@@ -1,0 +1,168 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Grockit Academy</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+      <title ng-bind="pageTitle"></title>
+
+      <!-- Get jQuery from Google CDN -->
+      <!--[if !IE]> -->
+      <script type="text/javascript"> window.jQuery || document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js">'+"<"+"/script>"); </script>
+      <!-- <![endif]-->
+      <!--[if lte IE 9]>
+      <script type="text/javascript"> window.jQuery || document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">'+"<"+"/script>"); </script>
+      <![endif]-->
+
+
+      <!-- Pixel Admin's stylesheets -->
+      <link href="assets/stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css">
+      <link href="assets/stylesheets/pixel-admin.min.css" rel="stylesheet" type="text/css">
+      <link href="assets/stylesheets/widgets.min.css" rel="stylesheet" type="text/css">
+      <link href="assets/stylesheets/rtl.min.css" rel="stylesheet" type="text/css">
+      <link href="assets/stylesheets/themes.min.css" rel="stylesheet" type="text/css">
+
+      <!--[if lt IE 9]>
+      <script src="assets/javascripts/ie.min.js"></script>
+      <![endif]-->
+      
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css({.tmp,app}) styles/main.css -->
+      <link rel="stylesheet" href="styles/71cd5492.main.css">
+    <!-- endbuild -->
+
+
+      <!--[if lt IE 9]>
+      <script src="bower_components/es5-shim/es5-shim.js"></script>
+      <script src="bower_components/json3/lib/json3.min.js"></script>
+      <![endif]-->
+
+      <!-- build:js scripts/vendor.js -->
+      <!-- bower:js -->
+      <script src="bower_components/angular/angular.js"></script>
+      <script src="bower_components/angular-resource/angular-resource.js"></script>
+      <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+      <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+      <script src="bower_components/angular-route/angular-route.js"></script>
+      <!-- endbower -->
+      <!-- endbuild -->
+
+      <!-- Scripts -->
+      <script src="common/lib/scripts.js"></script>
+      <script src="common/initRoutes.js"></script>
+  </head>
+<body class="theme-default main-menu-animated">
+
+<script>var init = [];</script>
+
+<div id="main-wrapper">
+
+    <!-- 2. $MAIN_NAVIGATION ===========================================================================
+
+        Main navigation
+    -->
+    <div id="main-navbar" class="navbar navbar-inverse" role="navigation">
+
+        <!-- Main menu toggle -->
+        <button type="button" id="main-menu-toggle"><i class="navbar-icon fa fa-bars icon"></i><span class="hide-menu-text">HIDE MENU</span></button>
+
+        <div class="navbar-inner">
+
+            <!-- Main navbar header -->
+            <div class="navbar-header">
+                <!-- Logo -->
+                <a href="#/home" class="navbar-brand">
+                    <div><img alt="Grockit" src="assets/images/pixel-admin/main-navbar-logo.png"></div>
+                    Grockit Academy
+                </a>
+
+                <!-- Main navbar toggle -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar-collapse"><i class="navbar-icon fa fa-bars"></i></button>
+
+            </div> <!-- / .navbar-header -->
+
+            <div id="main-navbar-collapse" class="collapse navbar-collapse main-navbar-collapse">
+                <div>
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a  href="#/home">GMAT</a>
+                        </li>
+                    </ul> <!-- / .navbar-nav -->
+
+                    <div class="right clearfix">
+                        <ul class="nav navbar-nav pull-right right-navbar-nav">
+
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle user-menu" data-toggle="dropdown">
+                                    <span>John Doe</span>
+                                </a>
+                            </li>
+                        </ul> <!-- / .navbar-nav -->
+                    </div> <!-- / .right -->
+                </div>
+            </div> <!-- / #main-navbar-collapse -->
+        </div> <!-- / .navbar-inner -->
+    </div> <!-- / #main-navbar -->
+
+    <div id="main-menu" role="navigation">
+        <div id="main-menu-inner">
+
+            <ul class="navigation">
+                <li>
+                    <a href="#/home"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Dashboard</span></a>
+                </li>
+                <li class="mm-dropdown mm-dropdown-root" >
+                    <a href="#"><i class="menu-icon fa fa-desktop"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Math</span></a>
+                    <ul class="mmc-dropdown-delay animated fadeInLeft" style="">
+                        <li>
+                            <a href="#/practice" tabindex="-1" ><span class="mm-text">Smart Practice</span></a>
+                        </li>
+                        <li >
+                            <a tabindex="-1" ><span class="mm-text">Exponents</span></a>
+                        </li>
+                        <li >
+                            <a tabindex="-1" ><span class="mm-text">Fractions</span></a>
+                        </li>
+                        <li >
+                            <a tabindex="-1" ><span class="mm-text">Problem Solving</span></a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="mm-dropdown">
+                    <a href="#"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Reading
+        </span>
+                    </a>
+                </li>
+                <li class="mm-dropdown">
+                    <a href="#"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Verbal</span></a>
+
+                </li>
+            </ul> <!-- / .navigation -->
+
+        </div> <!-- / #main-menu-inner -->
+    </div> <!-- / #main-menu -->
+    <!-- /4. $MAIN_MENU -->
+    <div id="content-wrapper" ng-view>
+
+    </div> <!-- / #content-wrapper -->
+    <div id="main-menu-bg"></div>
+</div> <!-- / #main-wrapper -->
+
+
+
+<!-- Pixel Admin's javascripts -->
+<script src="assets/javascripts/bootstrap.min.js"></script>
+<script src="assets/javascripts/pixel-admin.min.js"></script>
+
+<script type="text/javascript">
+    window.PixelAdmin.start(init);
+</script>
+</body>
+</html>
