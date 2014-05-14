@@ -15,24 +15,7 @@ app.service('getApiUrlRequest', function($http, $q) {
     };
 });
 
-
-app.service('tempRequest', function($http, $q) {
-    this.get = function(pos){
-        var deferred = $q.defer();
-        var url = 'http://grockit.firstfactoryinc.com/common/json/testDAta.json';
-        $http.get(url).success(function(data, status) {
-            deferred.resolve(data);
-        }).error(function(data, status) {
-                deferred.reject(data);
-            });
-
-        return deferred.promise;
-    };
-});
-
-
-
-app.service('ApiRequest', function($resource, $q) {
+app.service('ApiRequest', function($resource,$http, $q) {
     this.doRequest = function(config, url){
         var deferred = $q.defer();
         switch(config.method){
@@ -45,21 +28,21 @@ app.service('ApiRequest', function($resource, $q) {
             postPut: {
                 method : config.method,
                 params: { 'gRockit': new Date().getTime() },
-                data: {info:'@info'}
+                data: {info:'@info'},
+                isArray: config.isArray
             },
             getDelete: {
                 method : config.method,
-                params: { 'gRockit': new Date().getTime() }
+                params: { 'gRockit': new Date().getTime() },
+                isArray: config.isArray
             }
         });
 
         switch(config.method){
             case 'GET': case 'DELETE': {
-            res.getDelete.success(function(response){
+            res.getDelete(function(response){
                 deferred.resolve(response);
-            }).error(function(data, status) {
-                    deferred.reject(data);
-                });
+            });
             break;
         }
             case 'POST': case 'PUT': {

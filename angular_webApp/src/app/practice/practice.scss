@@ -1,31 +1,21 @@
 .answer-content{
-  background-color: #5bc0de;
+  background-color: rgba(38, 84, 97, 0.51);
   height: 1px;
   margin-left: -40px;
-
+  word-break: break-all;
 }
+
 .choice input {
   display: none;
 }
+
 .active {
   background-color: #5bc0de;
 }
-
-.answer-choice-wrapper {
-  border: 1px solid #e4e4e4;
-  border-radius: 2px;
-  white-space: nowrap;
-  position: relative;
-  overflow: hidden;
-}
 .answer-choice-steps {
-  width:100%;
+  max-width: 90%;
   cursor: default;
   display: block !important;
-  float: left;
-  margin: 0;
-  padding: 0;
-  position: relative;
   white-space: nowrap;
   -webkit-transition: left 0.3s;
   transition: left 0.3s;
@@ -37,15 +27,14 @@
   user-select: none;
 }
 .answer-choice-steps > li {
+
+  padding: 10px;
+  margin-bottom: 10px;
   margin-top: -10px;
-  margin-bottom:2%;
   list-style: none;
-  //margin: 0 0 0;
-  padding: 0 10px 0 50px;
-  //vertical-align: middle;
 }
 .answer-choice-step-number,
-.answer-choice-steps > li.completed .answer-choice-step-number:after {
+.answer-choice-steps > li.completed  {
   background: #fff;
   border-radius: 9999px;
   display: block;
@@ -60,21 +49,15 @@
   font-weight: 700;
   height: 30px;
   margin-left: -40px;
-  margin-top: 5px;
   width: 30px;
 }
+
 .answer-choice-step-caption {
-  color: #333;
-  display: inline-block;
-  line-height: 14px;
-  white-space: normal;
-}
-.answer-choice-step-caption {
+  white-space: pre;
+  max-width: 100%;
+  word-wrap:break-word;
   font-weight: 600;
   margin-bottom: 15px;
-  margin-top: -16px;
   vertical-align: middle;
   display:block;
-  width:'99%';
-  word-wrap:break-word;
 }

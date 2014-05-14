@@ -7,6 +7,7 @@ $script([
     'app/home/home.module.js',
     'app/practice/practice.module.js',
     'app/app.js',
+    'app/home/home.ctrl.js',
     'common/components/general.service.js'
 ], function() {
     angular.bootstrap(document, ['gRockitApp']);
