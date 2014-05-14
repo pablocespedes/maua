@@ -1,16 +1,23 @@
-var app =  angular.module("gRockitApp.practice",[]).config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide) {
+var app =  angular.module("gRockitApp.practice",['ngSanitize']).config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide) {
     app.controller    = $controllerProvider.register;
     app.directive     = $compileProvider.directive;
     app.routeProvider = $routeProvider;
     app.factory       = $provide.factory;
     app.service       = $provide.service;
 
+    var filePath = {
+        practice: { practiceCtrl: 'app/practice/practice.ctrl.js',
+                    practiceDrctv:'app/practice/practice.directive.js',
+                    practiceServ: 'common/components/general.service.js'
+        }
+    }
+
     $routeProvider.when('/practice', {templateUrl: 'app/practice/practice.tpl.html', resolve:{deps:function($q, $rootScope){
         var deferred = $q.defer();
         var essentials = [
-            'app/practice/practice.ctrl.js',
-            'app/practice/practice.directive.js',
-            'common/components/general.service.js'
+            filePath.practice.practiceCtrl,
+            filePath.practice.practiceDrctv,
+            filePath.practice.practiceServ
         ];
         $script(essentials,function(){
                 // all dependencies have now been loaded by $script.js so resolve the promise

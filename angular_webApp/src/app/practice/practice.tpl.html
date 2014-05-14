@@ -5,11 +5,10 @@
     <div class="panel-body">
         <div class="row">
             <div class="col-md-6">
-                {{QuestionDescription}}
+                <div ng-bind-html='stimulus'></div>
             </div>
-
             <div id="content" class="col-md-6">
-                <div ng-one-choice cols="cols" items="items"></div>
+                <ng-include src="template"></ng-include>
             </div>
         </div>
 
@@ -21,3 +20,22 @@
 
 </div>
 <span ng-init="loadQuestion()"></span>
+
+
+<script type="text/ng-template" id="mchoiceOnecorrect">
+
+    <div ng-one-choice items="items"></div>
+
+</script>
+
+<script type="text/ng-template" id="mChoiceMultiple">
+    <div ng-multiple-choice items="items"></div>
+</script>
+
+<script type="text/ng-template" id="mChoiceOne2x3Matrix">
+    <div ng-multiple-matrix2x3 items="items" ></div>
+</script>
+
+<script type="text/ng-template" id="mChoiceOne3x3Matrix">
+    <div ng-multiple-matrix3x3 items="items" ></div>
+</script>

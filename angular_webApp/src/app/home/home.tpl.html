@@ -1,2 +1,19 @@
-<h1>Home of G rockit app</h1>
 
+<p>Select page content template via dropdown</p>
+<select ng-model="template">
+    <option value="page1">Page 1</option>
+    <option value="page2">Page 2</option>
+</select>
+
+<p>Set page content template via button click</p>
+<button ng-click="template='page2'">Show Page 2 Content</button>
+
+<ng-include src="template"></ng-include>
+
+<script type="text/ng-template" id="page1">
+    <h1 style="color: blue;">This is the page 1 content</h1>
+</script>
+
+<script type="text/ng-template" id="page2">
+    <h1 style="color:green;">This is the page 2 content</h1>
+</script>
