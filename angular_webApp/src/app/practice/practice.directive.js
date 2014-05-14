@@ -2,6 +2,8 @@
  * Created by Jose on 5/9/14.
  */
 //Set of functions  - Utils
+
+// Start Directives Templates
 var multipleChoiceTemplate = function(){
     var template ='<div >' +
         '<ul class="answer-choice-steps">'+
@@ -16,6 +18,46 @@ var multipleChoiceTemplate = function(){
     return template;
 };
 
+var matrixTemplate2x3 = function(){
+    var template ='<div >' +
+        '<ul class="answer-choice-steps">'+
+        '<li class="choice" correct="{{item.correct}}"  ng-repeat="item in items">' +
+        '<div class="divisor" ng-if="($index % 2) ==0">'+
+        '<div >Blank {{$index+1}}</div>'+
+        '<hr>'+
+        '</div>'+
+        '<span class="answer-choice-step-number">{{item.option}}</span> ' +
+        '<input id="{{item.position}}" type="checkbox" name="choice"  value="{{item.position}}"  />' +
+        '<span class="answer-choice-step-caption" ng-bind-html="item.body"></span>' +
+        '</li>'+
+        '</ul>' +
+        '</div>';
+
+    return template;
+};
+
+var matrixTemplate3x3 = function(){
+    var template ='<div >' +
+        '<ul class="answer-choice-steps">'+
+        '<li class="choice" correct="{{item.correct}}"  ng-repeat="item in items">' +
+        '<div class="divisor" ng-if="($index % 3) ==0">'+
+        '<div >Blank {{$index+1}}</div>'+
+        '<hr>'+
+        '</div>'+
+        '<span class="answer-choice-step-number">{{item.option}}</span> ' +
+        '<input id="{{item.position}}" type="checkbox" name="choice"  value="{{item.position}}"  />' +
+        '<span class="answer-choice-step-caption" ng-bind-html="item.body"></span>' +
+        '</li>'+
+        '</ul>' +
+        '</div>';
+
+    return template;
+};
+
+
+// Ending directives Templates////
+
+// Start Directives logic// right now is the same but this could change along the project.
 
 function multipleAnswerOneChoice(){
 
@@ -96,6 +138,9 @@ function multipleAnswerMultipleChoiceTwoCorrect(){
 
 }
 
+// Ending Directives logic
+
+// Start Directives
 
 app.directive('ngOneChoice', function() {
         return {
@@ -124,26 +169,39 @@ app.directive('ngMultipleChoice', function() {
     };
 });
 
+app.directive('ngMultipleMatrix2x3', function() {
+    return {
+        restrict: 'A',
+        template :  matrixTemplate2x3(),
+        link: function() {
+            multipleAnswerMultipleChoice();
+        },
+        scope: {
+            items:'=items'
+        }
+    };
+});
+
+app.directive('ngMultipleMatrix3x3', function() {
+    return {
+        restrict: 'A',
+        template :  matrixTemplate3x3(),
+        link: function() {
+            multipleAnswerMultipleChoice();
+        },
+        scope: {
+            items:'=items'
+        }
+    };
+});
+
+// Ending Directives
 
 
 //Still Working
-var multipleMatrixTemplate = function(){
-    var template ='<div >' +
-        //'<div class="row" ng-repeat="item in items">'+
-        '<ul class="answer-choice-steps">'+
-        '<li class="choice" correct="{{item.correct[$index]}}"  ng-repeat="item in items">' +
-        '<span class="answer-choice-step-number">{{item.option}}</span> ' +
-        '<input id="{{item.position}}" type="checkbox" name="choice"  value="{{item.position}}"  />' +
-        '<span class="answer-choice-step-caption">{{item.body}}</span>' +
-        '</li>'+
-        '</ul>' +
-        // '</div>' +
-        '</div>';
-    return template;
-};
-
 
 app.directive('ngGmatIR', function() {
+
     /*    var template = '<div ng-repeat="col in cols">' +
      '<div class="panel-body no-padding-t col-md-4">'+
      '<div ng-repeat="item in items">' +
@@ -205,21 +263,6 @@ app.directive('ngMultipleChoiceTwo', function() {
         },
         scope: {
             items:'=items'
-        }
-    };
-});
-
-app.directive('ngMultipleMatrix', function() {
-
-    return {
-        restrict: 'A',
-        template :  multipleMatrixTemplate(),
-        link: function() {
-            multipleAnswerMultipleChoiceTwoCorrect();
-        },
-        scope: {
-            items:'=items',
-            rows:'=rows'
         }
     };
 });

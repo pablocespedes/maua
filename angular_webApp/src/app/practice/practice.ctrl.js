@@ -5,8 +5,7 @@
      $scope.actualView = angular.isDefined($rootScope.view)?$rootScope.view : 'mchoiceOnecorrect';
 
      //This list will be moved to a specific file
-     $scope.idList = ['A','B','C','D','E','F','G','H','I'];
-     $scope.list=[{}]
+     $scope.optionList = ['A','B','C','D','E','F','G','H','I'];
      $scope.questionItems=[];
      $scope.items=[];
      var getUrlQuestion= function(request){
@@ -67,7 +66,7 @@
                       $scope.stimulus= $scope.questionItems.stimulus;
 
                       angular.forEach(answers, function(value,index){
-                          value["option"] = $scope.idList[index];
+                          value["option"] = $scope.optionList[index];
                           $scope.items.push(value);
                       });
                   }
