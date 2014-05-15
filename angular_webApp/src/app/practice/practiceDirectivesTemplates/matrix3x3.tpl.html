@@ -1,0 +1,14 @@
+<div class="choice"  correct="{{item.correct}}" ng-repeat="item in items">
+<div class="divisor" ng-if="($index % 3) ==0">
+<div >Blank {{($index / 3) +1}}</div>'+
+<hr>
+</div>
+<div class="right"><i class="fa fa-times-circle"></i></div>
+<span class="letter">{{item.option}}</span>
+<div class="middle">
+<input id="{{item.position}}" type="checkbox" name="choice"  value="{{item.position}}"  />
+ <div class="content" >
+<div ng-bind-html="item.body"></div>
+ </div>
+ </div>
+ </div>

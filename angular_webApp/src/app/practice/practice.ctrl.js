@@ -26,7 +26,7 @@
              case 'mChoiceOne3x3Matrix':
                  return request.MultipleChoiceMatrixThreeByThree;
                  break;
-             case 'NumericEntry':
+             case 'numericEntry':
                  return request.NumericEntry;
                  break;
              case 'NumericEntryFraction':
@@ -73,8 +73,6 @@
               });
           });
      };
-
-
 
 
  });

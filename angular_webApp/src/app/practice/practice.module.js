@@ -8,7 +8,7 @@ var app =  angular.module("gRockitApp.practice",['ngSanitize']).config(function 
     var filePath = {
         practice: { practiceCtrl: 'app/practice/practice.ctrl.js',
                     practiceDrctv:'app/practice/practice.directive.js',
-                    practiceServ: 'common/components/general.service.js'
+                    practiceServ:'app/practice/practice.service.js'
         }
     }
 
