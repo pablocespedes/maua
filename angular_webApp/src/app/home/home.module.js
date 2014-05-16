@@ -7,7 +7,7 @@
 
         var filePath = {
             home: 'app/home/home.ctrl.js'
-        }
+        };
         $routeProvider.when('/home', {templateUrl: 'app/home/home.tpl.html', resolve:{deps:function($q, $rootScope){
             var deferred = $q.defer();
             var essentials = [ filePath.home ];

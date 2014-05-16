@@ -46,7 +46,7 @@ app.directive('ngOneChoice', function(multipleAnswerOneChoice) {
 .directive('ngMultipleMatrix3x3', function(multipleAnswerMultipleChoice) {
     return {
         restrict: 'A',
-        templateUrl : 'app/practice/practiceDirectivesTemplates/matrix2x3.tpl.html',
+        templateUrl : 'app/practice/practiceDirectivesTemplates/matrix3x3.tpl.html',
         link: function() {
             multipleAnswerMultipleChoice.execute();
         },
@@ -70,7 +70,6 @@ app.directive('ngOneChoice', function(multipleAnswerOneChoice) {
     })
 
 // Ending Directives
-
 
 
 //Still Working

@@ -34,7 +34,7 @@ app.factory('multipleAnswerMultipleChoice', function(){
                 var choice = $(event.target).closest('.choice'),
                     input = choice.find('[type="checkbox"]');
                 choice.find(".expandable-section").slideToggle(200);
-                input.prop('checked', !input.is(':checked')).trigger('change');
+                    input.prop('checked', !input.is(':checked')).trigger('change');
             });
             content.on( "change", ".choice input", function(event) {
                 var input = $(event.target),
