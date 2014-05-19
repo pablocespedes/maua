@@ -1,3 +1,4 @@
+'use strict';
 (function(app) {
     app.config(function ($routeProvider) {
 
@@ -6,9 +7,10 @@
     });
     app.run(function () {});
 }(angular.module("gRockitApp", [
-        'ngResource',
-        'ngRoute',
-        'gRockitApp.home',
-        'gRockitApp.practice'
-    ])));
+  'ngResource',
+  'ngRoute',
+  'gRockitApp.home',
+  'gRockitApp.practice'
+]))
+);
 

@@ -1,6 +1,8 @@
 /**
  * Created by Jose on 5/8/14.
  */
+'use strict';
+
  app.controller('PracticeController', function ($scope,$rootScope,getApiUrlRequest,ApiRequest) {
      $scope.actualView = angular.isDefined($rootScope.view)?$rootScope.view : 'mchoiceOnecorrect';
 
