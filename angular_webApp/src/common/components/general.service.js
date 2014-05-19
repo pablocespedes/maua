@@ -1,6 +1,3 @@
-/**
- * Created by Jose on 5/8/14.
- */
 app.service('getApiUrlRequest', function($http, $q) {
     this.get = function(){
         var deferred = $q.defer();
@@ -8,8 +5,8 @@ app.service('getApiUrlRequest', function($http, $q) {
         $http.get(url).success(function(data, status) {
             deferred.resolve(data);
         }).error(function(data, status) {
-                deferred.reject(data);
-            });
+            deferred.reject(data);
+        });
 
         return deferred.promise;
     };
@@ -49,8 +46,8 @@ app.service('ApiRequest', function($resource,$http, $q) {
             res.postPut(JSON.stringify(config.data), function(response){
                 deferred.resolve(data);
             }).error(function(data, status) {
-                    deferred.reject(data);
-                });
+                deferred.reject(data);
+            });
             break;
         }
         }

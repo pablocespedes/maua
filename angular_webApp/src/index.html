@@ -9,7 +9,6 @@
       <title>Grockit Academy</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
       <title ng-bind="pageTitle"></title>
-
       <!-- Get jQuery from Google CDN -->
       <!--[if !IE]> -->
       <script type="text/javascript"> window.jQuery || document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js">'+"<"+"/script>"); </script>
@@ -17,7 +16,6 @@
       <!--[if lte IE 9]>
       <script type="text/javascript"> window.jQuery || document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">'+"<"+"/script>"); </script>
       <![endif]-->
-
 
       <!-- Pixel Admin's stylesheets -->
       <link href="assets/stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -34,7 +32,7 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,app}) styles/main.css -->
-      <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
 
 
@@ -111,7 +109,7 @@
     </div> <!-- / #main-navbar -->
 
     <div id="main-menu" role="navigation">
-        <div id="main-menu-inner" ng-controller="HomeController">
+        <div id="main-menu-inner">
 
             <ul class="navigation">
                 <li>
@@ -162,7 +160,9 @@
                         <li >
                             <a ng-click="setView('mChoiceOne3x3Matrix')"  href="#/practice" tabindex="-1" ><span class="mm-text">Multiple choice (3x3 matrix)</span></a>
                         </li>
-
+                        <li >
+                            <a ng-click="setView('numericEntry')"  href="#/practice" tabindex="-1" ><span class="mm-text">Numeric Entry</span></a>
+                        </li>
                     </ul>
                 </li>
             </ul> <!-- / .navigation -->

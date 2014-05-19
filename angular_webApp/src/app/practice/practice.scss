@@ -1,68 +1,52 @@
-.answer-content{
-  background-color: rgba(38, 84, 97, 0.51);
-  height: 1px;
-  margin-left: -40px;
-  word-break: break-all;
-}
+#practice{
+  .choice input {
+    cursor: default;
+    display: none;
+  }
+  .divisor {
+    color: #5bc0de;
+    font-weight: bold;
+  }
+  .active {
+    max-height: '5px';
+    background-color: #5bc0de;
+  }
+  #numericEntry{
+    max-width: 30%;
+  }
+  div.content {
+    height: 35px;
+    margin-left:33px;
+  }
+  div.middle {
+    margin-top: 8px;
+    padding-top: 5px;
+  }
 
-.choice input {
-  display: none;
-}
-.divisor{
-  margin-left: -41px;
-  color: #5bc0de;
-  font-weight:bold;
-}
-.active {
-  max-height: '5px';
-  background-color: #5bc0de;
-}
-.answer-choice-steps {
-  max-width: 90%;
-  cursor: default;
-  display: block !important;
-  white-space: nowrap;
-  -webkit-transition: left 0.3s;
-  transition: left 0.3s;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-.answer-choice-steps > li {
+  div.right {
+    float: right;
+    padding-right: 4px;
+  }
+  span.letter {
+    background: #fff;
+    border-radius: 9999px;
+    display: block;
+    font-size: 14px;
+    line-height: 26px;
+    position: absolute;
+    text-align: center;
+    border: 2px solid #bbbbbb;
+    color: #333;
+    font-weight: 700;
+    height: 30px;
+    width: 30px;
 
-  padding: 10px;
-  margin-bottom: 10px;
-  margin-top: -10px;
-  list-style: none;
-}
-.answer-choice-step-number,
-.answer-choice-steps > li.completed  {
-  background: #fff;
-  border-radius: 9999px;
-  display: block;
-  font-size: 14px;
-  line-height: 26px;
-  position: absolute;
-  text-align: center;
-}
-.answer-choice-step-number {
-  border: 2px solid #bbbbbb;
-  color: #333;
-  font-weight: 700;
-  height: 30px;
-  margin-left: -40px;
-  width: 30px;
-}
+  }
+  .expandable-section {
+    padding:10px 10px;
+    background-color:#eee;
+    display:none;
+  }
 
-.answer-choice-step-caption {
-  white-space: pre;
-  max-width: 100%;
-  word-wrap:break-word;
-  font-weight: 600;
-  margin-bottom: 15px;
-  vertical-align: middle;
-  display:block;
+
 }
