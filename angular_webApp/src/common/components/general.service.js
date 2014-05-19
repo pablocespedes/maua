@@ -1,23 +1,18 @@
-/**
- * Created by Jose on 5/8/14.
- */
 app.service('getApiUrlRequest', function($http, $q) {
     this.get = function(){
         var deferred = $q.defer();
-        var url = 'scripts/js/json/url.json';
+        var url = 'common/json/url.json';
         $http.get(url).success(function(data, status) {
             deferred.resolve(data);
         }).error(function(data, status) {
-                deferred.reject(data);
-            });
+            deferred.reject(data);
+        });
 
         return deferred.promise;
     };
 });
 
-
-
-app.service('getApiUrlRequest', function($resource, $q) {
+app.service('ApiRequest', function($resource,$http, $q) {
     this.doRequest = function(config, url){
         var deferred = $q.defer();
         switch(config.method){
@@ -31,28 +26,28 @@ app.service('getApiUrlRequest', function($resource, $q) {
                 method : config.method,
                 params: { 'gRockit': new Date().getTime() },
                 data: {info:'@info'},
+                isArray: config.isArray
             },
             getDelete: {
                 method : config.method,
                 params: { 'gRockit': new Date().getTime() },
+                isArray: config.isArray
             }
         });
 
         switch(config.method){
             case 'GET': case 'DELETE': {
-            res.getDelete.success(function(response){
+            res.getDelete(function(response){
                 deferred.resolve(response);
-            }).error(function(data, status) {
-                    deferred.reject(data);
-                });
+            });
             break;
         }
             case 'POST': case 'PUT': {
             res.postPut(JSON.stringify(config.data), function(response){
                 deferred.resolve(data);
             }).error(function(data, status) {
-                    deferred.reject(data);
-                });
+                deferred.reject(data);
+            });
             break;
         }
         }

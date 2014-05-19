@@ -51,35 +51,194 @@
                         </div>
                      </div>
                     </div>
-                        <hr class="no-grid-gutter-h grid-gutter-margin-b no-margin-t">
+                    <hr class="no-grid-gutter-h grid-gutter-margin-b no-margin-t">
                     <div class="row">
                         <div class="panel-body buttons-with-margins">
-                        <div class="col-md-2">
-                            <div class="panel-body buttons-with-margins" id="c-tooltips">
-                            <div class="progress progress-striped active"><div class="progress-bar" style="width: 60%;"></div></div>
+                            <div class="col-md-4">
+                                <div class="panel-body buttons-with-margins">
+                                    <div class="select2-primary" id="topics">
+                                        <select  multiple="multiple" class="form-control">
+                                            <option value="1" selected="selected">First option</option>
+                                            <option value="2">Second option</option>
+                                            <option value="3" selected="selected">Third option</option>
+                                            <option value="4" selected="selected">Fourth option</option>
+                                            <option value="5">Fifth option</option>
+                                        </select>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel-body buttons-with-margins">
+                                    <button class="btn btn-success">[ + Add to Practice ]</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="panel-body buttons-with-margins">
-                            Topic name (ie “Number Properties”)
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="panel-body buttons-with-margins">
-                            <button class="btn btn-outline btn-labeled btn-primary">
-                                <span class="btn-label icon fa fa-play-circle"></span>
-                                Video
-                            </button>
+                    </div>
+                    <hr class="no-grid-gutter-h grid-gutter-margin-b no-margin-t">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="list-group">
+                                <a href="#" class="list-group-item active">
+                                    <div class="row">
+                                        <div class="buttons-with-margins">
+                                            <div class="col-md-6">
+                                                <div class=" buttons-with-margins">
+                                                    <div class="select2-primary" id="topics">
+                                                        <select  multiple="multiple" class="form-control">
+                                                            <option value="1" selected="selected">Algebra</option>
+                                                            <option value="2">Reading comprehension</option>
+                                                            <option value="3" style="background: #5ebd5e;" selected="selected">Third Topic</option>
+                                                            <option value="4" selected="selected">Fourth Topic</option>
+                                                            <option value="5">Fifth Topic</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class=" buttons-with-margins">
+                                                    <button class="btn btn-success">[ + Add to Practice ]</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </a> <!-- / .list-group-item -->
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="panel-body buttons-with-margins">
+                                            <div class="col-md-2">
+                                                <div class='panel-body buttons-with-margins'>
+                                                    <div class="progress progress-striped active" data-toggle='tooltip' data-placement='bottom' data-original-title='Accuracy(Percent Correct) 30%'>
+                                                        <div class="progress-bar progress-bar-danger" style="width: 30%;"></div></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="panel-body buttons-with-margins">
+                                                    Number Properties
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="panel-body buttons-with-margins">
+                                                    <button class="btn btn-outline btn-labeled btn-primary">
+                                                        <span class="btn-label icon fa fa-play-circle"></span>
+                                                        Video
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="panel-body buttons-with-margins">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Difficulty Level&nbsp;<i class="fa fa-caret-down"></i></button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#">Adaptive</a></li>
+                                                        <li><a href="#">Another action</a></li>
+                                                        <li><a href="#">Something else here</a></li>
+                                                    </ul>
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="panel-body buttons-with-margins">
+                                                    <button class="btn btn-success">[ + Add to Practice ]</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </li> <!-- / .list-group-item -->
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="panel-body buttons-with-margins">
+                                            <div class="col-md-2">
+                                                <div class="panel-body buttons-with-margins">
+                                                    <div class="progress progress-striped active" data-toggle='tooltip' data-placement='bottom' data-original-title='Accuracy(Percent Correct) 60%'>
+                                                        <div class="progress-bar progress-bar-warning" style="width: 60%;"></div></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="panel-body buttons-with-margins">
+                                                    Topic Example
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="panel-body buttons-with-margins">
+                                                    <button class="btn btn-outline btn-labeled btn-primary">
+                                                        <span class="btn-label icon fa fa-play-circle"></span>
+                                                        Video
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="panel-body buttons-with-margins">
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Difficulty Level&nbsp;<i class="fa fa-caret-down"></i></button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="#">Adaptive</a></li>
+                                                            <li><a href="#">Another action</a></li>
+                                                            <li><a href="#">Something else here</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="panel-body buttons-with-margins">
+                                                    <button class="btn btn-success">[ + Add to Practice ]</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </li> <!-- / .list-group-item -->
+
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="panel-body buttons-with-margins">
+                                            <div class="col-md-2">
+                                                <div class="panel-body buttons-with-margins">
+                                                    <div class="progress progress-striped active" data-toggle='tooltip' data-placement='bottom' data-original-title='Accuracy(Percent Correct) 90%' >
+                                                        <div class="progress-bar progress-bar-success" style="width: 90%;"></div></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="panel-body buttons-with-margins " >
+                                                    Topic Test
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="panel-body buttons-with-margins">
+                                                    <button class="btn btn-outline btn-labeled btn-primary">
+                                                        <span class="btn-label icon fa fa-play-circle"></span>
+                                                        Video
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="panel-body buttons-with-margins">
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Difficulty Level&nbsp;<i class="fa fa-caret-down"></i></button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="#">Adaptive</a></li>
+                                                            <li><a href="#">Another action</a></li>
+                                                            <li><a href="#">Something else here</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="panel-body buttons-with-margins">
+                                                    <button class="btn btn-success">[ + Add to Practice ]</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </li> <!-- / .list-group-item -->
                             </div>
                         </div>
 
-
-                        <div class="col-md-2">
-                           <div class="panel-body buttons-with-margins">
-                             <button class="btn btn-success">Start</button>
-                           </div>
-                        </div>
-                        </div>
                     </div>
 
                 </div>

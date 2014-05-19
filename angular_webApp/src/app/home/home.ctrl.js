@@ -5,9 +5,20 @@
 app.controller('HomeController', function ($scope,$rootScope,$route) {
 
     $scope.init = function(){
+        var easyPieChartDefaults = {
+            animate: 2000,
+            scaleColor: false,
+            lineWidth: 6,
+            lineCap: 'square',
+            size: 105,
+            trackColor: '#e5e5e5'
+        };
+        angular.element('#easy-pie-chart-2').easyPieChart(easyPieChartDefaults);
+        angular.element('.buttons-with-margins').tooltip();
 
-        angular.element('#easy-pie-chart-2').easyPieChart({});
-        angular.element('#c-tooltips button').tooltip();
+
+
+        angular.element('#topics select').select2();
 
         var uploads_data = [
             { day: '2014-03-10', v: 20 },

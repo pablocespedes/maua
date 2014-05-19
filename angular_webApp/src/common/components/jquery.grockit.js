@@ -4,23 +4,18 @@
 
 $(function(){
 
-   /* Easy Pie charts*/
-
-    init.push(function () {
-        // Easy Pie Charts
-        var easyPieChartDefaults = {
-        animate: 2000,
-        scaleColor: false,
-        lineWidth: 6,
-        lineCap: 'square',
-        size: 90,
-        trackColor: '#e5e5e5'
-        }
-
-        $('#easy-pie-chart-2').easyPieChart($.extend({}, easyPieChartDefaults, {
-        barColor: PixelAdmin.settings.consts.COLORS[1]
-        }));
-
+    $(window).load(function(){
+//tooltip, by default, activated by hover event
+        $('body').tooltip({
+            selector: '[data-toggle=tooltip]',
+            container: 'body'
         });
+
+//popover, by default, activated with clicking {toggle}
+        $('body').popover({
+            selector: '[data-toggle=popover]',
+            container: 'body'
+        });
+    });
 
 });
