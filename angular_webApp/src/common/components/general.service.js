@@ -4,7 +4,7 @@
 app.service('getApiUrlRequest', function($http, $q) {
     this.get = function(){
         var deferred = $q.defer();
-        var url = 'common/json/url.json';
+        var url = 'scripts/js/json/url.json';
         $http.get(url).success(function(data, status) {
             deferred.resolve(data);
         }).error(function(data, status) {
@@ -15,7 +15,9 @@ app.service('getApiUrlRequest', function($http, $q) {
     };
 });
 
-app.service('ApiRequest', function($resource,$http, $q) {
+
+
+app.service('getApiUrlRequest', function($resource, $q) {
     this.doRequest = function(config, url){
         var deferred = $q.defer();
         switch(config.method){
@@ -29,20 +31,20 @@ app.service('ApiRequest', function($resource,$http, $q) {
                 method : config.method,
                 params: { 'gRockit': new Date().getTime() },
                 data: {info:'@info'},
-                isArray: config.isArray
             },
             getDelete: {
                 method : config.method,
                 params: { 'gRockit': new Date().getTime() },
-                isArray: config.isArray
             }
         });
 
         switch(config.method){
             case 'GET': case 'DELETE': {
-            res.getDelete(function(response){
+            res.getDelete.success(function(response){
                 deferred.resolve(response);
-            });
+            }).error(function(data, status) {
+                    deferred.reject(data);
+                });
             break;
         }
             case 'POST': case 'PUT': {

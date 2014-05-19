@@ -1,46 +1,39 @@
-<div id="practiceModule" class="panel">
+<div class="panel">
     <div class="panel-heading">
         <span class="panel-title">Question</span>
     </div>
     <div class="panel-body">
         <div class="row">
-            <div class="col-md-6">
-                <div ng-bind-html='stimulus'></div>
+            <div class="col-md-2">
+                How Many numbers are shared by the two sets below?
+                <br>
+                Set A:2,5,8,13,18
+                <br>
+                Set B:3,4,5,9,11,14,18
             </div>
-            <div id="content" class="col-md-6">
-                <ng-include src="template"></ng-include>
+
+            <div class="col-md-6">
+                <div ng-answer cols="cols" items="items" input-type="radio" lbl-class="radio" ></div>
             </div>
         </div>
+        <div class="row">
 
+        <div class="col-md-2">
+            How Many numbers are shared by the two sets below?
+            <br>
+            Set A:2,5,8,13,18
+            <br>
+            Set B:3,4,5,9,11,14,18
+        </div>
+
+        <div class="col-md-6">
+            <div ng-answer cols="cols" items="items" input-type="checkbox" lbl-class="checkbox" ></div>
+        </div>
+</div>
     </div>
     <div class="panel-footer text-right">
-        <button class="btn btn-lg btn-warning" ng-click="loadQuestion()" >Skip</button>
-        <button class="btn btn-lg btn-primary" ng-click="loadQuestion()" >Submit</button>
+        <button class="btn btn-lg btn-warning ">Skip</button>
+        <button class="btn btn-lg btn-primary">Submit</button>
     </div>
 
 </div>
-<span ng-init="loadQuestion()"></span>
-
-
-<script type="text/ng-template" id="mchoiceOnecorrect">
-
-    <div ng-one-choice items="items"></div>
-
-</script>
-
-<script type="text/ng-template" id="mChoiceMultiple">
-    <div ng-multiple-choice items="items"></div>
-</script>
-
-<script type="text/ng-template" id="mChoiceOne2x3Matrix">
-    <div ng-multiple-matrix2x3 items="items" ></div>
-</script>
-
-<script type="text/ng-template" id="mChoiceOne3x3Matrix">
-    <div ng-multiple-matrix3x3 items="items" ></div>
-</script>
-
-<script type="text/ng-template" id="numericEntry">
-    <div ng-numeric-entry items="items" ></div>
-</script>
-
