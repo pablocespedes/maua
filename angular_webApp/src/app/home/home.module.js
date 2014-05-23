@@ -10,14 +10,14 @@
             var essentials = [
                 'app/home/home.ctrl.js'
             ];
-            var dependencies = [
-            ];
+
             $script(essentials,function(){
                 // all dependencies have now been loaded by $script.js so resolve the promise
                 $rootScope.$apply(function() {
                     deferred.resolve();
                 });
             });
+            setActiveMenu();
             return deferred.promise;
         }}, controller: 'HomeController'});
 

@@ -12,7 +12,8 @@ app.directive('ngOneChoice', function(multipleAnswerOneChoice) {
             multipleAnswerOneChoice.execute();
         },
         scope: {
-            items:'=items'
+            items:'=items',
+            showExplanation:'='
         }
     };
 })
@@ -25,7 +26,8 @@ app.directive('ngOneChoice', function(multipleAnswerOneChoice) {
                 multipleAnswerMultipleChoice.execute();
             },
             scope: {
-                items:'=items'
+                items:'=items',
+                showExplanation:'='
             }
         };
     })
@@ -38,7 +40,8 @@ app.directive('ngOneChoice', function(multipleAnswerOneChoice) {
                 multipleAnswerMultipleChoice.execute();
             },
             scope: {
-                items:'=items'
+                items:'=items',
+                showExplanation:'='
             }
         };
     })
@@ -51,7 +54,8 @@ app.directive('ngOneChoice', function(multipleAnswerOneChoice) {
                 multipleAnswerMultipleChoice.execute();
             },
             scope: {
-                items:'=items'
+                items:'=items',
+                showExplanation:'='
             }
         };
     })

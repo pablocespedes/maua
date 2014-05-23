@@ -48,6 +48,7 @@
       <script src="bower_components/angular-cookies/angular-cookies.js"></script>
       <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
       <script src="bower_components/angular-route/angular-route.js"></script>
+      <script src="bower_components/angular-animate/angular-animate.js"></script>
       <!-- endbower -->
       <!-- endbuild -->
 
@@ -55,7 +56,7 @@
       <script src="common/lib/scripts.js"></script>
       <script src="common/initRoutes.js"></script>
   </head>
-<body class="theme-default main-menu-animated">
+<body class="theme-default main-menu-animated" ng-cloak>
 
 <script>var init = [];</script>
 
@@ -91,6 +92,7 @@
                         <li>
                             <a  href="#/home">GMAT</a>
                         </li>
+
                     </ul> <!-- / .navbar-nav -->
 
                     <div class="right clearfix">
@@ -108,37 +110,21 @@
         </div> <!-- / .navbar-inner -->
     </div> <!-- / #main-navbar -->
 
-    <div id="main-menu" role="navigation">
+    <div id="main-menu" role="navigation" ng-controller="HomeController">
         <div id="main-menu-inner">
 
             <ul class="navigation">
                 <li>
                     <a href="#/home"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Dashboard</span></a>
                 </li>
-                <li class="mm-dropdown mm-dropdown-root" >
-                    <a href="#"><i class="menu-icon fa fa-desktop"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Math</span></a>
-                    <ul class="mmc-dropdown-delay animated fadeInLeft" style="">
-                        <li>
-                            <a href="#/practice" tabindex="-1" ><span class="mm-text">Smart Practice</span></a>
-                        </li>
-                        <li >
-                            <a tabindex="-1" ><span class="mm-text">Exponents</span></a>
-                        </li>
-                        <li >
-                            <a tabindex="-1" ><span class="mm-text">Fractions</span></a>
-                        </li>
-                        <li >
-                            <a tabindex="-1" ><span class="mm-text">Problem Solving</span></a>
-                        </li>
-
-                    </ul>
+                <li>
+                    <a href="#/math"><i class="menu-icon fa fa-desktop"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Math</span></a>
                 </li>
-                <li class="mm-dropdown">
-                    <a href="#"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Reading
-        </span>
+                <li>
+                    <a href="#"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Reading</span>
                     </a>
                 </li>
-                <li class="mm-dropdown">
+                <li>
                     <a href="#"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Verbal</span></a>
 
                 </li>
@@ -146,19 +132,19 @@
                     <a href="#"><i class="menu-icon fa fa-desktop"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Question Types Test</span></a>
                     <ul class="mmc-dropdown-delay animated fadeInLeft" style="" >
                         <li  >
-                            <a  ng-click="setView('mchoiceOnecorrect')" href="#/practice" tabindex="-1" ><span class="mm-text">Multiple choice one correct</span></a>
+                            <a  ng-click="setView('mchoiceOnecorrect')" href="#/practice/oneCorrect" tabindex="-1" ><span class="mm-text">Multiple choice one correct</span></a>
                         </li>
                         <li >
-                            <a ng-click="setView('mChoiceMultiple')"  href="#/practice" tabindex="-1" ><span class="mm-text">Multiple choice (1+ correct)</span></a>
+                            <a ng-click="setView('mChoiceMultiple')"  href="#/practice/multiple" tabindex="-1" ><span class="mm-text">Multiple choice (1+ correct)</span></a>
                         </li>
                         <li >
                             <a ng-click="setView('mChoiceTwoCorrects')"  href="#/practice" tabindex="-1" ><span class="mm-text">Multiple choice 2 correct</span></a>
                         </li>
                         <li >
-                            <a ng-click="setView('mChoiceOne2x3Matrix')"  href="#/practice" tabindex="-1" ><span class="mm-text">Multiple choice (2x3 matrix)</span></a>
+                            <a ng-click="setView('mChoiceOne2x3Matrix')"  href="#/practice/matrix2x3" tabindex="-1" ><span class="mm-text">Multiple choice (2x3 matrix)</span></a>
                         </li>
                         <li >
-                            <a ng-click="setView('mChoiceOne3x3Matrix')"  href="#/practice" tabindex="-1" ><span class="mm-text">Multiple choice (3x3 matrix)</span></a>
+                            <a ng-click="setView('mChoiceOne3x3Matrix')"  href="#/practice/matrix3x3" tabindex="-1" ><span class="mm-text">Multiple choice (3x3 matrix)</span></a>
                         </li>
                         <li >
                             <a ng-click="setView('numericEntry')"  href="#/practice" tabindex="-1" ><span class="mm-text">Numeric Entry</span></a>
@@ -170,17 +156,61 @@
         </div> <!-- / #main-menu-inner -->
     </div> <!-- / #main-menu -->
     <!-- /4. $MAIN_MENU -->
-    <div id="content-wrapper" ng-view>
+
+    <div id="content-wrapper"  ng-view>
 
     </div> <!-- / #content-wrapper -->
+        <!--footer-->
+ <!--   <footer>
+        <div class="foot-fixed-bottom">
+            <div class="container">
+
+                 <div class="panel-body-no-bg">
+         <div class="buttons-with-margins">
+             <div class="col-md-8">
+                 <div class=" buttons-with-margins">
+                     <div id="topics">
+                         <div class="select2-success">
+                             <select multiple="multiple" class="form-control">
+                                 <option class="warning-choice" value="1" selected="selected">"Number Properties (Adaptive)</option>
+                                 <option value="2">Algebra (Easy</option>
+                                 <option value="4" selected="selected">Logarithms (Hard)</option>
+                                 <option value="5">Second option</option>
+                                 <option value="6" selected="selected">Third option</option>
+                                 <option value="7" selected="selected">Fourth option</option>
+                                 <option value="8">Fifth option</option>
+                             </select>
+                         </div>
+
+                     </div>
+                 </div>
+             </div>
+             <div class="col-md-4">
+                 <div class=" buttons-with-margins">
+                     <button class="btn btn-lg  btn-success btn-flat ">
+                         <h4>Start Practice</h4>
+                     </button>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+            </div>
+        </div>
+    </footer>-->
+
+    <!--footer-->
     <div id="main-menu-bg"></div>
-</div> <!-- / #main-wrapper -->
+
+    </div> <!-- / #main-wrapper -->
+
+
 
 
 
 <!-- Pixel Admin's javascripts -->
 <script src="assets/javascripts/bootstrap.min.js"></script>
-<script src="assets/javascripts/pixel-admin.min.js"></script>
+<script src="assets/javascripts/pixel-admin.js"></script>
 
 <script type="text/javascript">
     window.PixelAdmin.start(init);

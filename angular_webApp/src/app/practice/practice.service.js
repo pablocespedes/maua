@@ -6,18 +6,17 @@
 app.factory('multipleAnswerOneChoice', function(){
     return {
         execute: function(){
-            var content = $('#content');
+            var content = $('#parent');
             content.on('click', '.choice', function(event) {
                 var choice = $(event.target).closest('.choice');
                     choice.find('[name="choice"]').prop('checked', true).trigger('change');
-                    choice.find(".expandable-section").slideToggle(200);
             });
 
             content.on('change', '.choice input', function() {
-                var choice = $(this).closest('.choice');
-                //$('.choice.active').find(".expandable-section").not(choice).slideUp(200);
-                $('.choice.active').removeClass('active');
-                choice.addClass('active');
+                var choice = $(this).closest('.choice'),
+                    button =  choice.find(':button');
+                $('.choice button').addClass('btn-primary');
+                button.removeClass('btn-primary');
             });
         }
     };
@@ -26,22 +25,24 @@ app.factory('multipleAnswerOneChoice', function(){
 app.factory('multipleAnswerMultipleChoice', function(){
     return {
         execute: function(){
-            var content = $('#content');
+            var content = $('#parent');
             content.on('click', '.choice', function(event) {
                 var choice = $(event.target).closest('.choice'),
                     input = choice.find('[type="checkbox"]');
-                choice.find(".expandable-section").slideToggle(200);
+
                     input.prop('checked', !input.is(':checked')).trigger('change');
             });
             content.on('change', '.choice input', function(event) {
                 var input = $(event.target),
-                    choice = $(this).closest('.middle');
+                    choice = $(this).closest('.middle'),
+                    button =  choice.find(':button');
+
 
                 if (input.is(':checked')) {
-                    choice.addClass('active');
+                    $('.choice button').removeClass('btn-primary');
                 }
                 else {
-                    choice.removeClass('active');
+                    button.addClass('btn-primary');
                 }
             });
         }
@@ -51,15 +52,16 @@ app.factory('multipleAnswerMultipleChoice', function(){
 app.factory('multipleAnswerMultipleChoiceTwoCorrect', function(){
     return {
         execute: function(){
-            var content = $('#content');
+            var content = $('#parent');
             content.on('click', '.choice', function(event) {
                 var choice = $(event.target).closest('.middle'),
                     input = choice.find('[type="checkbox"]');
                 input.prop('checked', !input.is(':checked')).trigger('change');
             });
+
             content.on('change', '.choice input', function(event) {
                 var input = $(event.target),
-                    choice = $(this).closest('.middle');
+                    choice = $(this).closest(':button');
 
                 if (input.is(':checked')) {
                     choice.addClass('active');
