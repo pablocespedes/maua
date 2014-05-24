@@ -35,7 +35,8 @@ app.factory('multipleAnswerMultipleChoice', function(){
             content.on('change', '.choice input', function(event) {
                 var input = $(event.target),
                     choice = $(this).closest('.middle'),
-                    button =  choice.find(':button');
+                    button = $(this).closest(':button');
+                    //button =  choice.find(':button');
 
 
                 if (input.is(':checked')) {

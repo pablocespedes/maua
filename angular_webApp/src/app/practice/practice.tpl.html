@@ -3,10 +3,9 @@
         <span class="panel-title"></span>
     </div>
     <div class="panel-body">
-        <div id="parent" >
-            <div class="slide-animate-container">
-                <div class="slide-animate" ng-include="templateUrl()"></div>
-            </div>
+        <div id="parent"  class="my-slide-container">
+            <div ng-include="templateUrl()" class="my-fade-animation"></div>
+        </div>
     </div>
     <div class="panel-footer">
         <div class="align-right">

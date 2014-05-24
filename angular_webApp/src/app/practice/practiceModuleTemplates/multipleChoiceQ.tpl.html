@@ -1,0 +1,24 @@
+        <div id="parent" >
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div id="question-explain" class="explain-margin" ng-if="showExplanation" ng-bind-html='questionExplanation'></div>
+
+                    <div id="videoExplain" ng-if="showExplanation"><br>
+                        <div class="video-container">
+                        <iframe id="ytplayer" type="text/html" width="640" height="360" src="https://www.youtube.com/embed/M7lc1UVf-VE"
+                                frameborder="0" allowfullscreen></iframe>
+                            </div>
+                    </div>
+                    <h3><b>Question Information</b></h3>
+                    <div ng-bind-html='questionInformation'></div>
+                </div>
+                <div class="col-md-6">
+                    <h2><b>Question</b></h2>
+                    <div ng-bind-html='stimulus'></div>
+                    <div ng-multiple-choice items="items" show-explanation="showExplanation"></div>
+                    <h2>{{messageConfirmation}}</h2>
+                </div>
+
+            </div>
+        </div>

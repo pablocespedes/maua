@@ -1,9 +1,9 @@
 <div class="choice"  ng-repeat="item in items">
 <div class="divisor" ng-if="($index % 2) ==0">
-<div >Blank {{($index / 2)+1}}</div>
+<h4>Fill in the Blank ({{($index / 2)+1}})</h4>
 <hr>
 </div>
-    <button id="{{item.name}}" type="button" class="btn-option btn-primary btn-rounded letter" >{{item.option}}</button>
+<button id="{{item.name}}" type="button" class="btn-option btn-primary btn-rounded letter" >{{item.option}}</button>
 <div class="middle">
 <input id="{{item.position}}" type="checkbox" name="choice"  value="{{item.position}}"  />
 <div class="content" >
@@ -13,4 +13,5 @@
     <div id="explanationAnswerPanel" ng-if="showExplanation" class="fadein " ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
         <div class="explain-margin" ng-bind-html='item.explanation'></div>
     </div>
+    <hr>
 </div>
