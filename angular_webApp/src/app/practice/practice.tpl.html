@@ -1,41 +1,18 @@
 <div id="practice" class="panel">
     <div class="panel-heading">
-        <span class="panel-title">Question</span>
+        <span class="panel-title"></span>
     </div>
     <div class="panel-body">
-        <div class="row">
-            <div class="col-md-6">
-                <div ng-bind-html='stimulus'></div>
-            </div>
-            <div id="content" class="col-md-6">
-                <ng-include src="template"></ng-include>
-            </div>
+        <div id="parent"  class="my-slide-container">
+            <div ng-include="templateUrl()" class="my-fade-animation"></div>
         </div>
-
     </div>
-    <div class="panel-footer text-right">
-        <button class="btn btn-lg btn-warning" ng-click="loadQuestion()" >Skip</button>
-        <button class="btn btn-lg btn-primary" ng-click="loadQuestion()" >Submit</button>
+    <div class="panel-footer">
+        <div class="align-right">
+        <button class="btn btn-lg  btn-flat" ng-click="skipQuestion()">Skip Question</button>
+        <button class="btn  btn-lg  btn-primary btn-flat" ng-click="confirmChoice()">Confirm Choice</button>
+            </div>
     </div>
-
 </div>
 <span ng-init="loadQuestion()"></span>
-
-
-<script type="text/ng-template" id="mchoiceOnecorrect">
-
-    <div ng-one-choice items="items"></div>
-
-</script>
-
-<script type="text/ng-template" id="mChoiceMultiple">
-    <div ng-multiple-choice items="items"></div>
-</script>
-
-<script type="text/ng-template" id="mChoiceOne2x3Matrix">
-    <div ng-multiple-matrix2x3 items="items" ></div>
-</script>
-
-<script type="text/ng-template" id="mChoiceOne3x3Matrix">
-    <div ng-multiple-matrix3x3 items="items" ></div>
-</script>
+</div>

@@ -3,3 +3,83 @@
 
 @import "../app/home/home.scss",
         "../app/practice/practice.scss";
+
+//general css
+
+.panel-body-no-bg {
+  margin: 0;
+  padding: 20px;
+}
+.colored.list-group-item{
+  background: #f2dede;
+  border-color: #ebccd1;
+  color: #b94a48;
+}
+
+.foot-fixed-bottom {
+  bottom: 0;
+  display: block;
+  margin-bottom: 0;
+  position: fixed;
+  z-index: 1030;
+}
+.foot-fixed-bottom .container {
+  margin-left: 26%;
+  padding-bottom: 2px;
+  max-width:100%;
+}
+
+@media (max-width: 480px) {
+  .foot-fixed-bottom {
+    bottom: 0;
+    display: block;
+    margin-bottom: 0;
+    position: initial;
+    z-index: 1030;
+  }
+  .container {
+    margin-left: 2%;
+    padding-bottom: 2px;
+    max-width: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .foot-fixed-bottom {
+    bottom: 0;
+    display: block;
+    margin-bottom: 0;
+    position: initial;
+    z-index: 1030;
+  }
+  .container {
+    margin-left: 2%;
+    padding-bottom: 2px;
+    max-width: 100%;
+  }
+}
+@media (min-width: 1200px){
+  .foot-fixed-bottom {
+    bottom: 0;
+    display: block;
+    margin-bottom: 0;
+    position: fixed;
+    z-index: 1030;
+  }
+  .container {
+    margin-left: 24%;
+    padding-bottom: 2px;
+    width: 1162px;
+  }
+}
+
+@media (min-width: 768px){
+  .foot-fixed-bottom {
+    bottom: 0;
+    display: block;
+    margin-bottom: 0;
+    position: fixed;
+    z-index: 1030;
+  }
+  .container {
+    padding-bottom: 2px;
+  }}
