@@ -24,13 +24,13 @@ app.service('ApiRequest', function($resource,$http, $q) {
         var res = $resource(url, {},{
             postPut: {
                 method : config.method,
-                params: { 'gRockit': new Date().getTime() },
+                params: { 'grockit': new Date().getTime() },
                 data: {info:'@info'},
                 isArray: config.isArray
             },
             getDelete: {
                 method : config.method,
-                params: { 'gRockit': new Date().getTime() },
+                params: { 'grockit': new Date().getTime() },
                 isArray: config.isArray
             }
         });

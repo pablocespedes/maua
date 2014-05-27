@@ -1,4 +1,4 @@
-    var app =  angular.module("gRockitApp.home",[]).config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide) {
+    var app =  angular.module("grockitApp.home",[]).config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide) {
         app.controller    = $controllerProvider.register;
         app.directive     = $compileProvider.directive;
         app.routeProvider = $routeProvider;
