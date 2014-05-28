@@ -1,9 +1,24 @@
 app.controller('PracticeController',['$scope', 'getApiUrlRequest','ApiRequest',function($scope,getApiUrlRequest,ApiRequest) {
+
+
+    var easyPieChartDefaults = {
+        animate: 2000,
+        scaleColor: false,
+        lineWidth: 6,
+        lineCap: 'square',
+        size: 105,
+        trackColor: '#e5e5e5'
+    };
+    angular.element('#easy-pie-chart-2').easyPieChart(easyPieChartDefaults);
+
     $scope.questionTemplates =
         [   { name: 'MultipleChoiceOneCorrect', url: 'app/practice/practiceModuleTemplates/oneCorrectQ.tpl.html'},
             { name: 'MultipleChoiceOneorMoreCorrect', url: 'app/practice/practiceModuleTemplates/multipleChoiceQ.tpl.html'},
             { name: 'MultipleChoiceMatrixTwoByThree', url: 'app/practice/practiceModuleTemplates/matrix2x3Q.tpl.html'},
-            { name: 'MultipleChoiceMatrixThreeByThree', url: 'app/practice/practiceModuleTemplates/matrix3x3Q.tpl.html'}
+            { name: 'MultipleChoiceMatrixThreeByThree', url: 'app/practice/practiceModuleTemplates/matrix3x3Q.tpl.html'},
+            { name: 'NumericEntryFraction', url: 'app/practice/practiceModuleTemplates/fractionEntryQ.tpl.html'},
+            { name: 'NumericEntry', url: 'app/practice/practiceModuleTemplates/numericEntryQ.tpl.html'},
+            { name: 'sat', url: 'app/practice/practiceModuleTemplates/satQ.tpl.html'}
         ];
     //This list will be moved to a specific file
     $scope.optionList = ['A','B','C','D','E','F','G','H','I'];
@@ -85,27 +100,26 @@ app.controller('PracticeController',['$scope', 'getApiUrlRequest','ApiRequest',f
 
     //confirm choice
     $scope.confirmChoice = function() {
+        var selectedPosition='';
+        //Get selected answers
+        angular.element('.choice input:checkbox:checked').each(function () {
+            selectedPosition = (this.checked ? $(this).val() : "");
+        });
 
-
-        if ($scope.questionItems !== null) {
+        if (selectedPosition!=='') {
             $scope.showExplanation = true;
-            var selectedPosition='';
+
             //Question Explanation
             $scope.questionExplanation=$scope.questionItems.explanation;
 
-
             //Get answers from the previous request and Explain
             var answers = $scope.questionItems.answers;
-
-            //Get selected answers
-            angular.element('.choice input:checkbox:checked').each(function () {
-                 selectedPosition = (this.checked ? $(this).val() : "");
-            });
 
             //Get the selected answers object
             var selectedAnswer = $.grep(answers,function (val) {
                 return val.position == selectedPosition;
             })[0];
+
             if(angular.isDefined(selectedAnswer)){
                 if(selectedAnswer.correct==true){
 
@@ -118,15 +132,19 @@ app.controller('PracticeController',['$scope', 'getApiUrlRequest','ApiRequest',f
                 angular.element('.choice button').addClass('btn-primary');
             }
 
-
         }
-    }
+        else{
+            bootbox.alert('Please select an option!');
+        }
+    };
 
     $scope.skipQuestion = function(){
         if($scope.questionTemplates.length-1> $scope.position){
             $scope.position++;
             $scope.loadQuestion();
             $scope.templateUrl();
+            $scope.messageConfirmation='';
+            $scope.showExplanation = false;
         }
 
     }

@@ -3,52 +3,110 @@
  */
 'use strict';
 
-app.factory('multipleAnswerOneChoice', function(){
+app.factory('oneChoiceFactory', function(){
     return {
         execute: function(){
             var content = $('#parent');
-            content.on('click', '.choice', function(event) {
+            content.on('click', '#oneChoice', function(event) {
                 var choice = $(event.target).closest('.choice');
                     choice.find('[name="choice"]').prop('checked', true).trigger('change');
             });
 
-            content.on('change', '.choice input', function() {
+            content.on('change', '#oneChoice input', function() {
+                $('#nextAction').removeClass('hide');
                 var choice = $(this).closest('.choice'),
                     button =  choice.find(':button');
-                $('.choice button').addClass('btn-primary');
-                button.removeClass('btn-primary');
+                $('.choice button').removeClass('btn-primary');
+                button.addClass('btn-primary');
+
             });
         }
     };
 });
 
-app.factory('multipleAnswerMultipleChoice', function(){
+app.factory('multipleChoiceFactory', function(){
+    return {
+        execute: function(){
+                var content = $('#parent');
+
+                content.on('click', '#multipleChoice', function(event) {
+                    var choice = $(event.target).closest('.choice'),
+                        input = choice.find('[type="checkbox"]'),
+                        choiceB = choice.find('.middle'),
+                        button= choiceB.find('#letter');
+
+                    if (input.is(':checked')|| !button.hasClass('btn-primary')) {
+                        button.addClass('btn-primary');
+                        input.attr('checked', false);
+                    }
+                    else {
+                        input.attr('checked', true);
+                        button.removeClass('btn-primary');
+                    }
+
+            });
+
+        }
+    };
+});
+
+app.factory('matrix2x3ChoiceFactory', function(){
     return {
         execute: function(){
             var content = $('#parent');
-            content.on('click', '.choice', function(event) {
+
+            content.on('click', '#matrix2x3', function(event) {
+
                 var choice = $(event.target).closest('.choice'),
-                    input = choice.find('[type="checkbox"]');
-
-                    input.prop('checked', !input.is(':checked')).trigger('change');
-            });
-            content.on('change', '.choice input', function(event) {
-                var input = $(event.target),
-                    choice = $(this).closest('.middle'),
-                    button = $(this).closest(':button');
-                    //button =  choice.find(':button');
+                    input = choice.find('[type="checkbox"]'),
+                    choiceB = choice.find('.middle'),
+                    button= choiceB.find('#letter');
 
 
-                if (input.is(':checked')) {
-                    $('.choice button').removeClass('btn-primary');
+                if (input.is(':checked')|| !button.hasClass('btn-primary')) {
+                    button.addClass('btn-primary');
+                    input.attr('checked', false);
                 }
                 else {
-                    button.addClass('btn-primary');
+                    input.attr('checked', true);
+                    button.removeClass('btn-primary');
                 }
+
             });
+
         }
     };
 });
+
+app.factory('matrix3x3ChoiceFactory', function(){
+    return {
+        execute: function(){
+            var content = $('#parent');
+            content.on('click', '#matrix3x3', function(event) {
+
+                var choice = $(event.target).closest('.choice'),
+                    input = choice.find('[type="checkbox"]'),
+                    choiceB = choice.find('.middle'),
+                    button= choiceB.find('#letter');
+
+                if (input.is(':checked') || !button.hasClass('btn-primary')) {
+                    button.addClass('btn-primary');
+                    input.attr('checked', false);
+                }
+                else {
+                    input.attr('checked', true);
+                    button.removeClass('btn-primary');
+                }
+
+            });
+
+        }
+    };
+});
+
+
+
+/*
 
 app.factory('multipleAnswerMultipleChoiceTwoCorrect', function(){
     return {
@@ -85,3 +143,4 @@ app.factory('multipleAnswerMultipleChoiceTwoCorrect', function(){
         }
     };
 });
+*/

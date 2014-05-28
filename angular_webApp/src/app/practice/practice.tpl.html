@@ -8,11 +8,12 @@
         </div>
     </div>
     <div class="panel-footer">
-        <div class="align-right">
+        <div class="text-right">
         <button class="btn btn-lg  btn-flat" ng-click="skipQuestion()">Skip Question</button>
-        <button class="btn  btn-lg  btn-primary btn-flat" ng-click="confirmChoice()">Confirm Choice</button>
-            </div>
+        <button id="nextAction" class="btn  btn-lg hide btn-flat" ng-click="confirmChoice()" >{{nextActionTitle}}</button>
+        </div>
     </div>
+ <!--   <div ng-include="'app/practice/practiceModuleTemplates/satQ.tpl.html'" class="my-fade-animation"></div>-->
 </div>
 <span ng-init="loadQuestion()"></span>
 </div>

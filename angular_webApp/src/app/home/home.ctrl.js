@@ -12,7 +12,7 @@ app.controller('HomeController',['$scope', '$rootScope','$route', 'getApiUrlRequ
         };
         angular.element('#easy-pie-chart-2').easyPieChart(easyPieChartDefaults);
         angular.element('.progress-bar').tooltip();
-        //getUserInformation();
+       // getUserInformation();
 
     };
 

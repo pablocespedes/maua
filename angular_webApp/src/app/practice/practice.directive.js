@@ -4,12 +4,17 @@
 
 // Start Directives
 
-app.directive('ngOneChoice', function(multipleAnswerOneChoice) {
+app.directive('ngOneChoice', function(oneChoiceFactory) {
     return {
         restrict: 'A',
-        templateUrl : 'app/practice/practiceDirectivesTemplates/multipleChoice.tpl.html',
-        link: function() {
-            multipleAnswerOneChoice.execute();
+        templateUrl : 'app/practice/practiceDirectivesTemplates/oneChoice.tpl.html',
+        link: function(scope) {
+            oneChoiceFactory.execute();
+           scope.$watch('nextActionTitle', function() {
+
+
+           });
+
         },
         scope: {
             items:'=items',
@@ -18,12 +23,12 @@ app.directive('ngOneChoice', function(multipleAnswerOneChoice) {
     };
 })
 
-    .directive('ngMultipleChoice', function(multipleAnswerMultipleChoice) {
+    .directive('ngMultipleChoice', function(multipleChoiceFactory) {
         return {
             restrict: 'A',
             templateUrl : 'app/practice/practiceDirectivesTemplates/multipleChoice.tpl.html',
             link: function() {
-                multipleAnswerMultipleChoice.execute();
+                multipleChoiceFactory.execute();
             },
             scope: {
                 items:'=items',
@@ -32,12 +37,12 @@ app.directive('ngOneChoice', function(multipleAnswerOneChoice) {
         };
     })
 
-    .directive('ngMultipleMatrix2x3', function(multipleAnswerMultipleChoice) {
+    .directive('ngMultipleMatrix2x3', function(matrix2x3ChoiceFactory) {
         return {
             restrict: 'A',
             templateUrl : 'app/practice/practiceDirectivesTemplates/matrix2x3.tpl.html',
             link: function() {
-                multipleAnswerMultipleChoice.execute();
+                matrix2x3ChoiceFactory.execute();
             },
             scope: {
                 items:'=items',
@@ -46,15 +51,29 @@ app.directive('ngOneChoice', function(multipleAnswerOneChoice) {
         };
     })
 
-    .directive('ngMultipleMatrix3x3', function(multipleAnswerMultipleChoice) {
+    .directive('ngMultipleMatrix3x3', function(matrix3x3ChoiceFactory) {
         return {
             restrict: 'A',
             templateUrl : 'app/practice/practiceDirectivesTemplates/matrix3x3.tpl.html',
             link: function() {
-                multipleAnswerMultipleChoice.execute();
+                matrix3x3ChoiceFactory.execute();
             },
             scope: {
                 items:'=items',
+                showExplanation:'='
+            }
+        };
+    })
+
+    .directive('ngSAT', function() {
+        return {
+            restrict: 'A',
+            templateUrl : 'app/practice/practiceDirectivesTemplates/sat.tpl.html',
+            link: function() {
+            },
+            scope: {
+                items:9,
+                cols:4,
                 showExplanation:'='
             }
         };
@@ -64,6 +83,19 @@ app.directive('ngOneChoice', function(multipleAnswerOneChoice) {
         return {
             restrict: 'A',
             templateUrl : 'app/practice/practiceDirectivesTemplates/numericEntry.tpl.html',
+            link: function() {
+            },
+            scope: {
+                items:'=items',
+                showExplanation:'='
+            }
+        };
+    })
+
+    .directive('ngFractionEntry', function() {
+        return {
+            restrict: 'A',
+            templateUrl : 'app/practice/practiceDirectivesTemplates/fractionEntry.tpl.html',
             link: function() {
 
             },
@@ -75,59 +107,6 @@ app.directive('ngOneChoice', function(multipleAnswerOneChoice) {
 
 // Ending Directives
 
-
-//Still Working
-
-    .directive('ngGmatIR', function() {
-
-        /*    var template = '<div ng-repeat="col in cols">' +
-         '<div class="panel-body no-padding-t col-md-4">'+
-         '<div ng-repeat="item in items">' +
-         '<p>' +
-         '<label class="{{lblClass}}">' +
-         '<input id="{{col.id}}'+"_"+'{{item.id}}"  type="{{inputType}}" name="styled-r1" class="px">' +
-         '<span class="lbl">{{item.answer}}</span>' +
-         '</label>' +
-         '</p>' +
-         '</div>' +
-         '</div>' +
-         '</div>';*/
-        return {
-            restrict: 'A',
-            template : template,
-            scope: {
-                cols:'=cols',
-                items:'=items',
-                inputType:'@',
-                lblClass:'@'
-            }
-        };
-    })
-
-    .directive('ngGmatRadios', function() {
-        /*    var template = '<div ng-repeat="col in cols">' +
-         '<div class="panel-body no-padding-t col-md-4">'+
-         '<div ng-repeat="item in items">' +
-         '<p>' +
-         '<label class="{{lblClass}}">' +
-         '<input id="{{col.id}}'+"_"+'{{item.id}}"  type="{{inputType}}" name="styled-r1" class="px">' +
-         '<span class="lbl">{{item.answer}}</span>' +
-         '</label>' +
-         '</p>' +
-         '</div>' +
-         '</div>' +
-         '</div>';*/
-        return {
-            restrict: 'A',
-            template : template,
-            scope: {
-                cols:'=cols',
-                items:'=items',
-                inputType:'@',
-                lblClass:'@'
-            }
-        };
-    })
 
 
 //testing
