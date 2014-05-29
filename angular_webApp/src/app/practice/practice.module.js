@@ -1,6 +1,6 @@
 'use strict';
 
-var app =  angular.module("gRockitApp.practice",['ngSanitize','ngAnimate']).config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide) {
+var app =  angular.module("grockitApp.practice",['ngSanitize','ngAnimate']).config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide) {
     app.controller    = $controllerProvider.register;
     app.directive     = $compileProvider.directive;
     app.routeProvider = $routeProvider;

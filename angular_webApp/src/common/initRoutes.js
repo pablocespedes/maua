@@ -22,5 +22,5 @@ $script([
     paths.jqueryGrockit,
     paths.generalService
 ], function() {
-    angular.bootstrap(document, ['gRockitApp']);
+    angular.bootstrap(document, ['grockitApp']);
 });

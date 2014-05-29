@@ -4,11 +4,11 @@
         $routeProvider.otherwise({redirectTo: '/home'});
     });
     app.run(function () {});
-}(angular.module("gRockitApp", [
+}(angular.module("grockitApp", [
   'ngResource',
   'ngRoute',
-  'gRockitApp.home',
-  'gRockitApp.practice'
+  'grockitApp.home',
+  'grockitApp.practice'
 ]))
 );
 
