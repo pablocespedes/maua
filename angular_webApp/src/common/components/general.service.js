@@ -12,6 +12,7 @@ app.service('getApiUrlRequest', function($http, $q) {
     };
 });
 
+
 app.service('ApiRequest', function($resource,$http, $q) {
     this.doRequest = function(config, url){
         var deferred = $q.defer();

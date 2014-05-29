@@ -12,7 +12,7 @@ app.controller('HomeController',['$scope', '$rootScope','$route', 'getApiUrlRequ
         };
         angular.element('#easy-pie-chart-2').easyPieChart(easyPieChartDefaults);
         angular.element('.progress-bar').tooltip();
-       // getUserInformation();
+        getUserInformation();
 
     };
 
@@ -22,7 +22,7 @@ app.controller('HomeController',['$scope', '$rootScope','$route', 'getApiUrlRequ
            var config = {
                    method: "GET",
                    contentType: "application/json",
-                   base: '',
+                   base: '.json',
                    isArray: false,
                    data:''
                },
@@ -43,7 +43,7 @@ app.controller('HomeController',['$scope', '$rootScope','$route', 'getApiUrlRequ
             var config = {
                     method: "GET",
                     contentType: "application/json",
-                    base: 'f58077f0-3084-012d-4d3f-123139068df2/analytics',
+                    base: 'f58077f0-3084-012d-4d3f-123139068df2/analytics.json',
                     isArray: false,
                     data:''
                 },
@@ -63,10 +63,10 @@ app.controller('HomeController',['$scope', '$rootScope','$route', 'getApiUrlRequ
         if(angular.isDefined(graphicData)){
             Morris.Line({
                 element: 'hero-graph',
-                data: graphicData,
+                data: graphicData.analytics,
                 xkey: 'day',
-                ykeys: ['total_xp_earned'],
-                labels: ['Total XP Earned:'],
+                ykeys: ['total_questions'],
+                labels: ['Total Questions:'],
                 lineColors: ['#fff'],
                 lineWidth: 2,
                 pointSize: 4,

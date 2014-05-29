@@ -14,6 +14,7 @@ app.factory('oneChoiceFactory', function(){
 
             content.on('change', '#oneChoice input', function() {
                 $('#nextAction').removeClass('hide');
+                $('#skipAction').addClass('hide');
                 var choice = $(this).closest('.choice'),
                     button =  choice.find(':button');
                 $('.choice button').removeClass('btn-primary');
@@ -30,6 +31,8 @@ app.factory('multipleChoiceFactory', function(){
                 var content = $('#parent');
 
                 content.on('click', '#multipleChoice', function(event) {
+                    $('#nextAction').removeClass('hide');
+                    $('#skipAction').addClass('hide');
                     var choice = $(event.target).closest('.choice'),
                         input = choice.find('[type="checkbox"]'),
                         choiceB = choice.find('.middle'),
@@ -37,10 +40,10 @@ app.factory('multipleChoiceFactory', function(){
 
                     if (input.is(':checked')|| !button.hasClass('btn-primary')) {
                         button.addClass('btn-primary');
-                        input.attr('checked', false);
+                        input.attr('checked', true);
                     }
                     else {
-                        input.attr('checked', true);
+                        input.attr('checked', false);
                         button.removeClass('btn-primary');
                     }
 
@@ -56,7 +59,8 @@ app.factory('matrix2x3ChoiceFactory', function(){
             var content = $('#parent');
 
             content.on('click', '#matrix2x3', function(event) {
-
+                $('#nextAction').removeClass('hide');
+                $('#skipAction').addClass('hide');
                 var choice = $(event.target).closest('.choice'),
                     input = choice.find('[type="checkbox"]'),
                     choiceB = choice.find('.middle'),
@@ -65,10 +69,10 @@ app.factory('matrix2x3ChoiceFactory', function(){
 
                 if (input.is(':checked')|| !button.hasClass('btn-primary')) {
                     button.addClass('btn-primary');
-                    input.attr('checked', false);
+                    input.attr('checked', true);
                 }
                 else {
-                    input.attr('checked', true);
+                    input.attr('checked', false);
                     button.removeClass('btn-primary');
                 }
 
@@ -83,7 +87,8 @@ app.factory('matrix3x3ChoiceFactory', function(){
         execute: function(){
             var content = $('#parent');
             content.on('click', '#matrix3x3', function(event) {
-
+                $('#nextAction').removeClass('hide');
+                $('#skipAction').addClass('hide');
                 var choice = $(event.target).closest('.choice'),
                     input = choice.find('[type="checkbox"]'),
                     choiceB = choice.find('.middle'),
@@ -91,10 +96,10 @@ app.factory('matrix3x3ChoiceFactory', function(){
 
                 if (input.is(':checked') || !button.hasClass('btn-primary')) {
                     button.addClass('btn-primary');
-                    input.attr('checked', false);
+                    input.attr('checked', true);
                 }
                 else {
-                    input.attr('checked', true);
+                    input.attr('checked', false);
                     button.removeClass('btn-primary');
                 }
 

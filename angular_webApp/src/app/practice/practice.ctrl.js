@@ -22,10 +22,11 @@ app.controller('PracticeController',['$scope', 'getApiUrlRequest','ApiRequest',f
         ];
     //This list will be moved to a specific file
     $scope.optionList = ['A','B','C','D','E','F','G','H','I'];
+    $scope.nextActionTitle='Confirm Choice';
     $scope.questionItems=[];
     $scope.items=[];
     $scope.showExplanation = false;
-
+    $scope.showVideo = false;
     $scope.position=0;
     $scope.templateUrl = function() {
                $scope.actualView=$scope.questionTemplates[$scope.position].name;
@@ -63,43 +64,8 @@ app.controller('PracticeController',['$scope', 'getApiUrlRequest','ApiRequest',f
 
     };
 
-    //load a question at the first time
-    $scope.loadQuestion = function(){
+    function confirmChoice(){
 
-        angular.element('.choice.active').removeClass('active');
-        getApiUrlRequest.get().then(function(objUrl){
-
-            var config = {
-                    method: "GET",
-                    contentType: "application/json",
-                    base: '',
-                    isArray: false,
-                    data:''
-                },
-                requestUrl= objUrl.baseURL+getUrlQuestion(objUrl.request);
-
-            ApiRequest.doRequest(config,requestUrl).then(function(contentResponse){
-                if(contentResponse.$resolved==true){
-                    $scope.items=[];
-                    $scope.stimulus="";
-                    $scope.template= $scope.actualView;
-                    $scope.questionItems= contentResponse;
-
-
-                    var answers= $scope.questionItems.answers;
-                    $scope.stimulus= $scope.questionItems.stimulus;
-                    $scope.questionInformation=  $scope.questionItems.question_set.info;
-                    angular.forEach(answers, function(value,index){
-                        value["option"] = $scope.optionList[index];
-                        $scope.items.push(value);
-                    });
-                }
-            });
-        });
-    };
-
-    //confirm choice
-    $scope.confirmChoice = function() {
         var selectedPosition='';
         //Get selected answers
         angular.element('.choice input:checkbox:checked').each(function () {
@@ -107,6 +73,9 @@ app.controller('PracticeController',['$scope', 'getApiUrlRequest','ApiRequest',f
         });
 
         if (selectedPosition!=='') {
+
+            angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
+            $scope.nextActionTitle='Next Question';
             $scope.showExplanation = true;
 
             //Question Explanation
@@ -136,17 +105,75 @@ app.controller('PracticeController',['$scope', 'getApiUrlRequest','ApiRequest',f
         else{
             bootbox.alert('Please select an option!');
         }
-    };
+    }
 
-    $scope.skipQuestion = function(){
+    function nextQuestion(){
         if($scope.questionTemplates.length-1> $scope.position){
             $scope.position++;
             $scope.loadQuestion();
             $scope.templateUrl();
             $scope.messageConfirmation='';
             $scope.showExplanation = false;
+            $scope.nextActionTitle='Confirm Choice';
+            angular.element('#nextAction').removeClass('btn-success').addClass('btn-primary hide');
+            angular.element('#skipAction').removeClass('hide');
+        }
+    }
+    //load a question at the first time
+    $scope.loadQuestion = function(){
+
+        angular.element('.choice.active').removeClass('active');
+        getApiUrlRequest.get().then(function(objUrl){
+
+            var config = {
+                    method: "GET",
+                    contentType: "application/json",
+                    base: '',
+                    isArray: false,
+                    data:''
+                },
+                requestUrl= objUrl.baseURL+getUrlQuestion(objUrl.request);
+
+            ApiRequest.doRequest(config,requestUrl).then(function(contentResponse){
+                if(contentResponse.$resolved==true){
+                    $scope.items=[];
+                    $scope.stimulus="";
+                    $scope.template= $scope.actualView;
+                    $scope.questionItems= contentResponse;
+
+
+                    $scope.questionInformation=  $scope.questionItems.question_set.info;
+                    $scope.stimulus= $scope.questionItems.stimulus;
+
+
+                    $scope.showVideo = $scope.questionItems.youtube_video_id  !=null ?true : false;
+                    $scope.videoId= 'https://www.youtube.com/embed/'+$scope.questionItems.youtube_video_id ;
+
+
+                    var answers= $scope.questionItems.answers;
+                    angular.forEach(answers, function(value,index){
+                        value["option"] = $scope.optionList[index];
+                        $scope.items.push(value);
+                    });
+
+                }
+            });
+        });
+    };
+
+    //confirm choice
+    $scope.nextAction = function() {
+        if($scope.nextActionTitle=='Confirm Choice'){
+            confirmChoice();
+        }
+        else{
+            nextQuestion();
         }
 
+    };
+
+    $scope.skipQuestion = function(){
+        nextQuestion();
     }
 
 
