@@ -1,5 +1,5 @@
 'use strict';
-app.controller('HomeController',['$scope', '$rootScope','$route', 'getApiUrlRequest','ApiRequest', function ($scope,$rootScope,$route,getApiUrlRequest,ApiRequest) {
+app.controller('HomeController',['$scope', '$rootScope','$route','Users', function ($scope,$rootScope,$route,Users) {
 
     $scope.init = function(){
         var easyPieChartDefaults = {
@@ -17,28 +17,26 @@ app.controller('HomeController',['$scope', '$rootScope','$route', 'getApiUrlRequ
     };
 
    function getUserInformation(){
-       getApiUrlRequest.get().then(function(objUrl){
 
-           var config = {
-                   method: "GET",
-                   contentType: "application/json",
-                   base: '.json',
-                   isArray: false,
-                   data:''
-               },
-               requestUrl= objUrl.baseURLv2+objUrl.request.Users+config.base;
-
-           ApiRequest.doRequest(config,requestUrl).then(function(contentResponse){
-               if(contentResponse.$resolved==true){
-                   getAnalyticsData();
-               }
+       var users = Users.UserInfo.one().get().then(function(userResult){
+           var analytics = Users.UserInfo.one(userResult.user.id).customGET('analytics').then(function(graphicResult){
+               FillGraphic(graphicResult);
            });
        });
 
    };
 
-   function getAnalyticsData(){
-        getApiUrlRequest.get().then(function(objUrl){
+
+
+
+   function getAnalyticsData(id){
+
+
+       var param = id+'/analytics';
+       var analytics = ApiRequest.Users.one('f58077f0-3084-012d-4d3f-123139068df2/analytics').get().then(function(Result){
+           var Response = Result;
+       });
+/*        getApiUrlRequest.get().then(function(objUrl){
 
             var config = {
                     method: "GET",
@@ -54,7 +52,7 @@ app.controller('HomeController',['$scope', '$rootScope','$route', 'getApiUrlRequ
                     FillGraphic(contentResponse);
                 }
             });
-        });
+        });*/
 
     };
 

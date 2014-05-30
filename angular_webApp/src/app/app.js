@@ -7,6 +7,9 @@
 }(angular.module("grockitApp", [
   'ngResource',
   'ngRoute',
+  'ngSanitize',
+  'ngAnimate',
+  'grockitApp.requests',
   'grockitApp.home',
   'grockitApp.practice'
 ]))
