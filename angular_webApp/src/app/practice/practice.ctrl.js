@@ -1,5 +1,6 @@
-app.controller('PracticeController',['$scope', 'getApiUrlRequest','ApiRequest',function($scope,getApiUrlRequest,ApiRequest) {
-
+app.controller('PracticeController',['$scope',function($scope) {
+  $scope.rows=[1,2,3,4,5,6,7,8,9];
+    $scope.column=[1,2,3,4];
 
     var easyPieChartDefaults = {
         animate: 2000,
@@ -20,6 +21,7 @@ app.controller('PracticeController',['$scope', 'getApiUrlRequest','ApiRequest',f
             { name: 'NumericEntry', url: 'app/practice/practiceModuleTemplates/numericEntryQ.tpl.html'},
             { name: 'sat', url: 'app/practice/practiceModuleTemplates/satQ.tpl.html'}
         ];
+
     //This list will be moved to a specific file
     $scope.optionList = ['A','B','C','D','E','F','G','H','I'];
     $scope.nextActionTitle='Confirm Choice';
@@ -119,6 +121,7 @@ app.controller('PracticeController',['$scope', 'getApiUrlRequest','ApiRequest',f
             angular.element('#skipAction').removeClass('hide');
         }
     }
+
     //load a question at the first time
     $scope.loadQuestion = function(){
 

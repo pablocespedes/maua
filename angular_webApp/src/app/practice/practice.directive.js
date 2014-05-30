@@ -65,16 +65,15 @@ app.directive('ngOneChoice', function(oneChoiceFactory) {
         };
     })
 
-    .directive('ngSAT', function() {
+    .directive('ngSat', function() {
         return {
             restrict: 'A',
             templateUrl : 'app/practice/practiceDirectivesTemplates/sat.tpl.html',
             link: function() {
             },
             scope: {
-                items:9,
-                cols:4,
-                showExplanation:'='
+                items:'=items',
+                cols:'=cols'
             }
         };
     })
