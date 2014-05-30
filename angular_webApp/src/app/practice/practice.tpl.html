@@ -1,24 +1,23 @@
 <div id="practice" class="panel">
-    <!--<div class="panel-heading">-->
-        <!--<span class="panel-title"></span>-->
-    <!--</div>-->
-    <!--<div class="panel-body">-->
-        <!--<div id="parent"  class="my-slide-container">-->
-            <!--<div ng-include="templateUrl()" class="my-fade-animation"></div>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div class="panel-footer">-->
-        <!--<div class="text-right">-->
-        <!--<button id="skipAction" class="btn btn-lg  btn-flat" ng-click="skipQuestion()">Skip Question</button>-->
-        <!--<button id="nextAction" class="btn btn-primary btn-lg hide btn-flat" ng-click="nextAction()" >{{nextActionTitle}}</button>-->
-        <!--</div>-->
-    <!--</div>-->
- <!--<!--   <div ng-include="'app/practice/practiceModuleTemplates/satQ.tpl.html'" class="my-fade-animation"></div>-->
-<!--</div>-->
-<!--<!--<span ng-init="loadQuestion()"></span>-->
+    <div class="panel-heading">
+        <span class="panel-title"></span>
+    </div>
+    <div class="panel-body">
+        <div id="parent"  class="my-slide-container">
+            <div ng-include="templateUrl()" class="my-fade-animation"></div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div class="text-right">
+        <button id="skipAction" class="btn btn-lg  btn-flat" ng-click="skipQuestion()">Skip Question</button>
+        <button id="nextAction" class="btn btn-primary btn-lg hide btn-flat" ng-click="nextAction()" >{{nextActionTitle}}</button>
+        </div>
+    </div>
+</div>
+<span ng-init="loadQuestion()"></span>
 
 
-<div id="parent" >
+<!--<div id="parent" >
     <div class="row">
 
 
@@ -26,5 +25,4 @@
             <div  ng-sat items="rows" cols="column"></div>
         </div>
     </div>
-</div>
-</div>
+</div>-->

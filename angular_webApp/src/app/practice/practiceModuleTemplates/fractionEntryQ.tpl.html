@@ -4,9 +4,9 @@
         <div class="col-md-6">
             <div id="question-explain" class="explain-margin" ng-if="showExplanation" ng-bind-html='questionExplanation'></div>
 
-            <div id="videoExplain" ng-if="showExplanation"><br>
+            <div id="videoExplain" ng-if="showVideo"><br>
                 <div class="video-container">
-                    <iframe id="ytplayer" type="text/html" width="640" height="360"  src="{{videoId}}"
+                    <iframe id="ytplayer" type="text/html" width="640" height="360"  ng-src="https://www.youtube.com/embed/{{videoId}}"
                             frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>

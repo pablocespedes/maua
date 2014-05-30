@@ -1,42 +1,58 @@
 <div id="sat" class="choice"  >
-    <div class="row matrix first-set">
-        <div class="col-md-1">
-            </div>
-        <div class="col-md-1">
-            1
-        </div>
-        <div class="col-md-1">
-            /
-        </div>
-        <div class="col-md-1">
-            7
-        </div>
-    </div>
+<table>
+    <tr class="first-set">
+        <td class="column-matrix">   </td>
+        <td class="column-matrix"><h4><b>1</b></h4></td>
+        <td class="column-matrix"><h4><b>/</b></h4></td>
+        <td class="column-matrix"><h4><b>7</b></h4></td>
+    </tr>
+    <tr class="second-set">
+        <td class="column-matrix"></td>
+        <td class="column-matrix">  <button  type="button" class="btn-option btn-rounded matrix" >/</button></td>
+        <td class="column-matrix">  <button  type="button" class="btn-option btn-rounded matrix" >/</button></td>
+        <td class="column-matrix"></td>
+    </tr>
+    <tr class="second-set">
+        <td class="column-matrix"> <button  type="button" class="btn-option btn-rounded matrix" >.</button></td>
+        <td class="column-matrix"> <button  type="button" class="btn-option btn-rounded matrix" >.</button></td>
+        <td class="column-matrix"> <button  type="button" class="btn-option btn-rounded matrix" >.</button></td>
+        <td class="column-matrix"> <button  type="button" class="btn-option btn-rounded matrix" >.</button></td>
+    </tr>
+    <tr ng-repeat="item in items">
+            <td class="column-matrix" ng-repeat="col in cols">
+                    <p>
+                        <button  type="button" class="btn-option btn-rounded matrix" >{{$parent.$index}}</button>
+                    </p>
+            </td>
+    </tr>
+</table>
+
+ <!--
 
     <div class="row matrix second-set">
-        <div class="col-md-1">
+        <div class="column-matrix">
         </div>
-        <div class="col-md-1">
+        <div class="column-matrix">
             <button  type="button" class="btn-option btn-rounded matrix" >/</button>
         </div>
-        <div class="col-md-1">
+        <div class="column-matrix">
             <button  type="button" class="btn-option btn-rounded matrix" >/</button>
         </div>
-        <div class="col-md-1">
+        <div class="column-matrix">
 
         </div>
     </div>
     <div class="row matrix second-set">
-        <div class="col-md-1">
+        <div class="column-matrix">
             <button  type="button" class="btn-option btn-rounded matrix" >.</button>
         </div>
-        <div class="col-md-1">
+        <div class="column-matrix">
             <button  type="button" class="btn-option btn-rounded matrix" >.</button>
         </div>
-        <div class="col-md-1">
+        <div class="column-matrix">
             <button  type="button" class="btn-option btn-rounded matrix" >.</button>
         </div>
-        <div class="col-md-1">
+        <div class="column-matrix">
             <button  type="button" class="btn-option btn-rounded matrix" >.</button>
         </div>
     </div>
@@ -45,7 +61,7 @@
     <div ng-repeat="item in items">
         <div class="row matrix">
     <div ng-repeat="col in cols">
-        <div class="col-md-1">
+        <div class=" column-matrix">
                 <p>
                     <button  type="button" class="btn-option btn-rounded matrix" >{{$parent.$index}}</button>
                 </p>
@@ -54,5 +70,6 @@
     </div>
     </div>
     </div>
+-->
 </div>
 

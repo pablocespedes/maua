@@ -2,6 +2,8 @@
 app.controller('HomeController',['$scope', '$rootScope','$route','Users', function ($scope,$rootScope,$route,Users) {
 
     $scope.init = function(){
+        //Declarate User RestAngular Object
+         $scope.UserRequest = Users.one();
         var easyPieChartDefaults = {
             animate: 2000,
             scaleColor: false,
@@ -18,43 +20,17 @@ app.controller('HomeController',['$scope', '$rootScope','$route','Users', functi
 
    function getUserInformation(){
 
-       var users = Users.UserInfo.one().get().then(function(userResult){
-           var analytics = Users.UserInfo.one(userResult.user.id).customGET('analytics').then(function(graphicResult){
+       $scope.UserRequest.get().then(function(userResult){
+
+           var analytics = $scope.UserRequest.one(userResult.user.id).customGET('analytics').then(function(graphicResult){
                FillGraphic(graphicResult);
            });
+
+       }).catch(function error(msg) {
+           console.error(msg);
        });
 
-   };
-
-
-
-
-   function getAnalyticsData(id){
-
-
-       var param = id+'/analytics';
-       var analytics = ApiRequest.Users.one('f58077f0-3084-012d-4d3f-123139068df2/analytics').get().then(function(Result){
-           var Response = Result;
-       });
-/*        getApiUrlRequest.get().then(function(objUrl){
-
-            var config = {
-                    method: "GET",
-                    contentType: "application/json",
-                    base: 'f58077f0-3084-012d-4d3f-123139068df2/analytics.json',
-                    isArray: false,
-                    data:''
-                },
-                requestUrl= objUrl.baseURLv2+objUrl.request.Users+config.base;
-
-            ApiRequest.doRequest(config,requestUrl).then(function(contentResponse){
-                if(contentResponse.$resolved==true){
-                    FillGraphic(contentResponse);
-                }
-            });
-        });*/
-
-    };
+   }
 
    function FillGraphic(graphicData){
 
@@ -71,20 +47,18 @@ app.controller('HomeController',['$scope', '$rootScope','$route','Users', functi
                 gridLineColor: 'rgba(255,255,255,.5)',
                 resize: true,
                 gridTextColor: '#fff',
-                xLabels: "day",
-                xLabelFormat: function(d) {
-                    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate();
-                }
+                xLabels: "day"//,
+             //   xLabelFormat: function(d) {
+            //       return d.getYear() + '/' + (d.getMonth() + 1) + '/' + d.getDay();// ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov', 'Dec'][d.getMonth()] + ' ' + d.getDay()+ ' ' + d.getDate();
+             //   }
             });
         }
 
 
-    };
+    }
 
     $scope.setView= function(activeView){
-
         $rootScope.view =activeView;
-        //$route.reload();
    };
 
 
