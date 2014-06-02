@@ -7,20 +7,23 @@ app.factory('oneChoiceFactory', function(){
     return {
         execute: function(){
             var content = $('#parent');
-            content.on('click', '#oneChoice', function(event) {
-                var choice = $(event.target).closest('.choice');
-                    choice.find('[name="choice"]').prop('checked', true).trigger('change');
-            });
+            content.on('click', '#oneChoice .middle', function(event) {
+                var choice = $(this).closest('.choice'),
+                    input = choice.find('[type="checkbox"]'),
+                    button =  choice.find(':button');
 
-            content.on('change', '#oneChoice input', function() {
                 $('#nextAction').removeClass('hide');
                 $('#skipAction').addClass('hide');
-                var choice = $(this).closest('.choice'),
-                    button =  choice.find(':button');
+
+                $('.choice').find('[type="checkbox"]').removeAttr('checked');
                 $('.choice button').removeClass('btn-primary');
+
+                input.attr('checked', true);
                 button.addClass('btn-primary');
 
             });
+
+
         }
     };
 });
@@ -30,20 +33,20 @@ app.factory('multipleChoiceFactory', function(){
         execute: function(){
                 var content = $('#parent');
 
-                content.on('click', '#multipleChoice', function(event) {
+                content.on('click', '#multipleChoice .middle', function(event) {
                     $('#nextAction').removeClass('hide');
                     $('#skipAction').addClass('hide');
                     var choice = $(event.target).closest('.choice'),
                         input = choice.find('[type="checkbox"]'),
                         choiceB = choice.find('.middle'),
-                        button= choiceB.find('#letter');
+                        button= choiceB.find('.letter');
 
-                    if (input.is(':checked')|| !button.hasClass('btn-primary')) {
+                    if (!input.is(':checked')&& !button.hasClass('btn-primary')) {
                         button.addClass('btn-primary');
                         input.attr('checked', true);
                     }
                     else {
-                        input.attr('checked', false);
+                        input.removeAttr('checked');
                         button.removeClass('btn-primary');
                     }
 
@@ -58,21 +61,21 @@ app.factory('matrix2x3ChoiceFactory', function(){
         execute: function(){
             var content = $('#parent');
 
-            content.on('click', '#matrix2x3', function(event) {
+            content.on('click', '#matrix2x3 .middle', function(event) {
                 $('#nextAction').removeClass('hide');
                 $('#skipAction').addClass('hide');
                 var choice = $(event.target).closest('.choice'),
                     input = choice.find('[type="checkbox"]'),
                     choiceB = choice.find('.middle'),
-                    button= choiceB.find('#letter');
+                    button= choiceB.find('.letter');
 
 
-                if (input.is(':checked')|| !button.hasClass('btn-primary')) {
+                if (!input.is(':checked')&& !button.hasClass('btn-primary')) {
                     button.addClass('btn-primary');
                     input.attr('checked', true);
                 }
                 else {
-                    input.attr('checked', false);
+                    input.removeAttr('checked');
                     button.removeClass('btn-primary');
                 }
 
@@ -86,20 +89,20 @@ app.factory('matrix3x3ChoiceFactory', function(){
     return {
         execute: function(){
             var content = $('#parent');
-            content.on('click', '#matrix3x3', function(event) {
+            content.on('click', '#matrix3x3 .middle', function(event) {
                 $('#nextAction').removeClass('hide');
                 $('#skipAction').addClass('hide');
                 var choice = $(event.target).closest('.choice'),
                     input = choice.find('[type="checkbox"]'),
                     choiceB = choice.find('.middle'),
-                    button= choiceB.find('#letter');
+                    button= choiceB.find('.letter');
 
-                if (input.is(':checked') || !button.hasClass('btn-primary')) {
+                if (!input.is(':checked') && !button.hasClass('btn-primary')) {
                     button.addClass('btn-primary');
                     input.attr('checked', true);
                 }
                 else {
-                    input.attr('checked', false);
+                    input.removeAttr('checked');
                     button.removeClass('btn-primary');
                 }
 

@@ -69,14 +69,14 @@ app.controller('PracticeController',['$scope','Questions',function($scope,Questi
 
     function confirmChoice(){
 
-        var selectedPosition='';
+        var selectedPosition='',selectedOptions=[];
         //Get selected answers
         angular.element('.choice input:checkbox:checked').each(function () {
             selectedPosition = (this.checked ? $(this).val() : "");
+            selectedOptions.push(selectedPosition);
         });
 
-        if (selectedPosition!=='') {
-
+        if (selectedOptions.length>0) {
             angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
             $scope.nextActionTitle='Next Question';
             $scope.showExplanation = true;
@@ -84,6 +84,7 @@ app.controller('PracticeController',['$scope','Questions',function($scope,Questi
             //Question Explanation
             $scope.questionExplanation=$scope.questionItems.explanation;
 
+             //video validation
             if($scope.questionItems.youtube_video_id !==null){
                 $scope.showVideo=true;
                 $scope.videoId= $scope.questionItems.youtube_video_id ;
@@ -92,23 +93,34 @@ app.controller('PracticeController',['$scope','Questions',function($scope,Questi
             //Get answers from the previous request and Explain
             var answers = $scope.questionItems.answers;
 
-            //Get the selected answers object
-            var selectedAnswer = $.grep(answers,function (val) {
-                return val.position == selectedPosition;
-            })[0];
+            //Work with the styles to shown result
+            //define is some answer is bad.
+            var allFine=true;
+            angular.element('.choice button').removeClass('btn-primary');
 
-            if(angular.isDefined(selectedAnswer)){
-                if(selectedAnswer.correct==true){
+            angular.forEach(selectedOptions, function (value, key) {
+                var selectedAnswer= $.grep(answers,function (val) {
+                    return val.position == value;
+                })[0];
 
-                    $scope.messageConfirmation='Your answer was correct';
+                if(angular.isDefined(selectedAnswer)) {
+                    var selectIdButton = '#' + selectedAnswer.position;
+                    if (!selectedAnswer.correct) {
+                        allFine = false;
+                        angular.element(selectIdButton).addClass('btn-danger');
+                    }
+                    else {
+                        angular.element(selectIdButton).addClass('btn-success');
+                    }
                 }
-                else
-                {
-                    $scope.messageConfirmation='Your answer was incorrect';
+                else{
+                    bootbox.alert('Something wrong getting your response, please try it again.!');
                 }
-                angular.element('.choice button').addClass('btn-primary');
-            }
 
+            });
+
+            $scope.messageConfirmation= allFine==true? 'Your answer was correct': 'Your answer was incorrect';
+            angular.element(".choice *").prop('disabled', true);
         }
         else{
             bootbox.alert('Please select an option!');
@@ -117,6 +129,8 @@ app.controller('PracticeController',['$scope','Questions',function($scope,Questi
 
     function nextQuestion(){
         if($scope.questionTemplates.length-1> $scope.position){
+            //Enable/disable answer section
+            angular.element('.choice *').removeAttr('disabled');
             $scope.showVideo = false;
             $scope.position++;
             $scope.loadQuestion();
