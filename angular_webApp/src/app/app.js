@@ -1,6 +1,7 @@
 'use strict';
 (function(app) {
-    app.config(function ($routeProvider) {
+ app.config(function($routeProvider) {
+
         $routeProvider.otherwise({redirectTo: '/home'});
     });
     app.run(function () {});
@@ -10,8 +11,8 @@
   'ngSanitize',
   'ngAnimate',
   'grockitApp.requests',
-  'grockitApp.home',
-  'grockitApp.practice'
+  'grockitApp.practice',
+    'grockitApp.home'
 ]))
 );
 

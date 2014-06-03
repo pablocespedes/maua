@@ -1,5 +1,5 @@
 'use strict';
-app.controller('HomeController',['$scope', '$rootScope','$route','Users', function ($scope,$rootScope,$route,Users) {
+home.controller('HomeController',['$scope','Users','History', function($scope,Users,History) {
 
     $scope.init = function(){
         //Declarate User RestAngular Object
@@ -37,7 +37,7 @@ app.controller('HomeController',['$scope', '$rootScope','$route','Users', functi
       /*  if(angular.isDefined(graphicData)){*/
             Morris.Line({
                 element: 'hero-graph',
-                data: addZeroToEmptyDates(),
+                data:History.findMissingDates(test()),
                 xkey: 'day',
                 ykeys: ['total_questions'],
                 labels: ['Total Questions:'],
@@ -56,40 +56,6 @@ app.controller('HomeController',['$scope', '$rootScope','$route','Users', functi
 
 
     }
-
-
-  var addZeroToEmptyDates = function(){
-      var dates = ["7/13/2011", "7/15/2011", "7/18/2011", "12/23/2011"];
-
-      var minDate = new Date(dates[0]).getTime(),
-          maxDate = new Date(dates[dates.length - 1]).getTime();
-      var newDates = [],
-          currentDate = minDate,
-          d;
-
-      while (currentDate <= maxDate) {
-          d = new Date(currentDate);
-
-          newDates.push({
-                  "day": (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear(),
-                  "total_questions": 0,
-                  "total_correct": 0,
-                  "total_seconds": 0,
-                  "total_xp_earned": 0,
-                  "total_experience_points": 0
-                });
-
-          currentDate += (24 * 60 * 60 * 1000); // add one day
-
-      }
-
-      var object = $.extend({}, test(), newDates);
-      console.log(object);
-       return newDates;
-
-
-  }
-
 
     var test = function(){
         return [
@@ -177,10 +143,6 @@ app.controller('HomeController',['$scope', '$rootScope','$route','Users', functi
         ];
 
     };
-
-    $scope.setView= function(activeView){
-        $rootScope.view =activeView;
-   };
 
 
 }]);
