@@ -112,7 +112,15 @@ app.factory('matrix3x3ChoiceFactory', function(){
     };
 });
 
-
+app.factory('TagElement',function(){
+    return{
+        add: function(value,text){
+            var footerTag=  $('#footerTags');
+            footerTag.append('<option value="'+value+'">'+text+'</option>');
+            footerTag.trigger("liszt:updated");
+        }
+    }
+});
 
 /*
 
