@@ -23,8 +23,7 @@
                     <div class="stat-cell col-sm-3 padding-sm-hr bordered no-border-r valign-top">
                         <div class=" score-prediction-graph stat-panel text-center">
                             <div class="stat-row">
-                                <!-- Dark gray background, small padding, extra small text, semibold text -->
-                                <div class="stat-cell bg-dark-gray padding-sm text-xs text-semibold">
+                                <div class="stat-cell bg-dark-gray no-padding text-xlg">
                                     <i class="fa fa-flash"></i>&nbsp;&nbsp;Score Prediction
                                 </div>
                             </div>
@@ -32,8 +31,10 @@
                             <div class="stat-row">
                                 <!-- Bordered, without top border, without horizontal padding -->
                                 <div class="stat-cell bordered no-border-t no-padding-hr">
-                                    <div class="pie-chart" data-percent="65" id="easy-pie-chart-2">
-                                        <div class="pie-chart-label">65</div>
+                                    <div class="pie-chart text-lg" data-percent="65" id="easy-pie-chart-2">
+                                        <div class="pie-chart-label ">
+                                            65<br>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -67,7 +68,7 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <button class="btn  btn-success btn-flat btn-block"><h4>Start</h4></button>
+                            <button class="btn  btn-success btn-flat btn-block" ng-click="StartPractice()"><h4>Start</h4></button>
                         </div>
                     </div>
                 </div>
@@ -77,6 +78,4 @@
 </div>
 
 
-
-<span ng-init="init()"></span>
 <div class="push"></div>

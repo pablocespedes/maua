@@ -78,16 +78,29 @@
             <div id="main-navbar-collapse" class="collapse navbar-collapse main-navbar-collapse">
                 <div>
                     <ul class="nav navbar-nav">
-                        <li>
-                            <a href="#/home">GMAT</a>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Subjects</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="" href="https://grockit.com/act">ACT®</a>
+                                </li><li><a class="" href="https://grockit.com/ap_calculus">AP® Calculus AB</a></li>
+                                <li><a class="" href="https://grockit.com/ap_psychology">AP® Psychology</a></li>
+                                <li><a class="" href="https://grockit.com/ap_us_history">AP® US History</a></li>
+                                <li><a class="" href="https://grockit.com/ap_world_history">AP® World History </a></li>
+                                <li><a class="" href="https://grockit.com/academy">College Edge Academy™</a></li>
+                                <li> <a class="" href="https://grockit.com/gmat">GMAT®</a></li>
+                                <li><a class="" href="https://grockit.com/gre">GRE®</a></li>
+                                <li><a class="" href="https://grockit.com/iim-cat">IIM CAT</a></li>
+                                <li><a class="" href="https://grockit.com/lsat">LSAT®</a></li>
+                                <li><a class="current" href="https://grockit.com/sat">SAT®</a></li>
+                            </ul>
                         </li>
                     </ul>
                     <!-- / .navbar-nav -->
                     <div class="right clearfix">
                         <ul class="nav navbar-nav pull-right right-navbar-nav">
                             <li class="dropdown">
-                             <a class="dropdown-toggle user-menu">
-                                    <button class="btn btn-flat btn-labeled btn-success btn-labeled"><span class="btn-label icon fa fa-play"></span>Resume</button>
+                             <a href="/#practice" class="dropdown-toggle user-menu">
+                                    <button class="btn btn-flat btn-labeled btn-success btn-labeled" ><span class="btn-label icon fa fa-play"></span>Resume</button>
                              </a>
                             </li>
                             <li class="dropdown">
@@ -96,11 +109,11 @@
                                     <span>Jeff Novich</span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#"><span class="label label-warning pull-right">New</span>Profile</a></li>
-                                    <li><a href="#"><span class="badge badge-primary pull-right">New</span>Account</a></li>
-                                    <li><a href="#"><i class="dropdown-icon fa fa-cog"></i>&nbsp;&nbsp;Settings</a></li>
+                                    <li><a href="https://grockit.com/users/e759ede0-e8c5-0130-53e6-1231390ef981/account"><i class="dropdown-icon fa  fa-info-circle"></i>&nbsp;&nbsp;Account</a></li>
+                                    <li><a href="https://grockit.com/users/e759ede0-e8c5-0130-53e6-1231390ef981"><i class="dropdown-icon fa fa-user"></i>&nbsp;&nbsp;Profile</a></li>
+                                    <li><a href="https://grockit.com/users/e759ede0-e8c5-0130-53e6-1231390ef981/message_center/folders/Inbox"><i class="dropdown-icon fa fa-envelope"></i>&nbsp;&nbsp;Messages</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="pages-signin.html"><i class="dropdown-icon fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
+                                    <li><a href="https://grockit.com/logout"><i class="dropdown-icon fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -124,15 +137,33 @@
                     <a href="#/math"><i class="menu-icon fa fa-desktop"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Math</span></a>
                 </li>
                 <li>
-                    <a href="#"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Reading</span>
+                    <a href="#"><i class="menu-icon fa fa-book"></i><span class="mm-text">Reading</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Verbal</span></a>
+                    <a href="#"><i class="menu-icon fa fa-comments-o"></i><span class="mm-text">Verbal</span></a>
                 </li>
                 <li>
-                    <a href="#/practice"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Questions Types</span></a>
+                    <a href="https://grockit.com/sat/study_plan"><i class="menu-icon fa fa-tasks"></i><span class="mm-text">Study Plan</span></a>
                 </li>
+                <li>
+                    <a href="https://grockit.com/sat/video_courses"><i class="menu-icon fa fa-video-camera"></i><span class="mm-text">Video Courses</span></a>
+                </li>
+                <li>
+                    <a href="https://grockit.com/sat/social"><i class="menu-icon fa fa-users"></i><span class="mm-text">Group Practice</span></a>
+                </li>
+                <li>
+                    <a href="https://grockit.com/sat/tutoring"><i class="menu-icon fa  fa-briefcase"></i><span class="mm-text">Tutoring</span></a>
+                </li>
+                <li>
+                    <a href="https://grockit.com/sat/skill_data"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Skill Data</span></a>
+                </li>
+                <li>
+                    <a href="https://grockit.com/reviews"><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
+                </li>
+              <!--  <li>
+                    <a href="#/practice"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Questions Types</span></a>
+                </li>-->
             </ul>
             <!-- / .navigation -->
         </div>
@@ -164,9 +195,6 @@
                     <option value="8">Fifth option</option>
                 </select>
             </div>
-            <button class="btn btn-lg btn-success btn-flat ">
-                Start Practice
-            </button>
         </div>
     </div>
 </div>

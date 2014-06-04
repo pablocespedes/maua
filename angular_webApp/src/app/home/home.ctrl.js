@@ -19,7 +19,7 @@ home.controller('HomeController',['$scope','Users','History', function($scope,Us
         FillGraphic()
     };
 
-   function getUserInformation(){
+    function getUserInformation(){
 
        $scope.UserRequest.get().then(function(userResult){
 
@@ -33,36 +33,11 @@ home.controller('HomeController',['$scope','Users','History', function($scope,Us
 
    }
 
-   function FillGraphic(graphicData){
-
-      /*  if(angular.isDefined(graphicData)){*/
-            Morris.Line({
-                element: 'hero-graph',
-                data:History.findMissingDates(test()),
-                xkey: 'day',
-                ykeys: ['total_questions'],
-                labels: ['Total Questions:'],
-                lineColors: ['#fff'],
-                lineWidth: 2,
-                pointSize: 4,
-                gridLineColor: 'rgba(255,255,255,.5)',
-                resize: true,
-                gridTextColor: '#fff',
-                xLabels: "day",
-                xLabelFormat: function(d) {
-                    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate();
-                }
-            });
-       /* }*/
-
-
-    }
-
     var test = function(){
         return [
             {
                 "day": "2013-12-04",
-                "total_questions": 3,
+                "total_questions": 2,
                 "total_correct": 3,
                 "total_seconds": 12,
                 "total_xp_earned": 24,
@@ -144,6 +119,48 @@ home.controller('HomeController',['$scope','Users','History', function($scope,Us
         ];
 
     };
+
+    function FillGraphic(graphicData){
+
+       var response = History.findMissingDates(test());
+
+      /*  if(angular.isDefined(graphicData)){*/
+            Morris.Line({
+                element: 'hero-graph',
+                data:response.Data,
+                xkey: 'day',
+                ykeys: ['total_questions'],
+
+                labels: ['Questions Answered'],
+                lineColors: ['#fff'],
+                lineWidth: 2,
+                pointSize: 4,
+                numLines: response.MaxLine,
+                hideHover: true,
+                onlyIntegers:false,
+                gridLineColor: 'rgba(255,255,255,.5)',
+                resize: true,
+                gridTextColor: '#fff',
+                xLabels: "day",
+                xLabelFormat: function(d) {
+                    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate();
+                },
+                dateFormat: function(date) {
+                    var  d = new Date(date);
+                    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate() +', '+d.getFullYear();
+                }
+            });
+       /* }*/
+
+
+    }
+
+    $scope.StartPractice = function(){
+
+        window.location.href='#/practice';
+
+    };
+    $scope.init();
 
 
 }]);

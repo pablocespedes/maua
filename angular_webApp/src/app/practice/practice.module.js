@@ -27,6 +27,7 @@ var app =  angular.module("grockitApp.practice",[]).config(function ($httpProvid
                 deferred.resolve();
             });
         });
+        footer();
         setActiveMenu();
         return deferred.promise;
     }}, controller: 'PracticeController'});
@@ -39,6 +40,7 @@ var app =  angular.module("grockitApp.practice",[]).config(function ($httpProvid
                 deferred.resolve();
             });
         });
+        footer();
         setActiveMenu();
         return deferred.promise;
     }}, controller: 'PracticeController'});

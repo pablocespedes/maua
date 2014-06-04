@@ -20,7 +20,7 @@
                         deferred.resolve();
                     });
             });
-
+            footer();
             setActiveMenu();
             return deferred.promise;
         }}, controller: 'HomeController'});

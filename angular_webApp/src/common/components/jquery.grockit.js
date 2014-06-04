@@ -17,7 +17,7 @@ $(function(){
             container: 'body'
         });
     });
-
+    footer();
     setActiveMenu();
     setSelect2Settings();
     setCookie('user_id','e1a2f2d0-c005-0130-2f70-1231390ef981');
@@ -95,8 +95,11 @@ function delCookie(c_name) {
 
 
 function footer(){
-    if(){
-
+    var url = location.hash;
+    if(url=='#/home'){
+        $('footer').addClass('hide-footer');
     }
-    $('footer').addClass('hide-footer');
+    else{
+        $('footer').removeClass('hide-footer');
+    }
 }
