@@ -4446,6 +4446,9 @@ body:after,
   .mme #main-navbar {
     position: absolute; }
 
+    .mme footer {
+        left: 184px; }
+
   .mme #content-wrapper {
     left: 184px; }
   .mme #main-navbar .navbar-inner {
@@ -4455,10 +4458,10 @@ body:after,
     width: 240px; } }
 @media (min-width: 768px) {
   .mme #main-wrapper,
-  #main-wrapper,footer {
+  #main-wrapper {
     padding-left: 240px; }
 
-  .mme #content-wrapper,
+  .mme #content-wrapper,footer,
   .mmc.mme #content-wrapper {
     left: 0; }
 

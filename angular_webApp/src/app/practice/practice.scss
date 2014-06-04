@@ -53,19 +53,29 @@
 
 
   }
+  .canvas {
+    margin-left: -9px;
+    margin-top: -1px;
+    height: 32px;
+    width: 31px;
+  }
+
   .matrix{
     margin-left: 0px;
     margin-right: 0px;
     border-right: 1px solid $letterCircle;
 
   }
+  .empty-space-matrix{
+    padding-left: 30px;
+  }
 
   .column-matrix{
     float: left;
     margin-left: 5px;
     margin-right: 5px;
-    padding-left: 6px;
   }
+
   //
   button.letter {
     display: block;

@@ -70,6 +70,7 @@ app.directive('ngOneChoice', function(oneChoiceFactory) {
             restrict: 'A',
             templateUrl : 'app/practice/practiceDirectivesTemplates/sat.tpl.html',
             link: function() {
+
             },
             scope: {
                 items:'=items',
@@ -103,6 +104,8 @@ app.directive('ngOneChoice', function(oneChoiceFactory) {
             }
         };
     })
+
+
 
 // Ending Directives
 

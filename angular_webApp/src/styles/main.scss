@@ -6,11 +6,23 @@
         "../app/practice/practice.scss";
 
 //general css
-
+.panel-no-bg {
+  margin-bottom: 18px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
 .panel-body-no-bg {
   margin: 0;
   padding: 20px;
 }
+.panel-footer-no-bg {
+  border-top: 1px solid #ececec;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .colored.list-group-item{
   background: #f2dede;
   border-color: #ebccd1;
@@ -37,4 +49,7 @@ footer {
 
 .push {
   height: 90px;
+}
+.hide-footer{
+  display: none;
 }

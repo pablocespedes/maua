@@ -2,6 +2,7 @@
 home.controller('HomeController',['$scope','Users','History', function($scope,Users,History) {
 
     $scope.init = function(){
+
         //Declarate User RestAngular Object
          $scope.UserRequest = Users.one();
         var easyPieChartDefaults = {
