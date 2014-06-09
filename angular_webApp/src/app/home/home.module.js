@@ -6,14 +6,12 @@
         home.factory       = $provide.factory;
         home.service       = $provide.service;
 
-        $routeProvider.when('/home', {templateUrl: 'app/home/home.tpl.html', resolve:{deps:function($q, $rootScope){
-            var deferred = $q.defer();
-
-            var essentials = [
-                'app/home/home.service.js',
-                'app/home/home.ctrl.js'
+        $routeProvider.when('/dashboard', {templateUrl: 'app/home/dashboard/dashboard.tpl.html', resolve:{deps:function($q, $rootScope){
+            var deferred = $q.defer(),
+             essentials = [
+                'app/home/dashboard/dashboard.service.js',
+                'app/home/dashboard/dashboard.ctrl.js'
             ];
-
             $script(essentials,function(){
                     // all dependencies have now been loaded by $script.js so resolve the promise
                     $rootScope.$apply(function() {
@@ -23,6 +21,6 @@
             footer();
             setActiveMenu();
             return deferred.promise;
-        }}, controller: 'HomeController'});
+        }}, controller: 'SimpleDashController'});
 
     });

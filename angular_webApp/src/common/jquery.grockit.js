@@ -4,19 +4,6 @@
 
 $(function(){
 
-    $(window).load(function(){
-//tooltip, by default, activated by hover event
-        $('body').tooltip({
-            selector: '[data-toggle=tooltip]',
-            container: 'body'
-        });
-
-//popover, by default, activated with clicking {toggle}
-        $('body').popover({
-            selector: '[data-toggle=popover]',
-            container: 'body'
-        });
-    });
     footer();
     setActiveMenu();
     setSelect2Settings();
@@ -31,7 +18,7 @@ function setActiveMenu(){
 
         menuList.removeClass('active');
         switch(actualLocation){
-            case "home":
+            case "dashboard":
                 $(menuList[0]).addClass('active'); //Dashboard
                 break;
             case "math":
@@ -40,7 +27,7 @@ function setActiveMenu(){
         }
 
 
-};
+}
 
 
 function setSelect2Settings(){
@@ -96,7 +83,7 @@ function delCookie(c_name) {
 
 function footer(){
     var url = location.hash;
-    if(url=='#/home'){
+    if(url=='#/dashboard'){
         $('footer').addClass('hide-footer');
     }
     else{

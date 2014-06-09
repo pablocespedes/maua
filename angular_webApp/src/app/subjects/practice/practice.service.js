@@ -3,23 +3,36 @@
  */
 'use strict';
 
-app.factory('oneChoiceFactory', function(){
+    app.factory('oneChoiceFactory', function(){
     return {
         execute: function(){
             var content = $('#parent');
             content.on('click', '#oneChoice .middle', function(event) {
-                var choice = $(this).closest('.choice'),
+                var choice = $(event.target).closest('.choice'),
                     input = choice.find('[type="checkbox"]'),
-                    button =  choice.find(':button');
+                    button =  choice.find(':button'),
+                    isChecked= input.is(':checked'),
+                    hasPrimary=button.hasClass('btn-primary'),
+                    nexAction =$('#nextAction'),
+                    seeAnswer=$('#skipAction');
 
-                $('#nextAction').removeClass('hide');
-                $('#skipAction').addClass('hide');
 
-                $('.choice').find('[type="checkbox"]').removeAttr('checked');
+                $('.choice').find('[type="checkbox"]').prop('value',false);
                 $('.choice button').removeClass('btn-primary');
 
-                input.attr('checked', true);
-                button.addClass('btn-primary');
+
+                if (!isChecked&& !hasPrimary) {
+                    input.prop('value',true);
+                    button.addClass('btn-primary');
+                    nexAction.addClass('btn-primary');
+                    seeAnswer.addClass('hide');
+                }
+                else{
+                    nexAction.removeClass('btn-primary');
+                    seeAnswer.removeClass('hide');
+                    input.prop('value',false);
+                    button.removeClass('btn-primary');
+                }
 
             });
 
@@ -34,19 +47,26 @@ app.factory('multipleChoiceFactory', function(){
                 var content = $('#parent');
 
                 content.on('click', '#multipleChoice .middle', function(event) {
-                    $('#nextAction').removeClass('hide');
-                    $('#skipAction').addClass('hide');
+
                     var choice = $(event.target).closest('.choice'),
                         input = choice.find('[type="checkbox"]'),
                         choiceB = choice.find('.middle'),
-                        button= choiceB.find('.letter');
+                        button= choiceB.find('.letter'),
+                        isChecked= input.is(':checked'),
+                        hasPrimary=button.hasClass('btn-primary'),
+                        nexAction =$('#nextAction'),
+                        seeAnswer=$('#skipAction');
 
-                    if (!input.is(':checked')&& !button.hasClass('btn-primary')) {
+                    if (!isChecked&& !hasPrimary) {
+                        input.prop('value',true);
                         button.addClass('btn-primary');
-                        input.attr('checked', true);
+                        nexAction.addClass('btn-primary');
+                        seeAnswer.addClass('hide');
                     }
-                    else {
-                        input.removeAttr('checked');
+                    else{
+                        nexAction.removeClass('btn-primary');
+                        seeAnswer.removeClass('hide');
+                        input.prop('value',false);
                         button.removeClass('btn-primary');
                     }
 
@@ -62,20 +82,26 @@ app.factory('matrix2x3ChoiceFactory', function(){
             var content = $('#parent');
 
             content.on('click', '#matrix2x3 .middle', function(event) {
-                $('#nextAction').removeClass('hide');
-                $('#skipAction').addClass('hide');
+
                 var choice = $(event.target).closest('.choice'),
                     input = choice.find('[type="checkbox"]'),
                     choiceB = choice.find('.middle'),
-                    button= choiceB.find('.letter');
+                    button= choiceB.find('.letter'),
+                    isChecked= input.is(':checked'),
+                    hasPrimary=button.hasClass('btn-primary'),
+                    nexAction =$('#nextAction'),
+                    seeAnswer=$('#skipAction');
 
-
-                if (!input.is(':checked')&& !button.hasClass('btn-primary')) {
+                if (!isChecked&& !hasPrimary) {
+                    input.prop('value',true);
                     button.addClass('btn-primary');
-                    input.attr('checked', true);
+                    nexAction.addClass('btn-primary');
+                    seeAnswer.addClass('hide');
                 }
-                else {
-                    input.removeAttr('checked');
+                else{
+                    nexAction.removeClass('btn-primary');
+                    seeAnswer.removeClass('hide');
+                    input.prop('value',false);
                     button.removeClass('btn-primary');
                 }
 
@@ -90,19 +116,26 @@ app.factory('matrix3x3ChoiceFactory', function(){
         execute: function(){
             var content = $('#parent');
             content.on('click', '#matrix3x3 .middle', function(event) {
-                $('#nextAction').removeClass('hide');
-                $('#skipAction').addClass('hide');
+
                 var choice = $(event.target).closest('.choice'),
                     input = choice.find('[type="checkbox"]'),
                     choiceB = choice.find('.middle'),
-                    button= choiceB.find('.letter');
+                    button= choiceB.find('.letter'),
+                    isChecked= input.is(':checked'),
+                    hasPrimary=button.hasClass('btn-primary'),
+                    nexAction =$('#nextAction'),
+                    seeAnswer=$('#skipAction');
 
-                if (!input.is(':checked') && !button.hasClass('btn-primary')) {
+                if (!isChecked&& !hasPrimary) {
+                    input.prop('value',true);
                     button.addClass('btn-primary');
-                    input.attr('checked', true);
+                    nexAction.addClass('btn-primary');
+                    seeAnswer.addClass('hide');
                 }
-                else {
-                    input.removeAttr('checked');
+                else{
+                    nexAction.removeClass('btn-primary');
+                    seeAnswer.removeClass('hide');
+                    input.prop('value',false);
                     button.removeClass('btn-primary');
                 }
 
@@ -112,17 +145,7 @@ app.factory('matrix3x3ChoiceFactory', function(){
     };
 });
 
-app.factory('TagElement',function(){
-    return{
-        add: function(value,text){
-            var footerTag=  $('#footerTags');
-            footerTag.append('<option value="'+value+'">'+text+'</option>');
-            footerTag.trigger("liszt:updated");
-        }
-    }
-});
 
-/*
 
 app.factory('multipleAnswerMultipleChoiceTwoCorrect', function(){
     return {
@@ -159,4 +182,4 @@ app.factory('multipleAnswerMultipleChoiceTwoCorrect', function(){
         }
     };
 });
-*/
+

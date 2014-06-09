@@ -1,19 +1,11 @@
-/**
- * Created by Jose on 5/9/14.
- */
-
-// Start Directives
 
 app.directive('ngOneChoice', function(oneChoiceFactory) {
     return {
         restrict: 'A',
-        templateUrl : 'app/practice/practiceDirectivesTemplates/oneChoice.tpl.html',
-        link: function(scope) {
+        templateUrl : 'app/subjects/practice/directives.tpl/oneChoice.tpl.html',
+        link: function() {
             oneChoiceFactory.execute();
-           scope.$watch('nextActionTitle', function() {
 
-
-           });
 
         },
         scope: {
@@ -26,7 +18,7 @@ app.directive('ngOneChoice', function(oneChoiceFactory) {
     .directive('ngMultipleChoice', function(multipleChoiceFactory) {
         return {
             restrict: 'A',
-            templateUrl : 'app/practice/practiceDirectivesTemplates/multipleChoice.tpl.html',
+            templateUrl : 'app/subjects/practice/directives.tpl/multipleChoice.tpl.html',
             link: function() {
                 multipleChoiceFactory.execute();
             },
@@ -40,7 +32,7 @@ app.directive('ngOneChoice', function(oneChoiceFactory) {
     .directive('ngMultipleMatrix2x3', function(matrix2x3ChoiceFactory) {
         return {
             restrict: 'A',
-            templateUrl : 'app/practice/practiceDirectivesTemplates/matrix2x3.tpl.html',
+            templateUrl : 'app/subjects/practice/directives.tpl/matrix2x3.tpl.html',
             link: function() {
                 matrix2x3ChoiceFactory.execute();
             },
@@ -54,7 +46,7 @@ app.directive('ngOneChoice', function(oneChoiceFactory) {
     .directive('ngMultipleMatrix3x3', function(matrix3x3ChoiceFactory) {
         return {
             restrict: 'A',
-            templateUrl : 'app/practice/practiceDirectivesTemplates/matrix3x3.tpl.html',
+            templateUrl : 'app/subjects/practice/directives.tpl/matrix3x3.tpl.html',
             link: function() {
                 matrix3x3ChoiceFactory.execute();
             },
@@ -68,7 +60,7 @@ app.directive('ngOneChoice', function(oneChoiceFactory) {
     .directive('ngSat', function() {
         return {
             restrict: 'A',
-            templateUrl : 'app/practice/practiceDirectivesTemplates/sat.tpl.html',
+            templateUrl : 'app/subjects/practice/directives.tpl/sat.tpl.html',
             link: function() {
 
             },
@@ -82,7 +74,7 @@ app.directive('ngOneChoice', function(oneChoiceFactory) {
     .directive('ngNumericEntry', function() {
         return {
             restrict: 'A',
-            templateUrl : 'app/practice/practiceDirectivesTemplates/numericEntry.tpl.html',
+            templateUrl : 'app/subjects/practice/directives.tpl/numericEntry.tpl.html',
             link: function() {
             },
             scope: {
@@ -95,7 +87,7 @@ app.directive('ngOneChoice', function(oneChoiceFactory) {
     .directive('ngFractionEntry', function() {
         return {
             restrict: 'A',
-            templateUrl : 'app/practice/practiceDirectivesTemplates/fractionEntry.tpl.html',
+            templateUrl : 'app/subjects/practice/directives.tpl/fractionEntry.tpl.html',
             link: function() {
 
             },
@@ -105,10 +97,13 @@ app.directive('ngOneChoice', function(oneChoiceFactory) {
         };
     })
 
+   .directive('ngAnswers', function(){
+    return {
+        restrict: 'A',
+        templateUrl : 'app/subjects/practice/directives.tpl/answers.tpl.html'
 
-
-// Ending Directives
-
+    };
+})
 
 
 //testing

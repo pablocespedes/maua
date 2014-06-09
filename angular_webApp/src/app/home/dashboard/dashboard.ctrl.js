@@ -1,5 +1,5 @@
 'use strict';
-home.controller('HomeController',['$scope','Users','History', function($scope,Users,History) {
+home.controller('SimpleDashController',['$scope','Users','History', function($scope,Users,History) {
 
     $scope.init = function(){
 
@@ -10,13 +10,13 @@ home.controller('HomeController',['$scope','Users','History', function($scope,Us
             scaleColor: false,
             lineWidth: 6,
             lineCap: 'square',
-            size: 105,
+            size: 145,
             trackColor: '#e5e5e5'
         };
         angular.element('#easy-pie-chart-2').easyPieChart(easyPieChartDefaults);
         angular.element('.progress-bar').tooltip();
         //getUsserInformation();
-        FillGraphic()
+        FillGraphic();
     };
 
     function getUserInformation(){
@@ -157,7 +157,7 @@ home.controller('HomeController',['$scope','Users','History', function($scope,Us
 
     $scope.StartPractice = function(){
 
-        window.location.href='#/practice';
+        window.location.href='#/practice/gre';
 
     };
     $scope.init();

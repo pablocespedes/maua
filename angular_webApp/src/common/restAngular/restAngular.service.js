@@ -6,6 +6,11 @@ request.factory('Users', function(Restangular) {
 
 });
 
+request.factory('Questions', function(Restangular) {
+    return  Restangular.service('questions')
+
+});
+
 request.factory('ApiV3Restangular', function(Restangular) {
     return Restangular.withConfig(function(RestangularConfigurer) {
         RestangularConfigurer.setBaseUrl('https://staging.grockit.com/api/v3/');
@@ -17,6 +22,5 @@ request.factory('Questions', function(ApiV3Restangular) {
     return ApiV3Restangular.service('questions');
 
 });
-
 
 

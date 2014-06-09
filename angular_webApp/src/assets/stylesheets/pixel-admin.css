@@ -3713,6 +3713,7 @@ body:after,
   .animate-mm-sm #main-navbar .navbar-inner,
   .animate-mm-sm #main-menu-toggle,
   .animate-mm-sm #main-wrapper,
+  .animate-mm-sm footer,
   .animate-mm-sm #main-menu,
   .animate-mm-sm #content-wrapper,
   .animate-mm-sm #main-menu-bg {
@@ -3727,6 +3728,7 @@ body:after,
   .animate-mm-md #main-navbar .navbar-inner,
   .animate-mm-md #main-menu-toggle,
   .animate-mm-md #main-wrapper,
+  .animate-mm-md footer,
   .animate-mm-md #main-menu,
   .animate-mm-md #content-wrapper,
   .animate-mm-md #main-menu-bg {
@@ -3741,6 +3743,7 @@ body:after,
   .animate-mm-lg #main-navbar .navbar-inner,
   .animate-mm-lg #main-menu-toggle,
   .animate-mm-lg #main-wrapper,
+  .animate-mm-lg footer,
   .animate-mm-lg #main-menu,
   .animate-mm-lg #content-wrapper,
   .animate-mm-lg #main-menu-bg {
@@ -3754,6 +3757,7 @@ body:after,
 .disable-mm-animation #main-navbar .navbar-inner,
 .disable-mm-animation #main-menu-toggle,
 .disable-mm-animation #main-wrapper,
+.disable-mm-animation footer,
 .disable-mm-animation #main-menu,
 .disable-mm-animation #content-wrapper,
 .disable-mm-animation #main-menu-bg,
@@ -4449,7 +4453,7 @@ body:after,
     .mme footer {
         left: 184px; }
 
-  .mme #content-wrapper {
+  .mme #content-wrapper{
     left: 184px; }
   .mme #main-navbar .navbar-inner {
     left: 240px;
@@ -4458,17 +4462,20 @@ body:after,
     width: 240px; } }
 @media (min-width: 768px) {
   .mme #main-wrapper,
-  #main-wrapper {
+  .mme footer,
+  #main-wrapper,
+  footer{
     padding-left: 240px; }
 
-  .mme #content-wrapper,footer,
+  .mme #content-wrapper,
   .mmc.mme #content-wrapper {
     left: 0; }
 
   .mme #main-navbar .navbar-inner {
     left: 0; }
 
-  .mmc #main-wrapper {
+  .mmc #main-wrapper,
+  .mmc footer {
     padding-left: 56px; }
 
   #main-navbar .navbar-header {
@@ -8666,8 +8673,7 @@ body:not(.right-to-left) .no-border-l {
     margin-right: 4px;
     top: 4px; }
     #main-navbar .navbar-brand div, #main-navbar .navbar-brand div img {
-      height: 18px;
-      width: 18px; }
+       }
     #main-navbar .navbar-brand div img {
       display: block; }
 
@@ -10158,7 +10164,7 @@ body .ui-tooltip {
     color: #fff;
     cursor: default;
     display: block;
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 600;
     line-height: 20px;
     margin: 0 0 5px 5px;

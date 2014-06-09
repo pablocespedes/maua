@@ -2,7 +2,7 @@
 (function(app) {
  app.config(function($routeProvider) {
 
-        $routeProvider.otherwise({redirectTo: '/home'});
+        $routeProvider.otherwise({redirectTo: '/dashboard'});
     });
     app.run(function () {});
 }(angular.module("grockitApp", [
@@ -12,7 +12,7 @@
   'ngAnimate',
   'grockitApp.requests',
   'grockitApp.practice',
-    'grockitApp.home'
+  'grockitApp.home'
 ]))
 );
 

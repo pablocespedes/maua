@@ -1,9 +1,17 @@
-/**
- * Created by Jose on 6/3/2014.
- */
+'use strict';
 
+app.factory('TagElement',function(){
+    return{
+        add: function(value,text){
+            var footerTag=  $('#footerTags'),
+                option = footerTag.find('option[value=' + value + ']').prop("selected","selected");
+            footerTag.trigger("change");
+            footerTag.append($('<option>', {value:value, text: text}));
+        }
+    }
+});
 
-home.factory('History', function() {
+app.factory('History', function() {
 
     function  getIndex(srcArray, field){
         var i, l, index;
@@ -36,7 +44,7 @@ home.factory('History', function() {
         findMissingDates:function(test){
             var dest = [], datestr = '', src = test,
                 index = getIndex(src, 'day'),max= 0,i=0,
-                //get boundaries
+            //get boundaries
                 first = new Date(src[0].day),
                 last = new Date(src[src.length-1].day);
 

@@ -16,24 +16,13 @@
   transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 
-/*
-
-.list-group-item :hover{
-  padding-bottom: 10px;
-  padding-top: 10px;
-  border-color: #e4e4e4;
+.pie-chart-label.xlText{
+  font-weight: 600;
+  font-size: 46px;
+  margin-top: -38px;
 }
 
-.list-group-item {
-  position: relative;
+.chart-range-text{
   display: block;
-  padding: 10px 15px;
-  margin-bottom: -1px;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  color: gray;
 }
-
-li {
-  background: 0 0;
-}
-*/

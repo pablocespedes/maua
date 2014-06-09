@@ -4,28 +4,28 @@
 // load all of the dependencies asynchronously.
 
 var paths={
-    jqueryGrockit:'common/components/jquery.grockit.js',
+    jqueryGrockit:'common/jquery.grockit.js',
     underscore:'common/lib/underscore.js',
-    requestFactory:'app/requests/requests.factory.js',
-    requests:'app/requests/requests.module.js',
+    restAngularFactory:'common/restAngular/restAngular.service.js',
+    restAngular:'common/restAngular/restAngular.module.js',
     home:'app/home/home.module.js',
-    practice:'app/practice/practice.module.js',
-    app:'app/app.js',
-    homeCtrl:'app/home/home.ctrl.js'
+    subjects:'app/subjects/subjects.module.js',
+    app:'app/app.js'//,
+    //homeCtrl:'app/home/home.ctrl.js'
 };
 
 $script([
     paths.underscore,
-    paths.requests,
+    paths.restAngular,
     paths.home,
-    paths.practice,
+    paths.subjects,
     paths.app
 ],'init')
 
     .ready('init', function(){
         $script([
-            paths.requestFactory,
-            paths.homeCtrl,
+            paths.restAngularFactory,
+            //paths.homeCtrl,
             paths.jqueryGrockit
         ], function() {
             angular.bootstrap(document, ['grockitApp']);

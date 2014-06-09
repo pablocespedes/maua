@@ -1,29 +1,4 @@
 app.controller('PracticeController',['$scope','Questions',function($scope,Questions) {
-
-    $scope.rows=[1,2,3,4,5,6,7,8,9,10];
-    $scope.column=[1,2,3,4];
-
-    var easyPieChartDefaults = {
-        animate: 2000,
-        scaleColor: false,
-        lineWidth: 6,
-        lineCap: 'square',
-        size: 105,
-        trackColor: '#e5e5e5'
-    };
-    angular.element('#easy-pie-chart-2').easyPieChart(easyPieChartDefaults);
-
-    $scope.questionTemplates =
-        [   { name: 'MultipleChoiceOneCorrect', url: 'app/practice/practiceModuleTemplates/oneCorrectQ.tpl.html'},
-            { name: 'MultipleChoiceOneorMoreCorrect', url: 'app/practice/practiceModuleTemplates/multipleChoiceQ.tpl.html'},
-            { name: 'MultipleChoiceMatrixTwoByThree', url: 'app/practice/practiceModuleTemplates/matrix2x3Q.tpl.html'},
-            { name: 'MultipleChoiceMatrixThreeByThree', url: 'app/practice/practiceModuleTemplates/matrix3x3Q.tpl.html'},
-            { name: 'NumericEntryFraction', url: 'app/practice/practiceModuleTemplates/fractionEntryQ.tpl.html'},
-            { name: 'NumericEntry', url: 'app/practice/practiceModuleTemplates/numericEntryQ.tpl.html'},
-            { name: 'sat', url: 'app/practice/practiceModuleTemplates/satQ.tpl.html'}
-        ];
-
-    //This list will be moved to a specific file
     $scope.optionList = ['A','B','C','D','E','F','G','H','I'];
     $scope.nextActionTitle='Confirm Choice';
     $scope.questionItems=[];
@@ -31,10 +6,28 @@ app.controller('PracticeController',['$scope','Questions',function($scope,Questi
     $scope.showExplanation = false;
     $scope.showVideo = false;
     $scope.position=0;
-    $scope.templateUrl = function() {
-               $scope.actualView=$scope.questionTemplates[$scope.position].name;
-        return $scope.questionTemplates[$scope.position].url;
-    };
+    $scope.rows=[1,2,3,4,5,6,7,8,9,10];
+    $scope.column=[1,2,3,4];
+
+    $scope.directives =
+        [   { id:'1', type: 'MultipleChoiceOneCorrect'},
+            { id:'2', type: 'MultipleChoiceOneOrMoreCorrect'},
+            { id:'3', type: 'MultipleChoiceMatrixTwoByThree'},
+            { id:'4', type: 'MultipleChoiceMatrixThreeByThree'},
+            { id:'5', type: 'NumericEntryFraction'},
+            { id:'6', type: 'NumericEntry'},
+            { id:'7', type: 'sat'},
+            {id:'8', type: 'MultipleChoiceTwoCorrect'}
+        ];
+
+
+    var selectAnswerType = function(type) {
+
+        return $.grep($scope.directives,function (val) {
+            return val.type == type;
+        })[0];
+
+    }
 
     var getUrlQuestion= function(){
 
@@ -67,16 +60,49 @@ app.controller('PracticeController',['$scope','Questions',function($scope,Questi
 
     };
 
+    function SeeAnswer(){
+         angular.element('#skipAction').addClass('hide');
+         angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
+         $scope.nextActionTitle='Next Question';
+         $scope.showExplanation = true;
+
+         //Question Explanation
+         $scope.questionExplanation=$scope.questionItems.explanation;
+
+         //video validation
+         if($scope.questionItems.youtube_video_id !==null){
+             $scope.showVideo=true;
+             $scope.videoId= $scope.questionItems.youtube_video_id ;
+         }
+
+         //Get answers from the previous request and Explain
+         var answers = $scope.questionItems.answers;
+
+         //Work with the styles to shown result
+         //define is some answer is bad.
+         angular.element('.choice button').removeClass('btn-primary');
+
+         angular.forEach(answers, function (value, key) {
+                 var selectIdButton = '#' + value.position;
+                 if (value.correct) {
+                     angular.element(selectIdButton).addClass('btn-success');
+                 }
+         });
+
+         angular.element(".choice *").prop('disabled', true);
+     }
+
     function confirmChoice(){
 
         var selectedPosition='',selectedOptions=[];
         //Get selected answers
-        angular.element('.choice input:checkbox:checked').each(function () {
-            selectedPosition = (this.checked ? $(this).val() : "");
+        angular.element('.choice input:checkbox[value=true]').each(function () {
+            selectedPosition = $(this).attr('id');
             selectedOptions.push(selectedPosition);
         });
 
         if (selectedOptions.length>0) {
+            angular.element('#skipAction').addClass('hide');
             angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
             $scope.nextActionTitle='Next Question';
             $scope.showExplanation = true;
@@ -128,17 +154,16 @@ app.controller('PracticeController',['$scope','Questions',function($scope,Questi
     }
 
     function nextQuestion(){
-        if($scope.questionTemplates.length-1> $scope.position){
+        if($scope.directives.length-1> $scope.position){
             //Enable/disable answer section
             angular.element('.choice *').removeAttr('disabled');
             $scope.showVideo = false;
             $scope.position++;
             $scope.loadQuestion();
-            $scope.templateUrl();
             $scope.messageConfirmation='';
             $scope.showExplanation = false;
             $scope.nextActionTitle='Confirm Choice';
-            angular.element('#nextAction').removeClass('btn-success').addClass('btn-primary hide');
+            angular.element('#nextAction').removeClass('btn-success');
             angular.element('#skipAction').removeClass('hide');
         }
     }
@@ -148,7 +173,7 @@ app.controller('PracticeController',['$scope','Questions',function($scope,Questi
 
         angular.element('.choice.active').removeClass('active');
         Questions.one(getUrlQuestion()).get().then(function(questionResult){
-
+                $scope.currentA=  selectAnswerType(questionResult.kind).id;
                 $scope.items=[];
                 $scope.stimulus="";
                 $scope.template= $scope.actualView;
@@ -156,9 +181,6 @@ app.controller('PracticeController',['$scope','Questions',function($scope,Questi
 
                 $scope.questionInformation=  $scope.questionItems.question_set.info;
                 $scope.stimulus= $scope.questionItems.stimulus;
-
-
-
 
                 var answers= $scope.questionItems.answers;
                 angular.forEach(answers, function(value,index){
@@ -183,9 +205,12 @@ app.controller('PracticeController',['$scope','Questions',function($scope,Questi
 
     };
 
-    $scope.skipQuestion = function(){
-        nextQuestion();
-    }
+    $scope.revealExplanation = function(){
+        SeeAnswer();
+    };
+
+
+
 
 
 
