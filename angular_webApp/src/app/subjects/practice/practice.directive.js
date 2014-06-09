@@ -97,27 +97,26 @@ app.directive('ngOneChoice', function(oneChoiceFactory) {
         };
     })
 
-   .directive('ngAnswers', function(){
-    return {
-        restrict: 'A',
-        templateUrl : 'app/subjects/practice/directives.tpl/answers.tpl.html'
-
-    };
-})
-
-
-//testing
-    .directive('ngMultipleChoiceTwo', function() {
+    .directive('ngTwoChoice', function(multipleChoiceTwoCorrect) {
 
         return {
             restrict: 'A',
-            template :  multipleChoiceTemplate(),
+            templateUrl : 'app/subjects/practice/directives.tpl/twoChoice.tpl.html',
             link: function() {
-                multipleAnswerMultipleChoiceTwoCorrect();
+                multipleChoiceTwoCorrect.execute();
             },
             scope: {
                 items:'=items'
             }
         };
+    })
+
+    .directive('ngAnswers', function(){
+        return {
+            restrict: 'A',
+            templateUrl : 'app/subjects/practice/directives.tpl/answers.tpl.html'
+
+        };
     });
+
 

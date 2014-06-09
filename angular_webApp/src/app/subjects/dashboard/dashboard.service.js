@@ -68,3 +68,85 @@ app.factory('History', function() {
     }
 
 });
+
+
+
+app.factory('ClusterInformation', function() {
+
+    var items = [
+        {
+            id: '1',
+            img: 'http://ionicframework.com.s3.amazonaws.com/demos/ionic-contrib-swipecards/pic4.png',
+            style: '250px'
+        },
+        {
+            id: '2',
+            img: 'http://ionicframework.com.s3.amazonaws.com/demos/ionic-contrib-swipecards/pic3.png',
+            style: '150px'
+        },
+        {
+            id: '3',
+            img: 'http://ionicframework.com.s3.amazonaws.com/demos/ionic-contrib-swipecards/pic2.png',
+            style: '350px'
+        },
+        {
+            id: '4',
+            img: 'http://ionicframework.com.s3.amazonaws.com/demos/ionic-contrib-swipecards/pic.png',
+            style: '50px'
+        },
+        {
+            id: '5',
+            img: 'http://ionicframework.com.s3.amazonaws.com/demos/ionic-contrib-swipecards/pic3.png',
+            style: '50px'
+        },
+        {
+            id: '6',
+            img: 'http://ionicframework.com.s3.amazonaws.com/demos/ionic-contrib-swipecards/pic2.png',
+            style: '100px'
+        },
+        {
+            id: '7',
+            img: 'http://ionicframework.com.s3.amazonaws.com/demos/ionic-contrib-swipecards/pic.png',
+            style: '50px'
+        },
+        {
+            id: '8',
+            img: 'http://ionicframework.com.s3.amazonaws.com/demos/ionic-contrib-swipecards/pic4.png',
+            style: '150px'
+        },
+        {
+            id: '9',
+            img: 'http://ionicframework.com.s3.amazonaws.com/demos/ionic-contrib-swipecards/pic2.png',
+            style: '250px'
+        },
+        {
+            id: '10',
+            img: 'http://ionicframework.com.s3.amazonaws.com/demos/ionic-contrib-swipecards/pic.png',
+            style: '250px'
+        },
+        {
+            id: '11',
+            img: 'http://ionicframework.com.s3.amazonaws.com/demos/ionic-contrib-swipecards/pic4.png',
+            style: '350px'
+        },
+        {
+            id: '12',
+            img: 'http://ionicframework.com.s3.amazonaws.com/demos/ionic-contrib-swipecards/pic2.png',
+            style: '75px'
+        },
+        {
+            id: '13',
+            img: 'http://ionicframework.com.s3.amazonaws.com/demos/ionic-contrib-swipecards/pic3.png',
+            style: '50px'
+        },
+        {
+            id: '14',
+            img: 'http://ionicframework.com.s3.amazonaws.com/demos/ionic-contrib-swipecards/pic4.png', style: '50px'
+        },
+        {
+            id: '15',
+            img: 'http://ionicframework.com.s3.amazonaws.com/demos/ionic-contrib-swipecards/pic.png',
+            style: '50px'
+        }
+    ];
+});

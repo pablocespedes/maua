@@ -1,4 +1,5 @@
-<div id="multipleChoice" class="choice"  ng-repeat="item in items">
+<div id="multipleChoice" >
+<div class="choice"  ng-repeat="item in items">
 <div class="middle">
  <button id="{{item.position}}" type="button" class="btn-option letter" >{{item.option}}</button>
 <input id="{{item.position}}" type="checkbox" name="choice"  value="{{item.position}}"  />
@@ -10,4 +11,5 @@
         <div class="explain-margin" ng-bind-html='item.explanation'></div>
     </div>
     <hr>
+</div>
 </div>
