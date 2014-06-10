@@ -78,7 +78,7 @@ app.factory('multipleChoiceFactory', function () {
 app.factory('matrix2x3ChoiceFactory', function () {
     return {
         execute: function () {
-            var content = $('#parent');
+            var content = $('#parent'),  maxAllowed = 2;
 
             content.on('click', '#matrix2x3 .middle', function (event) {
 
@@ -90,7 +90,16 @@ app.factory('matrix2x3ChoiceFactory', function () {
                     isChecked = input.is(':checked'),
                     hasPrimary = button.hasClass('btn-primary'),
                     nexAction = $('#nextAction'),
-                    seeAnswer = $('#skipAction');
+                    seeAnswer = $('#skipAction'),
+                    limitSelection = choiceB.parent();
+
+                var cnt = limitSelection.find('input[value="true"]').length;
+                if (cnt > maxAllowed)
+                {
+                    $(this).prop("checked", "");
+                    alert('Select maximum ' + maxAllowed + ' technologies!');
+                }
+
 
                 if (!isChecked && !hasPrimary) {
                     input.prop('value', true);

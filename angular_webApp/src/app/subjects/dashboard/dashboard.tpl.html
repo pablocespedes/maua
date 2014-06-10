@@ -58,20 +58,21 @@
                     <div class="col-md-2 bar-col">
                         <div class="text-center">
                             <div class="progress progress-striped active">
-                                <div data-toggle='tooltip' data-placement='bottom' data-original-title='Accuracy(Percent Correct) 10%' class="progress-bar progress-bar-danger" style="width: 30%;"></div>
+                                <div data-toggle='tooltip' data-placement='bottom' data-original-title='{{Accuracy}}' class="progress-bar progress-bar-danger" style="width: 30%;"></div>
                             </div>
+                            <span ng-bind="percentCompleted"></span>
                             30% completed
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="  text-center">
-                            <h4><b><span class="badge badge-danger">65</span></b>/80</h4>
+                            <h4><b><span class="badge badge-danger" ng-bind="readyQuestions"></span></b>/<span ng-bind="pendingQuestions"></span></h4>
                             <h4>Questions</h4>
                         </div>
                     </div>
                     <div class="col-md-3  tag-col">
                         <div class="  text-center">
-                            <h2>Number of Properties</h2>Algebra,Exponents,etc.
+                            <h2><span ng-bind="clusterName"></span></h2><span ng-bind="tagsRelated"></span>
                         </div>
                     </div>
                     <div class="col-md-2">

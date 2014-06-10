@@ -38,6 +38,7 @@ app.directive('ngOneChoice', function(oneChoiceFactory) {
             },
             scope: {
                 items:'=items',
+                rows:'=rows',
                 showExplanation:'='
             }
         };
