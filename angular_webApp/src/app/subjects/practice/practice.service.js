@@ -78,7 +78,7 @@ app.factory('multipleChoiceFactory', function () {
 app.factory('matrix2x3ChoiceFactory', function () {
     return {
         execute: function () {
-            var content = $('#parent'),  maxAllowed = 2;
+            var content = $('#parent');
 
             content.on('click', '#matrix2x3 .middle', function (event) {
 
@@ -91,15 +91,12 @@ app.factory('matrix2x3ChoiceFactory', function () {
                     hasPrimary = button.hasClass('btn-primary'),
                     nexAction = $('#nextAction'),
                     seeAnswer = $('#skipAction'),
-                    limitSelection = choiceB.parent();
+                    limitSelection = choice.parent().find('[data-group='+choiceB.data('group')+']');
 
-                var cnt = limitSelection.find('input[value="true"]').length;
-                if (cnt > maxAllowed)
-                {
-                    $(this).prop("checked", "");
-                    alert('Select maximum ' + maxAllowed + ' technologies!');
+                if(limitSelection.find('button').hasClass('btn-primary')){
+                    limitSelection.find('button').removeClass('btn-primary');
+                    limitSelection.find('input').prop('value', false);
                 }
-
 
                 if (!isChecked && !hasPrimary) {
                     input.prop('value', true);
@@ -135,8 +132,13 @@ app.factory('matrix3x3ChoiceFactory', function () {
                     isChecked = input.is(':checked'),
                     hasPrimary = button.hasClass('btn-primary'),
                     nexAction = $('#nextAction'),
-                    seeAnswer = $('#skipAction');
+                    seeAnswer = $('#skipAction'),
+                    limitSelection = choice.parent().find('[data-group='+choiceB.data('group')+']');
 
+                if(limitSelection.find('button').hasClass('btn-primary')){
+                    limitSelection.find('button').removeClass('btn-primary');
+                    limitSelection.find('input').prop('value', false);
+                }
                 if (!isChecked && !hasPrimary) {
                     input.prop('value', true);
                     button.addClass('btn-primary');

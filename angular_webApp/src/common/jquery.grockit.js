@@ -1,16 +1,17 @@
-/**
- * Created by Jose on 5/8/14.
- */
-
 $(function(){
-
+    setDropDownText();
     footer();
     setActiveMenu();
     setSelect2Settings();
-    setCookie('user_id','e1a2f2d0-c005-0130-2f70-1231390ef981');
+    setCookie('user_id','f58077f0-3084-012d-4d3f-123139068df2');
 });
 
-
+function setDropDownText(){
+    $('.dropdown-menu li a').click(function(){
+        var selText = $(this).text();
+        $(this).parents().find('#subjectDD').html(selText);
+    });
+}
 function setActiveMenu(){
     var menuList = $('div#main-menu-inner ul.navigation li');
         var url = window.location.href.split('/'),
@@ -19,10 +20,10 @@ function setActiveMenu(){
         menuList.removeClass('active');
         switch(actualLocation){
             case "dashboard":
-                $(menuList[0]).addClass('active'); //Dashboard
+                $(menuList[0]).addClass('active'); //Home Dashboard
                 break;
-            case "math":
-                $(menuList[1]).addClass('active'); //Practice
+            case "dashboard-practice":
+                $(menuList[1]).addClass('active'); //Game Dashboard
                 break;
         }
 

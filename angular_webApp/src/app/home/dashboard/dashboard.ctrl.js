@@ -1,6 +1,6 @@
 'use strict';
-home.controller('SimpleDashController',['$scope','Users','History', function($scope,Users,History) {
-
+home.controller('SimpleDashController',['$scope','Users','History','Groups', function($scope,Users,History,Groups) {
+    $scope.selectedTrack='';
     $scope.init = function(){
 
         //Declarate User RestAngular Object
@@ -15,116 +15,34 @@ home.controller('SimpleDashController',['$scope','Users','History', function($sc
         };
         angular.element('#easy-pie-chart-2').easyPieChart(easyPieChartDefaults);
         angular.element('.progress-bar').tooltip();
-        //getUsserInformation();
-        FillGraphic();
+        getHistoryInformation();
+        fetchTracksData();
     };
 
-    function getUserInformation(){
+    function fetchTracksData(){
+        var tracks = Groups.one('gre');
+         tracks.customGET('tags', {include_unpublished: true}).then(function(response){
+             $scope.tracks = response.tracks;
+         }).catch(function error(msg) {
+             console.error(msg);
+         });
+    }
 
-       $scope.UserRequest.get().then(function(userResult){
+    function getHistoryInformation(){
 
-           var analytics = $scope.UserRequest.one(userResult.user.id).customGET('analytics').then(function(graphicResult){
+           var analytics = $scope.UserRequest.one('f58077f0-3084-012d-4d3f-123139068df2').customGET('history',{group:'gmat'}).then(function(graphicResult){
                FillGraphic(graphicResult);
-           });
+           }).catch(function error(msg) {
+            console.error(msg);
+        });
 
-       }).catch(function error(msg) {
-           console.error(msg);
-       });
 
    }
 
-    var test = function(){
-        return [
-            {
-                "day": "2013-12-04",
-                "total_questions": 2,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2013-12-10",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-01-04",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-01-10",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-01-13",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-01-19",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-01-24",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-01-29",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-02-04",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-02-09",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            }
-
-        ];
-
-    };
-
     function FillGraphic(graphicData){
 
-       var response = History.findMissingDates(test());
-
-      /*  if(angular.isDefined(graphicData)){*/
+       var response = History.findMissingDates(graphicData.history);
+        if(angular.isDefined(graphicData)){
             Morris.Line({
                 element: 'hero-graph',
                 data:response.Data,
@@ -132,15 +50,15 @@ home.controller('SimpleDashController',['$scope','Users','History', function($sc
                 ykeys: ['total_questions'],
 
                 labels: ['Questions Answered'],
-                lineColors: ['#fff'],
+                lineColors: ['#2e9be2'],
                 lineWidth: 2,
                 pointSize: 4,
                 numLines: response.MaxLine,
                 hideHover: true,
                 onlyIntegers:false,
-                gridLineColor: 'rgba(255,255,255,.5)',
+                gridLineColor: '#2e9be2',//'rgba(255,255,255,.5)',
                 resize: true,
-                gridTextColor: '#fff',
+                gridTextColor: '#1d89cf',
                 xLabels: "day",
                 xLabelFormat: function(d) {
                     return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate();
@@ -150,14 +68,15 @@ home.controller('SimpleDashController',['$scope','Users','History', function($sc
                     return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate() +', '+d.getFullYear();
                 }
             });
-       /* }*/
+        }
 
 
     }
 
+
     $scope.StartPractice = function(){
 
-        window.location.href='#/practice/gre';
+        window.location.href=$scope.selectedTrack+'/#/practice/';
 
     };
     $scope.init();

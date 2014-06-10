@@ -63,7 +63,8 @@ app.factory('History', function() {
                 }
                 i++;
             }
-            return {"Data":dest,"MaxLine":max+1 };
+            max= max >= 5 ? 5 : max+1;
+            return {"Data":dest,"MaxLine":max };
         }
     }
 

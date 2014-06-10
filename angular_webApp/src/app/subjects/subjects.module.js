@@ -37,7 +37,7 @@ var app =  angular.module("grockitApp.practice",[]).config(function ($httpProvid
     }}, controller: 'DetailDashController'});
 
 
-    $routeProvider.when('/practice/:subject', {templateUrl: 'app/subjects/practice/practice.tpl.html', resolve:{deps:function($q, $rootScope){
+    $routeProvider.when('/:subject/practice', {templateUrl: 'app/subjects/practice/practice.tpl.html', resolve:{deps:function($q, $rootScope){
         var deferred = $q.defer(),
             essentials = [
                 filePath.practice.practiceCtrl,

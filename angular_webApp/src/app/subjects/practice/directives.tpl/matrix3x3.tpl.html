@@ -3,7 +3,7 @@
 <div >Blank {{($index / 3) +1}}</div>
 <hr>
 </div>
-    <div class="middle">
+    <div class="middle" data-group="{{(($index-($index%3))/3 )}}">
         <button id="{{item.position}}" type="button" class="letter btn-option  btn-rounded letter" >{{item.option}}</button>
         <input id="{{item.position}}" type="checkbox" name="choice"  value="{{item.position}}"  />
         <div class="content" >
