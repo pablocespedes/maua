@@ -1,6 +1,3 @@
-/**
- * Created by Jose on 5/8/14.
- */
 // load all of the dependencies asynchronously.
 
 var paths={
@@ -9,7 +6,7 @@ var paths={
     restAngularFactory:'common/restAngular/restAngular.service.js',
     restAngular:'common/restAngular/restAngular.module.js',
     home:'app/home/home.module.js',
-    subjects:'app/subjects/subjects.module.js',
+    practiceGame:'app/practiceGame/practiceGame.module.js',
     app:'app/app.js',
     generalDrctv:'common/directives/general.directive.js'
 };
@@ -18,14 +15,14 @@ $script([
     paths.underscore,
     paths.restAngular,
     paths.home,
-    paths.subjects,
+    paths.practiceGame,
     paths.app
 ],'init')
 
     .ready('init', function(){
         $script([
             paths.restAngularFactory,
-            paths.generalDrctv,
+            //paths.generalDrctv,
             paths.jqueryGrockit
         ], function() {
             angular.bootstrap(document, ['grockitApp']);

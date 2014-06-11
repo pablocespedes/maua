@@ -1,6 +1,6 @@
 'use strict';
 home.controller('SimpleDashController',['$scope','Users','History','Groups', function($scope,Users,History,Groups) {
-    $scope.selectedTrack='';
+    $scope.selectedTrack=undefined;
     $scope.init = function(){
 
         //Declarate User RestAngular Object
@@ -75,8 +75,13 @@ home.controller('SimpleDashController',['$scope','Users','History','Groups', fun
 
 
     $scope.StartPractice = function(){
+        if(angular.isDefined($scope.selectedTrack)){
+            window.location.href=$scope.selectedTrack.group_id+'/#/practice/';
+        }
+        else{
+            bootbox.alert('You must select one track at least');
+        }
 
-        window.location.href=$scope.selectedTrack+'/#/practice/';
 
     };
     $scope.init();
