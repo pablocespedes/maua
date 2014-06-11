@@ -84,7 +84,7 @@ app.factory('matrix2x3ChoiceFactory', function () {
 
                 var choice = $(event.target).closest('.choice'),
                     general= $('.choice .middle button'),
-                    input = choice.find('[type="checkbox"]'),
+                    input = choice.find('[type="radio"]'),
                     choiceB = choice.find('.middle'),
                     button = choiceB.find('.letter'),
                     isChecked = input.is(':checked'),
@@ -125,7 +125,7 @@ app.factory('matrix3x3ChoiceFactory', function () {
             content.on('click', '#matrix3x3 .middle', function (event) {
 
                 var choice = $(event.target).closest('.choice'),
-                    input = choice.find('[type="checkbox"]'),
+                    input = choice.find('[type="radio"]'),
                     general= $('.choice .middle button'),
                     choiceB = choice.find('.middle'),
                     button = choiceB.find('.letter'),

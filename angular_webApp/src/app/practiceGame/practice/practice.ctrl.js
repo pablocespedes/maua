@@ -96,7 +96,7 @@ app.controller('PracticeController',['$scope','Questions',function($scope,Questi
 
         var selectedPosition='',selectedOptions=[];
         //Get selected answers
-        angular.element('.choice input:checkbox[value=true]').each(function () {
+        angular.element('.choice input[value=true]').each(function () {
             selectedPosition = $(this).attr('id');
             selectedOptions.push(selectedPosition);
         });
