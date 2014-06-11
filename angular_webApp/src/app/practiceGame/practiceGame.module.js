@@ -1,6 +1,6 @@
 'use strict';
 
-var app =  angular.module("grockitApp.practice",[]).config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide) {
+var app =  angular.module("grockitApp.practiceGame",[]).config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide) {
     app.controller    = $controllerProvider.register;
     app.directive     = $compileProvider.directive;
     app.routeProvider = $routeProvider;
@@ -9,18 +9,18 @@ var app =  angular.module("grockitApp.practice",[]).config(function ($httpProvid
 
     var filePath = {
         practice: {
-            practiceCtrl: 'app/subjects/practice/practice.ctrl.js',
-            practiceDrctv:'app/subjects/practice/practice.directive.js',
-            practiceServ:'app/subjects/practice/practice.service.js'
+            practiceCtrl: 'app/practiceGame/practice/practice.ctrl.js',
+            practiceDrctv:'app/practiceGame/practice/practice.directive.js',
+            practiceServ:'app/practiceGame/practice/practice.service.js'
         },
         dashboard:{
-            dashCtrl: 'app/subjects/dashboard/dashboard.ctrl.js',
-            dashServ:'app/subjects/dashboard/dashboard.service.js'
+            dashCtrl: 'app/practiceGame/dashboard/dashboard.ctrl.js',
+            dashServ:'app/practiceGame/dashboard/dashboard.service.js'
         }
      };
 
 
-    $routeProvider.when('/dashboard-practice', {templateUrl: 'app/subjects/dashboard/dashboard.tpl.html', resolve:{deps:function($q, $rootScope){
+    $routeProvider.when('/dashboard-practice', {templateUrl: 'app/practiceGame/dashboard/dashboard.tpl.html', resolve:{deps:function($q, $rootScope){
         var deferred = $q.defer(),
             essentials = [
                 filePath.dashboard.dashServ,
@@ -37,7 +37,7 @@ var app =  angular.module("grockitApp.practice",[]).config(function ($httpProvid
     }}, controller: 'DetailDashController'});
 
 
-    $routeProvider.when('/:subject/practice', {templateUrl: 'app/subjects/practice/practice.tpl.html', resolve:{deps:function($q, $rootScope){
+    $routeProvider.when('/:subject/practice', {templateUrl: 'app/practiceGame/practice/practice.tpl.html', resolve:{deps:function($q, $rootScope){
         var deferred = $q.defer(),
             essentials = [
                 filePath.practice.practiceCtrl,

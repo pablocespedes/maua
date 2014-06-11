@@ -11,7 +11,7 @@
   'ngSanitize',
   'ngAnimate',
   'grockitApp.requests',
-  'grockitApp.practice',
+  'grockitApp.practiceGame',
   'grockitApp.home'
 ]))
 );
