@@ -1,85 +1,56 @@
 // bower:scss
 // endbower
 
-@import //"../app/home/home.scss",
-        "../app/practice/practice.scss";
+@import  "../styles/_variables.scss",
+        "../app/home/dashboard/dashboard.scss",
+"../app/practiceGame/dashboard/dashboard.scss",
+"../app/practiceGame/practice/practice.scss";
 
 //general css
-
+.panel-no-bg {
+  margin-bottom: 18px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
 .panel-body-no-bg {
   margin: 0;
   padding: 20px;
 }
-.colored.list-group-item{
-  background: #f2dede;
-  border-color: #ebccd1;
-  color: #b94a48;
+.panel-footer-no-bg {
+  border-top: 1px solid #ececec;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
-.foot-fixed-bottom {
-  bottom: 0;
-  display: block;
-  margin-bottom: 0;
-  position: fixed;
-  z-index: 1030;
+
+#topics{
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  background-color: #CCCBCB;
+  min-height: 50px;
+  margin-top: 5px;
+  border: none;
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
+
+//  box-shadow: 0 3px 1px #555, 0 -2px 4px #555;
+
 }
-.foot-fixed-bottom .container {
-  margin-left: 26%;
-  padding-bottom: 2px;
-  max-width:100%;
+footer {
+ z-index: 1030;
+  border: none;
+  min-height: 42px;
+  width: 100%;
+//  border-top: 1px solid transparent;
+
 }
 
-@media (max-width: 480px) {
-  .foot-fixed-bottom {
-    bottom: 0;
-    display: block;
-    margin-bottom: 0;
-    position: initial;
-    z-index: 1030;
-  }
-  .container {
-    margin-left: 2%;
-    padding-bottom: 2px;
-    max-width: 100%;
-  }
+.push {
+  height: 90px;
 }
-@media (max-width: 600px) {
-  .foot-fixed-bottom {
-    bottom: 0;
-    display: block;
-    margin-bottom: 0;
-    position: initial;
-    z-index: 1030;
-  }
-  .container {
-    margin-left: 2%;
-    padding-bottom: 2px;
-    max-width: 100%;
-  }
+.hide-footer{
+  display: none;
 }
-@media (min-width: 1200px){
-  .foot-fixed-bottom {
-    bottom: 0;
-    display: block;
-    margin-bottom: 0;
-    position: fixed;
-    z-index: 1030;
-  }
-  .container {
-    margin-left: 24%;
-    padding-bottom: 2px;
-    width: 1162px;
-  }
-}
-
-@media (min-width: 768px){
-  .foot-fixed-bottom {
-    bottom: 0;
-    display: block;
-    margin-bottom: 0;
-    position: fixed;
-    z-index: 1030;
-  }
-  .container {
-    padding-bottom: 2px;
-  }}

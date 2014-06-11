@@ -1,14 +1,18 @@
 'use strict';
 (function(app) {
-    app.config(function ($routeProvider) {
-        $routeProvider.otherwise({redirectTo: '/home'});
+ app.config(function($routeProvider) {
+
+        $routeProvider.otherwise({redirectTo: '/dashboard'});
     });
     app.run(function () {});
 }(angular.module("grockitApp", [
   'ngResource',
   'ngRoute',
-  'grockitApp.home',
-  'grockitApp.practice'
+  'ngSanitize',
+  'ngAnimate',
+  'grockitApp.requests',
+  'grockitApp.practiceGame',
+  'grockitApp.home'
 ]))
 );
 

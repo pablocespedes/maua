@@ -1,0 +1,35 @@
+<div id="sat" class="choice"  >
+<table>
+    <tr class="first-set">
+        <td class="column-matrix ">   </td>
+        <td class="column-matrix" style="padding-left: 56px;"><h4><b>1</b></h4></td>
+        <td class="column-matrix" style="padding-left: 24px;"><h4><b>/</b></h4></td>
+        <td class="column-matrix" style="padding-left: 22px;"><h4><b>7</b></h4></td>
+    </tr>
+    <tr class="second-set">
+        <td class="column-matrix"></td>
+        <td class="column-matrix" style="padding-left: 43px;">  <button  type="button" class="btn-option btn-rounded matrix" >/</button></td>
+        <td class="column-matrix" >  <button  type="button" class="btn-option btn-rounded matrix" >/</button></td>
+        <td class="column-matrix"></td>
+    </tr>
+    <tr class="second-set">
+        <td class="column-matrix"> <button  type="button" class="btn-option btn-rounded matrix" >.</button></td>
+        <td class="column-matrix"> <button  type="button" class="btn-option btn-rounded matrix" >.</button></td>
+        <td class="column-matrix"> <button  type="button" class="btn-option btn-rounded matrix" >.</button></td>
+        <td class="column-matrix"> <button  type="button" class="btn-option btn-rounded matrix" >.</button></td>
+    </tr>
+    <tr ng-repeat="item in items">
+
+            <td class="column-matrix" ng-repeat="col in cols">
+                    <p>
+                        <button id="{{item}}_{{col}}" type="button" class="btn-option btn-rounded matrix" >
+                                {{$parent.$index}}
+                            </button>
+                    </p>
+            </td>
+    </tr>
+</table>
+
+
+</div>
+

@@ -23528,8208 +23528,6 @@ $.fn.easyPieChart = function(options) {
 	};
 
 })(jQuery, window, document);;
-/*! X-editable - v1.5.1 
-* In-place editing with Twitter Bootstrap, jQuery UI or pure jQuery
-* http://github.com/vitalets/x-editable
-* Copyright (c) 2013 Vitaliy Potapov; Licensed MIT */
-/**
-Form with single input element, two buttons and two states: normal/loading.
-Applied as jQuery method to DIV tag (not to form tag!). This is because form can be in loading state when spinner shown.
-Editableform is linked with one of input types, e.g. 'text', 'select' etc.
-
-@class editableform
-@uses text
-@uses textarea
-**/
-(function ($) {
-    "use strict";
-    
-    var EditableForm = function (div, options) {
-        this.options = $.extend({}, $.fn.editableform.defaults, options);
-        this.$div = $(div); //div, containing form. Not form tag. Not editable-element.
-        if(!this.options.scope) {
-            this.options.scope = this;
-        }
-        //nothing shown after init
-    };
-
-    EditableForm.prototype = {
-        constructor: EditableForm,
-        initInput: function() {  //called once
-            //take input from options (as it is created in editable-element)
-            this.input = this.options.input;
-            
-            //set initial value
-            //todo: may be add check: typeof str === 'string' ? 
-            this.value = this.input.str2value(this.options.value); 
-            
-            //prerender: get input.$input
-            this.input.prerender();
-        },
-        initTemplate: function() {
-            this.$form = $($.fn.editableform.template); 
-        },
-        initButtons: function() {
-            var $btn = this.$form.find('.editable-buttons');
-            $btn.append($.fn.editableform.buttons);
-            if(this.options.showbuttons === 'bottom') {
-                $btn.addClass('editable-buttons-bottom');
-            }
-        },
-        /**
-        Renders editableform
-
-        @method render
-        **/        
-        render: function() {
-            //init loader
-            this.$loading = $($.fn.editableform.loading);        
-            this.$div.empty().append(this.$loading);
-            
-            //init form template and buttons
-            this.initTemplate();
-            if(this.options.showbuttons) {
-                this.initButtons();
-            } else {
-                this.$form.find('.editable-buttons').remove();
-            }
-
-            //show loading state
-            this.showLoading();            
-            
-            //flag showing is form now saving value to server. 
-            //It is needed to wait when closing form.
-            this.isSaving = false;
-            
-            /**        
-            Fired when rendering starts
-            @event rendering 
-            @param {Object} event event object
-            **/            
-            this.$div.triggerHandler('rendering');
-            
-            //init input
-            this.initInput();
-            
-            //append input to form
-            this.$form.find('div.editable-input').append(this.input.$tpl);            
-            
-            //append form to container
-            this.$div.append(this.$form);
-            
-            //render input
-            $.when(this.input.render())
-            .then($.proxy(function () {
-                //setup input to submit automatically when no buttons shown
-                if(!this.options.showbuttons) {
-                    this.input.autosubmit(); 
-                }
-                 
-                //attach 'cancel' handler
-                this.$form.find('.editable-cancel').click($.proxy(this.cancel, this));
-                
-                if(this.input.error) {
-                    this.error(this.input.error);
-                    this.$form.find('.editable-submit').attr('disabled', true);
-                    this.input.$input.attr('disabled', true);
-                    //prevent form from submitting
-                    this.$form.submit(function(e){ e.preventDefault(); });
-                } else {
-                    this.error(false);
-                    this.input.$input.removeAttr('disabled');
-                    this.$form.find('.editable-submit').removeAttr('disabled');
-                    var value = (this.value === null || this.value === undefined || this.value === '') ? this.options.defaultValue : this.value;
-                    this.input.value2input(value);
-                    //attach submit handler
-                    this.$form.submit($.proxy(this.submit, this));
-                }
-
-                /**        
-                Fired when form is rendered
-                @event rendered
-                @param {Object} event event object
-                **/            
-                this.$div.triggerHandler('rendered');                
-
-                this.showForm();
-                
-                //call postrender method to perform actions required visibility of form
-                if(this.input.postrender) {
-                    this.input.postrender();
-                }                
-            }, this));
-        },
-        cancel: function() {   
-            /**        
-            Fired when form was cancelled by user
-            @event cancel 
-            @param {Object} event event object
-            **/              
-            this.$div.triggerHandler('cancel');
-        },
-        showLoading: function() {
-            var w, h;
-            if(this.$form) {
-                //set loading size equal to form
-                w = this.$form.outerWidth();
-                h = this.$form.outerHeight(); 
-                if(w) {
-                    this.$loading.width(w);
-                }
-                if(h) {
-                    this.$loading.height(h);
-                }
-                this.$form.hide();
-            } else {
-                //stretch loading to fill container width
-                w = this.$loading.parent().width();
-                if(w) {
-                    this.$loading.width(w);
-                }
-            }
-            this.$loading.show(); 
-        },
-
-        showForm: function(activate) {
-            this.$loading.hide();
-            this.$form.show();
-            if(activate !== false) {
-                this.input.activate(); 
-            }
-            /**        
-            Fired when form is shown
-            @event show 
-            @param {Object} event event object
-            **/                    
-            this.$div.triggerHandler('show');
-        },
-
-        error: function(msg) {
-            var $group = this.$form.find('.control-group'),
-                $block = this.$form.find('.editable-error-block'),
-                lines;
-
-            if(msg === false) {
-                $group.removeClass($.fn.editableform.errorGroupClass);
-                $block.removeClass($.fn.editableform.errorBlockClass).empty().hide(); 
-            } else {
-                //convert newline to <br> for more pretty error display
-                if(msg) {
-                    lines = (''+msg).split('\n');
-                    for (var i = 0; i < lines.length; i++) {
-                        lines[i] = $('<div>').text(lines[i]).html();
-                    }
-                    msg = lines.join('<br>');
-                }
-                $group.addClass($.fn.editableform.errorGroupClass);
-                $block.addClass($.fn.editableform.errorBlockClass).html(msg).show();
-            }
-        },
-
-        submit: function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            
-            //get new value from input
-            var newValue = this.input.input2value(); 
-
-            //validation: if validate returns string or truthy value - means error
-            //if returns object like {newValue: '...'} => submitted value is reassigned to it
-            var error = this.validate(newValue);
-            if ($.type(error) === 'object' && error.newValue !== undefined) {
-                newValue = error.newValue;
-                this.input.value2input(newValue);
-                if(typeof error.msg === 'string') {
-                    this.error(error.msg);
-                    this.showForm();
-                    return;
-                }
-            } else if (error) {
-                this.error(error);
-                this.showForm();
-                return;
-            } 
-            
-            //if value not changed --> trigger 'nochange' event and return
-            /*jslint eqeq: true*/
-            if (!this.options.savenochange && this.input.value2str(newValue) == this.input.value2str(this.value)) {
-            /*jslint eqeq: false*/                
-                /**        
-                Fired when value not changed but form is submitted. Requires savenochange = false.
-                @event nochange 
-                @param {Object} event event object
-                **/                    
-                this.$div.triggerHandler('nochange');            
-                return;
-            } 
-
-            //convert value for submitting to server
-            var submitValue = this.input.value2submit(newValue);
-            
-            this.isSaving = true;
-            
-            //sending data to server
-            $.when(this.save(submitValue))
-            .done($.proxy(function(response) {
-                this.isSaving = false;
-
-                //run success callback
-                var res = typeof this.options.success === 'function' ? this.options.success.call(this.options.scope, response, newValue) : null;
-
-                //if success callback returns false --> keep form open and do not activate input
-                if(res === false) {
-                    this.error(false);
-                    this.showForm(false);
-                    return;
-                }
-
-                //if success callback returns string -->  keep form open, show error and activate input               
-                if(typeof res === 'string') {
-                    this.error(res);
-                    this.showForm();
-                    return;
-                }
-
-                //if success callback returns object like {newValue: <something>} --> use that value instead of submitted
-                //it is usefull if you want to chnage value in url-function
-                if(res && typeof res === 'object' && res.hasOwnProperty('newValue')) {
-                    newValue = res.newValue;
-                }
-
-                //clear error message
-                this.error(false);   
-                this.value = newValue;
-                /**        
-                Fired when form is submitted
-                @event save 
-                @param {Object} event event object
-                @param {Object} params additional params
-                @param {mixed} params.newValue raw new value
-                @param {mixed} params.submitValue submitted value as string
-                @param {Object} params.response ajax response
-
-                @example
-                $('#form-div').on('save'), function(e, params){
-                    if(params.newValue === 'username') {...}
-                });
-                **/
-                this.$div.triggerHandler('save', {newValue: newValue, submitValue: submitValue, response: response});
-            }, this))
-            .fail($.proxy(function(xhr) {
-                this.isSaving = false;
-
-                var msg;
-                if(typeof this.options.error === 'function') {
-                    msg = this.options.error.call(this.options.scope, xhr, newValue);
-                } else {
-                    msg = typeof xhr === 'string' ? xhr : xhr.responseText || xhr.statusText || 'Unknown error!';
-                }
-
-                this.error(msg);
-                this.showForm();
-            }, this));
-        },
-
-        save: function(submitValue) {
-            //try parse composite pk defined as json string in data-pk 
-            this.options.pk = $.fn.editableutils.tryParseJson(this.options.pk, true); 
-            
-            var pk = (typeof this.options.pk === 'function') ? this.options.pk.call(this.options.scope) : this.options.pk,
-            /*
-              send on server in following cases:
-              1. url is function
-              2. url is string AND (pk defined OR send option = always) 
-            */
-            send = !!(typeof this.options.url === 'function' || (this.options.url && ((this.options.send === 'always') || (this.options.send === 'auto' && pk !== null && pk !== undefined)))),
-            params;
-
-            if (send) { //send to server
-                this.showLoading();
-
-                //standard params
-                params = {
-                    name: this.options.name || '',
-                    value: submitValue,
-                    pk: pk 
-                };
-
-                //additional params
-                if(typeof this.options.params === 'function') {
-                    params = this.options.params.call(this.options.scope, params);  
-                } else {
-                    //try parse json in single quotes (from data-params attribute)
-                    this.options.params = $.fn.editableutils.tryParseJson(this.options.params, true);   
-                    $.extend(params, this.options.params);
-                }
-
-                if(typeof this.options.url === 'function') { //user's function
-                    return this.options.url.call(this.options.scope, params);
-                } else {  
-                    //send ajax to server and return deferred object
-                    return $.ajax($.extend({
-                        url     : this.options.url,
-                        data    : params,
-                        type    : 'POST'
-                    }, this.options.ajaxOptions));
-                }
-            }
-        }, 
-
-        validate: function (value) {
-            if (value === undefined) {
-                value = this.value;
-            }
-            if (typeof this.options.validate === 'function') {
-                return this.options.validate.call(this.options.scope, value);
-            }
-        },
-
-        option: function(key, value) {
-            if(key in this.options) {
-                this.options[key] = value;
-            }
-            
-            if(key === 'value') {
-                this.setValue(value);
-            }
-            
-            //do not pass option to input as it is passed in editable-element
-        },
-
-        setValue: function(value, convertStr) {
-            if(convertStr) {
-                this.value = this.input.str2value(value);
-            } else {
-                this.value = value;
-            }
-            
-            //if form is visible, update input
-            if(this.$form && this.$form.is(':visible')) {
-                this.input.value2input(this.value);
-            }            
-        }               
-    };
-
-    /*
-    Initialize editableform. Applied to jQuery object.
-
-    @method $().editableform(options)
-    @params {Object} options
-    @example
-    var $form = $('&lt;div&gt;').editableform({
-        type: 'text',
-        name: 'username',
-        url: '/post',
-        value: 'vitaliy'
-    });
-
-    //to display form you should call 'render' method
-    $form.editableform('render');     
-    */
-    $.fn.editableform = function (option) {
-        var args = arguments;
-        return this.each(function () {
-            var $this = $(this), 
-            data = $this.data('editableform'), 
-            options = typeof option === 'object' && option; 
-            if (!data) {
-                $this.data('editableform', (data = new EditableForm(this, options)));
-            }
-
-            if (typeof option === 'string') { //call method 
-                data[option].apply(data, Array.prototype.slice.call(args, 1));
-            } 
-        });
-    };
-
-    //keep link to constructor to allow inheritance
-    $.fn.editableform.Constructor = EditableForm;    
-
-    //defaults
-    $.fn.editableform.defaults = {
-        /* see also defaults for input */
-
-        /**
-        Type of input. Can be <code>text|textarea|select|date|checklist</code>
-
-        @property type 
-        @type string
-        @default 'text'
-        **/
-        type: 'text',
-        /**
-        Url for submit, e.g. <code>'/post'</code>  
-        If function - it will be called instead of ajax. Function should return deferred object to run fail/done callbacks.
-
-        @property url 
-        @type string|function
-        @default null
-        @example
-        url: function(params) {
-            var d = new $.Deferred;
-            if(params.value === 'abc') {
-                return d.reject('error message'); //returning error via deferred object
-            } else {
-                //async saving data in js model
-                someModel.asyncSaveMethod({
-                   ..., 
-                   success: function(){
-                      d.resolve();
-                   }
-                }); 
-                return d.promise();
-            }
-        } 
-        **/        
-        url:null,
-        /**
-        Additional params for submit. If defined as <code>object</code> - it is **appended** to original ajax data (pk, name and value).  
-        If defined as <code>function</code> - returned object **overwrites** original ajax data.
-        @example
-        params: function(params) {
-            //originally params contain pk, name and value
-            params.a = 1;
-            return params;
-        }
-
-        @property params 
-        @type object|function
-        @default null
-        **/          
-        params:null,
-        /**
-        Name of field. Will be submitted on server. Can be taken from <code>id</code> attribute
-
-        @property name 
-        @type string
-        @default null
-        **/         
-        name: null,
-        /**
-        Primary key of editable object (e.g. record id in database). For composite keys use object, e.g. <code>{id: 1, lang: 'en'}</code>.
-        Can be calculated dynamically via function.
-
-        @property pk 
-        @type string|object|function
-        @default null
-        **/         
-        pk: null,
-        /**
-        Initial value. If not defined - will be taken from element's content.
-        For __select__ type should be defined (as it is ID of shown text).
-
-        @property value 
-        @type string|object
-        @default null
-        **/        
-        value: null,
-        /**
-        Value that will be displayed in input if original field value is empty (`null|undefined|''`).
-
-        @property defaultValue 
-        @type string|object
-        @default null
-        @since 1.4.6
-        **/        
-        defaultValue: null,
-        /**
-        Strategy for sending data on server. Can be `auto|always|never`.
-        When 'auto' data will be sent on server **only if pk and url defined**, otherwise new value will be stored locally.
-
-        @property send 
-        @type string
-        @default 'auto'
-        **/          
-        send: 'auto', 
-        /**
-        Function for client-side validation. If returns string - means validation not passed and string showed as error.
-        Since 1.5.1 you can modify submitted value by returning object from `validate`: 
-        `{newValue: '...'}` or `{newValue: '...', msg: '...'}`
-
-        @property validate 
-        @type function
-        @default null
-        @example
-        validate: function(value) {
-            if($.trim(value) == '') {
-                return 'This field is required';
-            }
-        }
-        **/         
-        validate: null,
-        /**
-        Success callback. Called when value successfully sent on server and **response status = 200**.  
-        Usefull to work with json response. For example, if your backend response can be <code>{success: true}</code>
-        or <code>{success: false, msg: "server error"}</code> you can check it inside this callback.  
-        If it returns **string** - means error occured and string is shown as error message.  
-        If it returns **object like** <code>{newValue: &lt;something&gt;}</code> - it overwrites value, submitted by user.  
-        Otherwise newValue simply rendered into element.
-        
-        @property success 
-        @type function
-        @default null
-        @example
-        success: function(response, newValue) {
-            if(!response.success) return response.msg;
-        }
-        **/          
-        success: null,
-        /**
-        Error callback. Called when request failed (response status != 200).  
-        Usefull when you want to parse error response and display a custom message.
-        Must return **string** - the message to be displayed in the error block.
-                
-        @property error 
-        @type function
-        @default null
-        @since 1.4.4
-        @example
-        error: function(response, newValue) {
-            if(response.status === 500) {
-                return 'Service unavailable. Please try later.';
-            } else {
-                return response.responseText;
-            }
-        }
-        **/          
-        error: null,
-        /**
-        Additional options for submit ajax request.
-        List of values: http://api.jquery.com/jQuery.ajax
-        
-        @property ajaxOptions 
-        @type object
-        @default null
-        @since 1.1.1        
-        @example 
-        ajaxOptions: {
-            type: 'put',
-            dataType: 'json'
-        }        
-        **/        
-        ajaxOptions: null,
-        /**
-        Where to show buttons: left(true)|bottom|false  
-        Form without buttons is auto-submitted.
-
-        @property showbuttons 
-        @type boolean|string
-        @default true
-        @since 1.1.1
-        **/         
-        showbuttons: true,
-        /**
-        Scope for callback methods (success, validate).  
-        If <code>null</code> means editableform instance itself. 
-
-        @property scope 
-        @type DOMElement|object
-        @default null
-        @since 1.2.0
-        @private
-        **/            
-        scope: null,
-        /**
-        Whether to save or cancel value when it was not changed but form was submitted
-
-        @property savenochange 
-        @type boolean
-        @default false
-        @since 1.2.0
-        **/
-        savenochange: false
-    };   
-
-    /*
-    Note: following params could redefined in engine: bootstrap or jqueryui:
-    Classes 'control-group' and 'editable-error-block' must always present!
-    */      
-    $.fn.editableform.template = '<form class="form-inline editableform">'+
-    '<div class="control-group">' + 
-    '<div><div class="editable-input"></div><div class="editable-buttons"></div></div>'+
-    '<div class="editable-error-block"></div>' + 
-    '</div>' + 
-    '</form>';
-
-    //loading div
-    $.fn.editableform.loading = '<div class="editableform-loading"></div>';
-
-    //buttons
-    $.fn.editableform.buttons = '<button type="submit" class="editable-submit">ok</button>'+
-    '<button type="button" class="editable-cancel">cancel</button>';      
-
-    //error class attached to control-group
-    $.fn.editableform.errorGroupClass = null;  
-
-    //error class attached to editable-error-block
-    $.fn.editableform.errorBlockClass = 'editable-error';
-    
-    //engine
-    $.fn.editableform.engine = 'jquery';
-}(window.jQuery));
-
-/**
-* EditableForm utilites
-*/
-(function ($) {
-    "use strict";
-    
-    //utils
-    $.fn.editableutils = {
-        /**
-        * classic JS inheritance function
-        */  
-        inherit: function (Child, Parent) {
-            var F = function() { };
-            F.prototype = Parent.prototype;
-            Child.prototype = new F();
-            Child.prototype.constructor = Child;
-            Child.superclass = Parent.prototype;
-        },
-
-        /**
-        * set caret position in input
-        * see http://stackoverflow.com/questions/499126/jquery-set-cursor-position-in-text-area
-        */        
-        setCursorPosition: function(elem, pos) {
-            if (elem.setSelectionRange) {
-                elem.setSelectionRange(pos, pos);
-            } else if (elem.createTextRange) {
-                var range = elem.createTextRange();
-                range.collapse(true);
-                range.moveEnd('character', pos);
-                range.moveStart('character', pos);
-                range.select();
-            }
-        },
-
-        /**
-        * function to parse JSON in *single* quotes. (jquery automatically parse only double quotes)
-        * That allows such code as: <a data-source="{'a': 'b', 'c': 'd'}">
-        * safe = true --> means no exception will be thrown
-        * for details see http://stackoverflow.com/questions/7410348/how-to-set-json-format-to-html5-data-attributes-in-the-jquery
-        */
-        tryParseJson: function(s, safe) {
-            if (typeof s === 'string' && s.length && s.match(/^[\{\[].*[\}\]]$/)) {
-                if (safe) {
-                    try {
-                        /*jslint evil: true*/
-                        s = (new Function('return ' + s))();
-                        /*jslint evil: false*/
-                    } catch (e) {} finally {
-                        return s;
-                    }
-                } else {
-                    /*jslint evil: true*/
-                    s = (new Function('return ' + s))();
-                    /*jslint evil: false*/
-                }
-            }
-            return s;
-        },
-
-        /**
-        * slice object by specified keys
-        */
-        sliceObj: function(obj, keys, caseSensitive /* default: false */) {
-            var key, keyLower, newObj = {};
-
-            if (!$.isArray(keys) || !keys.length) {
-                return newObj;
-            }
-
-            for (var i = 0; i < keys.length; i++) {
-                key = keys[i];
-                if (obj.hasOwnProperty(key)) {
-                    newObj[key] = obj[key];
-                }
-
-                if(caseSensitive === true) {
-                    continue;
-                }
-
-                //when getting data-* attributes via $.data() it's converted to lowercase.
-                //details: http://stackoverflow.com/questions/7602565/using-data-attributes-with-jquery
-                //workaround is code below.
-                keyLower = key.toLowerCase();
-                if (obj.hasOwnProperty(keyLower)) {
-                    newObj[key] = obj[keyLower];
-                }
-            }
-
-            return newObj;
-        },
-
-        /*
-        exclude complex objects from $.data() before pass to config
-        */
-        getConfigData: function($element) {
-            var data = {};
-            $.each($element.data(), function(k, v) {
-                if(typeof v !== 'object' || (v && typeof v === 'object' && (v.constructor === Object || v.constructor === Array))) {
-                    data[k] = v;
-                }
-            });
-            return data;
-        },
-
-        /*
-         returns keys of object
-        */
-        objectKeys: function(o) {
-            if (Object.keys) {
-                return Object.keys(o);  
-            } else {
-                if (o !== Object(o)) {
-                    throw new TypeError('Object.keys called on a non-object');
-                }
-                var k=[], p;
-                for (p in o) {
-                    if (Object.prototype.hasOwnProperty.call(o,p)) {
-                        k.push(p);
-                    }
-                }
-                return k;
-            }
-
-        },
-        
-       /**
-        method to escape html.
-       **/
-       escape: function(str) {
-           return $('<div>').text(str).html();
-       },
-       
-       /*
-        returns array items from sourceData having value property equal or inArray of 'value'
-       */
-       itemsByValue: function(value, sourceData, valueProp) {
-           if(!sourceData || value === null) {
-               return [];
-           }
-           
-           if (typeof(valueProp) !== "function") {
-               var idKey = valueProp || 'value';
-               valueProp = function (e) { return e[idKey]; };
-           }
-                      
-           var isValArray = $.isArray(value),
-           result = [], 
-           that = this;
-
-           $.each(sourceData, function(i, o) {
-               if(o.children) {
-                   result = result.concat(that.itemsByValue(value, o.children, valueProp));
-               } else {
-                   /*jslint eqeq: true*/
-                   if(isValArray) {
-                       if($.grep(value, function(v){  return v == (o && typeof o === 'object' ? valueProp(o) : o); }).length) {
-                           result.push(o); 
-                       }
-                   } else {
-                       var itemValue = (o && (typeof o === 'object')) ? valueProp(o) : o;
-                       if(value == itemValue) {
-                           result.push(o); 
-                       }
-                   }
-                   /*jslint eqeq: false*/
-               }
-           });
-           
-           return result;
-       },
-       
-       /*
-       Returns input by options: type, mode. 
-       */
-       createInput: function(options) {
-           var TypeConstructor, typeOptions, input,
-           type = options.type;
-
-           //`date` is some kind of virtual type that is transformed to one of exact types
-           //depending on mode and core lib
-           if(type === 'date') {
-               //inline
-               if(options.mode === 'inline') {
-                   if($.fn.editabletypes.datefield) {
-                       type = 'datefield';
-                   } else if($.fn.editabletypes.dateuifield) {
-                       type = 'dateuifield';
-                   }
-               //popup
-               } else {
-                   if($.fn.editabletypes.date) {
-                       type = 'date';
-                   } else if($.fn.editabletypes.dateui) {
-                       type = 'dateui';
-                   }
-               }
-               
-               //if type still `date` and not exist in types, replace with `combodate` that is base input
-               if(type === 'date' && !$.fn.editabletypes.date) {
-                   type = 'combodate';
-               } 
-           }
-           
-           //`datetime` should be datetimefield in 'inline' mode
-           if(type === 'datetime' && options.mode === 'inline') {
-             type = 'datetimefield';  
-           }           
-
-           //change wysihtml5 to textarea for jquery UI and plain versions
-           if(type === 'wysihtml5' && !$.fn.editabletypes[type]) {
-               type = 'textarea';
-           }
-
-           //create input of specified type. Input will be used for converting value, not in form
-           if(typeof $.fn.editabletypes[type] === 'function') {
-               TypeConstructor = $.fn.editabletypes[type];
-               typeOptions = this.sliceObj(options, this.objectKeys(TypeConstructor.defaults));
-               input = new TypeConstructor(typeOptions);
-               return input;
-           } else {
-               $.error('Unknown type: '+ type);
-               return false; 
-           }  
-       },
-       
-       //see http://stackoverflow.com/questions/7264899/detect-css-transitions-using-javascript-and-without-modernizr
-       supportsTransitions: function () {
-           var b = document.body || document.documentElement,
-               s = b.style,
-               p = 'transition',
-               v = ['Moz', 'Webkit', 'Khtml', 'O', 'ms'];
-               
-           if(typeof s[p] === 'string') {
-               return true; 
-           }
-
-           // Tests for vendor specific prop
-           p = p.charAt(0).toUpperCase() + p.substr(1);
-           for(var i=0; i<v.length; i++) {
-               if(typeof s[v[i] + p] === 'string') { 
-                   return true; 
-               }
-           }
-           return false;
-       }            
-       
-    };      
-}(window.jQuery));
-
-/**
-Attaches stand-alone container with editable-form to HTML element. Element is used only for positioning, value is not stored anywhere.<br>
-This method applied internally in <code>$().editable()</code>. You should subscribe on it's events (save / cancel) to get profit of it.<br>
-Final realization can be different: bootstrap-popover, jqueryui-tooltip, poshytip, inline-div. It depends on which js file you include.<br>
-Applied as jQuery method.
-
-@class editableContainer
-@uses editableform
-**/
-(function ($) {
-    "use strict";
-
-    var Popup = function (element, options) {
-        this.init(element, options);
-    };
-    
-    var Inline = function (element, options) {
-        this.init(element, options);
-    };    
-
-    //methods
-    Popup.prototype = {
-        containerName: null, //method to call container on element
-        containerDataName: null, //object name in element's .data()
-        innerCss: null, //tbd in child class
-        containerClass: 'editable-container editable-popup', //css class applied to container element
-        defaults: {}, //container itself defaults
-        
-        init: function(element, options) {
-            this.$element = $(element);
-            //since 1.4.1 container do not use data-* directly as they already merged into options.
-            this.options = $.extend({}, $.fn.editableContainer.defaults, options);         
-            this.splitOptions();
-            
-            //set scope of form callbacks to element
-            this.formOptions.scope = this.$element[0]; 
-            
-            this.initContainer();
-            
-            //flag to hide container, when saving value will finish
-            this.delayedHide = false;
-
-            //bind 'destroyed' listener to destroy container when element is removed from dom
-            this.$element.on('destroyed', $.proxy(function(){
-                this.destroy();
-            }, this)); 
-            
-            //attach document handler to close containers on click / escape
-            if(!$(document).data('editable-handlers-attached')) {
-                //close all on escape
-                $(document).on('keyup.editable', function (e) {
-                    if (e.which === 27) {
-                        $('.editable-open').editableContainer('hide');
-                        //todo: return focus on element 
-                    }
-                });
-
-                //close containers when click outside 
-                //(mousedown could be better than click, it closes everything also on drag drop)
-                $(document).on('click.editable', function(e) {
-                    var $target = $(e.target), i,
-                        exclude_classes = ['.editable-container', 
-                                           '.ui-datepicker-header', 
-                                           '.datepicker', //in inline mode datepicker is rendered into body
-                                           '.modal-backdrop', 
-                                           '.bootstrap-wysihtml5-insert-image-modal', 
-                                           '.bootstrap-wysihtml5-insert-link-modal'
-                                           ];
-                    
-                    //check if element is detached. It occurs when clicking in bootstrap datepicker
-                    if (!$.contains(document.documentElement, e.target)) {
-                      return;
-                    }
-
-                    //for some reason FF 20 generates extra event (click) in select2 widget with e.target = document
-                    //we need to filter it via construction below. See https://github.com/vitalets/x-editable/issues/199
-                    //Possibly related to http://stackoverflow.com/questions/10119793/why-does-firefox-react-differently-from-webkit-and-ie-to-click-event-on-selec
-                    if($target.is(document)) {
-                       return; 
-                    }
-                    
-                    //if click inside one of exclude classes --> no nothing
-                    for(i=0; i<exclude_classes.length; i++) {
-                         if($target.is(exclude_classes[i]) || $target.parents(exclude_classes[i]).length) {
-                             return;
-                         }
-                    }
-                      
-                    //close all open containers (except one - target)
-                    Popup.prototype.closeOthers(e.target);
-                });
-                
-                $(document).data('editable-handlers-attached', true);
-            }                        
-        },
-
-        //split options on containerOptions and formOptions
-        splitOptions: function() {
-            this.containerOptions = {};
-            this.formOptions = {};
-            
-            if(!$.fn[this.containerName]) {
-                throw new Error(this.containerName + ' not found. Have you included corresponding js file?');   
-            }
-            
-            //keys defined in container defaults go to container, others go to form
-            for(var k in this.options) {
-              if(k in this.defaults) {
-                 this.containerOptions[k] = this.options[k];
-              } else {
-                 this.formOptions[k] = this.options[k];
-              } 
-            }
-        },
-        
-        /*
-        Returns jquery object of container
-        @method tip()
-        */         
-        tip: function() {
-            return this.container() ? this.container().$tip : null;
-        },
-
-        /* returns container object */
-        container: function() {
-            var container;
-            //first, try get it by `containerDataName`
-            if(this.containerDataName) {
-                if(container = this.$element.data(this.containerDataName)) {
-                    return container;
-                }
-            }
-            //second, try `containerName`
-            container = this.$element.data(this.containerName);
-            return container;
-        },
-
-        /* call native method of underlying container, e.g. this.$element.popover('method') */ 
-        call: function() {
-            this.$element[this.containerName].apply(this.$element, arguments); 
-        },        
-        
-        initContainer: function(){
-            this.call(this.containerOptions);
-        },
-
-        renderForm: function() {
-            this.$form
-            .editableform(this.formOptions)
-            .on({
-                save: $.proxy(this.save, this), //click on submit button (value changed)
-                nochange: $.proxy(function(){ this.hide('nochange'); }, this), //click on submit button (value NOT changed)                
-                cancel: $.proxy(function(){ this.hide('cancel'); }, this), //click on calcel button
-                show: $.proxy(function() {
-                    if(this.delayedHide) {
-                        this.hide(this.delayedHide.reason);
-                        this.delayedHide = false;
-                    } else {
-                        this.setPosition();
-                    }
-                }, this), //re-position container every time form is shown (occurs each time after loading state)
-                rendering: $.proxy(this.setPosition, this), //this allows to place container correctly when loading shown
-                resize: $.proxy(this.setPosition, this), //this allows to re-position container when form size is changed 
-                rendered: $.proxy(function(){
-                    /**        
-                    Fired when container is shown and form is rendered (for select will wait for loading dropdown options).  
-                    **Note:** Bootstrap popover has own `shown` event that now cannot be separated from x-editable's one.
-                    The workaround is to check `arguments.length` that is always `2` for x-editable.                     
-                    
-                    @event shown 
-                    @param {Object} event event object
-                    @example
-                    $('#username').on('shown', function(e, editable) {
-                        editable.input.$input.val('overwriting value of input..');
-                    });                     
-                    **/                      
-                    /*
-                     TODO: added second param mainly to distinguish from bootstrap's shown event. It's a hotfix that will be solved in future versions via namespaced events.  
-                    */
-                    this.$element.triggerHandler('shown', $(this.options.scope).data('editable')); 
-                }, this) 
-            })
-            .editableform('render');
-        },        
-
-        /**
-        Shows container with form
-        @method show()
-        @param {boolean} closeAll Whether to close all other editable containers when showing this one. Default true.
-        **/
-        /* Note: poshytip owerwrites this method totally! */          
-        show: function (closeAll) {
-            this.$element.addClass('editable-open');
-            if(closeAll !== false) {
-                //close all open containers (except this)
-                this.closeOthers(this.$element[0]);  
-            }
-            
-            //show container itself
-            this.innerShow();
-            this.tip().addClass(this.containerClass);
-
-            /*
-            Currently, form is re-rendered on every show. 
-            The main reason is that we dont know, what will container do with content when closed:
-            remove(), detach() or just hide() - it depends on container.
-            
-            Detaching form itself before hide and re-insert before show is good solution, 
-            but visually it looks ugly --> container changes size before hide.  
-            */             
-            
-            //if form already exist - delete previous data 
-            if(this.$form) {
-                //todo: destroy prev data!
-                //this.$form.destroy();
-            }
-
-            this.$form = $('<div>');
-            
-            //insert form into container body
-            if(this.tip().is(this.innerCss)) {
-                //for inline container
-                this.tip().append(this.$form); 
-            } else {
-                this.tip().find(this.innerCss).append(this.$form);
-            } 
-            
-            //render form
-            this.renderForm();
-        },
-
-        /**
-        Hides container with form
-        @method hide()
-        @param {string} reason Reason caused hiding. Can be <code>save|cancel|onblur|nochange|undefined (=manual)</code>
-        **/         
-        hide: function(reason) {  
-            if(!this.tip() || !this.tip().is(':visible') || !this.$element.hasClass('editable-open')) {
-                return;
-            }
-            
-            //if form is saving value, schedule hide
-            if(this.$form.data('editableform').isSaving) {
-                this.delayedHide = {reason: reason};
-                return;    
-            } else {
-                this.delayedHide = false;
-            }
-
-            this.$element.removeClass('editable-open');   
-            this.innerHide();
-
-            /**
-            Fired when container was hidden. It occurs on both save or cancel.  
-            **Note:** Bootstrap popover has own `hidden` event that now cannot be separated from x-editable's one.
-            The workaround is to check `arguments.length` that is always `2` for x-editable. 
-
-            @event hidden 
-            @param {object} event event object
-            @param {string} reason Reason caused hiding. Can be <code>save|cancel|onblur|nochange|manual</code>
-            @example
-            $('#username').on('hidden', function(e, reason) {
-                if(reason === 'save' || reason === 'cancel') {
-                    //auto-open next editable
-                    $(this).closest('tr').next().find('.editable').editable('show');
-                } 
-            });
-            **/
-            this.$element.triggerHandler('hidden', reason || 'manual');   
-        },
-
-        /* internal show method. To be overwritten in child classes */
-        innerShow: function () {
-             
-        },        
-
-        /* internal hide method. To be overwritten in child classes */
-        innerHide: function () {
-
-        },
-        
-        /**
-        Toggles container visibility (show / hide)
-        @method toggle()
-        @param {boolean} closeAll Whether to close all other editable containers when showing this one. Default true.
-        **/          
-        toggle: function(closeAll) {
-            if(this.container() && this.tip() && this.tip().is(':visible')) {
-                this.hide();
-            } else {
-                this.show(closeAll);
-            } 
-        },
-
-        /*
-        Updates the position of container when content changed.
-        @method setPosition()
-        */       
-        setPosition: function() {
-            //tbd in child class
-        },
-
-        save: function(e, params) {
-            /**        
-            Fired when new value was submitted. You can use <code>$(this).data('editableContainer')</code> inside handler to access to editableContainer instance
-            
-            @event save 
-            @param {Object} event event object
-            @param {Object} params additional params
-            @param {mixed} params.newValue submitted value
-            @param {Object} params.response ajax response
-            @example
-            $('#username').on('save', function(e, params) {
-                //assuming server response: '{success: true}'
-                var pk = $(this).data('editableContainer').options.pk;
-                if(params.response && params.response.success) {
-                    alert('value: ' + params.newValue + ' with pk: ' + pk + ' saved!');
-                } else {
-                    alert('error!'); 
-                } 
-            });
-            **/             
-            this.$element.triggerHandler('save', params);
-            
-            //hide must be after trigger, as saving value may require methods of plugin, applied to input
-            this.hide('save');
-        },
-
-        /**
-        Sets new option
-        
-        @method option(key, value)
-        @param {string} key 
-        @param {mixed} value 
-        **/         
-        option: function(key, value) {
-            this.options[key] = value;
-            if(key in this.containerOptions) {
-                this.containerOptions[key] = value;
-                this.setContainerOption(key, value); 
-            } else {
-                this.formOptions[key] = value;
-                if(this.$form) {
-                    this.$form.editableform('option', key, value);  
-                }
-            }
-        },
-        
-        setContainerOption: function(key, value) {
-            this.call('option', key, value);
-        },
-
-        /**
-        Destroys the container instance
-        @method destroy()
-        **/        
-        destroy: function() {
-            this.hide();
-            this.innerDestroy();
-            this.$element.off('destroyed');
-            this.$element.removeData('editableContainer');
-        },
-        
-        /* to be overwritten in child classes */
-        innerDestroy: function() {
-            
-        }, 
-        
-        /*
-        Closes other containers except one related to passed element. 
-        Other containers can be cancelled or submitted (depends on onblur option)
-        */
-        closeOthers: function(element) {
-            $('.editable-open').each(function(i, el){
-                //do nothing with passed element and it's children
-                if(el === element || $(el).find(element).length) {
-                    return;
-                }
-
-                //otherwise cancel or submit all open containers 
-                var $el = $(el),
-                ec = $el.data('editableContainer');
-
-                if(!ec) {
-                    return;  
-                }
-                
-                if(ec.options.onblur === 'cancel') {
-                    $el.data('editableContainer').hide('onblur');
-                } else if(ec.options.onblur === 'submit') {
-                    $el.data('editableContainer').tip().find('form').submit();
-                }
-            });
-
-        },
-        
-        /**
-        Activates input of visible container (e.g. set focus)
-        @method activate()
-        **/         
-        activate: function() {
-            if(this.tip && this.tip().is(':visible') && this.$form) {
-               this.$form.data('editableform').input.activate(); 
-            }
-        } 
-
-    };
-
-    /**
-    jQuery method to initialize editableContainer.
-    
-    @method $().editableContainer(options)
-    @params {Object} options
-    @example
-    $('#edit').editableContainer({
-        type: 'text',
-        url: '/post',
-        pk: 1,
-        value: 'hello'
-    });
-    **/  
-    $.fn.editableContainer = function (option) {
-        var args = arguments;
-        return this.each(function () {
-            var $this = $(this),
-            dataKey = 'editableContainer', 
-            data = $this.data(dataKey),
-            options = typeof option === 'object' && option,
-            Constructor = (options.mode === 'inline') ? Inline : Popup;             
-
-            if (!data) {
-                $this.data(dataKey, (data = new Constructor(this, options)));
-            }
-
-            if (typeof option === 'string') { //call method 
-                data[option].apply(data, Array.prototype.slice.call(args, 1));
-            }            
-        });
-    };     
-
-    //store constructors
-    $.fn.editableContainer.Popup = Popup;
-    $.fn.editableContainer.Inline = Inline;
-
-    //defaults
-    $.fn.editableContainer.defaults = {
-        /**
-        Initial value of form input
-
-        @property value 
-        @type mixed
-        @default null
-        @private
-        **/        
-        value: null,
-        /**
-        Placement of container relative to element. Can be <code>top|right|bottom|left</code>. Not used for inline container.
-
-        @property placement 
-        @type string
-        @default 'top'
-        **/        
-        placement: 'top',
-        /**
-        Whether to hide container on save/cancel.
-
-        @property autohide 
-        @type boolean
-        @default true
-        @private 
-        **/        
-        autohide: true,
-        /**
-        Action when user clicks outside the container. Can be <code>cancel|submit|ignore</code>.  
-        Setting <code>ignore</code> allows to have several containers open. 
-
-        @property onblur 
-        @type string
-        @default 'cancel'
-        @since 1.1.1
-        **/        
-        onblur: 'cancel',
-        
-        /**
-        Animation speed (inline mode only)
-        @property anim 
-        @type string
-        @default false
-        **/        
-        anim: false,
-        
-        /**
-        Mode of editable, can be `popup` or `inline` 
-        
-        @property mode 
-        @type string         
-        @default 'popup'
-        @since 1.4.0        
-        **/        
-        mode: 'popup'        
-    };
-
-    /* 
-    * workaround to have 'destroyed' event to destroy popover when element is destroyed
-    * see http://stackoverflow.com/questions/2200494/jquery-trigger-event-when-an-element-is-removed-from-the-dom
-    */
-    jQuery.event.special.destroyed = {
-        remove: function(o) {
-            if (o.handler) {
-                o.handler();
-            }
-        }
-    };    
-
-}(window.jQuery));
-
-/**
-* Editable Inline 
-* ---------------------
-*/
-(function ($) {
-    "use strict";
-    
-    //copy prototype from EditableContainer
-    //extend methods
-    $.extend($.fn.editableContainer.Inline.prototype, $.fn.editableContainer.Popup.prototype, {
-        containerName: 'editableform',
-        innerCss: '.editable-inline',
-        containerClass: 'editable-container editable-inline', //css class applied to container element
-                 
-        initContainer: function(){
-            //container is <span> element
-            this.$tip = $('<span></span>');
-            
-            //convert anim to miliseconds (int)
-            if(!this.options.anim) {
-                this.options.anim = 0;
-            }         
-        },
-        
-        splitOptions: function() {
-            //all options are passed to form
-            this.containerOptions = {};
-            this.formOptions = this.options;
-        },
-        
-        tip: function() {
-           return this.$tip; 
-        },
-        
-        innerShow: function () {
-            this.$element.hide();
-            this.tip().insertAfter(this.$element).show();
-        }, 
-        
-        innerHide: function () {
-            this.$tip.hide(this.options.anim, $.proxy(function() {
-                this.$element.show();
-                this.innerDestroy();
-            }, this)); 
-        },
-        
-        innerDestroy: function() {
-            if(this.tip()) {
-                this.tip().empty().remove();
-            }
-        } 
-    });
-
-}(window.jQuery));
-/**
-Makes editable any HTML element on the page. Applied as jQuery method.
-
-@class editable
-@uses editableContainer
-**/
-(function ($) {
-    "use strict";
-
-    var Editable = function (element, options) {
-        this.$element = $(element);
-        //data-* has more priority over js options: because dynamically created elements may change data-* 
-        this.options = $.extend({}, $.fn.editable.defaults, options, $.fn.editableutils.getConfigData(this.$element));  
-        if(this.options.selector) {
-            this.initLive();
-        } else {
-            this.init();
-        }
-        
-        //check for transition support
-        if(this.options.highlight && !$.fn.editableutils.supportsTransitions()) {
-            this.options.highlight = false;
-        }
-    };
-
-    Editable.prototype = {
-        constructor: Editable, 
-        init: function () {
-            var isValueByText = false, 
-                doAutotext, finalize;
-
-            //name
-            this.options.name = this.options.name || this.$element.attr('id');
-             
-            //create input of specified type. Input needed already here to convert value for initial display (e.g. show text by id for select)
-            //also we set scope option to have access to element inside input specific callbacks (e. g. source as function)
-            this.options.scope = this.$element[0]; 
-            this.input = $.fn.editableutils.createInput(this.options);
-            if(!this.input) {
-                return; 
-            }            
-
-            //set value from settings or by element's text
-            if (this.options.value === undefined || this.options.value === null) {
-                this.value = this.input.html2value($.trim(this.$element.html()));
-                isValueByText = true;
-            } else {
-                /*
-                  value can be string when received from 'data-value' attribute
-                  for complext objects value can be set as json string in data-value attribute, 
-                  e.g. data-value="{city: 'Moscow', street: 'Lenina'}"
-                */
-                this.options.value = $.fn.editableutils.tryParseJson(this.options.value, true); 
-                if(typeof this.options.value === 'string') {
-                    this.value = this.input.str2value(this.options.value);
-                } else {
-                    this.value = this.options.value;
-                }
-            }
-            
-            //add 'editable' class to every editable element
-            this.$element.addClass('editable');
-            
-            //specifically for "textarea" add class .editable-pre-wrapped to keep linebreaks
-            if(this.input.type === 'textarea') {
-                this.$element.addClass('editable-pre-wrapped');
-            }
-            
-            //attach handler activating editable. In disabled mode it just prevent default action (useful for links)
-            if(this.options.toggle !== 'manual') {
-                this.$element.addClass('editable-click');
-                this.$element.on(this.options.toggle + '.editable', $.proxy(function(e){
-                    //prevent following link if editable enabled
-                    if(!this.options.disabled) {
-                        e.preventDefault();
-                    }
-                    
-                    //stop propagation not required because in document click handler it checks event target
-                    //e.stopPropagation();
-                    
-                    if(this.options.toggle === 'mouseenter') {
-                        //for hover only show container
-                        this.show();
-                    } else {
-                        //when toggle='click' we should not close all other containers as they will be closed automatically in document click listener
-                        var closeAll = (this.options.toggle !== 'click');
-                        this.toggle(closeAll);
-                    }
-                }, this));
-            } else {
-                this.$element.attr('tabindex', -1); //do not stop focus on element when toggled manually
-            }
-            
-            //if display is function it's far more convinient to have autotext = always to render correctly on init
-            //see https://github.com/vitalets/x-editable-yii/issues/34
-            if(typeof this.options.display === 'function') {
-                this.options.autotext = 'always';
-            }
-            
-            //check conditions for autotext:
-            switch(this.options.autotext) {
-              case 'always':
-               doAutotext = true;
-              break;
-              case 'auto':
-                //if element text is empty and value is defined and value not generated by text --> run autotext
-                doAutotext = !$.trim(this.$element.text()).length && this.value !== null && this.value !== undefined && !isValueByText;
-              break;
-              default:
-               doAutotext = false;
-            }
-
-            //depending on autotext run render() or just finilize init
-            $.when(doAutotext ? this.render() : true).then($.proxy(function() {
-                if(this.options.disabled) {
-                    this.disable();
-                } else {
-                    this.enable(); 
-                }
-               /**        
-               Fired when element was initialized by `$().editable()` method. 
-               Please note that you should setup `init` handler **before** applying `editable`. 
-                              
-               @event init 
-               @param {Object} event event object
-               @param {Object} editable editable instance (as here it cannot accessed via data('editable'))
-               @since 1.2.0
-               @example
-               $('#username').on('init', function(e, editable) {
-                   alert('initialized ' + editable.options.name);
-               });
-               $('#username').editable();
-               **/                  
-                this.$element.triggerHandler('init', this);
-            }, this));
-        },
-
-        /*
-         Initializes parent element for live editables 
-        */
-        initLive: function() {
-           //store selector 
-           var selector = this.options.selector;
-           //modify options for child elements
-           this.options.selector = false; 
-           this.options.autotext = 'never';
-           //listen toggle events
-           this.$element.on(this.options.toggle + '.editable', selector, $.proxy(function(e){
-               var $target = $(e.target);
-               if(!$target.data('editable')) {
-                   //if delegated element initially empty, we need to clear it's text (that was manually set to `empty` by user)
-                   //see https://github.com/vitalets/x-editable/issues/137 
-                   if($target.hasClass(this.options.emptyclass)) {
-                      $target.empty();
-                   }
-                   $target.editable(this.options).trigger(e);
-               }
-           }, this)); 
-        },
-        
-        /*
-        Renders value into element's text.
-        Can call custom display method from options.
-        Can return deferred object.
-        @method render()
-        @param {mixed} response server response (if exist) to pass into display function
-        */          
-        render: function(response) {
-            //do not display anything
-            if(this.options.display === false) {
-                return;
-            }
-            
-            //if input has `value2htmlFinal` method, we pass callback in third param to be called when source is loaded
-            if(this.input.value2htmlFinal) {
-                return this.input.value2html(this.value, this.$element[0], this.options.display, response); 
-            //if display method defined --> use it    
-            } else if(typeof this.options.display === 'function') {
-                return this.options.display.call(this.$element[0], this.value, response);
-            //else use input's original value2html() method    
-            } else {
-                return this.input.value2html(this.value, this.$element[0]); 
-            }
-        },
-        
-        /**
-        Enables editable
-        @method enable()
-        **/          
-        enable: function() {
-            this.options.disabled = false;
-            this.$element.removeClass('editable-disabled');
-            this.handleEmpty(this.isEmpty);
-            if(this.options.toggle !== 'manual') {
-                if(this.$element.attr('tabindex') === '-1') {    
-                    this.$element.removeAttr('tabindex');                                
-                }
-            }
-        },
-        
-        /**
-        Disables editable
-        @method disable()
-        **/         
-        disable: function() {
-            this.options.disabled = true; 
-            this.hide();           
-            this.$element.addClass('editable-disabled');
-            this.handleEmpty(this.isEmpty);
-            //do not stop focus on this element
-            this.$element.attr('tabindex', -1);                
-        },
-        
-        /**
-        Toggles enabled / disabled state of editable element
-        @method toggleDisabled()
-        **/         
-        toggleDisabled: function() {
-            if(this.options.disabled) {
-                this.enable();
-            } else { 
-                this.disable(); 
-            }
-        },  
-        
-        /**
-        Sets new option
-        
-        @method option(key, value)
-        @param {string|object} key option name or object with several options
-        @param {mixed} value option new value
-        @example
-        $('.editable').editable('option', 'pk', 2);
-        **/          
-        option: function(key, value) {
-            //set option(s) by object
-            if(key && typeof key === 'object') {
-               $.each(key, $.proxy(function(k, v){
-                  this.option($.trim(k), v); 
-               }, this)); 
-               return;
-            }
-
-            //set option by string             
-            this.options[key] = value;                          
-            
-            //disabled
-            if(key === 'disabled') {
-               return value ? this.disable() : this.enable();
-            } 
-            
-            //value
-            if(key === 'value') {
-                this.setValue(value);
-            }
-            
-            //transfer new option to container! 
-            if(this.container) {
-                this.container.option(key, value);  
-            }
-             
-            //pass option to input directly (as it points to the same in form)
-            if(this.input.option) {
-                this.input.option(key, value);
-            }
-            
-        },              
-        
-        /*
-        * set emptytext if element is empty
-        */
-        handleEmpty: function (isEmpty) {
-            //do not handle empty if we do not display anything
-            if(this.options.display === false) {
-                return;
-            }
-
-            /* 
-            isEmpty may be set directly as param of method.
-            It is required when we enable/disable field and can't rely on content 
-            as node content is text: "Empty" that is not empty %)
-            */
-            if(isEmpty !== undefined) { 
-                this.isEmpty = isEmpty;
-            } else {
-                //detect empty
-                //for some inputs we need more smart check
-                //e.g. wysihtml5 may have <br>, <p></p>, <img>
-                if(typeof(this.input.isEmpty) === 'function') {
-                    this.isEmpty = this.input.isEmpty(this.$element);                    
-                } else {
-                    this.isEmpty = $.trim(this.$element.html()) === '';
-                }
-            }           
-            
-            //emptytext shown only for enabled
-            if(!this.options.disabled) {
-                if (this.isEmpty) {
-                    this.$element.html(this.options.emptytext);
-                    if(this.options.emptyclass) {
-                        this.$element.addClass(this.options.emptyclass);
-                    }
-                } else if(this.options.emptyclass) {
-                    this.$element.removeClass(this.options.emptyclass);
-                }
-            } else {
-                //below required if element disable property was changed
-                if(this.isEmpty) {
-                    this.$element.empty();
-                    if(this.options.emptyclass) {
-                        this.$element.removeClass(this.options.emptyclass);
-                    }
-                }
-            }
-        },        
-        
-        /**
-        Shows container with form
-        @method show()
-        @param {boolean} closeAll Whether to close all other editable containers when showing this one. Default true.
-        **/  
-        show: function (closeAll) {
-            if(this.options.disabled) {
-                return;
-            }
-            
-            //init editableContainer: popover, tooltip, inline, etc..
-            if(!this.container) {
-                var containerOptions = $.extend({}, this.options, {
-                    value: this.value,
-                    input: this.input //pass input to form (as it is already created)
-                });
-                this.$element.editableContainer(containerOptions);
-                //listen `save` event 
-                this.$element.on("save.internal", $.proxy(this.save, this));
-                this.container = this.$element.data('editableContainer'); 
-            } else if(this.container.tip().is(':visible')) {
-                return;
-            }      
-            
-            //show container
-            this.container.show(closeAll);
-        },
-        
-        /**
-        Hides container with form
-        @method hide()
-        **/       
-        hide: function () {   
-            if(this.container) {  
-                this.container.hide();
-            }
-        },
-        
-        /**
-        Toggles container visibility (show / hide)
-        @method toggle()
-        @param {boolean} closeAll Whether to close all other editable containers when showing this one. Default true.
-        **/  
-        toggle: function(closeAll) {
-            if(this.container && this.container.tip().is(':visible')) {
-                this.hide();
-            } else {
-                this.show(closeAll);
-            }
-        },
-        
-        /*
-        * called when form was submitted
-        */          
-        save: function(e, params) {
-            //mark element with unsaved class if needed
-            if(this.options.unsavedclass) {
-                /*
-                 Add unsaved css to element if:
-                  - url is not user's function 
-                  - value was not sent to server
-                  - params.response === undefined, that means data was not sent
-                  - value changed 
-                */
-                var sent = false;
-                sent = sent || typeof this.options.url === 'function';
-                sent = sent || this.options.display === false; 
-                sent = sent || params.response !== undefined; 
-                sent = sent || (this.options.savenochange && this.input.value2str(this.value) !== this.input.value2str(params.newValue)); 
-                
-                if(sent) {
-                    this.$element.removeClass(this.options.unsavedclass); 
-                } else {
-                    this.$element.addClass(this.options.unsavedclass);                    
-                }
-            }
-            
-            //highlight when saving
-            if(this.options.highlight) {
-                var $e = this.$element,
-                    bgColor = $e.css('background-color');
-                    
-                $e.css('background-color', this.options.highlight);
-                setTimeout(function(){
-                    if(bgColor === 'transparent') {
-                        bgColor = ''; 
-                    }
-                    $e.css('background-color', bgColor);
-                    $e.addClass('editable-bg-transition');
-                    setTimeout(function(){
-                       $e.removeClass('editable-bg-transition');  
-                    }, 1700);
-                }, 10);
-            }
-            
-            //set new value
-            this.setValue(params.newValue, false, params.response);
-            
-            /**        
-            Fired when new value was submitted. You can use <code>$(this).data('editable')</code> to access to editable instance
-            
-            @event save 
-            @param {Object} event event object
-            @param {Object} params additional params
-            @param {mixed} params.newValue submitted value
-            @param {Object} params.response ajax response
-            @example
-            $('#username').on('save', function(e, params) {
-                alert('Saved value: ' + params.newValue);
-            });
-            **/
-            //event itself is triggered by editableContainer. Description here is only for documentation              
-        },
-
-        validate: function () {
-            if (typeof this.options.validate === 'function') {
-                return this.options.validate.call(this, this.value);
-            }
-        },
-        
-        /**
-        Sets new value of editable
-        @method setValue(value, convertStr)
-        @param {mixed} value new value 
-        @param {boolean} convertStr whether to convert value from string to internal format
-        **/         
-        setValue: function(value, convertStr, response) {
-            if(convertStr) {
-                this.value = this.input.str2value(value);
-            } else {
-                this.value = value;
-            }
-            if(this.container) {
-                this.container.option('value', this.value);
-            }
-            $.when(this.render(response))
-            .then($.proxy(function() {
-                this.handleEmpty();
-            }, this));
-        },
-        
-        /**
-        Activates input of visible container (e.g. set focus)
-        @method activate()
-        **/         
-        activate: function() {
-            if(this.container) {
-               this.container.activate(); 
-            }
-        },
-        
-        /**
-        Removes editable feature from element
-        @method destroy()
-        **/        
-        destroy: function() {
-            this.disable();
-            
-            if(this.container) {
-               this.container.destroy(); 
-            }
-            
-            this.input.destroy();
-
-            if(this.options.toggle !== 'manual') {
-                this.$element.removeClass('editable-click');
-                this.$element.off(this.options.toggle + '.editable');
-            } 
-            
-            this.$element.off("save.internal");
-            
-            this.$element.removeClass('editable editable-open editable-disabled');
-            this.$element.removeData('editable');
-        }        
-    };
-
-    /* EDITABLE PLUGIN DEFINITION
-    * ======================= */
-
-    /**
-    jQuery method to initialize editable element.
-    
-    @method $().editable(options)
-    @params {Object} options
-    @example
-    $('#username').editable({
-        type: 'text',
-        url: '/post',
-        pk: 1
-    });
-    **/
-    $.fn.editable = function (option) {
-        //special API methods returning non-jquery object
-        var result = {}, args = arguments, datakey = 'editable';
-        switch (option) {
-            /**
-            Runs client-side validation for all matched editables
-            
-            @method validate()
-            @returns {Object} validation errors map
-            @example
-            $('#username, #fullname').editable('validate');
-            // possible result:
-            {
-              username: "username is required",
-              fullname: "fullname should be minimum 3 letters length"
-            }
-            **/
-            case 'validate':
-                this.each(function () {
-                    var $this = $(this), data = $this.data(datakey), error;
-                    if (data && (error = data.validate())) {
-                        result[data.options.name] = error;
-                    }
-                });
-            return result;
-
-            /**
-            Returns current values of editable elements.   
-            Note that it returns an **object** with name-value pairs, not a value itself. It allows to get data from several elements.    
-            If value of some editable is `null` or `undefined` it is excluded from result object.
-            When param `isSingle` is set to **true** - it is supposed you have single element and will return value of editable instead of object.   
-             
-            @method getValue()
-            @param {bool} isSingle whether to return just value of single element
-            @returns {Object} object of element names and values
-            @example
-            $('#username, #fullname').editable('getValue');
-            //result:
-            {
-            username: "superuser",
-            fullname: "John"
-            }
-            //isSingle = true
-            $('#username').editable('getValue', true);
-            //result "superuser" 
-            **/
-            case 'getValue':
-                if(arguments.length === 2 && arguments[1] === true) { //isSingle = true
-                    result = this.eq(0).data(datakey).value;
-                } else {
-                    this.each(function () {
-                        var $this = $(this), data = $this.data(datakey);
-                        if (data && data.value !== undefined && data.value !== null) {
-                            result[data.options.name] = data.input.value2submit(data.value);
-                        }
-                    });
-                }
-            return result;
-
-            /**
-            This method collects values from several editable elements and submit them all to server.   
-            Internally it runs client-side validation for all fields and submits only in case of success.  
-            See <a href="#newrecord">creating new records</a> for details.  
-            Since 1.5.1 `submit` can be applied to single element to send data programmatically. In that case
-            `url`, `success` and `error` is taken from initial options and you can just call `$('#username').editable('submit')`. 
-            
-            @method submit(options)
-            @param {object} options 
-            @param {object} options.url url to submit data 
-            @param {object} options.data additional data to submit
-            @param {object} options.ajaxOptions additional ajax options
-            @param {function} options.error(obj) error handler 
-            @param {function} options.success(obj,config) success handler
-            @returns {Object} jQuery object
-            **/
-            case 'submit':  //collects value, validate and submit to server for creating new record
-                var config = arguments[1] || {},
-                $elems = this,
-                errors = this.editable('validate');
-
-                // validation ok
-                if($.isEmptyObject(errors)) {
-                    var ajaxOptions = {};
-                                                      
-                    // for single element use url, success etc from options
-                    if($elems.length === 1) {
-                        var editable = $elems.data('editable');
-                        //standard params
-                        var params = {
-                            name: editable.options.name || '',
-                            value: editable.input.value2submit(editable.value),
-                            pk: (typeof editable.options.pk === 'function') ? 
-                                editable.options.pk.call(editable.options.scope) : 
-                                editable.options.pk 
-                        };
-
-                        //additional params
-                        if(typeof editable.options.params === 'function') {
-                            params = editable.options.params.call(editable.options.scope, params);  
-                        } else {
-                            //try parse json in single quotes (from data-params attribute)
-                            editable.options.params = $.fn.editableutils.tryParseJson(editable.options.params, true);   
-                            $.extend(params, editable.options.params);
-                        }
-
-                        ajaxOptions = {
-                            url: editable.options.url,
-                            data: params,
-                            type: 'POST'  
-                        };
-                        
-                        // use success / error from options 
-                        config.success = config.success || editable.options.success;
-                        config.error = config.error || editable.options.error;
-                        
-                    // multiple elements
-                    } else {
-                        var values = this.editable('getValue'); 
-                        
-                        ajaxOptions = {
-                            url: config.url,
-                            data: values, 
-                            type: 'POST'
-                        };                        
-                    }                    
-
-                    // ajax success callabck (response 200 OK)
-                    ajaxOptions.success = typeof config.success === 'function' ? function(response) {
-                            config.success.call($elems, response, config);
-                        } : $.noop;
-                                  
-                    // ajax error callabck
-                    ajaxOptions.error = typeof config.error === 'function' ? function() {
-                             config.error.apply($elems, arguments);
-                        } : $.noop;
-                       
-                    // extend ajaxOptions    
-                    if(config.ajaxOptions) { 
-                        $.extend(ajaxOptions, config.ajaxOptions);
-                    }
-                    
-                    // extra data 
-                    if(config.data) {
-                        $.extend(ajaxOptions.data, config.data);
-                    }                     
-                    
-                    // perform ajax request
-                    $.ajax(ajaxOptions);
-                } else { //client-side validation error
-                    if(typeof config.error === 'function') {
-                        config.error.call($elems, errors);
-                    }
-                }
-            return this;
-        }
-
-        //return jquery object
-        return this.each(function () {
-            var $this = $(this), 
-                data = $this.data(datakey), 
-                options = typeof option === 'object' && option;
-
-            //for delegated targets do not store `editable` object for element
-            //it's allows several different selectors.
-            //see: https://github.com/vitalets/x-editable/issues/312    
-            if(options && options.selector) {
-                data = new Editable(this, options);
-                return; 
-            }    
-            
-            if (!data) {
-                $this.data(datakey, (data = new Editable(this, options)));
-            }
-
-            if (typeof option === 'string') { //call method 
-                data[option].apply(data, Array.prototype.slice.call(args, 1));
-            } 
-        });
-    };    
-            
-
-    $.fn.editable.defaults = {
-        /**
-        Type of input. Can be <code>text|textarea|select|date|checklist</code> and more
-
-        @property type 
-        @type string
-        @default 'text'
-        **/
-        type: 'text',        
-        /**
-        Sets disabled state of editable
-
-        @property disabled 
-        @type boolean
-        @default false
-        **/         
-        disabled: false,
-        /**
-        How to toggle editable. Can be <code>click|dblclick|mouseenter|manual</code>.   
-        When set to <code>manual</code> you should manually call <code>show/hide</code> methods of editable.    
-        **Note**: if you call <code>show</code> or <code>toggle</code> inside **click** handler of some DOM element, 
-        you need to apply <code>e.stopPropagation()</code> because containers are being closed on any click on document.
-        
-        @example
-        $('#edit-button').click(function(e) {
-            e.stopPropagation();
-            $('#username').editable('toggle');
-        });
-
-        @property toggle 
-        @type string
-        @default 'click'
-        **/          
-        toggle: 'click',
-        /**
-        Text shown when element is empty.
-
-        @property emptytext 
-        @type string
-        @default 'Empty'
-        **/         
-        emptytext: 'Empty',
-        /**
-        Allows to automatically set element's text based on it's value. Can be <code>auto|always|never</code>. Useful for select and date.
-        For example, if dropdown list is <code>{1: 'a', 2: 'b'}</code> and element's value set to <code>1</code>, it's html will be automatically set to <code>'a'</code>.  
-        <code>auto</code> - text will be automatically set only if element is empty.  
-        <code>always|never</code> - always(never) try to set element's text.
-
-        @property autotext 
-        @type string
-        @default 'auto'
-        **/          
-        autotext: 'auto', 
-        /**
-        Initial value of input. If not set, taken from element's text.  
-        Note, that if element's text is empty - text is automatically generated from value and can be customized (see `autotext` option).  
-        For example, to display currency sign:
-        @example
-        <a id="price" data-type="text" data-value="100"></a>
-        <script>
-        $('#price').editable({
-            ...
-            display: function(value) {
-              $(this).text(value + '$');
-            } 
-        }) 
-        </script>
-                
-        @property value 
-        @type mixed
-        @default element's text
-        **/
-        value: null,
-        /**
-        Callback to perform custom displaying of value in element's text.  
-        If `null`, default input's display used.  
-        If `false`, no displaying methods will be called, element's text will never change.  
-        Runs under element's scope.  
-        _**Parameters:**_  
-        
-        * `value` current value to be displayed
-        * `response` server response (if display called after ajax submit), since 1.4.0
-         
-        For _inputs with source_ (select, checklist) parameters are different:  
-          
-        * `value` current value to be displayed
-        * `sourceData` array of items for current input (e.g. dropdown items) 
-        * `response` server response (if display called after ajax submit), since 1.4.0
-                  
-        To get currently selected items use `$.fn.editableutils.itemsByValue(value, sourceData)`.
-        
-        @property display 
-        @type function|boolean
-        @default null
-        @since 1.2.0
-        @example
-        display: function(value, sourceData) {
-           //display checklist as comma-separated values
-           var html = [],
-               checked = $.fn.editableutils.itemsByValue(value, sourceData);
-               
-           if(checked.length) {
-               $.each(checked, function(i, v) { html.push($.fn.editableutils.escape(v.text)); });
-               $(this).html(html.join(', '));
-           } else {
-               $(this).empty(); 
-           }
-        }
-        **/          
-        display: null,
-        /**
-        Css class applied when editable text is empty.
-
-        @property emptyclass 
-        @type string
-        @since 1.4.1        
-        @default editable-empty
-        **/        
-        emptyclass: 'editable-empty',
-        /**
-        Css class applied when value was stored but not sent to server (`pk` is empty or `send = 'never'`).  
-        You may set it to `null` if you work with editables locally and submit them together.  
-
-        @property unsavedclass 
-        @type string
-        @since 1.4.1        
-        @default editable-unsaved
-        **/        
-        unsavedclass: 'editable-unsaved',
-        /**
-        If selector is provided, editable will be delegated to the specified targets.  
-        Usefull for dynamically generated DOM elements.  
-        **Please note**, that delegated targets can't be initialized with `emptytext` and `autotext` options, 
-        as they actually become editable only after first click.  
-        You should manually set class `editable-click` to these elements.  
-        Also, if element originally empty you should add class `editable-empty`, set `data-value=""` and write emptytext into element:
-
-        @property selector 
-        @type string
-        @since 1.4.1        
-        @default null
-        @example
-        <div id="user">
-          <!-- empty -->
-          <a href="#" data-name="username" data-type="text" class="editable-click editable-empty" data-value="" title="Username">Empty</a>
-          <!-- non-empty -->
-          <a href="#" data-name="group" data-type="select" data-source="/groups" data-value="1" class="editable-click" title="Group">Operator</a>
-        </div>     
-        
-        <script>
-        $('#user').editable({
-            selector: 'a',
-            url: '/post',
-            pk: 1
-        });
-        </script>
-        **/         
-        selector: null,
-        /**
-        Color used to highlight element after update. Implemented via CSS3 transition, works in modern browsers.
-        
-        @property highlight 
-        @type string|boolean
-        @since 1.4.5        
-        @default #FFFF80 
-        **/
-        highlight: '#FFFF80'
-    };
-    
-}(window.jQuery));
-
-/**
-AbstractInput - base class for all editable inputs.
-It defines interface to be implemented by any input type.
-To create your own input you can inherit from this class.
-
-@class abstractinput
-**/
-(function ($) {
-    "use strict";
-
-    //types
-    $.fn.editabletypes = {};
-
-    var AbstractInput = function () { };
-
-    AbstractInput.prototype = {
-       /**
-        Initializes input
-
-        @method init() 
-        **/
-       init: function(type, options, defaults) {
-           this.type = type;
-           this.options = $.extend({}, defaults, options);
-       },
-
-       /*
-       this method called before render to init $tpl that is inserted in DOM
-       */
-       prerender: function() {
-           this.$tpl = $(this.options.tpl); //whole tpl as jquery object    
-           this.$input = this.$tpl;         //control itself, can be changed in render method
-           this.$clear = null;              //clear button
-           this.error = null;               //error message, if input cannot be rendered           
-       },
-       
-       /**
-        Renders input from tpl. Can return jQuery deferred object.
-        Can be overwritten in child objects
-
-        @method render()
-       **/
-       render: function() {
-
-       }, 
-
-       /**
-        Sets element's html by value. 
-
-        @method value2html(value, element)
-        @param {mixed} value
-        @param {DOMElement} element
-       **/
-       value2html: function(value, element) {
-           $(element)[this.options.escape ? 'text' : 'html']($.trim(value));
-       },
-
-       /**
-        Converts element's html to value
-
-        @method html2value(html)
-        @param {string} html
-        @returns {mixed}
-       **/
-       html2value: function(html) {
-           return $('<div>').html(html).text();
-       },
-
-       /**
-        Converts value to string (for internal compare). For submitting to server used value2submit().
-
-        @method value2str(value) 
-        @param {mixed} value
-        @returns {string}
-       **/
-       value2str: function(value) {
-           return value;
-       }, 
-
-       /**
-        Converts string received from server into value. Usually from `data-value` attribute.
-
-        @method str2value(str)
-        @param {string} str
-        @returns {mixed}
-       **/
-       str2value: function(str) {
-           return str;
-       }, 
-       
-       /**
-        Converts value for submitting to server. Result can be string or object.
-
-        @method value2submit(value) 
-        @param {mixed} value
-        @returns {mixed}
-       **/
-       value2submit: function(value) {
-           return value;
-       },
-
-       /**
-        Sets value of input.
-
-        @method value2input(value) 
-        @param {mixed} value
-       **/
-       value2input: function(value) {
-           this.$input.val(value);
-       },
-
-       /**
-        Returns value of input. Value can be object (e.g. datepicker)
-
-        @method input2value() 
-       **/
-       input2value: function() { 
-           return this.$input.val();
-       }, 
-
-       /**
-        Activates input. For text it sets focus.
-
-        @method activate() 
-       **/
-       activate: function() {
-           if(this.$input.is(':visible')) {
-               this.$input.focus();
-           }
-       },
-
-       /**
-        Creates input.
-
-        @method clear() 
-       **/        
-       clear: function() {
-           this.$input.val(null);
-       },
-
-       /**
-        method to escape html.
-       **/
-       escape: function(str) {
-           return $('<div>').text(str).html();
-       },
-       
-       /**
-        attach handler to automatically submit form when value changed (useful when buttons not shown)
-       **/
-       autosubmit: function() {
-        
-       },
-       
-       /**
-       Additional actions when destroying element 
-       **/
-       destroy: function() {
-       },
-
-       // -------- helper functions --------
-       setClass: function() {          
-           if(this.options.inputclass) {
-               this.$input.addClass(this.options.inputclass); 
-           } 
-       },
-
-       setAttr: function(attr) {
-           if (this.options[attr] !== undefined && this.options[attr] !== null) {
-               this.$input.attr(attr, this.options[attr]);
-           } 
-       },
-       
-       option: function(key, value) {
-            this.options[key] = value;
-       }
-       
-    };
-        
-    AbstractInput.defaults = {  
-        /**
-        HTML template of input. Normally you should not change it.
-
-        @property tpl 
-        @type string
-        @default ''
-        **/   
-        tpl: '',
-        /**
-        CSS class automatically applied to input
-        
-        @property inputclass 
-        @type string
-        @default null
-        **/         
-        inputclass: null,
-        
-        /**
-        If `true` - html will be escaped in content of element via $.text() method.  
-        If `false` - html will not be escaped, $.html() used.  
-        When you use own `display` function, this option obviosly has no effect.
-        
-        @property escape 
-        @type boolean
-        @since 1.5.0
-        @default true
-        **/         
-        escape: true,
-                
-        //scope for external methods (e.g. source defined as function)
-        //for internal use only
-        scope: null,
-        
-        //need to re-declare showbuttons here to get it's value from common config (passed only options existing in defaults)
-        showbuttons: true 
-    };
-    
-    $.extend($.fn.editabletypes, {abstractinput: AbstractInput});
-        
-}(window.jQuery));
-
-/**
-List - abstract class for inputs that have source option loaded from js array or via ajax
-
-@class list
-@extends abstractinput
-**/
-(function ($) {
-    "use strict";
-    
-    var List = function (options) {
-       
-    };
-
-    $.fn.editableutils.inherit(List, $.fn.editabletypes.abstractinput);
-
-    $.extend(List.prototype, {
-        render: function () {
-            var deferred = $.Deferred();
-
-            this.error = null;
-            this.onSourceReady(function () {
-                this.renderList();
-                deferred.resolve();
-            }, function () {
-                this.error = this.options.sourceError;
-                deferred.resolve();
-            });
-
-            return deferred.promise();
-        },
-
-        html2value: function (html) {
-            return null; //can't set value by text
-        },
-        
-        value2html: function (value, element, display, response) {
-            var deferred = $.Deferred(),
-                success = function () {
-                    if(typeof display === 'function') {
-                        //custom display method
-                        display.call(element, value, this.sourceData, response); 
-                    } else {
-                        this.value2htmlFinal(value, element);
-                    }
-                    deferred.resolve();
-               };
-            
-            //for null value just call success without loading source
-            if(value === null) {
-               success.call(this);   
-            } else {
-               this.onSourceReady(success, function () { deferred.resolve(); });
-            }
-
-            return deferred.promise();
-        },  
-
-        // ------------- additional functions ------------
-
-        onSourceReady: function (success, error) {
-            //run source if it function
-            var source;
-            if ($.isFunction(this.options.source)) {
-                source = this.options.source.call(this.options.scope);
-                this.sourceData = null;
-                //note: if function returns the same source as URL - sourceData will be taken from cahce and no extra request performed
-            } else {
-                source = this.options.source;
-            }            
-            
-            //if allready loaded just call success
-            if(this.options.sourceCache && $.isArray(this.sourceData)) {
-                success.call(this);
-                return; 
-            }
-
-            //try parse json in single quotes (for double quotes jquery does automatically)
-            try {
-                source = $.fn.editableutils.tryParseJson(source, false);
-            } catch (e) {
-                error.call(this);
-                return;
-            }
-
-            //loading from url
-            if (typeof source === 'string') {
-                //try to get sourceData from cache
-                if(this.options.sourceCache) {
-                    var cacheID = source,
-                    cache;
-
-                    if (!$(document).data(cacheID)) {
-                        $(document).data(cacheID, {});
-                    }
-                    cache = $(document).data(cacheID);
-
-                    //check for cached data
-                    if (cache.loading === false && cache.sourceData) { //take source from cache
-                        this.sourceData = cache.sourceData;
-                        this.doPrepend();
-                        success.call(this);
-                        return;
-                    } else if (cache.loading === true) { //cache is loading, put callback in stack to be called later
-                        cache.callbacks.push($.proxy(function () {
-                            this.sourceData = cache.sourceData;
-                            this.doPrepend();
-                            success.call(this);
-                        }, this));
-
-                        //also collecting error callbacks
-                        cache.err_callbacks.push($.proxy(error, this));
-                        return;
-                    } else { //no cache yet, activate it
-                        cache.loading = true;
-                        cache.callbacks = [];
-                        cache.err_callbacks = [];
-                    }
-                }
-                
-                //ajaxOptions for source. Can be overwritten bt options.sourceOptions
-                var ajaxOptions = $.extend({
-                    url: source,
-                    type: 'get',
-                    cache: false,
-                    dataType: 'json',
-                    success: $.proxy(function (data) {
-                        if(cache) {
-                            cache.loading = false;
-                        }
-                        this.sourceData = this.makeArray(data);
-                        if($.isArray(this.sourceData)) {
-                            if(cache) {
-                                //store result in cache
-                                cache.sourceData = this.sourceData;
-                                //run success callbacks for other fields waiting for this source
-                                $.each(cache.callbacks, function () { this.call(); }); 
-                            }
-                            this.doPrepend();
-                            success.call(this);
-                        } else {
-                            error.call(this);
-                            if(cache) {
-                                //run error callbacks for other fields waiting for this source
-                                $.each(cache.err_callbacks, function () { this.call(); }); 
-                            }
-                        }
-                    }, this),
-                    error: $.proxy(function () {
-                        error.call(this);
-                        if(cache) {
-                             cache.loading = false;
-                             //run error callbacks for other fields
-                             $.each(cache.err_callbacks, function () { this.call(); }); 
-                        }
-                    }, this)
-                }, this.options.sourceOptions);
-                
-                //loading sourceData from server
-                $.ajax(ajaxOptions);
-                
-            } else { //options as json/array
-                this.sourceData = this.makeArray(source);
-                    
-                if($.isArray(this.sourceData)) {
-                    this.doPrepend();
-                    success.call(this);   
-                } else {
-                    error.call(this);
-                }
-            }
-        },
-
-        doPrepend: function () {
-            if(this.options.prepend === null || this.options.prepend === undefined) {
-                return;  
-            }
-            
-            if(!$.isArray(this.prependData)) {
-                //run prepend if it is function (once)
-                if ($.isFunction(this.options.prepend)) {
-                    this.options.prepend = this.options.prepend.call(this.options.scope);
-                }
-              
-                //try parse json in single quotes
-                this.options.prepend = $.fn.editableutils.tryParseJson(this.options.prepend, true);
-                
-                //convert prepend from string to object
-                if (typeof this.options.prepend === 'string') {
-                    this.options.prepend = {'': this.options.prepend};
-                }
-                
-                this.prependData = this.makeArray(this.options.prepend);
-            }
-
-            if($.isArray(this.prependData) && $.isArray(this.sourceData)) {
-                this.sourceData = this.prependData.concat(this.sourceData);
-            }
-        },
-
-        /*
-         renders input list
-        */
-        renderList: function() {
-            // this method should be overwritten in child class
-        },
-       
-         /*
-         set element's html by value
-        */
-        value2htmlFinal: function(value, element) {
-            // this method should be overwritten in child class
-        },        
-
-        /**
-        * convert data to array suitable for sourceData, e.g. [{value: 1, text: 'abc'}, {...}]
-        */
-        makeArray: function(data) {
-            var count, obj, result = [], item, iterateItem;
-            if(!data || typeof data === 'string') {
-                return null; 
-            }
-
-            if($.isArray(data)) { //array
-                /* 
-                   function to iterate inside item of array if item is object.
-                   Caclulates count of keys in item and store in obj. 
-                */
-                iterateItem = function (k, v) {
-                    obj = {value: k, text: v};
-                    if(count++ >= 2) {
-                        return false;// exit from `each` if item has more than one key.
-                    }
-                };
-            
-                for(var i = 0; i < data.length; i++) {
-                    item = data[i]; 
-                    if(typeof item === 'object') {
-                        count = 0; //count of keys inside item
-                        $.each(item, iterateItem);
-                        //case: [{val1: 'text1'}, {val2: 'text2} ...]
-                        if(count === 1) { 
-                            result.push(obj); 
-                            //case: [{value: 1, text: 'text1'}, {value: 2, text: 'text2'}, ...]
-                        } else if(count > 1) {
-                            //removed check of existance: item.hasOwnProperty('value') && item.hasOwnProperty('text')
-                            if(item.children) {
-                                item.children = this.makeArray(item.children);   
-                            }
-                            result.push(item);
-                        }
-                    } else {
-                        //case: ['text1', 'text2' ...]
-                        result.push({value: item, text: item}); 
-                    }
-                }
-            } else {  //case: {val1: 'text1', val2: 'text2, ...}
-                $.each(data, function (k, v) {
-                    result.push({value: k, text: v});
-                });  
-            }
-            return result;
-        },
-        
-        option: function(key, value) {
-            this.options[key] = value;
-            if(key === 'source') {
-                this.sourceData = null;
-            }
-            if(key === 'prepend') {
-                this.prependData = null;
-            }            
-        }        
-
-    });      
-
-    List.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
-        /**
-        Source data for list.  
-        If **array** - it should be in format: `[{value: 1, text: "text1"}, {value: 2, text: "text2"}, ...]`  
-        For compability, object format is also supported: `{"1": "text1", "2": "text2" ...}` but it does not guarantee elements order.
-        
-        If **string** - considered ajax url to load items. In that case results will be cached for fields with the same source and name. See also `sourceCache` option.
-          
-        If **function**, it should return data in format above (since 1.4.0).
-        
-        Since 1.4.1 key `children` supported to render OPTGROUP (for **select** input only).  
-        `[{text: "group1", children: [{value: 1, text: "text1"}, {value: 2, text: "text2"}]}, ...]` 
-
-		
-        @property source 
-        @type string | array | object | function
-        @default null
-        **/         
-        source: null, 
-        /**
-        Data automatically prepended to the beginning of dropdown list.
-        
-        @property prepend 
-        @type string | array | object | function
-        @default false
-        **/         
-        prepend: false,
-        /**
-        Error message when list cannot be loaded (e.g. ajax error)
-        
-        @property sourceError 
-        @type string
-        @default Error when loading list
-        **/          
-        sourceError: 'Error when loading list',
-        /**
-        if <code>true</code> and source is **string url** - results will be cached for fields with the same source.    
-        Usefull for editable column in grid to prevent extra requests.
-        
-        @property sourceCache 
-        @type boolean
-        @default true
-        @since 1.2.0
-        **/        
-        sourceCache: true,
-        /**
-        Additional ajax options to be used in $.ajax() when loading list from server.
-        Useful to send extra parameters (`data` key) or change request method (`type` key).
-        
-        @property sourceOptions 
-        @type object|function
-        @default null
-        @since 1.5.0
-        **/        
-        sourceOptions: null
-    });
-
-    $.fn.editabletypes.list = List;      
-
-}(window.jQuery));
-
-/**
-Text input
-
-@class text
-@extends abstractinput
-@final
-@example
-<a href="#" id="username" data-type="text" data-pk="1">awesome</a>
-<script>
-$(function(){
-    $('#username').editable({
-        url: '/post',
-        title: 'Enter username'
-    });
-});
-</script>
-**/
-(function ($) {
-    "use strict";
-    
-    var Text = function (options) {
-        this.init('text', options, Text.defaults);
-    };
-
-    $.fn.editableutils.inherit(Text, $.fn.editabletypes.abstractinput);
-
-    $.extend(Text.prototype, {
-        render: function() {
-           this.renderClear();
-           this.setClass();
-           this.setAttr('placeholder');
-        },
-        
-        activate: function() {
-            if(this.$input.is(':visible')) {
-                this.$input.focus();
-                $.fn.editableutils.setCursorPosition(this.$input.get(0), this.$input.val().length);
-                if(this.toggleClear) {
-                    this.toggleClear();
-                }
-            }
-        },
-        
-        //render clear button
-        renderClear:  function() {
-           if (this.options.clear) {
-               this.$clear = $('<span class="editable-clear-x"></span>');
-               this.$input.after(this.$clear)
-                          .css('padding-right', 24)
-                          .keyup($.proxy(function(e) {
-                              //arrows, enter, tab, etc
-                              if(~$.inArray(e.keyCode, [40,38,9,13,27])) {
-                                return;
-                              }                            
-
-                              clearTimeout(this.t);
-                              var that = this;
-                              this.t = setTimeout(function() {
-                                that.toggleClear(e);
-                              }, 100);
-                              
-                          }, this))
-                          .parent().css('position', 'relative');
-                          
-               this.$clear.click($.proxy(this.clear, this));                       
-           }            
-        },
-        
-        postrender: function() {
-            /*
-            //now `clear` is positioned via css
-            if(this.$clear) {
-                //can position clear button only here, when form is shown and height can be calculated
-//                var h = this.$input.outerHeight(true) || 20,
-                var h = this.$clear.parent().height(),
-                    delta = (h - this.$clear.height()) / 2;
-                    
-                //this.$clear.css({bottom: delta, right: delta});
-            }
-            */ 
-        },
-        
-        //show / hide clear button
-        toggleClear: function(e) {
-            if(!this.$clear) {
-                return;
-            }
-            
-            var len = this.$input.val().length,
-                visible = this.$clear.is(':visible');
-                 
-            if(len && !visible) {
-                this.$clear.show();
-            } 
-            
-            if(!len && visible) {
-                this.$clear.hide();
-            } 
-        },
-        
-        clear: function() {
-           this.$clear.hide();
-           this.$input.val('').focus();
-        }          
-    });
-
-    Text.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
-        /**
-        @property tpl 
-        @default <input type="text">
-        **/         
-        tpl: '<input type="text">',
-        /**
-        Placeholder attribute of input. Shown when input is empty.
-
-        @property placeholder 
-        @type string
-        @default null
-        **/             
-        placeholder: null,
-        
-        /**
-        Whether to show `clear` button 
-        
-        @property clear 
-        @type boolean
-        @default true        
-        **/
-        clear: true
-    });
-
-    $.fn.editabletypes.text = Text;
-
-}(window.jQuery));
-
-/**
-Textarea input
-
-@class textarea
-@extends abstractinput
-@final
-@example
-<a href="#" id="comments" data-type="textarea" data-pk="1">awesome comment!</a>
-<script>
-$(function(){
-    $('#comments').editable({
-        url: '/post',
-        title: 'Enter comments',
-        rows: 10
-    });
-});
-</script>
-**/
-(function ($) {
-    "use strict";
-    
-    var Textarea = function (options) {
-        this.init('textarea', options, Textarea.defaults);
-    };
-
-    $.fn.editableutils.inherit(Textarea, $.fn.editabletypes.abstractinput);
-
-    $.extend(Textarea.prototype, {
-        render: function () {
-            this.setClass();
-            this.setAttr('placeholder');
-            this.setAttr('rows');                        
-            
-            //ctrl + enter
-            this.$input.keydown(function (e) {
-                if (e.ctrlKey && e.which === 13) {
-                    $(this).closest('form').submit();
-                }
-            });
-        },
-        
-       //using `white-space: pre-wrap` solves \n  <--> BR conversion very elegant!
-       /* 
-       value2html: function(value, element) {
-            var html = '', lines;
-            if(value) {
-                lines = value.split("\n");
-                for (var i = 0; i < lines.length; i++) {
-                    lines[i] = $('<div>').text(lines[i]).html();
-                }
-                html = lines.join('<br>');
-            }
-            $(element).html(html);
-        },
-       
-        html2value: function(html) {
-            if(!html) {
-                return '';
-            }
-
-            var regex = new RegExp(String.fromCharCode(10), 'g');
-            var lines = html.split(/<br\s*\/?>/i);
-            for (var i = 0; i < lines.length; i++) {
-                var text = $('<div>').html(lines[i]).text();
-
-                // Remove newline characters (\n) to avoid them being converted by value2html() method
-                // thus adding extra <br> tags
-                text = text.replace(regex, '');
-
-                lines[i] = text;
-            }
-            return lines.join("\n");
-        },
-         */
-        activate: function() {
-            $.fn.editabletypes.text.prototype.activate.call(this);
-        }
-    });
-
-    Textarea.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
-        /**
-        @property tpl
-        @default <textarea></textarea>
-        **/
-        tpl:'<textarea></textarea>',
-        /**
-        @property inputclass
-        @default input-large
-        **/
-        inputclass: 'input-large',
-        /**
-        Placeholder attribute of input. Shown when input is empty.
-
-        @property placeholder
-        @type string
-        @default null
-        **/
-        placeholder: null,
-        /**
-        Number of rows in textarea
-
-        @property rows
-        @type integer
-        @default 7
-        **/        
-        rows: 7        
-    });
-
-    $.fn.editabletypes.textarea = Textarea;
-
-}(window.jQuery));
-
-/**
-Select (dropdown)
-
-@class select
-@extends list
-@final
-@example
-<a href="#" id="status" data-type="select" data-pk="1" data-url="/post" data-title="Select status"></a>
-<script>
-$(function(){
-    $('#status').editable({
-        value: 2,    
-        source: [
-              {value: 1, text: 'Active'},
-              {value: 2, text: 'Blocked'},
-              {value: 3, text: 'Deleted'}
-           ]
-    });
-});
-</script>
-**/
-(function ($) {
-    "use strict";
-    
-    var Select = function (options) {
-        this.init('select', options, Select.defaults);
-    };
-
-    $.fn.editableutils.inherit(Select, $.fn.editabletypes.list);
-
-    $.extend(Select.prototype, {
-        renderList: function() {
-            this.$input.empty();
-
-            var fillItems = function($el, data) {
-                var attr;
-                if($.isArray(data)) {
-                    for(var i=0; i<data.length; i++) {
-                        attr = {};
-                        if(data[i].children) {
-                            attr.label = data[i].text;
-                            $el.append(fillItems($('<optgroup>', attr), data[i].children)); 
-                        } else {
-                            attr.value = data[i].value;
-                            if(data[i].disabled) {
-                                attr.disabled = true;
-                            }
-                            $el.append($('<option>', attr).text(data[i].text)); 
-                        }
-                    }
-                }
-                return $el;
-            };        
-
-            fillItems(this.$input, this.sourceData);
-            
-            this.setClass();
-            
-            //enter submit
-            this.$input.on('keydown.editable', function (e) {
-                if (e.which === 13) {
-                    $(this).closest('form').submit();
-                }
-            });            
-        },
-       
-        value2htmlFinal: function(value, element) {
-            var text = '', 
-                items = $.fn.editableutils.itemsByValue(value, this.sourceData);
-                
-            if(items.length) {
-                text = items[0].text;
-            }
-            
-            //$(element).text(text);
-            $.fn.editabletypes.abstractinput.prototype.value2html.call(this, text, element);
-        },
-        
-        autosubmit: function() {
-            this.$input.off('keydown.editable').on('change.editable', function(){
-                $(this).closest('form').submit();
-            });
-        }
-    });      
-
-    Select.defaults = $.extend({}, $.fn.editabletypes.list.defaults, {
-        /**
-        @property tpl 
-        @default <select></select>
-        **/         
-        tpl:'<select></select>'
-    });
-
-    $.fn.editabletypes.select = Select;      
-
-}(window.jQuery));
-
-/**
-List of checkboxes. 
-Internally value stored as javascript array of values.
-
-@class checklist
-@extends list
-@final
-@example
-<a href="#" id="options" data-type="checklist" data-pk="1" data-url="/post" data-title="Select options"></a>
-<script>
-$(function(){
-    $('#options').editable({
-        value: [2, 3],    
-        source: [
-              {value: 1, text: 'option1'},
-              {value: 2, text: 'option2'},
-              {value: 3, text: 'option3'}
-           ]
-    });
-});
-</script>
-**/
-(function ($) {
-    "use strict";
-    
-    var Checklist = function (options) {
-        this.init('checklist', options, Checklist.defaults);
-    };
-
-    $.fn.editableutils.inherit(Checklist, $.fn.editabletypes.list);
-
-    $.extend(Checklist.prototype, {
-        renderList: function() {
-            var $label, $div;
-            
-            this.$tpl.empty();
-            
-            if(!$.isArray(this.sourceData)) {
-                return;
-            }
-
-            for(var i=0; i<this.sourceData.length; i++) {
-                $label = $('<label>').append($('<input>', {
-                                           type: 'checkbox',
-                                           value: this.sourceData[i].value 
-                                     }))
-                                     .append($('<span>').text(' '+this.sourceData[i].text));
-                
-                $('<div>').append($label).appendTo(this.$tpl);
-            }
-            
-            this.$input = this.$tpl.find('input[type="checkbox"]');
-            this.setClass();
-        },
-       
-       value2str: function(value) {
-           return $.isArray(value) ? value.sort().join($.trim(this.options.separator)) : '';
-       },  
-       
-       //parse separated string
-        str2value: function(str) {
-           var reg, value = null;
-           if(typeof str === 'string' && str.length) {
-               reg = new RegExp('\\s*'+$.trim(this.options.separator)+'\\s*');
-               value = str.split(reg);
-           } else if($.isArray(str)) {
-               value = str; 
-           } else {
-               value = [str];
-           }
-           return value;
-        },       
-       
-       //set checked on required checkboxes
-       value2input: function(value) {
-            this.$input.prop('checked', false);
-            if($.isArray(value) && value.length) {
-               this.$input.each(function(i, el) {
-                   var $el = $(el);
-                   // cannot use $.inArray as it performs strict comparison
-                   $.each(value, function(j, val){
-                       /*jslint eqeq: true*/
-                       if($el.val() == val) {
-                       /*jslint eqeq: false*/                           
-                           $el.prop('checked', true);
-                       }
-                   });
-               }); 
-            }  
-        },  
-        
-       input2value: function() { 
-           var checked = [];
-           this.$input.filter(':checked').each(function(i, el) {
-               checked.push($(el).val());
-           });
-           return checked;
-       },            
-          
-       //collect text of checked boxes
-        value2htmlFinal: function(value, element) {
-           var html = [],
-               checked = $.fn.editableutils.itemsByValue(value, this.sourceData),
-               escape = this.options.escape;
-               
-           if(checked.length) {
-               $.each(checked, function(i, v) {
-                   var text = escape ? $.fn.editableutils.escape(v.text) : v.text; 
-                   html.push(text); 
-               });
-               $(element).html(html.join('<br>'));
-           } else {
-               $(element).empty(); 
-           }
-        },
-        
-       activate: function() {
-           this.$input.first().focus();
-       },
-       
-       autosubmit: function() {
-           this.$input.on('keydown', function(e){
-               if (e.which === 13) {
-                   $(this).closest('form').submit();
-               }
-           });
-       }
-    });      
-
-    Checklist.defaults = $.extend({}, $.fn.editabletypes.list.defaults, {
-        /**
-        @property tpl 
-        @default <div></div>
-        **/         
-        tpl:'<div class="editable-checklist"></div>',
-        
-        /**
-        @property inputclass 
-        @type string
-        @default null
-        **/         
-        inputclass: null,        
-        
-        /**
-        Separator of values when reading from `data-value` attribute
-
-        @property separator 
-        @type string
-        @default ','
-        **/         
-        separator: ','
-    });
-
-    $.fn.editabletypes.checklist = Checklist;      
-
-}(window.jQuery));
-
-/**
-HTML5 input types.
-Following types are supported:
-
-* password
-* email
-* url
-* tel
-* number
-* range
-* time
-
-Learn more about html5 inputs:  
-http://www.w3.org/wiki/HTML5_form_additions  
-To check browser compatibility please see:  
-https://developer.mozilla.org/en-US/docs/HTML/Element/Input
-            
-@class html5types 
-@extends text
-@final
-@since 1.3.0
-@example
-<a href="#" id="email" data-type="email" data-pk="1">admin@example.com</a>
-<script>
-$(function(){
-    $('#email').editable({
-        url: '/post',
-        title: 'Enter email'
-    });
-});
-</script>
-**/
-
-/**
-@property tpl 
-@default depends on type
-**/ 
-
-/*
-Password
-*/
-(function ($) {
-    "use strict";
-    
-    var Password = function (options) {
-        this.init('password', options, Password.defaults);
-    };
-    $.fn.editableutils.inherit(Password, $.fn.editabletypes.text);
-    $.extend(Password.prototype, {
-       //do not display password, show '[hidden]' instead
-       value2html: function(value, element) {
-           if(value) {
-               $(element).text('[hidden]');
-           } else {
-               $(element).empty(); 
-           }
-       },
-       //as password not displayed, should not set value by html
-       html2value: function(html) {
-           return null;
-       }       
-    });    
-    Password.defaults = $.extend({}, $.fn.editabletypes.text.defaults, {
-        tpl: '<input type="password">'
-    });
-    $.fn.editabletypes.password = Password;
-}(window.jQuery));
-
-
-/*
-Email
-*/
-(function ($) {
-    "use strict";
-    
-    var Email = function (options) {
-        this.init('email', options, Email.defaults);
-    };
-    $.fn.editableutils.inherit(Email, $.fn.editabletypes.text);
-    Email.defaults = $.extend({}, $.fn.editabletypes.text.defaults, {
-        tpl: '<input type="email">'
-    });
-    $.fn.editabletypes.email = Email;
-}(window.jQuery));
-
-
-/*
-Url
-*/
-(function ($) {
-    "use strict";
-    
-    var Url = function (options) {
-        this.init('url', options, Url.defaults);
-    };
-    $.fn.editableutils.inherit(Url, $.fn.editabletypes.text);
-    Url.defaults = $.extend({}, $.fn.editabletypes.text.defaults, {
-        tpl: '<input type="url">'
-    });
-    $.fn.editabletypes.url = Url;
-}(window.jQuery));
-
-
-/*
-Tel
-*/
-(function ($) {
-    "use strict";
-    
-    var Tel = function (options) {
-        this.init('tel', options, Tel.defaults);
-    };
-    $.fn.editableutils.inherit(Tel, $.fn.editabletypes.text);
-    Tel.defaults = $.extend({}, $.fn.editabletypes.text.defaults, {
-        tpl: '<input type="tel">'
-    });
-    $.fn.editabletypes.tel = Tel;
-}(window.jQuery));
-
-
-/*
-Number
-*/
-(function ($) {
-    "use strict";
-    
-    var NumberInput = function (options) {
-        this.init('number', options, NumberInput.defaults);
-    };
-    $.fn.editableutils.inherit(NumberInput, $.fn.editabletypes.text);
-    $.extend(NumberInput.prototype, {
-         render: function () {
-            NumberInput.superclass.render.call(this);
-            this.setAttr('min');
-            this.setAttr('max');
-            this.setAttr('step');
-        },
-        postrender: function() {
-            if(this.$clear) {
-                //increase right ffset  for up/down arrows
-                this.$clear.css({right: 24});
-                /*
-                //can position clear button only here, when form is shown and height can be calculated
-                var h = this.$input.outerHeight(true) || 20,
-                    delta = (h - this.$clear.height()) / 2;
-                
-                //add 12px to offset right for up/down arrows    
-                this.$clear.css({top: delta, right: delta + 16});
-                */
-            } 
-        }        
-    });     
-    NumberInput.defaults = $.extend({}, $.fn.editabletypes.text.defaults, {
-        tpl: '<input type="number">',
-        inputclass: 'input-mini',
-        min: null,
-        max: null,
-        step: null
-    });
-    $.fn.editabletypes.number = NumberInput;
-}(window.jQuery));
-
-
-/*
-Range (inherit from number)
-*/
-(function ($) {
-    "use strict";
-    
-    var Range = function (options) {
-        this.init('range', options, Range.defaults);
-    };
-    $.fn.editableutils.inherit(Range, $.fn.editabletypes.number);
-    $.extend(Range.prototype, {
-        render: function () {
-            this.$input = this.$tpl.filter('input');
-            
-            this.setClass();
-            this.setAttr('min');
-            this.setAttr('max');
-            this.setAttr('step');           
-            
-            this.$input.on('input', function(){
-                $(this).siblings('output').text($(this).val()); 
-            });  
-        },
-        activate: function() {
-            this.$input.focus();
-        }         
-    });
-    Range.defaults = $.extend({}, $.fn.editabletypes.number.defaults, {
-        tpl: '<input type="range"><output style="width: 30px; display: inline-block"></output>',
-        inputclass: 'input-medium'
-    });
-    $.fn.editabletypes.range = Range;
-}(window.jQuery));
-
-/*
-Time
-*/
-(function ($) {
-    "use strict";
-
-    var Time = function (options) {
-        this.init('time', options, Time.defaults);
-    };
-    //inherit from abstract, as inheritance from text gives selection error.
-    $.fn.editableutils.inherit(Time, $.fn.editabletypes.abstractinput);
-    $.extend(Time.prototype, {
-        render: function() {
-           this.setClass();
-        }        
-    });
-    Time.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
-        tpl: '<input type="time">'
-    });
-    $.fn.editabletypes.time = Time;
-}(window.jQuery));
-
-/**
-Select2 input. Based on amazing work of Igor Vaynberg https://github.com/ivaynberg/select2.  
-Please see [original select2 docs](http://ivaynberg.github.com/select2) for detailed description and options.  
- 
-You should manually download and include select2 distributive:  
-
-    <link href="select2/select2.css" rel="stylesheet" type="text/css"></link>  
-    <script src="select2/select2.js"></script>  
-    
-To make it **bootstrap-styled** you can use css from [here](https://github.com/t0m/select2-bootstrap-css): 
-
-    <link href="select2-bootstrap.css" rel="stylesheet" type="text/css"></link>    
-    
-**Note:** currently `autotext` feature does not work for select2 with `ajax` remote source.    
-You need initially put both `data-value` and element's text youself:    
-
-    <a href="#" data-type="select2" data-value="1">Text1</a>
-    
-    
-@class select2
-@extends abstractinput
-@since 1.4.1
-@final
-@example
-<a href="#" id="country" data-type="select2" data-pk="1" data-value="ru" data-url="/post" data-title="Select country"></a>
-<script>
-$(function(){
-    //local source
-    $('#country').editable({
-        source: [
-              {id: 'gb', text: 'Great Britain'},
-              {id: 'us', text: 'United States'},
-              {id: 'ru', text: 'Russia'}
-           ],
-        select2: {
-           multiple: true
-        }
-    });
-    //remote source (simple)
-    $('#country').editable({
-        source: '/getCountries',
-        select2: {
-            placeholder: 'Select Country',
-            minimumInputLength: 1
-        }
-    });
-    //remote source (advanced)
-    $('#country').editable({
-        select2: {
-            placeholder: 'Select Country',
-            allowClear: true,
-            minimumInputLength: 3,
-            id: function (item) {
-                return item.CountryId;
-            },
-            ajax: {
-                url: '/getCountries',
-                dataType: 'json',
-                data: function (term, page) {
-                    return { query: term };
-                },
-                results: function (data, page) {
-                    return { results: data };
-                }
-            },
-            formatResult: function (item) {
-                return item.CountryName;
-            },
-            formatSelection: function (item) {
-                return item.CountryName;
-            },
-            initSelection: function (element, callback) {
-                return $.get('/getCountryById', { query: element.val() }, function (data) {
-                    callback(data);
-                });
-            } 
-        }  
-    });
-});
-</script>
-**/
-(function ($) {
-    "use strict";
-    
-    var Constructor = function (options) {
-        this.init('select2', options, Constructor.defaults);
-
-        options.select2 = options.select2 || {};
-
-        this.sourceData = null;
-        
-        //placeholder
-        if(options.placeholder) {
-            options.select2.placeholder = options.placeholder;
-        }
-       
-        //if not `tags` mode, use source
-        if(!options.select2.tags && options.source) {
-            var source = options.source;
-            //if source is function, call it (once!)
-            if ($.isFunction(options.source)) {
-                source = options.source.call(options.scope);
-            }               
-
-            if (typeof source === 'string') {
-                options.select2.ajax = options.select2.ajax || {};
-                //some default ajax params
-                if(!options.select2.ajax.data) {
-                    options.select2.ajax.data = function(term) {return { query:term };};
-                }
-                if(!options.select2.ajax.results) {
-                    options.select2.ajax.results = function(data) { return {results:data };};
-                }
-                options.select2.ajax.url = source;
-            } else {
-                //check format and convert x-editable format to select2 format (if needed)
-                this.sourceData = this.convertSource(source);
-                options.select2.data = this.sourceData;
-            }
-        } 
-
-        //overriding objects in config (as by default jQuery extend() is not recursive)
-        this.options.select2 = $.extend({}, Constructor.defaults.select2, options.select2);
-
-        //detect whether it is multi-valued
-        this.isMultiple = this.options.select2.tags || this.options.select2.multiple;
-        this.isRemote = ('ajax' in this.options.select2);
-
-        //store function returning ID of item
-        //should be here as used inautotext for local source
-        this.idFunc = this.options.select2.id;
-        if (typeof(this.idFunc) !== "function") {
-            var idKey = this.idFunc || 'id';
-            this.idFunc = function (e) { return e[idKey]; };
-        }
-
-        //store function that renders text in select2
-        this.formatSelection = this.options.select2.formatSelection;
-        if (typeof(this.formatSelection) !== "function") {
-            this.formatSelection = function (e) { return e.text; };
-        }
-    };
-
-    $.fn.editableutils.inherit(Constructor, $.fn.editabletypes.abstractinput);
-
-    $.extend(Constructor.prototype, {
-        render: function() {
-            this.setClass();
-
-            //can not apply select2 here as it calls initSelection 
-            //over input that does not have correct value yet.
-            //apply select2 only in value2input
-            //this.$input.select2(this.options.select2);
-
-            //when data is loaded via ajax, we need to know when it's done to populate listData
-            if(this.isRemote) {
-                //listen to loaded event to populate data
-                this.$input.on('select2-loaded', $.proxy(function(e) {
-                    this.sourceData = e.items.results;
-                }, this));
-            }
-
-            //trigger resize of editableform to re-position container in multi-valued mode
-            if(this.isMultiple) {
-               this.$input.on('change', function() {
-                   $(this).closest('form').parent().triggerHandler('resize');
-               });
-            }
-       },
-
-       value2html: function(value, element) {
-           var text = '', data,
-               that = this;
-
-           if(this.options.select2.tags) { //in tags mode just assign value
-              data = value; 
-              //data = $.fn.editableutils.itemsByValue(value, this.options.select2.tags, this.idFunc);
-           } else if(this.sourceData) {
-              data = $.fn.editableutils.itemsByValue(value, this.sourceData, this.idFunc); 
-           } else {
-              //can not get list of possible values 
-              //(e.g. autotext for select2 with ajax source)
-           }
-
-           //data may be array (when multiple values allowed)
-           if($.isArray(data)) {
-               //collect selected data and show with separator
-               text = [];
-               $.each(data, function(k, v){
-                   text.push(v && typeof v === 'object' ? that.formatSelection(v) : v);
-               });
-           } else if(data) {
-               text = that.formatSelection(data);
-           }
-
-           text = $.isArray(text) ? text.join(this.options.viewseparator) : text;
-
-           //$(element).text(text);
-           Constructor.superclass.value2html.call(this, text, element); 
-       },
-
-       html2value: function(html) {
-           return this.options.select2.tags ? this.str2value(html, this.options.viewseparator) : null;
-       },
-
-       value2input: function(value) {
-           // if value array => join it anyway
-           if($.isArray(value)) {
-              value = value.join(this.getSeparator());
-           }
-
-           //for remote source just set value, text is updated by initSelection
-           if(!this.$input.data('select2')) {
-               this.$input.val(value);
-               this.$input.select2(this.options.select2);
-           } else {
-               //second argument needed to separate initial change from user's click (for autosubmit)   
-               this.$input.val(value).trigger('change', true); 
-
-               //Uncaught Error: cannot call val() if initSelection() is not defined
-               //this.$input.select2('val', value);
-           }
-
-           // if defined remote source AND no multiple mode AND no user's initSelection provided --> 
-           // we should somehow get text for provided id.
-           // The solution is to use element's text as text for that id (exclude empty)
-           if(this.isRemote && !this.isMultiple && !this.options.select2.initSelection) {
-               // customId and customText are methods to extract `id` and `text` from data object
-               // we can use this workaround only if user did not define these methods
-               // otherwise we cant construct data object
-               var customId = this.options.select2.id,
-                   customText = this.options.select2.formatSelection;
-
-               if(!customId && !customText) {
-                   var $el = $(this.options.scope);
-                   if (!$el.data('editable').isEmpty) {
-                       var data = {id: value, text: $el.text()};
-                       this.$input.select2('data', data); 
-                   }
-               }
-           }
-       },
-       
-       input2value: function() { 
-           return this.$input.select2('val');
-       },
-
-       str2value: function(str, separator) {
-            if(typeof str !== 'string' || !this.isMultiple) {
-                return str;
-            }
-
-            separator = separator || this.getSeparator();
-
-            var val, i, l;
-
-            if (str === null || str.length < 1) {
-                return null;
-            }
-            val = str.split(separator);
-            for (i = 0, l = val.length; i < l; i = i + 1) {
-                val[i] = $.trim(val[i]);
-            }
-
-            return val;
-       },
-
-        autosubmit: function() {
-            this.$input.on('change', function(e, isInitial){
-                if(!isInitial) {
-                  $(this).closest('form').submit();
-                }
-            });
-        },
-
-        getSeparator: function() {
-            return this.options.select2.separator || $.fn.select2.defaults.separator;
-        },
-
-        /*
-        Converts source from x-editable format: {value: 1, text: "1"} to
-        select2 format: {id: 1, text: "1"}
-        */
-        convertSource: function(source) {
-            if($.isArray(source) && source.length && source[0].value !== undefined) {
-                for(var i = 0; i<source.length; i++) {
-                    if(source[i].value !== undefined) {
-                        source[i].id = source[i].value;
-                        delete source[i].value;
-                    }
-                }
-            }
-            return source;
-        },
-        
-        destroy: function() {
-            if(this.$input.data('select2')) {
-                this.$input.select2('destroy');
-            }
-        }
-        
-    });
-
-    Constructor.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
-        /**
-        @property tpl 
-        @default <input type="hidden">
-        **/
-        tpl:'<input type="hidden">',
-        /**
-        Configuration of select2. [Full list of options](http://ivaynberg.github.com/select2).
-
-        @property select2 
-        @type object
-        @default null
-        **/
-        select2: null,
-        /**
-        Placeholder attribute of select
-
-        @property placeholder 
-        @type string
-        @default null
-        **/
-        placeholder: null,
-        /**
-        Source data for select. It will be assigned to select2 `data` property and kept here just for convenience.
-        Please note, that format is different from simple `select` input: use 'id' instead of 'value'.
-        E.g. `[{id: 1, text: "text1"}, {id: 2, text: "text2"}, ...]`.
-
-        @property source 
-        @type array|string|function
-        @default null        
-        **/
-        source: null,
-        /**
-        Separator used to display tags.
-
-        @property viewseparator 
-        @type string
-        @default ', '        
-        **/
-        viewseparator: ', '
-    });
-
-    $.fn.editabletypes.select2 = Constructor;
-
-}(window.jQuery));
-
-/**
-* Combodate - 1.0.5
-* Dropdown date and time picker.
-* Converts text input into dropdowns to pick day, month, year, hour, minute and second.
-* Uses momentjs as datetime library http://momentjs.com.
-* For i18n include corresponding file from https://github.com/timrwood/moment/tree/master/lang 
-*
-* Confusion at noon and midnight - see http://en.wikipedia.org/wiki/12-hour_clock#Confusion_at_noon_and_midnight
-* In combodate: 
-* 12:00 pm --> 12:00 (24-h format, midday)
-* 12:00 am --> 00:00 (24-h format, midnight, start of day)
-* 
-* Differs from momentjs parse rules:
-* 00:00 pm, 12:00 pm --> 12:00 (24-h format, day not change)
-* 00:00 am, 12:00 am --> 00:00 (24-h format, day not change)
-* 
-* 
-* Author: Vitaliy Potapov
-* Project page: http://github.com/vitalets/combodate
-* Copyright (c) 2012 Vitaliy Potapov. Released under MIT License.
-**/
-(function ($) {
-
-    var Combodate = function (element, options) {
-        this.$element = $(element);
-        if(!this.$element.is('input')) {
-            $.error('Combodate should be applied to INPUT element');
-            return;
-        }
-        this.options = $.extend({}, $.fn.combodate.defaults, options, this.$element.data());
-        this.init();  
-     };
-
-    Combodate.prototype = {
-        constructor: Combodate, 
-        init: function () {
-            this.map = {
-                //key   regexp    moment.method
-                day:    ['D',    'date'], 
-                month:  ['M',    'month'], 
-                year:   ['Y',    'year'], 
-                hour:   ['[Hh]', 'hours'],
-                minute: ['m',    'minutes'], 
-                second: ['s',    'seconds'],
-                ampm:   ['[Aa]', ''] 
-            };
-            
-            this.$widget = $('<span class="combodate"></span>').html(this.getTemplate());
-                      
-            this.initCombos();
-            
-            //update original input on change 
-            this.$widget.on('change', 'select', $.proxy(function(e) {
-                this.$element.val(this.getValue()).change();
-                // update days count if month or year changes
-                if (this.options.smartDays) {
-                    if ($(e.target).is('.month') || $(e.target).is('.year')) {
-                        this.fillCombo('day');
-                    }
-                }
-            }, this));
-            
-            this.$widget.find('select').css('width', 'auto');
-                                       
-            // hide original input and insert widget                                       
-            this.$element.hide().after(this.$widget);
-            
-            // set initial value
-            this.setValue(this.$element.val() || this.options.value);
-        },
-        
-        /*
-         Replace tokens in template with <select> elements 
-        */         
-        getTemplate: function() {
-            var tpl = this.options.template;
-
-            //first pass
-            $.each(this.map, function(k, v) {
-                v = v[0]; 
-                var r = new RegExp(v+'+'),
-                    token = v.length > 1 ? v.substring(1, 2) : v;
-                    
-                tpl = tpl.replace(r, '{'+token+'}');
-            });
-
-            //replace spaces with &nbsp;
-            tpl = tpl.replace(/ /g, '&nbsp;');
-
-            //second pass
-            $.each(this.map, function(k, v) {
-                v = v[0];
-                var token = v.length > 1 ? v.substring(1, 2) : v;
-                    
-                tpl = tpl.replace('{'+token+'}', '<select class="'+k+'"></select>');
-            });   
-
-            return tpl;
-        },
-        
-        /*
-         Initialize combos that presents in template 
-        */        
-        initCombos: function() {
-            for (var k in this.map) {
-                var $c = this.$widget.find('.'+k);
-                // set properties like this.$day, this.$month etc.
-                this['$'+k] = $c.length ? $c : null;
-                // fill with items
-                this.fillCombo(k);
-            }
-        },
-
-        /*
-         Fill combo with items 
-        */        
-        fillCombo: function(k) {
-            var $combo = this['$'+k];
-            if (!$combo) {
-                return;
-            }
-
-            // define method name to fill items, e.g `fillDays`
-            var f = 'fill' + k.charAt(0).toUpperCase() + k.slice(1); 
-            var items = this[f]();
-            var value = $combo.val();
-
-            $combo.empty();
-            for(var i=0; i<items.length; i++) {
-                $combo.append('<option value="'+items[i][0]+'">'+items[i][1]+'</option>');
-            }
-
-            $combo.val(value);
-        },
-
-        /*
-         Initialize items of combos. Handles `firstItem` option 
-        */
-        fillCommon: function(key) {
-            var values = [],
-                relTime;
-                
-            if(this.options.firstItem === 'name') {
-                //need both to support moment ver < 2 and  >= 2
-                relTime = moment.relativeTime || moment.langData()._relativeTime; 
-                var header = typeof relTime[key] === 'function' ? relTime[key](1, true, key, false) : relTime[key];
-                //take last entry (see momentjs lang files structure) 
-                header = header.split(' ').reverse()[0];                
-                values.push(['', header]);
-            } else if(this.options.firstItem === 'empty') {
-                values.push(['', '']);
-            }
-            return values;
-        },  
-
-
-        /*
-        fill day
-        */
-        fillDay: function() {
-            var items = this.fillCommon('d'), name, i,
-                twoDigit = this.options.template.indexOf('DD') !== -1,
-                daysCount = 31;
-
-            // detect days count (depends on month and year)
-            // originally https://github.com/vitalets/combodate/pull/7
-            if (this.options.smartDays && this.$month && this.$year) {
-                var month = parseInt(this.$month.val(), 10);
-                var year = parseInt(this.$year.val(), 10);
-
-                if (!isNaN(month) && !isNaN(year)) {
-                    daysCount = moment([year, month]).daysInMonth();
-                }
-            }
-
-            for (i = 1; i <= daysCount; i++) {
-                name = twoDigit ? this.leadZero(i) : i;
-                items.push([i, name]);
-            }
-            return items;        
-        },
-        
-        /*
-        fill month
-        */
-        fillMonth: function() {
-            var items = this.fillCommon('M'), name, i, 
-                longNames = this.options.template.indexOf('MMMM') !== -1,
-                shortNames = this.options.template.indexOf('MMM') !== -1,
-                twoDigit = this.options.template.indexOf('MM') !== -1;
-                
-            for(i=0; i<=11; i++) {
-                if(longNames) {
-                    //see https://github.com/timrwood/momentjs.com/pull/36
-                    name = moment().date(1).month(i).format('MMMM');
-                } else if(shortNames) {
-                    name = moment().date(1).month(i).format('MMM');
-                } else if(twoDigit) {
-                    name = this.leadZero(i+1);
-                } else {
-                    name = i+1;
-                }
-                items.push([i, name]);
-            } 
-            return items;
-        },  
-        
-        /*
-        fill year
-        */
-        fillYear: function() {
-            var items = [], name, i, 
-                longNames = this.options.template.indexOf('YYYY') !== -1;
-           
-            for(i=this.options.maxYear; i>=this.options.minYear; i--) {
-                name = longNames ? i : (i+'').substring(2);
-                items[this.options.yearDescending ? 'push' : 'unshift']([i, name]);
-            }
-            
-            items = this.fillCommon('y').concat(items);
-            
-            return items;              
-        },    
-        
-        /*
-        fill hour
-        */
-        fillHour: function() {
-            var items = this.fillCommon('h'), name, i,
-                h12 = this.options.template.indexOf('h') !== -1,
-                h24 = this.options.template.indexOf('H') !== -1,
-                twoDigit = this.options.template.toLowerCase().indexOf('hh') !== -1,
-                min = h12 ? 1 : 0, 
-                max = h12 ? 12 : 23;
-                
-            for(i=min; i<=max; i++) {
-                name = twoDigit ? this.leadZero(i) : i;
-                items.push([i, name]);
-            } 
-            return items;                 
-        },    
-        
-        /*
-        fill minute
-        */
-        fillMinute: function() {
-            var items = this.fillCommon('m'), name, i,
-                twoDigit = this.options.template.indexOf('mm') !== -1;
-
-            for(i=0; i<=59; i+= this.options.minuteStep) {
-                name = twoDigit ? this.leadZero(i) : i;
-                items.push([i, name]);
-            }    
-            return items;              
-        },  
-        
-        /*
-        fill second
-        */
-        fillSecond: function() {
-            var items = this.fillCommon('s'), name, i,
-                twoDigit = this.options.template.indexOf('ss') !== -1;
-
-            for(i=0; i<=59; i+= this.options.secondStep) {
-                name = twoDigit ? this.leadZero(i) : i;
-                items.push([i, name]);
-            }    
-            return items;              
-        },  
-        
-        /*
-        fill ampm
-        */
-        fillAmpm: function() {
-            var ampmL = this.options.template.indexOf('a') !== -1,
-                ampmU = this.options.template.indexOf('A') !== -1,            
-                items = [
-                    ['am', ampmL ? 'am' : 'AM'],
-                    ['pm', ampmL ? 'pm' : 'PM']
-                ];
-            return items;                              
-        },                                       
-
-        /*
-         Returns current date value from combos. 
-         If format not specified - `options.format` used.
-         If format = `null` - Moment object returned.
-        */
-        getValue: function(format) {
-            var dt, values = {}, 
-                that = this,
-                notSelected = false;
-                
-            //getting selected values    
-            $.each(this.map, function(k, v) {
-                if(k === 'ampm') {
-                    return;
-                }
-                var def = k === 'day' ? 1 : 0;
-                  
-                values[k] = that['$'+k] ? parseInt(that['$'+k].val(), 10) : def; 
-                
-                if(isNaN(values[k])) {
-                   notSelected = true;
-                   return false; 
-                }
-            });
-            
-            //if at least one visible combo not selected - return empty string
-            if(notSelected) {
-               return '';
-            }
-            
-            //convert hours 12h --> 24h 
-            if(this.$ampm) {
-                //12:00 pm --> 12:00 (24-h format, midday), 12:00 am --> 00:00 (24-h format, midnight, start of day)
-                if(values.hour === 12) {
-                    values.hour = this.$ampm.val() === 'am' ? 0 : 12;                    
-                } else {
-                    values.hour = this.$ampm.val() === 'am' ? values.hour : values.hour+12;
-                }
-            }    
-            
-            dt = moment([values.year, values.month, values.day, values.hour, values.minute, values.second]);
-            
-            //highlight invalid date
-            this.highlight(dt);
-                              
-            format = format === undefined ? this.options.format : format;
-            if(format === null) {
-               return dt.isValid() ? dt : null; 
-            } else {
-               return dt.isValid() ? dt.format(format) : ''; 
-            }           
-        },
-        
-        setValue: function(value) {
-            if(!value) {
-                return;
-            }
-            
-            var dt = typeof value === 'string' ? moment(value, this.options.format) : moment(value),
-                that = this,
-                values = {};
-            
-            //function to find nearest value in select options
-            function getNearest($select, value) {
-                var delta = {};
-                $select.children('option').each(function(i, opt){
-                    var optValue = $(opt).attr('value'),
-                    distance;
-
-                    if(optValue === '') return;
-                    distance = Math.abs(optValue - value); 
-                    if(typeof delta.distance === 'undefined' || distance < delta.distance) {
-                        delta = {value: optValue, distance: distance};
-                    } 
-                }); 
-                return delta.value;
-            }             
-            
-            if(dt.isValid()) {
-                //read values from date object
-                $.each(this.map, function(k, v) {
-                    if(k === 'ampm') {
-                       return; 
-                    }
-                    values[k] = dt[v[1]]();
-                });
-               
-                if(this.$ampm) {
-                    //12:00 pm --> 12:00 (24-h format, midday), 12:00 am --> 00:00 (24-h format, midnight, start of day)
-                    if(values.hour >= 12) {
-                        values.ampm = 'pm';
-                        if(values.hour > 12) {
-                            values.hour -= 12;
-                        }
-                    } else {
-                        values.ampm = 'am';
-                        if(values.hour === 0) {
-                            values.hour = 12;
-                        }
-                    } 
-                }
-               
-                $.each(values, function(k, v) {
-                    //call val() for each existing combo, e.g. this.$hour.val()
-                    if(that['$'+k]) {
-                       
-                        if(k === 'minute' && that.options.minuteStep > 1 && that.options.roundTime) {
-                           v = getNearest(that['$'+k], v);
-                        }
-                       
-                        if(k === 'second' && that.options.secondStep > 1 && that.options.roundTime) {
-                           v = getNearest(that['$'+k], v);
-                        }                       
-                       
-                        that['$'+k].val(v);
-                    }
-                });
-
-                // update days count
-                if (this.options.smartDays) {
-                    this.fillCombo('day');
-                }
-               
-               this.$element.val(dt.format(this.options.format)).change();
-            }
-        },
-        
-        /*
-         highlight combos if date is invalid
-        */
-        highlight: function(dt) {
-            if(!dt.isValid()) {
-                if(this.options.errorClass) {
-                    this.$widget.addClass(this.options.errorClass);
-                } else {
-                    //store original border color
-                    if(!this.borderColor) {
-                        this.borderColor = this.$widget.find('select').css('border-color'); 
-                    }
-                    this.$widget.find('select').css('border-color', 'red');
-                } 
-            } else {
-                if(this.options.errorClass) {
-                    this.$widget.removeClass(this.options.errorClass);
-                } else {
-                    this.$widget.find('select').css('border-color', this.borderColor);
-                }  
-            }
-        },
-        
-        leadZero: function(v) {
-            return v <= 9 ? '0' + v : v; 
-        },
-        
-        destroy: function() {
-            this.$widget.remove();
-            this.$element.removeData('combodate').show();
-        }
-        
-        //todo: clear method        
-    };
-
-    $.fn.combodate = function ( option ) {
-        var d, args = Array.apply(null, arguments);
-        args.shift();
-
-        //getValue returns date as string / object (not jQuery object)
-        if(option === 'getValue' && this.length && (d = this.eq(0).data('combodate'))) {
-          return d.getValue.apply(d, args);
-        }        
-        
-        return this.each(function () {
-            var $this = $(this),
-            data = $this.data('combodate'),
-            options = typeof option == 'object' && option;
-            if (!data) {
-                $this.data('combodate', (data = new Combodate(this, options)));
-            }
-            if (typeof option == 'string' && typeof data[option] == 'function') {
-                data[option].apply(data, args);
-            }
-        });
-    };  
-    
-    $.fn.combodate.defaults = {
-         //in this format value stored in original input
-        format: 'DD-MM-YYYY HH:mm',      
-        //in this format items in dropdowns are displayed
-        template: 'D / MMM / YYYY   H : mm',
-        //initial value, can be `new Date()`    
-        value: null,                       
-        minYear: 1970,
-        maxYear: 2015,
-        yearDescending: true,
-        minuteStep: 5,
-        secondStep: 1,
-        firstItem: 'empty', //'name', 'empty', 'none'
-        errorClass: null,
-        roundTime: true, // whether to round minutes and seconds if step > 1
-        smartDays: false // whether days in combo depend on selected month: 31, 30, 28
-    };
-
-}(window.jQuery));
-/**
-Combodate input - dropdown date and time picker.    
-Based on [combodate](http://vitalets.github.com/combodate) plugin (included). To use it you should manually include [momentjs](http://momentjs.com).
-
-    <script src="js/moment.min.js"></script>
-   
-Allows to input:
-
-* only date
-* only time 
-* both date and time  
-
-Please note, that format is taken from momentjs and **not compatible** with bootstrap-datepicker / jquery UI datepicker.  
-Internally value stored as `momentjs` object. 
-
-@class combodate
-@extends abstractinput
-@final
-@since 1.4.0
-@example
-<a href="#" id="dob" data-type="combodate" data-pk="1" data-url="/post" data-value="1984-05-15" data-title="Select date"></a>
-<script>
-$(function(){
-    $('#dob').editable({
-        format: 'YYYY-MM-DD',    
-        viewformat: 'DD.MM.YYYY',    
-        template: 'D / MMMM / YYYY',    
-        combodate: {
-                minYear: 2000,
-                maxYear: 2015,
-                minuteStep: 1
-           }
-        }
-    });
-});
-</script>
-**/
-
-/*global moment*/
-
-(function ($) {
-    "use strict";
-    
-    var Constructor = function (options) {
-        this.init('combodate', options, Constructor.defaults);
-        
-        //by default viewformat equals to format
-        if(!this.options.viewformat) {
-            this.options.viewformat = this.options.format;
-        }        
-        
-        //try parse combodate config defined as json string in data-combodate
-        options.combodate = $.fn.editableutils.tryParseJson(options.combodate, true);
-
-        //overriding combodate config (as by default jQuery extend() is not recursive)
-        this.options.combodate = $.extend({}, Constructor.defaults.combodate, options.combodate, {
-            format: this.options.format,
-            template: this.options.template
-        });
-    };
-
-    $.fn.editableutils.inherit(Constructor, $.fn.editabletypes.abstractinput);    
-    
-    $.extend(Constructor.prototype, {
-        render: function () {
-            this.$input.combodate(this.options.combodate);
-                    
-            if($.fn.editableform.engine === 'bs3') {
-                this.$input.siblings().find('select').addClass('form-control');
-            }
-            
-            if(this.options.inputclass) {
-                this.$input.siblings().find('select').addClass(this.options.inputclass);
-            }            
-            //"clear" link
-            /*
-            if(this.options.clear) {
-                this.$clear = $('<a href="#"></a>').html(this.options.clear).click($.proxy(function(e){
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.clear();
-                }, this));
-                
-                this.$tpl.parent().append($('<div class="editable-clear">').append(this.$clear));  
-            } 
-            */               
-        },
-        
-        value2html: function(value, element) {
-            var text = value ? value.format(this.options.viewformat) : '';
-            //$(element).text(text);
-            Constructor.superclass.value2html.call(this, text, element);  
-        },
-
-        html2value: function(html) {
-            return html ? moment(html, this.options.viewformat) : null;
-        },   
-        
-        value2str: function(value) {
-            return value ? value.format(this.options.format) : '';
-       }, 
-       
-       str2value: function(str) {
-           return str ? moment(str, this.options.format) : null;
-       }, 
-       
-       value2submit: function(value) {
-           return this.value2str(value);
-       },                    
-
-       value2input: function(value) {
-           this.$input.combodate('setValue', value);
-       },
-        
-       input2value: function() { 
-           return this.$input.combodate('getValue', null);
-       },       
-       
-       activate: function() {
-           this.$input.siblings('.combodate').find('select').eq(0).focus();
-       },
-       
-       /*
-       clear:  function() {
-          this.$input.data('datepicker').date = null;
-          this.$input.find('.active').removeClass('active');
-       },
-       */
-       
-       autosubmit: function() {
-           
-       }
-
-    });
-    
-    Constructor.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
-        /**
-        @property tpl 
-        @default <input type="text">
-        **/         
-        tpl:'<input type="text">',
-        /**
-        @property inputclass 
-        @default null
-        **/         
-        inputclass: null,
-        /**
-        Format used for sending value to server. Also applied when converting date from <code>data-value</code> attribute.<br>
-        See list of tokens in [momentjs docs](http://momentjs.com/docs/#/parsing/string-format)  
-        
-        @property format 
-        @type string
-        @default YYYY-MM-DD
-        **/         
-        format:'YYYY-MM-DD',
-        /**
-        Format used for displaying date. Also applied when converting date from element's text on init.   
-        If not specified equals to `format`.
-        
-        @property viewformat 
-        @type string
-        @default null
-        **/          
-        viewformat: null,        
-        /**
-        Template used for displaying dropdowns.
-        
-        @property template 
-        @type string
-        @default D / MMM / YYYY
-        **/          
-        template: 'D / MMM / YYYY',  
-        /**
-        Configuration of combodate.
-        Full list of options: http://vitalets.github.com/combodate/#docs
-        
-        @property combodate 
-        @type object
-        @default null
-        **/
-        combodate: null
-        
-        /*
-        (not implemented yet)
-        Text shown as clear date button. 
-        If <code>false</code> clear button will not be rendered.
-        
-        @property clear 
-        @type boolean|string
-        @default 'x clear'         
-        */
-        //clear: '&times; clear'
-    });   
-
-    $.fn.editabletypes.combodate = Constructor;
-
-}(window.jQuery));
-
-/*
-Editableform based on Twitter Bootstrap 3
-*/
-(function ($) {
-    "use strict";
-    
-    //store parent methods
-    var pInitInput = $.fn.editableform.Constructor.prototype.initInput;
-    
-    $.extend($.fn.editableform.Constructor.prototype, {
-        initTemplate: function() {
-            this.$form = $($.fn.editableform.template); 
-            this.$form.find('.control-group').addClass('form-group');
-            this.$form.find('.editable-error-block').addClass('help-block');
-        },
-        initInput: function() {  
-            pInitInput.apply(this);
-
-            //for bs3 set default class `input-sm` to standard inputs
-            var emptyInputClass = this.input.options.inputclass === null || this.input.options.inputclass === false;
-            var defaultClass = 'input-sm';
-            
-            //bs3 add `form-control` class to standard inputs
-            var stdtypes = 'text,select,textarea,password,email,url,tel,number,range,time,typeaheadjs'.split(','); 
-            if(~$.inArray(this.input.type, stdtypes)) {
-                this.input.$input.addClass('form-control');
-                if(emptyInputClass) {
-                    this.input.options.inputclass = defaultClass;
-                    this.input.$input.addClass(defaultClass);
-                }
-            }             
-        
-            //apply bs3 size class also to buttons (to fit size of control)
-            var $btn = this.$form.find('.editable-buttons');
-            var classes = emptyInputClass ? [defaultClass] : this.input.options.inputclass.split(' ');
-            for(var i=0; i<classes.length; i++) {
-                // `btn-sm` is default now
-                /*
-                if(classes[i].toLowerCase() === 'input-sm') { 
-                    $btn.find('button').addClass('btn-sm');  
-                }
-                */
-                if(classes[i].toLowerCase() === 'input-lg') {
-                    $btn.find('button').removeClass('btn-sm').addClass('btn-lg'); 
-                }
-            }
-        }
-    });    
-    
-    //buttons
-    $.fn.editableform.buttons = 
-      '<button type="submit" class="btn btn-primary btn-sm editable-submit">'+
-        '<i class="glyphicon glyphicon-ok"></i>'+
-      '</button>'+
-      '<button type="button" class="btn btn-default btn-sm editable-cancel">'+
-        '<i class="glyphicon glyphicon-remove"></i>'+
-      '</button>';         
-    
-    //error classes
-    $.fn.editableform.errorGroupClass = 'has-error';
-    $.fn.editableform.errorBlockClass = null;  
-    //engine
-    $.fn.editableform.engine = 'bs3';  
-}(window.jQuery));
-/**
-* Editable Popover3 (for Bootstrap 3) 
-* ---------------------
-* requires bootstrap-popover.js
-*/
-(function ($) {
-    "use strict";
-
-    //extend methods
-    $.extend($.fn.editableContainer.Popup.prototype, {
-        containerName: 'popover',
-        containerDataName: 'bs.popover',
-        innerCss: '.popover-content',
-        defaults: $.fn.popover.Constructor.DEFAULTS,
-
-        initContainer: function(){
-            $.extend(this.containerOptions, {
-                trigger: 'manual',
-                selector: false,
-                content: ' ',
-                template: this.defaults.template
-            });
-            
-            //as template property is used in inputs, hide it from popover
-            var t;
-            if(this.$element.data('template')) {
-               t = this.$element.data('template');
-               this.$element.removeData('template');  
-            } 
-            
-            this.call(this.containerOptions);
-            
-            if(t) {
-               //restore data('template')
-               this.$element.data('template', t); 
-            }
-        }, 
-        
-        /* show */
-        innerShow: function () {
-            this.call('show');                
-        },  
-        
-        /* hide */
-        innerHide: function () {
-            this.call('hide');       
-        }, 
-        
-        /* destroy */
-        innerDestroy: function() {
-            this.call('destroy');
-        },                               
-        
-        setContainerOption: function(key, value) {
-            this.container().options[key] = value; 
-        },               
-
-        /**
-        * move popover to new position. This function mainly copied from bootstrap-popover.
-        */
-        /*jshint laxcomma: true, eqeqeq: false*/
-        setPosition: function () { 
-
-            (function() {
-            /*    
-                var $tip = this.tip()
-                , inside
-                , pos
-                , actualWidth
-                , actualHeight
-                , placement
-                , tp
-                , tpt
-                , tpb
-                , tpl
-                , tpr;
-
-                placement = typeof this.options.placement === 'function' ?
-                this.options.placement.call(this, $tip[0], this.$element[0]) :
-                this.options.placement;
-
-                inside = /in/.test(placement);
-               
-                $tip
-              //  .detach()
-              //vitalets: remove any placement class because otherwise they dont influence on re-positioning of visible popover
-                .removeClass('top right bottom left')
-                .css({ top: 0, left: 0, display: 'block' });
-              //  .insertAfter(this.$element);
-               
-                pos = this.getPosition(inside);
-
-                actualWidth = $tip[0].offsetWidth;
-                actualHeight = $tip[0].offsetHeight;
-
-                placement = inside ? placement.split(' ')[1] : placement;
-
-                tpb = {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2};
-                tpt = {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2};
-                tpl = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth};
-                tpr = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width};
-
-                switch (placement) {
-                    case 'bottom':
-                        if ((tpb.top + actualHeight) > ($(window).scrollTop() + $(window).height())) {
-                            if (tpt.top > $(window).scrollTop()) {
-                                placement = 'top';
-                            } else if ((tpr.left + actualWidth) < ($(window).scrollLeft() + $(window).width())) {
-                                placement = 'right';
-                            } else if (tpl.left > $(window).scrollLeft()) {
-                                placement = 'left';
-                            } else {
-                                placement = 'right';
-                            }
-                        }
-                        break;
-                    case 'top':
-                        if (tpt.top < $(window).scrollTop()) {
-                            if ((tpb.top + actualHeight) < ($(window).scrollTop() + $(window).height())) {
-                                placement = 'bottom';
-                            } else if ((tpr.left + actualWidth) < ($(window).scrollLeft() + $(window).width())) {
-                                placement = 'right';
-                            } else if (tpl.left > $(window).scrollLeft()) {
-                                placement = 'left';
-                            } else {
-                                placement = 'right';
-                            }
-                        }
-                        break;
-                    case 'left':
-                        if (tpl.left < $(window).scrollLeft()) {
-                            if ((tpr.left + actualWidth) < ($(window).scrollLeft() + $(window).width())) {
-                                placement = 'right';
-                            } else if (tpt.top > $(window).scrollTop()) {
-                                placement = 'top';
-                            } else if (tpt.top > $(window).scrollTop()) {
-                                placement = 'bottom';
-                            } else {
-                                placement = 'right';
-                            }
-                        }
-                        break;
-                    case 'right':
-                        if ((tpr.left + actualWidth) > ($(window).scrollLeft() + $(window).width())) {
-                            if (tpl.left > $(window).scrollLeft()) {
-                                placement = 'left';
-                            } else if (tpt.top > $(window).scrollTop()) {
-                                placement = 'top';
-                            } else if (tpt.top > $(window).scrollTop()) {
-                                placement = 'bottom';
-                            }
-                        }
-                        break;
-                }
-
-                switch (placement) {
-                    case 'bottom':
-                        tp = tpb;
-                        break;
-                    case 'top':
-                        tp = tpt;
-                        break;
-                    case 'left':
-                        tp = tpl;
-                        break;
-                    case 'right':
-                        tp = tpr;
-                        break;
-                }
-
-                $tip
-                .offset(tp)
-                .addClass(placement)
-                .addClass('in');
-           */
-                     
-           
-            var $tip = this.tip();
-            
-            var placement = typeof this.options.placement == 'function' ?
-                this.options.placement.call(this, $tip[0], this.$element[0]) :
-                this.options.placement;            
-
-            var autoToken = /\s?auto?\s?/i;
-            var autoPlace = autoToken.test(placement);
-            if (autoPlace) {
-                placement = placement.replace(autoToken, '') || 'top';
-            }
-            
-            
-            var pos = this.getPosition();
-            var actualWidth = $tip[0].offsetWidth;
-            var actualHeight = $tip[0].offsetHeight;
-
-            if (autoPlace) {
-                var $parent = this.$element.parent();
-
-                var orgPlacement = placement;
-                var docScroll    = document.documentElement.scrollTop || document.body.scrollTop;
-                var parentWidth  = this.options.container == 'body' ? window.innerWidth  : $parent.outerWidth();
-                var parentHeight = this.options.container == 'body' ? window.innerHeight : $parent.outerHeight();
-                var parentLeft   = this.options.container == 'body' ? 0 : $parent.offset().left;
-
-                placement = placement == 'bottom' && pos.top   + pos.height  + actualHeight - docScroll > parentHeight  ? 'top'    :
-                            placement == 'top'    && pos.top   - docScroll   - actualHeight < 0                         ? 'bottom' :
-                            placement == 'right'  && pos.right + actualWidth > parentWidth                              ? 'left'   :
-                            placement == 'left'   && pos.left  - actualWidth < parentLeft                               ? 'right'  :
-                            placement;
-
-                $tip
-                  .removeClass(orgPlacement)
-                  .addClass(placement);
-            }
-
-
-            var calculatedOffset = this.getCalculatedOffset(placement, pos, actualWidth, actualHeight);
-
-            this.applyPlacement(calculatedOffset, placement);            
-                     
-                
-            }).call(this.container());
-          /*jshint laxcomma: false, eqeqeq: true*/  
-        }            
-    });
-
-}(window.jQuery));
-
-/* =========================================================
- * bootstrap-datepicker.js
- * http://www.eyecon.ro/bootstrap-datepicker
- * =========================================================
- * Copyright 2012 Stefan Petre
- * Improvements by Andrew Rowls
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ========================================================= */
-
-(function( $ ) {
-
-	function UTCDate(){
-		return new Date(Date.UTC.apply(Date, arguments));
-	}
-	function UTCToday(){
-		var today = new Date();
-		return UTCDate(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate());
-	}
-
-	// Picker object
-
-	var Datepicker = function(element, options) {
-		var that = this;
-
-		this._process_options(options);
-
-		this.element = $(element);
-		this.isInline = false;
-		this.isInput = this.element.is('input');
-		this.component = this.element.is('.date') ? this.element.find('.add-on, .btn') : false;
-		this.hasInput = this.component && this.element.find('input').length;
-		if(this.component && this.component.length === 0)
-			this.component = false;
-
-		this.picker = $(DPGlobal.template);
-		this._buildEvents();
-		this._attachEvents();
-
-		if(this.isInline) {
-			this.picker.addClass('datepicker-inline').appendTo(this.element);
-		} else {
-			this.picker.addClass('datepicker-dropdown dropdown-menu');
-		}
-
-		if (this.o.rtl){
-			this.picker.addClass('datepicker-rtl');
-			this.picker.find('.prev i, .next i')
-						.toggleClass('icon-arrow-left icon-arrow-right');
-		}
-
-
-		this.viewMode = this.o.startView;
-
-		if (this.o.calendarWeeks)
-			this.picker.find('tfoot th.today')
-						.attr('colspan', function(i, val){
-							return parseInt(val) + 1;
-						});
-
-		this._allow_update = false;
-
-		this.setStartDate(this.o.startDate);
-		this.setEndDate(this.o.endDate);
-		this.setDaysOfWeekDisabled(this.o.daysOfWeekDisabled);
-
-		this.fillDow();
-		this.fillMonths();
-
-		this._allow_update = true;
-
-		this.update();
-		this.showMode();
-
-		if(this.isInline) {
-			this.show();
-		}
-	};
-
-	Datepicker.prototype = {
-		constructor: Datepicker,
-
-		_process_options: function(opts){
-			// Store raw options for reference
-			this._o = $.extend({}, this._o, opts);
-			// Processed options
-			var o = this.o = $.extend({}, this._o);
-
-			// Check if "de-DE" style date is available, if not language should
-			// fallback to 2 letter code eg "de"
-			var lang = o.language;
-			if (!dates[lang]) {
-				lang = lang.split('-')[0];
-				if (!dates[lang])
-					lang = defaults.language;
-			}
-			o.language = lang;
-
-			switch(o.startView){
-				case 2:
-				case 'decade':
-					o.startView = 2;
-					break;
-				case 1:
-				case 'year':
-					o.startView = 1;
-					break;
-				default:
-					o.startView = 0;
-			}
-
-			switch (o.minViewMode) {
-				case 1:
-				case 'months':
-					o.minViewMode = 1;
-					break;
-				case 2:
-				case 'years':
-					o.minViewMode = 2;
-					break;
-				default:
-					o.minViewMode = 0;
-			}
-
-			o.startView = Math.max(o.startView, o.minViewMode);
-
-			o.weekStart %= 7;
-			o.weekEnd = ((o.weekStart + 6) % 7);
-
-			var format = DPGlobal.parseFormat(o.format)
-			if (o.startDate !== -Infinity) {
-				o.startDate = DPGlobal.parseDate(o.startDate, format, o.language);
-			}
-			if (o.endDate !== Infinity) {
-				o.endDate = DPGlobal.parseDate(o.endDate, format, o.language);
-			}
-
-			o.daysOfWeekDisabled = o.daysOfWeekDisabled||[];
-			if (!$.isArray(o.daysOfWeekDisabled))
-				o.daysOfWeekDisabled = o.daysOfWeekDisabled.split(/[,\s]*/);
-			o.daysOfWeekDisabled = $.map(o.daysOfWeekDisabled, function (d) {
-				return parseInt(d, 10);
-			});
-		},
-		_events: [],
-		_secondaryEvents: [],
-		_applyEvents: function(evs){
-			for (var i=0, el, ev; i<evs.length; i++){
-				el = evs[i][0];
-				ev = evs[i][1];
-				el.on(ev);
-			}
-		},
-		_unapplyEvents: function(evs){
-			for (var i=0, el, ev; i<evs.length; i++){
-				el = evs[i][0];
-				ev = evs[i][1];
-				el.off(ev);
-			}
-		},
-		_buildEvents: function(){
-			if (this.isInput) { // single input
-				this._events = [
-					[this.element, {
-						focus: $.proxy(this.show, this),
-						keyup: $.proxy(this.update, this),
-						keydown: $.proxy(this.keydown, this)
-					}]
-				];
-			}
-			else if (this.component && this.hasInput){ // component: input + button
-				this._events = [
-					// For components that are not readonly, allow keyboard nav
-					[this.element.find('input'), {
-						focus: $.proxy(this.show, this),
-						keyup: $.proxy(this.update, this),
-						keydown: $.proxy(this.keydown, this)
-					}],
-					[this.component, {
-						click: $.proxy(this.show, this)
-					}]
-				];
-			}
-			else if (this.element.is('div')) {  // inline datepicker
-				this.isInline = true;
-			}
-			else {
-				this._events = [
-					[this.element, {
-						click: $.proxy(this.show, this)
-					}]
-				];
-			}
-
-			this._secondaryEvents = [
-				[this.picker, {
-					click: $.proxy(this.click, this)
-				}],
-				[$(window), {
-					resize: $.proxy(this.place, this)
-				}],
-				[$(document), {
-					mousedown: $.proxy(function (e) {
-						// Clicked outside the datepicker, hide it
-						if (!(
-							this.element.is(e.target) ||
-							this.element.find(e.target).size() ||
-							this.picker.is(e.target) ||
-							this.picker.find(e.target).size()
-						)) {
-							this.hide();
-						}
-					}, this)
-				}]
-			];
-		},
-		_attachEvents: function(){
-			this._detachEvents();
-			this._applyEvents(this._events);
-		},
-		_detachEvents: function(){
-			this._unapplyEvents(this._events);
-		},
-		_attachSecondaryEvents: function(){
-			this._detachSecondaryEvents();
-			this._applyEvents(this._secondaryEvents);
-		},
-		_detachSecondaryEvents: function(){
-			this._unapplyEvents(this._secondaryEvents);
-		},
-		_trigger: function(event, altdate){
-			var date = altdate || this.date,
-				local_date = new Date(date.getTime() + (date.getTimezoneOffset()*60000));
-
-			this.element.trigger({
-				type: event,
-				date: local_date,
-				format: $.proxy(function(altformat){
-					var format = altformat || this.o.format;
-					return DPGlobal.formatDate(date, format, this.o.language);
-				}, this)
-			});
-		},
-
-		show: function(e) {
-			if (!this.isInline)
-				this.picker.appendTo('body');
-			this.picker.show();
-			this.height = this.component ? this.component.outerHeight() : this.element.outerHeight();
-			this.place();
-			this._attachSecondaryEvents();
-			if (e) {
-				e.preventDefault();
-			}
-			this._trigger('show');
-		},
-
-		hide: function(e){
-			if(this.isInline) return;
-			if (!this.picker.is(':visible')) return;
-			this.picker.hide().detach();
-			this._detachSecondaryEvents();
-			this.viewMode = this.o.startView;
-			this.showMode();
-
-			if (
-				this.o.forceParse &&
-				(
-					this.isInput && this.element.val() ||
-					this.hasInput && this.element.find('input').val()
-				)
-			)
-				this.setValue();
-			this._trigger('hide');
-		},
-
-		remove: function() {
-			this.hide();
-			this._detachEvents();
-			this._detachSecondaryEvents();
-			this.picker.remove();
-			delete this.element.data().datepicker;
-			if (!this.isInput) {
-				delete this.element.data().date;
-			}
-		},
-
-		getDate: function() {
-			var d = this.getUTCDate();
-			return new Date(d.getTime() + (d.getTimezoneOffset()*60000));
-		},
-
-		getUTCDate: function() {
-			return this.date;
-		},
-
-		setDate: function(d) {
-			this.setUTCDate(new Date(d.getTime() - (d.getTimezoneOffset()*60000)));
-		},
-
-		setUTCDate: function(d) {
-			this.date = d;
-			this.setValue();
-		},
-
-		setValue: function() {
-			var formatted = this.getFormattedDate();
-			if (!this.isInput) {
-				if (this.component){
-					this.element.find('input').val(formatted);
-				}
-			} else {
-				this.element.val(formatted);
-			}
-		},
-
-		getFormattedDate: function(format) {
-			if (format === undefined)
-				format = this.o.format;
-			return DPGlobal.formatDate(this.date, format, this.o.language);
-		},
-
-		setStartDate: function(startDate){
-			this._process_options({startDate: startDate});
-			this.update();
-			this.updateNavArrows();
-		},
-
-		setEndDate: function(endDate){
-			this._process_options({endDate: endDate});
-			this.update();
-			this.updateNavArrows();
-		},
-
-		setDaysOfWeekDisabled: function(daysOfWeekDisabled){
-			this._process_options({daysOfWeekDisabled: daysOfWeekDisabled});
-			this.update();
-			this.updateNavArrows();
-		},
-
-		place: function(){
-						if(this.isInline) return;
-			var zIndex = parseInt(this.element.parents().filter(function() {
-							return $(this).css('z-index') != 'auto';
-						}).first().css('z-index'))+10;
-			var offset = this.component ? this.component.parent().offset() : this.element.offset();
-			var height = this.component ? this.component.outerHeight(true) : this.element.outerHeight(true);
-			this.picker.css({
-				top: offset.top + height,
-				left: offset.left,
-				zIndex: zIndex
-			});
-		},
-
-		_allow_update: true,
-		update: function(){
-			if (!this._allow_update) return;
-
-			var date, fromArgs = false;
-			if(arguments && arguments.length && (typeof arguments[0] === 'string' || arguments[0] instanceof Date)) {
-				date = arguments[0];
-				fromArgs = true;
-			} else {
-				date = this.isInput ? this.element.val() : this.element.data('date') || this.element.find('input').val();
-				delete this.element.data().date;
-			}
-
-			this.date = DPGlobal.parseDate(date, this.o.format, this.o.language);
-
-			if(fromArgs) this.setValue();
-
-			if (this.date < this.o.startDate) {
-				this.viewDate = new Date(this.o.startDate);
-			} else if (this.date > this.o.endDate) {
-				this.viewDate = new Date(this.o.endDate);
-			} else {
-				this.viewDate = new Date(this.date);
-			}
-			this.fill();
-		},
-
-		fillDow: function(){
-			var dowCnt = this.o.weekStart,
-			html = '<tr>';
-			if(this.o.calendarWeeks){
-				var cell = '<th class="cw">&nbsp;</th>';
-				html += cell;
-				this.picker.find('.datepicker-days thead tr:first-child').prepend(cell);
-			}
-			while (dowCnt < this.o.weekStart + 7) {
-				html += '<th class="dow">'+dates[this.o.language].daysMin[(dowCnt++)%7]+'</th>';
-			}
-			html += '</tr>';
-			this.picker.find('.datepicker-days thead').append(html);
-		},
-
-		fillMonths: function(){
-			var html = '',
-			i = 0;
-			while (i < 12) {
-				html += '<span class="month">'+dates[this.o.language].monthsShort[i++]+'</span>';
-			}
-			this.picker.find('.datepicker-months td').html(html);
-		},
-
-		setRange: function(range){
-			if (!range || !range.length)
-				delete this.range;
-			else
-				this.range = $.map(range, function(d){ return d.valueOf(); });
-			this.fill();
-		},
-
-		getClassNames: function(date){
-			var cls = [],
-				year = this.viewDate.getUTCFullYear(),
-				month = this.viewDate.getUTCMonth(),
-				currentDate = this.date.valueOf(),
-				today = new Date();
-			if (date.getUTCFullYear() < year || (date.getUTCFullYear() == year && date.getUTCMonth() < month)) {
-				cls.push('old');
-			} else if (date.getUTCFullYear() > year || (date.getUTCFullYear() == year && date.getUTCMonth() > month)) {
-				cls.push('new');
-			}
-			// Compare internal UTC date with local today, not UTC today
-			if (this.o.todayHighlight &&
-				date.getUTCFullYear() == today.getFullYear() &&
-				date.getUTCMonth() == today.getMonth() &&
-				date.getUTCDate() == today.getDate()) {
-				cls.push('today');
-			}
-			if (currentDate && date.valueOf() == currentDate) {
-				cls.push('active');
-			}
-			if (date.valueOf() < this.o.startDate || date.valueOf() > this.o.endDate ||
-				$.inArray(date.getUTCDay(), this.o.daysOfWeekDisabled) !== -1) {
-				cls.push('disabled');
-			}
-			if (this.range){
-				if (date > this.range[0] && date < this.range[this.range.length-1]){
-					cls.push('range');
-				}
-				if ($.inArray(date.valueOf(), this.range) != -1){
-					cls.push('selected');
-				}
-			}
-			return cls;
-		},
-
-		fill: function() {
-			var d = new Date(this.viewDate),
-				year = d.getUTCFullYear(),
-				month = d.getUTCMonth(),
-				startYear = this.o.startDate !== -Infinity ? this.o.startDate.getUTCFullYear() : -Infinity,
-				startMonth = this.o.startDate !== -Infinity ? this.o.startDate.getUTCMonth() : -Infinity,
-				endYear = this.o.endDate !== Infinity ? this.o.endDate.getUTCFullYear() : Infinity,
-				endMonth = this.o.endDate !== Infinity ? this.o.endDate.getUTCMonth() : Infinity,
-				currentDate = this.date && this.date.valueOf(),
-				tooltip;
-			this.picker.find('.datepicker-days thead th.datepicker-switch')
-						.text(dates[this.o.language].months[month]+' '+year);
-			this.picker.find('tfoot th.today')
-						.text(dates[this.o.language].today)
-						.toggle(this.o.todayBtn !== false);
-			this.picker.find('tfoot th.clear')
-						.text(dates[this.o.language].clear)
-						.toggle(this.o.clearBtn !== false);
-			this.updateNavArrows();
-			this.fillMonths();
-			var prevMonth = UTCDate(year, month-1, 28,0,0,0,0),
-				day = DPGlobal.getDaysInMonth(prevMonth.getUTCFullYear(), prevMonth.getUTCMonth());
-			prevMonth.setUTCDate(day);
-			prevMonth.setUTCDate(day - (prevMonth.getUTCDay() - this.o.weekStart + 7)%7);
-			var nextMonth = new Date(prevMonth);
-			nextMonth.setUTCDate(nextMonth.getUTCDate() + 42);
-			nextMonth = nextMonth.valueOf();
-			var html = [];
-			var clsName;
-			while(prevMonth.valueOf() < nextMonth) {
-				if (prevMonth.getUTCDay() == this.o.weekStart) {
-					html.push('<tr>');
-					if(this.o.calendarWeeks){
-						// ISO 8601: First week contains first thursday.
-						// ISO also states week starts on Monday, but we can be more abstract here.
-						var
-							// Start of current week: based on weekstart/current date
-							ws = new Date(+prevMonth + (this.o.weekStart - prevMonth.getUTCDay() - 7) % 7 * 864e5),
-							// Thursday of this week
-							th = new Date(+ws + (7 + 4 - ws.getUTCDay()) % 7 * 864e5),
-							// First Thursday of year, year from thursday
-							yth = new Date(+(yth = UTCDate(th.getUTCFullYear(), 0, 1)) + (7 + 4 - yth.getUTCDay())%7*864e5),
-							// Calendar week: ms between thursdays, div ms per day, div 7 days
-							calWeek =  (th - yth) / 864e5 / 7 + 1;
-						html.push('<td class="cw">'+ calWeek +'</td>');
-
-					}
-				}
-				clsName = this.getClassNames(prevMonth);
-				clsName.push('day');
-
-				var before = this.o.beforeShowDay(prevMonth);
-				if (before === undefined)
-					before = {};
-				else if (typeof(before) === 'boolean')
-					before = {enabled: before};
-				else if (typeof(before) === 'string')
-					before = {classes: before};
-				if (before.enabled === false)
-					clsName.push('disabled');
-				if (before.classes)
-					clsName = clsName.concat(before.classes.split(/\s+/));
-				if (before.tooltip)
-					tooltip = before.tooltip;
-
-				clsName = $.unique(clsName);
-				html.push('<td class="'+clsName.join(' ')+'"' + (tooltip ? ' title="'+tooltip+'"' : '') + '>'+prevMonth.getUTCDate() + '</td>');
-				if (prevMonth.getUTCDay() == this.o.weekEnd) {
-					html.push('</tr>');
-				}
-				prevMonth.setUTCDate(prevMonth.getUTCDate()+1);
-			}
-			this.picker.find('.datepicker-days tbody').empty().append(html.join(''));
-			var currentYear = this.date && this.date.getUTCFullYear();
-
-			var months = this.picker.find('.datepicker-months')
-						.find('th:eq(1)')
-							.text(year)
-							.end()
-						.find('span').removeClass('active');
-			if (currentYear && currentYear == year) {
-				months.eq(this.date.getUTCMonth()).addClass('active');
-			}
-			if (year < startYear || year > endYear) {
-				months.addClass('disabled');
-			}
-			if (year == startYear) {
-				months.slice(0, startMonth).addClass('disabled');
-			}
-			if (year == endYear) {
-				months.slice(endMonth+1).addClass('disabled');
-			}
-
-			html = '';
-			year = parseInt(year/10, 10) * 10;
-			var yearCont = this.picker.find('.datepicker-years')
-								.find('th:eq(1)')
-									.text(year + '-' + (year + 9))
-									.end()
-								.find('td');
-			year -= 1;
-			for (var i = -1; i < 11; i++) {
-				html += '<span class="year'+(i == -1 ? ' old' : i == 10 ? ' new' : '')+(currentYear == year ? ' active' : '')+(year < startYear || year > endYear ? ' disabled' : '')+'">'+year+'</span>';
-				year += 1;
-			}
-			yearCont.html(html);
-		},
-
-		updateNavArrows: function() {
-			if (!this._allow_update) return;
-
-			var d = new Date(this.viewDate),
-				year = d.getUTCFullYear(),
-				month = d.getUTCMonth();
-			switch (this.viewMode) {
-				case 0:
-					if (this.o.startDate !== -Infinity && year <= this.o.startDate.getUTCFullYear() && month <= this.o.startDate.getUTCMonth()) {
-						this.picker.find('.prev').css({visibility: 'hidden'});
-					} else {
-						this.picker.find('.prev').css({visibility: 'visible'});
-					}
-					if (this.o.endDate !== Infinity && year >= this.o.endDate.getUTCFullYear() && month >= this.o.endDate.getUTCMonth()) {
-						this.picker.find('.next').css({visibility: 'hidden'});
-					} else {
-						this.picker.find('.next').css({visibility: 'visible'});
-					}
-					break;
-				case 1:
-				case 2:
-					if (this.o.startDate !== -Infinity && year <= this.o.startDate.getUTCFullYear()) {
-						this.picker.find('.prev').css({visibility: 'hidden'});
-					} else {
-						this.picker.find('.prev').css({visibility: 'visible'});
-					}
-					if (this.o.endDate !== Infinity && year >= this.o.endDate.getUTCFullYear()) {
-						this.picker.find('.next').css({visibility: 'hidden'});
-					} else {
-						this.picker.find('.next').css({visibility: 'visible'});
-					}
-					break;
-			}
-		},
-
-		click: function(e) {
-			e.preventDefault();
-			var target = $(e.target).closest('span, td, th');
-			if (target.length == 1) {
-				switch(target[0].nodeName.toLowerCase()) {
-					case 'th':
-						switch(target[0].className) {
-							case 'datepicker-switch':
-								this.showMode(1);
-								break;
-							case 'prev':
-							case 'next':
-								var dir = DPGlobal.modes[this.viewMode].navStep * (target[0].className == 'prev' ? -1 : 1);
-								switch(this.viewMode){
-									case 0:
-										this.viewDate = this.moveMonth(this.viewDate, dir);
-										break;
-									case 1:
-									case 2:
-										this.viewDate = this.moveYear(this.viewDate, dir);
-										break;
-								}
-								this.fill();
-								break;
-							case 'today':
-								var date = new Date();
-								date = UTCDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
-
-								this.showMode(-2);
-								var which = this.o.todayBtn == 'linked' ? null : 'view';
-								this._setDate(date, which);
-								break;
-							case 'clear':
-								var element;
-								if (this.isInput)
-									element = this.element;
-								else if (this.component)
-									element = this.element.find('input');
-								if (element)
-									element.val("").change();
-								this._trigger('changeDate');
-								this.update();
-								if (this.o.autoclose)
-									this.hide();
-								break;
-						}
-						break;
-					case 'span':
-						if (!target.is('.disabled')) {
-							this.viewDate.setUTCDate(1);
-							if (target.is('.month')) {
-								var day = 1;
-								var month = target.parent().find('span').index(target);
-								var year = this.viewDate.getUTCFullYear();
-								this.viewDate.setUTCMonth(month);
-								this._trigger('changeMonth', this.viewDate);
-								if (this.o.minViewMode === 1) {
-									this._setDate(UTCDate(year, month, day,0,0,0,0));
-								}
-							} else {
-								var year = parseInt(target.text(), 10)||0;
-								var day = 1;
-								var month = 0;
-								this.viewDate.setUTCFullYear(year);
-								this._trigger('changeYear', this.viewDate);
-								if (this.o.minViewMode === 2) {
-									this._setDate(UTCDate(year, month, day,0,0,0,0));
-								}
-							}
-							this.showMode(-1);
-							this.fill();
-						}
-						break;
-					case 'td':
-						if (target.is('.day') && !target.is('.disabled')){
-							var day = parseInt(target.text(), 10)||1;
-							var year = this.viewDate.getUTCFullYear(),
-								month = this.viewDate.getUTCMonth();
-							if (target.is('.old')) {
-								if (month === 0) {
-									month = 11;
-									year -= 1;
-								} else {
-									month -= 1;
-								}
-							} else if (target.is('.new')) {
-								if (month == 11) {
-									month = 0;
-									year += 1;
-								} else {
-									month += 1;
-								}
-							}
-							this._setDate(UTCDate(year, month, day,0,0,0,0));
-						}
-						break;
-				}
-			}
-		},
-
-		_setDate: function(date, which){
-			if (!which || which == 'date')
-				this.date = new Date(date);
-			if (!which || which  == 'view')
-				this.viewDate = new Date(date);
-			this.fill();
-			this.setValue();
-			this._trigger('changeDate');
-			var element;
-			if (this.isInput) {
-				element = this.element;
-			} else if (this.component){
-				element = this.element.find('input');
-			}
-			if (element) {
-				element.change();
-				if (this.o.autoclose && (!which || which == 'date')) {
-					this.hide();
-				}
-			}
-		},
-
-		moveMonth: function(date, dir){
-			if (!dir) return date;
-			var new_date = new Date(date.valueOf()),
-				day = new_date.getUTCDate(),
-				month = new_date.getUTCMonth(),
-				mag = Math.abs(dir),
-				new_month, test;
-			dir = dir > 0 ? 1 : -1;
-			if (mag == 1){
-				test = dir == -1
-					// If going back one month, make sure month is not current month
-					// (eg, Mar 31 -> Feb 31 == Feb 28, not Mar 02)
-					? function(){ return new_date.getUTCMonth() == month; }
-					// If going forward one month, make sure month is as expected
-					// (eg, Jan 31 -> Feb 31 == Feb 28, not Mar 02)
-					: function(){ return new_date.getUTCMonth() != new_month; };
-				new_month = month + dir;
-				new_date.setUTCMonth(new_month);
-				// Dec -> Jan (12) or Jan -> Dec (-1) -- limit expected date to 0-11
-				if (new_month < 0 || new_month > 11)
-					new_month = (new_month + 12) % 12;
-			} else {
-				// For magnitudes >1, move one month at a time...
-				for (var i=0; i<mag; i++)
-					// ...which might decrease the day (eg, Jan 31 to Feb 28, etc)...
-					new_date = this.moveMonth(new_date, dir);
-				// ...then reset the day, keeping it in the new month
-				new_month = new_date.getUTCMonth();
-				new_date.setUTCDate(day);
-				test = function(){ return new_month != new_date.getUTCMonth(); };
-			}
-			// Common date-resetting loop -- if date is beyond end of month, make it
-			// end of month
-			while (test()){
-				new_date.setUTCDate(--day);
-				new_date.setUTCMonth(new_month);
-			}
-			return new_date;
-		},
-
-		moveYear: function(date, dir){
-			return this.moveMonth(date, dir*12);
-		},
-
-		dateWithinRange: function(date){
-			return date >= this.o.startDate && date <= this.o.endDate;
-		},
-
-		keydown: function(e){
-			if (this.picker.is(':not(:visible)')){
-				if (e.keyCode == 27) // allow escape to hide and re-show picker
-					this.show();
-				return;
-			}
-			var dateChanged = false,
-				dir, day, month,
-				newDate, newViewDate;
-			switch(e.keyCode){
-				case 27: // escape
-					this.hide();
-					e.preventDefault();
-					break;
-				case 37: // left
-				case 39: // right
-					if (!this.o.keyboardNavigation) break;
-					dir = e.keyCode == 37 ? -1 : 1;
-					if (e.ctrlKey){
-						newDate = this.moveYear(this.date, dir);
-						newViewDate = this.moveYear(this.viewDate, dir);
-					} else if (e.shiftKey){
-						newDate = this.moveMonth(this.date, dir);
-						newViewDate = this.moveMonth(this.viewDate, dir);
-					} else {
-						newDate = new Date(this.date);
-						newDate.setUTCDate(this.date.getUTCDate() + dir);
-						newViewDate = new Date(this.viewDate);
-						newViewDate.setUTCDate(this.viewDate.getUTCDate() + dir);
-					}
-					if (this.dateWithinRange(newDate)){
-						this.date = newDate;
-						this.viewDate = newViewDate;
-						this.setValue();
-						this.update();
-						e.preventDefault();
-						dateChanged = true;
-					}
-					break;
-				case 38: // up
-				case 40: // down
-					if (!this.o.keyboardNavigation) break;
-					dir = e.keyCode == 38 ? -1 : 1;
-					if (e.ctrlKey){
-						newDate = this.moveYear(this.date, dir);
-						newViewDate = this.moveYear(this.viewDate, dir);
-					} else if (e.shiftKey){
-						newDate = this.moveMonth(this.date, dir);
-						newViewDate = this.moveMonth(this.viewDate, dir);
-					} else {
-						newDate = new Date(this.date);
-						newDate.setUTCDate(this.date.getUTCDate() + dir * 7);
-						newViewDate = new Date(this.viewDate);
-						newViewDate.setUTCDate(this.viewDate.getUTCDate() + dir * 7);
-					}
-					if (this.dateWithinRange(newDate)){
-						this.date = newDate;
-						this.viewDate = newViewDate;
-						this.setValue();
-						this.update();
-						e.preventDefault();
-						dateChanged = true;
-					}
-					break;
-				case 13: // enter
-					this.hide();
-					e.preventDefault();
-					break;
-				case 9: // tab
-					this.hide();
-					break;
-			}
-			if (dateChanged){
-				this._trigger('changeDate');
-				var element;
-				if (this.isInput) {
-					element = this.element;
-				} else if (this.component){
-					element = this.element.find('input');
-				}
-				if (element) {
-					element.change();
-				}
-			}
-		},
-
-		showMode: function(dir) {
-			if (dir) {
-				this.viewMode = Math.max(this.o.minViewMode, Math.min(2, this.viewMode + dir));
-			}
-			/*
-				vitalets: fixing bug of very special conditions:
-				jquery 1.7.1 + webkit + show inline datepicker in bootstrap popover.
-				Method show() does not set display css correctly and datepicker is not shown.
-				Changed to .css('display', 'block') solve the problem.
-				See https://github.com/vitalets/x-editable/issues/37
-
-				In jquery 1.7.2+ everything works fine.
-			*/
-			//this.picker.find('>div').hide().filter('.datepicker-'+DPGlobal.modes[this.viewMode].clsName).show();
-			this.picker.find('>div').hide().filter('.datepicker-'+DPGlobal.modes[this.viewMode].clsName).css('display', 'block');
-			this.updateNavArrows();
-		}
-	};
-
-	var DateRangePicker = function(element, options){
-		this.element = $(element);
-		this.inputs = $.map(options.inputs, function(i){ return i.jquery ? i[0] : i; });
-		delete options.inputs;
-
-		$(this.inputs)
-			.datepicker(options)
-			.bind('changeDate', $.proxy(this.dateUpdated, this));
-
-		this.pickers = $.map(this.inputs, function(i){ return $(i).data('datepicker'); });
-		this.updateDates();
-	};
-	DateRangePicker.prototype = {
-		updateDates: function(){
-			this.dates = $.map(this.pickers, function(i){ return i.date; });
-			this.updateRanges();
-		},
-		updateRanges: function(){
-			var range = $.map(this.dates, function(d){ return d.valueOf(); });
-			$.each(this.pickers, function(i, p){
-				p.setRange(range);
-			});
-		},
-		dateUpdated: function(e){
-			var dp = $(e.target).data('datepicker'),
-				new_date = dp.getUTCDate(),
-				i = $.inArray(e.target, this.inputs),
-				l = this.inputs.length;
-			if (i == -1) return;
-
-			if (new_date < this.dates[i]){
-				// Date being moved earlier/left
-				while (i>=0 && new_date < this.dates[i]){
-					this.pickers[i--].setUTCDate(new_date);
-				}
-			}
-			else if (new_date > this.dates[i]){
-				// Date being moved later/right
-				while (i<l && new_date > this.dates[i]){
-					this.pickers[i++].setUTCDate(new_date);
-				}
-			}
-			this.updateDates();
-		},
-		remove: function(){
-			$.map(this.pickers, function(p){ p.remove(); });
-			delete this.element.data().datepicker;
-		}
-	};
-
-	function opts_from_el(el, prefix){
-		// Derive options from element data-attrs
-		var data = $(el).data(),
-			out = {}, inkey,
-			replace = new RegExp('^' + prefix.toLowerCase() + '([A-Z])'),
-			prefix = new RegExp('^' + prefix.toLowerCase());
-		for (var key in data)
-			if (prefix.test(key)){
-				inkey = key.replace(replace, function(_,a){ return a.toLowerCase(); });
-				out[inkey] = data[key];
-			}
-		return out;
-	}
-
-	function opts_from_locale(lang){
-		// Derive options from locale plugins
-		var out = {};
-		// Check if "de-DE" style date is available, if not language should
-		// fallback to 2 letter code eg "de"
-		if (!dates[lang]) {
-			lang = lang.split('-')[0]
-			if (!dates[lang])
-				return;
-		}
-		var d = dates[lang];
-		$.each(locale_opts, function(i,k){
-			if (k in d)
-				out[k] = d[k];
-		});
-		return out;
-	}
-
-	var old = $.fn.datepicker;
-	var datepicker = $.fn.datepicker = function ( option ) {
-		var args = Array.apply(null, arguments);
-		args.shift();
-		var internal_return,
-			this_return;
-		this.each(function () {
-			var $this = $(this),
-				data = $this.data('datepicker'),
-				options = typeof option == 'object' && option;
-			if (!data) {
-				var elopts = opts_from_el(this, 'date'),
-					// Preliminary otions
-					xopts = $.extend({}, defaults, elopts, options),
-					locopts = opts_from_locale(xopts.language),
-					// Options priority: js args, data-attrs, locales, defaults
-					opts = $.extend({}, defaults, locopts, elopts, options);
-				if ($this.is('.input-daterange') || opts.inputs){
-					var ropts = {
-						inputs: opts.inputs || $this.find('input').toArray()
-					};
-					$this.data('datepicker', (data = new DateRangePicker(this, $.extend(opts, ropts))));
-				}
-				else{
-					$this.data('datepicker', (data = new Datepicker(this, opts)));
-				}
-			}
-			if (typeof option == 'string' && typeof data[option] == 'function') {
-				internal_return = data[option].apply(data, args);
-				if (internal_return !== undefined)
-					return false;
-			}
-		});
-		if (internal_return !== undefined)
-			return internal_return;
-		else
-			return this;
-	};
-
-	var defaults = $.fn.datepicker.defaults = {
-		autoclose: false,
-		beforeShowDay: $.noop,
-		calendarWeeks: false,
-		clearBtn: false,
-		daysOfWeekDisabled: [],
-		endDate: Infinity,
-		forceParse: true,
-		format: 'mm/dd/yyyy',
-		keyboardNavigation: true,
-		language: 'en',
-		minViewMode: 0,
-		rtl: false,
-		startDate: -Infinity,
-		startView: 0,
-		todayBtn: false,
-		todayHighlight: false,
-		weekStart: 0
-	};
-	var locale_opts = $.fn.datepicker.locale_opts = [
-		'format',
-		'rtl',
-		'weekStart'
-	];
-	$.fn.datepicker.Constructor = Datepicker;
-	var dates = $.fn.datepicker.dates = {
-		en: {
-			days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-			daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-			daysMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-			monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-			today: "Today",
-			clear: "Clear"
-		}
-	};
-
-	var DPGlobal = {
-		modes: [
-			{
-				clsName: 'days',
-				navFnc: 'Month',
-				navStep: 1
-			},
-			{
-				clsName: 'months',
-				navFnc: 'FullYear',
-				navStep: 1
-			},
-			{
-				clsName: 'years',
-				navFnc: 'FullYear',
-				navStep: 10
-		}],
-		isLeapYear: function (year) {
-			return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0));
-		},
-		getDaysInMonth: function (year, month) {
-			return [31, (DPGlobal.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
-		},
-		validParts: /dd?|DD?|mm?|MM?|yy(?:yy)?/g,
-		nonpunctuation: /[^ -\/:-@\[\u3400-\u9fff-`{-~\t\n\r]+/g,
-		parseFormat: function(format){
-			// IE treats \0 as a string end in inputs (truncating the value),
-			// so it's a bad format delimiter, anyway
-			var separators = format.replace(this.validParts, '\0').split('\0'),
-				parts = format.match(this.validParts);
-			if (!separators || !separators.length || !parts || parts.length === 0){
-				throw new Error("Invalid date format.");
-			}
-			return {separators: separators, parts: parts};
-		},
-		parseDate: function(date, format, language) {
-			if (date instanceof Date) return date;
-			if (typeof format === 'string')
-				format = DPGlobal.parseFormat(format);
-			if (/^[\-+]\d+[dmwy]([\s,]+[\-+]\d+[dmwy])*$/.test(date)) {
-				var part_re = /([\-+]\d+)([dmwy])/,
-					parts = date.match(/([\-+]\d+)([dmwy])/g),
-					part, dir;
-				date = new Date();
-				for (var i=0; i<parts.length; i++) {
-					part = part_re.exec(parts[i]);
-					dir = parseInt(part[1]);
-					switch(part[2]){
-						case 'd':
-							date.setUTCDate(date.getUTCDate() + dir);
-							break;
-						case 'm':
-							date = Datepicker.prototype.moveMonth.call(Datepicker.prototype, date, dir);
-							break;
-						case 'w':
-							date.setUTCDate(date.getUTCDate() + dir * 7);
-							break;
-						case 'y':
-							date = Datepicker.prototype.moveYear.call(Datepicker.prototype, date, dir);
-							break;
-					}
-				}
-				return UTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0);
-			}
-			var parts = date && date.match(this.nonpunctuation) || [],
-				date = new Date(),
-				parsed = {},
-				setters_order = ['yyyy', 'yy', 'M', 'MM', 'm', 'mm', 'd', 'dd'],
-				setters_map = {
-					yyyy: function(d,v){ return d.setUTCFullYear(v); },
-					yy: function(d,v){ return d.setUTCFullYear(2000+v); },
-					m: function(d,v){
-						v -= 1;
-						while (v<0) v += 12;
-						v %= 12;
-						d.setUTCMonth(v);
-						while (d.getUTCMonth() != v)
-							d.setUTCDate(d.getUTCDate()-1);
-						return d;
-					},
-					d: function(d,v){ return d.setUTCDate(v); }
-				},
-				val, filtered, part;
-			setters_map['M'] = setters_map['MM'] = setters_map['mm'] = setters_map['m'];
-			setters_map['dd'] = setters_map['d'];
-			date = UTCDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
-			var fparts = format.parts.slice();
-			// Remove noop parts
-			if (parts.length != fparts.length) {
-				fparts = $(fparts).filter(function(i,p){
-					return $.inArray(p, setters_order) !== -1;
-				}).toArray();
-			}
-			// Process remainder
-			if (parts.length == fparts.length) {
-				for (var i=0, cnt = fparts.length; i < cnt; i++) {
-					val = parseInt(parts[i], 10);
-					part = fparts[i];
-					if (isNaN(val)) {
-						switch(part) {
-							case 'MM':
-								filtered = $(dates[language].months).filter(function(){
-									var m = this.slice(0, parts[i].length),
-										p = parts[i].slice(0, m.length);
-									return m == p;
-								});
-								val = $.inArray(filtered[0], dates[language].months) + 1;
-								break;
-							case 'M':
-								filtered = $(dates[language].monthsShort).filter(function(){
-									var m = this.slice(0, parts[i].length),
-										p = parts[i].slice(0, m.length);
-									return m == p;
-								});
-								val = $.inArray(filtered[0], dates[language].monthsShort) + 1;
-								break;
-						}
-					}
-					parsed[part] = val;
-				}
-				for (var i=0, s; i<setters_order.length; i++){
-					s = setters_order[i];
-					if (s in parsed && !isNaN(parsed[s]))
-						setters_map[s](date, parsed[s]);
-				}
-			}
-			return date;
-		},
-		formatDate: function(date, format, language){
-			if (typeof format === 'string')
-				format = DPGlobal.parseFormat(format);
-			var val = {
-				d: date.getUTCDate(),
-				D: dates[language].daysShort[date.getUTCDay()],
-				DD: dates[language].days[date.getUTCDay()],
-				m: date.getUTCMonth() + 1,
-				M: dates[language].monthsShort[date.getUTCMonth()],
-				MM: dates[language].months[date.getUTCMonth()],
-				yy: date.getUTCFullYear().toString().substring(2),
-				yyyy: date.getUTCFullYear()
-			};
-			val.dd = (val.d < 10 ? '0' : '') + val.d;
-			val.mm = (val.m < 10 ? '0' : '') + val.m;
-			var date = [],
-				seps = $.extend([], format.separators);
-			for (var i=0, cnt = format.parts.length; i <= cnt; i++) {
-				if (seps.length)
-					date.push(seps.shift());
-				date.push(val[format.parts[i]]);
-			}
-			return date.join('');
-		},
-		headTemplate: '<thead>'+
-							'<tr>'+
-								'<th class="prev"><i class="icon-arrow-left"/></th>'+
-								'<th colspan="5" class="datepicker-switch"></th>'+
-								'<th class="next"><i class="icon-arrow-right"/></th>'+
-							'</tr>'+
-						'</thead>',
-		contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',
-		footTemplate: '<tfoot><tr><th colspan="7" class="today"></th></tr><tr><th colspan="7" class="clear"></th></tr></tfoot>'
-	};
-	DPGlobal.template = '<div class="datepicker">'+
-							'<div class="datepicker-days">'+
-								'<table class=" table-condensed">'+
-									DPGlobal.headTemplate+
-									'<tbody></tbody>'+
-									DPGlobal.footTemplate+
-								'</table>'+
-							'</div>'+
-							'<div class="datepicker-months">'+
-								'<table class="table-condensed">'+
-									DPGlobal.headTemplate+
-									DPGlobal.contTemplate+
-									DPGlobal.footTemplate+
-								'</table>'+
-							'</div>'+
-							'<div class="datepicker-years">'+
-								'<table class="table-condensed">'+
-									DPGlobal.headTemplate+
-									DPGlobal.contTemplate+
-									DPGlobal.footTemplate+
-								'</table>'+
-							'</div>'+
-						'</div>';
-
-	$.fn.datepicker.DPGlobal = DPGlobal;
-
-
-	/* DATEPICKER NO CONFLICT
-	* =================== */
-
-	$.fn.datepicker.noConflict = function(){
-		$.fn.datepicker = old;
-		return this;
-	};
-
-
-	/* DATEPICKER DATA-API
-	* ================== */
-
-	$(document).on(
-		'focus.datepicker.data-api click.datepicker.data-api',
-		'[data-provide="datepicker"]',
-		function(e){
-			var $this = $(this);
-			if ($this.data('datepicker')) return;
-			e.preventDefault();
-			// component click requires us to explicitly show it
-			datepicker.call($this, 'show');
-		}
-	);
-	$(function(){
-		//$('[data-provide="datepicker-inline"]').datepicker();
-        //vit: changed to support noConflict()
-        datepicker.call($('[data-provide="datepicker-inline"]'));
-	});
-
-}( window.jQuery ));
-
-/**
-Bootstrap-datepicker.  
-Description and examples: https://github.com/eternicode/bootstrap-datepicker.  
-For **i18n** you should include js file from here: https://github.com/eternicode/bootstrap-datepicker/tree/master/js/locales
-and set `language` option.  
-Since 1.4.0 date has different appearance in **popup** and **inline** modes. 
-
-@class date
-@extends abstractinput
-@final
-@example
-<a href="#" id="dob" data-type="date" data-pk="1" data-url="/post" data-title="Select date">15/05/1984</a>
-<script>
-$(function(){
-    $('#dob').editable({
-        format: 'yyyy-mm-dd',    
-        viewformat: 'dd/mm/yyyy',    
-        datepicker: {
-                weekStart: 1
-           }
-        }
-    });
-});
-</script>
-**/
-(function ($) {
-    "use strict";
-    
-    //store bootstrap-datepicker as bdateicker to exclude conflict with jQuery UI one
-    $.fn.bdatepicker = $.fn.datepicker.noConflict();
-    if(!$.fn.datepicker) { //if there were no other datepickers, keep also original name
-        $.fn.datepicker = $.fn.bdatepicker;    
-    }    
-    
-    var Date = function (options) {
-        this.init('date', options, Date.defaults);
-        this.initPicker(options, Date.defaults);
-    };
-
-    $.fn.editableutils.inherit(Date, $.fn.editabletypes.abstractinput);    
-    
-    $.extend(Date.prototype, {
-        initPicker: function(options, defaults) {
-            //'format' is set directly from settings or data-* attributes
-
-            //by default viewformat equals to format
-            if(!this.options.viewformat) {
-                this.options.viewformat = this.options.format;
-            }
-            
-            //try parse datepicker config defined as json string in data-datepicker
-            options.datepicker = $.fn.editableutils.tryParseJson(options.datepicker, true);
-            
-            //overriding datepicker config (as by default jQuery extend() is not recursive)
-            //since 1.4 datepicker internally uses viewformat instead of format. Format is for submit only
-            this.options.datepicker = $.extend({}, defaults.datepicker, options.datepicker, {
-                format: this.options.viewformat
-            });
-            
-            //language
-            this.options.datepicker.language = this.options.datepicker.language || 'en'; 
-
-            //store DPglobal
-            this.dpg = $.fn.bdatepicker.DPGlobal; 
-
-            //store parsed formats
-            this.parsedFormat = this.dpg.parseFormat(this.options.format);
-            this.parsedViewFormat = this.dpg.parseFormat(this.options.viewformat);            
-        },
-        
-        render: function () {
-            this.$input.bdatepicker(this.options.datepicker);
-            
-            //"clear" link
-            if(this.options.clear) {
-                this.$clear = $('<a href="#"></a>').html(this.options.clear).click($.proxy(function(e){
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.clear();
-                }, this));
-                
-                this.$tpl.parent().append($('<div class="editable-clear">').append(this.$clear));  
-            }                
-        },
-        
-        value2html: function(value, element) {
-           var text = value ? this.dpg.formatDate(value, this.parsedViewFormat, this.options.datepicker.language) : '';
-           Date.superclass.value2html.call(this, text, element); 
-        },
-
-        html2value: function(html) {
-            return this.parseDate(html, this.parsedViewFormat);
-        },   
-
-        value2str: function(value) {
-            return value ? this.dpg.formatDate(value, this.parsedFormat, this.options.datepicker.language) : '';
-        }, 
-
-        str2value: function(str) {
-            return this.parseDate(str, this.parsedFormat);
-        }, 
-
-        value2submit: function(value) {
-            return this.value2str(value);
-        },                    
-
-        value2input: function(value) {
-            this.$input.bdatepicker('update', value);
-        },
-
-        input2value: function() { 
-            return this.$input.data('datepicker').date;
-        },       
-
-        activate: function() {
-        },
-
-        clear:  function() {
-            this.$input.data('datepicker').date = null;
-            this.$input.find('.active').removeClass('active');
-            if(!this.options.showbuttons) {
-                this.$input.closest('form').submit(); 
-            }
-        },
-
-        autosubmit: function() {
-            this.$input.on('mouseup', '.day', function(e){
-                if($(e.currentTarget).is('.old') || $(e.currentTarget).is('.new')) {
-                    return;
-                }
-                var $form = $(this).closest('form');
-                setTimeout(function() {
-                    $form.submit();
-                }, 200);
-            });
-           //changedate is not suitable as it triggered when showing datepicker. see #149
-           /*
-           this.$input.on('changeDate', function(e){
-               var $form = $(this).closest('form');
-               setTimeout(function() {
-                   $form.submit();
-               }, 200);
-           });
-           */
-       },
-       
-       /*
-        For incorrect date bootstrap-datepicker returns current date that is not suitable
-        for datefield.
-        This function returns null for incorrect date.  
-       */
-       parseDate: function(str, format) {
-           var date = null, formattedBack;
-           if(str) {
-               date = this.dpg.parseDate(str, format, this.options.datepicker.language);
-               if(typeof str === 'string') {
-                   formattedBack = this.dpg.formatDate(date, format, this.options.datepicker.language);
-                   if(str !== formattedBack) {
-                       date = null;
-                   }
-               }
-           }
-           return date;
-       }
-
-    });
-
-    Date.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
-        /**
-        @property tpl 
-        @default <div></div>
-        **/         
-        tpl:'<div class="editable-date well"></div>',
-        /**
-        @property inputclass 
-        @default null
-        **/
-        inputclass: null,
-        /**
-        Format used for sending value to server. Also applied when converting date from <code>data-value</code> attribute.<br>
-        Possible tokens are: <code>d, dd, m, mm, yy, yyyy</code>  
-
-        @property format 
-        @type string
-        @default yyyy-mm-dd
-        **/
-        format:'yyyy-mm-dd',
-        /**
-        Format used for displaying date. Also applied when converting date from element's text on init.   
-        If not specified equals to <code>format</code>
-
-        @property viewformat 
-        @type string
-        @default null
-        **/
-        viewformat: null,
-        /**
-        Configuration of datepicker.
-        Full list of options: http://bootstrap-datepicker.readthedocs.org/en/latest/options.html
-
-        @property datepicker 
-        @type object
-        @default {
-            weekStart: 0,
-            startView: 0,
-            minViewMode: 0,
-            autoclose: false
-        }
-        **/
-        datepicker:{
-            weekStart: 0,
-            startView: 0,
-            minViewMode: 0,
-            autoclose: false
-        },
-        /**
-        Text shown as clear date button. 
-        If <code>false</code> clear button will not be rendered.
-
-        @property clear 
-        @type boolean|string
-        @default 'x clear'
-        **/
-        clear: '&times; clear'
-    });
-
-    $.fn.editabletypes.date = Date;
-
-}(window.jQuery));
-
-/**
-Bootstrap datefield input - modification for inline mode.
-Shows normal <input type="text"> and binds popup datepicker.  
-Automatically shown in inline mode.
-
-@class datefield
-@extends date
-
-@since 1.4.0
-**/
-(function ($) {
-    "use strict";
-    
-    var DateField = function (options) {
-        this.init('datefield', options, DateField.defaults);
-        this.initPicker(options, DateField.defaults);
-    };
-
-    $.fn.editableutils.inherit(DateField, $.fn.editabletypes.date);    
-    
-    $.extend(DateField.prototype, {
-        render: function () {
-            this.$input = this.$tpl.find('input');
-            this.setClass();
-            this.setAttr('placeholder');
-    
-            //bootstrap-datepicker is set `bdateicker` to exclude conflict with jQuery UI one. (in date.js)        
-            this.$tpl.bdatepicker(this.options.datepicker);
-            
-            //need to disable original event handlers
-            this.$input.off('focus keydown');
-            
-            //update value of datepicker
-            this.$input.keyup($.proxy(function(){
-               this.$tpl.removeData('date');
-               this.$tpl.bdatepicker('update');
-            }, this));
-            
-        },   
-        
-       value2input: function(value) {
-           this.$input.val(value ? this.dpg.formatDate(value, this.parsedViewFormat, this.options.datepicker.language) : '');
-           this.$tpl.bdatepicker('update');
-       },
-        
-       input2value: function() { 
-           return this.html2value(this.$input.val());
-       },              
-        
-       activate: function() {
-           $.fn.editabletypes.text.prototype.activate.call(this);
-       },
-       
-       autosubmit: function() {
-         //reset autosubmit to empty  
-       }
-    });
-    
-    DateField.defaults = $.extend({}, $.fn.editabletypes.date.defaults, {
-        /**
-        @property tpl 
-        **/         
-        tpl:'<div class="input-append date"><input type="text"/><span class="add-on"><i class="icon-th"></i></span></div>',
-        /**
-        @property inputclass 
-        @default 'input-small'
-        **/         
-        inputclass: 'input-small',
-        
-        /* datepicker config */
-        datepicker: {
-            weekStart: 0,
-            startView: 0,
-            minViewMode: 0,
-            autoclose: true
-        }
-    });
-    
-    $.fn.editabletypes.datefield = DateField;
-
-}(window.jQuery));
-/**
-Bootstrap-datetimepicker.  
-Based on [smalot bootstrap-datetimepicker plugin](https://github.com/smalot/bootstrap-datetimepicker). 
-Before usage you should manually include dependent js and css:
-
-    <link href="css/datetimepicker.css" rel="stylesheet" type="text/css"></link> 
-    <script src="js/bootstrap-datetimepicker.js"></script>
-
-For **i18n** you should include js file from here: https://github.com/smalot/bootstrap-datetimepicker/tree/master/js/locales
-and set `language` option.  
-
-@class datetime
-@extends abstractinput
-@final
-@since 1.4.4
-@example
-<a href="#" id="last_seen" data-type="datetime" data-pk="1" data-url="/post" title="Select date & time">15/03/2013 12:45</a>
-<script>
-$(function(){
-    $('#last_seen').editable({
-        format: 'yyyy-mm-dd hh:ii',    
-        viewformat: 'dd/mm/yyyy hh:ii',    
-        datetimepicker: {
-                weekStart: 1
-           }
-        }
-    });
-});
-</script>
-**/
-(function ($) {
-    "use strict";
-
-    var DateTime = function (options) {
-        this.init('datetime', options, DateTime.defaults);
-        this.initPicker(options, DateTime.defaults);
-    };
-
-    $.fn.editableutils.inherit(DateTime, $.fn.editabletypes.abstractinput);
-
-    $.extend(DateTime.prototype, {
-        initPicker: function(options, defaults) {
-            //'format' is set directly from settings or data-* attributes
-
-            //by default viewformat equals to format
-            if(!this.options.viewformat) {
-                this.options.viewformat = this.options.format;
-            }
-            
-            //try parse datetimepicker config defined as json string in data-datetimepicker
-            options.datetimepicker = $.fn.editableutils.tryParseJson(options.datetimepicker, true);
-
-            //overriding datetimepicker config (as by default jQuery extend() is not recursive)
-            //since 1.4 datetimepicker internally uses viewformat instead of format. Format is for submit only
-            this.options.datetimepicker = $.extend({}, defaults.datetimepicker, options.datetimepicker, {
-                format: this.options.viewformat
-            });
-
-            //language
-            this.options.datetimepicker.language = this.options.datetimepicker.language || 'en'; 
-
-            //store DPglobal
-            this.dpg = $.fn.datetimepicker.DPGlobal; 
-
-            //store parsed formats
-            this.parsedFormat = this.dpg.parseFormat(this.options.format, this.options.formatType);
-            this.parsedViewFormat = this.dpg.parseFormat(this.options.viewformat, this.options.formatType);
-        },
-
-        render: function () {
-            this.$input.datetimepicker(this.options.datetimepicker);
-
-            //adjust container position when viewMode changes
-            //see https://github.com/smalot/bootstrap-datetimepicker/pull/80
-            this.$input.on('changeMode', function(e) {
-                var f = $(this).closest('form').parent();
-                //timeout here, otherwise container changes position before form has new size
-                setTimeout(function(){
-                    f.triggerHandler('resize');
-                }, 0);
-            });
-
-            //"clear" link
-            if(this.options.clear) {
-                this.$clear = $('<a href="#"></a>').html(this.options.clear).click($.proxy(function(e){
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.clear();
-                }, this));
-
-                this.$tpl.parent().append($('<div class="editable-clear">').append(this.$clear));  
-            }
-        },
-
-        value2html: function(value, element) {
-            //formatDate works with UTCDate!
-            var text = value ? this.dpg.formatDate(this.toUTC(value), this.parsedViewFormat, this.options.datetimepicker.language, this.options.formatType) : '';
-            if(element) {
-                DateTime.superclass.value2html.call(this, text, element);
-            } else {
-                return text;
-            }
-        },
-
-        html2value: function(html) {
-            //parseDate return utc date!
-            var value = this.parseDate(html, this.parsedViewFormat); 
-            return value ? this.fromUTC(value) : null;
-        },
-
-        value2str: function(value) {
-            //formatDate works with UTCDate!
-            return value ? this.dpg.formatDate(this.toUTC(value), this.parsedFormat, this.options.datetimepicker.language, this.options.formatType) : '';
-       },
-
-       str2value: function(str) {
-           //parseDate return utc date!
-           var value = this.parseDate(str, this.parsedFormat);
-           return value ? this.fromUTC(value) : null;
-       },
-
-       value2submit: function(value) {
-           return this.value2str(value);
-       },
-
-       value2input: function(value) {
-           if(value) {
-             this.$input.data('datetimepicker').setDate(value);
-           }
-       },
-
-       input2value: function() { 
-           //date may be cleared, in that case getDate() triggers error
-           var dt = this.$input.data('datetimepicker');
-           return dt.date ? dt.getDate() : null;
-       },
-
-       activate: function() {
-       },
-
-       clear: function() {
-          this.$input.data('datetimepicker').date = null;
-          this.$input.find('.active').removeClass('active');
-          if(!this.options.showbuttons) {
-             this.$input.closest('form').submit(); 
-          }          
-       },
-
-       autosubmit: function() {
-           this.$input.on('mouseup', '.minute', function(e){
-               var $form = $(this).closest('form');
-               setTimeout(function() {
-                   $form.submit();
-               }, 200);
-           });
-       },
-
-       //convert date from local to utc
-       toUTC: function(value) {
-         return value ? new Date(value.valueOf() - value.getTimezoneOffset() * 60000) : value;  
-       },
-
-       //convert date from utc to local
-       fromUTC: function(value) {
-         return value ? new Date(value.valueOf() + value.getTimezoneOffset() * 60000) : value;  
-       },
-
-       /*
-        For incorrect date bootstrap-datetimepicker returns current date that is not suitable
-        for datetimefield.
-        This function returns null for incorrect date.  
-       */
-       parseDate: function(str, format) {
-           var date = null, formattedBack;
-           if(str) {
-               date = this.dpg.parseDate(str, format, this.options.datetimepicker.language, this.options.formatType);
-               if(typeof str === 'string') {
-                   formattedBack = this.dpg.formatDate(date, format, this.options.datetimepicker.language, this.options.formatType);
-                   if(str !== formattedBack) {
-                       date = null;
-                   } 
-               }
-           }
-           return date;
-       }
-
-    });
-
-    DateTime.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
-        /**
-        @property tpl 
-        @default <div></div>
-        **/         
-        tpl:'<div class="editable-date well"></div>',
-        /**
-        @property inputclass 
-        @default null
-        **/
-        inputclass: null,
-        /**
-        Format used for sending value to server. Also applied when converting date from <code>data-value</code> attribute.<br>
-        Possible tokens are: <code>d, dd, m, mm, yy, yyyy, h, i</code>  
-        
-        @property format 
-        @type string
-        @default yyyy-mm-dd hh:ii
-        **/         
-        format:'yyyy-mm-dd hh:ii',
-        formatType:'standard',
-        /**
-        Format used for displaying date. Also applied when converting date from element's text on init.   
-        If not specified equals to <code>format</code>
-        
-        @property viewformat 
-        @type string
-        @default null
-        **/
-        viewformat: null,
-        /**
-        Configuration of datetimepicker.
-        Full list of options: https://github.com/smalot/bootstrap-datetimepicker
-
-        @property datetimepicker 
-        @type object
-        @default { }
-        **/
-        datetimepicker:{
-            todayHighlight: false,
-            autoclose: false
-        },
-        /**
-        Text shown as clear date button. 
-        If <code>false</code> clear button will not be rendered.
-
-        @property clear 
-        @type boolean|string
-        @default 'x clear'
-        **/
-        clear: '&times; clear'
-    });
-
-    $.fn.editabletypes.datetime = DateTime;
-
-}(window.jQuery));
-/**
-Bootstrap datetimefield input - datetime input for inline mode.
-Shows normal <input type="text"> and binds popup datetimepicker.  
-Automatically shown in inline mode.
-
-@class datetimefield
-@extends datetime
-
-**/
-(function ($) {
-    "use strict";
-    
-    var DateTimeField = function (options) {
-        this.init('datetimefield', options, DateTimeField.defaults);
-        this.initPicker(options, DateTimeField.defaults);
-    };
-
-    $.fn.editableutils.inherit(DateTimeField, $.fn.editabletypes.datetime);
-    
-    $.extend(DateTimeField.prototype, {
-        render: function () {
-            this.$input = this.$tpl.find('input');
-            this.setClass();
-            this.setAttr('placeholder');
-            
-            this.$tpl.datetimepicker(this.options.datetimepicker);
-            
-            //need to disable original event handlers
-            this.$input.off('focus keydown');
-            
-            //update value of datepicker
-            this.$input.keyup($.proxy(function(){
-               this.$tpl.removeData('date');
-               this.$tpl.datetimepicker('update');
-            }, this));
-            
-        },   
-      
-       value2input: function(value) {
-           this.$input.val(this.value2html(value));
-           this.$tpl.datetimepicker('update');
-       },
-        
-       input2value: function() { 
-           return this.html2value(this.$input.val());
-       },              
-        
-       activate: function() {
-           $.fn.editabletypes.text.prototype.activate.call(this);
-       },
-       
-       autosubmit: function() {
-         //reset autosubmit to empty  
-       }
-    });
-    
-    DateTimeField.defaults = $.extend({}, $.fn.editabletypes.datetime.defaults, {
-        /**
-        @property tpl 
-        **/         
-        tpl:'<div class="input-append date"><input type="text"/><span class="add-on"><i class="icon-th"></i></span></div>',
-        /**
-        @property inputclass 
-        @default 'input-medium'
-        **/         
-        inputclass: 'input-medium',
-        
-        /* datetimepicker config */
-        datetimepicker:{
-            todayHighlight: false,
-            autoclose: true
-        }
-    });
-    
-    $.fn.editabletypes.datetimefield = DateTimeField;
-
-}(window.jQuery));;
-/**
-Address editable input.
-Internally value stored as {city: "Moscow", street: "Lenina", building: "15"}
-
-@class address
-@extends abstractinput
-@final
-@example
-<a href="#" id="address" data-type="address" data-pk="1">awesome</a>
-<script>
-$(function(){
-    $('#address').editable({
-        url: '/post',
-        title: 'Enter city, street and building #',
-        value: {
-            city: "Moscow", 
-            street: "Lenina", 
-            building: "15"
-        }
-    });
-});
-</script>
-**/
-(function ($) {
-    "use strict";
-    
-    var Address = function (options) {
-        this.init('address', options, Address.defaults);
-    };
-
-    //inherit from Abstract input
-    $.fn.editableutils.inherit(Address, $.fn.editabletypes.abstractinput);
-
-    $.extend(Address.prototype, {
-        /**
-        Renders input from tpl
-
-        @method render() 
-        **/        
-        render: function() {
-           this.$input = this.$tpl.find('input');
-        },
-        
-        /**
-        Default method to show value in element. Can be overwritten by display option.
-        
-        @method value2html(value, element) 
-        **/
-        value2html: function(value, element) {
-            if(!value) {
-                $(element).empty();
-                return; 
-            }
-            var html = $('<div>').text(value.city).html() + ', ' + $('<div>').text(value.street).html() + ' st., bld. ' + $('<div>').text(value.building).html();
-            $(element).html(html); 
-        },
-        
-        /**
-        Gets value from element's html
-        
-        @method html2value(html) 
-        **/        
-        html2value: function(html) {        
-          /*
-            you may write parsing method to get value by element's html
-            e.g. "Moscow, st. Lenina, bld. 15" => {city: "Moscow", street: "Lenina", building: "15"}
-            but for complex structures it's not recommended.
-            Better set value directly via javascript, e.g. 
-            editable({
-                value: {
-                    city: "Moscow", 
-                    street: "Lenina", 
-                    building: "15"
-                }
-            });
-          */ 
-          return null;  
-        },
-      
-       /**
-        Converts value to string. 
-        It is used in internal comparing (not for sending to server).
-        
-        @method value2str(value)  
-       **/
-       value2str: function(value) {
-           var str = '';
-           if(value) {
-               for(var k in value) {
-                   str = str + k + ':' + value[k] + ';';  
-               }
-           }
-           return str;
-       }, 
-       
-       /*
-        Converts string to value. Used for reading value from 'data-value' attribute.
-        
-        @method str2value(str)  
-       */
-       str2value: function(str) {
-           /*
-           this is mainly for parsing value defined in data-value attribute. 
-           If you will always set value by javascript, no need to overwrite it
-           */
-           return str;
-       },                
-       
-       /**
-        Sets value of input.
-        
-        @method value2input(value) 
-        @param {mixed} value
-       **/         
-       value2input: function(value) {
-           if(!value) {
-             return;
-           }
-           this.$input.filter('[name="city"]').val(value.city);
-           this.$input.filter('[name="street"]').val(value.street);
-           this.$input.filter('[name="building"]').val(value.building);
-       },       
-       
-       /**
-        Returns value of input.
-        
-        @method input2value() 
-       **/          
-       input2value: function() { 
-           return {
-              city: this.$input.filter('[name="city"]').val(), 
-              street: this.$input.filter('[name="street"]').val(), 
-              building: this.$input.filter('[name="building"]').val()
-           };
-       },        
-       
-        /**
-        Activates input: sets focus on the first field.
-        
-        @method activate() 
-       **/        
-       activate: function() {
-            this.$input.filter('[name="city"]').focus();
-       },  
-       
-       /**
-        Attaches handler to submit form in case of 'showbuttons=false' mode
-        
-        @method autosubmit() 
-       **/       
-       autosubmit: function() {
-           this.$input.keydown(function (e) {
-                if (e.which === 13) {
-                    $(this).closest('form').submit();
-                }
-           });
-       }       
-    });
-
-    Address.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
-        tpl: '<div class="editable-address"><label><span>City: </span><input type="text" name="city" class="input-small form-control"></label></div>'+
-             '<div class="editable-address"><label><span>Street: </span><input type="text" name="street" class="input-small form-control"></label></div>'+
-             '<div class="editable-address"><label><span>Building: </span><input type="text" name="building" class="input-mini form-control"></label></div>',
-             
-        inputclass: ''
-    });
-
-    $.fn.editabletypes.address = Address;
-
-}(window.jQuery));;
-/*!
- * typeahead.js 0.9.3
- * https://github.com/twitter/typeahead
- * Copyright 2013 Twitter, Inc. and other contributors; Licensed MIT
- */
-
-(function($) {
-    var VERSION = "0.9.3";
-    var utils = {
-        isMsie: function() {
-            var match = /(msie) ([\w.]+)/i.exec(navigator.userAgent);
-            return match ? parseInt(match[2], 10) : false;
-        },
-        isBlankString: function(str) {
-            return !str || /^\s*$/.test(str);
-        },
-        escapeRegExChars: function(str) {
-            return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-        },
-        isString: function(obj) {
-            return typeof obj === "string";
-        },
-        isNumber: function(obj) {
-            return typeof obj === "number";
-        },
-        isArray: $.isArray,
-        isFunction: $.isFunction,
-        isObject: $.isPlainObject,
-        isUndefined: function(obj) {
-            return typeof obj === "undefined";
-        },
-        bind: $.proxy,
-        bindAll: function(obj) {
-            var val;
-            for (var key in obj) {
-                $.isFunction(val = obj[key]) && (obj[key] = $.proxy(val, obj));
-            }
-        },
-        indexOf: function(haystack, needle) {
-            for (var i = 0; i < haystack.length; i++) {
-                if (haystack[i] === needle) {
-                    return i;
-                }
-            }
-            return -1;
-        },
-        each: $.each,
-        map: $.map,
-        filter: $.grep,
-        every: function(obj, test) {
-            var result = true;
-            if (!obj) {
-                return result;
-            }
-            $.each(obj, function(key, val) {
-                if (!(result = test.call(null, val, key, obj))) {
-                    return false;
-                }
-            });
-            return !!result;
-        },
-        some: function(obj, test) {
-            var result = false;
-            if (!obj) {
-                return result;
-            }
-            $.each(obj, function(key, val) {
-                if (result = test.call(null, val, key, obj)) {
-                    return false;
-                }
-            });
-            return !!result;
-        },
-        mixin: $.extend,
-        getUniqueId: function() {
-            var counter = 0;
-            return function() {
-                return counter++;
-            };
-        }(),
-        defer: function(fn) {
-            setTimeout(fn, 0);
-        },
-        debounce: function(func, wait, immediate) {
-            var timeout, result;
-            return function() {
-                var context = this, args = arguments, later, callNow;
-                later = function() {
-                    timeout = null;
-                    if (!immediate) {
-                        result = func.apply(context, args);
-                    }
-                };
-                callNow = immediate && !timeout;
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-                if (callNow) {
-                    result = func.apply(context, args);
-                }
-                return result;
-            };
-        },
-        throttle: function(func, wait) {
-            var context, args, timeout, result, previous, later;
-            previous = 0;
-            later = function() {
-                previous = new Date();
-                timeout = null;
-                result = func.apply(context, args);
-            };
-            return function() {
-                var now = new Date(), remaining = wait - (now - previous);
-                context = this;
-                args = arguments;
-                if (remaining <= 0) {
-                    clearTimeout(timeout);
-                    timeout = null;
-                    previous = now;
-                    result = func.apply(context, args);
-                } else if (!timeout) {
-                    timeout = setTimeout(later, remaining);
-                }
-                return result;
-            };
-        },
-        tokenizeQuery: function(str) {
-            return $.trim(str).toLowerCase().split(/[\s]+/);
-        },
-        tokenizeText: function(str) {
-            return $.trim(str).toLowerCase().split(/[\s\-_]+/);
-        },
-        getProtocol: function() {
-            return location.protocol;
-        },
-        noop: function() {}
-    };
-    var EventTarget = function() {
-        var eventSplitter = /\s+/;
-        return {
-            on: function(events, callback) {
-                var event;
-                if (!callback) {
-                    return this;
-                }
-                this._callbacks = this._callbacks || {};
-                events = events.split(eventSplitter);
-                while (event = events.shift()) {
-                    this._callbacks[event] = this._callbacks[event] || [];
-                    this._callbacks[event].push(callback);
-                }
-                return this;
-            },
-            trigger: function(events, data) {
-                var event, callbacks;
-                if (!this._callbacks) {
-                    return this;
-                }
-                events = events.split(eventSplitter);
-                while (event = events.shift()) {
-                    if (callbacks = this._callbacks[event]) {
-                        for (var i = 0; i < callbacks.length; i += 1) {
-                            callbacks[i].call(this, {
-                                type: event,
-                                data: data
-                            });
-                        }
-                    }
-                }
-                return this;
-            }
-        };
-    }();
-    var EventBus = function() {
-        var namespace = "typeahead:";
-        function EventBus(o) {
-            if (!o || !o.el) {
-                $.error("EventBus initialized without el");
-            }
-            this.$el = $(o.el);
-        }
-        utils.mixin(EventBus.prototype, {
-            trigger: function(type) {
-                var args = [].slice.call(arguments, 1);
-                this.$el.trigger(namespace + type, args);
-            }
-        });
-        return EventBus;
-    }();
-    var PersistentStorage = function() {
-        var ls, methods;
-        try {
-            ls = window.localStorage;
-            ls.setItem("~~~", "!");
-            ls.removeItem("~~~");
-        } catch (err) {
-            ls = null;
-        }
-        function PersistentStorage(namespace) {
-            this.prefix = [ "__", namespace, "__" ].join("");
-            this.ttlKey = "__ttl__";
-            this.keyMatcher = new RegExp("^" + this.prefix);
-        }
-        if (ls && window.JSON) {
-            methods = {
-                _prefix: function(key) {
-                    return this.prefix + key;
-                },
-                _ttlKey: function(key) {
-                    return this._prefix(key) + this.ttlKey;
-                },
-                get: function(key) {
-                    if (this.isExpired(key)) {
-                        this.remove(key);
-                    }
-                    return decode(ls.getItem(this._prefix(key)));
-                },
-                set: function(key, val, ttl) {
-                    if (utils.isNumber(ttl)) {
-                        ls.setItem(this._ttlKey(key), encode(now() + ttl));
-                    } else {
-                        ls.removeItem(this._ttlKey(key));
-                    }
-                    return ls.setItem(this._prefix(key), encode(val));
-                },
-                remove: function(key) {
-                    ls.removeItem(this._ttlKey(key));
-                    ls.removeItem(this._prefix(key));
-                    return this;
-                },
-                clear: function() {
-                    var i, key, keys = [], len = ls.length;
-                    for (i = 0; i < len; i++) {
-                        if ((key = ls.key(i)).match(this.keyMatcher)) {
-                            keys.push(key.replace(this.keyMatcher, ""));
-                        }
-                    }
-                    for (i = keys.length; i--; ) {
-                        this.remove(keys[i]);
-                    }
-                    return this;
-                },
-                isExpired: function(key) {
-                    var ttl = decode(ls.getItem(this._ttlKey(key)));
-                    return utils.isNumber(ttl) && now() > ttl ? true : false;
-                }
-            };
-        } else {
-            methods = {
-                get: utils.noop,
-                set: utils.noop,
-                remove: utils.noop,
-                clear: utils.noop,
-                isExpired: utils.noop
-            };
-        }
-        utils.mixin(PersistentStorage.prototype, methods);
-        return PersistentStorage;
-        function now() {
-            return new Date().getTime();
-        }
-        function encode(val) {
-            return JSON.stringify(utils.isUndefined(val) ? null : val);
-        }
-        function decode(val) {
-            return JSON.parse(val);
-        }
-    }();
-    var RequestCache = function() {
-        function RequestCache(o) {
-            utils.bindAll(this);
-            o = o || {};
-            this.sizeLimit = o.sizeLimit || 10;
-            this.cache = {};
-            this.cachedKeysByAge = [];
-        }
-        utils.mixin(RequestCache.prototype, {
-            get: function(url) {
-                return this.cache[url];
-            },
-            set: function(url, resp) {
-                var requestToEvict;
-                if (this.cachedKeysByAge.length === this.sizeLimit) {
-                    requestToEvict = this.cachedKeysByAge.shift();
-                    delete this.cache[requestToEvict];
-                }
-                this.cache[url] = resp;
-                this.cachedKeysByAge.push(url);
-            }
-        });
-        return RequestCache;
-    }();
-    var Transport = function() {
-        var pendingRequestsCount = 0, pendingRequests = {}, maxPendingRequests, requestCache;
-        function Transport(o) {
-            utils.bindAll(this);
-            o = utils.isString(o) ? {
-                url: o
-            } : o;
-            requestCache = requestCache || new RequestCache();
-            maxPendingRequests = utils.isNumber(o.maxParallelRequests) ? o.maxParallelRequests : maxPendingRequests || 6;
-            this.url = o.url;
-            this.wildcard = o.wildcard || "%QUERY";
-            this.filter = o.filter;
-            this.replace = o.replace;
-            this.ajaxSettings = {
-                type: "get",
-                cache: o.cache,
-                timeout: o.timeout,
-                dataType: o.dataType || "json",
-                beforeSend: o.beforeSend
-            };
-            this._get = (/^throttle$/i.test(o.rateLimitFn) ? utils.throttle : utils.debounce)(this._get, o.rateLimitWait || 300);
-        }
-        utils.mixin(Transport.prototype, {
-            _get: function(url, cb) {
-                var that = this;
-                if (belowPendingRequestsThreshold()) {
-                    this._sendRequest(url).done(done);
-                } else {
-                    this.onDeckRequestArgs = [].slice.call(arguments, 0);
-                }
-                function done(resp) {
-                    var data = that.filter ? that.filter(resp) : resp;
-                    cb && cb(data);
-                    requestCache.set(url, resp);
-                }
-            },
-            _sendRequest: function(url) {
-                var that = this, jqXhr = pendingRequests[url];
-                if (!jqXhr) {
-                    incrementPendingRequests();
-                    jqXhr = pendingRequests[url] = $.ajax(url, this.ajaxSettings).always(always);
-                }
-                return jqXhr;
-                function always() {
-                    decrementPendingRequests();
-                    pendingRequests[url] = null;
-                    if (that.onDeckRequestArgs) {
-                        that._get.apply(that, that.onDeckRequestArgs);
-                        that.onDeckRequestArgs = null;
-                    }
-                }
-            },
-            get: function(query, cb) {
-                var that = this, encodedQuery = encodeURIComponent(query || ""), url, resp;
-                cb = cb || utils.noop;
-                url = this.replace ? this.replace(this.url, encodedQuery) : this.url.replace(this.wildcard, encodedQuery);
-                if (resp = requestCache.get(url)) {
-                    utils.defer(function() {
-                        cb(that.filter ? that.filter(resp) : resp);
-                    });
-                } else {
-                    this._get(url, cb);
-                }
-                return !!resp;
-            }
-        });
-        return Transport;
-        function incrementPendingRequests() {
-            pendingRequestsCount++;
-        }
-        function decrementPendingRequests() {
-            pendingRequestsCount--;
-        }
-        function belowPendingRequestsThreshold() {
-            return pendingRequestsCount < maxPendingRequests;
-        }
-    }();
-    var Dataset = function() {
-        var keys = {
-            thumbprint: "thumbprint",
-            protocol: "protocol",
-            itemHash: "itemHash",
-            adjacencyList: "adjacencyList"
-        };
-        function Dataset(o) {
-            utils.bindAll(this);
-            if (utils.isString(o.template) && !o.engine) {
-                $.error("no template engine specified");
-            }
-            if (!o.local && !o.prefetch && !o.remote) {
-                $.error("one of local, prefetch, or remote is required");
-            }
-            this.name = o.name || utils.getUniqueId();
-            this.limit = o.limit || 5;
-            this.minLength = o.minLength || 1;
-            this.header = o.header;
-            this.footer = o.footer;
-            this.valueKey = o.valueKey || "value";
-            this.template = compileTemplate(o.template, o.engine, this.valueKey);
-            this.local = o.local;
-            this.prefetch = o.prefetch;
-            this.remote = o.remote;
-            this.itemHash = {};
-            this.adjacencyList = {};
-            this.storage = o.name ? new PersistentStorage(o.name) : null;
-        }
-        utils.mixin(Dataset.prototype, {
-            _processLocalData: function(data) {
-                this._mergeProcessedData(this._processData(data));
-            },
-            _loadPrefetchData: function(o) {
-                var that = this, thumbprint = VERSION + (o.thumbprint || ""), storedThumbprint, storedProtocol, storedItemHash, storedAdjacencyList, isExpired, deferred;
-                if (this.storage) {
-                    storedThumbprint = this.storage.get(keys.thumbprint);
-                    storedProtocol = this.storage.get(keys.protocol);
-                    storedItemHash = this.storage.get(keys.itemHash);
-                    storedAdjacencyList = this.storage.get(keys.adjacencyList);
-                }
-                isExpired = storedThumbprint !== thumbprint || storedProtocol !== utils.getProtocol();
-                o = utils.isString(o) ? {
-                    url: o
-                } : o;
-                o.ttl = utils.isNumber(o.ttl) ? o.ttl : 24 * 60 * 60 * 1e3;
-                if (storedItemHash && storedAdjacencyList && !isExpired) {
-                    this._mergeProcessedData({
-                        itemHash: storedItemHash,
-                        adjacencyList: storedAdjacencyList
-                    });
-                    deferred = $.Deferred().resolve();
-                } else {
-                    deferred = $.getJSON(o.url).done(processPrefetchData);
-                }
-                return deferred;
-                function processPrefetchData(data) {
-                    var filteredData = o.filter ? o.filter(data) : data, processedData = that._processData(filteredData), itemHash = processedData.itemHash, adjacencyList = processedData.adjacencyList;
-                    if (that.storage) {
-                        that.storage.set(keys.itemHash, itemHash, o.ttl);
-                        that.storage.set(keys.adjacencyList, adjacencyList, o.ttl);
-                        that.storage.set(keys.thumbprint, thumbprint, o.ttl);
-                        that.storage.set(keys.protocol, utils.getProtocol(), o.ttl);
-                    }
-                    that._mergeProcessedData(processedData);
-                }
-            },
-            _transformDatum: function(datum) {
-                var value = utils.isString(datum) ? datum : datum[this.valueKey], tokens = datum.tokens || utils.tokenizeText(value), item = {
-                    value: value,
-                    tokens: tokens
-                };
-                if (utils.isString(datum)) {
-                    item.datum = {};
-                    item.datum[this.valueKey] = datum;
-                } else {
-                    item.datum = datum;
-                }
-                item.tokens = utils.filter(item.tokens, function(token) {
-                    return !utils.isBlankString(token);
-                });
-                item.tokens = utils.map(item.tokens, function(token) {
-                    return token.toLowerCase();
-                });
-                return item;
-            },
-            _processData: function(data) {
-                var that = this, itemHash = {}, adjacencyList = {};
-                utils.each(data, function(i, datum) {
-                    var item = that._transformDatum(datum), id = utils.getUniqueId(item.value);
-                    itemHash[id] = item;
-                    utils.each(item.tokens, function(i, token) {
-                        var character = token.charAt(0), adjacency = adjacencyList[character] || (adjacencyList[character] = [ id ]);
-                        !~utils.indexOf(adjacency, id) && adjacency.push(id);
-                    });
-                });
-                return {
-                    itemHash: itemHash,
-                    adjacencyList: adjacencyList
-                };
-            },
-            _mergeProcessedData: function(processedData) {
-                var that = this;
-                utils.mixin(this.itemHash, processedData.itemHash);
-                utils.each(processedData.adjacencyList, function(character, adjacency) {
-                    var masterAdjacency = that.adjacencyList[character];
-                    that.adjacencyList[character] = masterAdjacency ? masterAdjacency.concat(adjacency) : adjacency;
-                });
-            },
-            _getLocalSuggestions: function(terms) {
-                var that = this, firstChars = [], lists = [], shortestList, suggestions = [];
-                utils.each(terms, function(i, term) {
-                    var firstChar = term.charAt(0);
-                    !~utils.indexOf(firstChars, firstChar) && firstChars.push(firstChar);
-                });
-                utils.each(firstChars, function(i, firstChar) {
-                    var list = that.adjacencyList[firstChar];
-                    if (!list) {
-                        return false;
-                    }
-                    lists.push(list);
-                    if (!shortestList || list.length < shortestList.length) {
-                        shortestList = list;
-                    }
-                });
-                if (lists.length < firstChars.length) {
-                    return [];
-                }
-                utils.each(shortestList, function(i, id) {
-                    var item = that.itemHash[id], isCandidate, isMatch;
-                    isCandidate = utils.every(lists, function(list) {
-                        return ~utils.indexOf(list, id);
-                    });
-                    isMatch = isCandidate && utils.every(terms, function(term) {
-                        return utils.some(item.tokens, function(token) {
-                            return token.indexOf(term) === 0;
-                        });
-                    });
-                    isMatch && suggestions.push(item);
-                });
-                return suggestions;
-            },
-            initialize: function() {
-                var deferred;
-                this.local && this._processLocalData(this.local);
-                this.transport = this.remote ? new Transport(this.remote) : null;
-                deferred = this.prefetch ? this._loadPrefetchData(this.prefetch) : $.Deferred().resolve();
-                this.local = this.prefetch = this.remote = null;
-                this.initialize = function() {
-                    return deferred;
-                };
-                return deferred;
-            },
-            getSuggestions: function(query, cb) {
-                var that = this, terms, suggestions, cacheHit = false;
-                if (query.length < this.minLength) {
-                    return;
-                }
-                terms = utils.tokenizeQuery(query);
-                suggestions = this._getLocalSuggestions(terms).slice(0, this.limit);
-                if (suggestions.length < this.limit && this.transport) {
-                    cacheHit = this.transport.get(query, processRemoteData);
-                }
-                !cacheHit && cb && cb(suggestions);
-                function processRemoteData(data) {
-                    suggestions = suggestions.slice(0);
-                    utils.each(data, function(i, datum) {
-                        var item = that._transformDatum(datum), isDuplicate;
-                        isDuplicate = utils.some(suggestions, function(suggestion) {
-                            return item.value === suggestion.value;
-                        });
-                        !isDuplicate && suggestions.push(item);
-                        return suggestions.length < that.limit;
-                    });
-                    cb && cb(suggestions);
-                }
-            }
-        });
-        return Dataset;
-        function compileTemplate(template, engine, valueKey) {
-            var renderFn, compiledTemplate;
-            if (utils.isFunction(template)) {
-                renderFn = template;
-            } else if (utils.isString(template)) {
-                compiledTemplate = engine.compile(template);
-                renderFn = utils.bind(compiledTemplate.render, compiledTemplate);
-            } else {
-                renderFn = function(context) {
-                    return "<p>" + context[valueKey] + "</p>";
-                };
-            }
-            return renderFn;
-        }
-    }();
-    var InputView = function() {
-        function InputView(o) {
-            var that = this;
-            utils.bindAll(this);
-            this.specialKeyCodeMap = {
-                9: "tab",
-                27: "esc",
-                37: "left",
-                39: "right",
-                13: "enter",
-                38: "up",
-                40: "down"
-            };
-            this.$hint = $(o.hint);
-            this.$input = $(o.input).on("blur.tt", this._handleBlur).on("focus.tt", this._handleFocus).on("keydown.tt", this._handleSpecialKeyEvent);
-            if (!utils.isMsie()) {
-                this.$input.on("input.tt", this._compareQueryToInputValue);
-            } else {
-                this.$input.on("keydown.tt keypress.tt cut.tt paste.tt", function($e) {
-                    if (that.specialKeyCodeMap[$e.which || $e.keyCode]) {
-                        return;
-                    }
-                    utils.defer(that._compareQueryToInputValue);
-                });
-            }
-            this.query = this.$input.val();
-            this.$overflowHelper = buildOverflowHelper(this.$input);
-        }
-        utils.mixin(InputView.prototype, EventTarget, {
-            _handleFocus: function() {
-                this.trigger("focused");
-            },
-            _handleBlur: function() {
-                this.trigger("blured");
-            },
-            _handleSpecialKeyEvent: function($e) {
-                var keyName = this.specialKeyCodeMap[$e.which || $e.keyCode];
-                keyName && this.trigger(keyName + "Keyed", $e);
-            },
-            _compareQueryToInputValue: function() {
-                var inputValue = this.getInputValue(), isSameQuery = compareQueries(this.query, inputValue), isSameQueryExceptWhitespace = isSameQuery ? this.query.length !== inputValue.length : false;
-                if (isSameQueryExceptWhitespace) {
-                    this.trigger("whitespaceChanged", {
-                        value: this.query
-                    });
-                } else if (!isSameQuery) {
-                    this.trigger("queryChanged", {
-                        value: this.query = inputValue
-                    });
-                }
-            },
-            destroy: function() {
-                this.$hint.off(".tt");
-                this.$input.off(".tt");
-                this.$hint = this.$input = this.$overflowHelper = null;
-            },
-            focus: function() {
-                this.$input.focus();
-            },
-            blur: function() {
-                this.$input.blur();
-            },
-            getQuery: function() {
-                return this.query;
-            },
-            setQuery: function(query) {
-                this.query = query;
-            },
-            getInputValue: function() {
-                return this.$input.val();
-            },
-            setInputValue: function(value, silent) {
-                this.$input.val(value);
-                !silent && this._compareQueryToInputValue();
-            },
-            getHintValue: function() {
-                return this.$hint.val();
-            },
-            setHintValue: function(value) {
-                this.$hint.val(value);
-            },
-            getLanguageDirection: function() {
-                return (this.$input.css("direction") || "ltr").toLowerCase();
-            },
-            isOverflow: function() {
-                this.$overflowHelper.text(this.getInputValue());
-                return this.$overflowHelper.width() > this.$input.width();
-            },
-            isCursorAtEnd: function() {
-                var valueLength = this.$input.val().length, selectionStart = this.$input[0].selectionStart, range;
-                if (utils.isNumber(selectionStart)) {
-                    return selectionStart === valueLength;
-                } else if (document.selection) {
-                    range = document.selection.createRange();
-                    range.moveStart("character", -valueLength);
-                    return valueLength === range.text.length;
-                }
-                return true;
-            }
-        });
-        return InputView;
-        function buildOverflowHelper($input) {
-            return $("<span></span>").css({
-                position: "absolute",
-                left: "-9999px",
-                visibility: "hidden",
-                whiteSpace: "nowrap",
-                fontFamily: $input.css("font-family"),
-                fontSize: $input.css("font-size"),
-                fontStyle: $input.css("font-style"),
-                fontVariant: $input.css("font-variant"),
-                fontWeight: $input.css("font-weight"),
-                wordSpacing: $input.css("word-spacing"),
-                letterSpacing: $input.css("letter-spacing"),
-                textIndent: $input.css("text-indent"),
-                textRendering: $input.css("text-rendering"),
-                textTransform: $input.css("text-transform")
-            }).insertAfter($input);
-        }
-        function compareQueries(a, b) {
-            a = (a || "").replace(/^\s*/g, "").replace(/\s{2,}/g, " ");
-            b = (b || "").replace(/^\s*/g, "").replace(/\s{2,}/g, " ");
-            return a === b;
-        }
-    }();
-    var DropdownView = function() {
-        var html = {
-            suggestionsList: '<span class="tt-suggestions"></span>'
-        }, css = {
-            suggestionsList: {
-                display: "block"
-            },
-            suggestion: {
-                whiteSpace: "nowrap",
-                cursor: "pointer"
-            },
-            suggestionChild: {
-                whiteSpace: "normal"
-            }
-        };
-        function DropdownView(o) {
-            utils.bindAll(this);
-            this.isOpen = false;
-            this.isEmpty = true;
-            this.isMouseOverDropdown = false;
-            this.$menu = $(o.menu).on("mouseenter.tt", this._handleMouseenter).on("mouseleave.tt", this._handleMouseleave).on("click.tt", ".tt-suggestion", this._handleSelection).on("mouseover.tt", ".tt-suggestion", this._handleMouseover);
-        }
-        utils.mixin(DropdownView.prototype, EventTarget, {
-            _handleMouseenter: function() {
-                this.isMouseOverDropdown = true;
-            },
-            _handleMouseleave: function() {
-                this.isMouseOverDropdown = false;
-            },
-            _handleMouseover: function($e) {
-                var $suggestion = $($e.currentTarget);
-                this._getSuggestions().removeClass("tt-is-under-cursor");
-                $suggestion.addClass("tt-is-under-cursor");
-            },
-            _handleSelection: function($e) {
-                var $suggestion = $($e.currentTarget);
-                this.trigger("suggestionSelected", extractSuggestion($suggestion));
-            },
-            _show: function() {
-                this.$menu.css("display", "block");
-            },
-            _hide: function() {
-                this.$menu.hide();
-            },
-            _moveCursor: function(increment) {
-                var $suggestions, $cur, nextIndex, $underCursor;
-                if (!this.isVisible()) {
-                    return;
-                }
-                $suggestions = this._getSuggestions();
-                $cur = $suggestions.filter(".tt-is-under-cursor");
-                $cur.removeClass("tt-is-under-cursor");
-                nextIndex = $suggestions.index($cur) + increment;
-                nextIndex = (nextIndex + 1) % ($suggestions.length + 1) - 1;
-                if (nextIndex === -1) {
-                    this.trigger("cursorRemoved");
-                    return;
-                } else if (nextIndex < -1) {
-                    nextIndex = $suggestions.length - 1;
-                }
-                $underCursor = $suggestions.eq(nextIndex).addClass("tt-is-under-cursor");
-                this._ensureVisibility($underCursor);
-                this.trigger("cursorMoved", extractSuggestion($underCursor));
-            },
-            _getSuggestions: function() {
-                return this.$menu.find(".tt-suggestions > .tt-suggestion");
-            },
-            _ensureVisibility: function($el) {
-                var menuHeight = this.$menu.height() + parseInt(this.$menu.css("paddingTop"), 10) + parseInt(this.$menu.css("paddingBottom"), 10), menuScrollTop = this.$menu.scrollTop(), elTop = $el.position().top, elBottom = elTop + $el.outerHeight(true);
-                if (elTop < 0) {
-                    this.$menu.scrollTop(menuScrollTop + elTop);
-                } else if (menuHeight < elBottom) {
-                    this.$menu.scrollTop(menuScrollTop + (elBottom - menuHeight));
-                }
-            },
-            destroy: function() {
-                this.$menu.off(".tt");
-                this.$menu = null;
-            },
-            isVisible: function() {
-                return this.isOpen && !this.isEmpty;
-            },
-            closeUnlessMouseIsOverDropdown: function() {
-                if (!this.isMouseOverDropdown) {
-                    this.close();
-                }
-            },
-            close: function() {
-                if (this.isOpen) {
-                    this.isOpen = false;
-                    this.isMouseOverDropdown = false;
-                    this._hide();
-                    this.$menu.find(".tt-suggestions > .tt-suggestion").removeClass("tt-is-under-cursor");
-                    this.trigger("closed");
-                }
-            },
-            open: function() {
-                if (!this.isOpen) {
-                    this.isOpen = true;
-                    !this.isEmpty && this._show();
-                    this.trigger("opened");
-                }
-            },
-            setLanguageDirection: function(dir) {
-                var ltrCss = {
-                    left: "0",
-                    right: "auto"
-                }, rtlCss = {
-                    left: "auto",
-                    right: " 0"
-                };
-                dir === "ltr" ? this.$menu.css(ltrCss) : this.$menu.css(rtlCss);
-            },
-            moveCursorUp: function() {
-                this._moveCursor(-1);
-            },
-            moveCursorDown: function() {
-                this._moveCursor(+1);
-            },
-            getSuggestionUnderCursor: function() {
-                var $suggestion = this._getSuggestions().filter(".tt-is-under-cursor").first();
-                return $suggestion.length > 0 ? extractSuggestion($suggestion) : null;
-            },
-            getFirstSuggestion: function() {
-                var $suggestion = this._getSuggestions().first();
-                return $suggestion.length > 0 ? extractSuggestion($suggestion) : null;
-            },
-            renderSuggestions: function(dataset, suggestions) {
-                var datasetClassName = "tt-dataset-" + dataset.name, wrapper = '<div class="tt-suggestion">%body</div>', compiledHtml, $suggestionsList, $dataset = this.$menu.find("." + datasetClassName), elBuilder, fragment, $el;
-                if ($dataset.length === 0) {
-                    $suggestionsList = $(html.suggestionsList).css(css.suggestionsList);
-                    $dataset = $("<div></div>").addClass(datasetClassName).append(dataset.header).append($suggestionsList).append(dataset.footer).appendTo(this.$menu);
-                }
-                if (suggestions.length > 0) {
-                    this.isEmpty = false;
-                    this.isOpen && this._show();
-                    elBuilder = document.createElement("div");
-                    fragment = document.createDocumentFragment();
-                    utils.each(suggestions, function(i, suggestion) {
-                        suggestion.dataset = dataset.name;
-                        compiledHtml = dataset.template(suggestion.datum);
-                        elBuilder.innerHTML = wrapper.replace("%body", compiledHtml);
-                        $el = $(elBuilder.firstChild).css(css.suggestion).data("suggestion", suggestion);
-                        $el.children().each(function() {
-                            $(this).css(css.suggestionChild);
-                        });
-                        fragment.appendChild($el[0]);
-                    });
-                    $dataset.show().find(".tt-suggestions").html(fragment);
-                } else {
-                    this.clearSuggestions(dataset.name);
-                }
-                this.trigger("suggestionsRendered");
-            },
-            clearSuggestions: function(datasetName) {
-                var $datasets = datasetName ? this.$menu.find(".tt-dataset-" + datasetName) : this.$menu.find('[class^="tt-dataset-"]'), $suggestions = $datasets.find(".tt-suggestions");
-                $datasets.hide();
-                $suggestions.empty();
-                if (this._getSuggestions().length === 0) {
-                    this.isEmpty = true;
-                    this._hide();
-                }
-            }
-        });
-        return DropdownView;
-        function extractSuggestion($el) {
-            return $el.data("suggestion");
-        }
-    }();
-    var TypeaheadView = function() {
-        var html = {
-            wrapper: '<span class="twitter-typeahead"></span>',
-            hint: '<input class="tt-hint" type="text" autocomplete="off" spellcheck="off" disabled>',
-            dropdown: '<span class="tt-dropdown-menu"></span>'
-        }, css = {
-            wrapper: {
-                position: "relative",
-                display: "inline-block"
-            },
-            hint: {
-                position: "absolute",
-                top: "0",
-                left: "0",
-                borderColor: "transparent",
-                boxShadow: "none"
-            },
-            query: {
-                position: "relative",
-                verticalAlign: "top",
-                backgroundColor: "transparent"
-            },
-            dropdown: {
-                position: "absolute",
-                top: "100%",
-                left: "0",
-                zIndex: "100",
-                display: "none"
-            }
-        };
-        if (utils.isMsie()) {
-            utils.mixin(css.query, {
-                backgroundImage: "url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)"
-            });
-        }
-        if (utils.isMsie() && utils.isMsie() <= 7) {
-            utils.mixin(css.wrapper, {
-                display: "inline",
-                zoom: "1"
-            });
-            utils.mixin(css.query, {
-                marginTop: "-1px"
-            });
-        }
-        function TypeaheadView(o) {
-            var $menu, $input, $hint;
-            utils.bindAll(this);
-            this.$node = buildDomStructure(o.input);
-            this.datasets = o.datasets;
-            this.dir = null;
-            this.eventBus = o.eventBus;
-            $menu = this.$node.find(".tt-dropdown-menu");
-            $input = this.$node.find(".tt-query");
-            $hint = this.$node.find(".tt-hint");
-            this.dropdownView = new DropdownView({
-                menu: $menu
-            }).on("suggestionSelected", this._handleSelection).on("cursorMoved", this._clearHint).on("cursorMoved", this._setInputValueToSuggestionUnderCursor).on("cursorRemoved", this._setInputValueToQuery).on("cursorRemoved", this._updateHint).on("suggestionsRendered", this._updateHint).on("opened", this._updateHint).on("closed", this._clearHint).on("opened closed", this._propagateEvent);
-            this.inputView = new InputView({
-                input: $input,
-                hint: $hint
-            }).on("focused", this._openDropdown).on("blured", this._closeDropdown).on("blured", this._setInputValueToQuery).on("enterKeyed tabKeyed", this._handleSelection).on("queryChanged", this._clearHint).on("queryChanged", this._clearSuggestions).on("queryChanged", this._getSuggestions).on("whitespaceChanged", this._updateHint).on("queryChanged whitespaceChanged", this._openDropdown).on("queryChanged whitespaceChanged", this._setLanguageDirection).on("escKeyed", this._closeDropdown).on("escKeyed", this._setInputValueToQuery).on("tabKeyed upKeyed downKeyed", this._managePreventDefault).on("upKeyed downKeyed", this._moveDropdownCursor).on("upKeyed downKeyed", this._openDropdown).on("tabKeyed leftKeyed rightKeyed", this._autocomplete);
-        }
-        utils.mixin(TypeaheadView.prototype, EventTarget, {
-            _managePreventDefault: function(e) {
-                var $e = e.data, hint, inputValue, preventDefault = false;
-                switch (e.type) {
-                  case "tabKeyed":
-                    hint = this.inputView.getHintValue();
-                    inputValue = this.inputView.getInputValue();
-                    preventDefault = hint && hint !== inputValue;
-                    break;
-
-                  case "upKeyed":
-                  case "downKeyed":
-                    preventDefault = !$e.shiftKey && !$e.ctrlKey && !$e.metaKey;
-                    break;
-                }
-                preventDefault && $e.preventDefault();
-            },
-            _setLanguageDirection: function() {
-                var dir = this.inputView.getLanguageDirection();
-                if (dir !== this.dir) {
-                    this.dir = dir;
-                    this.$node.css("direction", dir);
-                    this.dropdownView.setLanguageDirection(dir);
-                }
-            },
-            _updateHint: function() {
-                var suggestion = this.dropdownView.getFirstSuggestion(), hint = suggestion ? suggestion.value : null, dropdownIsVisible = this.dropdownView.isVisible(), inputHasOverflow = this.inputView.isOverflow(), inputValue, query, escapedQuery, beginsWithQuery, match;
-                if (hint && dropdownIsVisible && !inputHasOverflow) {
-                    inputValue = this.inputView.getInputValue();
-                    query = inputValue.replace(/\s{2,}/g, " ").replace(/^\s+/g, "");
-                    escapedQuery = utils.escapeRegExChars(query);
-                    beginsWithQuery = new RegExp("^(?:" + escapedQuery + ")(.*$)", "i");
-                    match = beginsWithQuery.exec(hint);
-                    this.inputView.setHintValue(inputValue + (match ? match[1] : ""));
-                }
-            },
-            _clearHint: function() {
-                this.inputView.setHintValue("");
-            },
-            _clearSuggestions: function() {
-                this.dropdownView.clearSuggestions();
-            },
-            _setInputValueToQuery: function() {
-                this.inputView.setInputValue(this.inputView.getQuery());
-            },
-            _setInputValueToSuggestionUnderCursor: function(e) {
-                var suggestion = e.data;
-                this.inputView.setInputValue(suggestion.value, true);
-            },
-            _openDropdown: function() {
-                this.dropdownView.open();
-            },
-            _closeDropdown: function(e) {
-                this.dropdownView[e.type === "blured" ? "closeUnlessMouseIsOverDropdown" : "close"]();
-            },
-            _moveDropdownCursor: function(e) {
-                var $e = e.data;
-                if (!$e.shiftKey && !$e.ctrlKey && !$e.metaKey) {
-                    this.dropdownView[e.type === "upKeyed" ? "moveCursorUp" : "moveCursorDown"]();
-                }
-            },
-            _handleSelection: function(e) {
-                var byClick = e.type === "suggestionSelected", suggestion = byClick ? e.data : this.dropdownView.getSuggestionUnderCursor();
-                if (suggestion) {
-                    this.inputView.setInputValue(suggestion.value);
-                    byClick ? this.inputView.focus() : e.data.preventDefault();
-                    byClick && utils.isMsie() ? utils.defer(this.dropdownView.close) : this.dropdownView.close();
-                    this.eventBus.trigger("selected", suggestion.datum, suggestion.dataset);
-                }
-            },
-            _getSuggestions: function() {
-                var that = this, query = this.inputView.getQuery();
-                if (utils.isBlankString(query)) {
-                    return;
-                }
-                utils.each(this.datasets, function(i, dataset) {
-                    dataset.getSuggestions(query, function(suggestions) {
-                        if (query === that.inputView.getQuery()) {
-                            that.dropdownView.renderSuggestions(dataset, suggestions);
-                        }
-                    });
-                });
-            },
-            _autocomplete: function(e) {
-                var isCursorAtEnd, ignoreEvent, query, hint, suggestion;
-                if (e.type === "rightKeyed" || e.type === "leftKeyed") {
-                    isCursorAtEnd = this.inputView.isCursorAtEnd();
-                    ignoreEvent = this.inputView.getLanguageDirection() === "ltr" ? e.type === "leftKeyed" : e.type === "rightKeyed";
-                    if (!isCursorAtEnd || ignoreEvent) {
-                        return;
-                    }
-                }
-                query = this.inputView.getQuery();
-                hint = this.inputView.getHintValue();
-                if (hint !== "" && query !== hint) {
-                    suggestion = this.dropdownView.getFirstSuggestion();
-                    this.inputView.setInputValue(suggestion.value);
-                    this.eventBus.trigger("autocompleted", suggestion.datum, suggestion.dataset);
-                }
-            },
-            _propagateEvent: function(e) {
-                this.eventBus.trigger(e.type);
-            },
-            destroy: function() {
-                this.inputView.destroy();
-                this.dropdownView.destroy();
-                destroyDomStructure(this.$node);
-                this.$node = null;
-            },
-            setQuery: function(query) {
-                this.inputView.setQuery(query);
-                this.inputView.setInputValue(query);
-                this._clearHint();
-                this._clearSuggestions();
-                this._getSuggestions();
-            }
-        });
-        return TypeaheadView;
-        function buildDomStructure(input) {
-            var $wrapper = $(html.wrapper), $dropdown = $(html.dropdown), $input = $(input), $hint = $(html.hint);
-            $wrapper = $wrapper.css(css.wrapper);
-            $dropdown = $dropdown.css(css.dropdown);
-            $hint.css(css.hint).css({
-                backgroundAttachment: $input.css("background-attachment"),
-                backgroundClip: $input.css("background-clip"),
-                backgroundColor: $input.css("background-color"),
-                backgroundImage: $input.css("background-image"),
-                backgroundOrigin: $input.css("background-origin"),
-                backgroundPosition: $input.css("background-position"),
-                backgroundRepeat: $input.css("background-repeat"),
-                backgroundSize: $input.css("background-size")
-            });
-            $input.data("ttAttrs", {
-                dir: $input.attr("dir"),
-                autocomplete: $input.attr("autocomplete"),
-                spellcheck: $input.attr("spellcheck"),
-                style: $input.attr("style")
-            });
-            $input.addClass("tt-query").attr({
-                autocomplete: "off",
-                spellcheck: false
-            }).css(css.query);
-            try {
-                !$input.attr("dir") && $input.attr("dir", "auto");
-            } catch (e) {}
-            return $input.wrap($wrapper).parent().prepend($hint).append($dropdown);
-        }
-        function destroyDomStructure($node) {
-            var $input = $node.find(".tt-query");
-            utils.each($input.data("ttAttrs"), function(key, val) {
-                utils.isUndefined(val) ? $input.removeAttr(key) : $input.attr(key, val);
-            });
-            $input.detach().removeData("ttAttrs").removeClass("tt-query").insertAfter($node);
-            $node.remove();
-        }
-    }();
-    (function() {
-        var cache = {}, viewKey = "ttView", methods;
-        methods = {
-            initialize: function(datasetDefs) {
-                var datasets;
-                datasetDefs = utils.isArray(datasetDefs) ? datasetDefs : [ datasetDefs ];
-                if (datasetDefs.length === 0) {
-                    $.error("no datasets provided");
-                }
-                datasets = utils.map(datasetDefs, function(o) {
-                    var dataset = cache[o.name] ? cache[o.name] : new Dataset(o);
-                    if (o.name) {
-                        cache[o.name] = dataset;
-                    }
-                    return dataset;
-                });
-                return this.each(initialize);
-                function initialize() {
-                    var $input = $(this), deferreds, eventBus = new EventBus({
-                        el: $input
-                    });
-                    deferreds = utils.map(datasets, function(dataset) {
-                        return dataset.initialize();
-                    });
-                    $input.data(viewKey, new TypeaheadView({
-                        input: $input,
-                        eventBus: eventBus = new EventBus({
-                            el: $input
-                        }),
-                        datasets: datasets
-                    }));
-                    $.when.apply($, deferreds).always(function() {
-                        utils.defer(function() {
-                            eventBus.trigger("initialized");
-                        });
-                    });
-                }
-            },
-            destroy: function() {
-                return this.each(destroy);
-                function destroy() {
-                    var $this = $(this), view = $this.data(viewKey);
-                    if (view) {
-                        view.destroy();
-                        $this.removeData(viewKey);
-                    }
-                }
-            },
-            setQuery: function(query) {
-                return this.each(setQuery);
-                function setQuery() {
-                    var view = $(this).data(viewKey);
-                    view && view.setQuery(query);
-                }
-            }
-        };
-        jQuery.fn.typeahead = function(method) {
-            if (methods[method]) {
-                return methods[method].apply(this, [].slice.call(arguments, 1));
-            } else {
-                return methods.initialize.apply(this, arguments);
-            }
-        };
-    })();
-})(window.jQuery);;
-/**
-Typeahead.js input, based on [Twitter Typeahead](http://twitter.github.io/typeahead.js).   
-It is mainly replacement of typeahead in Bootstrap 3.
-
-
-@class typeaheadjs
-@extends text
-@since 1.5.0
-@final
-@example
-<a href="#" id="country" data-type="typeaheadjs" data-pk="1" data-url="/post" data-title="Input country"></a>
-<script>
-$(function(){
-    $('#country').editable({
-        value: 'ru',
-        typeahead: {
-            name: 'country',
-            local: [
-                {value: 'ru', tokens: ['Russia']}, 
-                {value: 'gb', tokens: ['Great Britain']}, 
-                {value: 'us', tokens: ['United States']}
-            ],
-            template: function(item) {
-                return item.tokens[0] + ' (' + item.value + ')'; 
-            } 
-        }
-    });
-});
-</script>
-**/
-(function ($) {
-    "use strict";
-    
-    var Constructor = function (options) {
-        this.init('typeaheadjs', options, Constructor.defaults);
-    };
-
-    $.fn.editableutils.inherit(Constructor, $.fn.editabletypes.text);
-
-    $.extend(Constructor.prototype, {
-        render: function() {
-            this.renderClear();
-            this.setClass();
-            this.setAttr('placeholder');
-            this.$input.typeahead(this.options.typeahead);
-            
-            // copy `input-sm | input-lg` classes to placeholder input
-            if($.fn.editableform.engine === 'bs3') {
-                if(this.$input.hasClass('input-sm')) {
-                    this.$input.siblings('input.tt-hint').addClass('input-sm');
-                }
-                if(this.$input.hasClass('input-lg')) {
-                    this.$input.siblings('input.tt-hint').addClass('input-lg');
-                }
-            }
-        }
-    });      
-
-    Constructor.defaults = $.extend({}, $.fn.editabletypes.list.defaults, {
-        /**
-        @property tpl 
-        @default <input type="text">
-        **/         
-        tpl:'<input type="text">',
-        /**
-        Configuration of typeahead itself. 
-        [Full list of options](https://github.com/twitter/typeahead.js#dataset).
-        
-        @property typeahead 
-        @type object
-        @default null
-        **/
-        typeahead: null,
-        /**
-        Whether to show `clear` button 
-        
-        @property clear 
-        @type boolean
-        @default true        
-        **/
-        clear: true
-    });
-
-    $.fn.editabletypes.typeaheadjs = Constructor;      
-    
-}(window.jQuery));;
 /*!
  * jQuery Validation Plugin 1.11.1
  *
@@ -48205,1715 +40003,6 @@ if ( $.fn.DataTable.TableTools ) {
 // 	} );
 // }
 ;
-// // Uses AMD or browser globals to create a jQuery plugin.
-// (function (factory) {
-//   if (typeof define === 'function' && define.amd) {
-//       // AMD. Register as an anonymous module.
-//       define(['jquery'], factory);
-//   } else {
-//       // Browser globals
-//       factory(jQuery);
-//   }
-// } (function (jQuery) {
-//     var module = { exports: { } }; // Fake component
-
-
-// /**
-//  * Expose `Emitter`.
-//  */
-
-// module.exports = Emitter;
-
-/**
- * Initialize a new `Emitter`.
- *
- * @api public
- */
-
-function Emitter(obj) {
-  if (obj) return mixin(obj);
-};
-
-/**
- * Mixin the emitter properties.
- *
- * @param {Object} obj
- * @return {Object}
- * @api private
- */
-
-function mixin(obj) {
-  for (var key in Emitter.prototype) {
-    obj[key] = Emitter.prototype[key];
-  }
-  return obj;
-}
-
-/**
- * Listen on the given `event` with `fn`.
- *
- * @param {String} event
- * @param {Function} fn
- * @return {Emitter}
- * @api public
- */
-
-Emitter.prototype.on = function(event, fn){
-  this._callbacks = this._callbacks || {};
-  (this._callbacks[event] = this._callbacks[event] || [])
-    .push(fn);
-  return this;
-};
-
-/**
- * Adds an `event` listener that will be invoked a single
- * time then automatically removed.
- *
- * @param {String} event
- * @param {Function} fn
- * @return {Emitter}
- * @api public
- */
-
-Emitter.prototype.once = function(event, fn){
-  var self = this;
-  this._callbacks = this._callbacks || {};
-
-  function on() {
-    self.off(event, on);
-    fn.apply(this, arguments);
-  }
-
-  fn._off = on;
-  this.on(event, on);
-  return this;
-};
-
-/**
- * Remove the given callback for `event` or all
- * registered callbacks.
- *
- * @param {String} event
- * @param {Function} fn
- * @return {Emitter}
- * @api public
- */
-
-Emitter.prototype.off =
-Emitter.prototype.removeListener =
-Emitter.prototype.removeAllListeners = function(event, fn){
-  this._callbacks = this._callbacks || {};
-  var callbacks = this._callbacks[event];
-  if (!callbacks) return this;
-
-  // remove all handlers
-  if (1 == arguments.length) {
-    delete this._callbacks[event];
-    return this;
-  }
-
-  // remove specific handler
-  var i = callbacks.indexOf(fn._off || fn);
-  if (~i) callbacks.splice(i, 1);
-  return this;
-};
-
-/**
- * Emit `event` with the given args.
- *
- * @param {String} event
- * @param {Mixed} ...
- * @return {Emitter}
- */
-
-Emitter.prototype.emit = function(event){
-  this._callbacks = this._callbacks || {};
-  var args = [].slice.call(arguments, 1)
-    , callbacks = this._callbacks[event];
-
-  if (callbacks) {
-    callbacks = callbacks.slice(0);
-    for (var i = 0, len = callbacks.length; i < len; ++i) {
-      callbacks[i].apply(this, args);
-    }
-  }
-
-  return this;
-};
-
-/**
- * Return array of callbacks for `event`.
- *
- * @param {String} event
- * @return {Array}
- * @api public
- */
-
-Emitter.prototype.listeners = function(event){
-  this._callbacks = this._callbacks || {};
-  return this._callbacks[event] || [];
-};
-
-/**
- * Check if this emitter has `event` handlers.
- *
- * @param {String} event
- * @return {Boolean}
- * @api public
- */
-
-Emitter.prototype.hasListeners = function(event){
-  return !! this.listeners(event).length;
-};
-
-/*
-#
-# More info at [www.dropzonejs.com](http://www.dropzonejs.com)
-# 
-# Copyright (c) 2012, Matias Meno  
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
-*/
-
-
-(function() {
-  var Dropzone, Em, camelize, contentLoaded, detectVerticalSquash, drawImageIOSFix, noop, without,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __slice = [].slice;
-
-  Em = typeof Emitter !== "undefined" && Emitter !== null ? Emitter : require("emitter");
-
-  noop = function() {};
-
-  Dropzone = (function(_super) {
-    var extend;
-
-    __extends(Dropzone, _super);
-
-    /*
-    This is a list of all available events you can register on a dropzone object.
-    
-    You can register an event handler like this:
-    
-        dropzone.on("dragEnter", function() { });
-    */
-
-
-    Dropzone.prototype.events = ["drop", "dragstart", "dragend", "dragenter", "dragover", "dragleave", "addedfile", "removedfile", "thumbnail", "error", "errormultiple", "processing", "processingmultiple", "uploadprogress", "totaluploadprogress", "sending", "sendingmultiple", "success", "successmultiple", "canceled", "canceledmultiple", "complete", "completemultiple", "reset", "maxfilesexceeded", "maxfilesreached"];
-
-    Dropzone.prototype.defaultOptions = {
-      url: null,
-      method: "post",
-      withCredentials: false,
-      parallelUploads: 2,
-      uploadMultiple: false,
-      maxFilesize: 256,
-      paramName: "file",
-      createImageThumbnails: true,
-      maxThumbnailFilesize: 10,
-      thumbnailWidth: 100,
-      thumbnailHeight: 100,
-      maxFiles: null,
-      params: {},
-      clickable: true,
-      ignoreHiddenFiles: true,
-      acceptedFiles: null,
-      acceptedMimeTypes: null,
-      autoProcessQueue: true,
-      addRemoveLinks: false,
-      previewsContainer: null,
-      dictDefaultMessage: "Drop files here to upload",
-      dictFallbackMessage: "Your browser does not support drag'n'drop file uploads.",
-      dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
-      dictFileTooBig: "File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.",
-      dictInvalidFileType: "You can't upload files of this type.",
-      dictResponseError: "Server responded with {{statusCode}} code.",
-      dictCancelUpload: "Cancel upload",
-      dictCancelUploadConfirmation: "Are you sure you want to cancel this upload?",
-      dictRemoveFile: "Remove file",
-      dictRemoveFileConfirmation: null,
-      dictMaxFilesExceeded: "You can not upload any more files.",
-      accept: function(file, done) {
-        return done();
-      },
-      init: function() {
-        return noop;
-      },
-      forceFallback: false,
-      fallback: function() {
-        var child, messageElement, span, _i, _len, _ref;
-        this.element.className = "" + this.element.className + " dz-browser-not-supported";
-        _ref = this.element.getElementsByTagName("div");
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          child = _ref[_i];
-          if (/(^| )dz-message($| )/.test(child.className)) {
-            messageElement = child;
-            child.className = "dz-message";
-            continue;
-          }
-        }
-        if (!messageElement) {
-          messageElement = Dropzone.createElement("<div class=\"dz-message\"><span></span></div>");
-          this.element.appendChild(messageElement);
-        }
-        span = messageElement.getElementsByTagName("span")[0];
-        if (span) {
-          span.textContent = this.options.dictFallbackMessage;
-        }
-        return this.element.appendChild(this.getFallbackForm());
-      },
-      resize: function(file) {
-        var info, srcRatio, trgRatio;
-        info = {
-          srcX: 0,
-          srcY: 0,
-          srcWidth: file.width,
-          srcHeight: file.height
-        };
-        srcRatio = file.width / file.height;
-        trgRatio = this.options.thumbnailWidth / this.options.thumbnailHeight;
-        if (file.height < this.options.thumbnailHeight || file.width < this.options.thumbnailWidth) {
-          info.trgHeight = info.srcHeight;
-          info.trgWidth = info.srcWidth;
-        } else {
-          if (srcRatio > trgRatio) {
-            info.srcHeight = file.height;
-            info.srcWidth = info.srcHeight * trgRatio;
-          } else {
-            info.srcWidth = file.width;
-            info.srcHeight = info.srcWidth / trgRatio;
-          }
-        }
-        info.srcX = (file.width - info.srcWidth) / 2;
-        info.srcY = (file.height - info.srcHeight) / 2;
-        return info;
-      },
-      /*
-      Those functions register themselves to the events on init and handle all
-      the user interface specific stuff. Overwriting them won't break the upload
-      but can break the way it's displayed.
-      You can overwrite them if you don't like the default behavior. If you just
-      want to add an additional event handler, register it on the dropzone object
-      and don't overwrite those options.
-      */
-
-      drop: function(e) {
-        return this.element.classList.remove("dz-drag-hover");
-      },
-      dragstart: noop,
-      dragend: function(e) {
-        return this.element.classList.remove("dz-drag-hover");
-      },
-      dragenter: function(e) {
-        return this.element.classList.add("dz-drag-hover");
-      },
-      dragover: function(e) {
-        return this.element.classList.add("dz-drag-hover");
-      },
-      dragleave: function(e) {
-        return this.element.classList.remove("dz-drag-hover");
-      },
-      paste: noop,
-      reset: function() {
-        return this.element.classList.remove("dz-started");
-      },
-      addedfile: function(file) {
-        var node, removeFileEvent, removeLink, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results,
-          _this = this;
-        if (this.element === this.previewsContainer) {
-          this.element.classList.add("dz-started");
-        }
-        file.previewElement = Dropzone.createElement(this.options.previewTemplate.trim());
-        file.previewTemplate = file.previewElement;
-        this.previewsContainer.appendChild(file.previewElement);
-        _ref = file.previewElement.querySelectorAll("[data-dz-name]");
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          node = _ref[_i];
-          node.textContent = file.name;
-        }
-        _ref1 = file.previewElement.querySelectorAll("[data-dz-size]");
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          node = _ref1[_j];
-          node.innerHTML = this.filesize(file.size);
-        }
-        if (this.options.addRemoveLinks) {
-          file._removeLink = Dropzone.createElement("<a class=\"dz-remove\" href=\"javascript:undefined;\" data-dz-remove>" + this.options.dictRemoveFile + "</a>");
-          file.previewElement.appendChild(file._removeLink);
-        }
-        removeFileEvent = function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          if (file.status === Dropzone.UPLOADING) {
-            return Dropzone.confirm(_this.options.dictCancelUploadConfirmation, function() {
-              return _this.removeFile(file);
-            });
-          } else {
-            if (_this.options.dictRemoveFileConfirmation) {
-              return Dropzone.confirm(_this.options.dictRemoveFileConfirmation, function() {
-                return _this.removeFile(file);
-              });
-            } else {
-              return _this.removeFile(file);
-            }
-          }
-        };
-        _ref2 = file.previewElement.querySelectorAll("[data-dz-remove]");
-        _results = [];
-        for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-          removeLink = _ref2[_k];
-          _results.push(removeLink.addEventListener("click", removeFileEvent));
-        }
-        return _results;
-      },
-      removedfile: function(file) {
-        var _ref;
-        if ((_ref = file.previewElement) != null) {
-          _ref.parentNode.removeChild(file.previewElement);
-        }
-        return this._updateMaxFilesReachedClass();
-      },
-      thumbnail: function(file, dataUrl) {
-        var thumbnailElement, _i, _len, _ref, _results;
-        file.previewElement.classList.remove("dz-file-preview");
-        file.previewElement.classList.add("dz-image-preview");
-        _ref = file.previewElement.querySelectorAll("[data-dz-thumbnail]");
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          thumbnailElement = _ref[_i];
-          thumbnailElement.alt = file.name;
-          _results.push(thumbnailElement.src = dataUrl);
-        }
-        return _results;
-      },
-      error: function(file, message) {
-        var node, _i, _len, _ref, _results;
-        file.previewElement.classList.add("dz-error");
-        if (typeof message !== "String" && message.error) {
-          message = message.error;
-        }
-        _ref = file.previewElement.querySelectorAll("[data-dz-errormessage]");
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          node = _ref[_i];
-          _results.push(node.textContent = message);
-        }
-        return _results;
-      },
-      errormultiple: noop,
-      processing: function(file) {
-        file.previewElement.classList.add("dz-processing");
-        if (file._removeLink) {
-          return file._removeLink.textContent = this.options.dictCancelUpload;
-        }
-      },
-      processingmultiple: noop,
-      uploadprogress: function(file, progress, bytesSent) {
-        var node, _i, _len, _ref, _results;
-        _ref = file.previewElement.querySelectorAll("[data-dz-uploadprogress]");
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          node = _ref[_i];
-          _results.push(node.style.width = "" + progress + "%");
-        }
-        return _results;
-      },
-      totaluploadprogress: noop,
-      sending: noop,
-      sendingmultiple: noop,
-      success: function(file) {
-        return file.previewElement.classList.add("dz-success");
-      },
-      successmultiple: noop,
-      canceled: function(file) {
-        return this.emit("error", file, "Upload canceled.");
-      },
-      canceledmultiple: noop,
-      complete: function(file) {
-        if (file._removeLink) {
-          return file._removeLink.textContent = this.options.dictRemoveFile;
-        }
-      },
-      completemultiple: noop,
-      maxfilesexceeded: noop,
-      maxfilesreached: noop,
-      previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  <div class=\"dz-details\">\n    <div class=\"dz-filename\"><span data-dz-name></span></div>\n    <div class=\"dz-size\" data-dz-size></div>\n    <img data-dz-thumbnail />\n  </div>\n  <div class=\"dz-progress\"><span class=\"dz-upload\" data-dz-uploadprogress></span></div>\n  <div class=\"dz-success-mark\"><span>✔</span></div>\n  <div class=\"dz-error-mark\"><span>✘</span></div>\n  <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n</div>"
-    };
-
-    extend = function() {
-      var key, object, objects, target, val, _i, _len;
-      target = arguments[0], objects = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      for (_i = 0, _len = objects.length; _i < _len; _i++) {
-        object = objects[_i];
-        for (key in object) {
-          val = object[key];
-          target[key] = val;
-        }
-      }
-      return target;
-    };
-
-    function Dropzone(element, options) {
-      var elementOptions, fallback, _ref;
-      this.element = element;
-      this.version = Dropzone.version;
-      this.defaultOptions.previewTemplate = this.defaultOptions.previewTemplate.replace(/\n*/g, "");
-      this.clickableElements = [];
-      this.listeners = [];
-      this.files = [];
-      if (typeof this.element === "string") {
-        this.element = document.querySelector(this.element);
-      }
-      if (!(this.element && (this.element.nodeType != null))) {
-        throw new Error("Invalid dropzone element.");
-      }
-      if (this.element.dropzone) {
-        throw new Error("Dropzone already attached.");
-      }
-      Dropzone.instances.push(this);
-      this.element.dropzone = this;
-      elementOptions = (_ref = Dropzone.optionsForElement(this.element)) != null ? _ref : {};
-      this.options = extend({}, this.defaultOptions, elementOptions, options != null ? options : {});
-      if (this.options.forceFallback || !Dropzone.isBrowserSupported()) {
-        return this.options.fallback.call(this);
-      }
-      if (this.options.url == null) {
-        this.options.url = this.element.getAttribute("action");
-      }
-      if (!this.options.url) {
-        throw new Error("No URL provided.");
-      }
-      if (this.options.acceptedFiles && this.options.acceptedMimeTypes) {
-        throw new Error("You can't provide both 'acceptedFiles' and 'acceptedMimeTypes'. 'acceptedMimeTypes' is deprecated.");
-      }
-      if (this.options.acceptedMimeTypes) {
-        this.options.acceptedFiles = this.options.acceptedMimeTypes;
-        delete this.options.acceptedMimeTypes;
-      }
-      this.options.method = this.options.method.toUpperCase();
-      if ((fallback = this.getExistingFallback()) && fallback.parentNode) {
-        fallback.parentNode.removeChild(fallback);
-      }
-      if (this.options.previewsContainer) {
-        this.previewsContainer = Dropzone.getElement(this.options.previewsContainer, "previewsContainer");
-      } else {
-        this.previewsContainer = this.element;
-      }
-      if (this.options.clickable) {
-        if (this.options.clickable === true) {
-          this.clickableElements = [this.element];
-        } else {
-          this.clickableElements = Dropzone.getElements(this.options.clickable, "clickable");
-        }
-      }
-      this.init();
-    }
-
-    Dropzone.prototype.getAcceptedFiles = function() {
-      var file, _i, _len, _ref, _results;
-      _ref = this.files;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        file = _ref[_i];
-        if (file.accepted) {
-          _results.push(file);
-        }
-      }
-      return _results;
-    };
-
-    Dropzone.prototype.getRejectedFiles = function() {
-      var file, _i, _len, _ref, _results;
-      _ref = this.files;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        file = _ref[_i];
-        if (!file.accepted) {
-          _results.push(file);
-        }
-      }
-      return _results;
-    };
-
-    Dropzone.prototype.getQueuedFiles = function() {
-      var file, _i, _len, _ref, _results;
-      _ref = this.files;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        file = _ref[_i];
-        if (file.status === Dropzone.QUEUED) {
-          _results.push(file);
-        }
-      }
-      return _results;
-    };
-
-    Dropzone.prototype.getUploadingFiles = function() {
-      var file, _i, _len, _ref, _results;
-      _ref = this.files;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        file = _ref[_i];
-        if (file.status === Dropzone.UPLOADING) {
-          _results.push(file);
-        }
-      }
-      return _results;
-    };
-
-    Dropzone.prototype.init = function() {
-      var eventName, noPropagation, setupHiddenFileInput, _i, _len, _ref, _ref1,
-        _this = this;
-      if (this.element.tagName === "form") {
-        this.element.setAttribute("enctype", "multipart/form-data");
-      }
-      if (this.element.classList.contains("dropzone") && !this.element.querySelector(".dz-message")) {
-        this.element.appendChild(Dropzone.createElement("<div class=\"dz-default dz-message\"><span>" + this.options.dictDefaultMessage + "</span></div>"));
-      }
-      if (this.clickableElements.length) {
-        setupHiddenFileInput = function() {
-          if (_this.hiddenFileInput) {
-            document.body.removeChild(_this.hiddenFileInput);
-          }
-          _this.hiddenFileInput = document.createElement("input");
-          _this.hiddenFileInput.setAttribute("type", "file");
-          if ((_this.options.maxFiles == null) || _this.options.maxFiles > 1) {
-            _this.hiddenFileInput.setAttribute("multiple", "multiple");
-          }
-          if (_this.options.acceptedFiles != null) {
-            _this.hiddenFileInput.setAttribute("accept", _this.options.acceptedFiles);
-          }
-          _this.hiddenFileInput.style.visibility = "hidden";
-          _this.hiddenFileInput.style.position = "absolute";
-          _this.hiddenFileInput.style.top = "0";
-          _this.hiddenFileInput.style.left = "0";
-          _this.hiddenFileInput.style.height = "0";
-          _this.hiddenFileInput.style.width = "0";
-          document.body.appendChild(_this.hiddenFileInput);
-          return _this.hiddenFileInput.addEventListener("change", function() {
-            var file, files, _i, _len;
-            files = _this.hiddenFileInput.files;
-            if (files.length) {
-              for (_i = 0, _len = files.length; _i < _len; _i++) {
-                file = files[_i];
-                _this.addFile(file);
-              }
-            }
-            return setupHiddenFileInput();
-          });
-        };
-        setupHiddenFileInput();
-      }
-      this.URL = (_ref = window.URL) != null ? _ref : window.webkitURL;
-      _ref1 = this.events;
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        eventName = _ref1[_i];
-        this.on(eventName, this.options[eventName]);
-      }
-      this.on("uploadprogress", function() {
-        return _this.updateTotalUploadProgress();
-      });
-      this.on("removedfile", function() {
-        return _this.updateTotalUploadProgress();
-      });
-      this.on("canceled", function(file) {
-        return _this.emit("complete", file);
-      });
-      this.on("complete", function(file) {
-        if (_this.getUploadingFiles().length === 0 && _this.getQueuedFiles().length === 0) {
-          return setTimeout((function() {
-            return _this.emit("queuecomplete");
-          }), 0);
-        }
-      });
-      noPropagation = function(e) {
-        e.stopPropagation();
-        if (e.preventDefault) {
-          return e.preventDefault();
-        } else {
-          return e.returnValue = false;
-        }
-      };
-      this.listeners = [
-        {
-          element: this.element,
-          events: {
-            "dragstart": function(e) {
-              return _this.emit("dragstart", e);
-            },
-            "dragenter": function(e) {
-              noPropagation(e);
-              return _this.emit("dragenter", e);
-            },
-            "dragover": function(e) {
-              var efct;
-              try {
-                efct = e.dataTransfer.effectAllowed;
-              } catch (_error) {}
-              e.dataTransfer.dropEffect = 'move' === efct || 'linkMove' === efct ? 'move' : 'copy';
-              noPropagation(e);
-              return _this.emit("dragover", e);
-            },
-            "dragleave": function(e) {
-              return _this.emit("dragleave", e);
-            },
-            "drop": function(e) {
-              noPropagation(e);
-              return _this.drop(e);
-            },
-            "dragend": function(e) {
-              return _this.emit("dragend", e);
-            }
-          }
-        }
-      ];
-      this.clickableElements.forEach(function(clickableElement) {
-        return _this.listeners.push({
-          element: clickableElement,
-          events: {
-            "click": function(evt) {
-              if ((clickableElement !== _this.element) || (evt.target === _this.element || Dropzone.elementInside(evt.target, _this.element.querySelector(".dz-message")))) {
-                return _this.hiddenFileInput.click();
-              }
-            }
-          }
-        });
-      });
-      this.enable();
-      return this.options.init.call(this);
-    };
-
-    Dropzone.prototype.destroy = function() {
-      var _ref;
-      this.disable();
-      this.removeAllFiles(true);
-      if ((_ref = this.hiddenFileInput) != null ? _ref.parentNode : void 0) {
-        this.hiddenFileInput.parentNode.removeChild(this.hiddenFileInput);
-        this.hiddenFileInput = null;
-      }
-      delete this.element.dropzone;
-      return Dropzone.instances.splice(Dropzone.instances.indexOf(this), 1);
-    };
-
-    Dropzone.prototype.updateTotalUploadProgress = function() {
-      var acceptedFiles, file, totalBytes, totalBytesSent, totalUploadProgress, _i, _len, _ref;
-      totalBytesSent = 0;
-      totalBytes = 0;
-      acceptedFiles = this.getAcceptedFiles();
-      if (acceptedFiles.length) {
-        _ref = this.getAcceptedFiles();
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          file = _ref[_i];
-          totalBytesSent += file.upload.bytesSent;
-          totalBytes += file.upload.total;
-        }
-        totalUploadProgress = 100 * totalBytesSent / totalBytes;
-      } else {
-        totalUploadProgress = 100;
-      }
-      return this.emit("totaluploadprogress", totalUploadProgress, totalBytes, totalBytesSent);
-    };
-
-    Dropzone.prototype.getFallbackForm = function() {
-      var existingFallback, fields, fieldsString, form;
-      if (existingFallback = this.getExistingFallback()) {
-        return existingFallback;
-      }
-      fieldsString = "<div class=\"dz-fallback\">";
-      if (this.options.dictFallbackText) {
-        fieldsString += "<p>" + this.options.dictFallbackText + "</p>";
-      }
-      fieldsString += "<input type=\"file\" name=\"" + this.options.paramName + (this.options.uploadMultiple ? "[]" : "") + "\" " + (this.options.uploadMultiple ? 'multiple="multiple"' : void 0) + " /><input type=\"submit\" value=\"Upload!\"></div>";
-      fields = Dropzone.createElement(fieldsString);
-      if (this.element.tagName !== "FORM") {
-        form = Dropzone.createElement("<form action=\"" + this.options.url + "\" enctype=\"multipart/form-data\" method=\"" + this.options.method + "\"></form>");
-        form.appendChild(fields);
-      } else {
-        this.element.setAttribute("enctype", "multipart/form-data");
-        this.element.setAttribute("method", this.options.method);
-      }
-      return form != null ? form : fields;
-    };
-
-    Dropzone.prototype.getExistingFallback = function() {
-      var fallback, getFallback, tagName, _i, _len, _ref;
-      getFallback = function(elements) {
-        var el, _i, _len;
-        for (_i = 0, _len = elements.length; _i < _len; _i++) {
-          el = elements[_i];
-          if (/(^| )fallback($| )/.test(el.className)) {
-            return el;
-          }
-        }
-      };
-      _ref = ["div", "form"];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        tagName = _ref[_i];
-        if (fallback = getFallback(this.element.getElementsByTagName(tagName))) {
-          return fallback;
-        }
-      }
-    };
-
-    Dropzone.prototype.setupEventListeners = function() {
-      var elementListeners, event, listener, _i, _len, _ref, _results;
-      _ref = this.listeners;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        elementListeners = _ref[_i];
-        _results.push((function() {
-          var _ref1, _results1;
-          _ref1 = elementListeners.events;
-          _results1 = [];
-          for (event in _ref1) {
-            listener = _ref1[event];
-            _results1.push(elementListeners.element.addEventListener(event, listener, false));
-          }
-          return _results1;
-        })());
-      }
-      return _results;
-    };
-
-    Dropzone.prototype.removeEventListeners = function() {
-      var elementListeners, event, listener, _i, _len, _ref, _results;
-      _ref = this.listeners;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        elementListeners = _ref[_i];
-        _results.push((function() {
-          var _ref1, _results1;
-          _ref1 = elementListeners.events;
-          _results1 = [];
-          for (event in _ref1) {
-            listener = _ref1[event];
-            _results1.push(elementListeners.element.removeEventListener(event, listener, false));
-          }
-          return _results1;
-        })());
-      }
-      return _results;
-    };
-
-    Dropzone.prototype.disable = function() {
-      var file, _i, _len, _ref, _results;
-      this.clickableElements.forEach(function(element) {
-        return element.classList.remove("dz-clickable");
-      });
-      this.removeEventListeners();
-      _ref = this.files;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        file = _ref[_i];
-        _results.push(this.cancelUpload(file));
-      }
-      return _results;
-    };
-
-    Dropzone.prototype.enable = function() {
-      this.clickableElements.forEach(function(element) {
-        return element.classList.add("dz-clickable");
-      });
-      return this.setupEventListeners();
-    };
-
-    Dropzone.prototype.filesize = function(size) {
-      var string;
-      if (size >= 1024 * 1024 * 1024 * 1024 / 10) {
-        size = size / (1024 * 1024 * 1024 * 1024 / 10);
-        string = "TiB";
-      } else if (size >= 1024 * 1024 * 1024 / 10) {
-        size = size / (1024 * 1024 * 1024 / 10);
-        string = "GiB";
-      } else if (size >= 1024 * 1024 / 10) {
-        size = size / (1024 * 1024 / 10);
-        string = "MiB";
-      } else if (size >= 1024 / 10) {
-        size = size / (1024 / 10);
-        string = "KiB";
-      } else {
-        size = size * 10;
-        string = "b";
-      }
-      return "<strong>" + (Math.round(size) / 10) + "</strong> " + string;
-    };
-
-    Dropzone.prototype._updateMaxFilesReachedClass = function() {
-      if ((this.options.maxFiles != null) && this.getAcceptedFiles().length >= this.options.maxFiles) {
-        if (this.getAcceptedFiles().length === this.options.maxFiles) {
-          this.emit('maxfilesreached', this.files);
-        }
-        return this.element.classList.add("dz-max-files-reached");
-      } else {
-        return this.element.classList.remove("dz-max-files-reached");
-      }
-    };
-
-    Dropzone.prototype.drop = function(e) {
-      var files, items;
-      if (!e.dataTransfer) {
-        return;
-      }
-      this.emit("drop", e);
-      files = e.dataTransfer.files;
-      if (files.length) {
-        items = e.dataTransfer.items;
-        if (items && items.length && (items[0].webkitGetAsEntry != null)) {
-          this._addFilesFromItems(items);
-        } else {
-          this.handleFiles(files);
-        }
-      }
-    };
-
-    Dropzone.prototype.paste = function(e) {
-      var items, _ref;
-      if ((e != null ? (_ref = e.clipboardData) != null ? _ref.items : void 0 : void 0) == null) {
-        return;
-      }
-      this.emit("paste", e);
-      items = e.clipboardData.items;
-      if (items.length) {
-        return this._addFilesFromItems(items);
-      }
-    };
-
-    Dropzone.prototype.handleFiles = function(files) {
-      var file, _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = files.length; _i < _len; _i++) {
-        file = files[_i];
-        _results.push(this.addFile(file));
-      }
-      return _results;
-    };
-
-    Dropzone.prototype._addFilesFromItems = function(items) {
-      var entry, item, _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = items.length; _i < _len; _i++) {
-        item = items[_i];
-        if ((item.webkitGetAsEntry != null) && (entry = item.webkitGetAsEntry())) {
-          if (entry.isFile) {
-            _results.push(this.addFile(item.getAsFile()));
-          } else if (entry.isDirectory) {
-            _results.push(this._addFilesFromDirectory(entry, entry.name));
-          } else {
-            _results.push(void 0);
-          }
-        } else if (item.getAsFile != null) {
-          if ((item.kind == null) || item.kind === "file") {
-            _results.push(this.addFile(item.getAsFile()));
-          } else {
-            _results.push(void 0);
-          }
-        } else {
-          _results.push(void 0);
-        }
-      }
-      return _results;
-    };
-
-    Dropzone.prototype._addFilesFromDirectory = function(directory, path) {
-      var dirReader, entriesReader,
-        _this = this;
-      dirReader = directory.createReader();
-      entriesReader = function(entries) {
-        var entry, _i, _len;
-        for (_i = 0, _len = entries.length; _i < _len; _i++) {
-          entry = entries[_i];
-          if (entry.isFile) {
-            entry.file(function(file) {
-              if (_this.options.ignoreHiddenFiles && file.name.substring(0, 1) === '.') {
-                return;
-              }
-              file.fullPath = "" + path + "/" + file.name;
-              return _this.addFile(file);
-            });
-          } else if (entry.isDirectory) {
-            _this._addFilesFromDirectory(entry, "" + path + "/" + entry.name);
-          }
-        }
-      };
-      return dirReader.readEntries(entriesReader, function(error) {
-        return typeof console !== "undefined" && console !== null ? typeof console.log === "function" ? console.log(error) : void 0 : void 0;
-      });
-    };
-
-    Dropzone.prototype.accept = function(file, done) {
-      if (file.size > this.options.maxFilesize * 1024 * 1024) {
-        return done(this.options.dictFileTooBig.replace("{{filesize}}", Math.round(file.size / 1024 / 10.24) / 100).replace("{{maxFilesize}}", this.options.maxFilesize));
-      } else if (!Dropzone.isValidFile(file, this.options.acceptedFiles)) {
-        return done(this.options.dictInvalidFileType);
-      } else if ((this.options.maxFiles != null) && this.getAcceptedFiles().length >= this.options.maxFiles) {
-        done(this.options.dictMaxFilesExceeded.replace("{{maxFiles}}", this.options.maxFiles));
-        return this.emit("maxfilesexceeded", file);
-      } else {
-        return this.options.accept.call(this, file, done);
-      }
-    };
-
-    Dropzone.prototype.addFile = function(file) {
-      var _this = this;
-      file.upload = {
-        progress: 0,
-        total: file.size,
-        bytesSent: 0
-      };
-      this.files.push(file);
-      file.status = Dropzone.ADDED;
-      this.emit("addedfile", file);
-      this._enqueueThumbnail(file);
-      return this.accept(file, function(error) {
-        if (error) {
-          file.accepted = false;
-          _this._errorProcessing([file], error);
-        } else {
-          _this.enqueueFile(file);
-        }
-        return _this._updateMaxFilesReachedClass();
-      });
-    };
-
-    Dropzone.prototype.enqueueFiles = function(files) {
-      var file, _i, _len;
-      for (_i = 0, _len = files.length; _i < _len; _i++) {
-        file = files[_i];
-        this.enqueueFile(file);
-      }
-      return null;
-    };
-
-    Dropzone.prototype.enqueueFile = function(file) {
-      var _this = this;
-      file.accepted = true;
-      if (file.status === Dropzone.ADDED) {
-        file.status = Dropzone.QUEUED;
-        if (this.options.autoProcessQueue) {
-          return setTimeout((function() {
-            return _this.processQueue();
-          }), 0);
-        }
-      } else {
-        throw new Error("This file can't be queued because it has already been processed or was rejected.");
-      }
-    };
-
-    Dropzone.prototype._thumbnailQueue = [];
-
-    Dropzone.prototype._processingThumbnail = false;
-
-    Dropzone.prototype._enqueueThumbnail = function(file) {
-      var _this = this;
-      if (this.options.createImageThumbnails && file.type.match(/image.*/) && file.size <= this.options.maxThumbnailFilesize * 1024 * 1024) {
-        this._thumbnailQueue.push(file);
-        return setTimeout((function() {
-          return _this._processThumbnailQueue();
-        }), 0);
-      }
-    };
-
-    Dropzone.prototype._processThumbnailQueue = function() {
-      var _this = this;
-      if (this._processingThumbnail || this._thumbnailQueue.length === 0) {
-        return;
-      }
-      this._processingThumbnail = true;
-      return this.createThumbnail(this._thumbnailQueue.shift(), function() {
-        _this._processingThumbnail = false;
-        return _this._processThumbnailQueue();
-      });
-    };
-
-    Dropzone.prototype.removeFile = function(file) {
-      if (file.status === Dropzone.UPLOADING) {
-        this.cancelUpload(file);
-      }
-      this.files = without(this.files, file);
-      this.emit("removedfile", file);
-      if (this.files.length === 0) {
-        return this.emit("reset");
-      }
-    };
-
-    Dropzone.prototype.removeAllFiles = function(cancelIfNecessary) {
-      var file, _i, _len, _ref;
-      if (cancelIfNecessary == null) {
-        cancelIfNecessary = false;
-      }
-      _ref = this.files.slice();
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        file = _ref[_i];
-        if (file.status !== Dropzone.UPLOADING || cancelIfNecessary) {
-          this.removeFile(file);
-        }
-      }
-      return null;
-    };
-
-    Dropzone.prototype.createThumbnail = function(file, callback) {
-      var fileReader,
-        _this = this;
-      fileReader = new FileReader;
-      fileReader.onload = function() {
-        var img;
-        img = document.createElement("img");
-        img.onload = function() {
-          var canvas, ctx, resizeInfo, thumbnail, _ref, _ref1, _ref2, _ref3;
-          file.width = img.width;
-          file.height = img.height;
-          resizeInfo = _this.options.resize.call(_this, file);
-          if (resizeInfo.trgWidth == null) {
-            resizeInfo.trgWidth = _this.options.thumbnailWidth;
-          }
-          if (resizeInfo.trgHeight == null) {
-            resizeInfo.trgHeight = _this.options.thumbnailHeight;
-          }
-          canvas = document.createElement("canvas");
-          ctx = canvas.getContext("2d");
-          canvas.width = resizeInfo.trgWidth;
-          canvas.height = resizeInfo.trgHeight;
-          drawImageIOSFix(ctx, img, (_ref = resizeInfo.srcX) != null ? _ref : 0, (_ref1 = resizeInfo.srcY) != null ? _ref1 : 0, resizeInfo.srcWidth, resizeInfo.srcHeight, (_ref2 = resizeInfo.trgX) != null ? _ref2 : 0, (_ref3 = resizeInfo.trgY) != null ? _ref3 : 0, resizeInfo.trgWidth, resizeInfo.trgHeight);
-          thumbnail = canvas.toDataURL("image/png");
-          _this.emit("thumbnail", file, thumbnail);
-          if (callback != null) {
-            return callback();
-          }
-        };
-        return img.src = fileReader.result;
-      };
-      return fileReader.readAsDataURL(file);
-    };
-
-    Dropzone.prototype.processQueue = function() {
-      var i, parallelUploads, processingLength, queuedFiles;
-      parallelUploads = this.options.parallelUploads;
-      processingLength = this.getUploadingFiles().length;
-      i = processingLength;
-      if (processingLength >= parallelUploads) {
-        return;
-      }
-      queuedFiles = this.getQueuedFiles();
-      if (!(queuedFiles.length > 0)) {
-        return;
-      }
-      if (this.options.uploadMultiple) {
-        return this.processFiles(queuedFiles.slice(0, parallelUploads - processingLength));
-      } else {
-        while (i < parallelUploads) {
-          if (!queuedFiles.length) {
-            return;
-          }
-          this.processFile(queuedFiles.shift());
-          i++;
-        }
-      }
-    };
-
-    Dropzone.prototype.processFile = function(file) {
-      return this.processFiles([file]);
-    };
-
-    Dropzone.prototype.processFiles = function(files) {
-      var file, _i, _len;
-      for (_i = 0, _len = files.length; _i < _len; _i++) {
-        file = files[_i];
-        file.processing = true;
-        file.status = Dropzone.UPLOADING;
-        this.emit("processing", file);
-      }
-      if (this.options.uploadMultiple) {
-        this.emit("processingmultiple", files);
-      }
-      return this.uploadFiles(files);
-    };
-
-    Dropzone.prototype._getFilesWithXhr = function(xhr) {
-      var file, files;
-      return files = (function() {
-        var _i, _len, _ref, _results;
-        _ref = this.files;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          file = _ref[_i];
-          if (file.xhr === xhr) {
-            _results.push(file);
-          }
-        }
-        return _results;
-      }).call(this);
-    };
-
-    Dropzone.prototype.cancelUpload = function(file) {
-      var groupedFile, groupedFiles, _i, _j, _len, _len1, _ref;
-      if (file.status === Dropzone.UPLOADING) {
-        groupedFiles = this._getFilesWithXhr(file.xhr);
-        for (_i = 0, _len = groupedFiles.length; _i < _len; _i++) {
-          groupedFile = groupedFiles[_i];
-          groupedFile.status = Dropzone.CANCELED;
-        }
-        file.xhr.abort();
-        for (_j = 0, _len1 = groupedFiles.length; _j < _len1; _j++) {
-          groupedFile = groupedFiles[_j];
-          this.emit("canceled", groupedFile);
-        }
-        if (this.options.uploadMultiple) {
-          this.emit("canceledmultiple", groupedFiles);
-        }
-      } else if ((_ref = file.status) === Dropzone.ADDED || _ref === Dropzone.QUEUED) {
-        file.status = Dropzone.CANCELED;
-        this.emit("canceled", file);
-        if (this.options.uploadMultiple) {
-          this.emit("canceledmultiple", [file]);
-        }
-      }
-      if (this.options.autoProcessQueue) {
-        return this.processQueue();
-      }
-    };
-
-    Dropzone.prototype.uploadFile = function(file) {
-      return this.uploadFiles([file]);
-    };
-
-    Dropzone.prototype.uploadFiles = function(files) {
-      var file, formData, handleError, headerName, headerValue, headers, input, inputName, inputType, key, option, progressObj, response, updateProgress, value, xhr, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3, _ref4,
-        _this = this;
-      xhr = new XMLHttpRequest();
-      for (_i = 0, _len = files.length; _i < _len; _i++) {
-        file = files[_i];
-        file.xhr = xhr;
-      }
-      xhr.open(this.options.method, this.options.url, true);
-      xhr.withCredentials = !!this.options.withCredentials;
-      response = null;
-      handleError = function() {
-        var _j, _len1, _results;
-        _results = [];
-        for (_j = 0, _len1 = files.length; _j < _len1; _j++) {
-          file = files[_j];
-          _results.push(_this._errorProcessing(files, response || _this.options.dictResponseError.replace("{{statusCode}}", xhr.status), xhr));
-        }
-        return _results;
-      };
-      updateProgress = function(e) {
-        var allFilesFinished, progress, _j, _k, _l, _len1, _len2, _len3, _results;
-        if (e != null) {
-          progress = 100 * e.loaded / e.total;
-          for (_j = 0, _len1 = files.length; _j < _len1; _j++) {
-            file = files[_j];
-            file.upload = {
-              progress: progress,
-              total: e.total,
-              bytesSent: e.loaded
-            };
-          }
-        } else {
-          allFilesFinished = true;
-          progress = 100;
-          for (_k = 0, _len2 = files.length; _k < _len2; _k++) {
-            file = files[_k];
-            if (!(file.upload.progress === 100 && file.upload.bytesSent === file.upload.total)) {
-              allFilesFinished = false;
-            }
-            file.upload.progress = progress;
-            file.upload.bytesSent = file.upload.total;
-          }
-          if (allFilesFinished) {
-            return;
-          }
-        }
-        _results = [];
-        for (_l = 0, _len3 = files.length; _l < _len3; _l++) {
-          file = files[_l];
-          _results.push(_this.emit("uploadprogress", file, progress, file.upload.bytesSent));
-        }
-        return _results;
-      };
-      xhr.onload = function(e) {
-        var _ref;
-        if (files[0].status === Dropzone.CANCELED) {
-          return;
-        }
-        if (xhr.readyState !== 4) {
-          return;
-        }
-        response = xhr.responseText;
-        if (xhr.getResponseHeader("content-type") && ~xhr.getResponseHeader("content-type").indexOf("application/json")) {
-          try {
-            response = JSON.parse(response);
-          } catch (_error) {
-            e = _error;
-            response = "Invalid JSON response from server.";
-          }
-        }
-        updateProgress();
-        if (!((200 <= (_ref = xhr.status) && _ref < 300))) {
-          return handleError();
-        } else {
-          return _this._finished(files, response, e);
-        }
-      };
-      xhr.onerror = function() {
-        if (files[0].status === Dropzone.CANCELED) {
-          return;
-        }
-        return handleError();
-      };
-      progressObj = (_ref = xhr.upload) != null ? _ref : xhr;
-      progressObj.onprogress = updateProgress;
-      headers = {
-        "Accept": "application/json",
-        "Cache-Control": "no-cache",
-        "X-Requested-With": "XMLHttpRequest"
-      };
-      if (this.options.headers) {
-        extend(headers, this.options.headers);
-      }
-      for (headerName in headers) {
-        headerValue = headers[headerName];
-        xhr.setRequestHeader(headerName, headerValue);
-      }
-      formData = new FormData();
-      if (this.options.params) {
-        _ref1 = this.options.params;
-        for (key in _ref1) {
-          value = _ref1[key];
-          formData.append(key, value);
-        }
-      }
-      for (_j = 0, _len1 = files.length; _j < _len1; _j++) {
-        file = files[_j];
-        this.emit("sending", file, xhr, formData);
-      }
-      if (this.options.uploadMultiple) {
-        this.emit("sendingmultiple", files, xhr, formData);
-      }
-      if (this.element.tagName === "FORM") {
-        _ref2 = this.element.querySelectorAll("input, textarea, select, button");
-        for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-          input = _ref2[_k];
-          inputName = input.getAttribute("name");
-          inputType = input.getAttribute("type");
-          if (input.tagName === "SELECT" && input.hasAttribute("multiple")) {
-            _ref3 = input.options;
-            for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-              option = _ref3[_l];
-              if (option.selected) {
-                formData.append(inputName, option.value);
-              }
-            }
-          } else if (!inputType || ((_ref4 = inputType.toLowerCase()) !== "checkbox" && _ref4 !== "radio") || input.checked) {
-            formData.append(inputName, input.value);
-          }
-        }
-      }
-      for (_m = 0, _len4 = files.length; _m < _len4; _m++) {
-        file = files[_m];
-        formData.append("" + this.options.paramName + (this.options.uploadMultiple ? "[]" : ""), file, file.name);
-      }
-      return xhr.send(formData);
-    };
-
-    Dropzone.prototype._finished = function(files, responseText, e) {
-      var file, _i, _len;
-      for (_i = 0, _len = files.length; _i < _len; _i++) {
-        file = files[_i];
-        file.status = Dropzone.SUCCESS;
-        this.emit("success", file, responseText, e);
-        this.emit("complete", file);
-      }
-      if (this.options.uploadMultiple) {
-        this.emit("successmultiple", files, responseText, e);
-        this.emit("completemultiple", files);
-      }
-      if (this.options.autoProcessQueue) {
-        return this.processQueue();
-      }
-    };
-
-    Dropzone.prototype._errorProcessing = function(files, message, xhr) {
-      var file, _i, _len;
-      for (_i = 0, _len = files.length; _i < _len; _i++) {
-        file = files[_i];
-        file.status = Dropzone.ERROR;
-        this.emit("error", file, message, xhr);
-        this.emit("complete", file);
-      }
-      if (this.options.uploadMultiple) {
-        this.emit("errormultiple", files, message, xhr);
-        this.emit("completemultiple", files);
-      }
-      if (this.options.autoProcessQueue) {
-        return this.processQueue();
-      }
-    };
-
-    return Dropzone;
-
-  })(Em);
-
-  Dropzone.version = "3.8.4";
-
-  Dropzone.options = {};
-
-  Dropzone.optionsForElement = function(element) {
-    if (element.getAttribute("id")) {
-      return Dropzone.options[camelize(element.getAttribute("id"))];
-    } else {
-      return void 0;
-    }
-  };
-
-  Dropzone.instances = [];
-
-  Dropzone.forElement = function(element) {
-    if (typeof element === "string") {
-      element = document.querySelector(element);
-    }
-    if ((element != null ? element.dropzone : void 0) == null) {
-      throw new Error("No Dropzone found for given element. This is probably because you're trying to access it before Dropzone had the time to initialize. Use the `init` option to setup any additional observers on your Dropzone.");
-    }
-    return element.dropzone;
-  };
-
-  Dropzone.autoDiscover = true;
-
-  Dropzone.discover = function() {
-    var checkElements, dropzone, dropzones, _i, _len, _results;
-    if (document.querySelectorAll) {
-      dropzones = document.querySelectorAll(".dropzone");
-    } else {
-      dropzones = [];
-      checkElements = function(elements) {
-        var el, _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = elements.length; _i < _len; _i++) {
-          el = elements[_i];
-          if (/(^| )dropzone($| )/.test(el.className)) {
-            _results.push(dropzones.push(el));
-          } else {
-            _results.push(void 0);
-          }
-        }
-        return _results;
-      };
-      checkElements(document.getElementsByTagName("div"));
-      checkElements(document.getElementsByTagName("form"));
-    }
-    _results = [];
-    for (_i = 0, _len = dropzones.length; _i < _len; _i++) {
-      dropzone = dropzones[_i];
-      if (Dropzone.optionsForElement(dropzone) !== false) {
-        _results.push(new Dropzone(dropzone));
-      } else {
-        _results.push(void 0);
-      }
-    }
-    return _results;
-  };
-
-  Dropzone.blacklistedBrowsers = [/opera.*Macintosh.*version\/12/i];
-
-  Dropzone.isBrowserSupported = function() {
-    var capableBrowser, regex, _i, _len, _ref;
-    capableBrowser = true;
-    if (window.File && window.FileReader && window.FileList && window.Blob && window.FormData && document.querySelector) {
-      if (!("classList" in document.createElement("a"))) {
-        capableBrowser = false;
-      } else {
-        _ref = Dropzone.blacklistedBrowsers;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          regex = _ref[_i];
-          if (regex.test(navigator.userAgent)) {
-            capableBrowser = false;
-            continue;
-          }
-        }
-      }
-    } else {
-      capableBrowser = false;
-    }
-    return capableBrowser;
-  };
-
-  without = function(list, rejectedItem) {
-    var item, _i, _len, _results;
-    _results = [];
-    for (_i = 0, _len = list.length; _i < _len; _i++) {
-      item = list[_i];
-      if (item !== rejectedItem) {
-        _results.push(item);
-      }
-    }
-    return _results;
-  };
-
-  camelize = function(str) {
-    return str.replace(/[\-_](\w)/g, function(match) {
-      return match[1].toUpperCase();
-    });
-  };
-
-  Dropzone.createElement = function(string) {
-    var div;
-    div = document.createElement("div");
-    div.innerHTML = string;
-    return div.childNodes[0];
-  };
-
-  Dropzone.elementInside = function(element, container) {
-    if (element === container) {
-      return true;
-    }
-    while (element = element.parentNode) {
-      if (element === container) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  Dropzone.getElement = function(el, name) {
-    var element;
-    if (typeof el === "string") {
-      element = document.querySelector(el);
-    } else if (el.nodeType != null) {
-      element = el;
-    }
-    if (element == null) {
-      throw new Error("Invalid `" + name + "` option provided. Please provide a CSS selector or a plain HTML element.");
-    }
-    return element;
-  };
-
-  Dropzone.getElements = function(els, name) {
-    var e, el, elements, _i, _j, _len, _len1, _ref;
-    if (els instanceof Array) {
-      elements = [];
-      try {
-        for (_i = 0, _len = els.length; _i < _len; _i++) {
-          el = els[_i];
-          elements.push(this.getElement(el, name));
-        }
-      } catch (_error) {
-        e = _error;
-        elements = null;
-      }
-    } else if (typeof els === "string") {
-      elements = [];
-      _ref = document.querySelectorAll(els);
-      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-        el = _ref[_j];
-        elements.push(el);
-      }
-    } else if (els.nodeType != null) {
-      elements = [els];
-    }
-    if (!((elements != null) && elements.length)) {
-      throw new Error("Invalid `" + name + "` option provided. Please provide a CSS selector, a plain HTML element or a list of those.");
-    }
-    return elements;
-  };
-
-  Dropzone.confirm = function(question, accepted, rejected) {
-    if (window.confirm(question)) {
-      return accepted();
-    } else if (rejected != null) {
-      return rejected();
-    }
-  };
-
-  Dropzone.isValidFile = function(file, acceptedFiles) {
-    var baseMimeType, mimeType, validType, _i, _len;
-    if (!acceptedFiles) {
-      return true;
-    }
-    acceptedFiles = acceptedFiles.split(",");
-    mimeType = file.type;
-    baseMimeType = mimeType.replace(/\/.*$/, "");
-    for (_i = 0, _len = acceptedFiles.length; _i < _len; _i++) {
-      validType = acceptedFiles[_i];
-      validType = validType.trim();
-      if (validType.charAt(0) === ".") {
-        if (file.name.toLowerCase().indexOf(validType.toLowerCase(), file.name.length - validType.length) !== -1) {
-          return true;
-        }
-      } else if (/\/\*$/.test(validType)) {
-        if (baseMimeType === validType.replace(/\/.*$/, "")) {
-          return true;
-        }
-      } else {
-        if (mimeType === validType) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
-
-  if (typeof jQuery !== "undefined" && jQuery !== null) {
-    jQuery.fn.dropzone = function(options) {
-      return this.each(function() {
-        return new Dropzone(this, options);
-      });
-    };
-  }
-
-  if (typeof module !== "undefined" && module !== null) {
-    module.exports = Dropzone;
-  } else {
-    window.Dropzone = Dropzone;
-  }
-
-  Dropzone.ADDED = "added";
-
-  Dropzone.QUEUED = "queued";
-
-  Dropzone.ACCEPTED = Dropzone.QUEUED;
-
-  Dropzone.UPLOADING = "uploading";
-
-  Dropzone.PROCESSING = Dropzone.UPLOADING;
-
-  Dropzone.CANCELED = "canceled";
-
-  Dropzone.ERROR = "error";
-
-  Dropzone.SUCCESS = "success";
-
-  /*
-  
-  Bugfix for iOS 6 and 7
-  Source: http://stackoverflow.com/questions/11929099/html5-canvas-drawimage-ratio-bug-ios
-  based on the work of https://github.com/stomita/ios-imagefile-megapixel
-  */
-
-
-  detectVerticalSquash = function(img) {
-    var alpha, canvas, ctx, data, ey, ih, iw, py, ratio, sy;
-    iw = img.naturalWidth;
-    ih = img.naturalHeight;
-    canvas = document.createElement("canvas");
-    canvas.width = 1;
-    canvas.height = ih;
-    ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0);
-    data = ctx.getImageData(0, 0, 1, ih).data;
-    sy = 0;
-    ey = ih;
-    py = ih;
-    while (py > sy) {
-      alpha = data[(py - 1) * 4 + 3];
-      if (alpha === 0) {
-        ey = py;
-      } else {
-        sy = py;
-      }
-      py = (ey + sy) >> 1;
-    }
-    ratio = py / ih;
-    if (ratio === 0) {
-      return 1;
-    } else {
-      return ratio;
-    }
-  };
-
-  drawImageIOSFix = function(ctx, img, sx, sy, sw, sh, dx, dy, dw, dh) {
-    var vertSquashRatio;
-    vertSquashRatio = detectVerticalSquash(img);
-    return ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh / vertSquashRatio);
-  };
-
-  /*
-  # contentloaded.js
-  #
-  # Author: Diego Perini (diego.perini at gmail.com)
-  # Summary: cross-browser wrapper for DOMContentLoaded
-  # Updated: 20101020
-  # License: MIT
-  # Version: 1.2
-  #
-  # URL:
-  # http://javascript.nwbox.com/ContentLoaded/
-  # http://javascript.nwbox.com/ContentLoaded/MIT-LICENSE
-  */
-
-
-  contentLoaded = function(win, fn) {
-    var add, doc, done, init, poll, pre, rem, root, top;
-    done = false;
-    top = true;
-    doc = win.document;
-    root = doc.documentElement;
-    add = (doc.addEventListener ? "addEventListener" : "attachEvent");
-    rem = (doc.addEventListener ? "removeEventListener" : "detachEvent");
-    pre = (doc.addEventListener ? "" : "on");
-    init = function(e) {
-      if (e.type === "readystatechange" && doc.readyState !== "complete") {
-        return;
-      }
-      (e.type === "load" ? win : doc)[rem](pre + e.type, init, false);
-      if (!done && (done = true)) {
-        return fn.call(win, e.type || e);
-      }
-    };
-    poll = function() {
-      var e;
-      try {
-        root.doScroll("left");
-      } catch (_error) {
-        e = _error;
-        setTimeout(poll, 50);
-        return;
-      }
-      return init("poll");
-    };
-    if (doc.readyState !== "complete") {
-      if (doc.createEventObject && root.doScroll) {
-        try {
-          top = !win.frameElement;
-        } catch (_error) {}
-        if (top) {
-          poll();
-        }
-      }
-      doc[add](pre + "DOMContentLoaded", init, false);
-      doc[add](pre + "readystatechange", init, false);
-      return win[add](pre + "load", init, false);
-    }
-  };
-
-  Dropzone._autoDiscoverFunction = function() {
-    if (Dropzone.autoDiscover) {
-      return Dropzone.discover();
-    }
-  };
-
-  contentLoaded(window, Dropzone._autoDiscoverFunction);
-
-}).call(this);
-
-//     return module.exports;
-// }));;
 /**
  * Super simple wysiwyg editor on Bootstrap v0.5.1
  * http://hackerwins.github.io/summernote/
@@ -53223,1902 +43312,1888 @@ Emitter.prototype.hasListeners = function(event){
 }return{from:i,to:j}};c._getContainer=function(a,b,d,e){var f;return f=null!=e||c.is(a,"object")?a:A.doc.getElementById(a),null!=f?f.tagName?null==b?{container:f,width:f.style.pixelWidth||f.offsetWidth,height:f.style.pixelHeight||f.offsetHeight}:{container:f,width:b,height:d}:{container:1,x:a,y:b,width:d,height:e}:void 0},c.pathToRelative=Db,c._engine={},c.path2curve=Kb,c.matrix=function(a,b,c,d,e,f){return new o(a,b,c,d,e,f)},function(a){function b(a){return a[0]*a[0]+a[1]*a[1]}function d(a){var c=N.sqrt(b(a));a[0]&&(a[0]/=c),a[1]&&(a[1]/=c)}a.add=function(a,b,c,d,e,f){var g,h,i,j,k=[[],[],[]],l=[[this.a,this.c,this.e],[this.b,this.d,this.f],[0,0,1]],m=[[a,c,e],[b,d,f],[0,0,1]];for(a&&a instanceof o&&(m=[[a.a,a.c,a.e],[a.b,a.d,a.f],[0,0,1]]),g=0;3>g;g++)for(h=0;3>h;h++){for(j=0,i=0;3>i;i++)j+=l[g][i]*m[i][h];k[g][h]=j}this.a=k[0][0],this.b=k[1][0],this.c=k[0][1],this.d=k[1][1],this.e=k[0][2],this.f=k[1][2]},a.invert=function(){var a=this,b=a.a*a.d-a.b*a.c;return new o(a.d/b,-a.b/b,-a.c/b,a.a/b,(a.c*a.f-a.d*a.e)/b,(a.b*a.e-a.a*a.f)/b)},a.clone=function(){return new o(this.a,this.b,this.c,this.d,this.e,this.f)},a.translate=function(a,b){this.add(1,0,0,1,a,b)},a.scale=function(a,b,c,d){null==b&&(b=a),(c||d)&&this.add(1,0,0,1,c,d),this.add(a,0,0,b,0,0),(c||d)&&this.add(1,0,0,1,-c,-d)},a.rotate=function(a,b,d){a=c.rad(a),b=b||0,d=d||0;var e=+N.cos(a).toFixed(9),f=+N.sin(a).toFixed(9);this.add(e,f,-f,e,b,d),this.add(1,0,0,1,-b,-d)},a.x=function(a,b){return a*this.a+b*this.c+this.e},a.y=function(a,b){return a*this.b+b*this.d+this.f},a.get=function(a){return+this[I.fromCharCode(97+a)].toFixed(4)},a.toString=function(){return c.svg?"matrix("+[this.get(0),this.get(1),this.get(2),this.get(3),this.get(4),this.get(5)].join()+")":[this.get(0),this.get(2),this.get(1),this.get(3),0,0].join()},a.toFilter=function(){return"progid:DXImageTransform.Microsoft.Matrix(M11="+this.get(0)+", M12="+this.get(2)+", M21="+this.get(1)+", M22="+this.get(3)+", Dx="+this.get(4)+", Dy="+this.get(5)+", sizingmethod='auto expand')"},a.offset=function(){return[this.e.toFixed(4),this.f.toFixed(4)]},a.split=function(){var a={};a.dx=this.e,a.dy=this.f;var e=[[this.a,this.c],[this.b,this.d]];a.scalex=N.sqrt(b(e[0])),d(e[0]),a.shear=e[0][0]*e[1][0]+e[0][1]*e[1][1],e[1]=[e[1][0]-e[0][0]*a.shear,e[1][1]-e[0][1]*a.shear],a.scaley=N.sqrt(b(e[1])),d(e[1]),a.shear/=a.scaley;var f=-e[0][1],g=e[1][1];return 0>g?(a.rotate=c.deg(N.acos(g)),0>f&&(a.rotate=360-a.rotate)):a.rotate=c.deg(N.asin(f)),a.isSimple=!(+a.shear.toFixed(9)||a.scalex.toFixed(9)!=a.scaley.toFixed(9)&&a.rotate),a.isSuperSimple=!+a.shear.toFixed(9)&&a.scalex.toFixed(9)==a.scaley.toFixed(9)&&!a.rotate,a.noRotation=!+a.shear.toFixed(9)&&!a.rotate,a},a.toTransformString=function(a){var b=a||this[J]();return b.isSimple?(b.scalex=+b.scalex.toFixed(4),b.scaley=+b.scaley.toFixed(4),b.rotate=+b.rotate.toFixed(4),(b.dx||b.dy?"t"+[b.dx,b.dy]:G)+(1!=b.scalex||1!=b.scaley?"s"+[b.scalex,b.scaley,0,0]:G)+(b.rotate?"r"+[b.rotate,0,0]:G)):"m"+[this.get(0),this.get(1),this.get(2),this.get(3),this.get(4),this.get(5)]}}(o.prototype);var Qb=navigator.userAgent.match(/Version\/(.*?)\s/)||navigator.userAgent.match(/Chrome\/(\d+)/);v.safari="Apple Computer, Inc."==navigator.vendor&&(Qb&&Qb[1]<4||"iP"==navigator.platform.slice(0,2))||"Google Inc."==navigator.vendor&&Qb&&Qb[1]<8?function(){var a=this.rect(-99,-99,this.width+99,this.height+99).attr({stroke:"none"});setTimeout(function(){a.remove()})}:mb;for(var Rb=function(){this.returnValue=!1},Sb=function(){return this.originalEvent.preventDefault()},Tb=function(){this.cancelBubble=!0},Ub=function(){return this.originalEvent.stopPropagation()},Vb=function(a){var b=A.doc.documentElement.scrollTop||A.doc.body.scrollTop,c=A.doc.documentElement.scrollLeft||A.doc.body.scrollLeft;return{x:a.clientX+c,y:a.clientY+b}},Wb=function(){return A.doc.addEventListener?function(a,b,c,d){var e=function(a){var b=Vb(a);return c.call(d,a,b.x,b.y)};if(a.addEventListener(b,e,!1),F&&L[b]){var f=function(b){for(var e=Vb(b),f=b,g=0,h=b.targetTouches&&b.targetTouches.length;h>g;g++)if(b.targetTouches[g].target==a){b=b.targetTouches[g],b.originalEvent=f,b.preventDefault=Sb,b.stopPropagation=Ub;break}return c.call(d,b,e.x,e.y)};a.addEventListener(L[b],f,!1)}return function(){return a.removeEventListener(b,e,!1),F&&L[b]&&a.removeEventListener(L[b],e,!1),!0}}:A.doc.attachEvent?function(a,b,c,d){var e=function(a){a=a||A.win.event;var b=A.doc.documentElement.scrollTop||A.doc.body.scrollTop,e=A.doc.documentElement.scrollLeft||A.doc.body.scrollLeft,f=a.clientX+e,g=a.clientY+b;return a.preventDefault=a.preventDefault||Rb,a.stopPropagation=a.stopPropagation||Tb,c.call(d,a,f,g)};a.attachEvent("on"+b,e);var f=function(){return a.detachEvent("on"+b,e),!0};return f}:void 0}(),Xb=[],Yb=function(a){for(var c,d=a.clientX,e=a.clientY,f=A.doc.documentElement.scrollTop||A.doc.body.scrollTop,g=A.doc.documentElement.scrollLeft||A.doc.body.scrollLeft,h=Xb.length;h--;){if(c=Xb[h],F&&a.touches){for(var i,j=a.touches.length;j--;)if(i=a.touches[j],i.identifier==c.el._drag.id){d=i.clientX,e=i.clientY,(a.originalEvent?a.originalEvent:a).preventDefault();break}}else a.preventDefault();var k,l=c.el.node,m=l.nextSibling,n=l.parentNode,o=l.style.display;A.win.opera&&n.removeChild(l),l.style.display="none",k=c.el.paper.getElementByPoint(d,e),l.style.display=o,A.win.opera&&(m?n.insertBefore(l,m):n.appendChild(l)),k&&b("raphael.drag.over."+c.el.id,c.el,k),d+=g,e+=f,b("raphael.drag.move."+c.el.id,c.move_scope||c.el,d-c.el._drag.x,e-c.el._drag.y,d,e,a)}},Zb=function(a){c.unmousemove(Yb).unmouseup(Zb);for(var d,e=Xb.length;e--;)d=Xb[e],d.el._drag={},b("raphael.drag.end."+d.el.id,d.end_scope||d.start_scope||d.move_scope||d.el,a);Xb=[]},$b=c.el={},_b=K.length;_b--;)!function(a){c[a]=$b[a]=function(b,d){return c.is(b,"function")&&(this.events=this.events||[],this.events.push({name:a,f:b,unbind:Wb(this.shape||this.node||A.doc,a,b,d||this)})),this},c["un"+a]=$b["un"+a]=function(b){for(var d=this.events||[],e=d.length;e--;)d[e].name!=a||!c.is(b,"undefined")&&d[e].f!=b||(d[e].unbind(),d.splice(e,1),!d.length&&delete this.events);return this}}(K[_b]);$b.data=function(a,d){var e=kb[this.id]=kb[this.id]||{};if(0==arguments.length)return e;if(1==arguments.length){if(c.is(a,"object")){for(var f in a)a[z](f)&&this.data(f,a[f]);return this}return b("raphael.data.get."+this.id,this,e[a],a),e[a]}return e[a]=d,b("raphael.data.set."+this.id,this,d,a),this},$b.removeData=function(a){return null==a?kb[this.id]={}:kb[this.id]&&delete kb[this.id][a],this},$b.getData=function(){return d(kb[this.id]||{})},$b.hover=function(a,b,c,d){return this.mouseover(a,c).mouseout(b,d||c)},$b.unhover=function(a,b){return this.unmouseover(a).unmouseout(b)};var ac=[];$b.drag=function(a,d,e,f,g,h){function i(i){(i.originalEvent||i).preventDefault();var j=i.clientX,k=i.clientY,l=A.doc.documentElement.scrollTop||A.doc.body.scrollTop,m=A.doc.documentElement.scrollLeft||A.doc.body.scrollLeft;if(this._drag.id=i.identifier,F&&i.touches)for(var n,o=i.touches.length;o--;)if(n=i.touches[o],this._drag.id=n.identifier,n.identifier==this._drag.id){j=n.clientX,k=n.clientY;break}this._drag.x=j+m,this._drag.y=k+l,!Xb.length&&c.mousemove(Yb).mouseup(Zb),Xb.push({el:this,move_scope:f,start_scope:g,end_scope:h}),d&&b.on("raphael.drag.start."+this.id,d),a&&b.on("raphael.drag.move."+this.id,a),e&&b.on("raphael.drag.end."+this.id,e),b("raphael.drag.start."+this.id,g||f||this,i.clientX+m,i.clientY+l,i)}return this._drag={},ac.push({el:this,start:i}),this.mousedown(i),this},$b.onDragOver=function(a){a?b.on("raphael.drag.over."+this.id,a):b.unbind("raphael.drag.over."+this.id)},$b.undrag=function(){for(var a=ac.length;a--;)ac[a].el==this&&(this.unmousedown(ac[a].start),ac.splice(a,1),b.unbind("raphael.drag.*."+this.id));!ac.length&&c.unmousemove(Yb).unmouseup(Zb),Xb=[]},v.circle=function(a,b,d){var e=c._engine.circle(this,a||0,b||0,d||0);return this.__set__&&this.__set__.push(e),e},v.rect=function(a,b,d,e,f){var g=c._engine.rect(this,a||0,b||0,d||0,e||0,f||0);return this.__set__&&this.__set__.push(g),g},v.ellipse=function(a,b,d,e){var f=c._engine.ellipse(this,a||0,b||0,d||0,e||0);return this.__set__&&this.__set__.push(f),f},v.path=function(a){a&&!c.is(a,U)&&!c.is(a[0],V)&&(a+=G);var b=c._engine.path(c.format[D](c,arguments),this);return this.__set__&&this.__set__.push(b),b},v.image=function(a,b,d,e,f){var g=c._engine.image(this,a||"about:blank",b||0,d||0,e||0,f||0);return this.__set__&&this.__set__.push(g),g},v.text=function(a,b,d){var e=c._engine.text(this,a||0,b||0,I(d));return this.__set__&&this.__set__.push(e),e},v.set=function(a){!c.is(a,"array")&&(a=Array.prototype.splice.call(arguments,0,arguments.length));var b=new mc(a);return this.__set__&&this.__set__.push(b),b.paper=this,b.type="set",b},v.setStart=function(a){this.__set__=a||this.set()},v.setFinish=function(){var a=this.__set__;return delete this.__set__,a},v.setSize=function(a,b){return c._engine.setSize.call(this,a,b)},v.setViewBox=function(a,b,d,e,f){return c._engine.setViewBox.call(this,a,b,d,e,f)},v.top=v.bottom=null,v.raphael=c;var bc=function(a){var b=a.getBoundingClientRect(),c=a.ownerDocument,d=c.body,e=c.documentElement,f=e.clientTop||d.clientTop||0,g=e.clientLeft||d.clientLeft||0,h=b.top+(A.win.pageYOffset||e.scrollTop||d.scrollTop)-f,i=b.left+(A.win.pageXOffset||e.scrollLeft||d.scrollLeft)-g;return{y:h,x:i}};v.getElementByPoint=function(a,b){var c=this,d=c.canvas,e=A.doc.elementFromPoint(a,b);if(A.win.opera&&"svg"==e.tagName){var f=bc(d),g=d.createSVGRect();g.x=a-f.x,g.y=b-f.y,g.width=g.height=1;var h=d.getIntersectionList(g,null);h.length&&(e=h[h.length-1])}if(!e)return null;for(;e.parentNode&&e!=d.parentNode&&!e.raphael;)e=e.parentNode;return e==c.canvas.parentNode&&(e=d),e=e&&e.raphael?c.getById(e.raphaelid):null},v.getElementsByBBox=function(a){var b=this.set();return this.forEach(function(d){c.isBBoxIntersect(d.getBBox(),a)&&b.push(d)}),b},v.getById=function(a){for(var b=this.bottom;b;){if(b.id==a)return b;b=b.next}return null},v.forEach=function(a,b){for(var c=this.bottom;c;){if(a.call(b,c)===!1)return this;c=c.next}return this},v.getElementsByPoint=function(a,b){var c=this.set();return this.forEach(function(d){d.isPointInside(a,b)&&c.push(d)}),c},$b.isPointInside=function(a,b){var d=this.realPath=qb[this.type](this);return this.attr("transform")&&this.attr("transform").length&&(d=c.transformPath(d,this.attr("transform"))),c.isPointInsidePath(d,a,b)},$b.getBBox=function(a){if(this.removed)return{};var b=this._;return a?((b.dirty||!b.bboxwt)&&(this.realPath=qb[this.type](this),b.bboxwt=Bb(this.realPath),b.bboxwt.toString=p,b.dirty=0),b.bboxwt):((b.dirty||b.dirtyT||!b.bbox)&&((b.dirty||!this.realPath)&&(b.bboxwt=0,this.realPath=qb[this.type](this)),b.bbox=Bb(rb(this.realPath,this.matrix)),b.bbox.toString=p,b.dirty=b.dirtyT=0),b.bbox)},$b.clone=function(){if(this.removed)return null;var a=this.paper[this.type]().attr(this.attr());return this.__set__&&this.__set__.push(a),a},$b.glow=function(a){if("text"==this.type)return null;a=a||{};var b={width:(a.width||10)+(+this.attr("stroke-width")||1),fill:a.fill||!1,opacity:a.opacity||.5,offsetx:a.offsetx||0,offsety:a.offsety||0,color:a.color||"#000"},c=b.width/2,d=this.paper,e=d.set(),f=this.realPath||qb[this.type](this);f=this.matrix?rb(f,this.matrix):f;for(var g=1;c+1>g;g++)e.push(d.path(f).attr({stroke:b.color,fill:b.fill?b.color:"none","stroke-linejoin":"round","stroke-linecap":"round","stroke-width":+(b.width/c*g).toFixed(3),opacity:+(b.opacity/c).toFixed(3)}));return e.insertBefore(this).translate(b.offsetx,b.offsety)};var cc=function(a,b,d,e,f,g,h,i,l){return null==l?j(a,b,d,e,f,g,h,i):c.findDotsAtSegment(a,b,d,e,f,g,h,i,k(a,b,d,e,f,g,h,i,l))},dc=function(a,b){return function(d,e,f){d=Kb(d);for(var g,h,i,j,k,l="",m={},n=0,o=0,p=d.length;p>o;o++){if(i=d[o],"M"==i[0])g=+i[1],h=+i[2];else{if(j=cc(g,h,i[1],i[2],i[3],i[4],i[5],i[6]),n+j>e){if(b&&!m.start){if(k=cc(g,h,i[1],i[2],i[3],i[4],i[5],i[6],e-n),l+=["C"+k.start.x,k.start.y,k.m.x,k.m.y,k.x,k.y],f)return l;m.start=l,l=["M"+k.x,k.y+"C"+k.n.x,k.n.y,k.end.x,k.end.y,i[5],i[6]].join(),n+=j,g=+i[5],h=+i[6];continue}if(!a&&!b)return k=cc(g,h,i[1],i[2],i[3],i[4],i[5],i[6],e-n),{x:k.x,y:k.y,alpha:k.alpha}}n+=j,g=+i[5],h=+i[6]}l+=i.shift()+i}return m.end=l,k=a?n:b?m:c.findDotsAtSegment(g,h,i[0],i[1],i[2],i[3],i[4],i[5],1),k.alpha&&(k={x:k.x,y:k.y,alpha:k.alpha}),k}},ec=dc(1),fc=dc(),gc=dc(0,1);c.getTotalLength=ec,c.getPointAtLength=fc,c.getSubpath=function(a,b,c){if(this.getTotalLength(a)-c<1e-6)return gc(a,b).end;var d=gc(a,c,1);return b?gc(d,b).end:d},$b.getTotalLength=function(){var a=this.getPath();if(a)return this.node.getTotalLength?this.node.getTotalLength():ec(a)},$b.getPointAtLength=function(a){var b=this.getPath();if(b)return fc(b,a)},$b.getPath=function(){var a,b=c._getPath[this.type];if("text"!=this.type&&"set"!=this.type)return b&&(a=b(this)),a},$b.getSubpath=function(a,b){var d=this.getPath();if(d)return c.getSubpath(d,a,b)};var hc=c.easing_formulas={linear:function(a){return a},"<":function(a){return R(a,1.7)},">":function(a){return R(a,.48)},"<>":function(a){var b=.48-a/1.04,c=N.sqrt(.1734+b*b),d=c-b,e=R(Q(d),1/3)*(0>d?-1:1),f=-c-b,g=R(Q(f),1/3)*(0>f?-1:1),h=e+g+.5;return 3*(1-h)*h*h+h*h*h},backIn:function(a){var b=1.70158;return a*a*((b+1)*a-b)},backOut:function(a){a-=1;var b=1.70158;return a*a*((b+1)*a+b)+1},elastic:function(a){return a==!!a?a:R(2,-10*a)*N.sin(2*(a-.075)*S/.3)+1},bounce:function(a){var b,c=7.5625,d=2.75;return 1/d>a?b=c*a*a:2/d>a?(a-=1.5/d,b=c*a*a+.75):2.5/d>a?(a-=2.25/d,b=c*a*a+.9375):(a-=2.625/d,b=c*a*a+.984375),b}};hc.easeIn=hc["ease-in"]=hc["<"],hc.easeOut=hc["ease-out"]=hc[">"],hc.easeInOut=hc["ease-in-out"]=hc["<>"],hc["back-in"]=hc.backIn,hc["back-out"]=hc.backOut;var ic=[],jc=a.requestAnimationFrame||a.webkitRequestAnimationFrame||a.mozRequestAnimationFrame||a.oRequestAnimationFrame||a.msRequestAnimationFrame||function(a){setTimeout(a,16)},kc=function(){for(var a=+new Date,d=0;d<ic.length;d++){var e=ic[d];if(!e.el.removed&&!e.paused){var f,g,h=a-e.start,i=e.ms,j=e.easing,k=e.from,l=e.diff,m=e.to,n=(e.t,e.el),o={},p={};if(e.initstatus?(h=(e.initstatus*e.anim.top-e.prev)/(e.percent-e.prev)*i,e.status=e.initstatus,delete e.initstatus,e.stop&&ic.splice(d--,1)):e.status=(e.prev+(e.percent-e.prev)*(h/i))/e.anim.top,!(0>h))if(i>h){var q=j(h/i);for(var r in k)if(k[z](r)){switch(db[r]){case T:f=+k[r]+q*i*l[r];break;case"colour":f="rgb("+[lc($(k[r].r+q*i*l[r].r)),lc($(k[r].g+q*i*l[r].g)),lc($(k[r].b+q*i*l[r].b))].join(",")+")";break;case"path":f=[];for(var t=0,u=k[r].length;u>t;t++){f[t]=[k[r][t][0]];for(var v=1,w=k[r][t].length;w>v;v++)f[t][v]=+k[r][t][v]+q*i*l[r][t][v];f[t]=f[t].join(H)}f=f.join(H);break;case"transform":if(l[r].real)for(f=[],t=0,u=k[r].length;u>t;t++)for(f[t]=[k[r][t][0]],v=1,w=k[r][t].length;w>v;v++)f[t][v]=k[r][t][v]+q*i*l[r][t][v];else{var x=function(a){return+k[r][a]+q*i*l[r][a]};f=[["m",x(0),x(1),x(2),x(3),x(4),x(5)]]}break;case"csv":if("clip-rect"==r)for(f=[],t=4;t--;)f[t]=+k[r][t]+q*i*l[r][t];break;default:var y=[][E](k[r]);for(f=[],t=n.paper.customAttributes[r].length;t--;)f[t]=+y[t]+q*i*l[r][t]}o[r]=f}n.attr(o),function(a,c,d){setTimeout(function(){b("raphael.anim.frame."+a,c,d)})}(n.id,n,e.anim)}else{if(function(a,d,e){setTimeout(function(){b("raphael.anim.frame."+d.id,d,e),b("raphael.anim.finish."+d.id,d,e),c.is(a,"function")&&a.call(d)})}(e.callback,n,e.anim),n.attr(m),ic.splice(d--,1),e.repeat>1&&!e.next){for(g in m)m[z](g)&&(p[g]=e.totalOrigin[g]);e.el.attr(p),s(e.anim,e.el,e.anim.percents[0],null,e.totalOrigin,e.repeat-1)}e.next&&!e.stop&&s(e.anim,e.el,e.next,null,e.totalOrigin,e.repeat)}}}c.svg&&n&&n.paper&&n.paper.safari(),ic.length&&jc(kc)},lc=function(a){return a>255?255:0>a?0:a};$b.animateWith=function(a,b,d,e,f,g){var h=this;if(h.removed)return g&&g.call(h),h;var i=d instanceof r?d:c.animation(d,e,f,g);s(i,h,i.percents[0],null,h.attr());for(var j=0,k=ic.length;k>j;j++)if(ic[j].anim==b&&ic[j].el==a){ic[k-1].start=ic[j].start;break}return h},$b.onAnimation=function(a){return a?b.on("raphael.anim.frame."+this.id,a):b.unbind("raphael.anim.frame."+this.id),this},r.prototype.delay=function(a){var b=new r(this.anim,this.ms);return b.times=this.times,b.del=+a||0,b},r.prototype.repeat=function(a){var b=new r(this.anim,this.ms);return b.del=this.del,b.times=N.floor(O(a,0))||1,b},c.animation=function(a,b,d,e){if(a instanceof r)return a;(c.is(d,"function")||!d)&&(e=e||d||null,d=null),a=Object(a),b=+b||0;var f,g,h={};for(g in a)a[z](g)&&_(g)!=g&&_(g)+"%"!=g&&(f=!0,h[g]=a[g]);return f?(d&&(h.easing=d),e&&(h.callback=e),new r({100:h},b)):new r(a,b)},$b.animate=function(a,b,d,e){var f=this;if(f.removed)return e&&e.call(f),f;var g=a instanceof r?a:c.animation(a,b,d,e);return s(g,f,g.percents[0],null,f.attr()),f},$b.setTime=function(a,b){return a&&null!=b&&this.status(a,P(b,a.ms)/a.ms),this},$b.status=function(a,b){var c,d,e=[],f=0;if(null!=b)return s(a,this,-1,P(b,1)),this;for(c=ic.length;c>f;f++)if(d=ic[f],d.el.id==this.id&&(!a||d.anim==a)){if(a)return d.status;e.push({anim:d.anim,status:d.status})}return a?0:e},$b.pause=function(a){for(var c=0;c<ic.length;c++)ic[c].el.id!=this.id||a&&ic[c].anim!=a||b("raphael.anim.pause."+this.id,this,ic[c].anim)!==!1&&(ic[c].paused=!0);return this},$b.resume=function(a){for(var c=0;c<ic.length;c++)if(ic[c].el.id==this.id&&(!a||ic[c].anim==a)){var d=ic[c];b("raphael.anim.resume."+this.id,this,d.anim)!==!1&&(delete d.paused,this.status(d.anim,d.status))}return this},$b.stop=function(a){for(var c=0;c<ic.length;c++)ic[c].el.id!=this.id||a&&ic[c].anim!=a||b("raphael.anim.stop."+this.id,this,ic[c].anim)!==!1&&ic.splice(c--,1);return this},b.on("raphael.remove",t),b.on("raphael.clear",t),$b.toString=function(){return"Raphaël’s object"};var mc=function(a){if(this.items=[],this.length=0,this.type="set",a)for(var b=0,c=a.length;c>b;b++)!a[b]||a[b].constructor!=$b.constructor&&a[b].constructor!=mc||(this[this.items.length]=this.items[this.items.length]=a[b],this.length++)},nc=mc.prototype;nc.push=function(){for(var a,b,c=0,d=arguments.length;d>c;c++)a=arguments[c],!a||a.constructor!=$b.constructor&&a.constructor!=mc||(b=this.items.length,this[b]=this.items[b]=a,this.length++);return this},nc.pop=function(){return this.length&&delete this[this.length--],this.items.pop()},nc.forEach=function(a,b){for(var c=0,d=this.items.length;d>c;c++)if(a.call(b,this.items[c],c)===!1)return this;return this};for(var oc in $b)$b[z](oc)&&(nc[oc]=function(a){return function(){var b=arguments;return this.forEach(function(c){c[a][D](c,b)})}}(oc));return nc.attr=function(a,b){if(a&&c.is(a,V)&&c.is(a[0],"object"))for(var d=0,e=a.length;e>d;d++)this.items[d].attr(a[d]);else for(var f=0,g=this.items.length;g>f;f++)this.items[f].attr(a,b);return this},nc.clear=function(){for(;this.length;)this.pop()},nc.splice=function(a,b){a=0>a?O(this.length+a,0):a,b=O(0,P(this.length-a,b));var c,d=[],e=[],f=[];for(c=2;c<arguments.length;c++)f.push(arguments[c]);for(c=0;b>c;c++)e.push(this[a+c]);for(;c<this.length-a;c++)d.push(this[a+c]);var g=f.length;for(c=0;c<g+d.length;c++)this.items[a+c]=this[a+c]=g>c?f[c]:d[c-g];for(c=this.items.length=this.length-=b-g;this[c];)delete this[c++];return new mc(e)},nc.exclude=function(a){for(var b=0,c=this.length;c>b;b++)if(this[b]==a)return this.splice(b,1),!0},nc.animate=function(a,b,d,e){(c.is(d,"function")||!d)&&(e=d||null);var f,g,h=this.items.length,i=h,j=this;if(!h)return this;e&&(g=function(){!--h&&e.call(j)}),d=c.is(d,U)?d:g;var k=c.animation(a,b,d,g);for(f=this.items[--i].animate(k);i--;)this.items[i]&&!this.items[i].removed&&this.items[i].animateWith(f,k,k),this.items[i]&&!this.items[i].removed||h--;return this},nc.insertAfter=function(a){for(var b=this.items.length;b--;)this.items[b].insertAfter(a);return this},nc.getBBox=function(){for(var a=[],b=[],c=[],d=[],e=this.items.length;e--;)if(!this.items[e].removed){var f=this.items[e].getBBox();a.push(f.x),b.push(f.y),c.push(f.x+f.width),d.push(f.y+f.height)}return a=P[D](0,a),b=P[D](0,b),c=O[D](0,c),d=O[D](0,d),{x:a,y:b,x2:c,y2:d,width:c-a,height:d-b}},nc.clone=function(a){a=this.paper.set();for(var b=0,c=this.items.length;c>b;b++)a.push(this.items[b].clone());return a},nc.toString=function(){return"Raphaël‘s set"},nc.glow=function(a){var b=this.paper.set();return this.forEach(function(c){var d=c.glow(a);null!=d&&d.forEach(function(a){b.push(a)})}),b},nc.isPointInside=function(a,b){var c=!1;return this.forEach(function(d){return d.isPointInside(a,b)?(console.log("runned"),c=!0,!1):void 0}),c},c.registerFont=function(a){if(!a.face)return a;this.fonts=this.fonts||{};var b={w:a.w,face:{},glyphs:{}},c=a.face["font-family"];for(var d in a.face)a.face[z](d)&&(b.face[d]=a.face[d]);if(this.fonts[c]?this.fonts[c].push(b):this.fonts[c]=[b],!a.svg){b.face["units-per-em"]=ab(a.face["units-per-em"],10);for(var e in a.glyphs)if(a.glyphs[z](e)){var f=a.glyphs[e];if(b.glyphs[e]={w:f.w,k:{},d:f.d&&"M"+f.d.replace(/[mlcxtrv]/g,function(a){return{l:"L",c:"C",x:"z",t:"m",r:"l",v:"c"}[a]||"M"})+"z"},f.k)for(var g in f.k)f[z](g)&&(b.glyphs[e].k[g]=f.k[g])}}return a},v.getFont=function(a,b,d,e){if(e=e||"normal",d=d||"normal",b=+b||{normal:400,bold:700,lighter:300,bolder:800}[b]||400,c.fonts){var f=c.fonts[a];if(!f){var g=new RegExp("(^|\\s)"+a.replace(/[^\w\d\s+!~.:_-]/g,G)+"(\\s|$)","i");for(var h in c.fonts)if(c.fonts[z](h)&&g.test(h)){f=c.fonts[h];break}}var i;if(f)for(var j=0,k=f.length;k>j&&(i=f[j],i.face["font-weight"]!=b||i.face["font-style"]!=d&&i.face["font-style"]||i.face["font-stretch"]!=e);j++);return i}},v.print=function(a,b,d,e,f,g,h,i){g=g||"middle",h=O(P(h||0,1),-1),i=O(P(i||1,3),1);var j,k=I(d)[J](G),l=0,m=0,n=G;if(c.is(e,"string")&&(e=this.getFont(e)),e){j=(f||16)/e.face["units-per-em"];for(var o=e.face.bbox[J](w),p=+o[0],q=o[3]-o[1],r=0,s=+o[1]+("baseline"==g?q+ +e.face.descent:q/2),t=0,u=k.length;u>t;t++){if("\n"==k[t])l=0,x=0,m=0,r+=q*i;else{var v=m&&e.glyphs[k[t-1]]||{},x=e.glyphs[k[t]];l+=m?(v.w||e.w)+(v.k&&v.k[k[t]]||0)+e.w*h:0,m=1}x&&x.d&&(n+=c.transformPath(x.d,["t",l*j,r*j,"s",j,j,p,s,"t",(a-p)/j,(b-s)/j]))}}return this.path(n).attr({fill:"#000",stroke:"none"})},v.add=function(a){if(c.is(a,"array"))for(var b,d=this.set(),e=0,f=a.length;f>e;e++)b=a[e]||{},x[z](b.type)&&d.push(this[b.type]().attr(b));return d},c.format=function(a,b){var d=c.is(b,V)?[0][E](b):arguments;return a&&c.is(a,U)&&d.length-1&&(a=a.replace(y,function(a,b){return null==d[++b]?G:d[b]})),a||G},c.fullfill=function(){var a=/\{([^\}]+)\}/g,b=/(?:(?:^|\.)(.+?)(?=\[|\.|$|\()|\[('|")(.+?)\2\])(\(\))?/g,c=function(a,c,d){var e=d;return c.replace(b,function(a,b,c,d,f){b=b||d,e&&(b in e&&(e=e[b]),"function"==typeof e&&f&&(e=e()))}),e=(null==e||e==d?a:e)+""};return function(b,d){return String(b).replace(a,function(a,b){return c(a,b,d)})}}(),c.ninja=function(){return B.was?A.win.Raphael=B.is:delete Raphael,c},c.st=nc,function(a,b,d){function e(){/in/.test(a.readyState)?setTimeout(e,9):c.eve("raphael.DOMload")}null==a.readyState&&a.addEventListener&&(a.addEventListener(b,d=function(){a.removeEventListener(b,d,!1),a.readyState="complete"},!1),a.readyState="loading"),e()}(document,"DOMContentLoaded"),b.on("raphael.DOMload",function(){u=!0}),function(){if(c.svg){var a="hasOwnProperty",b=String,d=parseFloat,e=parseInt,f=Math,g=f.max,h=f.abs,i=f.pow,j=/[, ]+/,k=c.eve,l="",m=" ",n="http://www.w3.org/1999/xlink",o={block:"M5,0 0,2.5 5,5z",classic:"M5,0 0,2.5 5,5 3.5,3 3.5,2z",diamond:"M2.5,0 5,2.5 2.5,5 0,2.5z",open:"M6,1 1,3.5 6,6",oval:"M2.5,0A2.5,2.5,0,0,1,2.5,5 2.5,2.5,0,0,1,2.5,0z"},p={};c.toString=function(){return"Your browser supports SVG.\nYou are running Raphaël "+this.version};var q=function(d,e){if(e){"string"==typeof d&&(d=q(d));for(var f in e)e[a](f)&&("xlink:"==f.substring(0,6)?d.setAttributeNS(n,f.substring(6),b(e[f])):d.setAttribute(f,b(e[f])))}else d=c._g.doc.createElementNS("http://www.w3.org/2000/svg",d),d.style&&(d.style.webkitTapHighlightColor="rgba(0,0,0,0)");return d},r=function(a,e){var j="linear",k=a.id+e,m=.5,n=.5,o=a.node,p=a.paper,r=o.style,s=c._g.doc.getElementById(k);if(!s){if(e=b(e).replace(c._radial_gradient,function(a,b,c){if(j="radial",b&&c){m=d(b),n=d(c);var e=2*(n>.5)-1;i(m-.5,2)+i(n-.5,2)>.25&&(n=f.sqrt(.25-i(m-.5,2))*e+.5)&&.5!=n&&(n=n.toFixed(5)-1e-5*e)}return l}),e=e.split(/\s*\-\s*/),"linear"==j){var t=e.shift();if(t=-d(t),isNaN(t))return null;var u=[0,0,f.cos(c.rad(t)),f.sin(c.rad(t))],v=1/(g(h(u[2]),h(u[3]))||1);u[2]*=v,u[3]*=v,u[2]<0&&(u[0]=-u[2],u[2]=0),u[3]<0&&(u[1]=-u[3],u[3]=0)}var w=c._parseDots(e);if(!w)return null;if(k=k.replace(/[\(\)\s,\xb0#]/g,"_"),a.gradient&&k!=a.gradient.id&&(p.defs.removeChild(a.gradient),delete a.gradient),!a.gradient){s=q(j+"Gradient",{id:k}),a.gradient=s,q(s,"radial"==j?{fx:m,fy:n}:{x1:u[0],y1:u[1],x2:u[2],y2:u[3],gradientTransform:a.matrix.invert()}),p.defs.appendChild(s);for(var x=0,y=w.length;y>x;x++)s.appendChild(q("stop",{offset:w[x].offset?w[x].offset:x?"100%":"0%","stop-color":w[x].color||"#fff"}))}}return q(o,{fill:"url(#"+k+")",opacity:1,"fill-opacity":1}),r.fill=l,r.opacity=1,r.fillOpacity=1,1},s=function(a){var b=a.getBBox(1);q(a.pattern,{patternTransform:a.matrix.invert()+" translate("+b.x+","+b.y+")"})},t=function(d,e,f){if("path"==d.type){for(var g,h,i,j,k,m=b(e).toLowerCase().split("-"),n=d.paper,r=f?"end":"start",s=d.node,t=d.attrs,u=t["stroke-width"],v=m.length,w="classic",x=3,y=3,z=5;v--;)switch(m[v]){case"block":case"classic":case"oval":case"diamond":case"open":case"none":w=m[v];break;case"wide":y=5;break;case"narrow":y=2;break;case"long":x=5;break;case"short":x=2}if("open"==w?(x+=2,y+=2,z+=2,i=1,j=f?4:1,k={fill:"none",stroke:t.stroke}):(j=i=x/2,k={fill:t.stroke,stroke:"none"}),d._.arrows?f?(d._.arrows.endPath&&p[d._.arrows.endPath]--,d._.arrows.endMarker&&p[d._.arrows.endMarker]--):(d._.arrows.startPath&&p[d._.arrows.startPath]--,d._.arrows.startMarker&&p[d._.arrows.startMarker]--):d._.arrows={},"none"!=w){var A="raphael-marker-"+w,B="raphael-marker-"+r+w+x+y;c._g.doc.getElementById(A)?p[A]++:(n.defs.appendChild(q(q("path"),{"stroke-linecap":"round",d:o[w],id:A})),p[A]=1);var C,D=c._g.doc.getElementById(B);D?(p[B]++,C=D.getElementsByTagName("use")[0]):(D=q(q("marker"),{id:B,markerHeight:y,markerWidth:x,orient:"auto",refX:j,refY:y/2}),C=q(q("use"),{"xlink:href":"#"+A,transform:(f?"rotate(180 "+x/2+" "+y/2+") ":l)+"scale("+x/z+","+y/z+")","stroke-width":(1/((x/z+y/z)/2)).toFixed(4)}),D.appendChild(C),n.defs.appendChild(D),p[B]=1),q(C,k);var E=i*("diamond"!=w&&"oval"!=w);f?(g=d._.arrows.startdx*u||0,h=c.getTotalLength(t.path)-E*u):(g=E*u,h=c.getTotalLength(t.path)-(d._.arrows.enddx*u||0)),k={},k["marker-"+r]="url(#"+B+")",(h||g)&&(k.d=c.getSubpath(t.path,g,h)),q(s,k),d._.arrows[r+"Path"]=A,d._.arrows[r+"Marker"]=B,d._.arrows[r+"dx"]=E,d._.arrows[r+"Type"]=w,d._.arrows[r+"String"]=e}else f?(g=d._.arrows.startdx*u||0,h=c.getTotalLength(t.path)-g):(g=0,h=c.getTotalLength(t.path)-(d._.arrows.enddx*u||0)),d._.arrows[r+"Path"]&&q(s,{d:c.getSubpath(t.path,g,h)}),delete d._.arrows[r+"Path"],delete d._.arrows[r+"Marker"],delete d._.arrows[r+"dx"],delete d._.arrows[r+"Type"],delete d._.arrows[r+"String"];for(k in p)if(p[a](k)&&!p[k]){var F=c._g.doc.getElementById(k);F&&F.parentNode.removeChild(F)}}},u={"":[0],none:[0],"-":[3,1],".":[1,1],"-.":[3,1,1,1],"-..":[3,1,1,1,1,1],". ":[1,3],"- ":[4,3],"--":[8,3],"- .":[4,3,1,3],"--.":[8,3,1,3],"--..":[8,3,1,3,1,3]},v=function(a,c,d){if(c=u[b(c).toLowerCase()]){for(var e=a.attrs["stroke-width"]||"1",f={round:e,square:e,butt:0}[a.attrs["stroke-linecap"]||d["stroke-linecap"]]||0,g=[],h=c.length;h--;)g[h]=c[h]*e+(h%2?1:-1)*f;q(a.node,{"stroke-dasharray":g.join(",")})}},w=function(d,f){var i=d.node,k=d.attrs,m=i.style.visibility;i.style.visibility="hidden";for(var o in f)if(f[a](o)){if(!c._availableAttrs[a](o))continue;var p=f[o];switch(k[o]=p,o){case"blur":d.blur(p);break;case"href":case"title":var u=q("title"),w=c._g.doc.createTextNode(p);u.appendChild(w),i.appendChild(u);break;case"target":var x=i.parentNode;if("a"!=x.tagName.toLowerCase()){var u=q("a");x.insertBefore(u,i),u.appendChild(i),x=u}"target"==o?x.setAttributeNS(n,"show","blank"==p?"new":p):x.setAttributeNS(n,o,p);break;case"cursor":i.style.cursor=p;break;case"transform":d.transform(p);break;case"arrow-start":t(d,p);break;case"arrow-end":t(d,p,1);break;case"clip-rect":var z=b(p).split(j);if(4==z.length){d.clip&&d.clip.parentNode.parentNode.removeChild(d.clip.parentNode);var A=q("clipPath"),B=q("rect");A.id=c.createUUID(),q(B,{x:z[0],y:z[1],width:z[2],height:z[3]}),A.appendChild(B),d.paper.defs.appendChild(A),q(i,{"clip-path":"url(#"+A.id+")"}),d.clip=B}if(!p){var C=i.getAttribute("clip-path");if(C){var D=c._g.doc.getElementById(C.replace(/(^url\(#|\)$)/g,l));D&&D.parentNode.removeChild(D),q(i,{"clip-path":l}),delete d.clip}}break;case"path":"path"==d.type&&(q(i,{d:p?k.path=c._pathToAbsolute(p):"M0,0"}),d._.dirty=1,d._.arrows&&("startString"in d._.arrows&&t(d,d._.arrows.startString),"endString"in d._.arrows&&t(d,d._.arrows.endString,1)));break;case"width":if(i.setAttribute(o,p),d._.dirty=1,!k.fx)break;o="x",p=k.x;case"x":k.fx&&(p=-k.x-(k.width||0));case"rx":if("rx"==o&&"rect"==d.type)break;case"cx":i.setAttribute(o,p),d.pattern&&s(d),d._.dirty=1;break;case"height":if(i.setAttribute(o,p),d._.dirty=1,!k.fy)break;o="y",p=k.y;case"y":k.fy&&(p=-k.y-(k.height||0));case"ry":if("ry"==o&&"rect"==d.type)break;case"cy":i.setAttribute(o,p),d.pattern&&s(d),d._.dirty=1;break;case"r":"rect"==d.type?q(i,{rx:p,ry:p}):i.setAttribute(o,p),d._.dirty=1;break;case"src":"image"==d.type&&i.setAttributeNS(n,"href",p);break;case"stroke-width":(1!=d._.sx||1!=d._.sy)&&(p/=g(h(d._.sx),h(d._.sy))||1),d.paper._vbSize&&(p*=d.paper._vbSize),i.setAttribute(o,p),k["stroke-dasharray"]&&v(d,k["stroke-dasharray"],f),d._.arrows&&("startString"in d._.arrows&&t(d,d._.arrows.startString),"endString"in d._.arrows&&t(d,d._.arrows.endString,1));break;case"stroke-dasharray":v(d,p,f);break;case"fill":var E=b(p).match(c._ISURL);if(E){A=q("pattern");var F=q("image");A.id=c.createUUID(),q(A,{x:0,y:0,patternUnits:"userSpaceOnUse",height:1,width:1}),q(F,{x:0,y:0,"xlink:href":E[1]}),A.appendChild(F),function(a){c._preload(E[1],function(){var b=this.offsetWidth,c=this.offsetHeight;q(a,{width:b,height:c}),q(F,{width:b,height:c}),d.paper.safari()})}(A),d.paper.defs.appendChild(A),q(i,{fill:"url(#"+A.id+")"}),d.pattern=A,d.pattern&&s(d);break}var G=c.getRGB(p);if(G.error){if(("circle"==d.type||"ellipse"==d.type||"r"!=b(p).charAt())&&r(d,p)){if("opacity"in k||"fill-opacity"in k){var H=c._g.doc.getElementById(i.getAttribute("fill").replace(/^url\(#|\)$/g,l));if(H){var I=H.getElementsByTagName("stop");q(I[I.length-1],{"stop-opacity":("opacity"in k?k.opacity:1)*("fill-opacity"in k?k["fill-opacity"]:1)})}}k.gradient=p,k.fill="none";break}}else delete f.gradient,delete k.gradient,!c.is(k.opacity,"undefined")&&c.is(f.opacity,"undefined")&&q(i,{opacity:k.opacity}),!c.is(k["fill-opacity"],"undefined")&&c.is(f["fill-opacity"],"undefined")&&q(i,{"fill-opacity":k["fill-opacity"]});G[a]("opacity")&&q(i,{"fill-opacity":G.opacity>1?G.opacity/100:G.opacity});case"stroke":G=c.getRGB(p),i.setAttribute(o,G.hex),"stroke"==o&&G[a]("opacity")&&q(i,{"stroke-opacity":G.opacity>1?G.opacity/100:G.opacity}),"stroke"==o&&d._.arrows&&("startString"in d._.arrows&&t(d,d._.arrows.startString),"endString"in d._.arrows&&t(d,d._.arrows.endString,1));break;case"gradient":("circle"==d.type||"ellipse"==d.type||"r"!=b(p).charAt())&&r(d,p);break;case"opacity":k.gradient&&!k[a]("stroke-opacity")&&q(i,{"stroke-opacity":p>1?p/100:p});case"fill-opacity":if(k.gradient){H=c._g.doc.getElementById(i.getAttribute("fill").replace(/^url\(#|\)$/g,l)),H&&(I=H.getElementsByTagName("stop"),q(I[I.length-1],{"stop-opacity":p}));break}default:"font-size"==o&&(p=e(p,10)+"px");var J=o.replace(/(\-.)/g,function(a){return a.substring(1).toUpperCase()});i.style[J]=p,d._.dirty=1,i.setAttribute(o,p)}}y(d,f),i.style.visibility=m},x=1.2,y=function(d,f){if("text"==d.type&&(f[a]("text")||f[a]("font")||f[a]("font-size")||f[a]("x")||f[a]("y"))){var g=d.attrs,h=d.node,i=h.firstChild?e(c._g.doc.defaultView.getComputedStyle(h.firstChild,l).getPropertyValue("font-size"),10):10;
 if(f[a]("text")){for(g.text=f.text;h.firstChild;)h.removeChild(h.firstChild);for(var j,k=b(f.text).split("\n"),m=[],n=0,o=k.length;o>n;n++)j=q("tspan"),n&&q(j,{dy:i*x,x:g.x}),j.appendChild(c._g.doc.createTextNode(k[n])),h.appendChild(j),m[n]=j}else for(m=h.getElementsByTagName("tspan"),n=0,o=m.length;o>n;n++)n?q(m[n],{dy:i*x,x:g.x}):q(m[0],{dy:0});q(h,{x:g.x,y:g.y}),d._.dirty=1;var p=d._getBBox(),r=g.y-(p.y+p.height/2);r&&c.is(r,"finite")&&q(m[0],{dy:r})}},z=function(a,b){this[0]=this.node=a,a.raphael=!0,this.id=c._oid++,a.raphaelid=this.id,this.matrix=c.matrix(),this.realPath=null,this.paper=b,this.attrs=this.attrs||{},this._={transform:[],sx:1,sy:1,deg:0,dx:0,dy:0,dirty:1},!b.bottom&&(b.bottom=this),this.prev=b.top,b.top&&(b.top.next=this),b.top=this,this.next=null},A=c.el;z.prototype=A,A.constructor=z,c._engine.path=function(a,b){var c=q("path");b.canvas&&b.canvas.appendChild(c);var d=new z(c,b);return d.type="path",w(d,{fill:"none",stroke:"#000",path:a}),d},A.rotate=function(a,c,e){if(this.removed)return this;if(a=b(a).split(j),a.length-1&&(c=d(a[1]),e=d(a[2])),a=d(a[0]),null==e&&(c=e),null==c||null==e){var f=this.getBBox(1);c=f.x+f.width/2,e=f.y+f.height/2}return this.transform(this._.transform.concat([["r",a,c,e]])),this},A.scale=function(a,c,e,f){if(this.removed)return this;if(a=b(a).split(j),a.length-1&&(c=d(a[1]),e=d(a[2]),f=d(a[3])),a=d(a[0]),null==c&&(c=a),null==f&&(e=f),null==e||null==f)var g=this.getBBox(1);return e=null==e?g.x+g.width/2:e,f=null==f?g.y+g.height/2:f,this.transform(this._.transform.concat([["s",a,c,e,f]])),this},A.translate=function(a,c){return this.removed?this:(a=b(a).split(j),a.length-1&&(c=d(a[1])),a=d(a[0])||0,c=+c||0,this.transform(this._.transform.concat([["t",a,c]])),this)},A.transform=function(b){var d=this._;if(null==b)return d.transform;if(c._extractTransform(this,b),this.clip&&q(this.clip,{transform:this.matrix.invert()}),this.pattern&&s(this),this.node&&q(this.node,{transform:this.matrix}),1!=d.sx||1!=d.sy){var e=this.attrs[a]("stroke-width")?this.attrs["stroke-width"]:1;this.attr({"stroke-width":e})}return this},A.hide=function(){return!this.removed&&this.paper.safari(this.node.style.display="none"),this},A.show=function(){return!this.removed&&this.paper.safari(this.node.style.display=""),this},A.remove=function(){if(!this.removed&&this.node.parentNode){var a=this.paper;a.__set__&&a.__set__.exclude(this),k.unbind("raphael.*.*."+this.id),this.gradient&&a.defs.removeChild(this.gradient),c._tear(this,a),"a"==this.node.parentNode.tagName.toLowerCase()?this.node.parentNode.parentNode.removeChild(this.node.parentNode):this.node.parentNode.removeChild(this.node);for(var b in this)this[b]="function"==typeof this[b]?c._removedFactory(b):null;this.removed=!0}},A._getBBox=function(){if("none"==this.node.style.display){this.show();var a=!0}var b={};try{b=this.node.getBBox()}catch(c){}finally{b=b||{}}return a&&this.hide(),b},A.attr=function(b,d){if(this.removed)return this;if(null==b){var e={};for(var f in this.attrs)this.attrs[a](f)&&(e[f]=this.attrs[f]);return e.gradient&&"none"==e.fill&&(e.fill=e.gradient)&&delete e.gradient,e.transform=this._.transform,e}if(null==d&&c.is(b,"string")){if("fill"==b&&"none"==this.attrs.fill&&this.attrs.gradient)return this.attrs.gradient;if("transform"==b)return this._.transform;for(var g=b.split(j),h={},i=0,l=g.length;l>i;i++)b=g[i],h[b]=b in this.attrs?this.attrs[b]:c.is(this.paper.customAttributes[b],"function")?this.paper.customAttributes[b].def:c._availableAttrs[b];return l-1?h:h[g[0]]}if(null==d&&c.is(b,"array")){for(h={},i=0,l=b.length;l>i;i++)h[b[i]]=this.attr(b[i]);return h}if(null!=d){var m={};m[b]=d}else null!=b&&c.is(b,"object")&&(m=b);for(var n in m)k("raphael.attr."+n+"."+this.id,this,m[n]);for(n in this.paper.customAttributes)if(this.paper.customAttributes[a](n)&&m[a](n)&&c.is(this.paper.customAttributes[n],"function")){var o=this.paper.customAttributes[n].apply(this,[].concat(m[n]));this.attrs[n]=m[n];for(var p in o)o[a](p)&&(m[p]=o[p])}return w(this,m),this},A.toFront=function(){if(this.removed)return this;"a"==this.node.parentNode.tagName.toLowerCase()?this.node.parentNode.parentNode.appendChild(this.node.parentNode):this.node.parentNode.appendChild(this.node);var a=this.paper;return a.top!=this&&c._tofront(this,a),this},A.toBack=function(){if(this.removed)return this;var a=this.node.parentNode;"a"==a.tagName.toLowerCase()?a.parentNode.insertBefore(this.node.parentNode,this.node.parentNode.parentNode.firstChild):a.firstChild!=this.node&&a.insertBefore(this.node,this.node.parentNode.firstChild),c._toback(this,this.paper);this.paper;return this},A.insertAfter=function(a){if(this.removed)return this;var b=a.node||a[a.length-1].node;return b.nextSibling?b.parentNode.insertBefore(this.node,b.nextSibling):b.parentNode.appendChild(this.node),c._insertafter(this,a,this.paper),this},A.insertBefore=function(a){if(this.removed)return this;var b=a.node||a[0].node;return b.parentNode.insertBefore(this.node,b),c._insertbefore(this,a,this.paper),this},A.blur=function(a){var b=this;if(0!==+a){var d=q("filter"),e=q("feGaussianBlur");b.attrs.blur=a,d.id=c.createUUID(),q(e,{stdDeviation:+a||1.5}),d.appendChild(e),b.paper.defs.appendChild(d),b._blur=d,q(b.node,{filter:"url(#"+d.id+")"})}else b._blur&&(b._blur.parentNode.removeChild(b._blur),delete b._blur,delete b.attrs.blur),b.node.removeAttribute("filter");return b},c._engine.circle=function(a,b,c,d){var e=q("circle");a.canvas&&a.canvas.appendChild(e);var f=new z(e,a);return f.attrs={cx:b,cy:c,r:d,fill:"none",stroke:"#000"},f.type="circle",q(e,f.attrs),f},c._engine.rect=function(a,b,c,d,e,f){var g=q("rect");a.canvas&&a.canvas.appendChild(g);var h=new z(g,a);return h.attrs={x:b,y:c,width:d,height:e,r:f||0,rx:f||0,ry:f||0,fill:"none",stroke:"#000"},h.type="rect",q(g,h.attrs),h},c._engine.ellipse=function(a,b,c,d,e){var f=q("ellipse");a.canvas&&a.canvas.appendChild(f);var g=new z(f,a);return g.attrs={cx:b,cy:c,rx:d,ry:e,fill:"none",stroke:"#000"},g.type="ellipse",q(f,g.attrs),g},c._engine.image=function(a,b,c,d,e,f){var g=q("image");q(g,{x:c,y:d,width:e,height:f,preserveAspectRatio:"none"}),g.setAttributeNS(n,"href",b),a.canvas&&a.canvas.appendChild(g);var h=new z(g,a);return h.attrs={x:c,y:d,width:e,height:f,src:b},h.type="image",h},c._engine.text=function(a,b,d,e){var f=q("text");a.canvas&&a.canvas.appendChild(f);var g=new z(f,a);return g.attrs={x:b,y:d,"text-anchor":"middle",text:e,font:c._availableAttrs.font,stroke:"none",fill:"#000"},g.type="text",w(g,g.attrs),g},c._engine.setSize=function(a,b){return this.width=a||this.width,this.height=b||this.height,this.canvas.setAttribute("width",this.width),this.canvas.setAttribute("height",this.height),this._viewBox&&this.setViewBox.apply(this,this._viewBox),this},c._engine.create=function(){var a=c._getContainer.apply(0,arguments),b=a&&a.container,d=a.x,e=a.y,f=a.width,g=a.height;if(!b)throw new Error("SVG container not found.");var h,i=q("svg"),j="overflow:hidden;";return d=d||0,e=e||0,f=f||512,g=g||342,q(i,{height:g,version:1.1,width:f,xmlns:"http://www.w3.org/2000/svg"}),1==b?(i.style.cssText=j+"position:absolute;left:"+d+"px;top:"+e+"px",c._g.doc.body.appendChild(i),h=1):(i.style.cssText=j+"position:relative",b.firstChild?b.insertBefore(i,b.firstChild):b.appendChild(i)),b=new c._Paper,b.width=f,b.height=g,b.canvas=i,b.clear(),b._left=b._top=0,h&&(b.renderfix=function(){}),b.renderfix(),b},c._engine.setViewBox=function(a,b,c,d,e){k("raphael.setViewBox",this,this._viewBox,[a,b,c,d,e]);var f,h,i=g(c/this.width,d/this.height),j=this.top,l=e?"meet":"xMinYMin";for(null==a?(this._vbSize&&(i=1),delete this._vbSize,f="0 0 "+this.width+m+this.height):(this._vbSize=i,f=a+m+b+m+c+m+d),q(this.canvas,{viewBox:f,preserveAspectRatio:l});i&&j;)h="stroke-width"in j.attrs?j.attrs["stroke-width"]:1,j.attr({"stroke-width":h}),j._.dirty=1,j._.dirtyT=1,j=j.prev;return this._viewBox=[a,b,c,d,!!e],this},c.prototype.renderfix=function(){var a,b=this.canvas,c=b.style;try{a=b.getScreenCTM()||b.createSVGMatrix()}catch(d){a=b.createSVGMatrix()}var e=-a.e%1,f=-a.f%1;(e||f)&&(e&&(this._left=(this._left+e)%1,c.left=this._left+"px"),f&&(this._top=(this._top+f)%1,c.top=this._top+"px"))},c.prototype.clear=function(){c.eve("raphael.clear",this);for(var a=this.canvas;a.firstChild;)a.removeChild(a.firstChild);this.bottom=this.top=null,(this.desc=q("desc")).appendChild(c._g.doc.createTextNode("Created with Raphaël "+c.version)),a.appendChild(this.desc),a.appendChild(this.defs=q("defs"))},c.prototype.remove=function(){k("raphael.remove",this),this.canvas.parentNode&&this.canvas.parentNode.removeChild(this.canvas);for(var a in this)this[a]="function"==typeof this[a]?c._removedFactory(a):null};var B=c.st;for(var C in A)A[a](C)&&!B[a](C)&&(B[C]=function(a){return function(){var b=arguments;return this.forEach(function(c){c[a].apply(c,b)})}}(C))}}(),function(){if(c.vml){var a="hasOwnProperty",b=String,d=parseFloat,e=Math,f=e.round,g=e.max,h=e.min,i=e.abs,j="fill",k=/[, ]+/,l=c.eve,m=" progid:DXImageTransform.Microsoft",n=" ",o="",p={M:"m",L:"l",C:"c",Z:"x",m:"t",l:"r",c:"v",z:"x"},q=/([clmz]),?([^clmz]*)/gi,r=/ progid:\S+Blur\([^\)]+\)/g,s=/-?[^,\s-]+/g,t="position:absolute;left:0;top:0;width:1px;height:1px",u=21600,v={path:1,rect:1,image:1},w={circle:1,ellipse:1},x=function(a){var d=/[ahqstv]/gi,e=c._pathToAbsolute;if(b(a).match(d)&&(e=c._path2curve),d=/[clmz]/g,e==c._pathToAbsolute&&!b(a).match(d)){var g=b(a).replace(q,function(a,b,c){var d=[],e="m"==b.toLowerCase(),g=p[b];return c.replace(s,function(a){e&&2==d.length&&(g+=d+p["m"==b?"l":"L"],d=[]),d.push(f(a*u))}),g+d});return g}var h,i,j=e(a);g=[];for(var k=0,l=j.length;l>k;k++){h=j[k],i=j[k][0].toLowerCase(),"z"==i&&(i="x");for(var m=1,r=h.length;r>m;m++)i+=f(h[m]*u)+(m!=r-1?",":o);g.push(i)}return g.join(n)},y=function(a,b,d){var e=c.matrix();return e.rotate(-a,.5,.5),{dx:e.x(b,d),dy:e.y(b,d)}},z=function(a,b,c,d,e,f){var g=a._,h=a.matrix,k=g.fillpos,l=a.node,m=l.style,o=1,p="",q=u/b,r=u/c;if(m.visibility="hidden",b&&c){if(l.coordsize=i(q)+n+i(r),m.rotation=f*(0>b*c?-1:1),f){var s=y(f,d,e);d=s.dx,e=s.dy}if(0>b&&(p+="x"),0>c&&(p+=" y")&&(o=-1),m.flip=p,l.coordorigin=d*-q+n+e*-r,k||g.fillsize){var t=l.getElementsByTagName(j);t=t&&t[0],l.removeChild(t),k&&(s=y(f,h.x(k[0],k[1]),h.y(k[0],k[1])),t.position=s.dx*o+n+s.dy*o),g.fillsize&&(t.size=g.fillsize[0]*i(b)+n+g.fillsize[1]*i(c)),l.appendChild(t)}m.visibility="visible"}};c.toString=function(){return"Your browser doesn’t support SVG. Falling down to VML.\nYou are running Raphaël "+this.version};var A=function(a,c,d){for(var e=b(c).toLowerCase().split("-"),f=d?"end":"start",g=e.length,h="classic",i="medium",j="medium";g--;)switch(e[g]){case"block":case"classic":case"oval":case"diamond":case"open":case"none":h=e[g];break;case"wide":case"narrow":j=e[g];break;case"long":case"short":i=e[g]}var k=a.node.getElementsByTagName("stroke")[0];k[f+"arrow"]=h,k[f+"arrowlength"]=i,k[f+"arrowwidth"]=j},B=function(e,i){e.attrs=e.attrs||{};var l=e.node,m=e.attrs,p=l.style,q=v[e.type]&&(i.x!=m.x||i.y!=m.y||i.width!=m.width||i.height!=m.height||i.cx!=m.cx||i.cy!=m.cy||i.rx!=m.rx||i.ry!=m.ry||i.r!=m.r),r=w[e.type]&&(m.cx!=i.cx||m.cy!=i.cy||m.r!=i.r||m.rx!=i.rx||m.ry!=i.ry),s=e;for(var t in i)i[a](t)&&(m[t]=i[t]);if(q&&(m.path=c._getPath[e.type](e),e._.dirty=1),i.href&&(l.href=i.href),i.title&&(l.title=i.title),i.target&&(l.target=i.target),i.cursor&&(p.cursor=i.cursor),"blur"in i&&e.blur(i.blur),(i.path&&"path"==e.type||q)&&(l.path=x(~b(m.path).toLowerCase().indexOf("r")?c._pathToAbsolute(m.path):m.path),"image"==e.type&&(e._.fillpos=[m.x,m.y],e._.fillsize=[m.width,m.height],z(e,1,1,0,0,0))),"transform"in i&&e.transform(i.transform),r){var y=+m.cx,B=+m.cy,D=+m.rx||+m.r||0,E=+m.ry||+m.r||0;l.path=c.format("ar{0},{1},{2},{3},{4},{1},{4},{1}x",f((y-D)*u),f((B-E)*u),f((y+D)*u),f((B+E)*u),f(y*u)),e._.dirty=1}if("clip-rect"in i){var G=b(i["clip-rect"]).split(k);if(4==G.length){G[2]=+G[2]+ +G[0],G[3]=+G[3]+ +G[1];var H=l.clipRect||c._g.doc.createElement("div"),I=H.style;I.clip=c.format("rect({1}px {2}px {3}px {0}px)",G),l.clipRect||(I.position="absolute",I.top=0,I.left=0,I.width=e.paper.width+"px",I.height=e.paper.height+"px",l.parentNode.insertBefore(H,l),H.appendChild(l),l.clipRect=H)}i["clip-rect"]||l.clipRect&&(l.clipRect.style.clip="auto")}if(e.textpath){var J=e.textpath.style;i.font&&(J.font=i.font),i["font-family"]&&(J.fontFamily='"'+i["font-family"].split(",")[0].replace(/^['"]+|['"]+$/g,o)+'"'),i["font-size"]&&(J.fontSize=i["font-size"]),i["font-weight"]&&(J.fontWeight=i["font-weight"]),i["font-style"]&&(J.fontStyle=i["font-style"])}if("arrow-start"in i&&A(s,i["arrow-start"]),"arrow-end"in i&&A(s,i["arrow-end"],1),null!=i.opacity||null!=i["stroke-width"]||null!=i.fill||null!=i.src||null!=i.stroke||null!=i["stroke-width"]||null!=i["stroke-opacity"]||null!=i["fill-opacity"]||null!=i["stroke-dasharray"]||null!=i["stroke-miterlimit"]||null!=i["stroke-linejoin"]||null!=i["stroke-linecap"]){var K=l.getElementsByTagName(j),L=!1;if(K=K&&K[0],!K&&(L=K=F(j)),"image"==e.type&&i.src&&(K.src=i.src),i.fill&&(K.on=!0),(null==K.on||"none"==i.fill||null===i.fill)&&(K.on=!1),K.on&&i.fill){var M=b(i.fill).match(c._ISURL);if(M){K.parentNode==l&&l.removeChild(K),K.rotate=!0,K.src=M[1],K.type="tile";var N=e.getBBox(1);K.position=N.x+n+N.y,e._.fillpos=[N.x,N.y],c._preload(M[1],function(){e._.fillsize=[this.offsetWidth,this.offsetHeight]})}else K.color=c.getRGB(i.fill).hex,K.src=o,K.type="solid",c.getRGB(i.fill).error&&(s.type in{circle:1,ellipse:1}||"r"!=b(i.fill).charAt())&&C(s,i.fill,K)&&(m.fill="none",m.gradient=i.fill,K.rotate=!1)}if("fill-opacity"in i||"opacity"in i){var O=((+m["fill-opacity"]+1||2)-1)*((+m.opacity+1||2)-1)*((+c.getRGB(i.fill).o+1||2)-1);O=h(g(O,0),1),K.opacity=O,K.src&&(K.color="none")}l.appendChild(K);var P=l.getElementsByTagName("stroke")&&l.getElementsByTagName("stroke")[0],Q=!1;!P&&(Q=P=F("stroke")),(i.stroke&&"none"!=i.stroke||i["stroke-width"]||null!=i["stroke-opacity"]||i["stroke-dasharray"]||i["stroke-miterlimit"]||i["stroke-linejoin"]||i["stroke-linecap"])&&(P.on=!0),("none"==i.stroke||null===i.stroke||null==P.on||0==i.stroke||0==i["stroke-width"])&&(P.on=!1);var R=c.getRGB(i.stroke);P.on&&i.stroke&&(P.color=R.hex),O=((+m["stroke-opacity"]+1||2)-1)*((+m.opacity+1||2)-1)*((+R.o+1||2)-1);var S=.75*(d(i["stroke-width"])||1);if(O=h(g(O,0),1),null==i["stroke-width"]&&(S=m["stroke-width"]),i["stroke-width"]&&(P.weight=S),S&&1>S&&(O*=S)&&(P.weight=1),P.opacity=O,i["stroke-linejoin"]&&(P.joinstyle=i["stroke-linejoin"]||"miter"),P.miterlimit=i["stroke-miterlimit"]||8,i["stroke-linecap"]&&(P.endcap="butt"==i["stroke-linecap"]?"flat":"square"==i["stroke-linecap"]?"square":"round"),"stroke-dasharray"in i){var T={"-":"shortdash",".":"shortdot","-.":"shortdashdot","-..":"shortdashdotdot",". ":"dot","- ":"dash","--":"longdash","- .":"dashdot","--.":"longdashdot","--..":"longdashdotdot"};P.dashstyle=T[a](i["stroke-dasharray"])?T[i["stroke-dasharray"]]:o}Q&&l.appendChild(P)}if("text"==s.type){s.paper.canvas.style.display=o;var U=s.paper.span,V=100,W=m.font&&m.font.match(/\d+(?:\.\d*)?(?=px)/);p=U.style,m.font&&(p.font=m.font),m["font-family"]&&(p.fontFamily=m["font-family"]),m["font-weight"]&&(p.fontWeight=m["font-weight"]),m["font-style"]&&(p.fontStyle=m["font-style"]),W=d(m["font-size"]||W&&W[0])||10,p.fontSize=W*V+"px",s.textpath.string&&(U.innerHTML=b(s.textpath.string).replace(/</g,"&#60;").replace(/&/g,"&#38;").replace(/\n/g,"<br>"));var X=U.getBoundingClientRect();s.W=m.w=(X.right-X.left)/V,s.H=m.h=(X.bottom-X.top)/V,s.X=m.x,s.Y=m.y+s.H/2,("x"in i||"y"in i)&&(s.path.v=c.format("m{0},{1}l{2},{1}",f(m.x*u),f(m.y*u),f(m.x*u)+1));for(var Y=["x","y","text","font","font-family","font-weight","font-style","font-size"],Z=0,$=Y.length;$>Z;Z++)if(Y[Z]in i){s._.dirty=1;break}switch(m["text-anchor"]){case"start":s.textpath.style["v-text-align"]="left",s.bbx=s.W/2;break;case"end":s.textpath.style["v-text-align"]="right",s.bbx=-s.W/2;break;default:s.textpath.style["v-text-align"]="center",s.bbx=0}s.textpath.style["v-text-kern"]=!0}},C=function(a,f,g){a.attrs=a.attrs||{};var h=(a.attrs,Math.pow),i="linear",j=".5 .5";if(a.attrs.gradient=f,f=b(f).replace(c._radial_gradient,function(a,b,c){return i="radial",b&&c&&(b=d(b),c=d(c),h(b-.5,2)+h(c-.5,2)>.25&&(c=e.sqrt(.25-h(b-.5,2))*(2*(c>.5)-1)+.5),j=b+n+c),o}),f=f.split(/\s*\-\s*/),"linear"==i){var k=f.shift();if(k=-d(k),isNaN(k))return null}var l=c._parseDots(f);if(!l)return null;if(a=a.shape||a.node,l.length){a.removeChild(g),g.on=!0,g.method="none",g.color=l[0].color,g.color2=l[l.length-1].color;for(var m=[],p=0,q=l.length;q>p;p++)l[p].offset&&m.push(l[p].offset+n+l[p].color);g.colors=m.length?m.join():"0% "+g.color,"radial"==i?(g.type="gradientTitle",g.focus="100%",g.focussize="0 0",g.focusposition=j,g.angle=0):(g.type="gradient",g.angle=(270-k)%360),a.appendChild(g)}return 1},D=function(a,b){this[0]=this.node=a,a.raphael=!0,this.id=c._oid++,a.raphaelid=this.id,this.X=0,this.Y=0,this.attrs={},this.paper=b,this.matrix=c.matrix(),this._={transform:[],sx:1,sy:1,dx:0,dy:0,deg:0,dirty:1,dirtyT:1},!b.bottom&&(b.bottom=this),this.prev=b.top,b.top&&(b.top.next=this),b.top=this,this.next=null},E=c.el;D.prototype=E,E.constructor=D,E.transform=function(a){if(null==a)return this._.transform;var d,e=this.paper._viewBoxShift,f=e?"s"+[e.scale,e.scale]+"-1-1t"+[e.dx,e.dy]:o;e&&(d=a=b(a).replace(/\.{3}|\u2026/g,this._.transform||o)),c._extractTransform(this,f+a);var g,h=this.matrix.clone(),i=this.skew,j=this.node,k=~b(this.attrs.fill).indexOf("-"),l=!b(this.attrs.fill).indexOf("url(");if(h.translate(1,1),l||k||"image"==this.type)if(i.matrix="1 0 0 1",i.offset="0 0",g=h.split(),k&&g.noRotation||!g.isSimple){j.style.filter=h.toFilter();var m=this.getBBox(),p=this.getBBox(1),q=m.x-p.x,r=m.y-p.y;j.coordorigin=q*-u+n+r*-u,z(this,1,1,q,r,0)}else j.style.filter=o,z(this,g.scalex,g.scaley,g.dx,g.dy,g.rotate);else j.style.filter=o,i.matrix=b(h),i.offset=h.offset();return d&&(this._.transform=d),this},E.rotate=function(a,c,e){if(this.removed)return this;if(null!=a){if(a=b(a).split(k),a.length-1&&(c=d(a[1]),e=d(a[2])),a=d(a[0]),null==e&&(c=e),null==c||null==e){var f=this.getBBox(1);c=f.x+f.width/2,e=f.y+f.height/2}return this._.dirtyT=1,this.transform(this._.transform.concat([["r",a,c,e]])),this}},E.translate=function(a,c){return this.removed?this:(a=b(a).split(k),a.length-1&&(c=d(a[1])),a=d(a[0])||0,c=+c||0,this._.bbox&&(this._.bbox.x+=a,this._.bbox.y+=c),this.transform(this._.transform.concat([["t",a,c]])),this)},E.scale=function(a,c,e,f){if(this.removed)return this;if(a=b(a).split(k),a.length-1&&(c=d(a[1]),e=d(a[2]),f=d(a[3]),isNaN(e)&&(e=null),isNaN(f)&&(f=null)),a=d(a[0]),null==c&&(c=a),null==f&&(e=f),null==e||null==f)var g=this.getBBox(1);return e=null==e?g.x+g.width/2:e,f=null==f?g.y+g.height/2:f,this.transform(this._.transform.concat([["s",a,c,e,f]])),this._.dirtyT=1,this},E.hide=function(){return!this.removed&&(this.node.style.display="none"),this},E.show=function(){return!this.removed&&(this.node.style.display=o),this},E._getBBox=function(){return this.removed?{}:{x:this.X+(this.bbx||0)-this.W/2,y:this.Y-this.H,width:this.W,height:this.H}},E.remove=function(){if(!this.removed&&this.node.parentNode){this.paper.__set__&&this.paper.__set__.exclude(this),c.eve.unbind("raphael.*.*."+this.id),c._tear(this,this.paper),this.node.parentNode.removeChild(this.node),this.shape&&this.shape.parentNode.removeChild(this.shape);for(var a in this)this[a]="function"==typeof this[a]?c._removedFactory(a):null;this.removed=!0}},E.attr=function(b,d){if(this.removed)return this;if(null==b){var e={};for(var f in this.attrs)this.attrs[a](f)&&(e[f]=this.attrs[f]);return e.gradient&&"none"==e.fill&&(e.fill=e.gradient)&&delete e.gradient,e.transform=this._.transform,e}if(null==d&&c.is(b,"string")){if(b==j&&"none"==this.attrs.fill&&this.attrs.gradient)return this.attrs.gradient;for(var g=b.split(k),h={},i=0,m=g.length;m>i;i++)b=g[i],h[b]=b in this.attrs?this.attrs[b]:c.is(this.paper.customAttributes[b],"function")?this.paper.customAttributes[b].def:c._availableAttrs[b];return m-1?h:h[g[0]]}if(this.attrs&&null==d&&c.is(b,"array")){for(h={},i=0,m=b.length;m>i;i++)h[b[i]]=this.attr(b[i]);return h}var n;null!=d&&(n={},n[b]=d),null==d&&c.is(b,"object")&&(n=b);for(var o in n)l("raphael.attr."+o+"."+this.id,this,n[o]);if(n){for(o in this.paper.customAttributes)if(this.paper.customAttributes[a](o)&&n[a](o)&&c.is(this.paper.customAttributes[o],"function")){var p=this.paper.customAttributes[o].apply(this,[].concat(n[o]));this.attrs[o]=n[o];for(var q in p)p[a](q)&&(n[q]=p[q])}n.text&&"text"==this.type&&(this.textpath.string=n.text),B(this,n)}return this},E.toFront=function(){return!this.removed&&this.node.parentNode.appendChild(this.node),this.paper&&this.paper.top!=this&&c._tofront(this,this.paper),this},E.toBack=function(){return this.removed?this:(this.node.parentNode.firstChild!=this.node&&(this.node.parentNode.insertBefore(this.node,this.node.parentNode.firstChild),c._toback(this,this.paper)),this)},E.insertAfter=function(a){return this.removed?this:(a.constructor==c.st.constructor&&(a=a[a.length-1]),a.node.nextSibling?a.node.parentNode.insertBefore(this.node,a.node.nextSibling):a.node.parentNode.appendChild(this.node),c._insertafter(this,a,this.paper),this)},E.insertBefore=function(a){return this.removed?this:(a.constructor==c.st.constructor&&(a=a[0]),a.node.parentNode.insertBefore(this.node,a.node),c._insertbefore(this,a,this.paper),this)},E.blur=function(a){var b=this.node.runtimeStyle,d=b.filter;return d=d.replace(r,o),0!==+a?(this.attrs.blur=a,b.filter=d+n+m+".Blur(pixelradius="+(+a||1.5)+")",b.margin=c.format("-{0}px 0 0 -{0}px",f(+a||1.5))):(b.filter=d,b.margin=0,delete this.attrs.blur),this},c._engine.path=function(a,b){var c=F("shape");c.style.cssText=t,c.coordsize=u+n+u,c.coordorigin=b.coordorigin;var d=new D(c,b),e={fill:"none",stroke:"#000"};a&&(e.path=a),d.type="path",d.path=[],d.Path=o,B(d,e),b.canvas.appendChild(c);var f=F("skew");return f.on=!0,c.appendChild(f),d.skew=f,d.transform(o),d},c._engine.rect=function(a,b,d,e,f,g){var h=c._rectPath(b,d,e,f,g),i=a.path(h),j=i.attrs;return i.X=j.x=b,i.Y=j.y=d,i.W=j.width=e,i.H=j.height=f,j.r=g,j.path=h,i.type="rect",i},c._engine.ellipse=function(a,b,c,d,e){{var f=a.path();f.attrs}return f.X=b-d,f.Y=c-e,f.W=2*d,f.H=2*e,f.type="ellipse",B(f,{cx:b,cy:c,rx:d,ry:e}),f},c._engine.circle=function(a,b,c,d){{var e=a.path();e.attrs}return e.X=b-d,e.Y=c-d,e.W=e.H=2*d,e.type="circle",B(e,{cx:b,cy:c,r:d}),e},c._engine.image=function(a,b,d,e,f,g){var h=c._rectPath(d,e,f,g),i=a.path(h).attr({stroke:"none"}),k=i.attrs,l=i.node,m=l.getElementsByTagName(j)[0];return k.src=b,i.X=k.x=d,i.Y=k.y=e,i.W=k.width=f,i.H=k.height=g,k.path=h,i.type="image",m.parentNode==l&&l.removeChild(m),m.rotate=!0,m.src=b,m.type="tile",i._.fillpos=[d,e],i._.fillsize=[f,g],l.appendChild(m),z(i,1,1,0,0,0),i},c._engine.text=function(a,d,e,g){var h=F("shape"),i=F("path"),j=F("textpath");d=d||0,e=e||0,g=g||"",i.v=c.format("m{0},{1}l{2},{1}",f(d*u),f(e*u),f(d*u)+1),i.textpathok=!0,j.string=b(g),j.on=!0,h.style.cssText=t,h.coordsize=u+n+u,h.coordorigin="0 0";var k=new D(h,a),l={fill:"#000",stroke:"none",font:c._availableAttrs.font,text:g};k.shape=h,k.path=i,k.textpath=j,k.type="text",k.attrs.text=b(g),k.attrs.x=d,k.attrs.y=e,k.attrs.w=1,k.attrs.h=1,B(k,l),h.appendChild(j),h.appendChild(i),a.canvas.appendChild(h);var m=F("skew");return m.on=!0,h.appendChild(m),k.skew=m,k.transform(o),k},c._engine.setSize=function(a,b){var d=this.canvas.style;return this.width=a,this.height=b,a==+a&&(a+="px"),b==+b&&(b+="px"),d.width=a,d.height=b,d.clip="rect(0 "+a+" "+b+" 0)",this._viewBox&&c._engine.setViewBox.apply(this,this._viewBox),this},c._engine.setViewBox=function(a,b,d,e,f){c.eve("raphael.setViewBox",this,this._viewBox,[a,b,d,e,f]);var h,i,j=this.width,k=this.height,l=1/g(d/j,e/k);return f&&(h=k/e,i=j/d,j>d*h&&(a-=(j-d*h)/2/h),k>e*i&&(b-=(k-e*i)/2/i)),this._viewBox=[a,b,d,e,!!f],this._viewBoxShift={dx:-a,dy:-b,scale:l},this.forEach(function(a){a.transform("...")}),this};var F;c._engine.initWin=function(a){var b=a.document;b.createStyleSheet().addRule(".rvml","behavior:url(#default#VML)");try{!b.namespaces.rvml&&b.namespaces.add("rvml","urn:schemas-microsoft-com:vml"),F=function(a){return b.createElement("<rvml:"+a+' class="rvml">')}}catch(c){F=function(a){return b.createElement("<"+a+' xmlns="urn:schemas-microsoft.com:vml" class="rvml">')}}},c._engine.initWin(c._g.win),c._engine.create=function(){var a=c._getContainer.apply(0,arguments),b=a.container,d=a.height,e=a.width,f=a.x,g=a.y;if(!b)throw new Error("VML container not found.");var h=new c._Paper,i=h.canvas=c._g.doc.createElement("div"),j=i.style;return f=f||0,g=g||0,e=e||512,d=d||342,h.width=e,h.height=d,e==+e&&(e+="px"),d==+d&&(d+="px"),h.coordsize=1e3*u+n+1e3*u,h.coordorigin="0 0",h.span=c._g.doc.createElement("span"),h.span.style.cssText="position:absolute;left:-9999em;top:-9999em;padding:0;margin:0;line-height:1;",i.appendChild(h.span),j.cssText=c.format("top:0;left:0;width:{0};height:{1};display:inline-block;position:relative;clip:rect(0 {0} {1} 0);overflow:hidden",e,d),1==b?(c._g.doc.body.appendChild(i),j.left=f+"px",j.top=g+"px",j.position="absolute"):b.firstChild?b.insertBefore(i,b.firstChild):b.appendChild(i),h.renderfix=function(){},h},c.prototype.clear=function(){c.eve("raphael.clear",this),this.canvas.innerHTML=o,this.span=c._g.doc.createElement("span"),this.span.style.cssText="position:absolute;left:-9999em;top:-9999em;padding:0;margin:0;line-height:1;display:inline;",this.canvas.appendChild(this.span),this.bottom=this.top=null},c.prototype.remove=function(){c.eve("raphael.remove",this),this.canvas.parentNode.removeChild(this.canvas);for(var a in this)this[a]="function"==typeof this[a]?c._removedFactory(a):null;return!0};var G=c.st;for(var H in E)E[a](H)&&!G[a](H)&&(G[H]=function(a){return function(){var b=arguments;return this.forEach(function(c){c[a].apply(c,b)})}}(H))}}(),B.was?A.win.Raphael=c:Raphael=c,c});;
 /* @license
-morris.js v0.5.0
-Copyright 2014 Olly Smith All rights reserved.
-Licensed under the BSD-2-Clause License.
-*/
+ morris.js v0.5.0
+ Copyright 2014 Olly Smith All rights reserved.
+ Licensed under the BSD-2-Clause License.
+ */
 
 
 (function() {
-  var $, Morris, minutesSpecHelper, secondsSpecHelper,
-    __slice = [].slice,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    var $, Morris, minutesSpecHelper, secondsSpecHelper,
+        __slice = [].slice,
+        __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+        __hasProp = {}.hasOwnProperty,
+        __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+        __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  Morris = window.Morris = {};
+    Morris = window.Morris = {};
 
-  $ = jQuery;
+    $ = jQuery;
 
-  Morris.EventEmitter = (function() {
-    function EventEmitter() {}
+    Morris.EventEmitter = (function() {
+        function EventEmitter() {}
 
-    EventEmitter.prototype.on = function(name, handler) {
-      if (this.handlers == null) {
-        this.handlers = {};
-      }
-      if (this.handlers[name] == null) {
-        this.handlers[name] = [];
-      }
-      this.handlers[name].push(handler);
-      return this;
-    };
-
-    EventEmitter.prototype.fire = function() {
-      var args, handler, name, _i, _len, _ref, _results;
-      name = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      if ((this.handlers != null) && (this.handlers[name] != null)) {
-        _ref = this.handlers[name];
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          handler = _ref[_i];
-          _results.push(handler.apply(null, args));
-        }
-        return _results;
-      }
-    };
-
-    return EventEmitter;
-
-  })();
-
-  Morris.commas = function(num) {
-    var absnum, intnum, ret, strabsnum;
-    if (num != null) {
-      ret = num < 0 ? "-" : "";
-      absnum = Math.abs(num);
-      intnum = Math.floor(absnum).toFixed(0);
-      ret += intnum.replace(/(?=(?:\d{3})+$)(?!^)/g, ',');
-      strabsnum = absnum.toString();
-      if (strabsnum.length > intnum.length) {
-        ret += strabsnum.slice(intnum.length);
-      }
-      return ret;
-    } else {
-      return '-';
-    }
-  };
-
-  Morris.pad2 = function(number) {
-    return (number < 10 ? '0' : '') + number;
-  };
-
-  Morris.Grid = (function(_super) {
-    __extends(Grid, _super);
-
-    function Grid(options) {
-      this.resizeHandler = __bind(this.resizeHandler, this);
-      var _this = this;
-      if (typeof options.element === 'string') {
-        this.el = $(document.getElementById(options.element));
-      } else {
-        this.el = $(options.element);
-      }
-      if ((this.el == null) || this.el.length === 0) {
-        throw new Error("Graph container element not found");
-      }
-      if (this.el.css('position') === 'static') {
-        this.el.css('position', 'relative');
-      }
-      this.options = $.extend({}, this.gridDefaults, this.defaults || {}, options);
-      if (typeof this.options.units === 'string') {
-        this.options.postUnits = options.units;
-      }
-      this.raphael = new Raphael(this.el[0]);
-      this.elementWidth = null;
-      this.elementHeight = null;
-      this.dirty = false;
-      this.selectFrom = null;
-      if (this.init) {
-        this.init();
-      }
-      this.setData(this.options.data);
-      this.el.bind('mousemove', function(evt) {
-        var left, offset, right, width, x;
-        offset = _this.el.offset();
-        x = evt.pageX - offset.left;
-        if (_this.selectFrom) {
-          left = _this.data[_this.hitTest(Math.min(x, _this.selectFrom))]._x;
-          right = _this.data[_this.hitTest(Math.max(x, _this.selectFrom))]._x;
-          width = right - left;
-          return _this.selectionRect.attr({
-            x: left,
-            width: width
-          });
-        } else {
-          return _this.fire('hovermove', x, evt.pageY - offset.top);
-        }
-      });
-      this.el.bind('mouseleave', function(evt) {
-        if (_this.selectFrom) {
-          _this.selectionRect.hide();
-          _this.selectFrom = null;
-        }
-        return _this.fire('hoverout');
-      });
-      this.el.bind('touchstart touchmove touchend', function(evt) {
-        var offset, touch;
-        touch = evt.originalEvent.touches[0] || evt.originalEvent.changedTouches[0];
-        offset = _this.el.offset();
-        _this.fire('hover', touch.pageX - offset.left, touch.pageY - offset.top);
-        return touch;
-      });
-      this.el.bind('click', function(evt) {
-        var offset;
-        offset = _this.el.offset();
-        return _this.fire('gridclick', evt.pageX - offset.left, evt.pageY - offset.top);
-      });
-      if (this.options.rangeSelect) {
-        this.selectionRect = this.raphael.rect(0, 0, 0, this.el.innerHeight()).attr({
-          fill: this.options.rangeSelectColor,
-          stroke: false
-        }).toBack().hide();
-        this.el.bind('mousedown', function(evt) {
-          var offset;
-          offset = _this.el.offset();
-          return _this.startRange(evt.pageX - offset.left);
-        });
-        this.el.bind('mouseup', function(evt) {
-          var offset;
-          offset = _this.el.offset();
-          _this.endRange(evt.pageX - offset.left);
-          return _this.fire('hovermove', evt.pageX - offset.left, evt.pageY - offset.top);
-        });
-      }
-      if (this.options.resize) {
-        $(window).bind('resize', function(evt) {
-          if (_this.timeoutId != null) {
-            window.clearTimeout(_this.timeoutId);
-          }
-          return _this.timeoutId = window.setTimeout(_this.resizeHandler, 100);
-        });
-      }
-      if (this.postInit) {
-        this.postInit();
-      }
-    }
-
-    Grid.prototype.gridDefaults = {
-      dateFormat: null,
-      axes: true,
-      grid: true,
-      gridLineColor: '#aaa',
-      gridStrokeWidth: 0.5,
-      gridTextColor: '#888',
-      gridTextSize: 12,
-      gridTextFamily: 'sans-serif',
-      gridTextWeight: 'normal',
-      hideHover: false,
-      yLabelFormat: null,
-      xLabelAngle: 0,
-      numLines: 5,
-      padding: 25,
-      parseTime: true,
-      postUnits: '',
-      preUnits: '',
-      ymax: 'auto',
-      ymin: 'auto 0',
-      goals: [],
-      goalStrokeWidth: 1.0,
-      goalLineColors: ['#666633', '#999966', '#cc6666', '#663333'],
-      events: [],
-      eventStrokeWidth: 1.0,
-      eventLineColors: ['#005a04', '#ccffbb', '#3a5f0b', '#005502'],
-      rangeSelect: null,
-      rangeSelectColor: '#eef',
-      resize: false
-    };
-
-    Grid.prototype.setData = function(data, redraw) {
-      var e, idx, index, maxGoal, minGoal, ret, row, step, total, y, ykey, ymax, ymin, yval, _ref;
-      if (redraw == null) {
-        redraw = true;
-      }
-      this.options.data = data;
-      if ((data == null) || data.length === 0) {
-        this.data = [];
-        this.raphael.clear();
-        if (this.hover != null) {
-          this.hover.hide();
-        }
-        return;
-      }
-      ymax = this.cumulative ? 0 : null;
-      ymin = this.cumulative ? 0 : null;
-      if (this.options.goals.length > 0) {
-        minGoal = Math.min.apply(Math, this.options.goals);
-        maxGoal = Math.max.apply(Math, this.options.goals);
-        ymin = ymin != null ? Math.min(ymin, minGoal) : minGoal;
-        ymax = ymax != null ? Math.max(ymax, maxGoal) : maxGoal;
-      }
-      this.data = (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (index = _i = 0, _len = data.length; _i < _len; index = ++_i) {
-          row = data[index];
-          ret = {
-            src: row
-          };
-          ret.label = row[this.options.xkey];
-          if (this.options.parseTime) {
-            ret.x = Morris.parseDate(ret.label);
-            if (this.options.dateFormat) {
-              ret.label = this.options.dateFormat(ret.x);
-            } else if (typeof ret.label === 'number') {
-              ret.label = new Date(ret.label).toString();
+        EventEmitter.prototype.on = function(name, handler) {
+            if (this.handlers == null) {
+                this.handlers = {};
             }
-          } else {
-            ret.x = index;
-            if (this.options.xLabelFormat) {
-              ret.label = this.options.xLabelFormat(ret);
+            if (this.handlers[name] == null) {
+                this.handlers[name] = [];
             }
-          }
-          total = 0;
-          ret.y = (function() {
-            var _j, _len1, _ref, _results1;
-            _ref = this.options.ykeys;
-            _results1 = [];
-            for (idx = _j = 0, _len1 = _ref.length; _j < _len1; idx = ++_j) {
-              ykey = _ref[idx];
-              yval = row[ykey];
-              if (typeof yval === 'string') {
-                yval = parseFloat(yval);
-              }
-              if ((yval != null) && typeof yval !== 'number') {
-                yval = null;
-              }
-              if (yval != null) {
-                if (this.cumulative) {
-                  total += yval;
-                } else {
-                  if (ymax != null) {
-                    ymax = Math.max(yval, ymax);
-                    ymin = Math.min(yval, ymin);
-                  } else {
-                    ymax = ymin = yval;
-                  }
+            this.handlers[name].push(handler);
+            return this;
+        };
+
+        EventEmitter.prototype.fire = function() {
+            var args, handler, name, _i, _len, _ref, _results;
+            name = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+            if ((this.handlers != null) && (this.handlers[name] != null)) {
+                _ref = this.handlers[name];
+                _results = [];
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    handler = _ref[_i];
+                    _results.push(handler.apply(null, args));
                 }
-              }
-              if (this.cumulative && (total != null)) {
-                ymax = Math.max(total, ymax);
-                ymin = Math.min(total, ymin);
-              }
-              _results1.push(yval);
+                return _results;
             }
-            return _results1;
-          }).call(this);
-          _results.push(ret);
-        }
-        return _results;
-      }).call(this);
-      if (this.options.parseTime) {
-        this.data = this.data.sort(function(a, b) {
-          return (a.x > b.x) - (b.x > a.x);
-        });
-      }
-      this.xmin = this.data[0].x;
-      this.xmax = this.data[this.data.length - 1].x;
-      this.events = [];
-      if (this.options.events.length > 0) {
-        if (this.options.parseTime) {
-          this.events = (function() {
-            var _i, _len, _ref, _results;
-            _ref = this.options.events;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              e = _ref[_i];
-              _results.push(Morris.parseDate(e));
+        };
+
+        return EventEmitter;
+
+    })();
+
+    Morris.commas = function(num) {
+        var absnum, intnum, ret, strabsnum;
+        if (num != null) {
+            ret = num < 0 ? "-" : "";
+            absnum = Math.abs(num);
+            intnum = Math.floor(absnum).toFixed(0);
+            ret += intnum.replace(/(?=(?:\d{3})+$)(?!^)/g, ',');
+            strabsnum = absnum.toString();
+            if (strabsnum.length > intnum.length) {
+                ret += strabsnum.slice(intnum.length);
             }
-            return _results;
-          }).call(this);
+            return ret;
         } else {
-          this.events = this.options.events;
+            return '-';
         }
-        this.xmax = Math.max(this.xmax, Math.max.apply(Math, this.events));
-        this.xmin = Math.min(this.xmin, Math.min.apply(Math, this.events));
-      }
-      if (this.xmin === this.xmax) {
-        this.xmin -= 1;
-        this.xmax += 1;
-      }
-      this.ymin = this.yboundary('min', ymin);
-      this.ymax = this.yboundary('max', ymax);
-      if (this.ymin === this.ymax) {
-        if (ymin) {
-          this.ymin -= 1;
-        }
-        this.ymax += 1;
-      }
-      if (((_ref = this.options.axes) === true || _ref === 'both' || _ref === 'y') || this.options.grid === true) {
-        if (this.options.ymax === this.gridDefaults.ymax && this.options.ymin === this.gridDefaults.ymin) {
-          this.grid = this.autoGridLines(this.ymin, this.ymax, this.options.numLines);
-          this.ymin = Math.min(this.ymin, this.grid[0]);
-          this.ymax = Math.max(this.ymax, this.grid[this.grid.length - 1]);
-        } else {
-          step = (this.ymax - this.ymin) / (this.options.numLines - 1);
-          this.grid = (function() {
-            var _i, _ref1, _ref2, _results;
-            _results = [];
-            for (y = _i = _ref1 = this.ymin, _ref2 = this.ymax; step > 0 ? _i <= _ref2 : _i >= _ref2; y = _i += step) {
-              _results.push(y);
-            }
-            return _results;
-          }).call(this);
-        }
-      }
-      this.dirty = true;
-      if (redraw) {
-        return this.redraw();
-      }
     };
 
-    Grid.prototype.yboundary = function(boundaryType, currentValue) {
-      var boundaryOption, suggestedValue;
-      boundaryOption = this.options["y" + boundaryType];
-      if (typeof boundaryOption === 'string') {
-        if (boundaryOption.slice(0, 4) === 'auto') {
-          if (boundaryOption.length > 5) {
-            suggestedValue = parseInt(boundaryOption.slice(5), 10);
-            if (currentValue == null) {
-              return suggestedValue;
-            }
-            return Math[boundaryType](currentValue, suggestedValue);
-          } else {
-            if (currentValue != null) {
-              return currentValue;
+    Morris.pad2 = function(number) {
+        return (number < 10 ? '0' : '') + number;
+    };
+
+    Morris.Grid = (function(_super) {
+        __extends(Grid, _super);
+
+        function Grid(options) {
+            this.resizeHandler = __bind(this.resizeHandler, this);
+            var _this = this;
+            if (typeof options.element === 'string') {
+                this.el = $(document.getElementById(options.element));
             } else {
-              return 0;
+                this.el = $(options.element);
             }
-          }
-        } else {
-          return parseInt(boundaryOption, 10);
+            if ((this.el == null) || this.el.length === 0) {
+                throw new Error("Graph container element not found");
+            }
+            if (this.el.css('position') === 'static') {
+                this.el.css('position', 'relative');
+            }
+            this.options = $.extend({}, this.gridDefaults, this.defaults || {}, options);
+            if (typeof this.options.units === 'string') {
+                this.options.postUnits = options.units;
+            }
+            this.raphael = new Raphael(this.el[0]);
+            this.elementWidth = null;
+            this.elementHeight = null;
+            this.dirty = false;
+            this.selectFrom = null;
+            if (this.init) {
+                this.init();
+            }
+            this.setData(this.options.data);
+            this.el.bind('mousemove', function(evt) {
+                var left, offset, right, width, x;
+                offset = _this.el.offset();
+                x = evt.pageX - offset.left;
+                if (_this.selectFrom) {
+                    left = _this.data[_this.hitTest(Math.min(x, _this.selectFrom))]._x;
+                    right = _this.data[_this.hitTest(Math.max(x, _this.selectFrom))]._x;
+                    width = right - left;
+                    return _this.selectionRect.attr({
+                        x: left,
+                        width: width
+                    });
+                } else {
+                    return _this.fire('hovermove', x, evt.pageY - offset.top);
+                }
+            });
+            this.el.bind('mouseleave', function(evt) {
+                if (_this.selectFrom) {
+                    _this.selectionRect.hide();
+                    _this.selectFrom = null;
+                }
+                return _this.fire('hoverout');
+            });
+            this.el.bind('touchstart touchmove touchend', function(evt) {
+                var offset, touch;
+                touch = evt.originalEvent.touches[0] || evt.originalEvent.changedTouches[0];
+                offset = _this.el.offset();
+                _this.fire('hover', touch.pageX - offset.left, touch.pageY - offset.top);
+                return touch;
+            });
+            this.el.bind('click', function(evt) {
+                var offset;
+                offset = _this.el.offset();
+                return _this.fire('gridclick', evt.pageX - offset.left, evt.pageY - offset.top);
+            });
+            if (this.options.rangeSelect) {
+                this.selectionRect = this.raphael.rect(0, 0, 0, this.el.innerHeight()).attr({
+                    fill: this.options.rangeSelectColor,
+                    stroke: false
+                }).toBack().hide();
+                this.el.bind('mousedown', function(evt) {
+                    var offset;
+                    offset = _this.el.offset();
+                    return _this.startRange(evt.pageX - offset.left);
+                });
+                this.el.bind('mouseup', function(evt) {
+                    var offset;
+                    offset = _this.el.offset();
+                    _this.endRange(evt.pageX - offset.left);
+                    return _this.fire('hovermove', evt.pageX - offset.left, evt.pageY - offset.top);
+                });
+            }
+            if (this.options.resize) {
+                $(window).bind('resize', function(evt) {
+                    if (_this.timeoutId != null) {
+                        window.clearTimeout(_this.timeoutId);
+                    }
+                    return _this.timeoutId = window.setTimeout(_this.resizeHandler, 100);
+                });
+            }
+            if (this.postInit) {
+                this.postInit();
+            }
         }
-      } else {
-        return boundaryOption;
-      }
-    };
 
-    Grid.prototype.autoGridLines = function(ymin, ymax, nlines) {
-      var gmax, gmin, grid, smag, span, step, unit, y, ymag;
-      span = ymax - ymin;
-      ymag = Math.floor(Math.log(span) / Math.log(10));
-      unit = Math.pow(10, ymag);
-      gmin = Math.floor(ymin / unit) * unit;
-      gmax = Math.ceil(ymax / unit) * unit;
-      step = (gmax - gmin) / (nlines - 1);
-      if (unit === 1 && step > 1 && Math.ceil(step) !== step) {
-        step = Math.ceil(step);
-        gmax = gmin + step * (nlines - 1);
-      }
-      if (gmin < 0 && gmax > 0) {
-        gmin = Math.floor(ymin / step) * step;
-        gmax = Math.ceil(ymax / step) * step;
-      }
-      if (step < 1) {
-        smag = Math.floor(Math.log(step) / Math.log(10));
-        grid = (function() {
-          var _i, _results;
-          _results = [];
-          for (y = _i = gmin; step > 0 ? _i <= gmax : _i >= gmax; y = _i += step) {
-            _results.push(parseFloat(y.toFixed(1 - smag)));
-          }
-          return _results;
-        })();
-      } else {
-        grid = (function() {
-          var _i, _results;
-          _results = [];
-          for (y = _i = gmin; step > 0 ? _i <= gmax : _i >= gmax; y = _i += step) {
-            _results.push(y);
-          }
-          return _results;
-        })();
-      }
-      return grid;
-    };
+        Grid.prototype.gridDefaults = {
+            dateFormat: null,
+            axes: true,
+            grid: true,
+            gridLineColor: '#aaa',
+            gridStrokeWidth: 0.5,
+            gridTextColor: '#888',
+            gridTextSize: 12,
+            gridTextFamily: 'sans-serif',
+            gridTextWeight: 'normal',
+            hideHover: false,
+            yLabelFormat: null,
+            xLabelAngle: 0,
+            numLines: 5,
+            padding: 25,
+            parseTime: true,
+            postUnits: '',
+            preUnits: '',
+            ymax: 'auto',
+            ymin: 'auto 0',
+            goals: [],
+            goalStrokeWidth: 1.0,
+            goalLineColors: ['#666633', '#999966', '#cc6666', '#663333'],
+            events: [],
+            eventStrokeWidth: 1.0,
+            eventLineColors: ['#005a04', '#ccffbb', '#3a5f0b', '#005502'],
+            rangeSelect: null,
+            rangeSelectColor: '#eef',
+            resize: false
+        };
 
-    Grid.prototype._calc = function() {
-      var bottomOffsets, gridLine, h, i, w, yLabelWidths, _ref, _ref1;
-      w = this.el.width();
-      h = this.el.height();
-      if (this.elementWidth !== w || this.elementHeight !== h || this.dirty) {
-        this.elementWidth = w;
-        this.elementHeight = h;
-        this.dirty = false;
-        this.left = this.options.padding;
-        this.right = this.elementWidth - this.options.padding;
-        this.top = this.options.padding;
-        this.bottom = this.elementHeight - this.options.padding;
-        if ((_ref = this.options.axes) === true || _ref === 'both' || _ref === 'y') {
-          yLabelWidths = (function() {
-            var _i, _len, _ref1, _results;
+        Grid.prototype.setData = function(data, redraw) {
+            var e, idx, index, maxGoal, minGoal, ret, row, step, total, y, ykey, ymax, ymin, yval, _ref;
+            if (redraw == null) {
+                redraw = true;
+            }
+            this.options.data = data;
+            if ((data == null) || data.length === 0) {
+                this.data = [];
+                this.raphael.clear();
+                if (this.hover != null) {
+                    this.hover.hide();
+                }
+                return;
+            }
+            ymax = this.cumulative ? 0 : null;
+            ymin = this.cumulative ? 0 : null;
+            if (this.options.goals.length > 0) {
+                minGoal = Math.min.apply(Math, this.options.goals);
+                maxGoal = Math.max.apply(Math, this.options.goals);
+                ymin = ymin != null ? Math.min(ymin, minGoal) : minGoal;
+                ymax = ymax != null ? Math.max(ymax, maxGoal) : maxGoal;
+            }
+            this.data = (function() {
+                var _i, _len, _results;
+                _results = [];
+                for (index = _i = 0, _len = data.length; _i < _len; index = ++_i) {
+                    row = data[index];
+                    ret = {
+                        src: row
+                    };
+                    ret.label = row[this.options.xkey];
+                    if (this.options.parseTime) {
+                        ret.x = Morris.parseDate(ret.label);
+                        if (this.options.dateFormat) {
+                            ret.label = this.options.dateFormat(ret.x);
+                        } else if (typeof ret.label === 'number') {
+                            ret.label = new Date(ret.label).toString();
+                        }
+                    } else {
+                        ret.x = index;
+                        if (this.options.xLabelFormat) {
+                            ret.label = this.options.xLabelFormat(ret);
+                        }
+                    }
+                    total = 0;
+                    ret.y = (function() {
+                        var _j, _len1, _ref, _results1;
+                        _ref = this.options.ykeys;
+                        _results1 = [];
+                        for (idx = _j = 0, _len1 = _ref.length; _j < _len1; idx = ++_j) {
+                            ykey = _ref[idx];
+                            yval = row[ykey];
+                            if (typeof yval === 'string') {
+                                yval = parseFloat(yval);
+                            }
+                            if ((yval != null) && typeof yval !== 'number') {
+                                yval = null;
+                            }
+                            if (yval != null) {
+                                if (this.cumulative) {
+                                    total += yval;
+                                } else {
+                                    if (ymax != null) {
+                                        ymax = Math.max(yval, ymax);
+                                        ymin = Math.min(yval, ymin);
+                                    } else {
+                                        ymax = ymin = yval;
+                                    }
+                                }
+                            }
+                            if (this.cumulative && (total != null)) {
+                                ymax = Math.max(total, ymax);
+                                ymin = Math.min(total, ymin);
+                            }
+                            _results1.push(yval);
+                        }
+                        return _results1;
+                    }).call(this);
+                    _results.push(ret);
+                }
+                return _results;
+            }).call(this);
+            if (this.options.parseTime) {
+                this.data = this.data.sort(function(a, b) {
+                    return (a.x > b.x) - (b.x > a.x);
+                });
+            }
+            this.xmin = this.data[0].x;
+            this.xmax = this.data[this.data.length - 1].x;
+            this.events = [];
+            if (this.options.events.length > 0) {
+                if (this.options.parseTime) {
+                    this.events = (function() {
+                        var _i, _len, _ref, _results;
+                        _ref = this.options.events;
+                        _results = [];
+                        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                            e = _ref[_i];
+                            _results.push(Morris.parseDate(e));
+                        }
+                        return _results;
+                    }).call(this);
+                } else {
+                    this.events = this.options.events;
+                }
+                this.xmax = Math.max(this.xmax, Math.max.apply(Math, this.events));
+                this.xmin = Math.min(this.xmin, Math.min.apply(Math, this.events));
+            }
+            if (this.xmin === this.xmax) {
+                this.xmin -= 1;
+                this.xmax += 1;
+            }
+            this.ymin = this.yboundary('min', ymin);
+            this.ymax = this.yboundary('max', ymax);
+            if (this.ymin === this.ymax) {
+                if (ymin) {
+                    this.ymin -= 1;
+                }
+                this.ymax += 1;
+            }
+            if (((_ref = this.options.axes) === true || _ref === 'both' || _ref === 'y') || this.options.grid === true) {
+                if (this.options.ymax === this.gridDefaults.ymax && this.options.ymin === this.gridDefaults.ymin) {
+                    this.grid = this.autoGridLines(this.ymin, this.ymax, this.options.numLines);
+                    this.ymin = Math.min(this.ymin, this.grid[0]);
+                    this.ymax = Math.max(this.ymax, this.grid[this.grid.length - 1]);
+                } else {
+                    step = (this.ymax - this.ymin) / (this.options.numLines - 1);
+                    this.grid = (function() {
+                        var _i, _ref1, _ref2, _results;
+                        _results = [];
+                        for (y = _i = _ref1 = this.ymin, _ref2 = this.ymax; step > 0 ? _i <= _ref2 : _i >= _ref2; y = _i += step) {
+                            _results.push(y);
+                        }
+                        return _results;
+                    }).call(this);
+                }
+            }
+            this.dirty = true;
+            if (redraw) {
+                return this.redraw();
+            }
+        };
+
+        Grid.prototype.yboundary = function(boundaryType, currentValue) {
+            var boundaryOption, suggestedValue;
+            boundaryOption = this.options["y" + boundaryType];
+            if (typeof boundaryOption === 'string') {
+                if (boundaryOption.slice(0, 4) === 'auto') {
+                    if (boundaryOption.length > 5) {
+                        suggestedValue = parseInt(boundaryOption.slice(5), 10);
+                        if (currentValue == null) {
+                            return suggestedValue;
+                        }
+                        return Math[boundaryType](currentValue, suggestedValue);
+                    } else {
+                        if (currentValue != null) {
+                            return currentValue;
+                        } else {
+                            return 0;
+                        }
+                    }
+                } else {
+                    return parseInt(boundaryOption, 10);
+                }
+            } else {
+                return boundaryOption;
+            }
+        };
+
+        Grid.prototype.autoGridLines = function(ymin, ymax, nlines) {
+            var gmax, gmin, grid, smag, span, step, unit, y, ymag;
+            span = ymax - ymin;
+            ymag = Math.floor(Math.log(span) / Math.log(10));
+            unit = Math.pow(10, ymag);
+            gmin = Math.floor(ymin / unit) * unit;
+            gmax = Math.ceil(ymax / unit) * unit;
+            step = (gmax - gmin) / (nlines - 1);
+            if (unit === 1 && step > 1 && Math.ceil(step) !== step) {
+                step = Math.ceil(step);
+                gmax = gmin + step * (nlines - 1);
+            }
+            if (gmin < 0 && gmax > 0) {
+                gmin = Math.floor(ymin / step) * step;
+                gmax = Math.ceil(ymax / step) * step;
+            }
+            if (step < 1) {
+                smag = Math.floor(Math.log(step) / Math.log(10));
+                grid = (function() {
+                    var _i, _results;
+                    _results = [];
+                    for (y = _i = gmin; step > 0 ? _i <= gmax : _i >= gmax; y = _i += step) {
+                        _results.push(parseFloat(y.toFixed(1 - smag)));
+                    }
+                    return _results;
+                })();
+            } else {
+                grid = (function() {
+                    var _i, _results;
+                    _results = [];
+                    for (y = _i = gmin; step > 0 ? _i <= gmax : _i >= gmax; y = _i += step) {
+                        _results.push(y);
+                    }
+                    return _results;
+                })();
+            }
+            return grid;
+        };
+
+        Grid.prototype._calc = function() {
+            var bottomOffsets, gridLine, h, i, w, yLabelWidths, _ref, _ref1;
+            w = this.el.width();
+            h = this.el.height();
+            if (this.elementWidth !== w || this.elementHeight !== h || this.dirty) {
+                this.elementWidth = w;
+                this.elementHeight = h;
+                this.dirty = false;
+                this.left = this.options.padding;
+                this.right = this.elementWidth - this.options.padding;
+                this.top = this.options.padding;
+                this.bottom = this.elementHeight - this.options.padding;
+                if ((_ref = this.options.axes) === true || _ref === 'both' || _ref === 'y') {
+                    yLabelWidths = (function() {
+                        var _i, _len, _ref1, _results;
+                        _ref1 = this.grid;
+                        _results = [];
+                        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+                            gridLine = _ref1[_i];
+                            _results.push(this.measureText(this.yAxisFormat(gridLine)).width);
+                        }
+                        return _results;
+                    }).call(this);
+                    this.left += Math.max.apply(Math, yLabelWidths);
+                }
+                if ((_ref1 = this.options.axes) === true || _ref1 === 'both' || _ref1 === 'x') {
+                    bottomOffsets = (function() {
+                        var _i, _ref2, _results;
+                        _results = [];
+                        for (i = _i = 0, _ref2 = this.data.length; 0 <= _ref2 ? _i < _ref2 : _i > _ref2; i = 0 <= _ref2 ? ++_i : --_i) {
+                            _results.push(this.measureText(this.data[i].text, -this.options.xLabelAngle).height);
+                        }
+                        return _results;
+                    }).call(this);
+                    this.bottom -= Math.max.apply(Math, bottomOffsets);
+                }
+                this.width = Math.max(1, this.right - this.left);
+                this.height = Math.max(1, this.bottom - this.top);
+                this.dx = this.width / (this.xmax - this.xmin);
+                this.dy = this.height / (this.ymax - this.ymin);
+                if (this.calc) {
+                    return this.calc();
+                }
+            }
+        };
+
+        Grid.prototype.transY = function(y) {
+            return this.bottom - (y - this.ymin) * this.dy;
+        };
+
+        Grid.prototype.transX = function(x) {
+            if (this.data.length === 1) {
+                return (this.left + this.right) / 2;
+            } else {
+                return this.left + (x - this.xmin) * this.dx;
+            }
+        };
+
+        Grid.prototype.redraw = function() {
+            this.raphael.clear();
+            this._calc();
+            this.drawGrid();
+            this.drawGoals();
+            this.drawEvents();
+            if (this.draw) {
+                return this.draw();
+            }
+        };
+
+        Grid.prototype.measureText = function(text, angle) {
+            var ret, tt;
+            if (angle == null) {
+                angle = 0;
+            }
+            tt = this.raphael.text(100, 100, text).attr('font-size', this.options.gridTextSize).attr('font-family', this.options.gridTextFamily).attr('font-weight', this.options.gridTextWeight).rotate(angle);
+            ret = tt.getBBox();
+            tt.remove();
+            return ret;
+        };
+
+        Grid.prototype.yAxisFormat = function(label) {
+            return this.yLabelFormat(label);
+        };
+
+        Grid.prototype.yLabelFormat = function(label) {
+            if (typeof this.options.yLabelFormat === 'function') {
+                return this.options.yLabelFormat(label);
+            } else {
+                return "" + this.options.preUnits + (Morris.commas(label)) + this.options.postUnits;
+            }
+        };
+
+        Grid.prototype.drawGrid = function() {
+            var lineY, y, _i, _len, _ref, _ref1, _ref2, _results;
+            if (this.options.grid === false && ((_ref = this.options.axes) !== true && _ref !== 'both' && _ref !== 'y')) {
+                return;
+            }
             _ref1 = this.grid;
             _results = [];
             for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-              gridLine = _ref1[_i];
-              _results.push(this.measureText(this.yAxisFormat(gridLine)).width);
-            }
-            return _results;
-          }).call(this);
-          this.left += Math.max.apply(Math, yLabelWidths);
-        }
-        if ((_ref1 = this.options.axes) === true || _ref1 === 'both' || _ref1 === 'x') {
-          bottomOffsets = (function() {
-            var _i, _ref2, _results;
-            _results = [];
-            for (i = _i = 0, _ref2 = this.data.length; 0 <= _ref2 ? _i < _ref2 : _i > _ref2; i = 0 <= _ref2 ? ++_i : --_i) {
-              _results.push(this.measureText(this.data[i].text, -this.options.xLabelAngle).height);
-            }
-            return _results;
-          }).call(this);
-          this.bottom -= Math.max.apply(Math, bottomOffsets);
-        }
-        this.width = Math.max(1, this.right - this.left);
-        this.height = Math.max(1, this.bottom - this.top);
-        this.dx = this.width / (this.xmax - this.xmin);
-        this.dy = this.height / (this.ymax - this.ymin);
-        if (this.calc) {
-          return this.calc();
-        }
-      }
-    };
-
-    Grid.prototype.transY = function(y) {
-      return this.bottom - (y - this.ymin) * this.dy;
-    };
-
-    Grid.prototype.transX = function(x) {
-      if (this.data.length === 1) {
-        return (this.left + this.right) / 2;
-      } else {
-        return this.left + (x - this.xmin) * this.dx;
-      }
-    };
-
-    Grid.prototype.redraw = function() {
-      this.raphael.clear();
-      this._calc();
-      this.drawGrid();
-      this.drawGoals();
-      this.drawEvents();
-      if (this.draw) {
-        return this.draw();
-      }
-    };
-
-    Grid.prototype.measureText = function(text, angle) {
-      var ret, tt;
-      if (angle == null) {
-        angle = 0;
-      }
-      tt = this.raphael.text(100, 100, text).attr('font-size', this.options.gridTextSize).attr('font-family', this.options.gridTextFamily).attr('font-weight', this.options.gridTextWeight).rotate(angle);
-      ret = tt.getBBox();
-      tt.remove();
-      return ret;
-    };
-
-    Grid.prototype.yAxisFormat = function(label) {
-      return this.yLabelFormat(label);
-    };
-
-    Grid.prototype.yLabelFormat = function(label) {
-      if (typeof this.options.yLabelFormat === 'function') {
-        return this.options.yLabelFormat(label);
-      } else {
-        return "" + this.options.preUnits + (Morris.commas(label)) + this.options.postUnits;
-      }
-    };
-
-    Grid.prototype.drawGrid = function() {
-      var lineY, y, _i, _len, _ref, _ref1, _ref2, _results;
-      if (this.options.grid === false && ((_ref = this.options.axes) !== true && _ref !== 'both' && _ref !== 'y')) {
-        return;
-      }
-      _ref1 = this.grid;
-      _results = [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        lineY = _ref1[_i];
-        y = this.transY(lineY);
-        if ((_ref2 = this.options.axes) === true || _ref2 === 'both' || _ref2 === 'y') {
-          this.drawYAxisLabel(this.left - this.options.padding / 2, y, this.yAxisFormat(lineY));
-        }
-        if (this.options.grid) {
-          _results.push(this.drawGridLine("M" + this.left + "," + y + "H" + (this.left + this.width)));
-        } else {
-          _results.push(void 0);
-        }
-      }
-      return _results;
-    };
-
-    Grid.prototype.drawGoals = function() {
-      var color, goal, i, _i, _len, _ref, _results;
-      _ref = this.options.goals;
-      _results = [];
-      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-        goal = _ref[i];
-        color = this.options.goalLineColors[i % this.options.goalLineColors.length];
-        _results.push(this.drawGoal(goal, color));
-      }
-      return _results;
-    };
-
-    Grid.prototype.drawEvents = function() {
-      var color, event, i, _i, _len, _ref, _results;
-      _ref = this.events;
-      _results = [];
-      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-        event = _ref[i];
-        color = this.options.eventLineColors[i % this.options.eventLineColors.length];
-        _results.push(this.drawEvent(event, color));
-      }
-      return _results;
-    };
-
-    Grid.prototype.drawGoal = function(goal, color) {
-      return this.raphael.path("M" + this.left + "," + (this.transY(goal)) + "H" + this.right).attr('stroke', color).attr('stroke-width', this.options.goalStrokeWidth);
-    };
-
-    Grid.prototype.drawEvent = function(event, color) {
-      return this.raphael.path("M" + (this.transX(event)) + "," + this.bottom + "V" + this.top).attr('stroke', color).attr('stroke-width', this.options.eventStrokeWidth);
-    };
-
-    Grid.prototype.drawYAxisLabel = function(xPos, yPos, text) {
-      return this.raphael.text(xPos, yPos, text).attr('font-size', this.options.gridTextSize).attr('font-family', this.options.gridTextFamily).attr('font-weight', this.options.gridTextWeight).attr('fill', this.options.gridTextColor).attr('text-anchor', 'end');
-    };
-
-    Grid.prototype.drawGridLine = function(path) {
-      return this.raphael.path(path).attr('stroke', this.options.gridLineColor).attr('stroke-width', this.options.gridStrokeWidth);
-    };
-
-    Grid.prototype.startRange = function(x) {
-      this.hover.hide();
-      this.selectFrom = x;
-      return this.selectionRect.attr({
-        x: x,
-        width: 0
-      }).show();
-    };
-
-    Grid.prototype.endRange = function(x) {
-      var end, start;
-      if (this.selectFrom) {
-        start = Math.min(this.selectFrom, x);
-        end = Math.max(this.selectFrom, x);
-        this.options.rangeSelect.call(this.el, {
-          start: this.data[this.hitTest(start)].x,
-          end: this.data[this.hitTest(end)].x
-        });
-        return this.selectFrom = null;
-      }
-    };
-
-    Grid.prototype.resizeHandler = function() {
-      this.timeoutId = null;
-      this.raphael.setSize(this.el.width(), this.el.height());
-      return this.redraw();
-    };
-
-    return Grid;
-
-  })(Morris.EventEmitter);
-
-  Morris.parseDate = function(date) {
-    var isecs, m, msecs, n, o, offsetmins, p, q, r, ret, secs;
-    if (typeof date === 'number') {
-      return date;
-    }
-    m = date.match(/^(\d+) Q(\d)$/);
-    n = date.match(/^(\d+)-(\d+)$/);
-    o = date.match(/^(\d+)-(\d+)-(\d+)$/);
-    p = date.match(/^(\d+) W(\d+)$/);
-    q = date.match(/^(\d+)-(\d+)-(\d+)[ T](\d+):(\d+)(Z|([+-])(\d\d):?(\d\d))?$/);
-    r = date.match(/^(\d+)-(\d+)-(\d+)[ T](\d+):(\d+):(\d+(\.\d+)?)(Z|([+-])(\d\d):?(\d\d))?$/);
-    if (m) {
-      return new Date(parseInt(m[1], 10), parseInt(m[2], 10) * 3 - 1, 1).getTime();
-    } else if (n) {
-      return new Date(parseInt(n[1], 10), parseInt(n[2], 10) - 1, 1).getTime();
-    } else if (o) {
-      return new Date(parseInt(o[1], 10), parseInt(o[2], 10) - 1, parseInt(o[3], 10)).getTime();
-    } else if (p) {
-      ret = new Date(parseInt(p[1], 10), 0, 1);
-      if (ret.getDay() !== 4) {
-        ret.setMonth(0, 1 + ((4 - ret.getDay()) + 7) % 7);
-      }
-      return ret.getTime() + parseInt(p[2], 10) * 604800000;
-    } else if (q) {
-      if (!q[6]) {
-        return new Date(parseInt(q[1], 10), parseInt(q[2], 10) - 1, parseInt(q[3], 10), parseInt(q[4], 10), parseInt(q[5], 10)).getTime();
-      } else {
-        offsetmins = 0;
-        if (q[6] !== 'Z') {
-          offsetmins = parseInt(q[8], 10) * 60 + parseInt(q[9], 10);
-          if (q[7] === '+') {
-            offsetmins = 0 - offsetmins;
-          }
-        }
-        return Date.UTC(parseInt(q[1], 10), parseInt(q[2], 10) - 1, parseInt(q[3], 10), parseInt(q[4], 10), parseInt(q[5], 10) + offsetmins);
-      }
-    } else if (r) {
-      secs = parseFloat(r[6]);
-      isecs = Math.floor(secs);
-      msecs = Math.round((secs - isecs) * 1000);
-      if (!r[8]) {
-        return new Date(parseInt(r[1], 10), parseInt(r[2], 10) - 1, parseInt(r[3], 10), parseInt(r[4], 10), parseInt(r[5], 10), isecs, msecs).getTime();
-      } else {
-        offsetmins = 0;
-        if (r[8] !== 'Z') {
-          offsetmins = parseInt(r[10], 10) * 60 + parseInt(r[11], 10);
-          if (r[9] === '+') {
-            offsetmins = 0 - offsetmins;
-          }
-        }
-        return Date.UTC(parseInt(r[1], 10), parseInt(r[2], 10) - 1, parseInt(r[3], 10), parseInt(r[4], 10), parseInt(r[5], 10) + offsetmins, isecs, msecs);
-      }
-    } else {
-      return new Date(parseInt(date, 10), 0, 1).getTime();
-    }
-  };
-
-  Morris.Hover = (function() {
-    Hover.defaults = {
-      "class": 'morris-hover morris-default-style'
-    };
-
-    function Hover(options) {
-      if (options == null) {
-        options = {};
-      }
-      this.options = $.extend({}, Morris.Hover.defaults, options);
-      this.el = $("<div class='" + this.options["class"] + "'></div>");
-      this.el.hide();
-      this.options.parent.append(this.el);
-    }
-
-    Hover.prototype.update = function(html, x, y) {
-      this.html(html);
-      this.show();
-      return this.moveTo(x, y);
-    };
-
-    Hover.prototype.html = function(content) {
-      return this.el.html(content);
-    };
-
-    Hover.prototype.moveTo = function(x, y) {
-      var hoverHeight, hoverWidth, left, parentHeight, parentWidth, top;
-      parentWidth = this.options.parent.innerWidth();
-      parentHeight = this.options.parent.innerHeight();
-      hoverWidth = this.el.outerWidth();
-      hoverHeight = this.el.outerHeight();
-      left = Math.min(Math.max(0, x - hoverWidth / 2), parentWidth - hoverWidth);
-      if (y != null) {
-        top = y - hoverHeight - 10;
-        if (top < 0) {
-          top = y + 10;
-          if (top + hoverHeight > parentHeight) {
-            top = parentHeight / 2 - hoverHeight / 2;
-          }
-        }
-      } else {
-        top = parentHeight / 2 - hoverHeight / 2;
-      }
-      return this.el.css({
-        left: left + "px",
-        top: parseInt(top) + "px"
-      });
-    };
-
-    Hover.prototype.show = function() {
-      return this.el.show();
-    };
-
-    Hover.prototype.hide = function() {
-      return this.el.hide();
-    };
-
-    return Hover;
-
-  })();
-
-  Morris.Line = (function(_super) {
-    __extends(Line, _super);
-
-    function Line(options) {
-      this.hilight = __bind(this.hilight, this);
-      this.onHoverOut = __bind(this.onHoverOut, this);
-      this.onHoverMove = __bind(this.onHoverMove, this);
-      this.onGridClick = __bind(this.onGridClick, this);
-      if (!(this instanceof Morris.Line)) {
-        return new Morris.Line(options);
-      }
-      Line.__super__.constructor.call(this, options);
-    }
-
-    Line.prototype.init = function() {
-      if (this.options.hideHover !== 'always') {
-        this.hover = new Morris.Hover({
-          parent: this.el
-        });
-        this.on('hovermove', this.onHoverMove);
-        this.on('hoverout', this.onHoverOut);
-        return this.on('gridclick', this.onGridClick);
-      }
-    };
-
-    Line.prototype.defaults = {
-      lineWidth: 3,
-      pointSize: 4,
-      lineColors: ['#0b62a4', '#7A92A3', '#4da74d', '#afd8f8', '#edc240', '#cb4b4b', '#9440ed'],
-      pointStrokeWidths: [1],
-      pointStrokeColors: ['#ffffff'],
-      pointFillColors: [],
-      smooth: true,
-      xLabels: 'auto',
-      xLabelFormat: null,
-      xLabelMargin: 24,
-      continuousLine: true,
-      hideHover: false
-    };
-
-    Line.prototype.calc = function() {
-      this.calcPoints();
-      return this.generatePaths();
-    };
-
-    Line.prototype.calcPoints = function() {
-      var row, y, _i, _len, _ref, _results;
-      _ref = this.data;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        row = _ref[_i];
-        row._x = this.transX(row.x);
-        row._y = (function() {
-          var _j, _len1, _ref1, _results1;
-          _ref1 = row.y;
-          _results1 = [];
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            y = _ref1[_j];
-            if (y != null) {
-              _results1.push(this.transY(y));
-            } else {
-              _results1.push(y);
-            }
-          }
-          return _results1;
-        }).call(this);
-        _results.push(row._ymax = Math.min.apply(Math, [this.bottom].concat((function() {
-          var _j, _len1, _ref1, _results1;
-          _ref1 = row._y;
-          _results1 = [];
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            y = _ref1[_j];
-            if (y != null) {
-              _results1.push(y);
-            }
-          }
-          return _results1;
-        })())));
-      }
-      return _results;
-    };
-
-    Line.prototype.hitTest = function(x) {
-      var index, r, _i, _len, _ref;
-      if (this.data.length === 0) {
-        return null;
-      }
-      _ref = this.data.slice(1);
-      for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-        r = _ref[index];
-        if (x < (r._x + this.data[index]._x) / 2) {
-          break;
-        }
-      }
-      return index;
-    };
-
-    Line.prototype.onGridClick = function(x, y) {
-      var index;
-      index = this.hitTest(x);
-      return this.fire('click', index, this.data[index].src, x, y);
-    };
-
-    Line.prototype.onHoverMove = function(x, y) {
-      var index;
-      index = this.hitTest(x);
-      return this.displayHoverForRow(index);
-    };
-
-    Line.prototype.onHoverOut = function() {
-      if (this.options.hideHover !== false) {
-        return this.displayHoverForRow(null);
-      }
-    };
-
-    Line.prototype.displayHoverForRow = function(index) {
-      var _ref;
-      if (index != null) {
-        (_ref = this.hover).update.apply(_ref, this.hoverContentForRow(index));
-        return this.hilight(index);
-      } else {
-        this.hover.hide();
-        return this.hilight();
-      }
-    };
-
-    Line.prototype.hoverContentForRow = function(index) {
-      var content, j, row, y, _i, _len, _ref;
-      row = this.data[index];
-      content = "<div class='morris-hover-row-label'>" + row.label + "</div>";
-      _ref = row.y;
-      for (j = _i = 0, _len = _ref.length; _i < _len; j = ++_i) {
-        y = _ref[j];
-        content += "<div class='morris-hover-point' style='color: " + (this.colorFor(row, j, 'label')) + "'>\n  " + this.options.labels[j] + ":\n  " + (this.yLabelFormat(y)) + "\n</div>";
-      }
-      if (typeof this.options.hoverCallback === 'function') {
-        content = this.options.hoverCallback(index, this.options, content, row.src);
-      }
-      return [content, row._x, row._ymax];
-    };
-
-    Line.prototype.generatePaths = function() {
-      var c, coords, i, r, smooth;
-      return this.paths = (function() {
-        var _i, _ref, _ref1, _results;
-        _results = [];
-        for (i = _i = 0, _ref = this.options.ykeys.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-          smooth = typeof this.options.smooth === "boolean" ? this.options.smooth : (_ref1 = this.options.ykeys[i], __indexOf.call(this.options.smooth, _ref1) >= 0);
-          coords = (function() {
-            var _j, _len, _ref2, _results1;
-            _ref2 = this.data;
-            _results1 = [];
-            for (_j = 0, _len = _ref2.length; _j < _len; _j++) {
-              r = _ref2[_j];
-              if (r._y[i] !== void 0) {
-                _results1.push({
-                  x: r._x,
-                  y: r._y[i]
-                });
-              }
-            }
-            return _results1;
-          }).call(this);
-          if (this.options.continuousLine) {
-            coords = (function() {
-              var _j, _len, _results1;
-              _results1 = [];
-              for (_j = 0, _len = coords.length; _j < _len; _j++) {
-                c = coords[_j];
-                if (c.y !== null) {
-                  _results1.push(c);
+                lineY = _ref1[_i];
+                y = this.transY(lineY);
+                if ((_ref2 = this.options.axes) === true || _ref2 === 'both' || _ref2 === 'y') {
+                    this.drawYAxisLabel(this.left - this.options.padding / 2, y, this.yAxisFormat(lineY));
                 }
-              }
-              return _results1;
-            })();
-          }
-          if (coords.length > 1) {
-            _results.push(Morris.Line.createPath(coords, smooth, this.bottom));
-          } else {
-            _results.push(null);
-          }
-        }
-        return _results;
-      }).call(this);
-    };
-
-    Line.prototype.draw = function() {
-      var _ref;
-      if ((_ref = this.options.axes) === true || _ref === 'both' || _ref === 'x') {
-        this.drawXAxis();
-      }
-      this.drawSeries();
-      if (this.options.hideHover === false) {
-        return this.displayHoverForRow(this.data.length - 1);
-      }
-    };
-
-    Line.prototype.drawXAxis = function() {
-      var drawLabel, l, labels, prevAngleMargin, prevLabelMargin, row, ypos, _i, _len, _results,
-        _this = this;
-      ypos = this.bottom + this.options.padding / 2;
-      prevLabelMargin = null;
-      prevAngleMargin = null;
-      drawLabel = function(labelText, xpos) {
-        var label, labelBox, margin, offset, textBox;
-        label = _this.drawXAxisLabel(_this.transX(xpos), ypos, labelText);
-        textBox = label.getBBox();
-        label.transform("r" + (-_this.options.xLabelAngle));
-        labelBox = label.getBBox();
-        label.transform("t0," + (labelBox.height / 2) + "...");
-        if (_this.options.xLabelAngle !== 0) {
-          offset = -0.5 * textBox.width * Math.cos(_this.options.xLabelAngle * Math.PI / 180.0);
-          label.transform("t" + offset + ",0...");
-        }
-        labelBox = label.getBBox();
-        if (((prevLabelMargin == null) || prevLabelMargin >= labelBox.x + labelBox.width || (prevAngleMargin != null) && prevAngleMargin >= labelBox.x) && labelBox.x >= 0 && (labelBox.x + labelBox.width) < _this.el.width()) {
-          if (_this.options.xLabelAngle !== 0) {
-            margin = 1.25 * _this.options.gridTextSize / Math.sin(_this.options.xLabelAngle * Math.PI / 180.0);
-            prevAngleMargin = labelBox.x - margin;
-          }
-          return prevLabelMargin = labelBox.x - _this.options.xLabelMargin;
-        } else {
-          return label.remove();
-        }
-      };
-      if (this.options.parseTime) {
-        if (this.data.length === 1 && this.options.xLabels === 'auto') {
-          labels = [[this.data[0].label, this.data[0].x]];
-        } else {
-          labels = Morris.labelSeries(this.xmin, this.xmax, this.width, this.options.xLabels, this.options.xLabelFormat);
-        }
-      } else {
-        labels = (function() {
-          var _i, _len, _ref, _results;
-          _ref = this.data;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            row = _ref[_i];
-            _results.push([row.label, row.x]);
-          }
-          return _results;
-        }).call(this);
-      }
-      labels.reverse();
-      _results = [];
-      for (_i = 0, _len = labels.length; _i < _len; _i++) {
-        l = labels[_i];
-        _results.push(drawLabel(l[0], l[1]));
-      }
-      return _results;
-    };
-
-    Line.prototype.drawSeries = function() {
-      var i, _i, _j, _ref, _ref1, _results;
-      this.seriesPoints = [];
-      for (i = _i = _ref = this.options.ykeys.length - 1; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
-        this._drawLineFor(i);
-      }
-      _results = [];
-      for (i = _j = _ref1 = this.options.ykeys.length - 1; _ref1 <= 0 ? _j <= 0 : _j >= 0; i = _ref1 <= 0 ? ++_j : --_j) {
-        _results.push(this._drawPointFor(i));
-      }
-      return _results;
-    };
-
-    Line.prototype._drawPointFor = function(index) {
-      var circle, row, _i, _len, _ref, _results;
-      this.seriesPoints[index] = [];
-      _ref = this.data;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        row = _ref[_i];
-        circle = null;
-        if (row._y[index] != null) {
-          circle = this.drawLinePoint(row._x, row._y[index], this.colorFor(row, index, 'point'), index);
-        }
-        _results.push(this.seriesPoints[index].push(circle));
-      }
-      return _results;
-    };
-
-    Line.prototype._drawLineFor = function(index) {
-      var path;
-      path = this.paths[index];
-      if (path !== null) {
-        return this.drawLinePath(path, this.colorFor(null, index, 'line'), index);
-      }
-    };
-
-    Line.createPath = function(coords, smooth, bottom) {
-      var coord, g, grads, i, ix, lg, path, prevCoord, x1, x2, y1, y2, _i, _len;
-      path = "";
-      if (smooth) {
-        grads = Morris.Line.gradients(coords);
-      }
-      prevCoord = {
-        y: null
-      };
-      for (i = _i = 0, _len = coords.length; _i < _len; i = ++_i) {
-        coord = coords[i];
-        if (coord.y != null) {
-          if (prevCoord.y != null) {
-            if (smooth) {
-              g = grads[i];
-              lg = grads[i - 1];
-              ix = (coord.x - prevCoord.x) / 4;
-              x1 = prevCoord.x + ix;
-              y1 = Math.min(bottom, prevCoord.y + ix * lg);
-              x2 = coord.x - ix;
-              y2 = Math.min(bottom, coord.y - ix * g);
-              path += "C" + x1 + "," + y1 + "," + x2 + "," + y2 + "," + coord.x + "," + coord.y;
-            } else {
-              path += "L" + coord.x + "," + coord.y;
-            }
-          } else {
-            if (!smooth || (grads[i] != null)) {
-              path += "M" + coord.x + "," + coord.y;
-            }
-          }
-        }
-        prevCoord = coord;
-      }
-      return path;
-    };
-
-    Line.gradients = function(coords) {
-      var coord, grad, i, nextCoord, prevCoord, _i, _len, _results;
-      grad = function(a, b) {
-        return (a.y - b.y) / (a.x - b.x);
-      };
-      _results = [];
-      for (i = _i = 0, _len = coords.length; _i < _len; i = ++_i) {
-        coord = coords[i];
-        if (coord.y != null) {
-          nextCoord = coords[i + 1] || {
-            y: null
-          };
-          prevCoord = coords[i - 1] || {
-            y: null
-          };
-          if ((prevCoord.y != null) && (nextCoord.y != null)) {
-            _results.push(grad(prevCoord, nextCoord));
-          } else if (prevCoord.y != null) {
-            _results.push(grad(prevCoord, coord));
-          } else if (nextCoord.y != null) {
-            _results.push(grad(coord, nextCoord));
-          } else {
-            _results.push(null);
-          }
-        } else {
-          _results.push(null);
-        }
-      }
-      return _results;
-    };
-
-    Line.prototype.hilight = function(index) {
-      var i, _i, _j, _ref, _ref1;
-      if (this.prevHilight !== null && this.prevHilight !== index) {
-        for (i = _i = 0, _ref = this.seriesPoints.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
-          if (this.seriesPoints[i][this.prevHilight]) {
-            this.seriesPoints[i][this.prevHilight].animate(this.pointShrinkSeries(i));
-          }
-        }
-      }
-      if (index !== null && this.prevHilight !== index) {
-        for (i = _j = 0, _ref1 = this.seriesPoints.length - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
-          if (this.seriesPoints[i][index]) {
-            this.seriesPoints[i][index].animate(this.pointGrowSeries(i));
-          }
-        }
-      }
-      return this.prevHilight = index;
-    };
-
-    Line.prototype.colorFor = function(row, sidx, type) {
-      if (typeof this.options.lineColors === 'function') {
-        return this.options.lineColors.call(this, row, sidx, type);
-      } else if (type === 'point') {
-        return this.options.pointFillColors[sidx % this.options.pointFillColors.length] || this.options.lineColors[sidx % this.options.lineColors.length];
-      } else {
-        return this.options.lineColors[sidx % this.options.lineColors.length];
-      }
-    };
-
-    Line.prototype.drawXAxisLabel = function(xPos, yPos, text) {
-      return this.raphael.text(xPos, yPos, text).attr('font-size', this.options.gridTextSize).attr('font-family', this.options.gridTextFamily).attr('font-weight', this.options.gridTextWeight).attr('fill', this.options.gridTextColor);
-    };
-
-    Line.prototype.drawLinePath = function(path, lineColor, lineIndex) {
-      return this.raphael.path(path).attr('stroke', lineColor).attr('stroke-width', this.lineWidthForSeries(lineIndex));
-    };
-
-    Line.prototype.drawLinePoint = function(xPos, yPos, pointColor, lineIndex) {
-      return this.raphael.circle(xPos, yPos, this.pointSizeForSeries(lineIndex)).attr('fill', pointColor).attr('stroke-width', this.pointStrokeWidthForSeries(lineIndex)).attr('stroke', this.pointStrokeColorForSeries(lineIndex));
-    };
-
-    Line.prototype.pointStrokeWidthForSeries = function(index) {
-      return this.options.pointStrokeWidths[index % this.options.pointStrokeWidths.length];
-    };
-
-    Line.prototype.pointStrokeColorForSeries = function(index) {
-      return this.options.pointStrokeColors[index % this.options.pointStrokeColors.length];
-    };
-
-    Line.prototype.lineWidthForSeries = function(index) {
-      if (this.options.lineWidth instanceof Array) {
-        return this.options.lineWidth[index % this.options.lineWidth.length];
-      } else {
-        return this.options.lineWidth;
-      }
-    };
-
-    Line.prototype.pointSizeForSeries = function(index) {
-      if (this.options.pointSize instanceof Array) {
-        return this.options.pointSize[index % this.options.pointSize.length];
-      } else {
-        return this.options.pointSize;
-      }
-    };
-
-    Line.prototype.pointGrowSeries = function(index) {
-      return Raphael.animation({
-        r: this.pointSizeForSeries(index) + 3
-      }, 25, 'linear');
-    };
-
-    Line.prototype.pointShrinkSeries = function(index) {
-      return Raphael.animation({
-        r: this.pointSizeForSeries(index)
-      }, 25, 'linear');
-    };
-
-    return Line;
-
-  })(Morris.Grid);
-
-  Morris.labelSeries = function(dmin, dmax, pxwidth, specName, xLabelFormat) {
-    var d, d0, ddensity, name, ret, s, spec, t, _i, _len, _ref;
-    ddensity = 200 * (dmax - dmin) / pxwidth;
-    d0 = new Date(dmin);
-    spec = Morris.LABEL_SPECS[specName];
-    if (spec === void 0) {
-      _ref = Morris.AUTO_LABEL_ORDER;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        name = _ref[_i];
-        s = Morris.LABEL_SPECS[name];
-        if (ddensity >= s.span) {
-          spec = s;
-          break;
-        }
-      }
-    }
-    if (spec === void 0) {
-      spec = Morris.LABEL_SPECS["second"];
-    }
-    if (xLabelFormat) {
-      spec = $.extend({}, spec, {
-        fmt: xLabelFormat
-      });
-    }
-    d = spec.start(d0);
-    ret = [];
-    while ((t = d.getTime()) <= dmax) {
-      if (t >= dmin) {
-        ret.push([spec.fmt(d), t]);
-      }
-      spec.incr(d);
-    }
-    return ret;
-  };
-
-  minutesSpecHelper = function(interval) {
-    return {
-      span: interval * 60 * 1000,
-      start: function(d) {
-        return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours());
-      },
-      fmt: function(d) {
-        return "" + (Morris.pad2(d.getHours())) + ":" + (Morris.pad2(d.getMinutes()));
-      },
-      incr: function(d) {
-        return d.setUTCMinutes(d.getUTCMinutes() + interval);
-      }
-    };
-  };
-
-  secondsSpecHelper = function(interval) {
-    return {
-      span: interval * 1000,
-      start: function(d) {
-        return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes());
-      },
-      fmt: function(d) {
-        return "" + (Morris.pad2(d.getHours())) + ":" + (Morris.pad2(d.getMinutes())) + ":" + (Morris.pad2(d.getSeconds()));
-      },
-      incr: function(d) {
-        return d.setUTCSeconds(d.getUTCSeconds() + interval);
-      }
-    };
-  };
-
-  Morris.LABEL_SPECS = {
-    "decade": {
-      span: 172800000000,
-      start: function(d) {
-        return new Date(d.getFullYear() - d.getFullYear() % 10, 0, 1);
-      },
-      fmt: function(d) {
-        return "" + (d.getFullYear());
-      },
-      incr: function(d) {
-        return d.setFullYear(d.getFullYear() + 10);
-      }
-    },
-    "year": {
-      span: 17280000000,
-      start: function(d) {
-        return new Date(d.getFullYear(), 0, 1);
-      },
-      fmt: function(d) {
-        return "" + (d.getFullYear());
-      },
-      incr: function(d) {
-        return d.setFullYear(d.getFullYear() + 1);
-      }
-    },
-    "month": {
-      span: 2419200000,
-      start: function(d) {
-        return new Date(d.getFullYear(), d.getMonth(), 1);
-      },
-      fmt: function(d) {
-        return "" + (d.getFullYear()) + "-" + (Morris.pad2(d.getMonth() + 1));
-      },
-      incr: function(d) {
-        return d.setMonth(d.getMonth() + 1);
-      }
-    },
-    "week": {
-      span: 604800000,
-      start: function(d) {
-        return new Date(d.getFullYear(), d.getMonth(), d.getDate());
-      },
-      fmt: function(d) {
-        return "" + (d.getFullYear()) + "-" + (Morris.pad2(d.getMonth() + 1)) + "-" + (Morris.pad2(d.getDate()));
-      },
-      incr: function(d) {
-        return d.setDate(d.getDate() + 7);
-      }
-    },
-    "day": {
-      span: 86400000,
-      start: function(d) {
-        return new Date(d.getFullYear(), d.getMonth(), d.getDate());
-      },
-      fmt: function(d) {
-        return "" + (d.getFullYear()) + "-" + (Morris.pad2(d.getMonth() + 1)) + "-" + (Morris.pad2(d.getDate()));
-      },
-      incr: function(d) {
-        return d.setDate(d.getDate() + 1);
-      }
-    },
-    "hour": minutesSpecHelper(60),
-    "30min": minutesSpecHelper(30),
-    "15min": minutesSpecHelper(15),
-    "10min": minutesSpecHelper(10),
-    "5min": minutesSpecHelper(5),
-    "minute": minutesSpecHelper(1),
-    "30sec": secondsSpecHelper(30),
-    "15sec": secondsSpecHelper(15),
-    "10sec": secondsSpecHelper(10),
-    "5sec": secondsSpecHelper(5),
-    "second": secondsSpecHelper(1)
-  };
-
-  Morris.AUTO_LABEL_ORDER = ["decade", "year", "month", "week", "day", "hour", "30min", "15min", "10min", "5min", "minute", "30sec", "15sec", "10sec", "5sec", "second"];
-
-  Morris.Area = (function(_super) {
-    var areaDefaults;
-
-    __extends(Area, _super);
-
-    areaDefaults = {
-      fillOpacity: 'auto',
-      behaveLikeLine: false
-    };
-
-    function Area(options) {
-      var areaOptions;
-      if (!(this instanceof Morris.Area)) {
-        return new Morris.Area(options);
-      }
-      areaOptions = $.extend({}, areaDefaults, options);
-      this.cumulative = !areaOptions.behaveLikeLine;
-      if (areaOptions.fillOpacity === 'auto') {
-        areaOptions.fillOpacity = areaOptions.behaveLikeLine ? .8 : 1;
-      }
-      Area.__super__.constructor.call(this, areaOptions);
-    }
-
-    Area.prototype.calcPoints = function() {
-      var row, total, y, _i, _len, _ref, _results;
-      _ref = this.data;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        row = _ref[_i];
-        row._x = this.transX(row.x);
-        total = 0;
-        row._y = (function() {
-          var _j, _len1, _ref1, _results1;
-          _ref1 = row.y;
-          _results1 = [];
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            y = _ref1[_j];
-            if (this.options.behaveLikeLine) {
-              _results1.push(this.transY(y));
-            } else {
-              total += y || 0;
-              _results1.push(this.transY(total));
-            }
-          }
-          return _results1;
-        }).call(this);
-        _results.push(row._ymax = Math.max.apply(Math, row._y));
-      }
-      return _results;
-    };
-
-    Area.prototype.drawSeries = function() {
-      var i, range, _i, _j, _k, _len, _ref, _ref1, _results, _results1, _results2;
-      this.seriesPoints = [];
-      if (this.options.behaveLikeLine) {
-        range = (function() {
-          _results = [];
-          for (var _i = 0, _ref = this.options.ykeys.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; 0 <= _ref ? _i++ : _i--){ _results.push(_i); }
-          return _results;
-        }).apply(this);
-      } else {
-        range = (function() {
-          _results1 = [];
-          for (var _j = _ref1 = this.options.ykeys.length - 1; _ref1 <= 0 ? _j <= 0 : _j >= 0; _ref1 <= 0 ? _j++ : _j--){ _results1.push(_j); }
-          return _results1;
-        }).apply(this);
-      }
-      _results2 = [];
-      for (_k = 0, _len = range.length; _k < _len; _k++) {
-        i = range[_k];
-        this._drawFillFor(i);
-        this._drawLineFor(i);
-        _results2.push(this._drawPointFor(i));
-      }
-      return _results2;
-    };
-
-    Area.prototype._drawFillFor = function(index) {
-      var path;
-      path = this.paths[index];
-      if (path !== null) {
-        path = path + ("L" + (this.transX(this.xmax)) + "," + this.bottom + "L" + (this.transX(this.xmin)) + "," + this.bottom + "Z");
-        return this.drawFilledPath(path, this.fillForSeries(index));
-      }
-    };
-
-    Area.prototype.fillForSeries = function(i) {
-      var color;
-      color = Raphael.rgb2hsl(this.colorFor(this.data[i], i, 'line'));
-      return Raphael.hsl(color.h, this.options.behaveLikeLine ? color.s * 0.9 : color.s * 0.75, Math.min(0.98, this.options.behaveLikeLine ? color.l * 1.2 : color.l * 1.25));
-    };
-
-    Area.prototype.drawFilledPath = function(path, fill) {
-      return this.raphael.path(path).attr('fill', fill).attr('fill-opacity', this.options.fillOpacity).attr('stroke', 'none');
-    };
-
-    return Area;
-
-  })(Morris.Line);
-
-  Morris.Bar = (function(_super) {
-    __extends(Bar, _super);
-
-    function Bar(options) {
-      this.onHoverOut = __bind(this.onHoverOut, this);
-      this.onHoverMove = __bind(this.onHoverMove, this);
-      this.onGridClick = __bind(this.onGridClick, this);
-      if (!(this instanceof Morris.Bar)) {
-        return new Morris.Bar(options);
-      }
-      Bar.__super__.constructor.call(this, $.extend({}, options, {
-        parseTime: false
-      }));
-    }
-
-    Bar.prototype.init = function() {
-      this.cumulative = this.options.stacked;
-      if (this.options.hideHover !== 'always') {
-        this.hover = new Morris.Hover({
-          parent: this.el
-        });
-        this.on('hovermove', this.onHoverMove);
-        this.on('hoverout', this.onHoverOut);
-        return this.on('gridclick', this.onGridClick);
-      }
-    };
-
-    Bar.prototype.defaults = {
-      barSizeRatio: 0.75,
-      barGap: 3,
-      barColors: ['#0b62a4', '#7a92a3', '#4da74d', '#afd8f8', '#edc240', '#cb4b4b', '#9440ed'],
-      barOpacity: 1.0,
-      barRadius: [0, 0, 0, 0],
-      xLabelMargin: 50
-    };
-
-    Bar.prototype.calc = function() {
-      var _ref;
-      this.calcBars();
-      if (this.options.hideHover === false) {
-        return (_ref = this.hover).update.apply(_ref, this.hoverContentForRow(this.data.length - 1));
-      }
-    };
-
-    Bar.prototype.calcBars = function() {
-      var idx, row, y, _i, _len, _ref, _results;
-      _ref = this.data;
-      _results = [];
-      for (idx = _i = 0, _len = _ref.length; _i < _len; idx = ++_i) {
-        row = _ref[idx];
-        row._x = this.left + this.width * (idx + 0.5) / this.data.length;
-        _results.push(row._y = (function() {
-          var _j, _len1, _ref1, _results1;
-          _ref1 = row.y;
-          _results1 = [];
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            y = _ref1[_j];
-            if (y != null) {
-              _results1.push(this.transY(y));
-            } else {
-              _results1.push(null);
-            }
-          }
-          return _results1;
-        }).call(this));
-      }
-      return _results;
-    };
-
-    Bar.prototype.draw = function() {
-      var _ref;
-      if ((_ref = this.options.axes) === true || _ref === 'both' || _ref === 'x') {
-        this.drawXAxis();
-      }
-      return this.drawSeries();
-    };
-
-    Bar.prototype.drawXAxis = function() {
-      var i, label, labelBox, margin, offset, prevAngleMargin, prevLabelMargin, row, textBox, ypos, _i, _ref, _results;
-      ypos = this.bottom + (this.options.xAxisLabelTopPadding || this.options.padding / 2);
-      prevLabelMargin = null;
-      prevAngleMargin = null;
-      _results = [];
-      for (i = _i = 0, _ref = this.data.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        row = this.data[this.data.length - 1 - i];
-        label = this.drawXAxisLabel(row._x, ypos, row.label);
-        textBox = label.getBBox();
-        label.transform("r" + (-this.options.xLabelAngle));
-        labelBox = label.getBBox();
-        label.transform("t0," + (labelBox.height / 2) + "...");
-        if (this.options.xLabelAngle !== 0) {
-          offset = -0.5 * textBox.width * Math.cos(this.options.xLabelAngle * Math.PI / 180.0);
-          label.transform("t" + offset + ",0...");
-        }
-        if (((prevLabelMargin == null) || prevLabelMargin >= labelBox.x + labelBox.width || (prevAngleMargin != null) && prevAngleMargin >= labelBox.x) && labelBox.x >= 0 && (labelBox.x + labelBox.width) < this.el.width()) {
-          if (this.options.xLabelAngle !== 0) {
-            margin = 1.25 * this.options.gridTextSize / Math.sin(this.options.xLabelAngle * Math.PI / 180.0);
-            prevAngleMargin = labelBox.x - margin;
-          }
-          _results.push(prevLabelMargin = labelBox.x - this.options.xLabelMargin);
-        } else {
-          _results.push(label.remove());
-        }
-      }
-      return _results;
-    };
-
-    Bar.prototype.drawSeries = function() {
-      var barWidth, bottom, groupWidth, idx, lastTop, left, leftPadding, numBars, row, sidx, size, spaceLeft, top, ypos, zeroPos;
-      groupWidth = this.width / this.options.data.length;
-      numBars = this.options.stacked != null ? 1 : this.options.ykeys.length;
-      barWidth = (groupWidth * this.options.barSizeRatio - this.options.barGap * (numBars - 1)) / numBars;
-      if (this.options.barSize) {
-        barWidth = Math.min(barWidth, this.options.barSize);
-      }
-      spaceLeft = groupWidth - barWidth * numBars - this.options.barGap * (numBars - 1);
-      leftPadding = spaceLeft / 2;
-      zeroPos = this.ymin <= 0 && this.ymax >= 0 ? this.transY(0) : null;
-      return this.bars = (function() {
-        var _i, _len, _ref, _results;
-        _ref = this.data;
-        _results = [];
-        for (idx = _i = 0, _len = _ref.length; _i < _len; idx = ++_i) {
-          row = _ref[idx];
-          lastTop = 0;
-          _results.push((function() {
-            var _j, _len1, _ref1, _results1;
-            _ref1 = row._y;
-            _results1 = [];
-            for (sidx = _j = 0, _len1 = _ref1.length; _j < _len1; sidx = ++_j) {
-              ypos = _ref1[sidx];
-              if (ypos !== null) {
-                if (zeroPos) {
-                  top = Math.min(ypos, zeroPos);
-                  bottom = Math.max(ypos, zeroPos);
+                if (this.options.grid) {
+                    _results.push(this.drawGridLine("M" + this.left + "," + y + "H" + (this.left + this.width)));
                 } else {
-                  top = ypos;
-                  bottom = this.bottom;
+                    _results.push(void 0);
                 }
-                left = this.left + idx * groupWidth + leftPadding;
-                if (!this.options.stacked) {
-                  left += sidx * (barWidth + this.options.barGap);
-                }
-                size = bottom - top;
-                if (this.options.stacked) {
-                  top -= lastTop;
-                }
-                this.drawBar(left, top, barWidth, size, this.colorFor(row, sidx, 'bar'), this.options.barOpacity, this.options.barRadius);
-                _results1.push(lastTop += size);
-              } else {
-                _results1.push(null);
-              }
             }
-            return _results1;
-          }).call(this));
-        }
-        return _results;
-      }).call(this);
-    };
-
-    Bar.prototype.colorFor = function(row, sidx, type) {
-      var r, s;
-      if (typeof this.options.barColors === 'function') {
-        r = {
-          x: row.x,
-          y: row.y[sidx],
-          label: row.label
+            return _results;
         };
-        s = {
-          index: sidx,
-          key: this.options.ykeys[sidx],
-          label: this.options.labels[sidx]
+
+        Grid.prototype.drawGoals = function() {
+            var color, goal, i, _i, _len, _ref, _results;
+            _ref = this.options.goals;
+            _results = [];
+            for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+                goal = _ref[i];
+                color = this.options.goalLineColors[i % this.options.goalLineColors.length];
+                _results.push(this.drawGoal(goal, color));
+            }
+            return _results;
         };
-        return this.options.barColors.call(this, r, s, type);
-      } else {
-        return this.options.barColors[sidx % this.options.barColors.length];
-      }
-    };
 
-    Bar.prototype.hitTest = function(x) {
-      if (this.data.length === 0) {
-        return null;
-      }
-      x = Math.max(Math.min(x, this.right), this.left);
-      return Math.min(this.data.length - 1, Math.floor((x - this.left) / (this.width / this.data.length)));
-    };
+        Grid.prototype.drawEvents = function() {
+            var color, event, i, _i, _len, _ref, _results;
+            _ref = this.events;
+            _results = [];
+            for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+                event = _ref[i];
+                color = this.options.eventLineColors[i % this.options.eventLineColors.length];
+                _results.push(this.drawEvent(event, color));
+            }
+            return _results;
+        };
 
-    Bar.prototype.onGridClick = function(x, y) {
-      var index;
-      index = this.hitTest(x);
-      return this.fire('click', index, this.data[index].src, x, y);
-    };
+        Grid.prototype.drawGoal = function(goal, color) {
+            return this.raphael.path("M" + this.left + "," + (this.transY(goal)) + "H" + this.right).attr('stroke', color).attr('stroke-width', this.options.goalStrokeWidth);
+        };
 
-    Bar.prototype.onHoverMove = function(x, y) {
-      var index, _ref;
-      index = this.hitTest(x);
-      return (_ref = this.hover).update.apply(_ref, this.hoverContentForRow(index));
-    };
+        Grid.prototype.drawEvent = function(event, color) {
+            return this.raphael.path("M" + (this.transX(event)) + "," + this.bottom + "V" + this.top).attr('stroke', color).attr('stroke-width', this.options.eventStrokeWidth);
+        };
 
-    Bar.prototype.onHoverOut = function() {
-      if (this.options.hideHover !== false) {
-        return this.hover.hide();
-      }
-    };
+        Grid.prototype.drawYAxisLabel = function(xPos, yPos, text) {
+            return this.raphael.text(xPos, yPos, text).attr('font-size', this.options.gridTextSize).attr('font-family', this.options.gridTextFamily).attr('font-weight', this.options.gridTextWeight).attr('fill', this.options.gridTextColor).attr('text-anchor', 'end');
+        };
 
-    Bar.prototype.hoverContentForRow = function(index) {
-      var content, j, row, x, y, _i, _len, _ref;
-      row = this.data[index];
-      content = "<div class='morris-hover-row-label'>" + row.label + "</div>";
-      _ref = row.y;
-      for (j = _i = 0, _len = _ref.length; _i < _len; j = ++_i) {
-        y = _ref[j];
-        content += "<div class='morris-hover-point' style='color: " + (this.colorFor(row, j, 'label')) + "'>\n  " + this.options.labels[j] + ":\n  " + (this.yLabelFormat(y)) + "\n</div>";
-      }
-      if (typeof this.options.hoverCallback === 'function') {
-        content = this.options.hoverCallback(index, this.options, content, row.src);
-      }
-      x = this.left + (index + 0.5) * this.width / this.data.length;
-      return [content, x];
-    };
+        Grid.prototype.drawGridLine = function(path) {
+            return this.raphael.path(path).attr('stroke', this.options.gridLineColor).attr('stroke-width', this.options.gridStrokeWidth);
+        };
 
-    Bar.prototype.drawXAxisLabel = function(xPos, yPos, text) {
-      var label;
-      return label = this.raphael.text(xPos, yPos, text).attr('font-size', this.options.gridTextSize).attr('font-family', this.options.gridTextFamily).attr('font-weight', this.options.gridTextWeight).attr('fill', this.options.gridTextColor);
-    };
+        Grid.prototype.startRange = function(x) {
+            this.hover.hide();
+            this.selectFrom = x;
+            return this.selectionRect.attr({
+                x: x,
+                width: 0
+            }).show();
+        };
 
-    Bar.prototype.drawBar = function(xPos, yPos, width, height, barColor, opacity, radiusArray) {
-      var maxRadius, path;
-      maxRadius = Math.max.apply(Math, radiusArray);
-      if (maxRadius === 0 || maxRadius > height) {
-        path = this.raphael.rect(xPos, yPos, width, height);
-      } else {
-        path = this.raphael.path(this.roundedRect(xPos, yPos, width, height, radiusArray));
-      }
-      return path.attr('fill', barColor).attr('fill-opacity', opacity).attr('stroke', 'none');
-    };
+        Grid.prototype.endRange = function(x) {
+            var end, start;
+            if (this.selectFrom) {
+                start = Math.min(this.selectFrom, x);
+                end = Math.max(this.selectFrom, x);
+                this.options.rangeSelect.call(this.el, {
+                    start: this.data[this.hitTest(start)].x,
+                    end: this.data[this.hitTest(end)].x
+                });
+                return this.selectFrom = null;
+            }
+        };
 
-    Bar.prototype.roundedRect = function(x, y, w, h, r) {
-      if (r == null) {
-        r = [0, 0, 0, 0];
-      }
-      return ["M", x, r[0] + y, "Q", x, y, x + r[0], y, "L", x + w - r[1], y, "Q", x + w, y, x + w, y + r[1], "L", x + w, y + h - r[2], "Q", x + w, y + h, x + w - r[2], y + h, "L", x + r[3], y + h, "Q", x, y + h, x, y + h - r[3], "Z"];
-    };
+        Grid.prototype.resizeHandler = function() {
+            this.timeoutId = null;
+            this.raphael.setSize(this.el.width(), this.el.height());
+            return this.redraw();
+        };
 
-    return Bar;
+        return Grid;
 
-  })(Morris.Grid);
+    })(Morris.EventEmitter);
 
-  Morris.Donut = (function(_super) {
-    __extends(Donut, _super);
-
-    Donut.prototype.defaults = {
-      colors: ['#0B62A4', '#3980B5', '#679DC6', '#95BBD7', '#B0CCE1', '#095791', '#095085', '#083E67', '#052C48', '#042135'],
-      backgroundColor: '#FFFFFF',
-      labelColor: '#000000',
-      formatter: Morris.commas,
-      resize: false
-    };
-
-    function Donut(options) {
-      this.resizeHandler = __bind(this.resizeHandler, this);
-      this.select = __bind(this.select, this);
-      this.click = __bind(this.click, this);
-      var _this = this;
-      if (!(this instanceof Morris.Donut)) {
-        return new Morris.Donut(options);
-      }
-      this.options = $.extend({}, this.defaults, options);
-      if (typeof options.element === 'string') {
-        this.el = $(document.getElementById(options.element));
-      } else {
-        this.el = $(options.element);
-      }
-      if (this.el === null || this.el.length === 0) {
-        throw new Error("Graph placeholder not found.");
-      }
-      if (options.data === void 0 || options.data.length === 0) {
-        return;
-      }
-      this.raphael = new Raphael(this.el[0]);
-      if (this.options.resize) {
-        $(window).bind('resize', function(evt) {
-          if (_this.timeoutId != null) {
-            window.clearTimeout(_this.timeoutId);
-          }
-          return _this.timeoutId = window.setTimeout(_this.resizeHandler, 100);
-        });
-      }
-      this.setData(options.data);
-    }
-
-    Donut.prototype.redraw = function() {
-      var C, cx, cy, i, idx, last, max_value, min, next, seg, total, value, w, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
-      this.raphael.clear();
-      cx = this.el.width() / 2;
-      cy = this.el.height() / 2;
-      w = (Math.min(cx, cy) - 10) / 3;
-      total = 0;
-      _ref = this.values;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        value = _ref[_i];
-        total += value;
-      }
-      min = 5 / (2 * w);
-      C = 1.9999 * Math.PI - min * this.data.length;
-      last = 0;
-      idx = 0;
-      this.segments = [];
-      _ref1 = this.values;
-      for (i = _j = 0, _len1 = _ref1.length; _j < _len1; i = ++_j) {
-        value = _ref1[i];
-        next = last + min + C * (value / total);
-        seg = new Morris.DonutSegment(cx, cy, w * 2, w, last, next, this.data[i].color || this.options.colors[idx % this.options.colors.length], this.options.backgroundColor, idx, this.raphael);
-        seg.render();
-        this.segments.push(seg);
-        seg.on('hover', this.select);
-        seg.on('click', this.click);
-        last = next;
-        idx += 1;
-      }
-      this.text1 = this.drawEmptyDonutLabel(cx, cy - 10, this.options.labelColor, 15, 800);
-      this.text2 = this.drawEmptyDonutLabel(cx, cy + 10, this.options.labelColor, 14);
-      max_value = Math.max.apply(Math, this.values);
-      idx = 0;
-      _ref2 = this.values;
-      _results = [];
-      for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-        value = _ref2[_k];
-        if (value === max_value) {
-          this.select(idx);
-          break;
+    Morris.parseDate = function(date) {
+        var isecs, m, msecs, n, o, offsetmins, p, q, r, ret, secs;
+        if (typeof date === 'number') {
+            return date;
         }
-        _results.push(idx += 1);
-      }
-      return _results;
-    };
-
-    Donut.prototype.setData = function(data) {
-      var row;
-      this.data = data;
-      this.values = (function() {
-        var _i, _len, _ref, _results;
-        _ref = this.data;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          row = _ref[_i];
-          _results.push(parseFloat(row.value));
+        m = date.match(/^(\d+) Q(\d)$/);
+        n = date.match(/^(\d+)-(\d+)$/);
+        o = date.match(/^(\d+)-(\d+)-(\d+)$/);
+        p = date.match(/^(\d+) W(\d+)$/);
+        q = date.match(/^(\d+)-(\d+)-(\d+)[ T](\d+):(\d+)(Z|([+-])(\d\d):?(\d\d))?$/);
+        r = date.match(/^(\d+)-(\d+)-(\d+)[ T](\d+):(\d+):(\d+(\.\d+)?)(Z|([+-])(\d\d):?(\d\d))?$/);
+        if (m) {
+            return new Date(parseInt(m[1], 10), parseInt(m[2], 10) * 3 - 1, 1).getTime();
+        } else if (n) {
+            return new Date(parseInt(n[1], 10), parseInt(n[2], 10) - 1, 1).getTime();
+        } else if (o) {
+            return new Date(parseInt(o[1], 10), parseInt(o[2], 10) - 1, parseInt(o[3], 10)).getTime();
+        } else if (p) {
+            ret = new Date(parseInt(p[1], 10), 0, 1);
+            if (ret.getDay() !== 4) {
+                ret.setMonth(0, 1 + ((4 - ret.getDay()) + 7) % 7);
+            }
+            return ret.getTime() + parseInt(p[2], 10) * 604800000;
+        } else if (q) {
+            if (!q[6]) {
+                return new Date(parseInt(q[1], 10), parseInt(q[2], 10) - 1, parseInt(q[3], 10), parseInt(q[4], 10), parseInt(q[5], 10)).getTime();
+            } else {
+                offsetmins = 0;
+                if (q[6] !== 'Z') {
+                    offsetmins = parseInt(q[8], 10) * 60 + parseInt(q[9], 10);
+                    if (q[7] === '+') {
+                        offsetmins = 0 - offsetmins;
+                    }
+                }
+                return Date.UTC(parseInt(q[1], 10), parseInt(q[2], 10) - 1, parseInt(q[3], 10), parseInt(q[4], 10), parseInt(q[5], 10) + offsetmins);
+            }
+        } else if (r) {
+            secs = parseFloat(r[6]);
+            isecs = Math.floor(secs);
+            msecs = Math.round((secs - isecs) * 1000);
+            if (!r[8]) {
+                return new Date(parseInt(r[1], 10), parseInt(r[2], 10) - 1, parseInt(r[3], 10), parseInt(r[4], 10), parseInt(r[5], 10), isecs, msecs).getTime();
+            } else {
+                offsetmins = 0;
+                if (r[8] !== 'Z') {
+                    offsetmins = parseInt(r[10], 10) * 60 + parseInt(r[11], 10);
+                    if (r[9] === '+') {
+                        offsetmins = 0 - offsetmins;
+                    }
+                }
+                return Date.UTC(parseInt(r[1], 10), parseInt(r[2], 10) - 1, parseInt(r[3], 10), parseInt(r[4], 10), parseInt(r[5], 10) + offsetmins, isecs, msecs);
+            }
+        } else {
+            return new Date(parseInt(date, 10), 0, 1).getTime();
         }
-        return _results;
-      }).call(this);
-      return this.redraw();
     };
 
-    Donut.prototype.click = function(idx) {
-      return this.fire('click', idx, this.data[idx]);
+    Morris.Hover = (function() {
+        Hover.defaults = {
+            "class": 'morris-hover morris-default-style'
+        };
+
+        function Hover(options) {
+            if (options == null) {
+                options = {};
+            }
+            this.options = $.extend({}, Morris.Hover.defaults, options);
+            this.el = $("<div class='" + this.options["class"] + "'></div>");
+            this.el.hide();
+            this.options.parent.append(this.el);
+        }
+
+        Hover.prototype.update = function(html, x, y) {
+            this.html(html);
+            this.show();
+            return this.moveTo(x, y);
+        };
+
+        Hover.prototype.html = function(content) {
+            return this.el.html(content);
+        };
+
+        Hover.prototype.moveTo = function(x, y) {
+            var hoverHeight, hoverWidth, left, parentHeight, parentWidth, top;
+            parentWidth = this.options.parent.innerWidth();
+            parentHeight = this.options.parent.innerHeight();
+            hoverWidth = this.el.outerWidth();
+            hoverHeight = this.el.outerHeight();
+            left = Math.min(Math.max(0, x - hoverWidth / 2), parentWidth - hoverWidth);
+            if (y != null) {
+                top = y - hoverHeight - 10;
+                if (top < 0) {
+                    top = y + 10;
+                    if (top + hoverHeight > parentHeight) {
+                        top = parentHeight / 2 - hoverHeight / 2;
+                    }
+                }
+            } else {
+                top = parentHeight / 2 - hoverHeight / 2;
+            }
+            return this.el.css({
+                left: left + "px",
+                top: parseInt(top) + "px"
+            });
+        };
+
+        Hover.prototype.show = function() {
+            return this.el.show();
+        };
+
+        Hover.prototype.hide = function() {
+            return this.el.hide();
+        };
+
+        return Hover;
+
+    })();
+
+    Morris.Line = (function(_super) {
+        __extends(Line, _super);
+
+        function Line(options) {
+            this.hilight = __bind(this.hilight, this);
+            this.onHoverOut = __bind(this.onHoverOut, this);
+            this.onHoverMove = __bind(this.onHoverMove, this);
+            this.onGridClick = __bind(this.onGridClick, this);
+            if (!(this instanceof Morris.Line)) {
+                return new Morris.Line(options);
+            }
+            Line.__super__.constructor.call(this, options);
+        }
+
+        Line.prototype.init = function() {
+            if (this.options.hideHover !== 'always') {
+                this.hover = new Morris.Hover({
+                    parent: this.el
+                });
+                this.on('hovermove', this.onHoverMove);
+                this.on('hoverout', this.onHoverOut);
+                return this.on('gridclick', this.onGridClick);
+            }
+        };
+
+        Line.prototype.defaults = {
+            lineWidth: 3,
+            pointSize: 4,
+            lineColors: ['#0b62a4', '#7A92A3', '#4da74d', '#afd8f8', '#edc240', '#cb4b4b', '#9440ed'],
+            pointStrokeWidths: [1],
+            pointStrokeColors: ['#ffffff'],
+            pointFillColors: [],
+            smooth: true,
+            xLabels: 'auto',
+            xLabelFormat: null,
+            xLabelMargin: 24,
+            hideHover: false
+        };
+
+        Line.prototype.calc = function() {
+            this.calcPoints();
+            return this.generatePaths();
+        };
+
+        Line.prototype.calcPoints = function() {
+            var row, y, _i, _len, _ref, _results;
+            _ref = this.data;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                row = _ref[_i];
+                row._x = this.transX(row.x);
+                row._y = (function() {
+                    var _j, _len1, _ref1, _results1;
+                    _ref1 = row.y;
+                    _results1 = [];
+                    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+                        y = _ref1[_j];
+                        if (y != null) {
+                            _results1.push(this.transY(y));
+                        } else {
+                            _results1.push(y);
+                        }
+                    }
+                    return _results1;
+                }).call(this);
+                _results.push(row._ymax = Math.min.apply(Math, [this.bottom].concat((function() {
+                    var _j, _len1, _ref1, _results1;
+                    _ref1 = row._y;
+                    _results1 = [];
+                    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+                        y = _ref1[_j];
+                        if (y != null) {
+                            _results1.push(y);
+                        }
+                    }
+                    return _results1;
+                })())));
+            }
+            return _results;
+        };
+
+        Line.prototype.hitTest = function(x) {
+            var index, r, _i, _len, _ref;
+            if (this.data.length === 0) {
+                return null;
+            }
+            _ref = this.data.slice(1);
+            for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+                r = _ref[index];
+                if (x < (r._x + this.data[index]._x) / 2) {
+                    break;
+                }
+            }
+            return index;
+        };
+
+        Line.prototype.onGridClick = function(x, y) {
+            var index;
+            index = this.hitTest(x);
+            return this.fire('click', index, this.data[index].src, x, y);
+        };
+
+        Line.prototype.onHoverMove = function(x, y) {
+            var index;
+            index = this.hitTest(x);
+            return this.displayHoverForRow(index);
+        };
+
+        Line.prototype.onHoverOut = function() {
+            if (this.options.hideHover !== false) {
+                return this.displayHoverForRow(null);
+            }
+        };
+
+        Line.prototype.displayHoverForRow = function(index) {
+            var _ref;
+            if (index != null) {
+                (_ref = this.hover).update.apply(_ref, this.hoverContentForRow(index));
+                return this.hilight(index);
+            } else {
+                this.hover.hide();
+                return this.hilight();
+            }
+        };
+
+        Line.prototype.hoverContentForRow = function(index) {
+            var content, j, row, y, _i, _len, _ref;
+            row = this.data[index];
+            content = "<div class='morris-hover-row-label'>" + row.label + "</div>";
+            _ref = row.y;
+            for (j = _i = 0, _len = _ref.length; _i < _len; j = ++_i) {
+                y = _ref[j];
+                content += "<div class='morris-hover-point' style='color: " + (this.colorFor(row, j, 'label')) + "'>\n  " + this.options.labels[j] + ":\n  " + (this.yLabelFormat(y)) + "\n</div>";
+            }
+            if (typeof this.options.hoverCallback === 'function') {
+                content = this.options.hoverCallback(index, this.options, content, row.src);
+            }
+            return [content, row._x, row._ymax];
+        };
+
+        Line.prototype.generatePaths = function() {
+            var coords, i, r, smooth;
+            return this.paths = (function() {
+                var _i, _ref, _ref1, _results;
+                _results = [];
+                for (i = _i = 0, _ref = this.options.ykeys.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+                    smooth = typeof this.options.smooth === "boolean" ? this.options.smooth : (_ref1 = this.options.ykeys[i], __indexOf.call(this.options.smooth, _ref1) >= 0);
+                    coords = (function() {
+                        var _j, _len, _ref2, _results1;
+                        _ref2 = this.data;
+                        _results1 = [];
+                        for (_j = 0, _len = _ref2.length; _j < _len; _j++) {
+                            r = _ref2[_j];
+                            if (r._y[i] !== void 0) {
+                                _results1.push({
+                                    x: r._x,
+                                    y: r._y[i]
+                                });
+                            }
+                        }
+                        return _results1;
+                    }).call(this);
+                    if (coords.length > 1) {
+                        _results.push(Morris.Line.createPath(coords, smooth, this.bottom));
+                    } else {
+                        _results.push(null);
+                    }
+                }
+                return _results;
+            }).call(this);
+        };
+
+        Line.prototype.draw = function() {
+            var _ref;
+            if ((_ref = this.options.axes) === true || _ref === 'both' || _ref === 'x') {
+                this.drawXAxis();
+            }
+            this.drawSeries();
+            if (this.options.hideHover === false) {
+                return this.displayHoverForRow(this.data.length - 1);
+            }
+        };
+
+        Line.prototype.drawXAxis = function() {
+            var drawLabel, l, labels, prevAngleMargin, prevLabelMargin, row, ypos, _i, _len, _results,
+                _this = this;
+            ypos = this.bottom + this.options.padding / 2;
+            prevLabelMargin = null;
+            prevAngleMargin = null;
+            drawLabel = function(labelText, xpos) {
+                var label, labelBox, margin, offset, textBox;
+                label = _this.drawXAxisLabel(_this.transX(xpos), ypos, labelText);
+                textBox = label.getBBox();
+                label.transform("r" + (-_this.options.xLabelAngle));
+                labelBox = label.getBBox();
+                label.transform("t0," + (labelBox.height / 2) + "...");
+                if (_this.options.xLabelAngle !== 0) {
+                    offset = -0.5 * textBox.width * Math.cos(_this.options.xLabelAngle * Math.PI / 180.0);
+                    label.transform("t" + offset + ",0...");
+                }
+                labelBox = label.getBBox();
+                if (((prevLabelMargin == null) || prevLabelMargin >= labelBox.x + labelBox.width || (prevAngleMargin != null) && prevAngleMargin >= labelBox.x) && labelBox.x >= 0 && (labelBox.x + labelBox.width) < _this.el.width()) {
+                    if (_this.options.xLabelAngle !== 0) {
+                        margin = 1.25 * _this.options.gridTextSize / Math.sin(_this.options.xLabelAngle * Math.PI / 180.0);
+                        prevAngleMargin = labelBox.x - margin;
+                    }
+                    return prevLabelMargin = labelBox.x - _this.options.xLabelMargin;
+                } else {
+                    return label.remove();
+                }
+            };
+            if (this.options.parseTime) {
+                if (this.data.length === 1 && this.options.xLabels === 'auto') {
+                    labels = [[this.data[0].label, this.data[0].x]];
+                } else {
+                    labels = Morris.labelSeries(this.xmin, this.xmax, this.width, this.options.xLabels, this.options.xLabelFormat);
+                }
+            } else {
+                labels = (function() {
+                    var _i, _len, _ref, _results;
+                    _ref = this.data;
+                    _results = [];
+                    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                        row = _ref[_i];
+                        _results.push([row.label, row.x]);
+                    }
+                    return _results;
+                }).call(this);
+            }
+            labels.reverse();
+            _results = [];
+            for (_i = 0, _len = labels.length; _i < _len; _i++) {
+                l = labels[_i];
+                _results.push(drawLabel(l[0], l[1]));
+            }
+            return _results;
+        };
+
+        Line.prototype.drawSeries = function() {
+            var i, _i, _j, _ref, _ref1, _results;
+            this.seriesPoints = [];
+            for (i = _i = _ref = this.options.ykeys.length - 1; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
+                this._drawLineFor(i);
+            }
+            _results = [];
+            for (i = _j = _ref1 = this.options.ykeys.length - 1; _ref1 <= 0 ? _j <= 0 : _j >= 0; i = _ref1 <= 0 ? ++_j : --_j) {
+                _results.push(this._drawPointFor(i));
+            }
+            return _results;
+        };
+
+        Line.prototype._drawPointFor = function(index) {
+            var circle, row, _i, _len, _ref, _results;
+            this.seriesPoints[index] = [];
+            _ref = this.data;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                row = _ref[_i];
+                circle = null;
+                if (row._y[index] != null) {
+                    circle = this.drawLinePoint(row._x, row._y[index], this.colorFor(row, index, 'point'), index);
+                }
+                _results.push(this.seriesPoints[index].push(circle));
+            }
+            return _results;
+        };
+
+        Line.prototype._drawLineFor = function(index) {
+            var path;
+            path = this.paths[index];
+            if (path !== null) {
+                return this.drawLinePath(path, this.colorFor(null, index, 'line'), index);
+            }
+        };
+
+        Line.createPath = function(coords, smooth, bottom) {
+            var coord, g, grads, i, ix, lg, path, prevCoord, x1, x2, y1, y2, _i, _len;
+            path = "";
+            if (smooth) {
+                grads = Morris.Line.gradients(coords);
+            }
+            prevCoord = {
+                y: null
+            };
+            for (i = _i = 0, _len = coords.length; _i < _len; i = ++_i) {
+                coord = coords[i];
+                if (coord.y != null) {
+                    if (prevCoord.y != null) {
+                        if (smooth) {
+                            g = grads[i];
+                            lg = grads[i - 1];
+                            ix = (coord.x - prevCoord.x) / 4;
+                            x1 = prevCoord.x + ix;
+                            y1 = Math.min(bottom, prevCoord.y + ix * lg);
+                            x2 = coord.x - ix;
+                            y2 = Math.min(bottom, coord.y - ix * g);
+                            path += "C" + x1 + "," + y1 + "," + x2 + "," + y2 + "," + coord.x + "," + coord.y;
+                        } else {
+                            path += "L" + coord.x + "," + coord.y;
+                        }
+                    } else {
+                        if (!smooth || (grads[i] != null)) {
+                            path += "M" + coord.x + "," + coord.y;
+                        }
+                    }
+                }
+                prevCoord = coord;
+            }
+            return path;
+        };
+
+        Line.gradients = function(coords) {
+            var coord, grad, i, nextCoord, prevCoord, _i, _len, _results;
+            grad = function(a, b) {
+                return (a.y - b.y) / (a.x - b.x);
+            };
+            _results = [];
+            for (i = _i = 0, _len = coords.length; _i < _len; i = ++_i) {
+                coord = coords[i];
+                if (coord.y != null) {
+                    nextCoord = coords[i + 1] || {
+                        y: null
+                    };
+                    prevCoord = coords[i - 1] || {
+                        y: null
+                    };
+                    if ((prevCoord.y != null) && (nextCoord.y != null)) {
+                        _results.push(grad(prevCoord, nextCoord));
+                    } else if (prevCoord.y != null) {
+                        _results.push(grad(prevCoord, coord));
+                    } else if (nextCoord.y != null) {
+                        _results.push(grad(coord, nextCoord));
+                    } else {
+                        _results.push(null);
+                    }
+                } else {
+                    _results.push(null);
+                }
+            }
+            return _results;
+        };
+
+        Line.prototype.hilight = function(index) {
+            var i, _i, _j, _ref, _ref1;
+            if (this.prevHilight !== null && this.prevHilight !== index) {
+                for (i = _i = 0, _ref = this.seriesPoints.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+                    if (this.seriesPoints[i][this.prevHilight]) {
+                        this.seriesPoints[i][this.prevHilight].animate(this.pointShrinkSeries(i));
+                    }
+                }
+            }
+            if (index !== null && this.prevHilight !== index) {
+                for (i = _j = 0, _ref1 = this.seriesPoints.length - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
+                    if (this.seriesPoints[i][index]) {
+                        this.seriesPoints[i][index].animate(this.pointGrowSeries(i));
+                    }
+                }
+            }
+            return this.prevHilight = index;
+        };
+
+        Line.prototype.colorFor = function(row, sidx, type) {
+            if (typeof this.options.lineColors === 'function') {
+                return this.options.lineColors.call(this, row, sidx, type);
+            } else if (type === 'point') {
+                return this.options.pointFillColors[sidx % this.options.pointFillColors.length] || this.options.lineColors[sidx % this.options.lineColors.length];
+            } else {
+                return this.options.lineColors[sidx % this.options.lineColors.length];
+            }
+        };
+
+        Line.prototype.drawXAxisLabel = function(xPos, yPos, text) {
+            return this.raphael.text(xPos, yPos, text).attr('font-size', this.options.gridTextSize).attr('font-family', this.options.gridTextFamily).attr('font-weight', this.options.gridTextWeight).attr('fill', this.options.gridTextColor);
+        };
+
+        Line.prototype.drawLinePath = function(path, lineColor, lineIndex) {
+            return this.raphael.path(path).attr('stroke', lineColor).attr('stroke-width', this.lineWidthForSeries(lineIndex));
+        };
+
+        Line.prototype.drawLinePoint = function(xPos, yPos, pointColor, lineIndex) {
+            return this.raphael.circle(xPos, yPos, this.pointSizeForSeries(lineIndex)).attr('fill', pointColor).attr('stroke-width', this.pointStrokeWidthForSeries(lineIndex)).attr('stroke', this.pointStrokeColorForSeries(lineIndex));
+        };
+
+        Line.prototype.pointStrokeWidthForSeries = function(index) {
+            return this.options.pointStrokeWidths[index % this.options.pointStrokeWidths.length];
+        };
+
+        Line.prototype.pointStrokeColorForSeries = function(index) {
+            return this.options.pointStrokeColors[index % this.options.pointStrokeColors.length];
+        };
+
+        Line.prototype.lineWidthForSeries = function(index) {
+            if (this.options.lineWidth instanceof Array) {
+                return this.options.lineWidth[index % this.options.lineWidth.length];
+            } else {
+                return this.options.lineWidth;
+            }
+        };
+
+        Line.prototype.pointSizeForSeries = function(index) {
+            if (this.options.pointSize instanceof Array) {
+                return this.options.pointSize[index % this.options.pointSize.length];
+            } else {
+                return this.options.pointSize;
+            }
+        };
+
+        Line.prototype.pointGrowSeries = function(index) {
+            return Raphael.animation({
+                r: this.pointSizeForSeries(index) + 3
+            }, 25, 'linear');
+        };
+
+        Line.prototype.pointShrinkSeries = function(index) {
+            return Raphael.animation({
+                r: this.pointSizeForSeries(index)
+            }, 25, 'linear');
+        };
+
+        return Line;
+
+    })(Morris.Grid);
+
+    Morris.labelSeries = function(dmin, dmax, pxwidth, specName, xLabelFormat) {
+        var d, d0, ddensity, name, ret, s, spec, t, _i, _len, _ref;
+        ddensity = 200 * (dmax - dmin) / pxwidth;
+        d0 = new Date(dmin);
+        spec = Morris.LABEL_SPECS[specName];
+        if (spec === void 0) {
+            _ref = Morris.AUTO_LABEL_ORDER;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                name = _ref[_i];
+                s = Morris.LABEL_SPECS[name];
+                if (ddensity >= s.span) {
+                    spec = s;
+                    break;
+                }
+            }
+        }
+        if (spec === void 0) {
+            spec = Morris.LABEL_SPECS["second"];
+        }
+        if (xLabelFormat) {
+            spec = $.extend({}, spec, {
+                fmt: xLabelFormat
+            });
+        }
+        d = spec.start(d0);
+        ret = [];
+        while ((t = d.getTime()) <= dmax) {
+            if (t >= dmin) {
+                ret.push([spec.fmt(d), t]);
+            }
+            spec.incr(d);
+        }
+        return ret;
     };
 
-    Donut.prototype.select = function(idx) {
-      var row, s, segment, _i, _len, _ref;
-      _ref = this.segments;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        s = _ref[_i];
-        s.deselect();
-      }
-      segment = this.segments[idx];
-      segment.select();
-      row = this.data[idx];
-      return this.setLabels(row.label, this.options.formatter(row.value, row));
+    minutesSpecHelper = function(interval) {
+        return {
+            span: interval * 60 * 1000,
+            start: function(d) {
+                return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours());
+            },
+            fmt: function(d) {
+                return "" + (Morris.pad2(d.getHours())) + ":" + (Morris.pad2(d.getMinutes()));
+            },
+            incr: function(d) {
+                return d.setUTCMinutes(d.getUTCMinutes() + interval);
+            }
+        };
     };
 
-    Donut.prototype.setLabels = function(label1, label2) {
-      var inner, maxHeightBottom, maxHeightTop, maxWidth, text1bbox, text1scale, text2bbox, text2scale;
-      inner = (Math.min(this.el.width() / 2, this.el.height() / 2) - 10) * 2 / 3;
-      maxWidth = 1.8 * inner;
-      maxHeightTop = inner / 2;
-      maxHeightBottom = inner / 3;
-      this.text1.attr({
-        text: label1,
-        transform: ''
-      });
-      text1bbox = this.text1.getBBox();
-      text1scale = Math.min(maxWidth / text1bbox.width, maxHeightTop / text1bbox.height);
-      this.text1.attr({
-        transform: "S" + text1scale + "," + text1scale + "," + (text1bbox.x + text1bbox.width / 2) + "," + (text1bbox.y + text1bbox.height)
-      });
-      this.text2.attr({
-        text: label2,
-        transform: ''
-      });
-      text2bbox = this.text2.getBBox();
-      text2scale = Math.min(maxWidth / text2bbox.width, maxHeightBottom / text2bbox.height);
-      return this.text2.attr({
-        transform: "S" + text2scale + "," + text2scale + "," + (text2bbox.x + text2bbox.width / 2) + "," + text2bbox.y
-      });
+    secondsSpecHelper = function(interval) {
+        return {
+            span: interval * 1000,
+            start: function(d) {
+                return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes());
+            },
+            fmt: function(d) {
+                return "" + (Morris.pad2(d.getHours())) + ":" + (Morris.pad2(d.getMinutes())) + ":" + (Morris.pad2(d.getSeconds()));
+            },
+            incr: function(d) {
+                return d.setUTCSeconds(d.getUTCSeconds() + interval);
+            }
+        };
     };
 
-    Donut.prototype.drawEmptyDonutLabel = function(xPos, yPos, color, fontSize, fontWeight) {
-      var text;
-      text = this.raphael.text(xPos, yPos, '').attr('font-size', fontSize).attr('fill', color);
-      if (fontWeight != null) {
-        text.attr('font-weight', fontWeight);
-      }
-      return text;
+    Morris.LABEL_SPECS = {
+        "decade": {
+            span: 172800000000,
+            start: function(d) {
+                return new Date(d.getFullYear() - d.getFullYear() % 10, 0, 1);
+            },
+            fmt: function(d) {
+                return "" + (d.getFullYear());
+            },
+            incr: function(d) {
+                return d.setFullYear(d.getFullYear() + 10);
+            }
+        },
+        "year": {
+            span: 17280000000,
+            start: function(d) {
+                return new Date(d.getFullYear(), 0, 1);
+            },
+            fmt: function(d) {
+                return "" + (d.getFullYear());
+            },
+            incr: function(d) {
+                return d.setFullYear(d.getFullYear() + 1);
+            }
+        },
+        "month": {
+            span: 2419200000,
+            start: function(d) {
+                return new Date(d.getFullYear(), d.getMonth(), 1);
+            },
+            fmt: function(d) {
+                return "" + (d.getFullYear()) + "-" + (Morris.pad2(d.getMonth() + 1));
+            },
+            incr: function(d) {
+                return d.setMonth(d.getMonth() + 1);
+            }
+        },
+        "week": {
+            span: 604800000,
+            start: function(d) {
+                return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+            },
+            fmt: function(d) {
+                return "" + (d.getFullYear()) + "-" + (Morris.pad2(d.getMonth() + 1)) + "-" + (Morris.pad2(d.getDate()));
+            },
+            incr: function(d) {
+                return d.setDate(d.getDate() + 7);
+            }
+        },
+        "day": {
+            span: 86400000,
+            start: function(d) {
+                return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+            },
+            fmt: function(d) {
+                return "" + (d.getFullYear()) + "-" + (Morris.pad2(d.getMonth() + 1)) + "-" + (Morris.pad2(d.getDate()));
+            },
+            incr: function(d) {
+                return d.setDate(d.getDate() + 1);
+            }
+        },
+        "hour": minutesSpecHelper(60),
+        "30min": minutesSpecHelper(30),
+        "15min": minutesSpecHelper(15),
+        "10min": minutesSpecHelper(10),
+        "5min": minutesSpecHelper(5),
+        "minute": minutesSpecHelper(1),
+        "30sec": secondsSpecHelper(30),
+        "15sec": secondsSpecHelper(15),
+        "10sec": secondsSpecHelper(10),
+        "5sec": secondsSpecHelper(5),
+        "second": secondsSpecHelper(1)
     };
 
-    Donut.prototype.resizeHandler = function() {
-      this.timeoutId = null;
-      this.raphael.setSize(this.el.width(), this.el.height());
-      return this.redraw();
-    };
+    Morris.AUTO_LABEL_ORDER = ["decade", "year", "month", "week", "day", "hour", "30min", "15min", "10min", "5min", "minute", "30sec", "15sec", "10sec", "5sec", "second"];
 
-    return Donut;
+    Morris.Area = (function(_super) {
+        var areaDefaults;
 
-  })(Morris.EventEmitter);
+        __extends(Area, _super);
 
-  Morris.DonutSegment = (function(_super) {
-    __extends(DonutSegment, _super);
+        areaDefaults = {
+            fillOpacity: 'auto',
+            behaveLikeLine: false
+        };
 
-    function DonutSegment(cx, cy, inner, outer, p0, p1, color, backgroundColor, index, raphael) {
-      this.cx = cx;
-      this.cy = cy;
-      this.inner = inner;
-      this.outer = outer;
-      this.color = color;
-      this.backgroundColor = backgroundColor;
-      this.index = index;
-      this.raphael = raphael;
-      this.deselect = __bind(this.deselect, this);
-      this.select = __bind(this.select, this);
-      this.sin_p0 = Math.sin(p0);
-      this.cos_p0 = Math.cos(p0);
-      this.sin_p1 = Math.sin(p1);
-      this.cos_p1 = Math.cos(p1);
-      this.is_long = (p1 - p0) > Math.PI ? 1 : 0;
-      this.path = this.calcSegment(this.inner + 3, this.inner + this.outer - 5);
-      this.selectedPath = this.calcSegment(this.inner + 3, this.inner + this.outer);
-      this.hilight = this.calcArc(this.inner);
-    }
+        function Area(options) {
+            var areaOptions;
+            if (!(this instanceof Morris.Area)) {
+                return new Morris.Area(options);
+            }
+            areaOptions = $.extend({}, areaDefaults, options);
+            this.cumulative = !areaOptions.behaveLikeLine;
+            if (areaOptions.fillOpacity === 'auto') {
+                areaOptions.fillOpacity = areaOptions.behaveLikeLine ? .8 : 1;
+            }
+            Area.__super__.constructor.call(this, areaOptions);
+        }
 
-    DonutSegment.prototype.calcArcPoints = function(r) {
-      return [this.cx + r * this.sin_p0, this.cy + r * this.cos_p0, this.cx + r * this.sin_p1, this.cy + r * this.cos_p1];
-    };
+        Area.prototype.calcPoints = function() {
+            var row, total, y, _i, _len, _ref, _results;
+            _ref = this.data;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                row = _ref[_i];
+                row._x = this.transX(row.x);
+                total = 0;
+                row._y = (function() {
+                    var _j, _len1, _ref1, _results1;
+                    _ref1 = row.y;
+                    _results1 = [];
+                    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+                        y = _ref1[_j];
+                        if (this.options.behaveLikeLine) {
+                            _results1.push(this.transY(y));
+                        } else {
+                            total += y || 0;
+                            _results1.push(this.transY(total));
+                        }
+                    }
+                    return _results1;
+                }).call(this);
+                _results.push(row._ymax = Math.max.apply(Math, row._y));
+            }
+            return _results;
+        };
 
-    DonutSegment.prototype.calcSegment = function(r1, r2) {
-      var ix0, ix1, iy0, iy1, ox0, ox1, oy0, oy1, _ref, _ref1;
-      _ref = this.calcArcPoints(r1), ix0 = _ref[0], iy0 = _ref[1], ix1 = _ref[2], iy1 = _ref[3];
-      _ref1 = this.calcArcPoints(r2), ox0 = _ref1[0], oy0 = _ref1[1], ox1 = _ref1[2], oy1 = _ref1[3];
-      return ("M" + ix0 + "," + iy0) + ("A" + r1 + "," + r1 + ",0," + this.is_long + ",0," + ix1 + "," + iy1) + ("L" + ox1 + "," + oy1) + ("A" + r2 + "," + r2 + ",0," + this.is_long + ",1," + ox0 + "," + oy0) + "Z";
-    };
+        Area.prototype.drawSeries = function() {
+            var i, range, _i, _j, _k, _len, _ref, _ref1, _results, _results1, _results2;
+            this.seriesPoints = [];
+            if (this.options.behaveLikeLine) {
+                range = (function() {
+                    _results = [];
+                    for (var _i = 0, _ref = this.options.ykeys.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; 0 <= _ref ? _i++ : _i--){ _results.push(_i); }
+                    return _results;
+                }).apply(this);
+            } else {
+                range = (function() {
+                    _results1 = [];
+                    for (var _j = _ref1 = this.options.ykeys.length - 1; _ref1 <= 0 ? _j <= 0 : _j >= 0; _ref1 <= 0 ? _j++ : _j--){ _results1.push(_j); }
+                    return _results1;
+                }).apply(this);
+            }
+            _results2 = [];
+            for (_k = 0, _len = range.length; _k < _len; _k++) {
+                i = range[_k];
+                this._drawFillFor(i);
+                this._drawLineFor(i);
+                _results2.push(this._drawPointFor(i));
+            }
+            return _results2;
+        };
 
-    DonutSegment.prototype.calcArc = function(r) {
-      var ix0, ix1, iy0, iy1, _ref;
-      _ref = this.calcArcPoints(r), ix0 = _ref[0], iy0 = _ref[1], ix1 = _ref[2], iy1 = _ref[3];
-      return ("M" + ix0 + "," + iy0) + ("A" + r + "," + r + ",0," + this.is_long + ",0," + ix1 + "," + iy1);
-    };
+        Area.prototype._drawFillFor = function(index) {
+            var path;
+            path = this.paths[index];
+            if (path !== null) {
+                path = path + ("L" + (this.transX(this.xmax)) + "," + this.bottom + "L" + (this.transX(this.xmin)) + "," + this.bottom + "Z");
+                return this.drawFilledPath(path, this.fillForSeries(index));
+            }
+        };
 
-    DonutSegment.prototype.render = function() {
-      var _this = this;
-      this.arc = this.drawDonutArc(this.hilight, this.color);
-      return this.seg = this.drawDonutSegment(this.path, this.color, this.backgroundColor, function() {
-        return _this.fire('hover', _this.index);
-      }, function() {
-        return _this.fire('click', _this.index);
-      });
-    };
+        Area.prototype.fillForSeries = function(i) {
+            var color;
+            color = Raphael.rgb2hsl(this.colorFor(this.data[i], i, 'line'));
+            return Raphael.hsl(color.h, this.options.behaveLikeLine ? color.s * 0.9 : color.s * 0.75, Math.min(0.98, this.options.behaveLikeLine ? color.l * 1.2 : color.l * 1.25));
+        };
 
-    DonutSegment.prototype.drawDonutArc = function(path, color) {
-      return this.raphael.path(path).attr({
-        stroke: color,
-        'stroke-width': 2,
-        opacity: 0
-      });
-    };
+        Area.prototype.drawFilledPath = function(path, fill) {
+            return this.raphael.path(path).attr('fill', fill).attr('fill-opacity', this.options.fillOpacity).attr('stroke', 'none');
+        };
 
-    DonutSegment.prototype.drawDonutSegment = function(path, fillColor, strokeColor, hoverFunction, clickFunction) {
-      return this.raphael.path(path).attr({
-        fill: fillColor,
-        stroke: strokeColor,
-        'stroke-width': 3
-      }).hover(hoverFunction).click(clickFunction);
-    };
+        return Area;
 
-    DonutSegment.prototype.select = function() {
-      if (!this.selected) {
-        this.seg.animate({
-          path: this.selectedPath
-        }, 150, '<>');
-        this.arc.animate({
-          opacity: 1
-        }, 150, '<>');
-        return this.selected = true;
-      }
-    };
+    })(Morris.Line);
 
-    DonutSegment.prototype.deselect = function() {
-      if (this.selected) {
-        this.seg.animate({
-          path: this.path
-        }, 150, '<>');
-        this.arc.animate({
-          opacity: 0
-        }, 150, '<>');
-        return this.selected = false;
-      }
-    };
+    Morris.Bar = (function(_super) {
+        __extends(Bar, _super);
 
-    return DonutSegment;
+        function Bar(options) {
+            this.onHoverOut = __bind(this.onHoverOut, this);
+            this.onHoverMove = __bind(this.onHoverMove, this);
+            this.onGridClick = __bind(this.onGridClick, this);
+            if (!(this instanceof Morris.Bar)) {
+                return new Morris.Bar(options);
+            }
+            Bar.__super__.constructor.call(this, $.extend({}, options, {
+                parseTime: false
+            }));
+        }
 
-  })(Morris.EventEmitter);
+        Bar.prototype.init = function() {
+            this.cumulative = this.options.stacked;
+            if (this.options.hideHover !== 'always') {
+                this.hover = new Morris.Hover({
+                    parent: this.el
+                });
+                this.on('hovermove', this.onHoverMove);
+                this.on('hoverout', this.onHoverOut);
+                return this.on('gridclick', this.onGridClick);
+            }
+        };
+
+        Bar.prototype.defaults = {
+            barSizeRatio: 0.75,
+            barGap: 3,
+            barColors: ['#0b62a4', '#7a92a3', '#4da74d', '#afd8f8', '#edc240', '#cb4b4b', '#9440ed'],
+            barOpacity: 1.0,
+            barRadius: [0, 0, 0, 0],
+            xLabelMargin: 50
+        };
+
+        Bar.prototype.calc = function() {
+            var _ref;
+            this.calcBars();
+            if (this.options.hideHover === false) {
+                return (_ref = this.hover).update.apply(_ref, this.hoverContentForRow(this.data.length - 1));
+            }
+        };
+
+        Bar.prototype.calcBars = function() {
+            var idx, row, y, _i, _len, _ref, _results;
+            _ref = this.data;
+            _results = [];
+            for (idx = _i = 0, _len = _ref.length; _i < _len; idx = ++_i) {
+                row = _ref[idx];
+                row._x = this.left + this.width * (idx + 0.5) / this.data.length;
+                _results.push(row._y = (function() {
+                    var _j, _len1, _ref1, _results1;
+                    _ref1 = row.y;
+                    _results1 = [];
+                    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+                        y = _ref1[_j];
+                        if (y != null) {
+                            _results1.push(this.transY(y));
+                        } else {
+                            _results1.push(null);
+                        }
+                    }
+                    return _results1;
+                }).call(this));
+            }
+            return _results;
+        };
+
+        Bar.prototype.draw = function() {
+            var _ref;
+            if ((_ref = this.options.axes) === true || _ref === 'both' || _ref === 'x') {
+                this.drawXAxis();
+            }
+            return this.drawSeries();
+        };
+
+        Bar.prototype.drawXAxis = function() {
+            var i, label, labelBox, margin, offset, prevAngleMargin, prevLabelMargin, row, textBox, ypos, _i, _ref, _results;
+            ypos = this.bottom + (this.options.xAxisLabelTopPadding || this.options.padding / 2);
+            prevLabelMargin = null;
+            prevAngleMargin = null;
+            _results = [];
+            for (i = _i = 0, _ref = this.data.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+                row = this.data[this.data.length - 1 - i];
+                label = this.drawXAxisLabel(row._x, ypos, row.label);
+                textBox = label.getBBox();
+                label.transform("r" + (-this.options.xLabelAngle));
+                labelBox = label.getBBox();
+                label.transform("t0," + (labelBox.height / 2) + "...");
+                if (this.options.xLabelAngle !== 0) {
+                    offset = -0.5 * textBox.width * Math.cos(this.options.xLabelAngle * Math.PI / 180.0);
+                    label.transform("t" + offset + ",0...");
+                }
+                if (((prevLabelMargin == null) || prevLabelMargin >= labelBox.x + labelBox.width || (prevAngleMargin != null) && prevAngleMargin >= labelBox.x) && labelBox.x >= 0 && (labelBox.x + labelBox.width) < this.el.width()) {
+                    if (this.options.xLabelAngle !== 0) {
+                        margin = 1.25 * this.options.gridTextSize / Math.sin(this.options.xLabelAngle * Math.PI / 180.0);
+                        prevAngleMargin = labelBox.x - margin;
+                    }
+                    _results.push(prevLabelMargin = labelBox.x - this.options.xLabelMargin);
+                } else {
+                    _results.push(label.remove());
+                }
+            }
+            return _results;
+        };
+
+        Bar.prototype.drawSeries = function() {
+            var barWidth, bottom, groupWidth, idx, lastTop, left, leftPadding, numBars, row, sidx, size, spaceLeft, top, ypos, zeroPos;
+            groupWidth = this.width / this.options.data.length;
+            numBars = this.options.stacked != null ? 1 : this.options.ykeys.length;
+            barWidth = (groupWidth * this.options.barSizeRatio - this.options.barGap * (numBars - 1)) / numBars;
+            if (this.options.barSize) {
+                barWidth = Math.min(barWidth, this.options.barSize);
+            }
+            spaceLeft = groupWidth - barWidth * numBars - this.options.barGap * (numBars - 1);
+            leftPadding = spaceLeft / 2;
+            zeroPos = this.ymin <= 0 && this.ymax >= 0 ? this.transY(0) : null;
+            return this.bars = (function() {
+                var _i, _len, _ref, _results;
+                _ref = this.data;
+                _results = [];
+                for (idx = _i = 0, _len = _ref.length; _i < _len; idx = ++_i) {
+                    row = _ref[idx];
+                    lastTop = 0;
+                    _results.push((function() {
+                        var _j, _len1, _ref1, _results1;
+                        _ref1 = row._y;
+                        _results1 = [];
+                        for (sidx = _j = 0, _len1 = _ref1.length; _j < _len1; sidx = ++_j) {
+                            ypos = _ref1[sidx];
+                            if (ypos !== null) {
+                                if (zeroPos) {
+                                    top = Math.min(ypos, zeroPos);
+                                    bottom = Math.max(ypos, zeroPos);
+                                } else {
+                                    top = ypos;
+                                    bottom = this.bottom;
+                                }
+                                left = this.left + idx * groupWidth + leftPadding;
+                                if (!this.options.stacked) {
+                                    left += sidx * (barWidth + this.options.barGap);
+                                }
+                                size = bottom - top;
+                                if (this.options.stacked) {
+                                    top -= lastTop;
+                                }
+                                this.drawBar(left, top, barWidth, size, this.colorFor(row, sidx, 'bar'), this.options.barOpacity, this.options.barRadius);
+                                _results1.push(lastTop += size);
+                            } else {
+                                _results1.push(null);
+                            }
+                        }
+                        return _results1;
+                    }).call(this));
+                }
+                return _results;
+            }).call(this);
+        };
+
+        Bar.prototype.colorFor = function(row, sidx, type) {
+            var r, s;
+            if (typeof this.options.barColors === 'function') {
+                r = {
+                    x: row.x,
+                    y: row.y[sidx],
+                    label: row.label
+                };
+                s = {
+                    index: sidx,
+                    key: this.options.ykeys[sidx],
+                    label: this.options.labels[sidx]
+                };
+                return this.options.barColors.call(this, r, s, type);
+            } else {
+                return this.options.barColors[sidx % this.options.barColors.length];
+            }
+        };
+
+        Bar.prototype.hitTest = function(x) {
+            if (this.data.length === 0) {
+                return null;
+            }
+            x = Math.max(Math.min(x, this.right), this.left);
+            return Math.min(this.data.length - 1, Math.floor((x - this.left) / (this.width / this.data.length)));
+        };
+
+        Bar.prototype.onGridClick = function(x, y) {
+            var index;
+            index = this.hitTest(x);
+            return this.fire('click', index, this.data[index].src, x, y);
+        };
+
+        Bar.prototype.onHoverMove = function(x, y) {
+            var index, _ref;
+            index = this.hitTest(x);
+            return (_ref = this.hover).update.apply(_ref, this.hoverContentForRow(index));
+        };
+
+        Bar.prototype.onHoverOut = function() {
+            if (this.options.hideHover !== false) {
+                return this.hover.hide();
+            }
+        };
+
+        Bar.prototype.hoverContentForRow = function(index) {
+            var content, j, row, x, y, _i, _len, _ref;
+            row = this.data[index];
+            content = "<div class='morris-hover-row-label'>" + row.label + "</div>";
+            _ref = row.y;
+            for (j = _i = 0, _len = _ref.length; _i < _len; j = ++_i) {
+                y = _ref[j];
+                content += "<div class='morris-hover-point' style='color: " + (this.colorFor(row, j, 'label')) + "'>\n  " + this.options.labels[j] + ":\n  " + (this.yLabelFormat(y)) + "\n</div>";
+            }
+            if (typeof this.options.hoverCallback === 'function') {
+                content = this.options.hoverCallback(index, this.options, content, row.src);
+            }
+            x = this.left + (index + 0.5) * this.width / this.data.length;
+            return [content, x];
+        };
+
+        Bar.prototype.drawXAxisLabel = function(xPos, yPos, text) {
+            var label;
+            return label = this.raphael.text(xPos, yPos, text).attr('font-size', this.options.gridTextSize).attr('font-family', this.options.gridTextFamily).attr('font-weight', this.options.gridTextWeight).attr('fill', this.options.gridTextColor);
+        };
+
+        Bar.prototype.drawBar = function(xPos, yPos, width, height, barColor, opacity, radiusArray) {
+            var maxRadius, path;
+            maxRadius = Math.max.apply(Math, radiusArray);
+            if (maxRadius === 0 || maxRadius > height) {
+                path = this.raphael.rect(xPos, yPos, width, height);
+            } else {
+                path = this.raphael.path(this.roundedRect(xPos, yPos, width, height, radiusArray));
+            }
+            return path.attr('fill', barColor).attr('fill-opacity', opacity).attr('stroke', 'none');
+        };
+
+        Bar.prototype.roundedRect = function(x, y, w, h, r) {
+            if (r == null) {
+                r = [0, 0, 0, 0];
+            }
+            return ["M", x, r[0] + y, "Q", x, y, x + r[0], y, "L", x + w - r[1], y, "Q", x + w, y, x + w, y + r[1], "L", x + w, y + h - r[2], "Q", x + w, y + h, x + w - r[2], y + h, "L", x + r[3], y + h, "Q", x, y + h, x, y + h - r[3], "Z"];
+        };
+
+        return Bar;
+
+    })(Morris.Grid);
+
+    Morris.Donut = (function(_super) {
+        __extends(Donut, _super);
+
+        Donut.prototype.defaults = {
+            colors: ['#0B62A4', '#3980B5', '#679DC6', '#95BBD7', '#B0CCE1', '#095791', '#095085', '#083E67', '#052C48', '#042135'],
+            backgroundColor: '#FFFFFF',
+            labelColor: '#000000',
+            formatter: Morris.commas,
+            resize: false
+        };
+
+        function Donut(options) {
+            this.resizeHandler = __bind(this.resizeHandler, this);
+            this.select = __bind(this.select, this);
+            this.click = __bind(this.click, this);
+            var _this = this;
+            if (!(this instanceof Morris.Donut)) {
+                return new Morris.Donut(options);
+            }
+            this.options = $.extend({}, this.defaults, options);
+            if (typeof options.element === 'string') {
+                this.el = $(document.getElementById(options.element));
+            } else {
+                this.el = $(options.element);
+            }
+            if (this.el === null || this.el.length === 0) {
+                throw new Error("Graph placeholder not found.");
+            }
+            if (options.data === void 0 || options.data.length === 0) {
+                return;
+            }
+            this.raphael = new Raphael(this.el[0]);
+            if (this.options.resize) {
+                $(window).bind('resize', function(evt) {
+                    if (_this.timeoutId != null) {
+                        window.clearTimeout(_this.timeoutId);
+                    }
+                    return _this.timeoutId = window.setTimeout(_this.resizeHandler, 100);
+                });
+            }
+            this.setData(options.data);
+        }
+
+        Donut.prototype.redraw = function() {
+            var C, cx, cy, i, idx, last, max_value, min, next, seg, total, value, w, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
+            this.raphael.clear();
+            cx = this.el.width() / 2;
+            cy = this.el.height() / 2;
+            w = (Math.min(cx, cy) - 10) / 3;
+            total = 0;
+            _ref = this.values;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                value = _ref[_i];
+                total += value;
+            }
+            min = 5 / (2 * w);
+            C = 1.9999 * Math.PI - min * this.data.length;
+            last = 0;
+            idx = 0;
+            this.segments = [];
+            _ref1 = this.values;
+            for (i = _j = 0, _len1 = _ref1.length; _j < _len1; i = ++_j) {
+                value = _ref1[i];
+                next = last + min + C * (value / total);
+                seg = new Morris.DonutSegment(cx, cy, w * 2, w, last, next, this.data[i].color || this.options.colors[idx % this.options.colors.length], this.options.backgroundColor, idx, this.raphael);
+                seg.render();
+                this.segments.push(seg);
+                seg.on('hover', this.select);
+                seg.on('click', this.click);
+                last = next;
+                idx += 1;
+            }
+            this.text1 = this.drawEmptyDonutLabel(cx, cy - 10, this.options.labelColor, 15, 800);
+            this.text2 = this.drawEmptyDonutLabel(cx, cy + 10, this.options.labelColor, 14);
+            max_value = Math.max.apply(Math, this.values);
+            idx = 0;
+            _ref2 = this.values;
+            _results = [];
+            for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+                value = _ref2[_k];
+                if (value === max_value) {
+                    this.select(idx);
+                    break;
+                }
+                _results.push(idx += 1);
+            }
+            return _results;
+        };
+
+        Donut.prototype.setData = function(data) {
+            var row;
+            this.data = data;
+            this.values = (function() {
+                var _i, _len, _ref, _results;
+                _ref = this.data;
+                _results = [];
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    row = _ref[_i];
+                    _results.push(parseFloat(row.value));
+                }
+                return _results;
+            }).call(this);
+            return this.redraw();
+        };
+
+        Donut.prototype.click = function(idx) {
+            return this.fire('click', idx, this.data[idx]);
+        };
+
+        Donut.prototype.select = function(idx) {
+            var row, s, segment, _i, _len, _ref;
+            _ref = this.segments;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                s = _ref[_i];
+                s.deselect();
+            }
+            segment = this.segments[idx];
+            segment.select();
+            row = this.data[idx];
+            return this.setLabels(row.label, this.options.formatter(row.value, row));
+        };
+
+        Donut.prototype.setLabels = function(label1, label2) {
+            var inner, maxHeightBottom, maxHeightTop, maxWidth, text1bbox, text1scale, text2bbox, text2scale;
+            inner = (Math.min(this.el.width() / 2, this.el.height() / 2) - 10) * 2 / 3;
+            maxWidth = 1.8 * inner;
+            maxHeightTop = inner / 2;
+            maxHeightBottom = inner / 3;
+            this.text1.attr({
+                text: label1,
+                transform: ''
+            });
+            text1bbox = this.text1.getBBox();
+            text1scale = Math.min(maxWidth / text1bbox.width, maxHeightTop / text1bbox.height);
+            this.text1.attr({
+                transform: "S" + text1scale + "," + text1scale + "," + (text1bbox.x + text1bbox.width / 2) + "," + (text1bbox.y + text1bbox.height)
+            });
+            this.text2.attr({
+                text: label2,
+                transform: ''
+            });
+            text2bbox = this.text2.getBBox();
+            text2scale = Math.min(maxWidth / text2bbox.width, maxHeightBottom / text2bbox.height);
+            return this.text2.attr({
+                transform: "S" + text2scale + "," + text2scale + "," + (text2bbox.x + text2bbox.width / 2) + "," + text2bbox.y
+            });
+        };
+
+        Donut.prototype.drawEmptyDonutLabel = function(xPos, yPos, color, fontSize, fontWeight) {
+            var text;
+            text = this.raphael.text(xPos, yPos, '').attr('font-size', fontSize).attr('fill', color);
+            if (fontWeight != null) {
+                text.attr('font-weight', fontWeight);
+            }
+            return text;
+        };
+
+        Donut.prototype.resizeHandler = function() {
+            this.timeoutId = null;
+            this.raphael.setSize(this.el.width(), this.el.height());
+            return this.redraw();
+        };
+
+        return Donut;
+
+    })(Morris.EventEmitter);
+
+    Morris.DonutSegment = (function(_super) {
+        __extends(DonutSegment, _super);
+
+        function DonutSegment(cx, cy, inner, outer, p0, p1, color, backgroundColor, index, raphael) {
+            this.cx = cx;
+            this.cy = cy;
+            this.inner = inner;
+            this.outer = outer;
+            this.color = color;
+            this.backgroundColor = backgroundColor;
+            this.index = index;
+            this.raphael = raphael;
+            this.deselect = __bind(this.deselect, this);
+            this.select = __bind(this.select, this);
+            this.sin_p0 = Math.sin(p0);
+            this.cos_p0 = Math.cos(p0);
+            this.sin_p1 = Math.sin(p1);
+            this.cos_p1 = Math.cos(p1);
+            this.is_long = (p1 - p0) > Math.PI ? 1 : 0;
+            this.path = this.calcSegment(this.inner + 3, this.inner + this.outer - 5);
+            this.selectedPath = this.calcSegment(this.inner + 3, this.inner + this.outer);
+            this.hilight = this.calcArc(this.inner);
+        }
+
+        DonutSegment.prototype.calcArcPoints = function(r) {
+            return [this.cx + r * this.sin_p0, this.cy + r * this.cos_p0, this.cx + r * this.sin_p1, this.cy + r * this.cos_p1];
+        };
+
+        DonutSegment.prototype.calcSegment = function(r1, r2) {
+            var ix0, ix1, iy0, iy1, ox0, ox1, oy0, oy1, _ref, _ref1;
+            _ref = this.calcArcPoints(r1), ix0 = _ref[0], iy0 = _ref[1], ix1 = _ref[2], iy1 = _ref[3];
+            _ref1 = this.calcArcPoints(r2), ox0 = _ref1[0], oy0 = _ref1[1], ox1 = _ref1[2], oy1 = _ref1[3];
+            return ("M" + ix0 + "," + iy0) + ("A" + r1 + "," + r1 + ",0," + this.is_long + ",0," + ix1 + "," + iy1) + ("L" + ox1 + "," + oy1) + ("A" + r2 + "," + r2 + ",0," + this.is_long + ",1," + ox0 + "," + oy0) + "Z";
+        };
+
+        DonutSegment.prototype.calcArc = function(r) {
+            var ix0, ix1, iy0, iy1, _ref;
+            _ref = this.calcArcPoints(r), ix0 = _ref[0], iy0 = _ref[1], ix1 = _ref[2], iy1 = _ref[3];
+            return ("M" + ix0 + "," + iy0) + ("A" + r + "," + r + ",0," + this.is_long + ",0," + ix1 + "," + iy1);
+        };
+
+        DonutSegment.prototype.render = function() {
+            var _this = this;
+            this.arc = this.drawDonutArc(this.hilight, this.color);
+            return this.seg = this.drawDonutSegment(this.path, this.color, this.backgroundColor, function() {
+                return _this.fire('hover', _this.index);
+            }, function() {
+                return _this.fire('click', _this.index);
+            });
+        };
+
+        DonutSegment.prototype.drawDonutArc = function(path, color) {
+            return this.raphael.path(path).attr({
+                stroke: color,
+                'stroke-width': 2,
+                opacity: 0
+            });
+        };
+
+        DonutSegment.prototype.drawDonutSegment = function(path, fillColor, strokeColor, hoverFunction, clickFunction) {
+            return this.raphael.path(path).attr({
+                fill: fillColor,
+                stroke: strokeColor,
+                'stroke-width': 3
+            }).hover(hoverFunction).click(clickFunction);
+        };
+
+        DonutSegment.prototype.select = function() {
+            if (!this.selected) {
+                this.seg.animate({
+                    path: this.selectedPath
+                }, 150, '<>');
+                this.arc.animate({
+                    opacity: 1
+                }, 150, '<>');
+                return this.selected = true;
+            }
+        };
+
+        DonutSegment.prototype.deselect = function() {
+            if (this.selected) {
+                this.seg.animate({
+                    path: this.path
+                }, 150, '<>');
+                this.arc.animate({
+                    opacity: 0
+                }, 150, '<>');
+                return this.selected = false;
+            }
+        };
+
+        return DonutSegment;
+
+    })(Morris.EventEmitter);
 
 }).call(this);
 ;
