@@ -1,6 +1,6 @@
 'use strict';
 
-app.factory('oneChoiceFactory', function () {
+practiceGame.factory('oneChoiceFactory', function () {
     return {
         execute: function () {
             var content = $('#parent');
@@ -35,9 +35,9 @@ app.factory('oneChoiceFactory', function () {
 
         }
     };
-});
+})
 
-app.factory('multipleChoiceFactory', function () {
+.factory('multipleChoiceFactory', function () {
     return {
         execute: function () {
             var content = $('#parent');
@@ -73,9 +73,9 @@ app.factory('multipleChoiceFactory', function () {
 
         }
     };
-});
+})
 
-app.factory('matrix2x3ChoiceFactory', function () {
+.factory('matrix2x3ChoiceFactory', function () {
     return {
         execute: function () {
             var content = $('#parent');
@@ -116,9 +116,9 @@ app.factory('matrix2x3ChoiceFactory', function () {
 
         }
     };
-});
+})
 
-app.factory('matrix3x3ChoiceFactory', function () {
+.factory('matrix3x3ChoiceFactory', function () {
     return {
         execute: function () {
             var content = $('#parent');
@@ -157,9 +157,9 @@ app.factory('matrix3x3ChoiceFactory', function () {
 
         }
     };
-});
+})
 
-app.factory('multipleChoiceTwoCorrect', function () {
+.factory('multipleChoiceTwoCorrect', function () {
 
     var removeItem = function (options,idInput) {
         return $.grep(options, function (value) {

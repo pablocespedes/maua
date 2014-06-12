@@ -1,10 +1,32 @@
 'use strict';
-home.controller('SimpleDashController',['$scope','Users','History','Groups', function($scope,Users,History,Groups) {
+home.controller('SimpleDashController',['$scope','Users','History','Tracks','Account', function($scope,Users,History,Tracks,Account) {
+
+
     $scope.selectedTrack=undefined;
     $scope.init = function(){
-
-        //Declarate User RestAngular Object
+        angular.element('.progress-bar').tooltip();
+         $scope.user_id= Account.isUserAuthenticated();
+         //Declare User RestAngular Object
          $scope.UserRequest = Users.one();
+
+        fetchScorePrediction();
+
+        getHistoryInformation();
+
+        fetchTracksData();
+    };
+
+    function fetchTracksData(){
+        var tracks = Tracks.one();
+         tracks.customGET('',{group_id : 'gre',include_unpublished: true}).then(function(response){
+             $scope.tracks = response.tracks;
+         }).catch(function error(msg) {
+             console.error(msg);
+         });
+    }
+
+    function fetchScorePrediction(){
+
         var easyPieChartDefaults = {
             animate: 2000,
             scaleColor: false,
@@ -13,24 +35,23 @@ home.controller('SimpleDashController',['$scope','Users','History','Groups', fun
             size: 145,
             trackColor: '#e5e5e5'
         };
-        angular.element('#easy-pie-chart-2').easyPieChart(easyPieChartDefaults);
-        angular.element('.progress-bar').tooltip();
-        getHistoryInformation();
-        fetchTracksData();
-    };
 
-    function fetchTracksData(){
-        var tracks = Groups.one('gre');
-         tracks.customGET('tags', {include_unpublished: true}).then(function(response){
-             $scope.tracks = response.tracks;
-         }).catch(function error(msg) {
-             console.error(msg);
-         });
+        $scope.UserRequest.one($scope.user_id).customGET('score_prediction',{group:'gmat'}).then(function(response){
+            $scope.totalScore=response.total_score;
+            $scope.rangeInit=response.range[0];
+            $scope.rangeEnd=response.range[1];
+            $scope.percent=Math.round(100*$scope.rangeInit/$scope.rangeEnd);
+
+            angular.element('#easy-pie-chart-2').easyPieChart(easyPieChartDefaults).data('easyPieChart').update(87);
+        }).catch(function error(msg) {
+            console.error(msg);
+        });
+
     }
 
     function getHistoryInformation(){
 
-           var analytics = $scope.UserRequest.one('f58077f0-3084-012d-4d3f-123139068df2').customGET('history',{group:'gmat'}).then(function(graphicResult){
+           var analytics = $scope.UserRequest.one($scope.user_id).customGET('history',{group:'gmat'}).then(function(graphicResult){
                FillGraphic(graphicResult);
            }).catch(function error(msg) {
             console.error(msg);
@@ -84,6 +105,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Groups', fun
 
 
     };
+
     $scope.init();
 
 

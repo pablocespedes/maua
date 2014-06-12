@@ -9,8 +9,8 @@ request.factory('Questions', function(Restangular) {
 
 });
 
-request.factory('Groups', function(Restangular) {
-    return  Restangular.service('group')
+request.factory('Tracks', function(Restangular) {
+    return  Restangular.service('tracks')
 
 });
 

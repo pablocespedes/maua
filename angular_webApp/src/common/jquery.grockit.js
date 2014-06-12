@@ -3,7 +3,7 @@ $(function(){
     footer();
     setActiveMenu();
     setSelect2Settings();
-    setCookie('user_id','f58077f0-3084-012d-4d3f-123139068df2');
+
 });
 
 function setDropDownText(){
@@ -32,11 +32,12 @@ function setActiveMenu(){
 
 
 function setSelect2Settings(){
-    $('#topics select').select2({
+    var elm= $('#topics select');
+    elm.select2({
         allowClear: true
     });
 
-    $("#topics select").on("change", function(e) {
+    elm.on("change", function(e) {
         if (e.added) {
             // You can add other filters here like
             // if e.val == option_x_of_interest or
@@ -49,42 +50,9 @@ function setSelect2Settings(){
 }
 
 
-function setCookie(c_name,value,exdays) {
-    var exdate = new Date();
-    exdate.setDate(exdate.getDate() + exdays);
-    var c_value = escape(value) + ((exdays == null) ? "" : "; expires="+exdate.toUTCString());
-    document.cookie = c_name + "=" + c_value;
-}
-
-//Returns a cookie
-function getCookie(c_name) {
-    var c_value = document.cookie;
-    var c_start = c_value.indexOf(" " + c_name + "=");
-    if (c_start == -1) {
-        c_start = c_value.indexOf(c_name + "=");
-    }
-    if (c_start == -1) {
-        c_value = null;
-    } else {
-        c_start = c_value.indexOf("=", c_start) + 1;
-        var c_end = c_value.indexOf(";", c_start);
-        if (c_end == -1) {
-            c_end = c_value.length;
-        }
-        c_value = unescape(c_value.substring(c_start,c_end));
-    }
-    return c_value;
-}
-
-//Deletes a cookie
-function delCookie(c_name) {
-    document.cookie = c_name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-}
-
-
 function footer(){
     var url = location.hash;
-    if(url=='#/dashboard'){
+    if(url=='#/sat/dashboard'){
         $('footer').addClass('hide-footer');
     }
     else{

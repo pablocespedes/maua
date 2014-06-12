@@ -1,5 +1,5 @@
 
-app.directive('ngOneChoice', function(oneChoiceFactory) {
+practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
     return {
         restrict: 'A',
         templateUrl : 'app/practiceGame/practice/directives.tpl/oneChoice.tpl.html',
