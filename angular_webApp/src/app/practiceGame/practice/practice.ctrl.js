@@ -1,4 +1,4 @@
-app.controller('PracticeController',['$scope','Questions',function($scope,Questions) {
+practiceGame.controller('PracticeController',['$scope','Questions',function($scope,Questions) {
     $scope.optionList = ['A','B','C','D','E','F','G','H','I'];
     $scope.nextActionTitle='Confirm Choice';
     $scope.questionItems=[];

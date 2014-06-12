@@ -1,11 +1,11 @@
 'use strict';
 
-var app =  angular.module("grockitApp.practiceGame",[]).config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide) {
-    app.controller    = $controllerProvider.register;
-    app.directive     = $compileProvider.directive;
-    app.routeProvider = $routeProvider;
-    app.factory       = $provide.factory;
-    app.service       = $provide.service;
+var practiceGame =  angular.module("grockitApp.practiceGame",[]).config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide) {
+    practiceGame.controller    = $controllerProvider.register;
+    practiceGame.directive     = $compileProvider.directive;
+    practiceGame.routeProvider = $routeProvider;
+    practiceGame.factory       = $provide.factory;
+    practiceGame.service       = $provide.service;
 
     var filePath = {
         practice: {
@@ -20,7 +20,7 @@ var app =  angular.module("grockitApp.practiceGame",[]).config(function ($httpPr
      };
 
 
-    $routeProvider.when('/dashboard-practice', {templateUrl: 'app/practiceGame/dashboard/dashboard.tpl.html', resolve:{deps:function($q, $rootScope){
+    $routeProvider.when('/:subject/dashboard-practice', {templateUrl: 'app/practiceGame/dashboard/dashboard.tpl.html', resolve:{deps:function($q, $rootScope){
         var deferred = $q.defer(),
             essentials = [
                 filePath.dashboard.dashServ,

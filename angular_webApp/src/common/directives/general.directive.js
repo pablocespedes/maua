@@ -1,4 +1,5 @@
-app.directive('select2',function(){
+angular.module('grockitApp.directives', [])
+    .directive('select2',function(){
     var linker = function(scope, element,attr){
         scope.$watch('names',function(){
             setTimeout(function(){
@@ -12,3 +13,4 @@ app.directive('select2',function(){
         link: linker
     };
 });
+

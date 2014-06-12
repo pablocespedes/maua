@@ -7,8 +7,8 @@ var paths={
     restAngular:'common/restAngular/restAngular.module.js',
     home:'app/home/home.module.js',
     practiceGame:'app/practiceGame/practiceGame.module.js',
-    app:'app/app.js',
-    generalDrctv:'common/directives/general.directive.js'
+    generalServices:'common/services/general.services.js',
+    app:'app/app.js'
 };
 
 $script([
@@ -16,13 +16,13 @@ $script([
     paths.restAngular,
     paths.home,
     paths.practiceGame,
+    paths.generalServices,
     paths.app
 ],'init')
 
     .ready('init', function(){
         $script([
             paths.restAngularFactory,
-            //paths.generalDrctv,
             paths.jqueryGrockit
         ], function() {
             angular.bootstrap(document, ['grockitApp']);

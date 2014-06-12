@@ -29,23 +29,26 @@
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 10px;
-  background-color: #CCCBCB;
   min-height: 50px;
   margin-top: 5px;
+  margin-bottom: 5px;
   border: none;
-  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
-  box-shadow: 0 1px 1px rgba(0,0,0,.05);
 
 //  box-shadow: 0 3px 1px #555, 0 -2px 4px #555;
 
 }
 footer {
- z-index: 1030;
-  border: none;
-  min-height: 42px;
   width: 100%;
-//  border-top: 1px solid transparent;
-
+  _height: 1px;
+  position: absolute!important;
+  padding-left: 0px;
+  border: 1px solid #EEEBEB!important;
+  background: #f1f1f1;
+  
+}
+.theme-default footer {
+  -webkit-box-shadow: 0 2px 2px rgba(0,0,0,.05),0 1px 0 rgba(0,0,0,.05);
+  box-shadow: 0 2px 2px rgba(0,0,0,.05),0 1px 0 rgba(0,0,0,.05);
 }
 
 .push {

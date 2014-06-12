@@ -26,11 +26,11 @@
                             <div class="stat-row">
                                 <!-- Bordered, without top border, without horizontal padding -->
                                 <div class="stat-cell bordered no-border-t no-padding-hr">
-                                    <div class="pie-chart " data-percent="65" id="easy-pie-chart-2">
+                                    <div class="pie-chart " data-percent="{{percent}}" id="easy-pie-chart-2">
                                         <div class="pie-chart-label xlText">
-                                            650
+                                            <span ng-bind="totalScore"></span>
                                             <span class="text-sm chart-range-text">
-                                                600-700
+                                                <span ng-bind="rangeInit"></span> -  <span ng-bind="rangeEnd"></span>
                                             </span>
                                         </div>
                                     </div>
@@ -42,6 +42,30 @@
                     </div>
                 </div>
             </div>
+        <hr class="no-grid-gutter-h grid-gutter-margin-b no-margin-t">
+        <div class="stat-panel">
+            <div class="stat-row">
+
+                <div class="stat-cell col-sm-6  padding-sm-hr bordered no-border-r valign-middle">
+                    <div class="row">
+                        <div class="col-md-12 padding-sm-hr">
+                            <h2>
+                                <small>Getting Started</small>
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="stat-panel text-center">
+                        <div class="col-md-6">
+                            <select data-ng-options="o.name for o in tracks" class="select-control-custom col-lg-12 col-md-12 col-sm-4 col-xs-12" data-ng-model="selectedTrack" ></select>
+
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn  btn-success btn-flat btn-block" ng-click="StartPractice()"><h4>Start</h4></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <hr class="no-grid-gutter-h grid-gutter-margin-b no-margin-t">
         <div class="stat-panel">
@@ -57,7 +81,7 @@
                     </div>
                     <div class="stat-panel text-center">
                         <div class="col-md-6">
-                            <select data-ng-options="o.name for o in tracks" class="select-control-custom col-lg-12 col-md-12 col-sm-4 col-xs-12" data-ng-model="selectedTrack" ></select>
+                            <select data-ng-options="o.short_name for o in tracks" class="select-control-custom col-lg-12 col-md-12 col-sm-4 col-xs-12" data-ng-model="selectedTrack" ></select>
 
 
                         </div>

@@ -28,8 +28,8 @@ home.factory('History', function() {
     }
 
     return {
-        findMissingDates:function(test){
-            var dest = [], datestr = '', src = test,
+        findMissingDates:function(data){
+            var dest = [], datestr = '', src = data,
                 index = getIndex(src, 'day'),max= 0,i=0,
                 //get boundaries
                 first = new Date(src[0].day),

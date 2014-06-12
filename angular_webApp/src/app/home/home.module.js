@@ -6,9 +6,10 @@
         home.factory       = $provide.factory;
         home.service       = $provide.service;
 
-        $routeProvider.when('/dashboard', {templateUrl: 'app/home/dashboard/dashboard.tpl.html', resolve:{deps:function($q, $rootScope){
+        $routeProvider.when('/:subject/dashboard', {templateUrl: 'app/home/dashboard/dashboard.tpl.html', resolve:{deps:function($q, $rootScope){
             var deferred = $q.defer(),
              essentials = [
+                'app/home/account/account.service.js',
                 'app/home/dashboard/dashboard.service.js',
                 'app/home/dashboard/dashboard.ctrl.js'
             ];
