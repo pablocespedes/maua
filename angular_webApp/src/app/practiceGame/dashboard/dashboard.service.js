@@ -1,6 +1,6 @@
 'use strict';
 
-app.factory('TagElement',function(){
+practiceGame.factory('TagElement',function(){
     return{
         add: function(value,text){
             var footerTag=  $('#footerTags'),
@@ -11,7 +11,7 @@ app.factory('TagElement',function(){
     }
 });
 
-app.factory('History', function() {
+practiceGame.factory('History', function() {
 
     function  getIndex(srcArray, field){
         var i, l, index;
@@ -72,7 +72,7 @@ app.factory('History', function() {
 
 
 
-app.factory('ClusterInformation', function() {
+practiceGame.factory('ClusterInformation', function() {
 
     var items = [
         {

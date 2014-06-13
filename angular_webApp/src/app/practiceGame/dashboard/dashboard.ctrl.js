@@ -1,4 +1,4 @@
-app.controller('DetailDashController',['$scope','TagElement','History',function($scope,TagElement,History) {
+practiceGame.controller('DetailDashController',['$scope','TagElement','History',function($scope,TagElement,History) {
 
 
     $scope.init = function(){

@@ -47,21 +47,27 @@
             <div class="stat-row">
 
                 <div class="stat-cell col-sm-6  padding-sm-hr bordered no-border-r valign-middle">
-                    <div class="row">
-                        <div class="col-md-12 padding-sm-hr">
-                            <h2>
-                                <small>Getting Started</small>
-                            </h2>
-                        </div>
-                    </div>
                     <div class="stat-panel text-center">
-                        <div class="col-md-6">
-                            <select data-ng-options="o.name for o in tracks" class="select-control-custom col-lg-12 col-md-12 col-sm-4 col-xs-12" data-ng-model="selectedTrack" ></select>
+                        <div class="col-md-12">
+                            <div class="panel  panel-dark widget-profile">
+                                <div class="panel-heading text-left">
+                                    <h4><i class="panel-title-icon fa fa-fire"></i>Let's get started! Diagnostic</h4>
+                                </div> <!-- / .panel-heading -->
+                                <div class="list-group text-left">
+                                    <a href="#" class="list-group-item">
+                                        <span class="label label-success text-bg text-slim">Completed</span>
+                                        Congrats! You've taken the <span class="text-xlg"><strong>Reading</strong> </span> quick test
+                                    </a>
+                                    <a href="#" class="list-group-item">
+                                        <span class="label label-warning text-bg text-slim">Pending</span>
+                                        JumpStart your <span class="text-xlg"><strong>Math</strong> </span>practice in just 12 questions
+                                        <button class="float-right btn btn-lg btn-success">Start</button>
+                                    </a>
+                                </div>
+                            </div>
 
                         </div>
-                        <div class="col-md-6">
-                            <button class="btn  btn-success btn-flat btn-block" ng-click="StartPractice()"><h4>Start</h4></button>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -75,7 +81,7 @@
                     <div class="row">
                         <div class="col-md-12 padding-sm-hr">
                             <h2>
-                                <small>Lets start your practice</small>
+                                <small>Let's start your practice</small>
                             </h2>
                         </div>
                     </div>

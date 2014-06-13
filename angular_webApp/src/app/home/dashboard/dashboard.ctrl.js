@@ -1,11 +1,11 @@
 'use strict';
-home.controller('SimpleDashController',['$scope','Users','History','Tracks','Account', function($scope,Users,History,Tracks,Account) {
+home.controller('SimpleDashController',['$scope','Users','History','Tracks', function($scope,Users,History,Tracks) {
 
 
     $scope.selectedTrack=undefined;
     $scope.init = function(){
         angular.element('.progress-bar').tooltip();
-         $scope.user_id= Account.isUserAuthenticated();
+         $scope.user_id= '12312';//Account.isUserAuthenticated();
          //Declare User RestAngular Object
          $scope.UserRequest = Users.one();
 

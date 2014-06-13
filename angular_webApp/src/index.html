@@ -70,7 +70,7 @@
             <!-- Main navbar header -->
             <div class="navbar-header">
                 <!-- Logo -->
-                <a href="#/dashboard" class="navbar-brand">
+                <a href="#/{{activeGroupId}}/dashboard" class="navbar-brand">
                     <div style="background: transparent;">
                         <img alt="Grockit" style="height: 27px;" src="https://grockit.com/assets/logos/header_logo-6432a20e4d5cb724ec7871f537716363.png">
                     </div>
@@ -113,7 +113,7 @@
                     <div class="right clearfix">
                         <ul class="nav navbar-nav pull-right right-navbar-nav">
                             <li class="dropdown">
-                             <a href="#/sat/practice" class="dropdown-toggle user-menu">
+                             <a ng-href="#/{{activeGroupId}}/practice" class="dropdown-toggle user-menu">
                                     <button class="btn btn-flat btn-labeled btn-success btn-labeled" ><span class="btn-label icon fa fa-play"></span>Resume</button>
                              </a>
                             </li>
@@ -145,10 +145,10 @@
         <div id="main-menu-inner">
             <ul class="navigation">
                 <li>
-                    <a href="#/dashboard"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Dashboard</span></a>
+                    <a ng-href="#/{{activeGroupId}}/dashboard"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Dashboard</span></a>
                 </li>
                 <li>
-                    <a href="#/dashboard-practice"><i class="menu-icon fa fa-desktop"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Math</span></a>
+                    <a ng-href="#/{{activeGroupId}}/dashboard-practice"><i class="menu-icon fa fa-desktop"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Math</span></a>
                 </li>
                 <li>
                     <a href="#"><i class="menu-icon fa fa-book"></i><span class="mm-text">Reading</span>
