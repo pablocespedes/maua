@@ -35,9 +35,9 @@ practiceGame.factory('oneChoiceFactory', function () {
 
         }
     };
-})
+});
 
-.factory('multipleChoiceFactory', function () {
+practiceGame.factory('multipleChoiceFactory', function () {
     return {
         execute: function () {
             var content = $('#parent');
@@ -73,9 +73,9 @@ practiceGame.factory('oneChoiceFactory', function () {
 
         }
     };
-})
+});
 
-.factory('matrix2x3ChoiceFactory', function () {
+practiceGame.factory('matrix2x3ChoiceFactory', function () {
     return {
         execute: function () {
             var content = $('#parent');
@@ -116,9 +116,9 @@ practiceGame.factory('oneChoiceFactory', function () {
 
         }
     };
-})
+});
 
-.factory('matrix3x3ChoiceFactory', function () {
+practiceGame.factory('matrix3x3ChoiceFactory', function () {
     return {
         execute: function () {
             var content = $('#parent');
@@ -157,9 +157,9 @@ practiceGame.factory('oneChoiceFactory', function () {
 
         }
     };
-})
+});
 
-.factory('multipleChoiceTwoCorrect', function () {
+practiceGame.factory('multipleChoiceTwoCorrect', function () {
 
     var removeItem = function (options,idInput) {
         return $.grep(options, function (value) {
