@@ -1,27 +1,75 @@
 angular.module('grockitApp.services', ['webStorageModule'])
-    .provider('url.provider',function(){
-        this.$get= function(){
-            var obj={};
-            obj.other= function(){return '/:subject/dashboard-practice'};
-        }
-    })
-    .factory('generalServices', function(webStorage,$rootScope) {
+    .factory('Groups', function(webStorage,$rootScope) {
+        var trackData = {
+            id: null
+        };
         return {
-            isGroupActive: function () {
-                var groupId= webStorage.get('groupId');
-                if((groupId==null) ||(angular.isDefined(groupId))){
-                    webStorage.add('groupId', 'sat');
-                }
-
-                return groupId;
-            },
             getActiveGroup: function(){
+                $rootScope.activeGroupId =  webStorage.get('currentUser').studyingFor;
                 return  $rootScope.activeGroupId;
+            },
+            setActiveGroup: function(activeGroupId){
+
+                $rootScope.activeGroupId = activeGroupId;
+
+            },
+            getActiveTrack: function () {
+                return trackData;
+            },
+            setActiveTrack: function (data) {
+                trackData = data;
             }
 
         }
-    }).
-    config(["url.providerProvider",function(p){
+    })
+    .factory('Footer',function(){
 
-    }]);
+        return{
+            hideFooter: function () {
+              angular.element('footer').addClass('hide-footer')
+            },
+            showFooter: function () {
+                angular.element('footer').removeClass('hide-footer')
+
+            }
+
+
+        }
+    })
+
+.factory('Utilities', function($http) {
+        var activeTabIndex=-1;
+    return {
+        findInArray: function (element,array,filter) {
+
+            return  $.grep(array,function (val) {
+                return val[filter] === element;
+            })[0];
+        },
+        getJson: function (url) {
+            return $http.get(url).then(function (response) {
+                return response.data;
+            }, function (error) {
+                return "IError";
+            });
+        },
+        encodeRedirect:function(redirectUrl,url){
+            var fUrl=redirectUrl+ encodeURIComponent(url);
+            window.location.href =fUrl;
+        },
+        redirect:function(url){
+            window.location.href=url;
+        },
+        setActiveTab: function(){
+            return activeTabIndex;
+        },
+        getActiveTab: function(index){
+            activeTabIndex = index;
+        }
+    }
+});
+
+
+
+
 

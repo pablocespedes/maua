@@ -1,63 +1,90 @@
-angular.module('grockitApp.authServices', ['webStorageModule'])
-    .constant('userRoles', {
+angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
+    .constant('UserRoles', {
         admin: 'admin',
         member: 'member',
         guest: 'guest'
     })
-    .factory('authService', function (Session, $location) {
-        return {
-            verifySessionURL: function () {
-                var SessionObject = $location.search()._app_server_session;
-                if (SessionObject !== '' && angular.isDefined(SessionObject)) {
-                    Session.create(SessionObject);
-                    return true;
-                } else {
-                    return false;
-                }
-            },
-            isAuthenticated: function () {
-                return Session.isSessionDefined();
-            },
-            isAuthorized: function (authorizedRoles) {
+    .factory('Auth', function($cookies,UserRoles,webStorage,Users,Groups,$location,$q){
+
+    return {
+        authorize: function(next) {
+
+            if(angular.isDefined(next.access)){
+                var authorizedRoles = next.access.authorizedRoles;
+
                 if (!angular.isArray(authorizedRoles)) {
                     authorizedRoles = [authorizedRoles];
                 }
-                return (this.isAuthenticated() &&
-                    authorizedRoles.indexOf(Session.userRole) !== -1);
+                return (this.isLoggedIn() &&
+                    authorizedRoles.indexOf(this.isLoggedIn().role) !== -1);
             }
-        };
-    })
-    .factory('Session', function (webStorage, Users, Headers,userRoles) {
-        return {
-            create: function (sessionId) {
-                Headers.setDefaultHeader(sessionId);
 
-                Users.one("f58077f0-3084-012d-4d3f-123139068df2").get().then(function (result) {
-                    var userData=result.user,
-                     _app_server_session = {
-                        id: sessionId,
-                        userId: userData.id,
-                        userRole: userData.guest == true ? userRoles.member : userRoles.guest,
-                        group_memberships: userData.group_memberships,
-                        studying_for: userData.studying_for
-                    };
-
-
-                    webStorage.add('_app_server_session', _app_server_session);
-
-                }).catch(function error(msg) {
-                    console.error(msg.headers());
-                });
-
-            },
-            destroy: function () {
-                var sessionid = webStorage.get('_app_server_session').id;
-                Headers.removeDefaultHeader(sessionid);
-                webStorage.remove('_app_server_session');
-            },
-            isSessionDefined: function () {
-                return webStorage.get('_app_server_session') == null || "" ? false : true;
-
+        },
+        isLoggedIn: function() {
+            if((webStorage.get('currentUser') == null || "") || ( angular.isUndefined($cookies._app_server_session) || $cookies._app_server_session=='')) {
+                return false;
             }
+            else {
+                return true;
+            }
+
+        },
+        logout: function() {
+
+
+            try{
+                //var userData = webStorage.get('_app_server_session');
+                //Headers.removeDefaultHeader(sessionId);
+                webStorage.remove('currentUser');
+                $cookies.remove('_app_server_session');
+
+
+            }catch(e){
+            }
+
+        },
+        setCurrentUser: function () {
+            var deferred = $q.defer(), currentUser=undefined;
+            var sessionParam = $location.search()._app_server_session;
+            try {
+                if (sessionParam !== '' && angular.isDefined(sessionParam)) {
+                    //Headers.setDefaultHeader(SessionObject);
+
+                    Users.one("f58077f0-3084-012d-4d3f-123139068df2").get().then(function (result) {
+
+                        currentUser = {
+                            userId: result.user.id,
+                            role: result.user.guest == true ? UserRoles.member : UserRoles.guest,
+                            groupMemberships: result.user.group_memberships,
+                            studyingFor: result.user.studying_for,
+                            fullName: result.user.first_name
+                        };
+
+                        Groups.setActiveGroup(result.user.studying_for);
+                        webStorage.add('currentUser', currentUser);
+                        $cookies._app_server_session= sessionParam;
+                        deferred.resolve(currentUser);
+
+                    }).catch(function error(e) {
+                        deferred.reject(e);
+                    });
+
+                }
+                else{
+                    deferred.resolve(currentUser);
+                }
+                return deferred.promise;
+            }catch(e){
+                deferred.reject(e);
+            }
+
+        },
+        getCurrentUserInfo: function() {
+            return webStorage.get('currentUser');
+        },
+        updateUserInfo: function(currentUser){
+            webStorage.add('currentUser', currentUser);
         }
-    });
+    };
+});
+

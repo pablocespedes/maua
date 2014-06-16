@@ -14,24 +14,31 @@ request.factory('Tracks', function(Restangular) {
 
 });
 
-request.factory('Headers', function(Restangular,$http) {
+request.factory('PracticeGames', function(Restangular) {
+    return  Restangular.service('practice_games')
+
+});
+
+
+request.factory('Headers', function(Restangular) {
     return  {
         setDefaultHeader:function(sessionId){
-            //$http.defaults.headers.common.Authorization='Token token='+sessionId;
-
-//            return Restangular.withConfig(function(AuthRestangular) {
-//                AuthRestangular.setDefaultHeaders({'Authorization':'Token token='+sessionId+""});
-//            });
+            Restangular.setDefaultHeaders({'Authorization':'Token token='+sessionId+""});
 
         },
         removeDefaultHeader: function(){
             Restangular.setDefaultHeaders({'Authorization':''})
         }
     }
-
-
-
 });
+
+
+
+
+
+
+
+
 
 
 request.factory('ApiV3Restangular', function(Restangular) {

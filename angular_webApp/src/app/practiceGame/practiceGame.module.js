@@ -1,7 +1,7 @@
 'use strict';
 
 var practiceGame =  angular.module("grockitApp.practiceGame",[])
-    .config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide,userRoles) {
+    .config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide,UserRoles) {
 
         practiceGame.controller    = $controllerProvider.register;
         practiceGame.directive     = $compileProvider.directive;
@@ -33,12 +33,15 @@ var practiceGame =  angular.module("grockitApp.practiceGame",[])
                 deferred.resolve();
             });
         });
-        footer();
-        setActiveMenu();
         return deferred.promise;
-    }}, controller: 'DetailDashController',
-        data: {
-            authorizedRoles: [userRoles.admin, userRoles.member]
+    }},
+        delay: function($q, $defer) {
+        var delay = $q.defer();
+        $defer(delay.resolve, 500);
+        return delay.promise;
+    }, controller: 'DetailDashController',
+    access: {
+            authorizedRoles: [UserRoles.admin, UserRoles.member]
         }
     })
 
@@ -55,15 +58,18 @@ var practiceGame =  angular.module("grockitApp.practiceGame",[])
                 deferred.resolve();
             });
         });
-        footer();
-        setActiveMenu();
         return deferred.promise;
-    }}, controller: 'PracticeController',
-            data: {
-                authorizedRoles: [userRoles.admin, userRoles.member]
-            }
+    }},
+      delay: function($q, $defer) {
+          var delay = $q.defer();
+          $defer(delay.resolve, 500);
+          return delay.promise;
+      }, controller: 'PracticeController',
+      access: {
+          authorizedRoles: [UserRoles.admin, UserRoles.member]
+      }
     });
 
-  //.otherwise({redirectTo: urlsProvider.other()});
+        $routeProvider.otherwise({redirect:'/'});
 
 });

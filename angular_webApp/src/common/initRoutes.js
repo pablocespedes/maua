@@ -9,6 +9,8 @@ var paths={
     practiceGame:'app/practiceGame/practiceGame.module.js',
     generalServices:'common/services/general.services.js',
     authServices:'common/services/auth.services.js',
+    accountModule:'app/account/account.module.js',
+    accountCtrl:'app/account/auth/auth.ctrl.js',
     app:'app/app.js'
 };
 
@@ -18,14 +20,17 @@ $script([
     paths.restAngular,
     paths.home,
     paths.practiceGame,
+    paths.authServices,
     paths.app
 ],'init')
 
     .ready('init', function(){
         $script([
             paths.restAngularFactory,
-            paths.authServices,
+            paths.accountModule,
+            paths.accountCtrl,
             paths.jqueryGrockit
+
         ], function() {
             angular.bootstrap(document, ['grockitApp']);
         });

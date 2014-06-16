@@ -1,8 +1,8 @@
-practiceGame.controller('DetailDashController',['$scope','TagElement','History',function($scope,TagElement,History) {
+practiceGame.controller('DetailDashController',['$scope','TagElement','History','Footer',function($scope,TagElement,History,Footer) {
 
 
     $scope.init = function(){
-
+        Footer.showFooter();
         var easyPieChartDefaults = {
             animate: 2000,
             scaleColor: false,

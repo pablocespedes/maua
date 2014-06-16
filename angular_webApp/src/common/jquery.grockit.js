@@ -1,34 +1,7 @@
 $(function(){
-    setDropDownText();
-    footer();
-    setActiveMenu();
+
     setSelect2Settings();
-
 });
-
-function setDropDownText(){
-    $('.dropdown-menu li a').click(function(){
-        var selText = $(this).text();
-        $(this).parents().find('#subjectDD').html(selText);
-    });
-}
-function setActiveMenu(){
-    var menuList = $('div#main-menu-inner ul.navigation li');
-        var url = window.location.href.split('/'),
-         actualLocation = url[(url.length - 1)] || 'home';
-
-        menuList.removeClass('active');
-        switch(actualLocation){
-            case "dashboard":
-                $(menuList[0]).addClass('active'); //Home Dashboard
-                break;
-            case "dashboard-practice":
-                $(menuList[1]).addClass('active'); //Game Dashboard
-                break;
-        }
-
-
-}
 
 
 function setSelect2Settings(){
@@ -49,13 +22,3 @@ function setSelect2Settings(){
     });
 }
 
-
-function footer(){
-    var url = location.hash;
-    if(url=='#/sat/dashboard'){
-        $('footer').addClass('hide-footer');
-    }
-    else{
-        $('footer').removeClass('hide-footer');
-    }
-}

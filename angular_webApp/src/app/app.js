@@ -2,38 +2,45 @@
 (function(app) {
  app.config(function() {
     })
-    .run(function ($rootScope,$location,generalServices, authService) {
+     .run(function ($rootScope, $location, Auth,Groups,Utilities) {
 
-         $rootScope.activeGroupId = generalServices.isGroupActive();
+     $rootScope.$on("$routeChangeStart", function (event, next) {
+         var oldSite='',newSite='';
+         if (!Auth.authorize(next)) {
 
-         $rootScope.$on('$routeChangeStart', function (event, next) {
+             if(Auth.isLoggedIn()){
+                 Groups.getActiveGroup();
+                 if ($location.path() == '' ||  angular.isDefined($location.search()._app_server_session)) {
 
-             if (authService.isAuthenticated()) {
-
-                 // user authenticated
-                 event.preventDefault();
-                 var authorizedRoles = next.data.authorizedRoles;
-                 if (!authService.isAuthorized(authorizedRoles)) {
-
-                 } else {
-                     // user is not logged in
-                     window.location.href = "http://staging.grockit.com/login?redirect=http%3A%2F%2F127.0.0.1%3A9000%2F%23%2Fsat%2Fdashboard%3F_app_server_session";
+                     Utilities.redirect('#/' + Groups.getActiveGroup() + '/dashboard');
                  }
              }
              else {
-                // search for session in the url hay una variable en la url
-                 if(!authService.verifySessionURL()){
 
-                     window.location.href = "http://staging.grockit.com/login?redirect=http%3A%2F%2F127.0.0.1%3A9000%2F%23%2Fsat%2Fdashboard%3F_app_server_session";
-                     return false;
-                 }
+                 Auth.setCurrentUser().then(function (userData) {
+                     if (angular.isDefined(userData)) {
 
+                         window.location.href = '#/' + userData.studyingFor + "/dashboard";
 
+                     } else {
+
+                             oldSite = 'http://staging.grockit.com/login?redirect=';
+                         if ($location.path() == ''){
+                             newSite = $location.absUrl() + '#/?'+'_app_server_session';
+                         }
+                         else{
+                             newSite = $location.absUrl() + '/?'+'_app_server_session';
+                         }
+
+                         Utilities.encodeRedirect(oldSite, newSite);
+                     }
+
+                 });
              }
-
-         });
-
+         }
      });
+
+});
 }(angular.module("grockitApp", [
   'ngResource',
   'ngRoute',
@@ -44,7 +51,8 @@
   'grockitApp.services',
   'grockitApp.authServices',
   'grockitApp.practiceGame',
-  'grockitApp.home'
+  'grockitApp.home',
+  'grockitApp.account'
 ]))
 );
 
