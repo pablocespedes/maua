@@ -5,8 +5,6 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
         templateUrl : 'app/practiceGame/practice/directives.tpl/oneChoice.tpl.html',
         link: function() {
             oneChoiceFactory.execute();
-
-
         },
         scope: {
             items:'=items',

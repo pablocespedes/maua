@@ -183,7 +183,7 @@ practiceGame.factory('multipleChoiceTwoCorrect', function () {
                     nexAction = $('#nextAction'),
                     seeAnswer = $('#skipAction');
 
-                // validation whic takes care to keep just 2 options selected
+                // validation which takes care to keep just 2 options selected
                 if (options.length >= 2) {
                     var itemToRemove = options[0];
                     options = removeItem(options,itemToRemove);

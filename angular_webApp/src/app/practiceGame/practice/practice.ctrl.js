@@ -1,4 +1,6 @@
-practiceGame.controller('PracticeController',['$scope','Questions',function($scope,Questions) {
+practiceGame.controller('PracticeController',['$scope','Questions','Utilities','Groups',function($scope,Questions,Utilities,Groups) {
+    $scope.activeTrack =Groups.getActiveTrack();
+
     $scope.optionList = ['A','B','C','D','E','F','G','H','I'];
     $scope.nextActionTitle='Confirm Choice';
     $scope.questionItems=[];
@@ -20,14 +22,6 @@ practiceGame.controller('PracticeController',['$scope','Questions',function($sco
             {id:'8', type: 'MultipleChoiceTwoCorrect'}
         ];
 
-
-    var selectAnswerType = function(type) {
-
-        return $.grep($scope.directives,function (val) {
-            return val.type == type;
-        })[0];
-
-    }
 
     var getUrlQuestion= function(){
 
@@ -168,12 +162,17 @@ practiceGame.controller('PracticeController',['$scope','Questions',function($sco
         }
     }
 
+    function CreatePracticeGame(){
+
+
+    }
+
     //load a question at the first time
     $scope.loadQuestion = function(){
 
         angular.element('.choice.active').removeClass('active');
         Questions.one(getUrlQuestion()).get().then(function(questionResult){
-                $scope.currentA=  selectAnswerType(questionResult.kind).id;
+                $scope.currentA=  Utilities.findInArray(questionResult.kind,$scope.directives,'type').id;
                 $scope.items=[];
                 $scope.stimulus="";
                 $scope.template= $scope.actualView;

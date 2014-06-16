@@ -63,7 +63,7 @@
     <!-- 2. $MAIN_NAVIGATION ===========================================================================
         Main navigation
     -->
-    <div id="main-navbar" class="navbar navbar-inverse" role="navigation">
+    <div id="main-navbar" class="navbar navbar-inverse" role="navigation" ng-controller="NavController">
         <!-- Main menu toggle -->
         <button type="button" id="main-menu-toggle"><i class="navbar-icon fa fa-bars icon"></i><span class="hide-menu-text">HIDE MENU</span></button>
         <div class="navbar-inner">
@@ -83,18 +83,26 @@
                 <div>
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a id="subjectDD" href="#" class="dropdown-toggle" data-toggle="dropdown">Subjects&nbsp;<i class="fa fa-caret-down"></i></a>
-                            <ul class="dropdown-menu">
-                                <li><a class="" href="#/act/practice">ACT®</a>
-                                </li><li><a class="" href="#/ap_calculus/practice">AP® Calculus AB</a></li>
-                                <li><a class="" href="#/ap_psychology/practice">AP® Psychology</a></li>
-                                <li><a class="" href="#/ap_us_history/practice">AP® US History</a></li>
-                                <li><a class="" href="#/ap_world_history/practice">AP® World History </a></li>
-                                <li><a class="" href="#/academy/practice">College Edge Academy™</a></li>
-                                <li> <a class="" href="#/gmat/practice">GMAT®</a></li>
-                                <li><a class="" href="#/gre/practice">GRE®</a></li>
-                                <li><a class="" href="#/lsat/practice">LSAT®</a></li>
-                                <li><a class="current" href="#/sat/practice">SAT®</a></li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span ng-bind="selectedGroup"></span>&nbsp;<i class="fa fa-caret-down"></i></a>
+                            <ul id="subjectDD"  class="dropdown-menu">
+                                <li ng-repeat="linked in linkedGroups">
+                                    <a class="" ng-click="selectGroup($index)" ng-href="#/{{linked.group_id}}/dashboard"><span ng-bind="linked.name"></span></a>
+
+                                </li>
+                                <li class="divider"></li>
+                                <li id="{{unlinked.group_id}}" ng-repeat="unlinked in unLinkedGroups"><a class="" ng-href="https://grockit.com/{{unlinked.group_id}}/info" target="_blank"><span ng-bind="unlinked.name"></span></a></li>
+
+
+                                <!--<li><a class="" href="#/act/practice">ACT®</a>-->
+                                <!--</li><li><a class="" href="#/ap_calculus/practice">AP® Calculus AB</a></li>-->
+                                <!--<li><a class="" href="#/ap_psychology/practice">AP® Psychology</a></li>-->
+                                <!--<li><a class="" href="#/ap_us_history/practice">AP® US History</a></li>-->
+                                <!--<li><a class="" href="#/ap_world_history/practice">AP® World History </a></li>-->
+                                <!--<li><a class="" href="#/academy/practice">College Edge Academy™</a></li>-->
+                                <!--<li> <a class="" href="#/gmat/practice">GMAT®</a></li>-->
+                                <!--<li><a class="" href="#/gre/practice">GRE®</a></li>-->
+                                <!--<li><a class="" href="#/lsat/practice">LSAT®</a></li>-->
+                                <!--<li><a href="#/sat/practice">SAT®</a></li>-->
                                 <!--<li><a class="" href="https://grockit.com/act" active>ACT®</a>-->
                                 <!--</li><li><a class="" href="https://grockit.com/ap_calculus">AP® Calculus AB</a></li>-->
                                 <!--<li><a class="" href="https://grockit.com/ap_psychology">AP® Psychology</a></li>-->
@@ -118,16 +126,18 @@
                              </a>
                             </li>
                             <li class="dropdown">
+
+
                                 <a href="#" class="dropdown-toggle user-menu" data-toggle="dropdown">
                                     <img src="images/1.jpg" alt="">
-                                    <span>Jeff Novich</span>
+                                    <span ng-if="currentUser" ng-bind="currentUser.fullName"></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="https://grockit.com/users/e759ede0-e8c5-0130-53e6-1231390ef981/account"><i class="dropdown-icon fa  fa-info-circle"></i>&nbsp;&nbsp;Account</a></li>
-                                    <li><a href="https://grockit.com/users/e759ede0-e8c5-0130-53e6-1231390ef981"><i class="dropdown-icon fa fa-user"></i>&nbsp;&nbsp;Profile</a></li>
-                                    <li><a href="https://grockit.com/users/e759ede0-e8c5-0130-53e6-1231390ef981/message_center/folders/Inbox"><i class="dropdown-icon fa fa-envelope"></i>&nbsp;&nbsp;Messages</a></li>
+                                    <li><a ng-href="https://grockit.com/users/{{currentUser.userId}}/account"><i class="dropdown-icon fa  fa-info-circle"></i>&nbsp;&nbsp;Account</a></li>
+                                    <li><a ng-href="https://grockit.com/users/{{currentUser.userId}}"><i class="dropdown-icon fa fa-user"></i>&nbsp;&nbsp;Profile</a></li>
+                                    <li><a ng-href="https://grockit.com/users/{{currentUser.userId}}/message_center/folders/Inbox"><i class="dropdown-icon fa fa-envelope"></i>&nbsp;&nbsp;Messages</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="https://grockit.com/logout"><i class="dropdown-icon fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
+                                    <li><a href="https://grockit.com/logout" ng-click="logOut()"><i class="dropdown-icon fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -141,22 +151,29 @@
         <!-- / .navbar-inner -->
     </div>
     <!-- / #main-navbar -->
-    <div id="main-menu" role="navigation">
+    <div id="main-menu" role="navigation" ng-controller="NavController">
         <div id="main-menu-inner">
             <ul class="navigation">
-                <li>
+
+
+                <li ng-click="select(-1)" ng-class="{active: -1 == selected}">
                     <a ng-href="#/{{activeGroupId}}/dashboard"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Dashboard</span></a>
                 </li>
-                <li>
-                    <a ng-href="#/{{activeGroupId}}/dashboard-practice"><i class="menu-icon fa fa-desktop"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Math</span></a>
+
+                <li ng-repeat="track in tracksList" ng-click="select($index)" ng-class="{active: $index == selected}">
+                    <a id="{{track.id}}" ng-href="#/{{activeGroupId}}/dashboard-practice"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn" ng-bind="track.short_name"></span></a>
                 </li>
-                <li>
-                    <a href="#"><i class="menu-icon fa fa-book"></i><span class="mm-text">Reading</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#"><i class="menu-icon fa fa-comments-o"></i><span class="mm-text">Verbal</span></a>
-                </li>
+
+                <!--<li ng-click="select($index)" ng-class="{active: $index == selected}">-->
+                    <!--<a ng-href="#/{{activeGroupId}}/dashboard-practice"><i class="menu-icon fa fa-desktop"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Math</span></a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="#"><i class="menu-icon fa fa-book"></i><span class="mm-text">Reading</span>-->
+                    <!--</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="#"><i class="menu-icon fa fa-comments-o"></i><span class="mm-text">Verbal</span></a>-->
+                <!--</li>-->
                 <li>
                     <a href="https://grockit.com/sat/study_plan"><i class="menu-icon fa fa-tasks"></i><span class="mm-text">Study Plan</span></a>
                 </li>

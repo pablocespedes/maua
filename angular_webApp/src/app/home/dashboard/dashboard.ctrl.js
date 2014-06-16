@@ -1,11 +1,11 @@
 'use strict';
-home.controller('SimpleDashController',['$scope','Users','History','Tracks', function($scope,Users,History,Tracks) {
+home.controller('SimpleDashController',['$scope','Users','History','Tracks','Footer','Groups','Auth', function($scope,Users,History,Tracks,Footer,Groups,Auth) {
 
-
-    $scope.selectedTrack=undefined;
+    $scope.activeGroupId= Groups.getActiveGroup();
     $scope.init = function(){
+        Footer.hideFooter();
         angular.element('.progress-bar').tooltip();
-         $scope.user_id= '12312';//Account.isUserAuthenticated();
+         $scope.user_id= Auth.getCurrentUserInfo().userId;
          //Declare User RestAngular Object
          $scope.UserRequest = Users.one();
 
@@ -18,7 +18,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks', fun
 
     function fetchTracksData(){
         var tracks = Tracks.one();
-         tracks.customGET('',{group_id : 'gre',include_unpublished: true}).then(function(response){
+         tracks.customGET('',{group_id : $scope.activeGroupId,include_unpublished: true}).then(function(response){
              $scope.tracks = response.tracks;
          }).catch(function error(msg) {
              console.error(msg);
@@ -36,13 +36,13 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks', fun
             trackColor: '#e5e5e5'
         };
 
-        $scope.UserRequest.one($scope.user_id).customGET('score_prediction',{group:'gmat'}).then(function(response){
+        $scope.UserRequest.one($scope.user_id).customGET('score_prediction',{group:$scope.activeGroupId}).then(function(response){
             $scope.totalScore=response.total_score;
             $scope.rangeInit=response.range[0];
             $scope.rangeEnd=response.range[1];
             $scope.percent=Math.round(100*$scope.rangeInit/$scope.rangeEnd);
 
-            angular.element('#easy-pie-chart-2').easyPieChart(easyPieChartDefaults).data('easyPieChart').update(87);
+            angular.element('#easy-pie-chart-2').easyPieChart(easyPieChartDefaults).data('easyPieChart').update($scope.percent);
         }).catch(function error(msg) {
             console.error(msg);
         });
@@ -51,7 +51,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks', fun
 
     function getHistoryInformation(){
 
-           var analytics = $scope.UserRequest.one($scope.user_id).customGET('history',{group:'gmat'}).then(function(graphicResult){
+           var analytics = $scope.UserRequest.one($scope.user_id).customGET('history',{group:$scope.activeGroupId}).then(function(graphicResult){
                FillGraphic(graphicResult);
            }).catch(function error(msg) {
             console.error(msg);
@@ -94,10 +94,12 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks', fun
 
     }
 
-
     $scope.StartPractice = function(){
         if(angular.isDefined($scope.selectedTrack)){
-            window.location.href=$scope.selectedTrack.group_id+'/#/practice/';
+           var trackData={'id':$scope.selectedTrack.id};
+           Groups.setActiveTrack(trackData);
+
+            window.location.href='/#/'+$scope.activeGroupId+'/practice';
         }
         else{
             bootbox.alert('You must select one track at least');
