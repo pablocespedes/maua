@@ -20,10 +20,15 @@
            });
            return deferred.promise;
        }},
-           controller: 'SimpleDashController',
-           access: {
-               authorizedRoles: [UserRoles.admin, UserRoles.member]
-           }
+       delay: function($q, $defer) {
+           var delay = $q.defer();
+           $defer(delay.resolve, 500);
+           return delay.promise;
+       },
+       controller: 'SimpleDashController',
+       access: {
+           authorizedRoles: [UserRoles.admin, UserRoles.member]
+       }
        });
 
        $routeProvider.otherwise({redirect:'/'});

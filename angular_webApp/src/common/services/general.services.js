@@ -38,6 +38,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
     })
 
 .factory('Utilities', function($http) {
+        var activeTabIndex=-1;
     return {
         findInArray: function (element,array,filter) {
 
@@ -58,6 +59,12 @@ angular.module('grockitApp.services', ['webStorageModule'])
         },
         redirect:function(url){
             window.location.href=url;
+        },
+        setActiveTab: function(){
+            return activeTabIndex;
+        },
+        getActiveTab: function(index){
+            activeTabIndex = index;
         }
     }
 });

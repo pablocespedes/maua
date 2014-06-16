@@ -34,8 +34,13 @@ var practiceGame =  angular.module("grockitApp.practiceGame",[])
             });
         });
         return deferred.promise;
-    }}, controller: 'DetailDashController',
-        access: {
+    }},
+        delay: function($q, $defer) {
+        var delay = $q.defer();
+        $defer(delay.resolve, 500);
+        return delay.promise;
+    }, controller: 'DetailDashController',
+    access: {
             authorizedRoles: [UserRoles.admin, UserRoles.member]
         }
     })
@@ -54,10 +59,15 @@ var practiceGame =  angular.module("grockitApp.practiceGame",[])
             });
         });
         return deferred.promise;
-    }}, controller: 'PracticeController',
-            access: {
-                authorizedRoles: [UserRoles.admin, UserRoles.member]
-            }
+    }},
+      delay: function($q, $defer) {
+          var delay = $q.defer();
+          $defer(delay.resolve, 500);
+          return delay.promise;
+      }, controller: 'PracticeController',
+      access: {
+          authorizedRoles: [UserRoles.admin, UserRoles.member]
+      }
     });
 
         $routeProvider.otherwise({redirect:'/'});

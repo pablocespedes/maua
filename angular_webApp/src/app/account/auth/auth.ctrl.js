@@ -1,17 +1,21 @@
 account.controller('NavController', ['$rootScope', '$scope', '$location', 'Auth','Utilities','Tracks','Groups', function($rootScope, $scope, $location, Auth,Utilities,Tracks,Groups) {
 
     $scope.init= function(){
-        $scope.selected = -1;
+        $scope.selected = Utilities.getActiveTab();
 
         $scope.linkedGroups=[];
         $scope.unLinkedGroups=[];
-        $scope.currentUser = Auth.getCurrentUserInfo();
-        loadGroupMembership();
-        fetchLeftNavTracksData();
+        setTimeout(function(){
+            $scope.currentUser = Auth.getCurrentUserInfo();
+            loadGroupMembership();
+            fetchLeftNavTracksData();
+        },500);
+
+
     };
 
     $scope.selectGroup = function(index){
-        $scope.selected = -1;
+
         $scope.selectedGroup= $scope.linkedGroups[index].name;
         $scope.currentUser.studyingFor=$scope.linkedGroups[index].group_id;
         Auth.updateUserInfo($scope.currentUser);
@@ -24,6 +28,7 @@ account.controller('NavController', ['$rootScope', '$scope', '$location', 'Auth'
 
     $scope.select= function(index) {
         $scope.selected = index;
+        Utilities.setActiveTab(index);
         if(index>=0) {
             var trackData = {'id': $scope.tracksList[index].id};
             Groups.setActiveTrack(trackData);

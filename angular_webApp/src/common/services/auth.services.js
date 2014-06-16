@@ -4,7 +4,7 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
         member: 'member',
         guest: 'guest'
     })
-    .factory('Auth', function($cookieStore,UserRoles,webStorage,Users,Groups,$location,$q){
+    .factory('Auth', function($cookies,UserRoles,webStorage,Users,Groups,$location,$q){
 
     return {
         authorize: function(next) {
@@ -21,8 +21,13 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
 
         },
         isLoggedIn: function() {
+            if((webStorage.get('currentUser') == null || "") || ( angular.isUndefined($cookies._app_server_session) || $cookies._app_server_session=='')) {
+                return false;
+            }
+            else {
+                return true;
+            }
 
-            return webStorage.get('currentUser') == null || "" ? false : true;
         },
         logout: function() {
 
@@ -31,7 +36,7 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
                 //var userData = webStorage.get('_app_server_session');
                 //Headers.removeDefaultHeader(sessionId);
                 webStorage.remove('currentUser');
-                $cookieStore.remove('_app_server_session');
+                $cookies.remove('_app_server_session');
 
 
             }catch(e){
@@ -57,7 +62,7 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
 
                         Groups.setActiveGroup(result.user.studying_for);
                         webStorage.add('currentUser', currentUser);
-                        $cookieStore.put('_app_server_session', sessionParam);
+                        $cookies._app_server_session= sessionParam;
                         deferred.resolve(currentUser);
 
                     }).catch(function error(e) {

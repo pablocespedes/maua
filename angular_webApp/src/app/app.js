@@ -25,7 +25,13 @@
                      } else {
 
                              oldSite = 'http://staging.grockit.com/login?redirect=';
+                         if ($location.path() == ''){
                              newSite = $location.absUrl() + '#/?'+'_app_server_session';
+                         }
+                         else{
+                             newSite = $location.absUrl() + '/?'+'_app_server_session';
+                         }
+
                          Utilities.encodeRedirect(oldSite, newSite);
                      }
 
