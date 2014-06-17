@@ -4,7 +4,7 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
         member: 'member',
         guest: 'guest'
     })
-    .factory('Auth', function($cookies,UserRoles,webStorage,Users,Groups,$location,$q){
+    .factory('Auth', function($cookies,UserRoles,webStorage,Users,Groups,$location,$q,Headers){
 
     return {
         authorize: function(next) {
@@ -33,11 +33,8 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
 
 
             try{
-                //var userData = webStorage.get('_app_server_session');
-                //Headers.removeDefaultHeader(sessionId);
                 webStorage.remove('currentUser');
                 $cookies.remove('_app_server_session');
-
 
             }catch(e){
             }
@@ -48,9 +45,9 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
             var sessionParam = $location.search()._app_server_session;
             try {
                 if (sessionParam !== '' && angular.isDefined(sessionParam)) {
-                    //Headers.setDefaultHeader(SessionObject);
+                    Headers.setDefaultHeader(sessionParam);
 
-                    Users.one("f58077f0-3084-012d-4d3f-123139068df2").get().then(function (result) {
+                    Users.one('self').get().then(function (result) {
 
                         currentUser = {
                             userId: result.user.id,
@@ -81,6 +78,23 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
         },
         getCurrentUserInfo: function() {
             return webStorage.get('currentUser');
+        },
+        getUpdateUserData: function(){
+            var deferred = $q.defer();
+            Headers.setDefaultHeader($cookies._app_server_session);
+
+            Users.one('self').get().then(function (result) {
+                webStorage.get('currentUser').groupMemberships=result.user.group_memberships;
+                webStorage.get('currentUser').studyingFor=result.user.studying_for;
+
+                Groups.setActiveGroup(result.user.studying_for);
+                deferred.resolve(webStorage.get('currentUser'));
+
+            }).catch(function error(e) {
+                deferred.resolve(webStorage.get('currentUser'));
+            });
+            return deferred.promise;
+
         },
         updateUserInfo: function(currentUser){
             webStorage.add('currentUser', currentUser);

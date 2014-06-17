@@ -4,6 +4,7 @@ request.factory('Users', function(Restangular) {
 
 });
 
+
 request.factory('Questions', function(Restangular) {
     return  Restangular.service('questions')
 
@@ -19,11 +20,16 @@ request.factory('PracticeGames', function(Restangular) {
 
 });
 
+request.factory('QuestionSets', function(Restangular) {
+    return  Restangular.service('question_sets')
+
+});
+
 
 request.factory('Headers', function(Restangular) {
     return  {
         setDefaultHeader:function(sessionId){
-            Restangular.setDefaultHeaders({'Authorization':'Token token='+sessionId+""});
+            Restangular.setDefaultHeaders({'Authorization':'Token token='+'"'+sessionId+'"'});
 
         },
         removeDefaultHeader: function(){
@@ -31,14 +37,6 @@ request.factory('Headers', function(Restangular) {
         }
     }
 });
-
-
-
-
-
-
-
-
 
 
 request.factory('ApiV3Restangular', function(Restangular) {

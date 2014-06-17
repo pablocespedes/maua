@@ -18,7 +18,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Foo
 
     function fetchTracksData(){
         var tracks = Tracks.one();
-         tracks.customGET('',{group_id : $scope.activeGroupId,include_unpublished: true}).then(function(response){
+         tracks.customGET('',{group_id : $scope.activeGroupId}).then(function(response){
              $scope.tracks = response.tracks;
          }).catch(function error(msg) {
              console.error(msg);
@@ -37,12 +37,19 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Foo
         };
 
         $scope.UserRequest.one($scope.user_id).customGET('score_prediction',{group:$scope.activeGroupId}).then(function(response){
-            $scope.totalScore=response.total_score;
-            $scope.rangeInit=response.range[0];
-            $scope.rangeEnd=response.range[1];
-            $scope.percent=Math.round(100*$scope.rangeInit/$scope.rangeEnd);
+            if(response.total_score!=null &&response.range!=null) {
+                $scope.totalScore = response.total_score;
+                $scope.rangeInit = response.range[0];
+                $scope.rangeEnd = response.range[1];
+                $scope.percent = Math.round(100 * $scope.rangeInit / $scope.rangeEnd);
 
-            angular.element('#easy-pie-chart-2').easyPieChart(easyPieChartDefaults).data('easyPieChart').update($scope.percent);
+                angular.element('#easy-pie-chart-2').easyPieChart(easyPieChartDefaults).data('easyPieChart').update($scope.percent);
+
+            }
+            else{
+                $scope.scoreVisible=false;
+            }
+
         }).catch(function error(msg) {
             console.error(msg);
         });
@@ -62,8 +69,9 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Foo
 
     function FillGraphic(graphicData){
 
-       var response = History.findMissingDates(graphicData.history);
-        if(angular.isDefined(graphicData)){
+
+        if(angular.isDefined(graphicData) &&graphicData.history.length>0){
+            var response = History.findMissingDates(graphicData.history);
             Morris.Line({
                 element: 'hero-graph',
                 data:response.Data,
@@ -90,13 +98,17 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Foo
                 }
             });
         }
+        else{
+            $scope.historyVisible=false;
+        }
 
 
     }
 
     $scope.StartPractice = function(){
         if(angular.isDefined($scope.selectedTrack)){
-           var trackData={'id':$scope.selectedTrack.id};
+
+           var trackData=$scope.selectedTrack.id;
            Groups.setActiveTrack(trackData);
 
             window.location.href='/#/'+$scope.activeGroupId+'/practice';

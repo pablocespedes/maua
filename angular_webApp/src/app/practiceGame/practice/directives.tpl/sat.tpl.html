@@ -20,11 +20,12 @@
     </tr>
     <tr ng-repeat="item in items">
 
-            <td class="column-matrix" ng-repeat="col in cols">
+            <td data-group="{{$index}}" class="column-matrix" ng-repeat="col in cols">
                     <p>
                         <button id="{{item}}_{{col}}" type="button" class="btn-option btn-rounded matrix" >
                                 {{$parent.$index}}
                             </button>
+                        <input id="{{item.position}}" type="radio" name="choice" value="false"   />
                     </p>
             </td>
     </tr>

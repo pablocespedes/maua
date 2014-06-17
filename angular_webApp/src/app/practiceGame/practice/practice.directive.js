@@ -56,12 +56,12 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
         };
     })
 
-    .directive('ngSat', function() {
+    .directive('ngSat', function(satFactory) {
         return {
             restrict: 'A',
             templateUrl : 'app/practiceGame/practice/directives.tpl/sat.tpl.html',
             link: function() {
-
+                satFactory.execute();
             },
             scope: {
                 items:'=items',

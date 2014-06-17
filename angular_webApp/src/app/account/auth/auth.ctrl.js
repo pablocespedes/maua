@@ -5,11 +5,14 @@ account.controller('NavController', ['$rootScope', '$scope', '$location', 'Auth'
 
         $scope.linkedGroups=[];
         $scope.unLinkedGroups=[];
-        setTimeout(function(){
+        Auth.getUpdateUserData().then(function(response) {
+            $scope.groupMemberships = response.groupMemberships;
             $scope.currentUser = Auth.getCurrentUserInfo();
+            $scope.selectedGroup = Auth.getCurrentUserInfo().studyingFor;
             loadGroupMembership();
-            fetchLeftNavTracksData();
-        },500);
+            //  fetchLeftNavTracksData();
+        });
+
 
 
     };
@@ -19,7 +22,6 @@ account.controller('NavController', ['$rootScope', '$scope', '$location', 'Auth'
         $scope.selectedGroup= $scope.linkedGroups[index].name;
         $scope.currentUser.studyingFor=$scope.linkedGroups[index].group_id;
         Auth.updateUserInfo($scope.currentUser);
-        window.test=$scope;
     };
 
     $scope.logOut= function(){
@@ -36,28 +38,36 @@ account.controller('NavController', ['$rootScope', '$scope', '$location', 'Auth'
     };
 
     function loadGroupMembership(){
-        var  linkedGroups= $scope.currentUser.groupMemberships;
-        Utilities.getJson('common/json/GroupMembership.json').then(function(result){
-            $scope.selectedGroup= Utilities.findInArray($scope.currentUser.studyingFor,result,'group_id').name;
 
-            angular.forEach(linkedGroups,function(val,index){
+        if( $scope.currentUser.groupMemberships.length>0){
 
-                if(val.group_id==result[index].group_id){
-                    $scope.linkedGroups.push(result[index]);
-                    result.splice(index, 1);
-                }
+            Utilities.getJson('common/json/GroupMembership.json').then(function(result){
+
+                $scope.selectedGroup= Utilities.findInArray($scope.currentUser.studyingFor,result,'group_id').name;
+                var  linkedGroups= $scope.groupMemberships;
+
+                angular.forEach(linkedGroups,function(val,index){
+
+                    if(linkedGroups[index]!=null) {
+                        $scope.linkedGroups.push(Utilities.findInArray(val.group_id, result, 'group_id'))
+                        result.splice(index, 1);
+                    }
+
+                });
+                $scope.unLinkedGroups=result;
+
+
             });
-            $scope.unLinkedGroups=result;
-
-        });
-
+        }
 
     }
 
     function fetchLeftNavTracksData(){
         var tracks = Tracks.one();
-        tracks.customGET('',{group_id : 'gre',include_unpublished: true}).then(function(response){
+        tracks.customGET('',{group_id : $scope.selectedGroup,include_unpublished: true}).then(function(response){
+
             $scope.tracksList = response.tracks;
+            window.test = response.tracks;
         }).catch(function error(msg) {
             console.error(msg);
         });

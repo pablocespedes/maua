@@ -4,7 +4,7 @@
 <div class="profile-content">
     <div class="widget-article-comments tab-pane no-padding no-border fade active in" id="profile-tabs-Math">
 
-            <div class="stat-panel">
+            <div ng-if="historyVisible"  class="stat-panel">
                 <div class="stat-row">
 
                     <div class="stat-cell col-sm-14  padding-sm-hr bordered no-border-r valign-middle">
@@ -15,7 +15,7 @@
                         </div>
                     </div>
 
-                    <div class="stat-cell col-sm-3 padding-sm-hr bordered no-border-r valign-top">
+                    <div ng-if="scoreVisible" class="stat-cell col-sm-3 padding-sm-hr bordered no-border-r valign-top">
                         <div class=" score-prediction-graph stat-panel text-center">
                             <div class="stat-row">
                                 <div class="stat-cell bg-dark-gray no-padding ">
@@ -41,9 +41,11 @@
 
                     </div>
                 </div>
+
+                <hr class="no-grid-gutter-h grid-gutter-margin-b no-margin-t">
+
             </div>
-        <hr class="no-grid-gutter-h grid-gutter-margin-b no-margin-t">
-        <div class="stat-panel">
+        <div class="stat-panel" style="display: none;">
             <div class="stat-row">
 
                 <div class="stat-cell col-sm-6  padding-sm-hr bordered no-border-r valign-middle">

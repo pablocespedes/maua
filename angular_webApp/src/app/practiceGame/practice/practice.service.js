@@ -213,3 +213,46 @@ practiceGame.factory('multipleChoiceTwoCorrect', function () {
         }
     };
 });
+
+practiceGame.factory('satFactory', function () {
+    return {
+        execute: function () {
+            var content = $('#parent');
+
+            content.on('click', '#sat', function (event) {
+
+                var choice = $(event.target).closest('.column-matrix'),
+                    general= $('.choice .column-matrix button'),
+                    input = choice.find('[type="radio"]'),
+                    choiceB = choice.find('.column-matrix'),
+                    button = choiceB.find('.matrix'),
+                    isChecked = input.is(':checked'),
+                    hasPrimary = button.hasClass('btn-primary'),
+                    nexAction = $('#nextAction'),
+                    seeAnswer = $('#skipAction'),
+                    limitSelection = choice.parent().find('[data-group='+choiceB.data('group')+']');
+
+                if(limitSelection.find('button').hasClass('btn-primary')){
+                    limitSelection.find('button').removeClass('btn-primary');
+                    limitSelection.find('input').prop('value', false);
+                }
+
+                if (!isChecked && !hasPrimary) {
+                    input.prop('value', true);
+                    button.addClass('btn-primary');
+                    nexAction.addClass('btn-primary');
+                    seeAnswer.addClass('hide');
+                } else {
+                    input.prop('value', false);
+                    button.removeClass('btn-primary');
+                    if(!general.hasClass('btn-primary')){
+                        nexAction.removeClass('btn-primary');
+                        seeAnswer.removeClass('hide');
+                    }
+                }
+
+            });
+
+        }
+    };
+});

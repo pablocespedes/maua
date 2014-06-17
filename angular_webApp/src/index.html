@@ -63,7 +63,8 @@
     <!-- 2. $MAIN_NAVIGATION ===========================================================================
         Main navigation
     -->
-    <div id="main-navbar" class="navbar navbar-inverse" role="navigation" ng-controller="NavController">
+    <div ng-controller="NavController">
+    <div id="main-navbar" class="navbar navbar-inverse" role="navigation">
         <!-- Main menu toggle -->
         <button type="button" id="main-menu-toggle"><i class="navbar-icon fa fa-bars icon"></i><span class="hide-menu-text">HIDE MENU</span></button>
         <div class="navbar-inner">
@@ -151,7 +152,7 @@
         <!-- / .navbar-inner -->
     </div>
     <!-- / #main-navbar -->
-    <div id="main-menu" role="navigation" ng-controller="NavController">
+    <div id="main-menu" role="navigation" >
         <div id="main-menu-inner">
             <ul class="navigation">
 
@@ -161,19 +162,9 @@
                 </li>
 
                 <li ng-repeat="track in tracksList" ng-click="select($index)" ng-class="{active: $index == selected}">
-                    <a id="{{track.id}}" ng-href="#/{{activeGroupId}}/dashboard-practice"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn" ng-bind="track.short_name"></span></a>
+                    <a id="{{track.id}}" ng-href="#/{{activeGroupId}}/dashboard-practice"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn" ng-bind="track.name"></span></a>
                 </li>
 
-                <!--<li ng-click="select($index)" ng-class="{active: $index == selected}">-->
-                    <!--<a ng-href="#/{{activeGroupId}}/dashboard-practice"><i class="menu-icon fa fa-desktop"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Math</span></a>-->
-                <!--</li>-->
-                <!--<li>-->
-                    <!--<a href="#"><i class="menu-icon fa fa-book"></i><span class="mm-text">Reading</span>-->
-                    <!--</a>-->
-                <!--</li>-->
-                <!--<li>-->
-                    <!--<a href="#"><i class="menu-icon fa fa-comments-o"></i><span class="mm-text">Verbal</span></a>-->
-                <!--</li>-->
                 <li>
                     <a href="https://grockit.com/sat/study_plan"><i class="menu-icon fa fa-tasks"></i><span class="mm-text">Study Plan</span></a>
                 </li>
@@ -199,6 +190,7 @@
             <!-- / .navigation -->
         </div>
         <!-- / #main-menu-inner -->
+    </div>
     </div>
     <!-- / #main-menu -->
     <div id="content-wrapper">
