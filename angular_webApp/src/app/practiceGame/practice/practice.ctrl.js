@@ -1,12 +1,13 @@
-practiceGame.controller('PracticeController',['$scope','Questions','Utilities','Groups',function($scope,Questions,Utilities,Groups) {
-    $scope.activeTrack =Groups.getActiveTrack();
-
+practiceGame.controller('PracticeController',['$scope','Questions','Utilities','Groups','PracticeGames','$sce',function($scope,Questions,Utilities,Groups,PracticeGames,$sce) {
+    $scope.activeTracks =Groups.getActiveTrack();
+    $scope.activeGroupId= Groups.getActiveGroup();
     $scope.optionList = ['A','B','C','D','E','F','G','H','I'];
     $scope.nextActionTitle='Confirm Choice';
     $scope.questionItems=[];
     $scope.items=[];
     $scope.showExplanation = false;
     $scope.showVideo = false;
+    $scope.setPosition=0;
     $scope.position=0;
     $scope.rows=[1,2,3,4,5,6,7,8,9,10];
     $scope.column=[1,2,3,4];
@@ -23,36 +24,52 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
         ];
 
 
-    var getUrlQuestion= function(){
 
-        switch($scope.position){
-            case 0:
-                return '75f93df0-a4ed-012e-035d-1231390ef981';
-                break;
-            case 1:
-                return '69f3f390-a4ed-012e-035d-1231390ef981';
-                break;
-            case 2:
-                return '37ef3dd0-9f89-012e-5ad5-1231390ef981';
-                break;
-            case 3:
-                return '27e8ef70-a4eb-012e-0320-1231390ef981';
-                break;
-            case 4:
-                return '2dfe7d20-a4eb-012e-0320-1231390ef981';
-                break;
-            case 5:
-                return '2a79f190-9f89-012e-5ad5-1231390ef981';
-                break;
-            case 6:
-                return 'c16b675b-4db3-c272-ded1-455be01d586e';
-                break;
-            case 7:
-                return 'bde6fff0-30c7-012e-f7bc-1231390ef981';
-                break;
+
+        //load a question at the first time
+    function loadQuestion() {
+
+
+        if($scope.QuestionSetList.length>0) {
+
+            var setPosition = $scope.setPosition,
+                questionSetResult = $scope.QuestionSetList[setPosition];
+
+
+            var position = $scope.position,
+                questionsCount = questionSetResult.questions.length;
+
+
+            if (position <= questionsCount) {
+                var questionResult = questionSetResult.questions[position];
+
+                angular.element('.choice.active').removeClass('active');
+
+
+                $scope.currentA = Utilities.findInArray(questionResult.kind, $scope.directives, 'type').id;
+                $scope.items = [];
+                $scope.stimulus = "";
+                $scope.template = $scope.actualView;
+                $scope.questionItems = questionResult;
+
+                $scope.questionInformation = questionSetResult.info;
+                $scope.stimulus = $scope.questionItems.stimulus;
+
+                var answers = $scope.questionItems.answers;
+                angular.forEach(answers, function (value, index) {
+                    value["option"] = $scope.optionList[index];
+                    $scope.items.push(value);
+                });
+
+                position++;
+            }
+            else {
+                $scope.setPosition++;
+                loadQuestion();
+            }
         }
 
-    };
+    }
 
     function SeeAnswer(){
          angular.element('#skipAction').addClass('hide');
@@ -66,7 +83,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
          //video validation
          if($scope.questionItems.youtube_video_id !==null){
              $scope.showVideo=true;
-             $scope.videoId= $scope.questionItems.youtube_video_id ;
+             $scope.videoId = $sce.trustAsResourceUrl('https://www.youtube.com/embed/'+$scope.questionItems.youtube_video_id);
          }
 
          //Get answers from the previous request and Explain
@@ -107,7 +124,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
              //video validation
             if($scope.questionItems.youtube_video_id !==null){
                 $scope.showVideo=true;
-                $scope.videoId= $scope.questionItems.youtube_video_id ;
+                $scope.videoId = $sce.trustAsResourceUrl('https://www.youtube.com/embed/'+$scope.questionItems.youtube_video_id );
             }
 
             //Get answers from the previous request and Explain
@@ -148,48 +165,42 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
     }
 
     function nextQuestion(){
-        if($scope.directives.length-1> $scope.position){
             //Enable/disable answer section
             angular.element('.choice *').removeAttr('disabled');
             $scope.showVideo = false;
-            $scope.position++;
-            $scope.loadQuestion();
             $scope.messageConfirmation='';
             $scope.showExplanation = false;
             $scope.nextActionTitle='Confirm Choice';
             angular.element('#nextAction').removeClass('btn-success');
             angular.element('#skipAction').removeClass('hide');
-        }
-    }
-
-    function CreatePracticeGame(){
-
+            loadQuestion();
 
     }
 
-    //load a question at the first time
-    $scope.loadQuestion = function(){
 
-        angular.element('.choice.active').removeClass('active');
-        Questions.one(getUrlQuestion()).get().then(function(questionResult){
-                $scope.currentA=  Utilities.findInArray(questionResult.kind,$scope.directives,'type').id;
-                $scope.items=[];
-                $scope.stimulus="";
-                $scope.template= $scope.actualView;
-                $scope.questionItems= questionResult;
 
-                $scope.questionInformation=  $scope.questionItems.question_set.info;
-                $scope.stimulus= $scope.questionItems.stimulus;
+    $scope.CreatePracticeGame= function(){
+        if($scope.activeTracks.length>0){
+            $scope.practiceGame =  PracticeGames.one();
+            $scope.practiceGame.post('',{group_id:$scope.activeGroupId}).then(function(PracticeObject) {
+                var response = PracticeObject.practice_game;
+                PracticeObject.one(response.id,'next_round').customGET('',{'tracks[]':$scope.activeTracks}).then(function(QuestionSetObject){
+                    $scope.QuestionSetList= QuestionSetObject.question_sets;
+                    loadQuestion();
 
-                var answers= $scope.questionItems.answers;
-                angular.forEach(answers, function(value,index){
-                    value["option"] = $scope.optionList[index];
-                    $scope.items.push(value);
                 });
 
-        }).catch(function error(msg) {
-            console.error(msg);
-        });
+
+            }, function() {
+                console.log("There was an error creating the Practice Game");
+            });
+        }
+        else{
+            bootbox.alert('You must select one track at least',function(){
+
+                window.location.href='/#/'+$scope.activeGroupId+'/dashboard';
+            });
+        }
 
     };
 
@@ -209,6 +220,36 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
     };
 
 
+        var getUrlQuestion= function(){
+
+            switch($scope.position){
+                case 0:
+                    return '75f93df0-a4ed-012e-035d-1231390ef981';
+                    break;
+                case 1:
+                    return '69f3f390-a4ed-012e-035d-1231390ef981';
+                    break;
+                case 2:
+                    return '37ef3dd0-9f89-012e-5ad5-1231390ef981';
+                    break;
+                case 3:
+                    return '27e8ef70-a4eb-012e-0320-1231390ef981';
+                    break;
+                case 4:
+                    return '2dfe7d20-a4eb-012e-0320-1231390ef981';
+                    break;
+                case 5:
+                    return '2a79f190-9f89-012e-5ad5-1231390ef981';
+                    break;
+                case 6:
+                    return 'c16b675b-4db3-c272-ded1-455be01d586e';
+                    break;
+                case 7:
+                    return 'bde6fff0-30c7-012e-f7bc-1231390ef981';
+                    break;
+            }
+
+        };
 
 
 

@@ -1,10 +1,10 @@
 <div id="practice" class="panel">
     <div class="panel-heading">
         <span class="panel-title"></span>
-        <div class="text-right">
-            <button id="nextAction" class="btn  btn-lg  btn-flat" ng-click="nextAction()" ng-bind="nextActionTitle"></button>
-            <a id="skipAction" ng-click="revealExplanation()">Don't know? See answer.</a>
-        </div>
+        <!--<div class="text-right">-->
+            <!--<button id="nextAction" class="btn  btn-lg  btn-flat" ng-click="nextAction()" ng-bind="nextActionTitle"></button>-->
+            <!--<a id="skipAction" ng-click="revealExplanation()">Don't know? See answer.</a>-->
+        <!--</div>-->
     </div>
     <div class="panel-body">
         <div id="parent" class="my-slide-container">
@@ -15,7 +15,7 @@
 
                     <div id="videoExplain" ng-if="showVideo"><br>
                         <div class="video-container">
-                            <iframe id="ytplayer" type="text/html" width="640" height="360"  ng-src="https://www.youtube.com/embed/{{videoId}}"
+                            <iframe id="ytplayer" type="text/html" width="640" height="360"  ng-src="{{videoId}}"
                                     frameborder="0" allowfullscreen></iframe>
                         </div>
                     </div>
@@ -33,6 +33,11 @@
                     <!--<div ng-include="'app/practiceGame/practice/directives.tpl/answers.tpl.html'" class="my-fade-animation"></div>-->
 
                     <h2><span ng-bind="messageConfirmation"> </span></h2>
+
+                    <div class="text-right">
+                        <button id="nextAction" class="btn  btn-lg  btn-flat" ng-click="nextAction()" ng-bind="nextActionTitle"></button>
+                        <a id="skipAction" ng-click="revealExplanation()">Don't know? See answer.</a>
+                    </div>
                 </div>
 
             </div>
@@ -40,7 +45,7 @@
 
     </div>
     <div class="panel-footer">
-
+        <!--<div  ng-sat items="rows" cols="column" ></div>-->
     </div>
 </div>
-<span ng-init="loadQuestion()"></span>
+<span ng-init="CreatePracticeGame()"></span>

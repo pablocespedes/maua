@@ -1,8 +1,6 @@
 angular.module('grockitApp.services', ['webStorageModule'])
     .factory('Groups', function(webStorage,$rootScope) {
-        var trackData = {
-            id: null
-        };
+        var trackData = [];
         return {
             getActiveGroup: function(){
                 $rootScope.activeGroupId =  webStorage.get('currentUser').studyingFor;
@@ -17,7 +15,8 @@ angular.module('grockitApp.services', ['webStorageModule'])
                 return trackData;
             },
             setActiveTrack: function (data) {
-                trackData = data;
+                trackData=[];
+                trackData.push(data);
             }
 
         }
@@ -50,7 +49,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
             return $http.get(url).then(function (response) {
                 return response.data;
             }, function (error) {
-                return "IError";
+                return "Error";
             });
         },
         encodeRedirect:function(redirectUrl,url){

@@ -29,6 +29,7 @@ home.factory('History', function() {
 
     return {
         findMissingDates:function(data){
+
             var dest = [], datestr = '', src = data,
                 index = getIndex(src, 'day'),max= 0,i=0,
                 //get boundaries
@@ -52,6 +53,7 @@ home.factory('History', function() {
             }
             max= max >= 5 ? 5 : max+1;
             return {"Data":dest,"MaxLine":max };
+
         }
     }
 

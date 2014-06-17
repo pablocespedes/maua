@@ -2,7 +2,7 @@
 (function(app) {
  app.config(function() {
     })
-     .run(function ($rootScope, $location, Auth,Groups,Utilities) {
+     .run(function ($rootScope, $location, Auth,Groups,Utilities,Headers,$cookies) {
 
      $rootScope.$on("$routeChangeStart", function (event, next) {
          var oldSite='',newSite='';
@@ -10,10 +10,12 @@
 
              if(Auth.isLoggedIn()){
                  Groups.getActiveGroup();
+
                  if ($location.path() == '' ||  angular.isDefined($location.search()._app_server_session)) {
 
                      Utilities.redirect('#/' + Groups.getActiveGroup() + '/dashboard');
                  }
+                 Headers.setDefaultHeader($cookies._app_server_session);
              }
              else {
 
@@ -24,7 +26,7 @@
 
                      } else {
 
-                             oldSite = 'http://staging.grockit.com/login?redirect=';
+                             oldSite = 'https://staging.grockit.com/login?redirect=';
                          if ($location.path() == ''){
                              newSite = $location.absUrl() + '#/?'+'_app_server_session';
                          }
