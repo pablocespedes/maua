@@ -11,7 +11,6 @@ module.exports = function (grunt) {
 
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
-    grunt.loadNpmTasks('grunt-html2js');
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
@@ -56,7 +55,6 @@ module.exports = function (grunt) {
         files: [
           '<%= yeoman.src %>/{,*/}*.html',
           '<%= yeoman.src %>/app/**/*.tpl.html',
-          '<%= yeoman.src %>/common/**/*.tpl.html',
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.src %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
@@ -105,7 +103,7 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '<%= yeoman.src %>/**/*.js'
+        '<%= yeoman.src %>/app/**/*.js'
       ],
       test: {
         options: {
@@ -192,6 +190,9 @@ module.exports = function (grunt) {
         files: {
           src: [
             '<%= yeoman.dist %>/app/{,*/}*.js',
+            '<%= yeoman.dist %>/app/**/*.js',
+            '<%= yeoman.dist %>/common/**/*.js',
+            '<%= yeoman.dist %>/scripts/*.js',
             '<%= yeoman.dist %>/styles/{,*/}*.css',
             '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
             '<%= yeoman.dist %>/styles/fonts/*'
@@ -205,6 +206,7 @@ module.exports = function (grunt) {
     // additional tasks can operate on them
     useminPrepare: {
       html: '<%= yeoman.src %>/index.html',
+      js: '<%= yeoman.src %>/app/**/*.js',
       options: {
         dest: '<%= yeoman.dist %>',
         flow: {
@@ -221,20 +223,99 @@ module.exports = function (grunt) {
 
     // Performs rewrites based on rev and the useminPrepare configuration
     usemin: {
-      html: ['<%= yeoman.dist %>/{,*/}*.html'],
-      css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
-      options: {
-        assetsDirs: ['<%= yeoman.dist %>']
+        html: ['<%= yeoman.dist %>/{,*/}*.html','<%= yeoman.dist %>/app/**/*.html'],
+        css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
+        js: [
+          '<%= yeoman.dist %>/common/*.js',
+          '<%= yeoman.dist %>/index.html'],
+        options: {
+            assetsDirs: ['<%= yeoman.dist %>'        ,
+                '<%= yeoman.dist %>/app/account/auth',
+                '<%= yeoman.dist %>/app/account',
+                '<%= yeoman.dist %>/app/home',
+                '<%= yeoman.dist %>/app/home/dashboard',
+                '<%= yeoman.dist %>/app/practiceGame/dashboard',
+                '<%= yeoman.dist %>/app/practiceGame/practice',
+                '<%= yeoman.dist %>/app/practiceGame',
+                '<%= yeoman.dist %>/common/restAngular',
+                '<%= yeoman.dist %>/common/directives',
+                '<%= yeoman.dist %>/common/services',
+                '<%= yeoman.dist %>/app',
+                '<%= yeoman.dist %>/common',
+                '<%= yeoman.dist %>/common/lib'
+            ],
+            patterns: {
+
+                js: [
+                    [/(images\/.*?\.(?:gif|jpeg|jpg|png|webp|svg))/gm, 'Update the JS to reference our revved images'],
+                    /*Change references for account */
+                    [/(auth.ctrl\.js)/, 'Replacing references to account ctrl'],
+                    [/(account.module\.js)/, 'Replacing references account to module'],
+                    /*Change references for home controllers and services*/
+                    [/(dashboard.ctrl\.js)/, 'Replacing references to home ctrl'],
+                    [/(dashboard.service\.js)/, 'Replacing references to home service'],
+                    [/(home.module\.js)/, 'Replacing references to home module'],
+                    /*Change references for practice controllers and services*/
+                    [/(dashboard.ctrl\.js)/, 'Replacing references to dashboard ctrl'],
+                    [/(dashboard.service\.js)/, 'Replacing references to dashboard service'],
+                    [/(practice.ctrl\.js)/, 'Replacing references to practice ctrl'],
+                    [/(practice.directive\.js)/, 'Replacing references to practice directive'],
+                    [/(practice.service\.js)/, 'Replacing references to practice service'],
+                    [/(practiceGame.module\.js)/, 'Replacing references to practice module'],
+
+                    [/(restAngular.module\.js)/, 'Replacing references to restAngular module'],
+                    [/(restAngular.service\.js)/, 'Replacing references to restAngular service'],
+
+                    [/(general.directive\.js)/, 'Replacing references to general directives'],
+                    [/(general.services\.js)/, 'Replacing references to general services'],
+
+                    [/(auth.services\.js)/, 'Replacing references to auth services'],
+
+                    [/(jquery.grockit\.js)/, 'Replacing references to practice module'],
+
+                    [/(app\.js)/, 'Replacing references to app'],
+
+
+
+                    [/(underscore\.js)/, 'Replacing references to underscore ']
+                ]
+            }
       }
     },
 
     // The following *-min tasks produce minified files in the dist folder
     cssmin: {
-      options: {
-        root: '<%= yeoman.src %>'
-      }
+        dist: {
+            options: {
+                collapseWhitespace: true,
+                collapseBooleanAttributes: true,
+                removeCommentsFromCDATA: true,
+                removeOptionalTags: true
+            },
+            files: [{
+                expand: true,
+                cwd: '<%= yeoman.src %>',
+                src: ['styles/**/*.css'],
+                dest: '<%= yeoman.dist %>'
+            }]
+        }
     },
-
+      uglify: {
+          options: {
+              mangle: false, //prevents all the variables to be changed for any reason
+              compress: {
+                  drop_console: true // <-
+              }
+          },
+          dist: {
+              files: [{
+                  expand: true,
+                  cwd: '<%= yeoman.dist %>',
+                  src: ['app/**/*.js','common/**/*.js'],
+                  dest: '<%= yeoman.dist %>'
+              }]
+          }
+      },
     imagemin: {
       dist: {
         files: [{
@@ -268,7 +349,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.src %>',
-          src: ['*.html', '/app/**/*.tpl.html','/common/**/*.tpl.html' ],
+          src: ['/*.html', '/app/**/*.html', '/app/*.html' ],
           dest: '<%= yeoman.dist %>'
         }]
       }
@@ -303,6 +384,9 @@ module.exports = function (grunt) {
           cwd: '<%= yeoman.src %>',
           dest: '<%= yeoman.dist %>',
           src: [
+              'app/**/*',
+              'assets/**/*',
+              'common/**/*',
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',

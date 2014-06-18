@@ -8,6 +8,7 @@ var paths={
     home:'app/home/home.module.js',
     practiceGame:'app/practiceGame/practiceGame.module.js',
     generalServices:'common/services/general.services.js',
+    generalDirectives:'common/directives/general.directive.js',
     authServices:'common/services/auth.services.js',
     accountModule:'app/account/account.module.js',
     accountCtrl:'app/account/auth/auth.ctrl.js',
@@ -16,7 +17,9 @@ var paths={
 
 $script([
     paths.underscore,
+    paths.jqueryGrockit,
     paths.generalServices,
+    paths.generalDirectives,
     paths.restAngular,
     paths.home,
     paths.practiceGame,
@@ -28,9 +31,7 @@ $script([
         $script([
             paths.restAngularFactory,
             paths.accountModule,
-            paths.accountCtrl,
-            paths.jqueryGrockit
-
+            paths.accountCtrl
         ], function() {
             angular.bootstrap(document, ['grockitApp']);
         });

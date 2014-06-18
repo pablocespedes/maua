@@ -6,11 +6,18 @@
        home.factory = $provide.factory;
        home.service = $provide.service;
 
+       var filePath = {
+           dashboard: {
+               dashCtrl: 'app/practiceGame/dashboard/sDashboard.ctrl.js',
+               dashServ: 'app/practiceGame/dashboard/sDashboard.service.js'
+           }
+       };
+
        $routeProvider.when('/:subject/dashboard', {templateUrl: 'app/home/dashboard/dashboard.tpl.html', resolve: {deps: function ($q, $rootScope) {
            var deferred = $q.defer(),
                essentials = [
-                   'app/home/dashboard/dashboard.service.js',
-                   'app/home/dashboard/dashboard.ctrl.js'
+                   filePath.dashboard.dashServ,
+                   filePath.dashboard.dashCtrl
                ];
            $script(essentials, function () {
                // all dependencies have now been loaded by $script.js so resolve the promise
@@ -20,11 +27,6 @@
            });
            return deferred.promise;
        }},
-       delay: function($q, $defer) {
-           var delay = $q.defer();
-           $defer(delay.resolve, 500);
-           return delay.promise;
-       },
        controller: 'SimpleDashController',
        access: {
            authorizedRoles: [UserRoles.admin, UserRoles.member]

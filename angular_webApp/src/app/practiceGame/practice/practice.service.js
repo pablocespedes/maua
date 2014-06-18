@@ -4,6 +4,7 @@ practiceGame.factory('oneChoiceFactory', function () {
     return {
         execute: function () {
             var content = $('#parent');
+
             content.on('click', '#oneChoice .middle', function (event) {
                 var choice = $(event.target).closest('.choice'),
                     input = choice.find('[type="checkbox"]'),
@@ -15,7 +16,7 @@ practiceGame.factory('oneChoiceFactory', function () {
 
 
                 $('.choice').find('[type="checkbox"]').prop('value', false);
-                $('.choice button').removeClass('btn-primary');
+                $('.choice button').removeClass('btn-primary btn-danger');
 
 
                 if (!isChecked && !hasPrimary) {

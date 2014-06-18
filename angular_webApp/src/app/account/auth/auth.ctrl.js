@@ -1,21 +1,8 @@
-account.controller('NavController', ['$rootScope', '$scope', '$location', 'Auth','Utilities','Tracks','Groups', function($rootScope, $scope, $location, Auth,Utilities,Tracks,Groups) {
+account.controller('NavController', ['$rootScope','$scope', '$location', 'Auth','Utilities','Tracks','Groups','Headers','$cookies', function($rootScope,$scope, $location, Auth,Utilities,Tracks,Groups,Headers,$cookies) {
 
-    $scope.init= function(){
-        $scope.selected = Utilities.getActiveTab();
-
-        $scope.linkedGroups=[];
-        $scope.unLinkedGroups=[];
-        Auth.getUpdateUserData().then(function(response) {
-            $scope.groupMemberships = response.groupMemberships;
-            $scope.currentUser = Auth.getCurrentUserInfo();
-            $scope.selectedGroup = Auth.getCurrentUserInfo().studyingFor;
-            loadGroupMembership();
-            //  fetchLeftNavTracksData();
-        });
-
-
-
-    };
+    $rootScope.$on("init", function () {
+        init();
+    });
 
     $scope.selectGroup = function(index){
 
@@ -42,25 +29,47 @@ account.controller('NavController', ['$rootScope', '$scope', '$location', 'Auth'
         if( $scope.currentUser.groupMemberships.length>0){
 
             Utilities.getJson('common/json/GroupMembership.json').then(function(result){
+                if($scope.currentUser.studyingFor!=null){
+                    $scope.selectedGroup= Utilities.findInArray($scope.currentUser.studyingFor,result,'group_id').name;
+                    var  linkedGroups= $scope.groupMemberships;
 
-                $scope.selectedGroup= Utilities.findInArray($scope.currentUser.studyingFor,result,'group_id').name;
-                var  linkedGroups= $scope.groupMemberships;
+                    angular.forEach(linkedGroups,function(val,index){
 
-                angular.forEach(linkedGroups,function(val,index){
+                        if(linkedGroups[index]!=null) {
+                            $scope.linkedGroups.push(Utilities.findInArray(val.group_id, result, 'group_id'));
+                            result.splice(index, 1);
+                        }
 
-                    if(linkedGroups[index]!=null) {
-                        $scope.linkedGroups.push(Utilities.findInArray(val.group_id, result, 'group_id'))
-                        result.splice(index, 1);
-                    }
-
-                });
-                $scope.unLinkedGroups=result;
-
+                    });
+                    $scope.unLinkedGroups=result;
+                }
 
             });
         }
 
     }
+
+    function init(){
+        Headers.updateDefaultHeader();
+        $scope.selected = Utilities.getActiveTab();
+
+        $scope.linkedGroups=[];
+        $scope.unLinkedGroups=[];
+        Auth.getUpdateUserData().then(function(response) {
+            if(response!=null){
+                $scope.groupMemberships = response.groupMemberships;
+                $scope.currentUser = Auth.getCurrentUserInfo();
+                $scope.selectedGroup = Auth.getCurrentUserInfo().studyingFor;
+                loadGroupMembership();
+                //  fetchLeftNavTracksData();
+            }
+        });
+    }
+
+    if($cookies.authorization_token!=null || authorization_token.$cookies!=''){
+        init();
+    }
+
 
     function fetchLeftNavTracksData(){
         var tracks = Tracks.one();
@@ -74,7 +83,7 @@ account.controller('NavController', ['$rootScope', '$scope', '$location', 'Auth'
     }
 
 
-    $scope.init();
+
 
 
 

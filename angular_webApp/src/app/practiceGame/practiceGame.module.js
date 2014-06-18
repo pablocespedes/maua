@@ -2,7 +2,6 @@
 
 var practiceGame =  angular.module("grockitApp.practiceGame",[])
     .config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide,UserRoles) {
-
         practiceGame.controller    = $controllerProvider.register;
         practiceGame.directive     = $compileProvider.directive;
         practiceGame.routeProvider = $routeProvider;
@@ -35,11 +34,12 @@ var practiceGame =  angular.module("grockitApp.practiceGame",[])
         });
         return deferred.promise;
     }},
-        delay: function($q, $defer) {
-        var delay = $q.defer();
-        $defer(delay.resolve, 500);
-        return delay.promise;
-    }, controller: 'DetailDashController',
+//        delay: function($q, $defer) {
+//        var delay = $q.defer();
+//        $defer(delay.resolve, 500);
+//        return delay.promise;
+//    },
+    controller: 'DetailDashController',
     access: {
             authorizedRoles: [UserRoles.admin, UserRoles.member]
         }

@@ -1,8 +1,9 @@
 'use strict';
 (function(app) {
- app.config(function() {
+ app.config(function($httpProvider) {
+
     })
-     .run(function ($rootScope, $location, Auth,Groups,Utilities,Headers,$cookies) {
+     .run(function ($rootScope, $location, Auth,Groups,Utilities) {
 
      $rootScope.$on("$routeChangeStart", function (event, next) {
          var oldSite='',newSite='';
@@ -15,17 +16,15 @@
 
                      Utilities.redirect('#/' + Groups.getActiveGroup() + '/dashboard');
                  }
-                 Headers.setDefaultHeader($cookies._app_server_session);
              }
              else {
 
                  Auth.setCurrentUser().then(function (userData) {
                      if (angular.isDefined(userData)) {
-
+                         $rootScope.$broadcast("init");
                          window.location.href = '#/' + userData.studyingFor + "/dashboard";
 
                      } else {
-
                              oldSite = 'https://staging.grockit.com/login?redirect=';
                          if ($location.path() == ''){
                              newSite = $location.absUrl() + '#/?'+'_app_server_session';
@@ -54,7 +53,8 @@
   'grockitApp.authServices',
   'grockitApp.practiceGame',
   'grockitApp.home',
-  'grockitApp.account'
+  'grockitApp.account',
+   'grockitApp.directives'
 ]))
 );
 

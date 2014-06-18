@@ -130,7 +130,7 @@
 
 
                                 <a href="#" class="dropdown-toggle user-menu" data-toggle="dropdown">
-                                    <img src="images/1.jpg" alt="">
+                                    <img ng-src="{{currentUser.avatar_url}}" alt="">
                                     <span ng-if="currentUser" ng-bind="currentUser.fullName"></span>
                                 </a>
                                 <ul class="dropdown-menu">
@@ -252,9 +252,12 @@
 <!-- Pixel Admin's javascripts -->
 <script src="assets/javascripts/bootstrap.min.js"></script>
 <script src="assets/javascripts/bootbox.min.js"></script>
-<script src="assets/javascripts/pixel-admin.js"></script>
+<script src="assets/javascripts/pixel-admin.min.js"></script>
 <script type="text/javascript">
-    window.PixelAdmin.start(init);
+    $( window ).load(function() {
+        window.PixelAdmin.start(init);
+    });
+
 </script>
 </body>
 </html>

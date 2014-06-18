@@ -7,9 +7,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
                 return  $rootScope.activeGroupId;
             },
             setActiveGroup: function(activeGroupId){
-
                 $rootScope.activeGroupId = activeGroupId;
-
             },
             getActiveTrack: function () {
                 return trackData;
@@ -18,7 +16,6 @@ angular.module('grockitApp.services', ['webStorageModule'])
                 trackData=[];
                 trackData.push(data);
             }
-
         }
     })
     .factory('Footer',function(){
@@ -35,38 +32,36 @@ angular.module('grockitApp.services', ['webStorageModule'])
 
         }
     })
-
-.factory('Utilities', function($http) {
+    .factory('Utilities', function($http) {
         var activeTabIndex=-1;
-    return {
-        findInArray: function (element,array,filter) {
-
-            return  $.grep(array,function (val) {
-                return val[filter] === element;
-            })[0];
-        },
-        getJson: function (url) {
-            return $http.get(url).then(function (response) {
-                return response.data;
-            }, function (error) {
-                return "Error";
-            });
-        },
-        encodeRedirect:function(redirectUrl,url){
-            var fUrl=redirectUrl+ encodeURIComponent(url);
-            window.location.href =fUrl;
-        },
-        redirect:function(url){
-            window.location.href=url;
-        },
-        setActiveTab: function(){
-            return activeTabIndex;
-        },
-        getActiveTab: function(index){
-            activeTabIndex = index;
+        return {
+            findInArray: function (element, array, filter) {
+                return  $.grep(array, function (val) {
+                    return val[filter] === element;
+                })[0];
+            },
+            getJson: function (url) {
+                return $http.get(url).then(function (response) {
+                    return response.data;
+                }, function (error) {
+                    return "Error";
+                });
+            },
+            encodeRedirect: function (redirectUrl, url) {
+                var fUrl = redirectUrl + encodeURIComponent(url);
+                window.location.href = fUrl;
+            },
+            redirect: function (url) {
+                window.location.href = url;
+            },
+            setActiveTab: function () {
+                return activeTabIndex;
+            },
+            getActiveTab: function (index) {
+                activeTabIndex = index;
+            }
         }
-    }
-});
+    });
 
 
 
