@@ -9,6 +9,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
     $scope.showVideo = false;
     $scope.setPosition=0;
     $scope.position=0;
+    $scope.lastAnswerLoaded='';
     $scope.rows=[1,2,3,4,5,6,7,8,9,10];
     $scope.column=[1,2,3,4];
 
@@ -23,10 +24,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             {id:'8', type: 'MultipleChoiceTwoCorrect'}
         ];
 
-
-
-
-        //load a question at the first time
+     //load a question at the first time
     function loadQuestion() {
 
 
@@ -40,13 +38,16 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                 questionsCount = questionSetResult.questions.length;
 
 
-            if (position <= questionsCount) {
+            if (position < questionsCount) {
                 var questionResult = questionSetResult.questions[position];
 
                 angular.element('.choice.active').removeClass('active');
 
+                if($scope.lastAnswerLoaded=='' || $scope.lastAnswerLoaded!=questionResult.kind){
+                    $scope.currentA = Utilities.findInArray(questionResult.kind, $scope.directives, 'type').id;
+                    $scope.lastAnswerLoaded=questionResult.kind;
+                }
 
-                $scope.currentA = Utilities.findInArray(questionResult.kind, $scope.directives, 'type').id;
                 $scope.items = [];
                 $scope.stimulus = "";
                 $scope.template = $scope.actualView;
@@ -61,9 +62,10 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                     $scope.items.push(value);
                 });
 
-                position++;
+                $scope.position++;
             }
             else {
+                $scope.position=0;
                 $scope.setPosition++;
                 loadQuestion();
             }
@@ -166,7 +168,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
     function nextQuestion(){
             //Enable/disable answer section
-            angular.element('.choice *').removeAttr('disabled');
+            angular.element('.choice *').removeClass('btn-primary btn-danger btn-success').removeAttr('disabled');
             $scope.showVideo = false;
             $scope.messageConfirmation='';
             $scope.showExplanation = false;
@@ -177,8 +179,6 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
     }
 
-
-
     $scope.CreatePracticeGame= function(){
         if($scope.activeTracks.length>0){
             $scope.practiceGame =  PracticeGames.one();
@@ -187,7 +187,6 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                 PracticeObject.one(response.id,'next_round').customGET('',{'tracks[]':$scope.activeTracks}).then(function(QuestionSetObject){
                     $scope.QuestionSetList= QuestionSetObject.question_sets;
                     loadQuestion();
-
                 });
 
 
@@ -218,40 +217,6 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
     $scope.revealExplanation = function(){
         SeeAnswer();
     };
-
-
-        var getUrlQuestion= function(){
-
-            switch($scope.position){
-                case 0:
-                    return '75f93df0-a4ed-012e-035d-1231390ef981';
-                    break;
-                case 1:
-                    return '69f3f390-a4ed-012e-035d-1231390ef981';
-                    break;
-                case 2:
-                    return '37ef3dd0-9f89-012e-5ad5-1231390ef981';
-                    break;
-                case 3:
-                    return '27e8ef70-a4eb-012e-0320-1231390ef981';
-                    break;
-                case 4:
-                    return '2dfe7d20-a4eb-012e-0320-1231390ef981';
-                    break;
-                case 5:
-                    return '2a79f190-9f89-012e-5ad5-1231390ef981';
-                    break;
-                case 6:
-                    return 'c16b675b-4db3-c272-ded1-455be01d586e';
-                    break;
-                case 7:
-                    return 'bde6fff0-30c7-012e-f7bc-1231390ef981';
-                    break;
-            }
-
-        };
-
-
 
 
 }]);

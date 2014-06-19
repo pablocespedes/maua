@@ -26,14 +26,17 @@ request.factory('QuestionSets', function(Restangular) {
 });
 
 
-request.factory('Headers', function(Restangular) {
+request.factory('Headers', function(Restangular,$cookies) {
     return  {
         setDefaultHeader:function(sessionId){
+
             Restangular.setDefaultHeaders({'Authorization':'Token token='+'"'+sessionId+'"'});
 
         },
-        removeDefaultHeader: function(){
-            Restangular.setDefaultHeaders({'Authorization':''})
+        updateDefaultHeader:function(){
+
+            Restangular.setDefaultHeaders({'Authorization':'Token token='+'"'+$cookies.authorization_token+'"'});
+
         }
     }
 });

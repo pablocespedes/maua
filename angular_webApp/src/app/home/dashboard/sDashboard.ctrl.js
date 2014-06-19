@@ -1,8 +1,9 @@
 'use strict';
-home.controller('SimpleDashController',['$scope','Users','History','Tracks','Footer','Groups','Auth', function($scope,Users,History,Tracks,Footer,Groups,Auth) {
+home.controller('SimpleDashController',['$scope','Users','History','Tracks','Footer','Groups','Auth','Headers', function($scope,Users,History,Tracks,Footer,Groups,Auth,Headers) {
 
     $scope.activeGroupId= Groups.getActiveGroup();
     $scope.init = function(){
+        Headers.updateDefaultHeader();
         Footer.hideFooter();
         angular.element('.progress-bar').tooltip();
          $scope.user_id= Auth.getCurrentUserInfo().userId;
@@ -38,6 +39,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Foo
 
         $scope.UserRequest.one($scope.user_id).customGET('score_prediction',{group:$scope.activeGroupId}).then(function(response){
             if(response.total_score!=null &&response.range!=null) {
+                $scope.scoreVisible=true;
                 $scope.totalScore = response.total_score;
                 $scope.rangeInit = response.range[0];
                 $scope.rangeEnd = response.range[1];
@@ -58,26 +60,23 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Foo
 
     function getHistoryInformation(){
 
-           var analytics = $scope.UserRequest.one($scope.user_id).customGET('history',{group:$scope.activeGroupId}).then(function(graphicResult){
-               FillGraphic(graphicResult);
-           }).catch(function error(msg) {
-            console.error(msg);
-        });
-
+            $scope.UserRequest.one($scope.user_id).customGET('history', {group: $scope.activeGroupId}).then(function (graphicResult) {
+                FillGraphic(graphicResult);
+            }).catch(function error(msg) {
+                console.error(msg);
+            });
 
    }
 
     function FillGraphic(graphicData){
 
-
         if(angular.isDefined(graphicData) &&graphicData.history.length>0){
+            $scope.historyVisible=true;
             var response = History.findMissingDates(graphicData.history);
-            Morris.Line({
-                element: 'hero-graph',
+            $scope.chart_options = {
                 data:response.Data,
                 xkey: 'day',
                 ykeys: ['total_questions'],
-
                 labels: ['Questions Answered'],
                 lineColors: ['#2e9be2'],
                 lineWidth: 2,
@@ -96,12 +95,11 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Foo
                     var  d = new Date(date);
                     return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate() +', '+d.getFullYear();
                 }
-            });
+            };
         }
         else{
             $scope.historyVisible=false;
         }
-
 
     }
 
@@ -120,7 +118,6 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Foo
 
     };
 
-    $scope.init();
-
+$scope.init();
 
 }]);
