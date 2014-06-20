@@ -8,8 +8,8 @@
 
        var filePath = {
            dashboard: {
-               dashCtrl: 'app/practiceGame/dashboard/sDashboard.ctrl.js',
-               dashServ: 'app/practiceGame/dashboard/sDashboard.service.js'
+               dashCtrl: 'app/home/dashboard/sDashboard.ctrl.js',
+               dashServ: 'app/home/dashboard/sDashboard.service.js'
            }
        };
 

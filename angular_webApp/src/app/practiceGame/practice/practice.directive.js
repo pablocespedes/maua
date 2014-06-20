@@ -64,8 +64,6 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
                 satFactory.execute();
             },
             scope: {
-                items:'=items',
-                cols:'=cols'
             }
         };
     })

@@ -10,9 +10,6 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
     $scope.setPosition=0;
     $scope.position=0;
     $scope.lastAnswerLoaded='';
-    $scope.rows=[1,2,3,4,5,6,7,8,9,10];
-    $scope.column=[1,2,3,4];
-
     $scope.directives =
         [   { id:'1', type: 'MultipleChoiceOneCorrect'},
             { id:'2', type: 'MultipleChoiceOneOrMoreCorrect'},
@@ -54,6 +51,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                 $scope.questionItems = questionResult;
 
                 $scope.questionInformation = questionSetResult.info;
+                setLayoutBasedOnQuestionInfo();
                 $scope.stimulus = $scope.questionItems.stimulus;
 
                 var answers = $scope.questionItems.answers;
@@ -177,6 +175,22 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             angular.element('#skipAction').removeClass('hide');
             loadQuestion();
 
+    }
+
+    function setLayoutBasedOnQuestionInfo(){
+        var questInfo =$scope.questionInformation,
+            panel1 = angular.element('#Panel1'),
+            panel2 = angular.element('#Panel2'),
+            panelQuest = angular.element('#PanelQuestion');
+        if(angular.isDefined(questInfo) && questInfo!=null && questInfo!=''){
+            panel1.addClass('col-md-6');
+            panel2.addClass('col-md-6');
+
+        }
+        else{
+            panel1.addClass('col-md-6 col-md-offset-3');
+            panel2.addClass('col-md-6 col-md-offset-3');
+        }
     }
 
     $scope.CreatePracticeGame= function(){

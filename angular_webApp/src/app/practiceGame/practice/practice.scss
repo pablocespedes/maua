@@ -1,6 +1,7 @@
 #practice{
-
-
+  #skipAction {
+    cursor: pointer;
+  }
 
   .choice input {
     cursor: default;
@@ -51,7 +52,19 @@
   button.matrix {
     display: block;
     font-size: 14px;
-    border: 3px solid $letterCircle;
+    padding: 0px 9px!important;
+    border: 2px solid $letterCircle;
+    font-weight: 700;
+    height: 31px;
+    width: 31px;
+
+
+  }
+  button.matrixTop {
+    display: block;
+    font-size: 14px;
+    padding: 0px 9px!important;
+    border: 2px solid $letterCircle;
     font-weight: 700;
     height: 31px;
     width: 31px;
@@ -59,20 +72,29 @@
 
   }
 
-  .matrix{
-    margin-left: 0px;
-    margin-right: 0px;
-    border-right: 1px solid $letterCircle;
-
-  }
   .empty-space-matrix{
     padding-left: 30px;
   }
 
-  .column-matrix{
-    float: left;
-    margin-left: 5px;
-    margin-right: 5px;
+  table#spr_input tr#slash td.empty {
+    cursor: default;
+    background: #bebebe;
+  }
+
+  table#spr_input td.empty {
+    cursor: default;
+    background: #bebebe;
+  }
+
+  table#spr_input td {
+    // background: url(/assets/answer/spr/circle-cdf2042247c40466124bc8486ecee341.png) no-repeat 2px 0;
+    padding: 6px 12px;
+    border-right: 1px solid #000;
+    cursor: pointer;
+  }
+  table#spr_input tbody {
+    border-bottom: 1px solid #000;
+    border-left: 1px solid #000;
   }
 
   //
@@ -149,53 +171,6 @@
   }
 
 
- /* Angular Animate Styles for question*/
-  .fadein {
-    transition: 2s linear all;
-    -webkit-transition: 2s linear all;
-    -moz-transition: 2s linear all;
-    -o-transition: 2s linear all;
-  }
-  .fadein.ng-enter {
-      transition: 1s linear all;
-      -webkit-transition: 1s linear all;
-      -moz-transition: 1s linear all;
-      -o-transition: 1s linear all;
-    }
-
-  .fadein.ng-enter.ng-enter-active {
-    opacity: 1;
-  }
-
-
-
-  /*Sub Views Questions Transition*/
-  .my-fade-container {
-    position: relative;
-  }
-  .my-fade-animation.ng-enter{
-    -webkit-animation: 0.5s slide-animation-enter;
-    animation: 0.5s slide-animation-enter;
-  }
-
-  .my-fade-animation.ng-leave {
-    -webkit-animation: 0.5s slide-animation-leave;
-    animation: 0.5s slide-animation-leave;
-  }
-  .my-fade-animation.ng-enter {
-    z-index: 100;
-    opacity: 0;
-  }
-  .my-fade-animation.ng-enter.ng-enter-active {
-    opacity: 1;
-  }
-  .my-fade-animation.ng-leave {
-    z-index: 101;
-    opacity: 1;
-  }
-  .my-fade-animation.ng-leave.ng-leave-active {
-    opacity: 0;
-  }
 
 }
 
