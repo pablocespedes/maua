@@ -1,0 +1,15 @@
+<div id="twoChoice" >
+<div class="choice"  ng-repeat="item in items" >
+    <div class="middle">
+        <button id="{{item.position}}" type="button" class="btn-option  btn-rounded letter" >{{item.option}}</button>
+        <input id="{{item.position}}" type="checkbox" name="choice"  value="false"  />
+        <div class="content" >
+            <div ng-bind-html="item.body"></div>
+        </div>
+    </div>
+    <div id="explanationAnswerPanel" ng-if="showExplanation" class="fadein " ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
+        <div class="explain-margin" ng-bind-html='item.explanation'></div>
+    </div>
+    <hr>
+</div>
+</div>
