@@ -15,8 +15,6 @@ pubspec.lock
 .idea/
 angular_webApp/src/bower_components/
 *.log
-web/.sass-cache/3114538dc2cfa0a4ebbe25b25c280fce7402dc1f/dashboard.scssc
-web/.sass-cache/81f80a14ab563f1c95bd25f492b51f83ca765c5f/practice.scssc
-web/.sass-cache/a6d10cf123ae1236d6a65898672524903975cc7c/_variables.scssc
-web/.sass-cache/a6d10cf123ae1236d6a65898672524903975cc7c/main.scssc
-web/.sass-cache/d0fdffe1676beb58f5d6e13e292b0366f1c8a37f/dashboard.scssc
+web/.sass-cache/
+web/node_modules/
+web/src/bower_components/
