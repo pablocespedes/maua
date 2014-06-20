@@ -1,21 +1,37 @@
 {
-  "name": "g-rockit-app",
+  "name": "grockit",
   "version": "0.0.0",
+  "homepage": "https://github.com/joanrm20/maua",
+  "authors": [
+    "First Factory"
+  ],
+  "description": "grockit",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
   "dependencies": {
-    "angular": "1.2.15",
-    "json3": "~3.2.6",
-    "es5-shim": "~2.1.0",
-    "angular-resource": "1.2.15",
-    "angular-cookies": "1.2.15",
-    "angular-sanitize": "1.2.15",
-    "angular-route": "1.2.15",
     "angular-animate": "~1.2.16",
-    "restangular": "~1.4.0",
-    "elasticsearch": "~2.2.0",
-    "webStorageModule": "~0.10.3"
-  },
-  "devDependencies": {
+    "angular-cookies": "1.2.15",
     "angular-mocks": "1.2.15",
-    "angular-scenario": "1.2.15"
+    "angular-resource": "1.2.15",
+    "angular-route": "1.2.15",
+    "angular-sanitize": "1.2.15",
+    "angular-scenario": "1.2.15",
+    "elasticsearch": "~2.2.0",
+    "es5-shim": "~2.1.0",
+    "json3": "~3.2.6",
+    "restangular": "~1.4.0",
+    "webStorageModule": "~0.10.3",
+    "lodash": "~2.4.1",
+    "angular": "1.2.18"
+  },
+  "resolutions": {
+    "angular": "1.2.18"
   }
 }
