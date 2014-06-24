@@ -51,7 +51,7 @@ home.factory('History', function() {
                 }
                 i++;
             }
-            max= max >= 5 ? 5 : max+1;
+            max= max >= 5 ? 6 : max+1;
             return {"Data":dest,"MaxLine":max };
 
         }

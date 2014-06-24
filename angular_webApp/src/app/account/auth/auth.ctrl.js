@@ -1,4 +1,4 @@
-account.controller('NavController', ['$rootScope','$scope', '$location', 'Auth','Utilities','Tracks','Groups','Headers','$cookies', function($rootScope,$scope, $location, Auth,Utilities,Tracks,Groups,Headers,$cookies) {
+NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$cookies,Groups) {
 
     $rootScope.$on("init", function () {
         init();
@@ -7,7 +7,7 @@ account.controller('NavController', ['$rootScope','$scope', '$location', 'Auth',
     $scope.selectGroup = function(index){
 
         $scope.selectedGroup= $scope.linkedGroups[index].name;
-        $scope.currentUser.studyingFor=$scope.linkedGroups[index].group_id;
+        $scope.currentUser.studyingFor=$scope.linkedGroups[index].id;
         Auth.updateUserInfo($scope.currentUser);
     };
 
@@ -20,7 +20,7 @@ account.controller('NavController', ['$rootScope','$scope', '$location', 'Auth',
         Utilities.setActiveTab(index);
         if(index>=0) {
             var trackData = {'id': $scope.tracksList[index].id};
-            Groups.setActiveTrack(trackData);
+            Utilities.setActiveTrack(trackData);
         }
     };
 
@@ -28,29 +28,35 @@ account.controller('NavController', ['$rootScope','$scope', '$location', 'Auth',
 
         if( $scope.currentUser.groupMemberships.length>0){
 
-            Utilities.getJson('common/json/GroupMembership.json').then(function(result){
+            var groups = Groups.one();
+            groups.customGET('',{subdomain : 'www'}).then(function(result){
+
                 if($scope.currentUser.studyingFor!=null){
-                    $scope.selectedGroup= Utilities.findInArray($scope.currentUser.studyingFor,result,'group_id').name;
+                    var responseGroups= result.groups;
+
+                    $scope.selectedGroup= Utilities.findInArray($scope.currentUser.studyingFor,responseGroups,'id').name;
                     var  linkedGroups= $scope.groupMemberships;
 
                     angular.forEach(linkedGroups,function(val,index){
 
                         if(linkedGroups[index]!=null) {
-                            $scope.linkedGroups.push(Utilities.findInArray(val.group_id, result, 'group_id'));
-                            result.splice(index, 1);
+                            $scope.linkedGroups.push(Utilities.findInArray(val.group_id, responseGroups, 'id'));
+                            responseGroups.splice(index, 1);
                         }
 
                     });
-                    $scope.unLinkedGroups=result;
+                    $scope.unLinkedGroups=responseGroups;
                 }
 
+            }).catch(function error(msg) {
+                console.error(msg);
             });
+
         }
 
     }
 
     function init(){
-        Headers.updateDefaultHeader();
         $scope.selected = Utilities.getActiveTab();
 
         $scope.linkedGroups=[];
@@ -61,19 +67,22 @@ account.controller('NavController', ['$rootScope','$scope', '$location', 'Auth',
                 $scope.currentUser = Auth.getCurrentUserInfo();
                 $scope.selectedGroup = Auth.getCurrentUserInfo().studyingFor;
                 loadGroupMembership();
-                //  fetchLeftNavTracksData();
+                //fetchLeftNavTracksData();
             }
         });
     }
 
-    if($cookies.authorization_token!=null || authorization_token.$cookies!=''){
-        init();
+    if(angular.isDefined($cookies.authorization_token)){
+        if($cookies.authorization_token!=null || authorization_token.$cookies!=''){
+            init();
+        }
     }
+
 
 
     function fetchLeftNavTracksData(){
         var tracks = Tracks.one();
-        tracks.customGET('',{group_id : $scope.selectedGroup,include_unpublished: true}).then(function(response){
+        tracks.customGET('',{group_id : $scope.selectedGroup}).then(function(response){
 
             $scope.tracksList = response.tracks;
             window.test = response.tracks;
@@ -87,4 +96,4 @@ account.controller('NavController', ['$rootScope','$scope', '$location', 'Auth',
 
 
 
-}]);
+};

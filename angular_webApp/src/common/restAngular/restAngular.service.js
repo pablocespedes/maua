@@ -1,26 +1,50 @@
 
-request.factory('Users', function(Restangular) {
+request.factory('Users', function(Restangular,Headers) {
+    Headers.updateDefaultHeader();
     return  Restangular.service('users')
 
 });
 
 
-request.factory('Questions', function(Restangular) {
+request.factory('Questions', function(Restangular,Headers) {
+    Headers.updateDefaultHeader();
     return  Restangular.service('questions')
 
 });
 
-request.factory('Tracks', function(Restangular) {
+request.factory('Groups', function(Restangular,Headers) {
+    Headers.updateDefaultHeader();
+    return  Restangular.service('groups')
+
+});
+
+request.factory('Tracks', function(Restangular,Headers) {
+    Headers.updateDefaultHeader();
     return  Restangular.service('tracks')
 
 });
 
-request.factory('PracticeGames', function(Restangular) {
+request.factory('SubTracks', function(Restangular,Headers) {
+    Headers.updateDefaultHeader();
+    return  Restangular.service('subtracks')
+
+});
+
+request.factory('PracticeGames', function(Restangular,Headers) {
+    Headers.updateDefaultHeader();
     return  Restangular.service('practice_games')
 
 });
 
-request.factory('QuestionSets', function(Restangular) {
+request.factory('RoundSessions', function(Restangular,Headers) {
+    Headers.updateDefaultHeader();
+    return  Restangular.service('round_sessions')
+
+});
+
+
+request.factory('QuestionSets', function(Restangular,Headers) {
+    Headers.updateDefaultHeader();
     return  Restangular.service('question_sets')
 
 });
@@ -40,21 +64,5 @@ request.factory('Headers', function(Restangular,$cookies) {
         }
     }
 });
-
-
-request.factory('ApiV3Restangular', function(Restangular) {
-    return Restangular.withConfig(function(RestangularConfigurer) {
-        RestangularConfigurer.setBaseUrl('https://staging.grockit.com/api/v3/');
-        RestangularConfigurer.setRequestSuffix('.json');
-    });
-});
-
-request.factory('Questions', function(ApiV3Restangular) {
-
-    return ApiV3Restangular.service('questions');
-
-});
-
-
 
 

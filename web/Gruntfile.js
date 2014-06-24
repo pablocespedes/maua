@@ -151,7 +151,7 @@ module.exports = function (grunt) {
       },
       sass: {
         src: ['<%= yeoman.src %>/styles/{,*/}*.{scss,sass}'],
-        ignorePath: '<%= yeoman.src %>/bower_components/'
+        ignorePath: '<%= yeoman.src %>/'
       }
     },
 
@@ -164,7 +164,7 @@ module.exports = function (grunt) {
         imagesDir: '<%= yeoman.src %>/images',
         javascriptsDir: '<%= yeoman.src %>/app',
         fontsDir: '<%= yeoman.src %>/styles/fonts',
-        importPath: '<%= yeoman.src %>/bower_components',
+        importPath: 'bower_components',
         httpImagesPath: '/images',
         httpGeneratedImagesPath: '/images/generated',
         httpFontsPath: '/styles/fonts',

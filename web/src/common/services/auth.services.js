@@ -43,7 +43,7 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
                 var sessionParam = $location.search()._app_server_session;
                 try {
                     if (sessionParam !== '' && angular.isDefined(sessionParam)) {
-                        var sessionId = sessionParam+'=';
+                        var sessionId = sessionParam;//+'=';
                         Headers.setDefaultHeader(sessionId);
                         $cookies.authorization_token = sessionId;
                         Users.one('self').get().then(function (result) {

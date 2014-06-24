@@ -34,15 +34,11 @@ var practiceGame =  angular.module("grockitApp.practiceGame",[])
         });
         return deferred.promise;
     }},
-//        delay: function($q, $defer) {
-//        var delay = $q.defer();
-//        $defer(delay.resolve, 500);
-//        return delay.promise;
-//    },
     controller: 'DetailDashController',
     access: {
             authorizedRoles: [UserRoles.admin, UserRoles.member]
         }
+
     })
 
 

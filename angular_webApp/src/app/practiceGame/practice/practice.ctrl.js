@@ -1,6 +1,10 @@
-practiceGame.controller('PracticeController',['$scope','Questions','Utilities','Groups','PracticeGames','$sce',function($scope,Questions,Utilities,Groups,PracticeGames,$sce) {
-    $scope.activeTracks =Groups.getActiveTrack();
-    $scope.activeGroupId= Groups.getActiveGroup();
+practiceGame.controller('PracticeController',['$scope','Questions','Utilities','PracticeGames','$sce','RoundSessions',function($scope,Questions,Utilities,PracticeGames,$sce,RoundSessions) {
+
+
+    $scope.activeTracks =Utilities.getActiveTrack();
+    $scope.TitleQuest=$scope.activeTracks.trackTitle;
+    $scope.activeGroupId= Utilities.getActiveGroup();
+
     $scope.optionList = ['A','B','C','D','E','F','G','H','I'];
     $scope.nextActionTitle='Confirm Choice';
     $scope.questionItems=[];
@@ -24,20 +28,19 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
      //load a question at the first time
     function loadQuestion() {
 
-
         if($scope.QuestionSetList.length>0) {
 
-            var setPosition = $scope.setPosition,
-                questionSetResult = $scope.QuestionSetList[setPosition];
+            var setLayoutType=false,
+                setPosition = $scope.setPosition,
+                questionSetResult = $scope.QuestionSetList[setPosition],
 
-
-            var position = $scope.position,
+                position = $scope.position,
                 questionsCount = questionSetResult.questions.length;
 
 
             if (position < questionsCount) {
                 var questionResult = questionSetResult.questions[position];
-
+                $scope.currentQuestionId = questionResult.id;
                 angular.element('.choice.active').removeClass('active');
 
                 if($scope.lastAnswerLoaded=='' || $scope.lastAnswerLoaded!=questionResult.kind){
@@ -51,7 +54,11 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                 $scope.questionItems = questionResult;
 
                 $scope.questionInformation = questionSetResult.info;
-                setLayoutBasedOnQuestionInfo();
+
+
+                setLayoutType = angular.isDefined($scope.questionInformation) && $scope.questionInformation!=null && $scope.questionInformation!='' ? true : false;
+
+                setLayoutBasedOnQuestionInfo(setLayoutType);
                 $scope.stimulus = $scope.questionItems.stimulus;
 
                 var answers = $scope.questionItems.answers;
@@ -72,6 +79,8 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
     }
 
     function SeeAnswer(){
+
+         setLayoutBasedOnQuestionInfo(true);
          angular.element('#skipAction').addClass('hide');
          angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
          $scope.nextActionTitle='Next Question';
@@ -88,16 +97,17 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
          //Get answers from the previous request and Explain
          var answers = $scope.questionItems.answers;
-
+         $scope.tags = $scope.questionItems.tags;
+        $scope.xpTag =$scope.questionItems.experience_points;
          //Work with the styles to shown result
          //define is some answer is bad.
          angular.element('.choice button').removeClass('btn-primary');
 
          angular.forEach(answers, function (value, key) {
-                 var selectIdButton = '#' + value.position;
-                 if (value.correct) {
-                     angular.element(selectIdButton).addClass('btn-success');
-                 }
+           var selectIdButton = '#' + value.id;
+           if (value.correct) {
+               angular.element(selectIdButton).addClass('btn-success');
+           }
          });
 
          angular.element(".choice *").prop('disabled', true);
@@ -106,6 +116,8 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
     function confirmChoice(){
 
         var selectedPosition='',selectedOptions=[];
+        setLayoutBasedOnQuestionInfo(true);
+
         //Get selected answers
         angular.element('.choice input[value=true]').each(function () {
             selectedPosition = $(this).attr('id');
@@ -113,6 +125,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
         });
 
         if (selectedOptions.length>0) {
+            //createAnswerResponse();
             angular.element('#skipAction').addClass('hide');
             angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
             $scope.nextActionTitle='Next Question';
@@ -129,6 +142,8 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
             //Get answers from the previous request and Explain
             var answers = $scope.questionItems.answers;
+            $scope.tags = $scope.questionItems.tags;
+            $scope.xpTag =$scope.questionItems.experience_points;
 
             //Work with the styles to shown result
             //define is some answer is bad.
@@ -136,9 +151,8 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             angular.element('.choice button').removeClass('btn-primary');
 
             angular.forEach(selectedOptions, function (value, key) {
-                var selectedAnswer= $.grep(answers,function (val) {
-                    return val.position == value;
-                })[0];
+//
+                var selectedAnswer=  Utilities.findInArray(value,answers,'id');
 
                 if(angular.isDefined(selectedAnswer)) {
                     var selectIdButton = '#' + selectedAnswer.position;
@@ -156,7 +170,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
             });
 
-            $scope.messageConfirmation= allFine==true? 'Your answer was correct': 'Your answer was incorrect';
+            $scope.messageConfirmation= allFine ? 'Your answer was correct': 'Your answer was incorrect';
             angular.element(".choice *").prop('disabled', true);
         }
         else{
@@ -164,41 +178,51 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
         }
     }
 
-    function nextQuestion(){
-            //Enable/disable answer section
-            angular.element('.choice *').removeClass('btn-primary btn-danger btn-success').removeAttr('disabled');
-            $scope.showVideo = false;
-            $scope.messageConfirmation='';
-            $scope.showExplanation = false;
-            $scope.nextActionTitle='Confirm Choice';
-            angular.element('#nextAction').removeClass('btn-success');
-            angular.element('#skipAction').removeClass('hide');
-            loadQuestion();
-
+    function nextQuestion() {
+        //Enable/disable answer section
+        angular.element('.choice *').removeClass('btn-primary btn-danger btn-success').removeAttr('disabled');
+        $scope.showVideo = false;
+        $scope.messageConfirmation = '';
+        $scope.showExplanation = false;
+        $scope.nextActionTitle = 'Confirm Choice';
+        angular.element('#nextAction').removeClass('btn-success');
+        angular.element('#skipAction').removeClass('hide');
+        loadQuestion();
     }
 
-    function setLayoutBasedOnQuestionInfo(){
-        var questInfo =$scope.questionInformation,
-            panel1 = angular.element('#Panel1'),
-            panel2 = angular.element('#Panel2'),
-            panelQuest = angular.element('#PanelQuestion');
-        if(angular.isDefined(questInfo) && questInfo!=null && questInfo!=''){
-            panel1.addClass('col-md-6');
-            panel2.addClass('col-md-6');
-
+    function setLayoutBasedOnQuestionInfo(setLayout){
+        var panel1 = angular.element('#Panel1'),
+            panel2 = angular.element('#Panel2');
+        if(setLayout){
+            panel1.removeClass('col-md-offset-3');
+            panel2.removeClass('col-md-offset-3');
         }
         else{
-            panel1.addClass('col-md-6 col-md-offset-3');
-            panel2.addClass('col-md-6 col-md-offset-3');
+            panel1.addClass('col-md-offset-3');
+            panel2.addClass('col-md-offset-3');
         }
+    }
+
+    function createAnswerResponse(answerId){
+        var AnswersRequest =  RoundSessions.one();
+        AnswersRequest.post('',{game_id:$scope.practiceGameResponse.id,question_id:$scope.currentQuestionId}).then(function(AnswerObject) {
+
+         var RoundSession = AnswerObject.round_session,
+             getCurrentRSession = AnswerObject.put('');
+
+
+        }, function() {
+            console.log("There was an error creating the Round Session");
+        });
     }
 
     $scope.CreatePracticeGame= function(){
-        if($scope.activeTracks.length>0){
-            $scope.practiceGame =  PracticeGames.one();
-            $scope.practiceGame.post('',{group_id:$scope.activeGroupId}).then(function(PracticeObject) {
-                var response = PracticeObject.practice_game;
-                PracticeObject.one(response.id,'next_round').customGET('',{'tracks[]':$scope.activeTracks}).then(function(QuestionSetObject){
+        if($scope.activeTracks.tracks.length > 0){
+            var practiceGame =  PracticeGames.one();
+            practiceGame.post('',{group_id:$scope.activeGroupId}).then(function(PracticeObject) {
+
+                $scope.practiceGameResponse = PracticeObject.practice_game;
+                PracticeObject.one($scope.practiceGameResponse.id,'sample').customGET('',{'tracks[]':$scope.activeTracks.tracks}).then(function(QuestionSetObject){
                     $scope.QuestionSetList= QuestionSetObject.question_sets;
                     loadQuestion();
                 });
@@ -210,7 +234,6 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
         }
         else{
             bootbox.alert('You must select one track at least',function(){
-
                 window.location.href='/#/'+$scope.activeGroupId+'/dashboard';
             });
         }
