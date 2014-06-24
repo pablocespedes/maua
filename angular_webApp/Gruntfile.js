@@ -226,6 +226,7 @@ module.exports = function (grunt) {
         html: ['<%= yeoman.dist %>/{,*/}*.html','<%= yeoman.dist %>/app/**/*.html'],
         css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
         js: [
+          '<%= yeoman.dist %>/app/**/*.js',
           '<%= yeoman.dist %>/common/*.js',
           '<%= yeoman.dist %>/index.html'],
         options: {
@@ -233,7 +234,7 @@ module.exports = function (grunt) {
                 '<%= yeoman.dist %>/app/account/auth',
                 '<%= yeoman.dist %>/app/account',
                 '<%= yeoman.dist %>/app/home',
-                '<%= yeoman.dist %>/app/home/dashboard',
+                '<%= yeoman.dist %>/app/home/dashboard/',
                 '<%= yeoman.dist %>/app/practiceGame/dashboard',
                 '<%= yeoman.dist %>/app/practiceGame/practice',
                 '<%= yeoman.dist %>/app/practiceGame',
@@ -252,8 +253,8 @@ module.exports = function (grunt) {
                     [/(auth.ctrl\.js)/, 'Replacing references to account ctrl'],
                     [/(account.module\.js)/, 'Replacing references account to module'],
                     /*Change references for home controllers and services*/
-                    [/(dashboard.ctrl\.js)/, 'Replacing references to home ctrl'],
-                    [/(dashboard.service\.js)/, 'Replacing references to home service'],
+                    [/(sDashboard.ctrl\.js)/, 'Replacing references to home ctrl'],
+                    [/(sDashboard.service\.js)/, 'Replacing references to home service'],
                     [/(home.module\.js)/, 'Replacing references to home module'],
                     /*Change references for practice controllers and services*/
                     [/(dashboard.ctrl\.js)/, 'Replacing references to dashboard ctrl'],

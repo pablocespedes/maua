@@ -4,7 +4,7 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
         member: 'member',
         guest: 'guest'
     })
-    .factory('Auth', function($cookies,UserRoles,webStorage,Users,Groups,$location,$q,Headers) {
+    .factory('Auth', function($cookies,UserRoles,webStorage,Users,Utilities,$location,$q,Headers) {
 
         return {
             authorize: function (next) {
@@ -40,7 +40,7 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
             },
             setCurrentUser: function () {
                 var deferred = $q.defer(), currentUser = undefined;
-                var sessionParam = $location.search()._app_server_session;
+                var sessionParam = $location.search()._token;
                 try {
                     if (sessionParam !== '' && angular.isDefined(sessionParam)) {
                         var sessionId = sessionParam+'=';
@@ -57,7 +57,7 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
                                 avatar_url: result.user.avatar_url
                             };
 
-                            Groups.setActiveGroup(result.user.studying_for);
+                            Utilities.setActiveGroup(result.user.studying_for);
                             webStorage.add('currentUser', currentUser);
 
                             deferred.resolve(currentUser);
@@ -85,8 +85,9 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
                 Users.one('self').get().then(function (result) {
                     webStorage.get('currentUser').groupMemberships = result.user.group_memberships;
                     webStorage.get('currentUser').studyingFor = result.user.studying_for;
+                    webStorage.get('currentUser').role = result.user.guest == true ? UserRoles.member : UserRoles.guest;
 
-                    Groups.setActiveGroup(result.user.studying_for);
+                    Utilities.setActiveGroup(result.user.studying_for);
                     deferred.resolve(webStorage.get('currentUser'));
 
                 }).catch(function error(e) {

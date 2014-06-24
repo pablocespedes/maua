@@ -1,5 +1,5 @@
 $(function(){
-
+    setActiveMenu();
     setSelect2Settings();
 });
 
@@ -21,4 +21,23 @@ function setSelect2Settings(){
         }
     });
 }
+
+function setActiveMenu(){
+    var menuList = $('div#main-menu-inner ul.navigation li');
+    var url = window.location.href.split('/'),
+        actualLocation = url[(url.length - 1)] || 'dashboard';
+
+    menuList.removeClass('active');
+    switch(actualLocation){
+        case "dashboard":
+            $(menuList[0]).addClass('active'); //Home Dashboard
+            break;
+        case "dashboard-practice":
+            $(menuList[1]).addClass('active'); //Game Dashboard
+            break;
+    }
+
+
+}
+
 

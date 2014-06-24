@@ -1,0 +1,25 @@
+
+<div id="matrix2x3">
+    <div  class="choice" ng-repeat="item in items">
+        <div class="divisor" ng-if="($index % 2) ==0">
+            <div >Blank {{($index / 2) +1}}</div>
+            <hr>
+        </div>
+
+       <div class="middle" data-group="{{(($index-($index%2))/2 )}}">
+            <button id="{{item.position}}" type="button" class="letter btn-option  btn-rounded letter" >{{item.option}}</button>
+            <input id="{{item.position}}" type="radio" name="choice" value="false"   />
+            <div class="content" >
+                <div ng-bind-html="item.body"></div>
+            </div>
+        </div>
+        <div id="explanationAnswerPanel" ng-if="showExplanation" class="fadein " ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
+            <div class="explain-margin" ng-bind-html='item.explanation'></div>
+        </div>
+        <hr>
+
+    </div>
+
+</div>
+
+

@@ -1,11 +1,12 @@
 'use strict';
-home.controller('SimpleDashController',['$scope','Users','History','Tracks','Footer','Groups','Auth','Headers', function($scope,Users,History,Tracks,Footer,Groups,Auth,Headers) {
+home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','SubTracks', function($scope,Users,History,Tracks,Utilities,Auth,SubTracks) {
 
-    $scope.activeGroupId= Groups.getActiveGroup();
+    $scope.activeGroupId= Utilities.getActiveGroup();
+
     $scope.init = function(){
-        Headers.updateDefaultHeader();
-        Footer.hideFooter();
-        angular.element('.progress-bar').tooltip();
+        $scope.scoreVisible=false;
+        $scope.historyVisible=false;
+        Utilities.hideFooter();
          $scope.user_id= Auth.getCurrentUserInfo().userId;
          //Declare User RestAngular Object
          $scope.UserRequest = Users.one();
@@ -18,7 +19,8 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Foo
     };
 
     function fetchTracksData(){
-        var tracks = Tracks.one();
+        var tracks =Tracks.one();
+
          tracks.customGET('',{group_id : $scope.activeGroupId}).then(function(response){
              $scope.tracks = response.tracks;
          }).catch(function error(msg) {
@@ -28,25 +30,13 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Foo
 
     function fetchScorePrediction(){
 
-        var easyPieChartDefaults = {
-            animate: 2000,
-            scaleColor: false,
-            lineWidth: 6,
-            lineCap: 'square',
-            size: 145,
-            trackColor: '#e5e5e5'
-        };
-
         $scope.UserRequest.one($scope.user_id).customGET('score_prediction',{group:$scope.activeGroupId}).then(function(response){
             if(response.total_score!=null &&response.range!=null) {
                 $scope.scoreVisible=true;
                 $scope.totalScore = response.total_score;
                 $scope.rangeInit = response.range[0];
                 $scope.rangeEnd = response.range[1];
-                $scope.percent = Math.round(100 * $scope.rangeInit / $scope.rangeEnd);
-
-                angular.element('#easy-pie-chart-2').easyPieChart(easyPieChartDefaults).data('easyPieChart').update($scope.percent);
-
+                $scope.percent = Math.round(100 * response.range[0] / response.range[1]);
             }
             else{
                 $scope.scoreVisible=false;
@@ -81,9 +71,12 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Foo
                 lineColors: ['#2e9be2'],
                 lineWidth: 2,
                 pointSize: 4,
+                //ymin:0,
+//                ymax:response.MaxLine+5,
                 numLines: response.MaxLine,
+                //gridIntegers: true,
                 hideHover: true,
-                onlyIntegers:false,
+                //onlyIntegers:false,
                 gridLineColor: '#2e9be2',//'rgba(255,255,255,.5)',
                 resize: true,
                 gridTextColor: '#1d89cf',
@@ -103,13 +96,21 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Foo
 
     }
 
-    $scope.StartPractice = function(){
-        if(angular.isDefined($scope.selectedTrack)){
+    $scope.StartPractice = function(index){
+        if(angular.isDefined(index)) {
 
-           var trackData=$scope.selectedTrack.id;
-           Groups.setActiveTrack(trackData);
+            var tracks = [],
+                trackTitle = $scope.tracks[index].name;
+                tracks.push($scope.tracks[index].id);
 
-            window.location.href='/#/'+$scope.activeGroupId+'/practice';
+            var trackData = {
+                tracks: tracks,
+                trackTitle: trackTitle
+            };
+
+            Utilities.setActiveTrack(trackData);
+
+            window.location.href = '/#/' + $scope.activeGroupId + '/practice';
         }
         else{
             bootbox.alert('You must select one track at least');

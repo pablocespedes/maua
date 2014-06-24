@@ -3,18 +3,24 @@
  app.config(function($httpProvider) {
 
     })
-     .run(function ($rootScope, $location, Auth,Groups,Utilities) {
+     .run(function ($rootScope, $location, Auth,Utilities) {
 
      $rootScope.$on("$routeChangeStart", function (event, next) {
          var oldSite='',newSite='';
+
+             oldSite='https://staging.grockit.com/login?redirect=';
+             newSite= $location.protocol()+"://"+$location.host() ;
+         if($location.port()){
+             newSite= newSite +':'+ $location.port();
+         }
          if (!Auth.authorize(next)) {
 
              if(Auth.isLoggedIn()){
-                 Groups.getActiveGroup();
+                 Utilities.getActiveGroup();
 
-                 if ($location.path() == '' ||  angular.isDefined($location.search()._app_server_session)) {
+                 if ($location.path() == '' || angular.isDefined($location.search()._token)) {
 
-                     Utilities.redirect('#/' + Groups.getActiveGroup() + '/dashboard');
+                     Utilities.redirect('#/' + Utilities.getActiveGroup() + '/dashboard');
                  }
              }
              else {
@@ -25,12 +31,12 @@
                          window.location.href = '#/' + userData.studyingFor + "/dashboard";
 
                      } else {
-                             oldSite = 'https://staging.grockit.com/login?redirect=';
+
                          if ($location.path() == ''){
-                             newSite = $location.absUrl() + '#/?'+'_app_server_session';
+                             newSite = newSite+ '#/?'+'_token';
                          }
                          else{
-                             newSite = $location.absUrl() + '/?'+'_app_server_session';
+                             newSite = newSite+ '/?'+'_token';
                          }
 
                          Utilities.encodeRedirect(oldSite, newSite);
@@ -53,7 +59,6 @@
   'grockitApp.authServices',
   'grockitApp.practiceGame',
   'grockitApp.home',
-  'grockitApp.account',
    'grockitApp.directives'
 ]))
 );

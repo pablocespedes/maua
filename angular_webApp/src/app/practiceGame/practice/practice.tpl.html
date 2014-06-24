@@ -1,6 +1,7 @@
 <div id="practice" class="panel">
     <div class="panel-heading">
         <span class="panel-title"></span>
+        <span ng-bind="TitleQuest"></span>
         <!--<div class="text-right">-->
             <!--<button id="nextAction" class="btn  btn-lg  btn-flat" ng-click="nextAction()" ng-bind="nextActionTitle"></button>-->
             <!--<a id="skipAction" ng-click="revealExplanation()">Don't know? See answer.</a>-->
@@ -8,10 +9,23 @@
     </div>
     <div class="panel-body">
         <div id="parent" class="my-slide-container">
-            <div class="row">
+            <div id="PanelQuestion" class=" row">
 
-                <div class="col-md-6">
-                    <div id="question-explain" class="explain-margin" ng-if="showExplanation" ng-bind-html='questionExplanation'></div>
+                <div id="Panel1" class="col-md-6">
+                    <div class="panel" ng-if="showExplanation" >
+                        <div class="panel-heading">
+                            <span class="panel-title">Question Data</span>
+                        </div>
+                        <div class="panel-body">
+                            &nbsp;Difficulty <label style="margin-left: 4px" class="label label-info" ng-bind="xpTag"></label><br>
+                            <label ng-repeat="tag in tags" style="margin-left: 4px" class="label label-info" ng-bind="tag.name"></label>
+
+                        </div>
+                    </div>
+
+                    <!--<div ng-if="showExplanation"  class="question-explain">-->
+                    <!--</div>-->
+                    <div id="question-explain" class="question-explain explain-margin" ng-if="showExplanation" ng-bind-html='questionExplanation'></div>
 
                     <div id="videoExplain" ng-if="showVideo"><br>
                         <div class="video-container">
@@ -19,13 +33,11 @@
                                     frameborder="0" allowfullscreen></iframe>
                         </div>
                     </div>
-                    <h3><b>Question Information</b></h3>
 
                     <div ng-bind-html='questionInformation'></div>
 
                 </div>
-                <div class="col-md-6">
-                    <h2><b>Question</b></h2>
+                <div id="Panel2" class="col-md-6">
                     <div ng-bind-html='stimulus'></div>
 
                     <!--answer-->

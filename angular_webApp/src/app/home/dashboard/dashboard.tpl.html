@@ -2,106 +2,111 @@
     <h2><i class="fa fa-dashboard page-header-icon"></i>&nbsp;&nbsp;Welcome to Grockit Gmat! <small>Here is a snapshot of how you're doing!</small></h2>
 </div>
 <div class="profile-content">
-    <div class="widget-article-comments tab-pane no-padding no-border fade active in" id="profile-tabs-Math">
+<div class="stat-panel">
+<div class="stat-row">
 
-            <div ng-if="historyVisible"  class="stat-panel">
-                <div class="stat-row">
+    <div id="graphPanel" ng-if="historyVisible" class="col-md-9" >
+        <div  line-chart id="hero-graph" data-options="chart_options" style="height: 185px;" ng-attr-class="{'col-sm-9': scoreVisible, 'col-sm-12': !scoreVisible}'"></div>
+    </div>
+    <div ng-if="scoreVisible" class="col-md-3">
+        <div class=" score-prediction-graph stat-panel text-center">
+            <div class="stat-row">
+                <div class="stat-cell bg-dark-gray no-padding ">
+                    <i class="fa fa-flash"></i>&nbsp;&nbsp;Score Prediction
+                </div>
+            </div>
 
-                    <div class="stat-cell col-sm-14  padding-sm-hr bordered no-border-r valign-middle">
-                        <div class="stat-panel bg-panel text-center">
-                            <div class="stat-row">
-                                <div line-chart id="hero-graph" data-options="chart_options" style="height: 185px;"></div>
-                            </div>
+            <div class="stat-row">
+                <!-- Bordered, without top border, without horizontal padding -->
+                <div class="stat-cell bordered no-border-t no-padding-hr">
+                    <div easypiechart class="pie-chart"  percent="percent" totalScore="totalScore" rangeInit="rangeInit" rangeEnd="rangeEnd" id="easy-pie-chart-2">
+                        <div class="pie-chart-label xlText">
+                            <span ng-bind="totalScore"></span>
+                              <span class="text-sm chart-range-text">
+                                <span ng-bind="rangeInit"></span> -  <span ng-bind="rangeEnd"></span>
+                               </span>
                         </div>
-                    </div>
-
-                    <div ng-if="scoreVisible" class="stat-cell col-sm-3 padding-sm-hr bordered no-border-r valign-top">
-                        <div class=" score-prediction-graph stat-panel text-center">
-                            <div class="stat-row">
-                                <div class="stat-cell bg-dark-gray no-padding ">
-                                    <i class="fa fa-flash"></i>&nbsp;&nbsp;Score Prediction
-                                </div>
-                            </div>
-                            <!-- /.stat-row -->
-                            <div class="stat-row">
-                                <!-- Bordered, without top border, without horizontal padding -->
-                                <div class="stat-cell bordered no-border-t no-padding-hr">
-                                    <div class="pie-chart " data-percent="{{percent}}" id="easy-pie-chart-2">
-                                        <div class="pie-chart-label xlText">
-                                            <span ng-bind="totalScore"></span>
-                                            <span class="text-sm chart-range-text">
-                                                <span ng-bind="rangeInit"></span> -  <span ng-bind="rangeEnd"></span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /.stat-row -->
-                        </div>
-
                     </div>
                 </div>
-
-                <hr class="no-grid-gutter-h grid-gutter-margin-b no-margin-t">
-
             </div>
-        <div class="stat-panel" style="display: none;">
-            <div class="stat-row">
 
-                <div class="stat-cell col-sm-6  padding-sm-hr bordered no-border-r valign-middle">
-                    <div class="stat-panel text-center">
-                        <div class="col-md-12">
-                            <div class="panel  panel-dark widget-profile">
-                                <div class="panel-heading text-left">
-                                    <h4><i class="panel-title-icon fa fa-fire"></i>Let's get started! Diagnostic</h4>
-                                </div> <!-- / .panel-heading -->
-                                <div class="list-group text-left">
-                                    <a href="#" class="list-group-item">
-                                        <span class="label label-success text-bg text-slim">Completed</span>
-                                        Congrats! You've taken the <span class="text-xlg"><strong>Reading</strong> </span> quick test
-                                    </a>
-                                    <a href="#" class="list-group-item">
-                                        <span class="label label-warning text-bg text-slim">Pending</span>
-                                        JumpStart your <span class="text-xlg"><strong>Math</strong> </span>practice in just 12 questions
-                                        <button class="float-right btn btn-lg btn-success">Start</button>
-                                    </a>
-                                </div>
+        </div>
+
+    </div>
+
+</div>
+</div>
+<div class="row">
+
+</div>
+<div class="stat-panel" style="display: none">
+        <div class="stat-row">
+
+            <div class="stat-cell col-sm-6  padding-sm-hr bordered no-border-r valign-middle">
+                <div class="stat-panel text-center">
+                    <div class="col-md-12">
+                        <div class="panel  panel-dark widget-profile">
+                            <div class="panel-heading text-left">
+                                <h4><i class="panel-title-icon fa fa-fire"></i>Let's get started! Diagnostic</h4>
+                            </div> <!-- / .panel-heading -->
+                            <div class="list-group text-left">
+                                <a href="#" class="list-group-item">
+                                    <span class="label label-success text-bg text-slim">Completed</span>
+                                    Congrats! You've taken the <span class="text-xlg"><strong>Reading</strong> </span> quick test
+                                </a>
+                                <a href="#" class="list-group-item">
+                                    <span class="label label-warning text-bg text-slim">Pending</span>
+                                    JumpStart your <span class="text-xlg"><strong>Math</strong> </span>practice in just 12 questions
+                                    <button class="float-right btn btn-lg btn-success">Start</button>
+                                </a>
                             </div>
-
                         </div>
 
                     </div>
+
                 </div>
             </div>
         </div>
+</div>
+    <hr class="no-grid-gutter-h grid-gutter-margin-b no-margin-t">
 
-        <hr class="no-grid-gutter-h grid-gutter-margin-b no-margin-t">
-        <div class="stat-panel">
-            <div class="stat-row">
+    <div class="stat-panel" >
+        <div class="stat-row">
 
-                <div class="stat-cell col-sm-6  padding-sm-hr bordered no-border-r valign-middle">
-                    <div class="row">
-                        <div class="col-md-12 padding-sm-hr">
-                            <h2>
-                                <small>Let's start your practice</small>
-                            </h2>
+            <div class="stat-cell col-sm-6  padding-sm-hr bordered no-border-r valign-middle">
+                <div class="stat-panel text-center">
+                    <div class="col-md-12">
+                        <div class="panel  panel-dark widget-profile">
+                            <div class="panel-heading text-left">
+                                <h4><i class="panel-title-icon fa fa-fire"></i>Let Grockit’s smart engine choose items in your personal strike zone - they’ll be the right balance of difficulty and skill</h4>
+                            </div>
+
+                            <div class="list-group text-left">
+
+                                <a ng-repeat="track in tracks" href="javascript:void(0)" class="list-group-item">
+                                    Start your
+                                <span class="text-bg">
+                                    <strong>
+                                       <span ng-bind="track.short_name"></span>
+                                    </strong>
+                                </span>
+                                    Smart Practice
+                                    <!--<button class="float-right btn btn-lg btn-success btn-flat" ng-click="StartPractice($index)">Start</button>-->
+                                    <button class="float-right btn btn-labeled btn-lg btn-primary btn-flat" ng-click="StartPractice($index)"><span class="btn-label icon fa fa-lightbulb-o"></span>Start</button>
+                                </a>
+
+                            </div>
                         </div>
+
                     </div>
-                    <div class="stat-panel text-center">
-                        <div class="col-md-6">
-                            <select data-ng-options="o.short_name for o in tracks" class="select-control-custom col-lg-12 col-md-12 col-sm-4 col-xs-12" data-ng-model="selectedTrack" ></select>
 
-
-                        </div>
-                        <div class="col-md-6">
-                            <button class="btn  btn-success btn-flat btn-block" ng-click="StartPractice()"><h4>Start</h4></button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
+
 
 
 <div class="push"></div>

@@ -1,0 +1,62 @@
+// bower:scss
+// endbower
+
+@import  "../styles/_variables.scss",
+        "../app/home/dashboard/dashboard.scss",
+"../app/practiceGame/dashboard/dashboard.scss",
+"../app/practiceGame/practice/practice.scss";
+
+//general css
+.panel-no-bg {
+  margin-bottom: 18px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+.panel-body-no-bg {
+  margin: 0;
+  padding: 20px;
+}
+.panel-footer-no-bg {
+  border-top: 1px solid #ececec;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+
+#topics{
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  min-height: 50px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border: none;
+
+//  box-shadow: 0 3px 1px #555, 0 -2px 4px #555;
+
+}
+footer {
+  width: 100%;
+  _height: 1px;
+  position: absolute!important;
+  padding-left: 0px;
+  border: 1px solid #EEEBEB!important;
+  background: #f1f1f1;
+  
+}
+.theme-default footer {
+  -webkit-box-shadow: 0 2px 2px rgba(0,0,0,.05),0 1px 0 rgba(0,0,0,.05);
+  box-shadow: 0 2px 2px rgba(0,0,0,.05),0 1px 0 rgba(0,0,0,.05);
+}
+
+.push {
+  height: 90px;
+}
+.hide-footer{
+  display: none;
+}
+.float-right{
+float: right;
+}
