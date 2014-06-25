@@ -1,6 +1,6 @@
 'use strict';
 home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','SubTracks', function($scope,Users,History,Tracks,Utilities,Auth,SubTracks) {
-
+    Utilities.setActiveTab(0);
     $scope.activeGroupId= Utilities.getActiveGroup();
 
     $scope.init = function(){
@@ -22,7 +22,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         var tracks =Tracks.one();
 
          tracks.customGET('',{group_id : $scope.activeGroupId}).then(function(response){
-             $scope.tracks = response.tracks;
+             $scope.tracks = response.data.tracks;
          }).catch(function error(msg) {
              console.error(msg);
          });
@@ -51,7 +51,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
     function getHistoryInformation(){
 
             $scope.UserRequest.one($scope.user_id).customGET('history', {group: $scope.activeGroupId}).then(function (graphicResult) {
-                FillGraphic(graphicResult);
+                FillGraphic(graphicResult.data);
             }).catch(function error(msg) {
                 console.error(msg);
             });
@@ -107,10 +107,9 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
                 tracks: tracks,
                 trackTitle: trackTitle
             };
-
+            Utilities.setActiveTab(0);
             Utilities.setActiveTrack(trackData);
-
-            window.location.href = '/#/' + $scope.activeGroupId + '/practice';
+            Utilities.redirect('#/' +  $scope.activeGroupId+ '/practice');
         }
         else{
             bootbox.alert('You must select one track at least');

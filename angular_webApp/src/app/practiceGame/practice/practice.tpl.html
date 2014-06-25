@@ -1,7 +1,7 @@
 <div id="practice" class="panel">
     <div class="panel-heading">
         <span class="panel-title"></span>
-        <span ng-bind="TitleQuest"></span>
+        <span ng-bind="titleQuest"></span>
         <!--<div class="text-right">-->
             <!--<button id="nextAction" class="btn  btn-lg  btn-flat" ng-click="nextAction()" ng-bind="nextActionTitle"></button>-->
             <!--<a id="skipAction" ng-click="revealExplanation()">Don't know? See answer.</a>-->
@@ -17,8 +17,9 @@
                             <span class="panel-title">Question Data</span>
                         </div>
                         <div class="panel-body">
-                            &nbsp;Difficulty <label style="margin-left: 4px" class="label label-info" ng-bind="xpTag"></label><br>
-                            <label ng-repeat="tag in tags" style="margin-left: 4px" class="label label-info" ng-bind="tag.name"></label>
+                            &nbsp;Question Tags: <label ng-repeat="tag in tags" style="margin-left: 4px" class="label label-info" ng-bind="tag.name"></label>
+                            <br>
+                            &nbsp;Difficulty: <label style="margin-left: 4px" class="label label-default" ng-bind="xpTag"></label><br>
 
                         </div>
                     </div>

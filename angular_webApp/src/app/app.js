@@ -8,11 +8,9 @@
      $rootScope.$on("$routeChangeStart", function (event, next) {
          var oldSite='',newSite='';
 
-             oldSite='https://staging.grockit.com/login?redirect=';
-             newSite= $location.protocol()+"://"+$location.host() ;
-         if($location.port()){
-             newSite= newSite +':'+ $location.port();
-         }
+             oldSite=Utilities.originalGrockit().url+'/login?redirect=';
+             newSite= Utilities.newGrockit().url;
+
          if (!Auth.authorize(next)) {
 
              if(Auth.isLoggedIn()){
@@ -28,7 +26,7 @@
                  Auth.setCurrentUser().then(function (userData) {
                      if (angular.isDefined(userData)) {
                          $rootScope.$broadcast("init");
-                         window.location.href = '#/' + userData.studyingFor + "/dashboard";
+                         Utilities.redirect('#/' + userData.studyingFor + "/dashboard");
 
                      } else {
 

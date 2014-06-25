@@ -1,5 +1,5 @@
 $(function(){
-    setActiveMenu();
+    //setActiveMenu();
     setSelect2Settings();
 });
 
@@ -30,6 +30,9 @@ function setActiveMenu(){
     menuList.removeClass('active');
     switch(actualLocation){
         case "dashboard":
+            $(menuList[0]).addClass('active'); //Home Dashboard
+            break;
+        case "practice":
             $(menuList[0]).addClass('active'); //Home Dashboard
             break;
         case "dashboard-practice":

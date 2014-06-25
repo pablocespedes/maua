@@ -47,17 +47,17 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
                         Headers.setDefaultHeader(sessionId);
                         $cookies.authorization_token = sessionId;
                         Users.one('self').get().then(function (result) {
-
+                            var response =result.data;
                             currentUser = {
-                                userId: result.user.id,
-                                role: result.user.guest == true ? UserRoles.member : UserRoles.guest,
-                                groupMemberships: result.user.group_memberships,
-                                studyingFor: result.user.studying_for,
-                                fullName: result.user.first_name,
-                                avatar_url: result.user.avatar_url
+                                userId: response.user.id,
+                                role: response.user.guest == true ? UserRoles.member : UserRoles.guest,
+                                groupMemberships: response.user.group_memberships,
+                                studyingFor: response.user.studying_for,
+                                fullName: response.user.first_name,
+                                avatar_url: response.user.avatar_url
                             };
 
-                            Utilities.setActiveGroup(result.user.studying_for);
+                            Utilities.setActiveGroup(response.user.studying_for);
                             webStorage.add('currentUser', currentUser);
 
                             deferred.resolve(currentUser);
@@ -83,11 +83,13 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
                 var deferred = $q.defer();
 
                 Users.one('self').get().then(function (result) {
-                    webStorage.get('currentUser').groupMemberships = result.user.group_memberships;
-                    webStorage.get('currentUser').studyingFor = result.user.studying_for;
-                    webStorage.get('currentUser').role = result.user.guest == true ? UserRoles.member : UserRoles.guest;
+                    var response = result.data;
 
-                    Utilities.setActiveGroup(result.user.studying_for);
+                    webStorage.get('currentUser').groupMemberships = response.user.group_memberships;
+                    webStorage.get('currentUser').studyingFor = response.user.studying_for;
+                    webStorage.get('currentUser').role = response.user.guest == true ? UserRoles.member : UserRoles.guest;
+
+                    Utilities.setActiveGroup(response.user.studying_for);
                     deferred.resolve(webStorage.get('currentUser'));
 
                 }).catch(function error(e) {
