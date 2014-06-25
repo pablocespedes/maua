@@ -1,9 +1,10 @@
-practiceGame.controller('PracticeController',['$scope','Questions','Utilities','PracticeGames','$sce','RoundSessions',function($scope,Questions,Utilities,PracticeGames,$sce,RoundSessions) {
+practiceGame.controller('PracticeController',['$scope','Questions','Utilities','PracticeGames','$sce','RoundSessions','Headers',function($scope,Questions,Utilities,PracticeGames,$sce,RoundSessions,Headers) {
 
 
     $scope.activeTracks =Utilities.getActiveTrack();
-    $scope.TitleQuest=$scope.activeTracks.trackTitle;
+    $scope.titleQuest=$scope.activeTracks.trackTitle;
     $scope.activeGroupId= Utilities.getActiveGroup();
+
 
     $scope.optionList = ['A','B','C','D','E','F','G','H','I'];
     $scope.nextActionTitle='Confirm Choice';
@@ -25,13 +26,15 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             {id:'8', type: 'MultipleChoiceTwoCorrect'}
         ];
 
-     //load a question at the first time
+    /* Load a question at the first time*/
     function loadQuestion() {
 
         if($scope.QuestionSetList.length>0) {
-
+            $scope.titleQuest=$scope.activeTracks.trackTitle;
             var setLayoutType=false,
                 setPosition = $scope.setPosition,
+
+               /* Iterate between all the question sets retrieved it by the API */
                 questionSetResult = $scope.QuestionSetList[setPosition],
 
                 position = $scope.position,
@@ -39,35 +42,48 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
 
             if (position < questionsCount) {
+
+                /* Iterate between all the question retrieved it by the API which belong to a specific Question set */
                 var questionResult = questionSetResult.questions[position];
-                $scope.currentQuestionId = questionResult.id;
-                angular.element('.choice.active').removeClass('active');
 
-                if($scope.lastAnswerLoaded=='' || $scope.lastAnswerLoaded!=questionResult.kind){
-                    $scope.currentA = Utilities.findInArray(questionResult.kind, $scope.directives, 'type').id;
-                    $scope.lastAnswerLoaded=questionResult.kind;
-                }
+                /*Create Round Session by Question*/
+                RoundSessions.one().post('',{game_id:$scope.practiceGameResponse.id,question_id:questionResult.id}).then(function(result) {
+                    $scope.answerObject = result.data;
+                     $scope.roundSessionAnswer = $scope.answerObject.round_session;
 
-                $scope.items = [];
-                $scope.stimulus = "";
-                $scope.template = $scope.actualView;
-                $scope.questionItems = questionResult;
+                    angular.element('.choice.active').removeClass('active');
 
-                $scope.questionInformation = questionSetResult.info;
+                    if($scope.lastAnswerLoaded=='' || $scope.lastAnswerLoaded!=questionResult.kind){
+                        $scope.currentA = Utilities.findInArray(questionResult.kind, $scope.directives, 'type').id;
+                        $scope.lastAnswerLoaded=questionResult.kind;
+                    }
 
+                    $scope.items = [];
+                    $scope.stimulus = "";
+                    $scope.template = $scope.actualView;
+                    $scope.questionItems = questionResult;
 
-                setLayoutType = angular.isDefined($scope.questionInformation) && $scope.questionInformation!=null && $scope.questionInformation!='' ? true : false;
+                    $scope.questionInformation = questionSetResult.info;
 
-                setLayoutBasedOnQuestionInfo(setLayoutType);
-                $scope.stimulus = $scope.questionItems.stimulus;
+                    /*Find if there is a question info defined or retrive it by the API*/
+                    setLayoutType = angular.isDefined($scope.questionInformation) && $scope.questionInformation!=null && $scope.questionInformation!='' ? true : false;
 
-                var answers = $scope.questionItems.answers;
-                angular.forEach(answers, function (value, index) {
-                    value["option"] = $scope.optionList[index];
-                    $scope.items.push(value);
+                    setLayoutBasedOnQuestionInfo(setLayoutType);
+                    $scope.stimulus = $scope.questionItems.stimulus;
+
+                    var answers = $scope.questionItems.answers;
+                    angular.forEach(answers, function (value, index) {
+                        value["option"] = $scope.optionList[index];
+                        $scope.items.push(value);
+                    });
+
+                    $scope.position++;
+
+                }, function() {
+                    console.log("There was an error creating the Round Session");
                 });
 
-                $scope.position++;
+
             }
             else {
                 $scope.position=0;
@@ -75,32 +91,58 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                 loadQuestion();
             }
         }
+        else{
+
+          var dialogOptions  = {
+              message: "Sorry, we can't show you questions for this topic yet. We're still working on them and should have them ready soon. " +
+                       "Please select a different topic for now or also you can answers" +''+
+                      " questions in the old Grockit.. Thanks.",
+              buttons: {
+                  success: {
+                      label: "Stay on New Grockit!",
+                      className: "btn-success",
+                      callback: function () {
+                          Utilities.redirect('#/' +  $scope.activeGroupId + '/dashboard');
+                      }
+                  },
+                  main: {
+                      label: "Continue to Original Grockit!",
+                      className: "btn-primary",
+                      callback: function () {
+                          Utilities.redirect(Utilities.originalGrockit.url);
+                      }
+                  }
+              }
+          };
+        }
 
     }
 
     function SeeAnswer(){
-
+         $scope.titleQuest=$scope.titleQuest+ ' Explanation';
          setLayoutBasedOnQuestionInfo(true);
          angular.element('#skipAction').addClass('hide');
          angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
          $scope.nextActionTitle='Next Question';
          $scope.showExplanation = true;
 
-         //Question Explanation
+         /*Question Explanation*/
          $scope.questionExplanation=$scope.questionItems.explanation;
 
-         //video validation
+         /*video validation*/
          if($scope.questionItems.youtube_video_id !==null){
              $scope.showVideo=true;
              $scope.videoId = $sce.trustAsResourceUrl('https://www.youtube.com/embed/'+$scope.questionItems.youtube_video_id);
          }
 
-         //Get answers from the previous request and Explain
+         /*Get answers from the previous request and Explain*/
          var answers = $scope.questionItems.answers;
          $scope.tags = $scope.questionItems.tags;
-        $scope.xpTag =$scope.questionItems.experience_points;
-         //Work with the styles to shown result
-         //define is some answer is bad.
+         $scope.xpTag =$scope.questionItems.experience_points;
+
+
+      /*   Work with the styles to shown result
+         define is some answer is bad.*/
          angular.element('.choice button').removeClass('btn-primary');
 
          angular.forEach(answers, function (value, key) {
@@ -114,55 +156,75 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
      }
 
     function confirmChoice(){
-
+        $scope.titleQuest=$scope.titleQuest+ ' Explanation';
         var selectedPosition='',selectedOptions=[];
         setLayoutBasedOnQuestionInfo(true);
 
-        //Get selected answers
+        /*Get selected answers*/
         angular.element('.choice input[value=true]').each(function () {
             selectedPosition = $(this).attr('id');
             selectedOptions.push(selectedPosition);
         });
 
         if (selectedOptions.length>0) {
-            //createAnswerResponse();
+
+
             angular.element('#skipAction').addClass('hide');
             angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
             $scope.nextActionTitle='Next Question';
             $scope.showExplanation = true;
 
-            //Question Explanation
+           /* Question Explanation*/
             $scope.questionExplanation=$scope.questionItems.explanation;
 
-             //video validation
+            /* video validation*/
             if($scope.questionItems.youtube_video_id !==null){
                 $scope.showVideo=true;
                 $scope.videoId = $sce.trustAsResourceUrl('https://www.youtube.com/embed/'+$scope.questionItems.youtube_video_id );
             }
 
-            //Get answers from the previous request and Explain
+            /*Get answers from the previous request and Explain*/
             var answers = $scope.questionItems.answers;
             $scope.tags = $scope.questionItems.tags;
             $scope.xpTag =$scope.questionItems.experience_points;
 
-            //Work with the styles to shown result
-            //define is some answer is bad.
+           /* Work with the styles to shown result
+            define is some answer is bad.*/
             var allFine=true;
             angular.element('.choice button').removeClass('btn-primary');
 
             angular.forEach(selectedOptions, function (value, key) {
-//
+
                 var selectedAnswer=  Utilities.findInArray(value,answers,'id');
 
                 if(angular.isDefined(selectedAnswer)) {
-                    var selectIdButton = '#' + selectedAnswer.position;
-                    if (!selectedAnswer.correct) {
-                        allFine = false;
-                        angular.element(selectIdButton).addClass('btn-danger');
-                    }
-                    else {
-                        angular.element(selectIdButton).addClass('btn-success');
-                    }
+
+                    /*Send answer response to server*/
+
+//                    $scope.answerObject.customPUT($scope.roundSessionAnswer, $scope.roundSessionAnswer.id,{answer_id: selectedAnswer.id }).then(function(account) {
+//                       // TO-DO
+//                    });
+
+                    //$scope.answerObject.one($scope.roundSessionAnswer.id).patch($scope.roundSessionAnswer,{answer_id: selectedAnswer.id });
+
+//                    angular.extend($scope.roundSessionAnswer, $scope.answerObject.one($scope.roundSessionAnswer.id));
+//                    $scope.roundSessionAnswer.put({answer_id: selectedAnswer.id });
+
+                   $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: selectedAnswer.id });
+//                    var passReq = $scope.answerObject.one($scope.roundSessionAnswer.id).customPUT([$scope.answerObject.round_session,'', {answer_id: selectedAnswer.id }, '']);
+
+//
+
+                        /*selectIdButton Find the letter button to apply class depending if it's correct or not*/
+                        var selectIdButton = '#' + selectedAnswer.position;
+                        if (!selectedAnswer.correct) {
+                            allFine = false;
+                            angular.element(selectIdButton).addClass('btn-danger');
+                        }
+                        else {
+                            angular.element(selectIdButton).addClass('btn-success');
+                        }
+
                 }
                 else{
                     bootbox.alert('Something wrong getting your response, please try it again.!');
@@ -203,26 +265,15 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
         }
     }
 
-    function createAnswerResponse(answerId){
-        var AnswersRequest =  RoundSessions.one();
-        AnswersRequest.post('',{game_id:$scope.practiceGameResponse.id,question_id:$scope.currentQuestionId}).then(function(AnswerObject) {
-
-         var RoundSession = AnswerObject.round_session,
-             getCurrentRSession = AnswerObject.put('');
-
-
-        }, function() {
-            console.log("There was an error creating the Round Session");
-        });
-    }
 
     $scope.CreatePracticeGame= function(){
         if($scope.activeTracks.tracks.length > 0){
             var practiceGame =  PracticeGames.one();
-            practiceGame.post('',{group_id:$scope.activeGroupId}).then(function(PracticeObject) {
-
+            practiceGame.post('',{group_id:$scope.activeGroupId}).then(function(result) {
+                var PracticeObject = result.data;
                 $scope.practiceGameResponse = PracticeObject.practice_game;
-                PracticeObject.one($scope.practiceGameResponse.id,'sample').customGET('',{'tracks[]':$scope.activeTracks.tracks}).then(function(QuestionSetObject){
+                PracticeObject.one($scope.practiceGameResponse.id,'sample').customGET('',{'tracks[]':$scope.activeTracks.tracks}).then(function(result){
+                    var QuestionSetObject= result.data;
                     $scope.QuestionSetList= QuestionSetObject.question_sets;
                     loadQuestion();
                 });
@@ -234,7 +285,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
         }
         else{
             bootbox.alert('You must select one track at least',function(){
-                window.location.href='/#/'+$scope.activeGroupId+'/dashboard';
+                Utilities.redirect('#/' +  $scope.activeGroupId+ '/dashboard');
             });
         }
 

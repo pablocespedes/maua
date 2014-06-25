@@ -16,8 +16,9 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
     };
 
     $scope.select= function(index) {
+        Utilities.clearActiveTab();
         $scope.selected = index;
-        Utilities.setActiveTab(index);
+
         if(index>=0) {
             var trackData = {'id': $scope.tracksList[index].id};
             Utilities.setActiveTrack(trackData);
@@ -30,9 +31,10 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
 
             var groups = Groups.one();
             groups.customGET('',{subdomain : 'www'}).then(function(result){
+                var response = result.data;
 
                 if($scope.currentUser.studyingFor!=null){
-                    var responseGroups= result.groups;
+                    var responseGroups= response.groups,groupsUnLinked=response.groups;
 
                     $scope.selectedGroup= Utilities.findInArray($scope.currentUser.studyingFor,responseGroups,'id').name;
                     var  linkedGroups= $scope.groupMemberships;
@@ -40,8 +42,15 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
                     angular.forEach(linkedGroups,function(val,index){
 
                         if(linkedGroups[index]!=null) {
-                            $scope.linkedGroups.push(Utilities.findInArray(val.group_id, responseGroups, 'id'));
-                            responseGroups.splice(index, 1);
+                            var linkGroup = Utilities.findInArray(val.group_id, responseGroups, 'id');
+
+                            if(angular.isDefined(linkGroup)){
+                                $scope.linkedGroups.push(linkGroup);
+                                var indexToRemove = Utilities.getIndexArray(responseGroups,'id',val.group_id);
+                                responseGroups.splice(indexToRemove, 1);
+
+                            }
+
                         }
 
                     });
@@ -57,7 +66,6 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
     }
 
     function init(){
-        $scope.selected = Utilities.getActiveTab();
 
         $scope.linkedGroups=[];
         $scope.unLinkedGroups=[];
@@ -67,7 +75,7 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
                 $scope.currentUser = Auth.getCurrentUserInfo();
                 $scope.selectedGroup = Auth.getCurrentUserInfo().studyingFor;
                 loadGroupMembership();
-                //fetchLeftNavTracksData();
+                fetchLeftNavTracksData();
             }
         });
     }
@@ -82,10 +90,9 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
 
     function fetchLeftNavTracksData(){
         var tracks = Tracks.one();
-        tracks.customGET('',{group_id : $scope.selectedGroup}).then(function(response){
-
+        tracks.customGET('',{group_id : $scope.selectedGroup}).then(function(result){
+             var response = result.data;
             $scope.tracksList = response.tracks;
-            window.test = response.tracks;
         }).catch(function error(msg) {
             console.error(msg);
         });
