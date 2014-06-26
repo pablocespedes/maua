@@ -29,7 +29,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
     function loadQuestion() {
 
         /**/
-        if($scope.QuestionSetList.length>=$scope.setPosition) {
+        if($scope.QuestionSetList.length>0) {
             $scope.titleQuest=$scope.activeTracks.trackTitle;
             var setLayoutType=false,
                 setPosition = $scope.setPosition,
