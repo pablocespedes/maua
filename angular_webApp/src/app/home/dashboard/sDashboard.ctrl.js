@@ -1,13 +1,16 @@
 'use strict';
-home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','SubTracks', function($scope,Users,History,Tracks,Utilities,Auth,SubTracks) {
+home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','$compile', function($scope,Users,History,Tracks,Utilities,Auth,$compile) {
     Utilities.setActiveTab(0);
     $scope.activeGroupId= Utilities.getActiveGroup();
 
     $scope.init = function(){
+
         $scope.scoreVisible=false;
         $scope.historyVisible=false;
         Utilities.hideFooter();
-         $scope.user_id= Auth.getCurrentUserInfo().userId;
+        var userInfo= Auth.getCurrentUserInfo();
+        $scope.user_id= userInfo.userId;
+        $scope.groupTitle=userInfo.groupName;
          //Declare User RestAngular Object
          $scope.UserRequest = Users.one();
 
@@ -32,6 +35,8 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
         $scope.UserRequest.one($scope.user_id).customGET('score_prediction',{group:$scope.activeGroupId}).then(function(response){
             if(response.total_score!=null &&response.range!=null) {
+                angular.element('#graphPanel').addClass('col-md-9');
+                $compile(angular.element('#graphPanel'))($scope);
                 $scope.scoreVisible=true;
                 $scope.totalScore = response.total_score;
                 $scope.rangeInit = response.range[0];
@@ -40,6 +45,8 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
             }
             else{
                 $scope.scoreVisible=false;
+                angular.element('#graphPanel').addClass('col-md-12')
+                $compile(angular.element('#graphPanel'))($scope);
             }
 
         }).catch(function error(msg) {
@@ -62,6 +69,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
         if(angular.isDefined(graphicData) &&graphicData.history.length>0){
             $scope.historyVisible=true;
+            $scope.titleDashboard='Here is a snapshot of how you\'re doing!';
             var response = History.findMissingDates(graphicData.history);
             $scope.chart_options = {
                 data:response.Data,
@@ -91,6 +99,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
             };
         }
         else{
+            $scope.titleDashboard='You haven’t answered any questions yet.  Select a track below.';
             $scope.historyVisible=false;
         }
 

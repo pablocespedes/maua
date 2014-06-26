@@ -25,11 +25,11 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             { id:'7', type: 'sat'},
             {id:'8', type: 'MultipleChoiceTwoCorrect'}
         ];
-
     /* Load a question at the first time*/
     function loadQuestion() {
 
-        if($scope.QuestionSetList.length>0) {
+        /**/
+        if($scope.QuestionSetList.length>=$scope.setPosition) {
             $scope.titleQuest=$scope.activeTracks.trackTitle;
             var setLayoutType=false,
                 setPosition = $scope.setPosition,
@@ -65,11 +65,12 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
                     $scope.questionInformation = questionSetResult.info;
 
-                    /*Find if there is a question info defined or retrive it by the API*/
+                    /*Find if there is a question info defined or retrieve it by the API*/
                     setLayoutType = angular.isDefined($scope.questionInformation) && $scope.questionInformation!=null && $scope.questionInformation!='' ? true : false;
 
                     setLayoutBasedOnQuestionInfo(setLayoutType);
                     $scope.stimulus = $scope.questionItems.stimulus;
+
 
                     var answers = $scope.questionItems.answers;
                     angular.forEach(answers, function (value, index) {
@@ -78,7 +79,6 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                     });
 
                     $scope.position++;
-
                 }, function() {
                     console.log("There was an error creating the Round Session");
                 });
@@ -95,7 +95,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
           var dialogOptions  = {
               message: "Sorry, we can't show you questions for this topic yet. We're still working on them and should have them ready soon. " +
-                       "Please select a different topic for now or also you can answers" +''+
+                       "Please select a different topic for now or also you can answer" +''+
                       " questions in the old Grockit.. Thanks.",
               buttons: {
                   success: {
@@ -109,11 +109,14 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                       label: "Continue to Original Grockit!",
                       className: "btn-primary",
                       callback: function () {
-                          Utilities.redirect(Utilities.originalGrockit.url);
+                          var url = Utilities.originalGrockit().url+'/'+ $scope.activeGroupId;
+                          Utilities.redirect(url);
                       }
                   }
               }
           };
+
+            Utilities.dialogService(dialogOptions);
         }
 
     }
@@ -124,10 +127,13 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
          angular.element('#skipAction').addClass('hide');
          angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
          $scope.nextActionTitle='Next Question';
-         $scope.showExplanation = true;
 
-         /*Question Explanation*/
-         $scope.questionExplanation=$scope.questionItems.explanation;
+        /*Question Explanation*/
+        $scope.questionExplanation=$scope.questionItems.explanation;
+
+        if($scope.questionExplanation!=null)
+           $scope.showExplanation = true;
+
 
          /*video validation*/
          if($scope.questionItems.youtube_video_id !==null){
@@ -146,6 +152,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
          angular.element('.choice button').removeClass('btn-primary');
 
          angular.forEach(answers, function (value, key) {
+           $scope['showExplanation'+value.id] = value.explanation != null ? true : false;
            var selectIdButton = '#' + value.id;
            if (value.correct) {
                angular.element(selectIdButton).addClass('btn-success');
@@ -172,10 +179,13 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             angular.element('#skipAction').addClass('hide');
             angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
             $scope.nextActionTitle='Next Question';
-            $scope.showExplanation = true;
 
-           /* Question Explanation*/
+            /* Question Explanation*/
             $scope.questionExplanation=$scope.questionItems.explanation;
+
+            if($scope.questionExplanation!=null)
+                $scope.showExplanation = true;
+
 
             /* video validation*/
             if($scope.questionItems.youtube_video_id !==null){
@@ -200,20 +210,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                 if(angular.isDefined(selectedAnswer)) {
 
                     /*Send answer response to server*/
-
-//                    $scope.answerObject.customPUT($scope.roundSessionAnswer, $scope.roundSessionAnswer.id,{answer_id: selectedAnswer.id }).then(function(account) {
-//                       // TO-DO
-//                    });
-
-                    //$scope.answerObject.one($scope.roundSessionAnswer.id).patch($scope.roundSessionAnswer,{answer_id: selectedAnswer.id });
-
-//                    angular.extend($scope.roundSessionAnswer, $scope.answerObject.one($scope.roundSessionAnswer.id));
-//                    $scope.roundSessionAnswer.put({answer_id: selectedAnswer.id });
-
                    $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: selectedAnswer.id });
-//                    var passReq = $scope.answerObject.one($scope.roundSessionAnswer.id).customPUT([$scope.answerObject.round_session,'', {answer_id: selectedAnswer.id }, '']);
-
-//
 
                         /*selectIdButton Find the letter button to apply class depending if it's correct or not*/
                         var selectIdButton = '#' + selectedAnswer.position;
@@ -255,6 +252,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
     function setLayoutBasedOnQuestionInfo(setLayout){
         var panel1 = angular.element('#Panel1'),
             panel2 = angular.element('#Panel2');
+
         if(setLayout){
             panel1.removeClass('col-md-offset-3');
             panel2.removeClass('col-md-offset-3');

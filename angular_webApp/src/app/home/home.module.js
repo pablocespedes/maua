@@ -33,6 +33,6 @@
        }
        });
 
-       $routeProvider.otherwise({redirect:'/'});
+       $routeProvider.otherwise({redirectTo:'/'});
    });
 

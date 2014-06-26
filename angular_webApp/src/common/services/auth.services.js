@@ -28,15 +28,12 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
 
             },
             logout: function () {
-
-
                 try {
                     webStorage.remove('currentUser');
                     $cookies.authorization_token='';
 
                 } catch (e) {
                 }
-
             },
             setCurrentUser: function () {
                 var deferred = $q.defer(), currentUser = undefined;
@@ -53,6 +50,7 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
                                 role: response.user.guest == true ? UserRoles.member : UserRoles.guest,
                                 groupMemberships: response.user.group_memberships,
                                 studyingFor: response.user.studying_for,
+                                groupName: '',
                                 fullName: response.user.first_name,
                                 avatar_url: response.user.avatar_url
                             };

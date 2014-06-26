@@ -7,6 +7,7 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
     $scope.selectGroup = function(index){
 
         $scope.selectedGroup= $scope.linkedGroups[index].name;
+        $scope.currentUser.groupName=$scope.selectedGroup;
         $scope.currentUser.studyingFor=$scope.linkedGroups[index].id;
         Auth.updateUserInfo($scope.currentUser);
     };
@@ -34,9 +35,10 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
                 var response = result.data;
 
                 if($scope.currentUser.studyingFor!=null){
-                    var responseGroups= response.groups,groupsUnLinked=response.groups;
+                    var responseGroups= response.groups;
 
                     $scope.selectedGroup= Utilities.findInArray($scope.currentUser.studyingFor,responseGroups,'id').name;
+                    $scope.currentUser.groupName=$scope.selectedGroup;
                     var  linkedGroups= $scope.groupMemberships;
 
                     angular.forEach(linkedGroups,function(val,index){
@@ -75,7 +77,7 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
                 $scope.currentUser = Auth.getCurrentUserInfo();
                 $scope.selectedGroup = Auth.getCurrentUserInfo().studyingFor;
                 loadGroupMembership();
-                fetchLeftNavTracksData();
+               // fetchLeftNavTracksData();
             }
         });
     }

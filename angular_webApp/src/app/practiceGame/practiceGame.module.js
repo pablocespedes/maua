@@ -61,6 +61,6 @@ var practiceGame =  angular.module("grockitApp.practiceGame",[])
       }
     });
 
-        $routeProvider.otherwise({redirect:'/'});
+        $routeProvider.otherwise({redirectTo:'/'});
 
 });

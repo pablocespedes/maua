@@ -1,11 +1,11 @@
 <div class="page-header">
-    <h2><i class="fa fa-dashboard page-header-icon"></i>&nbsp;&nbsp;Welcome to Grockit Gmat! <small>Here is a snapshot of how you're doing!</small></h2>
+    <h2><i class="fa fa-dashboard page-header-icon"></i>&nbsp;&nbsp;Welcome to Grockit <span ng-bind="groupTitle"></span>! <small><span ng-bind="titleDashboard"></span></small></h2>
 </div>
 <div class="profile-content">
 <div class="stat-panel">
 <div class="stat-row">
 
-    <div id="graphPanel" ng-if="historyVisible" class="col-md-9" >
+    <div id="graphPanel" ng-if="historyVisible" class="" >
         <div  line-chart id="hero-graph" data-options="chart_options" style="height: 185px;" ng-attr-class="{'col-sm-9': scoreVisible, 'col-sm-12': !scoreVisible}'"></div>
     </div>
     <div ng-if="scoreVisible" class="col-md-3">
