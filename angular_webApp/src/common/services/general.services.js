@@ -3,12 +3,13 @@ angular.module('grockitApp.services', ['webStorageModule'])
         var trackData = {
                 tracks:[],
                 trackTitle:''
-            };
+            },
+            property='';
 
         return {
             newGrockit: function(){
                 return {
-                    url : 'http://127.0.0.1:9000'//'https://staging.grockit.com/2.0'
+                    url : 'https://staging.grockit.com/2.0'
                 };
             },
             originalGrockit: function(){
@@ -17,7 +18,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
                 };
             },
             getActiveGroup: function(){
-                $rootScope.activeGroupId =  webStorage.get('currentUser').studyingFor;
+                $rootScope.activeGroupId = webStorage.get('currentUser').studyingFor;
                 return  $rootScope.activeGroupId;
             },
             setActiveGroup: function(activeGroupId){
@@ -34,7 +35,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
                     return val[filter] == element;
                 })[0];
             },
-           getIndexArray : function getArrayIndexForKey(arr, key, val){
+           getIndexArray : function (arr, key, val){
                for(var i = 0; i < arr.length; i++){
                    if(arr[i][key] == val)
                        return i;
@@ -67,6 +68,12 @@ angular.module('grockitApp.services', ['webStorageModule'])
             },
             dialogService: function(options){
                 bootbox.dialog(options);
+            },
+            getProperty: function () {
+                return property;
+            },
+            setProperty: function(value) {
+                property = value;
             }
 
         }

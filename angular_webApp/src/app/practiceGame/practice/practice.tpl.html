@@ -1,7 +1,9 @@
 <div id="practice" class="panel">
     <div class="panel-heading">
         <span class="panel-title"></span>
-        <span ng-bind="titleQuest"></span>
+
+        <i class="fa  fa-angle-double-left"></i>
+        <a href="#/{{activeGroupId}}/dashboard" title="" class="title" ng-bind="titleQuest"></a>
         <!--<div class="text-right">-->
             <!--<button id="nextAction" class="btn  btn-lg  btn-flat" ng-click="nextAction()" ng-bind="nextActionTitle"></button>-->
             <!--<a id="skipAction" ng-click="revealExplanation()">Don't know? See answer.</a>-->
@@ -48,8 +50,9 @@
                     <h2><span ng-bind="messageConfirmation"> </span></h2>
 
                     <div class="text-right">
-                        <button id="nextAction" class="btn  btn-lg  btn-flat" ng-click="nextAction()" ng-bind="nextActionTitle"></button>
                         <a id="skipAction" ng-click="revealExplanation()">Don't know? See answer.</a>
+                        <button id="nextAction" class="btn  btn-lg  btn-flat" ng-click="nextAction()" ng-bind="nextActionTitle"></button>
+
                     </div>
                 </div>
 
