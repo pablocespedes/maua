@@ -1,10 +1,11 @@
-practiceGame.controller('PracticeController',['$scope','Questions','Utilities','PracticeGames','$sce','RoundSessions','Headers',function($scope,Questions,Utilities,PracticeGames,$sce,RoundSessions,Headers) {
+practiceGame.controller('PracticeController',['$scope','Questions','Utilities','PracticeGames','$sce','RoundSessions','breadcrumbs',function($scope,Questions,Utilities,PracticeGames,$sce,RoundSessions,breadcrumbs) {
 
-
+    $scope.breadcrumbs = breadcrumbs;
     $scope.activeTracks =Utilities.getActiveTrack();
     $scope.titleQuest=$scope.activeTracks.trackTitle;
     $scope.activeGroupId= Utilities.getActiveGroup();
 
+    breadcrumbs.options = { 'practice': $scope.titleQuest };
 
     $scope.optionList = ['A','B','C','D','E','F','G','H','I'];
     $scope.nextActionTitle='Confirm Choice';
@@ -274,6 +275,11 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                     var QuestionSetObject= result.data;
                     $scope.QuestionSetList= QuestionSetObject.question_sets;
                     loadQuestion();
+
+
+
+
+
                 });
 
 

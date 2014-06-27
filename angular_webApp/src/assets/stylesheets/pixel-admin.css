@@ -5870,8 +5870,8 @@ ul.dropdown-menu {
   background-color: transparent; }
 
 .list-group-item {
-  padding-bottom: 35px;
-  padding-top: 35px;
+  padding-bottom: 10px;
+  padding-top: 10px;
   border-color: #e4e4e4; }
   .list-group-item > .badge {
     line-height: 16px;

@@ -1,16 +1,20 @@
 'use strict';
-home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','$compile', function($scope,Users,History,Tracks,Utilities,Auth,$compile) {
+home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','breadcrumbs', function($scope,Users,History,Tracks,Utilities,Auth,breadcrumbs) {
+
     Utilities.setActiveTab(0);
     $scope.activeGroupId= Utilities.getActiveGroup();
 
     $scope.init = function(){
-
-        $scope.scoreVisible=false;
-        $scope.historyVisible=false;
         Utilities.hideFooter();
         var userInfo= Auth.getCurrentUserInfo();
         $scope.user_id= userInfo.userId;
         $scope.groupTitle=userInfo.groupName;
+
+        $scope.breadcrumbs = breadcrumbs;
+
+
+        $scope.scoreVisible=false;
+        $scope.historyVisible=false;
          //Declare User RestAngular Object
          $scope.UserRequest = Users.one();
 
@@ -23,20 +27,25 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
     function fetchTracksData(){
         var tracks =Tracks.one();
+        $scope.UserRequest.one($scope.user_id).customGET('score_prediction',{group:$scope.activeGroupId}).then(function(scorePrediction) {
+            $scope.scoreResponse = scorePrediction.data;
+            tracks.customGET('',{group_id : $scope.activeGroupId}).then(function(response){
+                $scope.tracks = response.data.tracks;
 
-         tracks.customGET('',{group_id : $scope.activeGroupId}).then(function(response){
-             $scope.tracks = response.data.tracks;
-         }).catch(function error(msg) {
-             console.error(msg);
-         });
+            }).catch(function error(msg) {
+                console.error(msg);
+            });
+
+        });
+
+
     }
 
     function fetchScorePrediction(){
 
         $scope.UserRequest.one($scope.user_id).customGET('score_prediction',{group:$scope.activeGroupId}).then(function(response){
             if(response.total_score!=null &&response.range!=null) {
-                angular.element('#graphPanel').addClass('col-md-9');
-                $compile(angular.element('#graphPanel'))($scope);
+
                 $scope.scoreVisible=true;
                 $scope.totalScore = response.total_score;
                 $scope.rangeInit = response.range[0];
@@ -45,8 +54,6 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
             }
             else{
                 $scope.scoreVisible=false;
-                angular.element('#graphPanel').addClass('col-md-12')
-                $compile(angular.element('#graphPanel'))($scope);
             }
 
         }).catch(function error(msg) {
@@ -118,7 +125,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
             };
             Utilities.setActiveTab(0);
             Utilities.setActiveTrack(trackData);
-            Utilities.redirect('#/' +  $scope.activeGroupId+ '/practice');
+            Utilities.redirect('#/' +  $scope.activeGroupId+ '/dashboard/practice');
         }
         else{
             bootbox.alert('You must select one track at least');

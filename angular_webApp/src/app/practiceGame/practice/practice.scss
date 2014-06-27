@@ -102,6 +102,7 @@
     border-left: 1px solid #000;
   }
 
+
   //
   button.letter {
     display: block;
@@ -175,7 +176,25 @@
     margin-left: 164px;
   }
 
-
+/*Class from old Grockit*/
+  div.sentence_correction_underline {
+    display: inline;
+    position: relative;
+    white-space: nowrap;
+    border-bottom: 1px solid #000;
+  }
+  div.sentence_correction_letter {
+    position: absolute;
+    top: 6px;
+    left: 0;
+    text-align: center;
+    width: 100%;
+  }
+  div.sentence_correction_stimulus {
+    line-height: 35px;
+    margin-bottom: 5px;
+  }
+  /*End classes from old Grockit*/
 
 }
 

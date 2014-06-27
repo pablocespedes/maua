@@ -1,37 +1,20 @@
+<ul class="breadcrumb breadcrumb-page">
+    <div class="breadcrumb-label text-light-gray">You are here: </div>
+    <li ng-repeat="breadcrumb in breadcrumbs.get() track by breadcrumb.path" ng-class="{ active: $last }">
+        <a ng-if="!$last" ng-href="#{{ breadcrumb.path }}" ng-bind="breadcrumb.label" class="margin-right-xs"></a>
+        <span ng-if="$last" ng-bind="breadcrumb.label"></span>
+    </li>
+</ul>
+
 <div class="page-header">
-    <h2><i class="fa fa-dashboard page-header-icon"></i>&nbsp;&nbsp;Welcome to Grockit <span ng-bind="groupTitle"></span>! <small><span ng-bind="titleDashboard"></span></small></h2>
+    <h2><i class="fa fa-dashboard page-header-icon"></i>&nbsp;&nbsp;Welcome to Grockit <span ng-bind="groupTitle"></span>! <small><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span ng-bind="titleDashboard"></span></small></h2>
 </div>
 <div class="profile-content">
 <div class="stat-panel">
 <div class="stat-row">
 
-    <div id="graphPanel" ng-if="historyVisible" class="" >
+    <div id="graphPanel" ng-if="historyVisible" class="col-md-12" >
         <div  line-chart id="hero-graph" data-options="chart_options" style="height: 185px;" ng-attr-class="{'col-sm-9': scoreVisible, 'col-sm-12': !scoreVisible}'"></div>
-    </div>
-    <div ng-if="scoreVisible" class="col-md-3">
-        <div class=" score-prediction-graph stat-panel text-center">
-            <div class="stat-row">
-                <div class="stat-cell bg-dark-gray no-padding ">
-                    <i class="fa fa-flash"></i>&nbsp;&nbsp;Score Prediction
-                </div>
-            </div>
-
-            <div class="stat-row">
-                <!-- Bordered, without top border, without horizontal padding -->
-                <div class="stat-cell bordered no-border-t no-padding-hr">
-                    <div easypiechart class="pie-chart"  percent="percent" totalScore="totalScore" rangeInit="rangeInit" rangeEnd="rangeEnd" id="easy-pie-chart-2">
-                        <div class="pie-chart-label xlText">
-                            <span ng-bind="totalScore"></span>
-                              <span class="text-sm chart-range-text">
-                                <span ng-bind="rangeInit"></span> -  <span ng-bind="rangeEnd"></span>
-                               </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
     </div>
 
 </div>
@@ -73,8 +56,8 @@
     <div class="stat-panel" >
         <div class="stat-row">
 
-            <div class="stat-cell col-sm-6  padding-sm-hr bordered no-border-r valign-middle">
-                <div class="stat-panel text-center">
+            <!--<div class="stat-cell col-sm-6  padding-sm-hr bordered no-border-r valign-middle">-->
+                <!--<div class="stat-panel text-center">-->
                     <div class="col-md-12">
                         <div class="panel  panel-dark widget-profile">
                             <div class="panel-heading text-left">
@@ -84,14 +67,21 @@
                             <div class="list-group text-left">
 
                                 <a ng-repeat="track in tracks" href="javascript:void(0)" class="list-group-item">
-                                <span class="text-bg">
+                                <button class="float-left btn btn-labeled btn-lg btn-primary btn-flat" ng-click="StartPractice($index)"><span class="btn-label icon fa fa-lightbulb-o"></span>Start</button>
+                               &nbsp; &nbsp; &nbsp;
+                                <span class="text-xlg">
                                     <strong>
                                        <span ng-bind="track.short_name"></span>
                                     </strong>
                                 </span>
                                     Smart Practice
-                                    <!--<button class="float-right btn btn-lg btn-success btn-flat" ng-click="StartPractice($index)">Start</button>-->
-                                    <button class="float-right btn btn-labeled btn-lg btn-primary btn-flat" ng-click="StartPractice($index)"><span class="btn-label icon fa fa-lightbulb-o"></span>Start</button>
+                                <div class=" text-center pull-right">
+                                    <button id="btn-score"  class=" btn-lg float-right btn btn-labeled btn-info disabled"><span class="btn-label icon fa fa-bolt"></span>34</button>
+                                    <br>
+                                    <span class="text-xs valign-bottom">Score Prediction</span>
+
+                                </div>
+
                                 </a>
 
                             </div>
@@ -99,8 +89,8 @@
 
                     </div>
 
-                </div>
-            </div>
+                <!--</div>-->
+            <!--</div>-->
         </div>
     </div>
 
