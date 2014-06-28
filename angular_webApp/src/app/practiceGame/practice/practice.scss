@@ -7,6 +7,9 @@
   #skipAction {
     cursor: pointer;
   }
+  .no-hover:hover{
+    background: none !important;
+  }
 
   .choice input {
     cursor: default;
@@ -26,7 +29,7 @@
     max-width: 30%;
   }
   div.content {
-    margin-left:33px;
+    margin-left:38px;
     padding-bottom: 10px;
   }
   div.middle {

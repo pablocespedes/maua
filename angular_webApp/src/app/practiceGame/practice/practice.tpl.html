@@ -42,10 +42,7 @@
         <span class="panel-title"></span>
 
         <label title="" class="title" ng-bind="titleQuest"></label>
-        <!--<div class="text-right">-->
-            <!--<button id="nextAction" class="btn  btn-lg  btn-flat" ng-click="nextAction()" ng-bind="nextActionTitle"></button>-->
-            <!--<a id="skipAction" ng-click="revealExplanation()">Don't know? See answer.</a>-->
-        <!--</div>-->
+
     </div>
     <div class="panel-body">
         <div id="parent" class="my-slide-container">
@@ -64,8 +61,7 @@
                         </div>
                     </div>
 
-                    <!--<div ng-if="showExplanation"  class="question-explain">-->
-                    <!--</div>-->
+
                     <div id="question-explain" class="question-explain explain-margin" ng-if="showExplanation" ng-bind-html='questionExplanation'></div>
 
                     <div id="videoExplain" ng-if="showVideo"><br>
@@ -83,7 +79,6 @@
 
                     <!--answer-->
                     <div ng-answers></div>
-                    <!--<div ng-include="'app/practiceGame/practice/directives.tpl/answers.tpl.html'" class="my-fade-animation"></div>-->
 
                     <h2><span ng-bind="messageConfirmation"> </span></h2>
 

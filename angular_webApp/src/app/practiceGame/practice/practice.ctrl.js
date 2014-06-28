@@ -122,12 +122,19 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
     }
 
+    function resetLayout(){
+        $scope.titleQuest=$scope.titleQuest+ ' Explanation';
+        setLayoutBasedOnQuestionInfo(true);
+        angular.element('#skipAction').addClass('hide');
+        angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
+        angular.element('.list-group *').addClass('no-hover');
+        $scope.nextActionTitle='Next Question';
+
+
+    }
+
     function SeeAnswer(){
-         $scope.titleQuest=$scope.titleQuest+ ' Explanation';
-         setLayoutBasedOnQuestionInfo(true);
-         angular.element('#skipAction').addClass('hide');
-         angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
-         $scope.nextActionTitle='Next Question';
+         resetLayout();
 
         /*Question Explanation*/
         $scope.questionExplanation=$scope.questionItems.explanation;
@@ -164,9 +171,10 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
      }
 
     function confirmChoice(){
-        $scope.titleQuest=$scope.titleQuest+ ' Explanation';
+
+        resetLayout();
+
         var selectedPosition='',selectedOptions=[];
-        setLayoutBasedOnQuestionInfo(true);
 
         /*Get selected answers*/
         angular.element('.choice input[value=true]').each(function () {
@@ -176,10 +184,6 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
         if (selectedOptions.length>0) {
 
-
-            angular.element('#skipAction').addClass('hide');
-            angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
-            $scope.nextActionTitle='Next Question';
 
             /* Question Explanation*/
             $scope.questionExplanation=$scope.questionItems.explanation;
