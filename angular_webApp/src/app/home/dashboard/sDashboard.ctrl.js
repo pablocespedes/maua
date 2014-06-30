@@ -28,10 +28,9 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
     function fetchTracksData(){
         var tracks =Tracks.one();
         $scope.UserRequest.one($scope.user_id).customGET('score_prediction',{group:$scope.activeGroupId}).then(function(scorePrediction) {
-            $scope.scoreResponse = scorePrediction.data;
+            $scope.score = scorePrediction.data;
             tracks.customGET('',{group_id : $scope.activeGroupId}).then(function(response){
                 $scope.tracks = response.data.tracks;
-
             }).catch(function error(msg) {
                 console.error(msg);
             });

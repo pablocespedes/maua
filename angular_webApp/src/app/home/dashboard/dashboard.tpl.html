@@ -78,9 +78,18 @@
                                 </span>
                                     Smart Practice
                                 <div class=" text-center pull-right">
-                                    <button id="btn-score"  class=" btn-lg float-right btn btn-labeled btn-info disabled"><span class="btn-label icon fa fa-bolt"></span>34</button>
-                                    <br>
-                                    <span class="text-xs valign-bottom">Score Prediction</span>
+                                    <div ng-show="score.tracks[track.id]!=null">
+                                        <button id="btn-score"  class=" btn-lg float-right btn btn-labeled btn-info disabled"><span class="btn-label icon fa fa-bolt"></span>{{score.tracks[track.id]}}</button>
+                                        <br>
+                                        <span class="text-xs valign-bottom">Score Prediction</span>
+                                    </div>
+                                    <div class="valign-middle" ng-show="score.tracks[track.id]==null">
+                                        <br>
+                                        <span  >Not enough data</span>
+
+                                    </div>
+                                    <!--<button id="btn-score" ng-show="score.tracks[track.id]==null" class=" float-right btn btn-labeled btn-info disabled"><span class="btn-label icon fa fa-bolt"></span>Not enough data</button>-->
+
 
                                 </div>
 
