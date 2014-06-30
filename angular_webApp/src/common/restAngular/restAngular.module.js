@@ -6,7 +6,7 @@
      $httpProvider.defaults.headers.common["Accept"] = 'application/json, text/html, text/plain';
 
      RestangularProvider.setFullResponse(true);
-    RestangularProvider.setBaseUrl('http://api.staging.grockit.com');
+    RestangularProvider.setBaseUrl('https://api.staging.grockit.com');
 
 
  });
