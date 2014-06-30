@@ -1,6 +1,6 @@
 'use strict';
 
-var practiceGame =  angular.module("grockitApp.practiceGame",[])
+var practiceGame =  angular.module("grockitApp.practiceGame",['ng-breadcrumbs'])
     .config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide,UserRoles) {
         practiceGame.controller    = $controllerProvider.register;
         practiceGame.directive     = $compileProvider.directive;
@@ -21,7 +21,7 @@ var practiceGame =  angular.module("grockitApp.practiceGame",[])
     };
 
 
-    $routeProvider.when('/:subject/dashboard-practice', {templateUrl: 'app/practiceGame/dashboard/dashboard.tpl.html', resolve: {deps: function ($q, $rootScope) {
+    $routeProvider.when('/:subject/dashboard-practice', {templateUrl: 'app/practiceGame/dashboard/dashboard.tpl.html',label: 'Dashboard', resolve: {deps: function ($q, $rootScope) {
         var deferred = $q.defer(),
             essentials = [
                 filePath.dashboard.dashServ,
@@ -42,7 +42,7 @@ var practiceGame =  angular.module("grockitApp.practiceGame",[])
     })
 
 
-    .when('/:subject/practice', {templateUrl: 'app/practiceGame/practice/practice.tpl.html', resolve: {deps: function ($q, $rootScope) {
+    .when('/:subject/practice', {templateUrl: 'app/practiceGame/practice/practice.tpl.html', label: 'More Detail', resolve: {deps: function ($q, $rootScope) {
         var deferred = $q.defer(),
             essentials = [
                 filePath.practice.practiceCtrl,

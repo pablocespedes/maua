@@ -1,13 +1,48 @@
+
+<!--<script>-->
+    <!--$(function() {-->
+        <!--var offset = $("#sidebar").offset();-->
+        <!--var topPadding = 15;-->
+        <!--$(window).scroll(function() {-->
+            <!--if ($(window).scrollTop() > offset.top) {-->
+                <!--$("#sidebar").stop().animate({-->
+                    <!--marginTop: $(window).scrollTop() - offset.top + topPadding-->
+                <!--});-->
+            <!--} else {-->
+                <!--$("#sidebar").stop().animate({-->
+                    <!--marginTop: 0-->
+                <!--});-->
+            <!--}-->
+        <!--});-->
+    <!--});-->
+<!--</script>-->
+<!--<style type="text/css">-->
+
+    <!--* { margin: 0; padding: 0; }-->
+    <!--body { font: 14px/1.4 Georgia, serif; }-->
+    <!--#page-wrap { width: 600px; margin: 15px auto; }-->
+    <!--p { margin: 0 0 15px 0; }-->
+    <!--p:first-child { background: #fffcde; padding: 10px; }-->
+    <!--#sidebar ul { background: #eee; padding: 10px; }-->
+    <!--li { margin: 0 0 0 20px; }-->
+    <!--#main { width: 390px; float: left; }-->
+    <!--#sidebar { width: 190px; float: right; }-->
+
+<!--</style>-->
+
+<ul class="breadcrumb breadcrumb-page">
+    <div class="breadcrumb-label text-light-gray">You are here: </div>
+    <li ng-repeat="breadcrumb in breadcrumbs.get() track by breadcrumb.path" ng-class="{ active: $last }">
+        <a ng-if="!$last" ng-href="#{{ breadcrumb.path }}" ng-bind="breadcrumb.label" class="margin-right-xs"></a>
+        <span ng-if="$last" ng-bind="breadcrumb.label"></span>
+    </li>
+</ul>
 <div id="practice" class="panel">
     <div class="panel-heading">
         <span class="panel-title"></span>
 
-        <i class="fa  fa-angle-double-left"></i>
-        <a href="#/{{activeGroupId}}/dashboard" title="" class="title" ng-bind="titleQuest"></a>
-        <!--<div class="text-right">-->
-            <!--<button id="nextAction" class="btn  btn-lg  btn-flat" ng-click="nextAction()" ng-bind="nextActionTitle"></button>-->
-            <!--<a id="skipAction" ng-click="revealExplanation()">Don't know? See answer.</a>-->
-        <!--</div>-->
+        <label title="" class="title" ng-bind="titleQuest"></label>
+
     </div>
     <div class="panel-body">
         <div id="parent" class="my-slide-container">
@@ -26,8 +61,7 @@
                         </div>
                     </div>
 
-                    <!--<div ng-if="showExplanation"  class="question-explain">-->
-                    <!--</div>-->
+
                     <div id="question-explain" class="question-explain explain-margin" ng-if="showExplanation" ng-bind-html='questionExplanation'></div>
 
                     <div id="videoExplain" ng-if="showVideo"><br>
@@ -37,7 +71,7 @@
                         </div>
                     </div>
 
-                    <div ng-bind-html='questionInformation'></div>
+                    <div class="sentence_correction_stimulus" ng-bind-html='questionInformation'></div>
 
                 </div>
                 <div id="Panel2" class="col-md-6">
@@ -45,7 +79,6 @@
 
                     <!--answer-->
                     <div ng-answers></div>
-                    <!--<div ng-include="'app/practiceGame/practice/directives.tpl/answers.tpl.html'" class="my-fade-animation"></div>-->
 
                     <h2><span ng-bind="messageConfirmation"> </span></h2>
 
@@ -65,3 +98,118 @@
     </div>
 </div>
 <span ng-init="CreatePracticeGame()"></span>
+
+
+
+<!--<div id="demo-top-bar">-->
+
+    <!--<div id="demo-bar-inside">-->
+
+        <!--<h2 id="demo-bar-badge">-->
+            <!--<a href="/">CSS-Tricks Example</a>-->
+        <!--</h2>-->
+
+        <!--<div id="demo-bar-buttons">-->
+            <!--<a class="header-button" href="http://css-tricks.com">Back Home</a>-->
+            <!--&nbsp;-->
+            <!--<a class="header-button" href="http://css-tricks.com/downloads/">More Demos</a>-->
+        <!--</div>-->
+
+    <!--</div>-->
+
+<!--</div>-->
+<!--<div id="page-wrap">-->
+
+    <!--<div id="title-area">-->
+
+        <!--<h1>Scrolling Sidebar</h1>-->
+        <!--<p>By <a href="http://css-tricks.com"><strong>CSS</strong>-Tricks</a></p>-->
+
+    <!--</div>-->
+
+    <!--<div id="main">-->
+
+        <!--<p>Scroll down and watch the sidebar on the right follow.</p>-->
+
+        <!--<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>-->
+        <!--<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>-->
+        <!--<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>-->
+        <!--<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>-->
+        <!--<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>-->
+
+    <!--</div>-->
+
+    <!--<div id="sidebar" style="margin-top: 83px;">-->
+
+        <!--<ul>-->
+            <!--<li><a href="index.php">jQuery (animated)</a></li>-->
+            <!--<li><a href="css.php">CSS (fixed)</a></li>-->
+            <!--<li><a href="reveal.php">CSS (reveal)</a></li>-->
+        <!--</ul>-->
+    <!--</div>-->
+
+<!--</div>-->
+
+<!--<style type="text/css" style="display: none !important;">-->
+    <!--* {-->
+    <!--margin: 0;-->
+    <!--padding: 0;-->
+    <!--}-->
+    <!--body {-->
+    <!--overflow-x: hidden;-->
+    <!--}-->
+    <!--#demo-top-bar {-->
+    <!--text-align: left;-->
+    <!--background: #222;-->
+    <!--position: relative;-->
+    <!--zoom: 1;-->
+    <!--width: 100% !important;-->
+    <!--z-index: 6000;-->
+    <!--padding: 20px 0 20px;-->
+    <!--}-->
+    <!--#demo-bar-inside {-->
+    <!--width: 960px;-->
+    <!--margin: 0 auto;-->
+    <!--position: relative;-->
+    <!--}-->
+    <!--#demo-bar-buttons {-->
+    <!--padding-top: 10px;-->
+    <!--float: right;-->
+    <!--}-->
+    <!--#demo-bar-buttons a {-->
+    <!--font-size: 12px;-->
+    <!--margin-left: 20px;-->
+    <!--color: white;-->
+    <!--margin: 2px 0;-->
+    <!--text-decoration: none;-->
+    <!--font: 14px "Lucida Grande", Sans-Serif !important;-->
+    <!--}-->
+    <!--#demo-bar-buttons a:hover,-->
+    <!--#demo-bar-buttons a:focus {-->
+    <!--text-decoration: underline;-->
+    <!--}-->
+    <!--#demo-bar-badge {-->
+    <!--display: inline-block;-->
+    <!--width: 302px;-->
+    <!--padding: 0 !important;-->
+    <!--margin: 0 !important;-->
+    <!--background-color: transparent !important;-->
+    <!--}-->
+    <!--#demo-bar-badge a {-->
+    <!--display: block;-->
+    <!--width: 100%;-->
+    <!--height: 38px;-->
+    <!--border-radius: 0;-->
+    <!--bottom: auto;-->
+    <!--margin: 0;-->
+    <!--//background: url(/images/examples-logo.png) no-repeat;-->
+    <!--background-size: 100%;-->
+    <!--overflow: hidden;-->
+    <!--text-indent: -9999px;-->
+    <!--}-->
+    <!--#demo-bar-badge:before, #demo-bar-badge:after {-->
+    <!--display: none !important;-->
+    <!--}-->
+<!--</style>-->
+
+

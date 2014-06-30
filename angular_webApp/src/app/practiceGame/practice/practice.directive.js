@@ -8,7 +8,8 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
         },
         scope: {
             items:'=items',
-            showExplanation:'='
+            showExplanation:'=',
+            hasExplanation: '&'
         }
     };
 })
@@ -22,7 +23,8 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
             },
             scope: {
                 items:'=items',
-                showExplanation:'='
+                showExplanation:'=',
+                hasExplanation: '&'
             }
         };
     })
@@ -36,8 +38,8 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
             },
             scope: {
                 items:'=items',
-                rows:'=rows',
-                showExplanation:'='
+                showExplanation:'=',
+                hasExplanation: '&'
             }
         };
     })
@@ -51,7 +53,8 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
             },
             scope: {
                 items:'=items',
-                showExplanation:'='
+                showExplanation:'=',
+                hasExplanation: '&'
             }
         };
     })
@@ -103,7 +106,9 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
                 multipleChoiceTwoCorrect.execute();
             },
             scope: {
-                items:'=items'
+                items:'=items',
+                showExplanation:'=',
+                hasExplanation: '&'
             }
         };
     })
