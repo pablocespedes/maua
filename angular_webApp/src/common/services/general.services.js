@@ -1,6 +1,7 @@
 angular.module('grockitApp.services', ['webStorageModule'])
     .factory('Utilities', function($http,webStorage,$rootScope,$location) {
-        var trackData = {
+        var urlPattern = /http(s?)\:\/\/staging/.test(location.origin),
+            trackData = {
                 tracks:[],
                 trackTitle:''
             },
@@ -9,12 +10,12 @@ angular.module('grockitApp.services', ['webStorageModule'])
         return {
             newGrockit: function(){
                 return {
-                    url : 'https://staging.grockit.com/2.0'
+                    url : urlPattern ? 'https://staging.grockit.com/2.0':'https://grockit.com/2.0'
                 };
             },
             originalGrockit: function(){
                 return {
-                    url : 'https://staging.grockit.com'
+                    url :urlPattern ? 'https://staging.grockit.com':'https:/grockit.com'
                 };
             },
             getActiveGroup: function(){

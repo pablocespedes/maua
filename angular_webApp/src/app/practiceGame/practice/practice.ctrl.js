@@ -146,7 +146,6 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             //Enable/disable answer section
             angular.element('.choice *').removeClass('btn-primary btn-danger btn-success').removeAttr('disabled');
             $scope.showVideo = false;
-            $scope.messageConfirmation = '';
             $scope.showExplanation = false;
             $scope.nextActionTitle = 'Confirm Choice';
             angular.element('#nextAction').removeClass('btn-success');
@@ -189,7 +188,6 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             angular.element(".choice *").prop('disabled', true);
         },
         confirmChoice: function () {
-
             this.resetLayout();
 
             var selectedPosition = '', selectedOptions = [];
@@ -223,7 +221,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
                 /* Work with the styles to shown result
                  define is some answer is bad.*/
-                var allFine = true;
+
                 angular.element('.choice button').removeClass('btn-primary');
 
                 angular.forEach(selectedOptions, function (value, key) {
@@ -236,13 +234,19 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                         $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: selectedAnswer.id });
 
                         /*selectIdButton Find the letter button to apply class depending if it's correct or not*/
-                        var selectIdButton = '#' + selectedAnswer.position;
+                        var selectIdButton = '#' + selectedAnswer.position,
+                            answerMessageSelector = 'span.' + selectedAnswer.position;
+
                         if (!selectedAnswer.correct) {
-                            allFine = false;
+
                             angular.element(selectIdButton).addClass('btn-danger');
+                            angular.element(answerMessageSelector).text('Your answer was incorrect');
+
                         }
                         else {
                             angular.element(selectIdButton).addClass('btn-success');
+                            angular.element(answerMessageSelector).text('Your answer was correct');
+
                         }
 
                     }
@@ -252,7 +256,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
                 });
 
-                $scope.messageConfirmation = allFine ? 'Your answer was correct' : 'Your answer was incorrect';
+
                 angular.element(".choice *").prop('disabled', true);
             }
             else {
