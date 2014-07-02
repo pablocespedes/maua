@@ -7,19 +7,6 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
     .factory('Auth', function($cookies,UserRoles,webStorage,Users,Utilities,$location,$q,Headers) {
 
         return {
-            authorize: function (next) {
-
-                if (angular.isDefined(next.access)) {
-                    var authorizedRoles = next.access.authorizedRoles;
-
-                    if (!angular.isArray(authorizedRoles)) {
-                        authorizedRoles = [authorizedRoles];
-                    }
-                    return (this.isLoggedIn() &&
-                        authorizedRoles.indexOf(this.isLoggedIn().role) !== -1);
-                }
-
-            },
             isLoggedIn: function () {
                 if((webStorage.get('currentUser') == null || "") || ( angular.isUndefined($cookies.authorization_token) || $cookies.authorization_token == ''))
                     return false;
@@ -31,20 +18,28 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
                 try {
                     webStorage.remove('currentUser');
                     $cookies.authorization_token='';
+                    window.location.href =Utilities.originalGrockit().url+'/logout';
 
                 } catch (e) {
                 }
             },
             setCurrentUser: function () {
-                var deferred = $q.defer(), currentUser = undefined;
-                var sessionParam = $location.search()._token;
+               var  oldSite= ($location.host=='127.0.0.1' || 'grockit.firstfactoryinc.com') ? Utilities.originalGrockit().url+'/login?redirect=' : '' + '/login?redirect=',
+                    newSite= Utilities.newGrockit().url,
+                    params =$location.url().match(/.*[?&]_token=([^&]+)(&|$)/),
+                    token = (params ? params[1] : ""),
+                    deferred = $q.defer();
+
                 try {
-                    if (sessionParam !== '' && angular.isDefined(sessionParam)) {
-                        var sessionId = sessionParam+'=';
+                    if (token !== '' && angular.isDefined(token)) {
+
+                        var sessionId = token+'=';
                         Headers.setDefaultHeader(sessionId);
                         $cookies.authorization_token = sessionId;
+
                         Users.one('self').get().then(function (result) {
-                            var response =result.data;
+
+                            var response =result.data,
                             currentUser = {
                                 userId: response.user.id,
                                 role: response.user.guest == true ? UserRoles.member : UserRoles.guest,
@@ -56,6 +51,7 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
                             };
 
                             Utilities.setActiveGroup(response.user.studying_for);
+
                             webStorage.add('currentUser', currentUser);
 
                             deferred.resolve(currentUser);
@@ -66,9 +62,20 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
 
                     }
                     else {
-                        deferred.resolve(currentUser);
+
+                       if ($location.path() == '' || $location.path() == '/') {
+                           newSite = newSite + '#/?' + '_token';
+                       }
+                       else {
+                           newSite = newSite + '/?' + '_token';
+                       }
+
+                       Utilities.encodeRedirect(oldSite, newSite);
+
                     }
                     return deferred.promise;
+
+
                 } catch (e) {
                     deferred.reject(e);
                 }

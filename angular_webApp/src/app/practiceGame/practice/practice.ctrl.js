@@ -1,6 +1,6 @@
 practiceGame.controller('PracticeController',['$scope','Questions','Utilities','PracticeGames','$sce','RoundSessions','breadcrumbs',function($scope,Questions,Utilities,PracticeGames,$sce,RoundSessions,breadcrumbs) {
 
-    $scope.breadcrumbs = breadcrumbs;
+    $scope.breadcrumbs = breadcrumbs.get();
     $scope.activeTracks =Utilities.getActiveTrack();
     $scope.titleQuest=$scope.activeTracks.trackTitle;
     $scope.activeGroupId= Utilities.getActiveGroup();
