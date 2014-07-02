@@ -10,7 +10,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         $scope.user_id= userInfo.userId;
         $scope.groupTitle=userInfo.groupName;
 
-        $scope.breadcrumbs = breadcrumbs;
+        $scope.breadcrumbs = breadcrumbs.get();
 
 
         $scope.scoreVisible=false;

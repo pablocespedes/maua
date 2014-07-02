@@ -1,21 +1,29 @@
 angular.module('grockitApp.services', ['webStorageModule'])
     .factory('Utilities', function($http,webStorage,$rootScope,$location) {
-        var urlPattern = /http(s?)\:\/\/staging/.test(location.origin),
-            trackData = {
+           var trackData = {
                 tracks:[],
                 trackTitle:''
             },
             property='';
 
+        function enviromentEvaluation(isNewGrockit){
+            if(isNewGrockit){
+               return location.host== '127.0.0.1:9000' ? location.origin : location.origin+'/2.0';
+            }
+            else{
+              return location.host== '127.0.0.1:9000' || location.host=='ww2.grockit.com' ? 'https://grockit.com' :location.origin
+            }
+        }
+
         return {
             newGrockit: function(){
                 return {
-                    url : urlPattern ? 'https://staging.grockit.com/2.0':'https://grockit.com/2.0'
+                    url : enviromentEvaluation(true)
                 };
             },
             originalGrockit: function(){
                 return {
-                    url :urlPattern ? 'https://staging.grockit.com':'https:/grockit.com'
+                    url : enviromentEvaluation(false)
                 };
             },
             getActiveGroup: function(){

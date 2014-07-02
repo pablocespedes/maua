@@ -5,7 +5,7 @@
          url = urlPattern ? 'https://api.staging.grockit.com':'https://api.grockit.com';
 
 
-         request.factory       = $provide.factory;
+     request.factory = $provide.factory;
      delete $httpProvider.defaults.headers.common["X-Requested-With"];
      $httpProvider.defaults.headers.common["Content-Type"] = 'application/json';
      $httpProvider.defaults.headers.common["Accept"] = 'application/json, text/html, text/plain';
