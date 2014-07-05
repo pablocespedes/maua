@@ -10,9 +10,10 @@ var practiceGame =  angular.module("grockitApp.practiceGame",['ng-breadcrumbs'])
 
     var filePath = {
         practice: {
-            practiceCtrl: 'app/practiceGame/practice/practice.ctrl.js',
-            practiceDrctv: 'app/practiceGame/practice/practice.directive.js',
-            practiceServ: 'app/practiceGame/practice/practice.service.js'
+            practiceCtrl:   'app/practiceGame/practice/practice.ctrl.js',
+            practiceDrctv:  'app/practiceGame/practice/practice.directive.js',
+            practiceServ:   'app/practiceGame/practice/practice.service.js',
+            youtube:        'assets/javascripts/youtubeModal/bootstrap.youtubepopup.js'
         },
         dashboard: {
             dashCtrl: 'app/practiceGame/dashboard/dashboard.ctrl.js',
@@ -47,14 +48,16 @@ var practiceGame =  angular.module("grockitApp.practiceGame",['ng-breadcrumbs'])
             essentials = [
                 filePath.practice.practiceCtrl,
                 filePath.practice.practiceDrctv,
-                filePath.practice.practiceServ
+                filePath.practice.practiceServ,
+                filePath.practice.youtube
             ];
         $script(essentials, function () {
             $rootScope.$apply(function () {
                 deferred.resolve();
             });
         });
-        return deferred.promise;
+
+            return deferred.promise;
     }}, controller: 'PracticeController',
       access: {
           authorizedRoles: [UserRoles.admin, UserRoles.member]

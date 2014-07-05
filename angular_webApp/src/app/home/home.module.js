@@ -10,7 +10,8 @@
            practice: {
                practiceCtrl: 'app/practiceGame/practice/practice.ctrl.js',
                practiceDrctv: 'app/practiceGame/practice/practice.directive.js',
-               practiceServ: 'app/practiceGame/practice/practice.service.js'
+               practiceServ: 'app/practiceGame/practice/practice.service.js',
+               youtube:        'assets/javascripts/youtubeModal/bootstrap.youtubepopup.js'
            },
            dashboard: {
                dashCtrl: 'app/home/dashboard/sDashboard.ctrl.js',
@@ -43,13 +44,15 @@
                    essentials = [
                        filePath.practice.practiceCtrl,
                        filePath.practice.practiceDrctv,
-                       filePath.practice.practiceServ
+                       filePath.practice.practiceServ,
+                       filePath.practice.youtube
                    ];
                $script(essentials, function () {
                    $rootScope.$apply(function () {
                        deferred.resolve();
                    });
                });
+
                return deferred.promise;
            }}, controller: 'PracticeController',
                access: {

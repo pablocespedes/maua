@@ -5,7 +5,6 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
     $scope.activeGroupId= Utilities.getActiveGroup();
 
     $scope.init = function(){
-        Utilities.hideFooter();
         var userInfo= Auth.getCurrentUserInfo();
         $scope.user_id= userInfo.userId;
         $scope.groupTitle=userInfo.groupName;

@@ -45,4 +45,15 @@ directive('lineChart', function() {
                 });
             }
         };
+    })
+    .directive('youtube',function() {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+
+                $(element).YouTubeModal({autoplay:0, height: 480, width:'100%'});
+            }
+        };
     });
+
+
