@@ -120,7 +120,7 @@
                                     <li><a ng-href="https://staging.grockit.com/users/{{currentUser.userId}}"><i class="dropdown-icon fa fa-user"></i>&nbsp;&nbsp;Profile</a></li>
                                     <li><a ng-href="https://staging.grockit.com/users/{{currentUser.userId}}/message_center/folders/Inbox"><i class="dropdown-icon fa fa-envelope"></i>&nbsp;&nbsp;Messages</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="#" ng-click="logOut()"><i class="dropdown-icon fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
+                                    <li><a ng-href="{{logOutUrl}}" ng-click="logOut()"><i class="dropdown-icon fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -140,7 +140,7 @@
 
 
                 <li>
-                    <a ng-href="#/{{activeGroupId}}/dashboard"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Dashboard</span></a>
+                    <a ng-href="#/{{activeGroupId}}/dashboard" ng-click="select($index)"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Dashboard</span></a>
                 </li>
 
                 <li ng-repeat="track in tracksList" ng-click="select($index)" ng-class="{active: $index == selected}">
@@ -148,25 +148,25 @@
                 </li>
 
                 <li>
-                    <a href="https://staging.grockit.com/{{activeGroupId}}/study_plan"><i class="menu-icon fa fa-tasks"></i><span class="mm-text">Study Plan</span></a>
+                    <a ng-href="{{url}}/{{activeGroupId}}/study_plan"><i class="menu-icon fa fa-tasks"></i><span class="mm-text">Study Plan</span></a>
                 </li>
                 <li>
-                    <a href="https://staging.grockit.com/{{activeGroupId}}/video_courses"><i class="menu-icon fa fa-video-camera"></i><span class="mm-text">Video Courses</span></a>
+                    <a ng-href="{{url}}/{{activeGroupId}}/video_courses"><i class="menu-icon fa fa-video-camera"></i><span class="mm-text">Video Courses</span></a>
                 </li>
                 <li>
-                    <a href="https://staging.grockit.com/{{activeGroupId}}/social"><i class="menu-icon fa fa-users"></i><span class="mm-text">Group Practice</span></a>
+                    <a ng-href="{{url}}/{{activeGroupId}}/social"><i class="menu-icon fa fa-users"></i><span class="mm-text">Group Practice</span></a>
                 </li>
                 <li>
-                    <a href="https://staging.grockit.com/{{activeGroupId}}/tutoring"><i class="menu-icon fa  fa-briefcase"></i><span class="mm-text">Tutoring</span></a>
+                    <a ng-href="{{url}}/{{activeGroupId}}/tutoring"><i class="menu-icon fa  fa-briefcase"></i><span class="mm-text">Tutoring</span></a>
                 </li>
                 <li>
-                    <a href="https://staging.grockit.com/{{activeGroupId}}/skill_data"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Skill Data</span></a>
+                    <a ng-href="{{url}}/{{activeGroupId}}/skill_data"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Skill Data</span></a>
                 </li>
                 <li>
-                    <a href="https://staging.grockit.com/reviews"><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
+                    <a ng-href="{{url}}/reviews"><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
                 </li>
                 <li  class="btn-success" >
-                    <a href="https://staging.grockit.com/"><i class="menu-icon fa fa-mail-forward"></i><span style="color: white" class="mm-text">Switch to Original Grockit</span></a>
+                    <a ng-href="{{url}}"><i class="menu-icon fa fa-mail-forward"></i><span style="color: white" class="mm-text">Switch to Original Grockit</span></a>
                 </li>
               <!--  <li>
                     <a href="#/practice"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Questions Types</span></a>
@@ -181,54 +181,9 @@
     <div id="content-wrapper">
         <div ng-view>
         </div>
-        <div class="push">
-            <!--//-->
-        </div>
-        <footer class="navbar navbar-fixed-bottom" role="navigation">
-            <div id="topics" class="">
-                <div >
-                    <div class="text-right">
-                        <div class="col-md-11">
-                            <div class="select2-success">
-                                <select id="footerTags" multiple="multiple" class="form-control">
-                                    <option class="warning-choice" value="1" selected="selected"> Properties (easy)</option>
-                                    <option value="2">Algebra (Easy</option>
-                                    <option value="4" selected="selected">Logarithms (Hard)</option>
-                                    <option value="5">Second option</option>
-                                    <option value="6" selected="selected">Third option</option>
-                                    <option value="7" selected="selected">Fourth option</option>
-                                    <option value="8">Fifth option</option>
-                                    <option value="9">six option</option>
-                                    <option value="10">Another option</option>
-                                    <option value="11">Fifth option</option>
-                                    <option value="12">Extra option</option>
-                                    <option value="13">Fifth option</option>
-                                    <option value="14">Tag option</option>
-                                    <option value="15">new option</option>
-                                    <option value="16">great option</option>
-                                    <option value="17">Increase option</option>
-                                    <option value="18">cool option</option>
-                                    <option value="19">Fifth option</option>
-                                    <option value="20">nine option</option>
-                                    <option value="21">Fifth option</option>
-                                    <option value="22">old option</option>
-                                    <option value="23">seven option</option>
-                                </select>
 
-                            </div>
-                        </div>
-                        <div class="col-md-1 buttons-with-margins valign-middle">
-                            <button class="btn btn-success btn-lg btn-flat">Start</button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </footer>
     </div>
-    <!--footer  class="container"-->
 
-    <!--footer-->
     <!-- / #content-wrapper -->
     <div id="main-menu-bg">
     </div>
@@ -239,6 +194,7 @@
 <script src="assets/javascripts/bootstrap.min.js"></script>
 <script src="assets/javascripts/bootbox.min.js"></script>
 <script src="assets/javascripts/pixel-admin.min.js"></script>
+
 <script type="text/javascript">
    //$( window ).load(function() {
         init.push(function () {
@@ -249,5 +205,6 @@
    // });
 
 </script>
+<a href="#" class="back-to-top fa  fa-arrow-up"></a>
 </body>
 </html>

@@ -1,4 +1,6 @@
-NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$cookies,Groups) {
+NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$cookies,Groups,$route) {
+    $scope.url= Utilities.originalGrockit().url;
+    $scope.logOutUrl= Utilities.originalGrockit().url+'/logout';
 
     $rootScope.$on("init", function () {
         init();
@@ -17,6 +19,7 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
     };
 
     $scope.select= function(index) {
+        $route.reload();
         Utilities.clearActiveTab();
         $scope.selected = index;
 
@@ -25,6 +28,7 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
             Utilities.setActiveTrack(trackData);
         }
     };
+
 
     function loadGroupMembership(){
 

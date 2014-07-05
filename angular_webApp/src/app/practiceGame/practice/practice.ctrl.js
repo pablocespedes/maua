@@ -1,12 +1,12 @@
-practiceGame.controller('PracticeController',['$scope','Questions','Utilities','PracticeGames','$sce','RoundSessions','breadcrumbs',function($scope,Questions,Utilities,PracticeGames,$sce,RoundSessions,breadcrumbs) {
+practiceGame.controller('PracticeController',['$scope','Questions','Utilities','PracticeGames','$sce','RoundSessions','breadcrumbs','VideoService',function($scope,Questions,Utilities,PracticeGames,$sce,RoundSessions,breadcrumbs,VideoService) {
 
-    $scope.breadcrumbs = breadcrumbs.get();
+    $scope.loading=true;
     $scope.activeTracks =Utilities.getActiveTrack();
     $scope.titleQuest=$scope.activeTracks.trackTitle;
     $scope.activeGroupId= Utilities.getActiveGroup();
+    $scope.breadcrumbs = breadcrumbs;
 
     breadcrumbs.options = { 'practice': $scope.titleQuest };
-
     $scope.optionList = ['A','B','C','D','E','F','G','H','I'];
     $scope.nextActionTitle='Confirm Choice';
     $scope.questionItems=[];
@@ -27,7 +27,6 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             {id:'8', type: 'MultipleChoiceTwoCorrect'}
         ];
 
-    /* Load a question at the first time*/
     var Practice = {
         setLayoutBasedOnQuestionInfo: function (setLayout) {
             var panel1 = angular.element('#Panel1'),
@@ -81,6 +80,8 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
                         /*Find if there is a question info defined or retrieve it by the API*/
                         setLayoutType = angular.isDefined($scope.questionInformation) && $scope.questionInformation != null && $scope.questionInformation != '' ? true : false;
+
+                       /*Set the layout based on the question info*/
                         Practice.setLayoutBasedOnQuestionInfo(setLayoutType);
                         $scope.stimulus = $scope.questionItems.stimulus;
 
@@ -148,6 +149,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             $scope.showVideo = false;
             $scope.showExplanation = false;
             $scope.nextActionTitle = 'Confirm Choice';
+            $scope.messageConfirmation='';
             angular.element('#nextAction').removeClass('btn-success');
             angular.element('#skipAction').removeClass('hide');
             this.loadQuestion();
@@ -165,7 +167,8 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             /*video validation*/
             if ($scope.questionItems.youtube_video_id !== null) {
                 $scope.showVideo = true;
-                $scope.videoId = $sce.trustAsResourceUrl('https://www.youtube.com/embed/' + $scope.questionItems.youtube_video_id);
+               $scope.videoId = $scope.questionItems.youtube_video_id;
+               // $scope.videoId = $sce.trustAsResourceUrl('//https://www.youtube.com/embed/'+$scope.questionItems.youtube_video_id);
             }
 
             /*Get answers from the previous request and Explain*/
@@ -211,7 +214,11 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                 /* video validation*/
                 if ($scope.questionItems.youtube_video_id !== null) {
                     $scope.showVideo = true;
-                    $scope.videoId = $sce.trustAsResourceUrl('https://www.youtube.com/embed/' + $scope.questionItems.youtube_video_id);
+                    $scope.videoId = $scope.questionItems.youtube_video_id;
+                    VideoService.setYouTubeTitle($scope.videoId).then(function(videoTime){
+                        $scope.videoText='Video Explanation ('+videoTime+')';
+                    });
+                   // $scope.videoId = $sce.trustAsResourceUrl('https://www.youtube.com/embed/'+$scope.questionItems.youtube_video_id);
                 }
 
                 /*Get answers from the previous request and Explain*/
@@ -221,7 +228,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
                 /* Work with the styles to shown result
                  define is some answer is bad.*/
-
+                 $scope.answerStatus=true;
                 angular.element('.choice button').removeClass('btn-primary');
 
                 angular.forEach(selectedOptions, function (value, key) {
@@ -234,18 +241,15 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                         $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: selectedAnswer.id });
 
                         /*selectIdButton Find the letter button to apply class depending if it's correct or not*/
-                        var selectIdButton = '#' + selectedAnswer.position,
-                            answerMessageSelector = 'span.' + selectedAnswer.position;
+                        var selectIdButton = '#' + selectedAnswer.position;
 
                         if (!selectedAnswer.correct) {
-
+                            $scope.answerStatus = false;
                             angular.element(selectIdButton).addClass('btn-danger');
-                            angular.element(answerMessageSelector).text('Your answer was incorrect');
 
                         }
                         else {
                             angular.element(selectIdButton).addClass('btn-success');
-                            angular.element(answerMessageSelector).text('Your answer was correct');
 
                         }
 
@@ -256,20 +260,13 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
                 });
 
-
+                $scope.messageConfirmation=  $scope.answerStatus ? 'Your answer was correct': 'Your answer was incorrect';
                 angular.element(".choice *").prop('disabled', true);
             }
             else {
                 bootbox.alert('Please select an option!');
             }
         }
-    };
-
-
-    $scope.answerHasExplanation = function(index){
-       var answer = $scope.questionItems.answers[index];
-        return !(answer.explanation == null || answer.explanation == '<br>');
-
     };
 
     $scope.CreatePracticeGame= function(){
@@ -282,18 +279,27 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                     var QuestionSetObject= result.data;
                     $scope.QuestionSetList= QuestionSetObject.question_sets;
                     Practice.loadQuestion();
+                    $scope.loading=false;
                 });
 
 
             }, function() {
+                $scope.loading=false;
                 console.log("There was an error creating the Practice Game");
             });
         }
         else{
             bootbox.alert('You must select one track at least',function(){
+                $scope.loading=false;
                 Utilities.redirect('#/' +  $scope.activeGroupId+ '/dashboard');
             });
         }
+
+    };
+
+    $scope.answerHasExplanation = function(index){
+        var answer = $scope.questionItems.answers[index];
+        return !(answer.explanation == null || answer.explanation == '<br>');
 
     };
 

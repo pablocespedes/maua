@@ -18,7 +18,7 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
                 try {
                     webStorage.remove('currentUser');
                     $cookies.authorization_token='';
-                    window.location.href =Utilities.originalGrockit().url+'/logout';
+
 
                 } catch (e) {
                 }
