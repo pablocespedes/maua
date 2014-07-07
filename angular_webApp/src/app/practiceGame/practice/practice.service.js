@@ -184,30 +184,35 @@ practiceGame.factory('multipleChoiceTwoCorrect', function () {
                     nexAction = $('#nextAction'),
                     seeAnswer = $('#skipAction');
 
-                // validation which takes care to keep just 2 options selected
-                if (options.length >= 2) {
-                    var itemToRemove = options[0];
-                    options = removeItem(options,itemToRemove);
-                    var removedButton=$('button#' + itemToRemove), removeInput= removedButton.parent().find('input');
-                    removeInput.prop('value', false);
-                    removedButton.removeClass('btn-primary');
-                    event.preventDefault();
-                }
+
                 // normal flow, this just identify when check or uncheck
                 if (!isChecked && !hasPrimary) {
+
+                    // validation which takes care to keep just 2 options selected
+                    if (options.length >= 2) {
+                        var itemToRemove = options[0];
+                        options = removeItem(options,itemToRemove);
+                        var removedButton=$('button#' + itemToRemove), removeInput= removedButton.parent().find('input');
+                        removeInput.prop('value', false);
+                        removedButton.removeClass('btn-primary');
+                        event.preventDefault();
+                    }
+
                     options.push(idInput);
                     input.prop('value', true);
                     button.addClass('btn-primary');
                     nexAction.addClass('btn-primary');
                     seeAnswer.addClass('hide');
                 } else {
-                    options = removeItem(idInput);
+                    options = removeItem(options,idInput);
 
                     nexAction.removeClass('btn-primary');
                     seeAnswer.removeClass('hide');
                     input.prop('value', false);
                     button.removeClass('btn-primary');
                 }
+
+
 
             });
 

@@ -12,10 +12,8 @@
         <span class="panel-title"></span>
 
         <label title="" class="title" ng-bind="titleQuest"></label>
-        <div class="answer-status" ng-if="showExplanation">
-        <div class="float-right" ng-class="{'correct-answer-status': answerStatus, 'incorrect-answer-status': !answerStatus}">
-         <div ng-bind="messageConfirmation"></div>
-        </div>
+        <div class="answer-status float-right" ng-if="showExplanation">
+            <span class="badge" ng-class="{'badge-success': answerStatus, 'badge-danger': !answerStatus}" ng-bind="messageConfirmation"></span>
         </div>
     </div>
     <div class="panel-body">

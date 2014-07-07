@@ -287,3 +287,122 @@ footer {
     color: #FFFFFF;
   }
 }
+
+#practice-settings {
+ position: fixed;
+ right: -270px;
+ width: 270px;
+ top: 70px;
+ padding-right: 10px;
+ background: #333;
+ border-radius: 5px;
+ -webkit-transition: all .3s;
+ -moz-transition: all .3s;
+ -ms-transition: all .3s;
+ -o-transition: all .3s;
+ transition: all .3s;
+ -webkit-touch-callout: none;
+ -webkit-user-select: none;
+ -khtml-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+ user-select: none;
+ z-index: 999998;
+}
+#practice-settings.open {
+ right: -10px;
+}
+#practice-settings > .header {
+ position: relative;
+ z-index: 100000;
+ line-height: 20px;
+ background: #444;
+ color: #fff;
+ font-size:  11px;
+ font-weight: 600;
+ padding: 10px 20px;
+ margin: 0;
+}
+#practice-settings > div {
+ position: relative;
+ z-index: 100000;
+ background: #282828;
+ border-bottom-right-radius: 5px;
+ border-bottom-left-radius: 5px;
+}
+#practice-settings-toggler {
+ font-size: 21px;
+ width: 50px;
+ height: 40px;
+ padding-right: 10px;
+ position: absolute;
+ left: -40px;
+ top: 0;
+ background: #444;
+ text-align: center;
+ line-height: 40px;
+ color: #fff;
+ border-radius: 5px;
+ z-index: 99999;
+ text-decoration: none !important;
+ -webkit-transition: color .3s;
+ -moz-transition: color .3s;
+ -ms-transition: color .3s;
+ -o-transition: color .3s;
+ transition: color .3s;
+}
+#practice-settings.open #practice-settings-toggler {
+ font-size: 16px;
+ color: #888;
+}
+#practice-settings.open #practice-settings-toggler:hover {
+ color: #fff;
+}
+//#practice-settings.open #practice-settings-toggler:before {
+// content: "\\f00d";
+//}
+#practice-settings-list {
+ padding: 0;
+ margin: 0;
+}
+#practice-settings-list li {
+ padding: 0;
+ margin: 0;
+ list-style: none;
+ position: relative;
+}
+#practice-settings-list li > span {
+ line-height: 20px;
+ color: #fff;
+ display: block;
+ padding: 12px 20px;
+ cursor: pointer;
+}
+#practice-settings-list li + li {
+ border-top: 1px solid #333;
+}
+#practice-settings .practice-checkbox {
+ position: absolute;
+ right: 20px;
+ top: 12px;
+}
+.right-to-left #practice-settings {
+ left: -270px;
+ right: auto;
+ padding-right: 0;
+ padding-left: 10px;
+}
+.right-to-left #practice-settings.open {
+ left: -10px;
+ right: auto;
+}
+.right-to-left #practice-settings-toggler {
+ padding-left: 10px;
+ padding-right: 0;
+ left: auto;
+ right: -40px;
+}
+.right-to-left #practice-settings .practice-checkbox {
+ right: auto;
+ left: 20px;
+}

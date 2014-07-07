@@ -1,11 +1,12 @@
 $(function(){
     backToTop();
     setSelect2Settings();
+    togglePanel();
 });
 
 
 function setSelect2Settings(){
-    var elm= $('#topics select');
+    var elm= $('#practice-list select');
     elm.select2({
         allowClear: true
     });
@@ -38,6 +39,27 @@ function backToTop(){
             $('#main-wrapper').animate({scrollTop: 0}, duration);
             return false;
         })
+}
+
+function togglePanel(){
+
+    $('.practice-settings-switcher').switcher({
+        theme: 'square',
+        on_state_content: '<span class="fa fa-check" style="font-size:11px;"></span>',
+        off_state_content: '<span class="fa fa-times" style="font-size:11px;"></span>'
+    });
+
+    // Demo panel toggle
+    $('#practice-settings-toggler').click(function () {
+        $('#practice-settings').toggleClass('open');
+        return false;
+    });
+
+    // Toggle switchers on label click
+    $('#practice-settings-list li > span').click(function () {
+        $(this).parents('li').find('.switcher').click();
+    });
+
 }
 
 function setActiveMenu(){

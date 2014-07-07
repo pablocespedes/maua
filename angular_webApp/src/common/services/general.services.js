@@ -44,7 +44,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
                     return val[filter] == element;
                 })[0];
             },
-           getIndexArray : function (arr, key, val){
+            getIndexArray : function (arr, key, val){
                for(var i = 0; i < arr.length; i++){
                    if(arr[i][key] == val)
                        return i;
@@ -83,6 +83,9 @@ angular.module('grockitApp.services', ['webStorageModule'])
             },
             setProperty: function(value) {
                 property = value;
+            },
+            isUndefinedNull : function(val) {
+                return angular.isUndefined(val) || val === null || val==''
             }
 
         }

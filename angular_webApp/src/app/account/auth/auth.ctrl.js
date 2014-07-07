@@ -1,10 +1,74 @@
-NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$cookies,Groups,$route) {
+NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$cookies,Groups) {
     $scope.url= Utilities.originalGrockit().url;
     $scope.logOutUrl= Utilities.originalGrockit().url+'/logout';
 
     $rootScope.$on("init", function () {
-        init();
+        Application.init();
     });
+
+    var Application = {
+        loadGroupMembership: function(){
+            if( $scope.currentUser.groupMemberships.length>0) {
+
+                var groups = Groups.one();
+                groups.customGET('', {subdomain: 'www'}).then(function (result) {
+                    var response = result.data;
+
+                    if ($scope.currentUser.studyingFor != null) {
+                        var responseGroups = response.groups;
+
+                        $scope.selectedGroup = Utilities.findInArray($scope.currentUser.studyingFor, responseGroups, 'id').name;
+                        $scope.currentUser.groupName = $scope.selectedGroup;
+                        var linkedGroups = $scope.groupMemberships;
+
+                        angular.forEach(linkedGroups, function (val, index) {
+
+                            if (linkedGroups[index] != null) {
+                                var linkGroup = Utilities.findInArray(val.group_id, responseGroups, 'id');
+
+                                if (angular.isDefined(linkGroup)) {
+                                    $scope.linkedGroups.push(linkGroup);
+                                    var indexToRemove = Utilities.getIndexArray(responseGroups, 'id', val.group_id);
+                                    responseGroups.splice(indexToRemove, 1);
+
+                                }
+
+                            }
+
+                        });
+                        $scope.unLinkedGroups = responseGroups;
+                    }
+
+                }).catch(function error(msg) {
+                    console.error(msg);
+                });
+
+            }
+
+        },
+        fetchLeftNavTracksData: function(){
+            var tracks = Tracks.one();
+            tracks.customGET('',{group_id : $scope.selectedGroup}).then(function(result){
+                var response = result.data;
+                $scope.tracksList = response.tracks;
+            }).catch(function error(msg) {
+                console.error(msg);
+            });
+        },
+        init: function(){
+            $scope.linkedGroups=[];
+            $scope.unLinkedGroups=[];
+            Auth.getUpdateUserData().then(function(response) {
+                if(response!=null){
+                    $scope.groupMemberships = response.groupMemberships;
+                    $scope.currentUser = Auth.getCurrentUserInfo();
+                    $scope.selectedGroup = Auth.getCurrentUserInfo().studyingFor;
+                    Application.loadGroupMembership();
+                    // fetchLeftNavTracksData();
+                }
+            });
+        }
+    };
 
     $scope.selectGroup = function(index){
 
@@ -19,7 +83,7 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
     };
 
     $scope.select= function(index) {
-        $route.reload();
+
         Utilities.clearActiveTab();
         $scope.selected = index;
 
@@ -30,83 +94,57 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
     };
 
 
-    function loadGroupMembership(){
+    if(angular.isDefined($cookies.authorization_token)){
+        if($cookies.authorization_token!=null || authorization_token.$cookies!=''){
+            Application.init();
+        }
+    }
 
+
+    function asd(){
         if( $scope.currentUser.groupMemberships.length>0){
 
             var groups = Groups.one();
             groups.customGET('',{subdomain : 'www'}).then(function(result){
-                var response = result.data;
+                var responseGroups = result.data.groups,
+                    lastGroup = $scope.groupMemberships[0];
 
-                if($scope.currentUser.studyingFor!=null){
-                    var responseGroups= response.groups;
+                if(!!$scope.currentUser.studyingFor){
+                   var studyingFor = Utilities.findInArray($scope.currentUser.studyingFor, responseGroups, 'id');
 
-                    $scope.selectedGroup= Utilities.findInArray($scope.currentUser.studyingFor,responseGroups,'id').name;
-                    $scope.currentUser.groupName=$scope.selectedGroup;
-                    var  linkedGroups= $scope.groupMemberships;
+                    if (!!studyingFor) {
+                        lastGroup = studyingFor;
+                    }
+                }
 
-                    angular.forEach(linkedGroups,function(val,index){
+                $scope.selectedGroup = lastGroup.name;
 
-                        if(linkedGroups[index]!=null) {
-                            var linkGroup = Utilities.findInArray(val.group_id, responseGroups, 'id');
+                $scope.currentUser.groupName=$scope.selectedGroup;
+                var  linkedGroups= $scope.groupMemberships;
 
-                            if(angular.isDefined(linkGroup)){
-                                $scope.linkedGroups.push(linkGroup);
-                                var indexToRemove = Utilities.getIndexArray(responseGroups,'id',val.group_id);
-                                responseGroups.splice(indexToRemove, 1);
+                angular.forEach(linkedGroups,function(val,index){
 
-                            }
+                    if(linkedGroups[index]!=null) {
+                        var linkGroup = Utilities.findInArray(val.group_id, responseGroups, 'id');
+
+                        if(angular.isDefined(linkGroup)){
+                            $scope.linkedGroups.push(linkGroup);
+                            var indexToRemove = Utilities.getIndexArray(responseGroups,'id',val.group_id);
+                            responseGroups.splice(indexToRemove, 1);
 
                         }
 
-                    });
-                    $scope.unLinkedGroups=responseGroups;
-                }
+                    }
+
+                });
+                $scope.unLinkedGroups=responseGroups;
+
 
             }).catch(function error(msg) {
                 console.error(msg);
             });
 
         }
-
     }
-
-    function init(){
-
-        $scope.linkedGroups=[];
-        $scope.unLinkedGroups=[];
-        Auth.getUpdateUserData().then(function(response) {
-            if(response!=null){
-                $scope.groupMemberships = response.groupMemberships;
-                $scope.currentUser = Auth.getCurrentUserInfo();
-                $scope.selectedGroup = Auth.getCurrentUserInfo().studyingFor;
-                loadGroupMembership();
-               // fetchLeftNavTracksData();
-            }
-        });
-    }
-
-    if(angular.isDefined($cookies.authorization_token)){
-        if($cookies.authorization_token!=null || authorization_token.$cookies!=''){
-            init();
-        }
-    }
-
-
-
-    function fetchLeftNavTracksData(){
-        var tracks = Tracks.one();
-        tracks.customGET('',{group_id : $scope.selectedGroup}).then(function(result){
-             var response = result.data;
-            $scope.tracksList = response.tracks;
-        }).catch(function error(msg) {
-            console.error(msg);
-        });
-    }
-
-
-
-
-
 
 };
