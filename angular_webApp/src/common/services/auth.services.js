@@ -33,22 +33,22 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
                 try {
                     if (token !== '' && angular.isDefined(token)) {
 
-                        var sessionId = token+'=';
+                        var sessionId = token + '=';
                         Headers.setDefaultHeader(sessionId);
                         $cookies.authorization_token = sessionId;
 
                         Users.one('self').get().then(function (result) {
 
-                            var response =result.data,
-                            currentUser = {
-                                userId: response.user.id,
-                                role: response.user.guest == true ? UserRoles.member : UserRoles.guest,
-                                groupMemberships: response.user.group_memberships,
-                                studyingFor: response.user.studying_for,
-                                groupName: '',
-                                fullName: response.user.first_name,
-                                avatar_url: response.user.avatar_url
-                            };
+                            var response = result.data,
+                                currentUser = {
+                                    userId: response.user.id,
+                                    role: response.user.guest == true ? UserRoles.member : UserRoles.guest,
+                                    groupMemberships: response.user.group_memberships,
+                                    studyingFor: response.user.studying_for,
+                                    groupName: '',
+                                    fullName: response.user.first_name,
+                                    avatar_url: response.user.avatar_url
+                                };
 
                             Utilities.setActiveGroup(response.user.studying_for);
 
@@ -63,14 +63,14 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
                     }
                     else {
 
-                       if ($location.path() == '' || $location.path() == '/') {
-                           newSite = newSite + '#/?' + '_token';
-                       }
-                       else {
-                           newSite = newSite + '/?' + '_token';
-                       }
+                        if ($location.path() == '' || $location.path() == '/') {
+                            newSite = newSite + '#/?' + '_token';
+                        }
+                        else {
+                            newSite = newSite + '/?' + '_token';
+                        }
 
-                       Utilities.encodeRedirect(oldSite, newSite);
+                        Utilities.encodeRedirect(oldSite, newSite);
 
                     }
                     return deferred.promise;
