@@ -88,13 +88,21 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
                 var deferred = $q.defer();
 
                 Users.one('self').get().then(function (result) {
-                    var response = result.data;
+                    var response = result.data,
 
-                    webStorage.get('currentUser').groupMemberships = response.user.group_memberships;
-                    webStorage.get('currentUser').studyingFor = response.user.studying_for;
-                    webStorage.get('currentUser').role = response.user.guest == true ? UserRoles.member : UserRoles.guest;
+                    currentUser = {
+                        userId: response.user.id,
+                        role: response.user.guest == true ? UserRoles.member : UserRoles.guest,
+                        groupMemberships: response.user.group_memberships,
+                        studyingFor: response.user.studying_for,
+                        groupName: '',
+                        fullName: response.user.first_name,
+                        avatar_url: response.user.avatar_url
+                    };
 
+                    webStorage.add('currentUser', currentUser);
                     Utilities.setActiveGroup(response.user.studying_for);
+
                     deferred.resolve(webStorage.get('currentUser'));
 
                 }).catch(function error(e) {

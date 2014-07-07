@@ -10,7 +10,14 @@
 
              if ($location.path() === '/' || $location.path() === '/' + Utilities.getActiveGroup() || $location.path() == '' || angular.isDefined($location.search()._token)) {
 
-                 Utilities.redirect('#/' + Utilities.getActiveGroup() + '/dashboard');
+                 Auth.getUpdateUserData().then(function(response) {
+                     if(response!=null){
+
+                         Utilities.redirect('#/' + Utilities.getActiveGroup() + '/dashboard');
+
+                     }
+                 });
+
              }
          }
          else {
