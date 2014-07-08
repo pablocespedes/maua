@@ -106,39 +106,32 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
 
             var groups = Groups.one();
             groups.customGET('',{subdomain : 'www'}).then(function(result){
-                var responseGroups = result.data.groups,
-                    lastGroup = $scope.groupMemberships[0];
+                var responseGroups = result.data.groups;
 
-                if(!!$scope.currentUser.studyingFor){
-                   var studyingFor = Utilities.findInArray($scope.currentUser.studyingFor, responseGroups, 'id');
+                if(!!responseGroups) {
 
-                    if (!!studyingFor) {
-                        lastGroup = studyingFor;
-                    }
-                }
+                  var studyingFor = !!$scope.currentUser.studyingFor ?
+                                    Utilities.findInArray($scope.currentUser.studyingFor, responseGroups, 'id') :  $scope.groupMemberships[0];
 
-                $scope.selectedGroup = lastGroup.name;
+                    $scope.selectedGroup = studyingFor.name;
 
-                $scope.currentUser.groupName=$scope.selectedGroup;
-                var  linkedGroups= $scope.groupMemberships;
+                    $scope.currentUser.groupName = $scope.selectedGroup;
+                    var linkedGroups = $scope.groupMemberships;
 
-                angular.forEach(linkedGroups,function(val,index){
+                    angular.forEach(linkedGroups, function (val, index) {
 
-                    if(linkedGroups[index]!=null) {
-                        var linkGroup = Utilities.findInArray(val.group_id, responseGroups, 'id');
+                        if (!!linkedGroups[index]) {
+                            var linkGroup = Utilities.findInArray(val.group_id, responseGroups, 'id');
 
-                        if(angular.isDefined(linkGroup)){
-                            $scope.linkedGroups.push(linkGroup);
-                            var indexToRemove = Utilities.getIndexArray(responseGroups,'id',val.group_id);
-                            responseGroups.splice(indexToRemove, 1);
-
+                            if (angular.isDefined(linkGroup)) {
+                                $scope.linkedGroups.push(linkGroup);
+                                var indexToRemove = Utilities.getIndexArray(responseGroups, 'id', val.group_id);
+                                responseGroups.splice(indexToRemove, 1);
+                            }
                         }
-
-                    }
-
-                });
-                $scope.unLinkedGroups=responseGroups;
-
+                    });
+                    $scope.unLinkedGroups = responseGroups;
+                }
 
             }).catch(function error(msg) {
                 console.error(msg);

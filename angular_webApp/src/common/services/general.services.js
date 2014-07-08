@@ -13,6 +13,14 @@ angular.module('grockitApp.services', ['webStorageModule'])
             else{
               return location.host== '127.0.0.1:9000' || location.host=='ww2.grockit.com' ? 'https://grockit.com' :location.origin
             }
+
+//            if(isNewGrockit){
+//
+//                return location.host== 'grockit.firstfactoryinc.com'  ? 'http://grockit.firstfactoryinc.com/' : location.origin+'/2.0';
+//            }
+//            else{
+//                return location.host== 'grockit.firstfactoryinc.com' ? 'https://staging.grockit.com' : location.host=='ww2.grockit.com' ? 'https://grockit.com' :location.origin
+//            }
         }
 
         return {
@@ -83,9 +91,6 @@ angular.module('grockitApp.services', ['webStorageModule'])
             },
             setProperty: function(value) {
                 property = value;
-            },
-            isUndefinedNull : function(val) {
-                return angular.isUndefined(val) || val === null || val==''
             }
 
         }

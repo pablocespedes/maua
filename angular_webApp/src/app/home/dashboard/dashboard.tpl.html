@@ -1,5 +1,5 @@
 <ul class="breadcrumb breadcrumb-page">
-    <div class="breadcrumb-label text-light-gray">You are here: </div>
+    <div class="breadcrumb-label text-light-gray">You are here:</div>
     <li ng-repeat="breadcrumb in breadcrumbs.get() track by breadcrumb.path" ng-class="{ active: $last }">
         <a ng-if="!$last" ng-href="#{{ breadcrumb.path }}" ng-bind="breadcrumb.label" class="margin-right-xs"></a>
         <span ng-if="$last" ng-bind="breadcrumb.label"></span>
@@ -8,104 +8,104 @@
 
 <div id="simpleDash">
 
-<div class="page-header">
-    <h2><i class="fa fa-dashboard page-header-icon"></i>&nbsp;&nbsp;Welcome to Grockit <span ng-bind="groupTitle"></span>!
-        <small><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span ng-bind="titleDashboard"></span></small>
-    </h2>
-</div>
-<div class="profile-content">
-<div class="stat-panel">
-<div class="stat-row">
-
-    <div id="graphPanel" ng-if="historyVisible" class="col-md-12" >
-        <div  line-chart id="hero-graph" data-options="chart_options" style="height: 185px;" ng-attr-class="{'col-sm-9': scoreVisible, 'col-sm-12': !scoreVisible}'"></div>
+    <div class="page-header">
+        <h2><i class="fa fa-dashboard page-header-icon"></i>&nbsp;&nbsp;Welcome to Grockit <span ng-bind="groupTitle"></span>!
+            <small><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span ng-bind="titleDashboard"></span></small>
+        </h2>
     </div>
+    <div class="profile-content">
+        <div class="stat-panel">
+            <div class="stat-row">
 
-</div>
-</div>
+                <div id="graphPanel" ng-if="historyVisible" class="col-md-12">
+                    <div line-chart id="hero-graph" data-options="chart_options" style="height: 185px;" ng-attr-class="{'col-sm-9': scoreVisible, 'col-sm-12': !scoreVisible}'"></div>
+                </div>
 
-<div class="stat-panel" style="display: none">
-        <div class="stat-row">
+            </div>
+        </div>
 
-            <div class="stat-cell col-sm-6  padding-sm-hr bordered no-border-r valign-middle">
-                <div class="stat-panel text-center">
-                    <div class="col-md-12">
-                        <div class="panel  panel-dark widget-profile">
-                            <div class="panel-heading text-left">
-                                <h4><i class="panel-title-icon fa fa-fire"></i>Let's get started! Diagnostic</h4>
-                            </div> <!-- / .panel-heading -->
-                            <div class="list-group text-left">
-                                <a href="#" class="list-group-item">
-                                    <span class="label label-success text-bg text-slim">Completed</span>
-                                    Congrats! You've taken the <span class="text-xlg"><strong>Reading</strong> </span> quick test
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <span class="label label-warning text-bg text-slim">Pending</span>
-                                    JumpStart your <span class="text-xlg"><strong>Math</strong> </span>practice in just 12 questions
-                                    <button class="float-right btn btn-lg btn-success">Start</button>
-                                </a>
+        <div class="stat-panel" style="display: none">
+            <div class="stat-row">
+
+                <div class="stat-cell col-sm-6  padding-sm-hr bordered no-border-r valign-middle">
+                    <div class="stat-panel text-center">
+                        <div class="col-md-12">
+                            <div class="panel  panel-dark widget-profile">
+                                <div class="panel-heading text-left">
+                                    <h4><i class="panel-title-icon fa fa-fire"></i>Let's get started! Diagnostic</h4>
+                                </div>
+                                <!-- / .panel-heading -->
+                                <div class="list-group text-left">
+                                    <a href="#" class="list-group-item">
+                                        <span class="label label-success text-bg text-slim">Completed</span>
+                                        Congrats! You've taken the <span class="text-xlg"><strong>Reading</strong> </span> quick test
+                                    </a>
+                                    <a href="#" class="list-group-item">
+
+                                        <span class="label label-warning text-bg text-slim">Pending</span>
+                                        JumpStart your <span class="text-xlg"><strong>Math</strong> </span>practice in just 12 questions
+                                        <button class="float-right btn btn-lg btn-success">Start</button>
+                                    </a>
+                                </div>
                             </div>
+
                         </div>
 
                     </div>
-
                 </div>
             </div>
         </div>
-</div>
-    <hr class="no-grid-gutter-h grid-gutter-margin-b no-margin-t">
+        <hr class="no-grid-gutter-h grid-gutter-margin-b no-margin-t">
 
-    <div class="stat-panel" >
-        <div class="stat-row">
+        <div class="stat-panel">
+            <div class="stat-row">
 
-            <!--<div class="stat-cell col-sm-6  padding-sm-hr bordered no-border-r valign-middle">-->
+                <!--<div class="stat-cell col-sm-6  padding-sm-hr bordered no-border-r valign-middle">-->
                 <!--<div class="stat-panel text-center">-->
-                    <div class="col-md-12">
-                        <div class="panel  panel-dark widget-profile">
-                            <div class="panel-heading text-left">
-                                <h4><i class="panel-title-icon fa fa-fire"></i>Let Grockit’s smart engine choose items in your personal strike zone</h4>
-                            </div>
-
-                            <div class="list-group text-left">
-
-                                <a ng-repeat="track in tracks" href="javascript:void(0)" class="list-group-item">
-                                <button class="float-left btn btn-labeled btn-lg btn-primary btn-flat" ng-click="StartPractice($index)"><span class="btn-label icon fa fa-lightbulb-o"></span>Start</button>
-                               &nbsp; &nbsp; &nbsp;
-                                <span class="text-xlg">
-                                    <strong>
-                                       <span ng-bind="track.short_name"></span>
-                                    </strong>
-                                </span>
-                                    Smart Practice
-                                <div class=" text-center pull-right">
-                                    <div ng-show="score.tracks[track.id]!=null">
-                                        <button id="btn-score"  class=" btn-lg float-right btn btn-labeled btn-info disabled"><span class="btn-label icon fa fa-bolt"></span>{{score.tracks[track.id]}}</button>
-                                        <br>
-                                        <span class="text-xs valign-bottom">Score Prediction</span>
-                                    </div>
-                                    <div class="valign-middle" ng-show="score.tracks[track.id]==null">
-                                        <br>
-                                        <span  >Not enough data</span>
-
-                                    </div>
-                                    <!--<button id="btn-score" ng-show="score.tracks[track.id]==null" class=" float-right btn btn-labeled btn-info disabled"><span class="btn-label icon fa fa-bolt"></span>Not enough data</button>-->
-
-
-                                </div>
-
-                                </a>
-
-                            </div>
+                <div class="col-md-12">
+                    <div class="panel  panel-dark widget-profile">
+                        <div class="panel-heading text-left">
+                            <h4><i class="panel-title-icon fa fa-fire"></i>Let Grockit’s smart engine choose items in your personal strike zone</h4>
                         </div>
 
+                        <div class="list-group text-left">
+
+                            <a ng-repeat="track in tracks" href="javascript:void(0)" class="list-group-item">
+                                <div class="row">
+                                    <button class="float-left btn btn-labeled btn-lg btn-primary btn-flat" ng-click="StartPractice($index)"><span class="btn-label icon fa fa-lightbulb-o"></span>Start</button>
+                                    &nbsp; &nbsp; &nbsp;
+                                    <span class="text-xlg">
+                                    <strong>
+                                        <span ng-bind="track.short_name"></span>
+                                    </strong>
+                                    </span>
+                                    Smart Practice
+                                    <div class=" text-center pull-right">
+                                        <div ng-show="score.tracks[track.id]!=null">
+                                            <button id="btn-score" class=" btn-lg float-right btn btn-labeled btn-info disabled"><span class="btn-label icon fa fa-bolt"></span>{{score.tracks[track.id]}}</button>
+                                            <br>
+                                            <span class="text-xs valign-bottom">Score Prediction</span>
+                                        </div>
+                                        <div class="valign-middle" ng-show="score.tracks[track.id]==null">
+                                            <br>
+                                            <span>Not enough data</span>
+                                        </div>
+                                        <!--<button id="btn-score" ng-show="score.tracks[track.id]==null" class=" float-right btn btn-labeled btn-info disabled"><span class="btn-label icon fa fa-bolt"></span>Not enough data</button>-->
+                                    </div>
+                                </div>
+                            </a>
+
+                        </div>
                     </div>
 
+                </div>
+
                 <!--</div>-->
-            <!--</div>-->
+                <!--</div>-->
+            </div>
         </div>
+
     </div>
 
-</div>
-
-<div class="push"></div>
+    <div class="push"></div>
 </div>
