@@ -4,9 +4,9 @@
 
     })
      .run(function ($rootScope, $location, Auth,Utilities,Alerts) {
-         var errorMsg='';
+
          if(Auth.isLoggedIn()) {
-             Utilities.getActiveGroup();
+            // Utilities.getActiveGroup();
 
              if ($location.path() === '/' || $location.path() === '/' + Utilities.getActiveGroup() || $location.path() == '' || angular.isDefined($location.search()._token)) {
 
@@ -29,7 +29,7 @@
                  if (angular.isDefined(userData)) {
 
                      $rootScope.$broadcast("init");
-                     Utilities.redirect('#/' + userData.studyingFor + "/dashboard");
+                     Utilities.redirect('#/' + Utilities.getActiveGroup() + "/dashboard");
                  }
              }).catch(function error(error) {
 

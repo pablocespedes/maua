@@ -7,7 +7,7 @@
             </div>
             <a href="javascript:void(0)" class="list-group-item">
                 <div class="middle" data-group="{{(($index-($index%3))/3 )}}">
-                    <button id="{{item.position}}" type="button" class="letter btn-option  btn-rounded letter" >{{item.option}}</button>
+                    <button id="{{item.id}}" type="button" class="letter btn-option  btn-rounded letter" >{{item.option}}</button>
                     <input id="{{item.id}}" type="radio" name="choice" value="false"   />
                     <div class="content" >
                         <div ng-bind-html="item.body"></div>

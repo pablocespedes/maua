@@ -1,5 +1,5 @@
 angular.module('grockitApp.services', ['webStorageModule'])
-    .factory('Utilities', function($http,webStorage,$rootScope,$location) {
+    .factory('Utilities', function($http,webStorage,$rootScope,$location,$routeParams) {
            var trackData = {
                 tracks:[],
                 trackTitle:''
@@ -26,7 +26,13 @@ angular.module('grockitApp.services', ['webStorageModule'])
                 };
             },
             getActiveGroup: function(){
-                $rootScope.activeGroupId = webStorage.get('currentUser').currentGroup;
+                var currentGroup  = webStorage.get('currentUser').currentGroup;
+                    $rootScope.activeGroupId =currentGroup;
+
+                if(angular.isDefined($routeParams.subject) && currentGroup!=$routeParams.subject)
+                    this.redirect('#/' + currentGroup+ '/dashboard');
+
+
                 return  $rootScope.activeGroupId;
             },
             setActiveGroup: function(activeGroupId){
@@ -50,6 +56,9 @@ angular.module('grockitApp.services', ['webStorageModule'])
                }
                return -1;
            },
+            existsInArray: function (element, array) {
+                return  ($.inArray(element, array)!==-1);
+            },
             encodeRedirect: function (redirectUrl, url) {
                 var fUrl = redirectUrl + encodeURIComponent(url);
                 window.location.href = fUrl;
@@ -87,7 +96,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
             PixelAdmin.plugins.alerts.add(alertMsg, options);
         },
         setErrorApiMsg : function(error){
-            return 'We are getting problems to retrieve your data';
+            return 'Uh oh! We\'re having difficulty retrieving your data.';
         }
     }
 });
