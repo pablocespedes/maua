@@ -7,7 +7,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
     $scope.breadcrumbs = breadcrumbs;
 
     breadcrumbs.options = { 'practice': $scope.titleQuest };
-    $scope.optionList = ['A','B','C','D','E','F','G','H','I'];
+    $scope.optionList = "abcdefghijklmnopqrstuvwxyz";
     $scope.nextActionTitle='Confirm Choice';
     $scope.questionItems=[];
     $scope.items=[];
@@ -85,10 +85,11 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                         Practice.setLayoutBasedOnQuestionInfo(setLayoutType);
                         $scope.stimulus = $scope.questionItems.stimulus;
 
-
-                        var answers = $scope.questionItems.answers;
+                        var options = $scope.optionList.toUpperCase().split(""),
+                            answers = $scope.questionItems.answers;
                         angular.forEach(answers, function (value, index) {
-                            value["option"] = $scope.optionList[index];
+
+                            value["option"] = options[index];
                             $scope.items.push(value);
                         });
 
@@ -199,7 +200,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
         confirmChoice: function () {
             this.resetLayout();
 
-            var selectedPosition = '', selectedOptions = [];
+            var selectedPosition = '', selectedOptions = [], selectedOptionsCount, i=0;
 
             /*Get selected answers*/
             angular.element('.choice input[value=true]').each(function () {
@@ -207,7 +208,8 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                 selectedOptions.push(selectedPosition);
             });
 
-            if (selectedOptions.length > 0) {
+                selectedOptionsCount= selectedOptions.length;
+            if (selectedOptionsCount > 0) {
 
 
                 /* Question Explanation*/
@@ -236,39 +238,38 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                  define is some answer is bad.*/
                  $scope.answerStatus=true;
                 angular.element('.choice button').removeClass('btn-primary');
+                angular.forEach(answers, function (value) {
 
-                var correctAnswer = Utilities.findInArray(false, answers, 'correct');
+                    var selectIdButton = ('#' + value.id);
 
-
-
-                angular.forEach(selectedOptions, function (value, key) {
-
-                    var selectedAnswer = Utilities.findInArray(value, answers, 'id');
-
-                    if (angular.isDefined(selectedAnswer)) {
-
-                        /*Send answer response to server*/
-                        $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: selectedAnswer.id });
-
-                        /*selectIdButton Find the letter button to apply class depending if it's correct or not*/
-                        var selectIdButton = '#' + selectedAnswer.position;
-
-                        if (!selectedAnswer.correct) {
+                    /*set the correct class on the button*/
+                    if (value.correct) {
+                        if(Utilities.existsInArray(value.id,selectedOptions)) {
+                            /*Send answer response to server, important this line have to be inside this if
+                             * since just the users answers get into this evaluation
+                             * */
+                            $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: value.id });
+                        }
+                        else{
                             $scope.answerStatus = false;
-                            angular.element(selectIdButton).addClass('btn-danger');
-
                         }
-                        else {
-                            angular.element(selectIdButton).addClass('btn-success');
-
-                        }
+                        angular.element(selectIdButton).addClass('btn-success');
 
                     }
-                    else {
-                        bootbox.alert('Something wrong getting your response, please try it again.!');
+                    else{
+                        if(Utilities.existsInArray(value.id,selectedOptions)) {
+                            /*Send answer response to server, important this line have to be inside this if
+                             * since just the users answers get into this evaluation
+                             * */
+                            $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: value.id });
+                            angular.element(selectIdButton).addClass('btn-danger');
+                            $scope.answerStatus = false;
+                        }
+
                     }
 
                 });
+
 
                 $scope.messageConfirmation=  $scope.answerStatus ? 'Your answer was correct': 'Your answer was incorrect';
                 angular.element(".choice *").prop('disabled', true);

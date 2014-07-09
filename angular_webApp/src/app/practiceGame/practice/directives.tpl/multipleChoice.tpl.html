@@ -2,7 +2,7 @@
     <div class="list-group text-left">
         <a ng-repeat="item in items" href="javascript:void(0)" class="choice list-group-item">
             <div class="middle">
-                <button id="{{item.position}}" type="button" class="btn-option letter" >{{item.option}}</button>
+                <button id="{{item.id}}" type="button" class="btn-option letter" >{{item.option}}</button>
                 <input id="{{item.id}}" type="checkbox" name="choice"  value="{{item.position}}"  />
                 <div class="content" >
                     <div ng-bind-html="item.body"></div>
