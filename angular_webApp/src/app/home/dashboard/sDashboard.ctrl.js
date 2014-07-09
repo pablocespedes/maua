@@ -1,9 +1,8 @@
 'use strict';
-home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','breadcrumbs', function($scope,Users,History,Tracks,Utilities,Auth,breadcrumbs) {
+home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','breadcrumbs','Alerts', function($scope,Users,History,Tracks,Utilities,Auth,breadcrumbs,Alerts) {
 
     Utilities.setActiveTab(0);
     $scope.activeGroupId= Utilities.getActiveGroup();
-
     var SimpleDashBoard= {
         fetchTracksData: function () {
             var tracks = Tracks.one();
@@ -11,15 +10,20 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
                 $scope.score = scorePrediction.data;
                 tracks.customGET('', {group_id: $scope.activeGroupId}).then(function (response) {
                     $scope.tracks = response.data.tracks;
-                }).catch(function error(msg) {
-                    console.error(msg);
+
+                }).catch(function error(error) {
+
+                    Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
                 });
 
+            }).catch(function error(error) {
+
+                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
             });
         },
         fetchScorePrediction: function () {
             $scope.UserRequest.one($scope.user_id).customGET('score_prediction',{group:$scope.activeGroupId}).then(function(response){
-                if(response.total_score!=null &&response.range!=null) {
+                if(response.total_score!=null && response.range!=null) {
 
                     $scope.scoreVisible=true;
                     $scope.totalScore = response.total_score;
@@ -31,12 +35,14 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
                     $scope.scoreVisible=false;
                 }
 
-            }).catch(function error(msg) {
-                console.error(msg);
+            }).catch(function error(error) {
+
+                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
             });
+
         },
         fillGraphic: function (graphicData) {
-            if(angular.isDefined(graphicData) &&graphicData.history.length>0) {
+            if(angular.isDefined(graphicData) && graphicData.history.length>0) {
                 $scope.historyVisible = true;
                 $scope.titleDashboard = 'Here is a snapshot of how you\'re doing!';
                 var response = History.findMissingDates(graphicData.history);
@@ -71,8 +77,10 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         getHistoryInformation: function () {
             $scope.UserRequest.one($scope.user_id).customGET('history', {group: $scope.activeGroupId}).then(function (graphicResult) {
                 SimpleDashBoard.fillGraphic(graphicResult.data);
-            }).catch(function error(msg) {
-                console.error(msg);
+
+            }).catch(function error(error) {
+
+                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
             });
         }
     };
@@ -80,10 +88,8 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
     $scope.init = function(){
         var userInfo= Auth.getCurrentUserInfo();
         $scope.user_id= userInfo.userId;
-        $scope.groupTitle=userInfo.groupName;
 
         $scope.breadcrumbs = breadcrumbs;
-
 
         $scope.scoreVisible=false;
         $scope.historyVisible=false;
@@ -95,6 +101,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         SimpleDashBoard.getHistoryInformation();
 
         SimpleDashBoard.fetchTracksData();
+
     };
 
     $scope.StartPractice = function(index){

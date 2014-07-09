@@ -1,4 +1,4 @@
-practiceGame.controller('PracticeController',['$scope','Questions','Utilities','PracticeGames','$sce','RoundSessions','breadcrumbs','VideoService',function($scope,Questions,Utilities,PracticeGames,$sce,RoundSessions,breadcrumbs,VideoService) {
+practiceGame.controller('PracticeController',['$scope','Questions','Utilities','PracticeGames','RoundSessions','breadcrumbs','VideoService','Alerts',function($scope,Questions,Utilities,PracticeGames,RoundSessions,breadcrumbs,VideoService,Alerts) {
 
     $scope.loading=true;
     $scope.activeTracks =Utilities.getActiveTrack();
@@ -93,8 +93,10 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                         });
 
                         $scope.position++;
-                    }, function () {
-                        console.log("There was an error creating the Round Session");
+
+                    }).catch(function error(error) {
+
+                        Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
                     });
 
 
@@ -153,6 +155,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             angular.element('#nextAction').removeClass('btn-success');
             angular.element('#skipAction').removeClass('hide');
             this.loadQuestion();
+
         },
         seeAnswer: function () {
             this.resetLayout();
@@ -168,7 +171,9 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             if ($scope.questionItems.youtube_video_id !== null) {
                 $scope.showVideo = true;
                $scope.videoId = $scope.questionItems.youtube_video_id;
-               // $scope.videoId = $sce.trustAsResourceUrl('//https://www.youtube.com/embed/'+$scope.questionItems.youtube_video_id);
+                VideoService.setYouTubeTitle($scope.videoId).then(function(videoTime){
+                    $scope.videoText='Video Explanation ('+videoTime+')';
+                });
             }
 
             /*Get answers from the previous request and Explain*/
@@ -189,6 +194,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             });
 
             angular.element(".choice *").prop('disabled', true);
+
         },
         confirmChoice: function () {
             this.resetLayout();
@@ -231,6 +237,10 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                  $scope.answerStatus=true;
                 angular.element('.choice button').removeClass('btn-primary');
 
+                var correctAnswer = Utilities.findInArray(false, answers, 'correct');
+
+
+
                 angular.forEach(selectedOptions, function (value, key) {
 
                     var selectedAnswer = Utilities.findInArray(value, answers, 'id');
@@ -264,7 +274,8 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
                 angular.element(".choice *").prop('disabled', true);
             }
             else {
-                bootbox.alert('Please select an option!');
+                Alerts.showAlert('Please select an option!','warning');
+
             }
         }
     };
@@ -275,17 +286,22 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             practiceGame.post('',{group_id:$scope.activeGroupId}).then(function(result) {
                 var PracticeObject = result.data;
                 $scope.practiceGameResponse = PracticeObject.practice_game;
+
                 PracticeObject.one($scope.practiceGameResponse.id,'sample').customGET('',{'tracks[]':$scope.activeTracks.tracks}).then(function(result){
                     var QuestionSetObject= result.data;
                     $scope.QuestionSetList= QuestionSetObject.question_sets;
                     Practice.loadQuestion();
                     $scope.loading=false;
+
+                }).catch(function error(error) {
+
+                    Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
                 });
 
 
-            }, function() {
-                $scope.loading=false;
-                console.log("There was an error creating the Practice Game");
+            }).catch(function error(error) {
+
+                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
             });
         }
         else{

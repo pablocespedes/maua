@@ -7,10 +7,10 @@ var paths={
     restAngular:'common/restAngular/restAngular.module.js',
     home:'app/home/home.module.js',
     practiceGame:'app/practiceGame/practiceGame.module.js',
-    generalServices:'common/services/general.services.js',
+    generalServices:'common/services/application.services.js',
     generalDirectives:'common/directives/general.directive.js',
     authServices:'common/services/auth.services.js',
-    accountCtrl:'app/account/auth/auth.ctrl.js',
+    accountCtrl:'app/account/application.ctrl.js',
     app:'app/app.js'
 };
 
