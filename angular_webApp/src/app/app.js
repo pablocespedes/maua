@@ -3,8 +3,8 @@
  app.config(function($httpProvider) {
 
     })
-     .run(function ($rootScope, $location, Auth,Utilities) {
-
+     .run(function ($rootScope, $location, Auth,Utilities,Alerts) {
+         var errorMsg='';
          if(Auth.isLoggedIn()) {
              Utilities.getActiveGroup();
 
@@ -16,6 +16,9 @@
                          Utilities.redirect('#/' + Utilities.getActiveGroup() + '/dashboard');
 
                      }
+                 }).catch(function error(error) {
+
+                     Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
                  });
 
              }
@@ -28,6 +31,9 @@
                      $rootScope.$broadcast("init");
                      Utilities.redirect('#/' + userData.studyingFor + "/dashboard");
                  }
+             }).catch(function error(error) {
+
+                 Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
              });
 
          }

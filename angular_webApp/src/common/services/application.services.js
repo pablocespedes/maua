@@ -3,8 +3,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
            var trackData = {
                 tracks:[],
                 trackTitle:''
-            },
-            property='';
+            };
 
         function enviromentEvaluation(isNewGrockit){
             if(isNewGrockit){
@@ -13,14 +12,6 @@ angular.module('grockitApp.services', ['webStorageModule'])
             else{
               return location.host== '127.0.0.1:9000' || location.host=='ww2.grockit.com' ? 'https://grockit.com' :location.origin
             }
-
-//            if(isNewGrockit){
-//
-//                return location.host== 'grockit.firstfactoryinc.com'  ? 'http://grockit.firstfactoryinc.com/' : location.origin+'/2.0';
-//            }
-//            else{
-//                return location.host== 'grockit.firstfactoryinc.com' ? 'https://staging.grockit.com' : location.host=='ww2.grockit.com' ? 'https://grockit.com' :location.origin
-//            }
         }
 
         return {
@@ -35,7 +26,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
                 };
             },
             getActiveGroup: function(){
-                $rootScope.activeGroupId = webStorage.get('currentUser').studyingFor;
+                $rootScope.activeGroupId = webStorage.get('currentUser').currentGroup;
                 return  $rootScope.activeGroupId;
             },
             setActiveGroup: function(activeGroupId){
@@ -76,25 +67,30 @@ angular.module('grockitApp.services', ['webStorageModule'])
             clearActiveTab: function () {
                 angular.element('div#main-menu-inner ul.navigation li').removeClass('active');
             },
-            hideFooter: function () {
-                angular.element('footer').addClass('hide-footer')
-            },
-            showFooter: function () {
-                angular.element('footer').removeClass('hide-footer')
-
-            },
             dialogService: function(options){
                 bootbox.dialog(options);
-            },
-            getProperty: function () {
-                return property;
-            },
-            setProperty: function(value) {
-                property = value;
             }
 
+
         }
-    });
+    })
+
+    .factory('Alerts', function() {
+    return {
+        showAlert: function (alertMsg,type) {
+
+            var options = {
+                type: type,
+                namespace: 'pa_page_alerts_dark',
+                classes: 'alert-dark'
+            };
+            PixelAdmin.plugins.alerts.add(alertMsg, options);
+        },
+        setErrorApiMsg : function(error){
+            return 'We are getting problems to retrieve your data';
+        }
+    }
+});
 
 
 

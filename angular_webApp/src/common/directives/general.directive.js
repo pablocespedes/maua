@@ -1,5 +1,5 @@
-angular.module('grockitApp.directives', []).
-directive('lineChart', function() {
+angular.module('grockitApp.directives', [])
+    .directive('lineChart', function() {
 
         function createChart(el_id, options) {
             options.element = el_id;
