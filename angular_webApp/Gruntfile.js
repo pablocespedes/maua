@@ -231,7 +231,6 @@ module.exports = function (grunt) {
           '<%= yeoman.dist %>/index.html'],
         options: {
             assetsDirs: ['<%= yeoman.dist %>'        ,
-                '<%= yeoman.dist %>/app/account/auth',
                 '<%= yeoman.dist %>/app/account',
                 '<%= yeoman.dist %>/app/home',
                 '<%= yeoman.dist %>/app/home/dashboard/',
@@ -250,7 +249,7 @@ module.exports = function (grunt) {
                 js: [
                     [/(images\/.*?\.(?:gif|jpeg|jpg|png|webp|svg))/gm, 'Update the JS to reference our revved images'],
                     /*Change references for account */
-                    [/(auth.ctrl\.js)/, 'Replacing references to account ctrl'],
+                    [/(application.ctrl\.js)/, 'Replacing references to account ctrl'],
                     [/(account.module\.js)/, 'Replacing references account to module'],
                     /*Change references for home controllers and services*/
                     [/(sDashboard.ctrl\.js)/, 'Replacing references to home ctrl'],
@@ -268,7 +267,7 @@ module.exports = function (grunt) {
                     [/(restAngular.service\.js)/, 'Replacing references to restAngular service'],
 
                     [/(general.directive\.js)/, 'Replacing references to general directives'],
-                    [/(general.services\.js)/, 'Replacing references to general services'],
+                    [/(application.services\.js)/, 'Replacing references to general services'],
 
                     [/(auth.services\.js)/, 'Replacing references to auth services'],
 
