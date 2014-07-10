@@ -147,6 +147,8 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
         },
         nextQuestion: function () {
+            this.loadQuestion();
+
             //Enable/disable answer section
             angular.element('.choice *').removeClass('btn-primary btn-danger btn-success').removeAttr('disabled');
             $scope.showVideo = false;
@@ -155,7 +157,9 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             $scope.messageConfirmation='';
             angular.element('#nextAction').removeClass('btn-success');
             angular.element('#skipAction').removeClass('hide');
-            this.loadQuestion();
+            angular.element('#answersPanels').removeClass().addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                angular.element(this).removeClass();
+            });
 
         },
         seeAnswer: function () {
@@ -316,12 +320,15 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
 
     $scope.answerHasExplanation = function(index){
         var answer = $scope.questionItems.answers[index];
-        return !(answer.explanation == null || answer.explanation == '<br>');
+        return !(answer.explanation == null || angular.isUndefined(answer.explanation));
 
     };
 
     //confirm choice
     $scope.nextAction = function() {
+
+
+
         if($scope.nextActionTitle=='Confirm Choice'){
             Practice.confirmChoice();
         }

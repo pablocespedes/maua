@@ -9,16 +9,91 @@
 <div id="simpleDash">
 
     <div class="page-header">
-        <h2><i class="fa fa-dashboard page-header-icon"></i>&nbsp;&nbsp;Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
-            <small><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span ng-bind="titleDashboard"></span></small>
-        </h2>
+        <div class="row fadeIn animated">
+            <div class="col-md-9">
+                <h2><i class="fa fa-dashboard page-header-icon"></i>&nbsp;&nbsp;Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
+                </h2>
+            </div>
+            <div class="col-md-3" ng-if="activeGroupId == 'gmat' || activeGroupId == 'act' || activeGroupId == 'sat'">
+                <div class="padding-sm">
+                    <div class="stat-cell bg-info valign-middle">
+                        <div ng-show="scoreLoading" class="loadingScore">
+                            <i class="fa fa-trophy bg-icon"></i>
+                            <div id="circularG" class="text-lg">
+                                <div id="circularG_1" class="circularG">
+                                </div>
+                                <div id="circularG_2" class="circularG">
+                                </div>
+                                <div id="circularG_3" class="circularG">
+                                </div>
+                                <div id="circularG_4" class="circularG">
+                                </div>
+                                <div id="circularG_5" class="circularG">
+                                </div>
+                                <div id="circularG_6" class="circularG">
+                                </div>
+                                <div id="circularG_7" class="circularG">
+                                </div>
+                                <div id="circularG_8" class="circularG">
+                                </div>
+                            </div>
+                            <br><br>
+                            <span class=" text-sm"> Your Overall <span ng-bind="$root.groupTitle"></span> Score Prediction</span>
+                        </div>
+                        <div ng-show="!scoreLoading" class="bounceIn animated">
+                            <i class="fa fa-trophy bg-icon"></i>
+                            <span class="text-xlg"><strong ng-bind="totalScore"></strong></span><br>
+                            <span class="text-bg"><span ng-bind="rangeInit"></span>-<span ng-bind="rangeEnd"></span></span><br>
+                            <span class="text-sm"> Your Overall <span ng-bind="$root.groupTitle"></span> Score Prediction</span>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
     </div>
     <div class="profile-content">
-        <div class="stat-panel">
-            <div class="stat-row">
 
-                <div id="graphPanel" ng-if="historyVisible" class="col-md-12">
-                    <div line-chart id="hero-graph" data-options="chart_options" style="height: 185px;" ng-attr-class="{'col-sm-9': scoreVisible, 'col-sm-12': !scoreVisible}'"></div>
+        <div class="col-md-6 col-lg-offset-5">
+            <div id="inTurnFadingTextG" ng-show="loading">
+                <div id="inTurnFadingTextG_1" class="inTurnFadingTextG">
+                    L</div>
+                <div id="inTurnFadingTextG_2" class="inTurnFadingTextG">
+                    o</div>
+                <div id="inTurnFadingTextG_3" class="inTurnFadingTextG">
+                    a</div>
+                <div id="inTurnFadingTextG_4" class="inTurnFadingTextG">
+                    d</div>
+                <div id="inTurnFadingTextG_5" class="inTurnFadingTextG">
+                    i</div>
+                <div id="inTurnFadingTextG_6" class="inTurnFadingTextG">
+                    n</div>
+                <div id="inTurnFadingTextG_7" class="inTurnFadingTextG">
+                    g</div>
+                <div id="inTurnFadingTextG_8" class="inTurnFadingTextG">
+                    .</div>
+                <div id="inTurnFadingTextG_9" class="inTurnFadingTextG">
+                    .</div>
+                <div id="inTurnFadingTextG_10" class="inTurnFadingTextG">
+                    .</div>
+            </div>
+        </div>
+        <div class="row fadeIn animated" ng-if="historyVisible">
+            <div class="col-sm-12">
+                <span>Here's a chart of the questions you've answered. The more questions you answer, the more you'll improve!</span>
+
+            </div>
+        </div>
+
+        <div class="stat-panel fadeIn animated" ng-if="historyVisible" >
+
+            <div class="stat-row" >
+
+                <div id="graphPanel" class="col-md-12">
+
+                    <div line-chart id="hero-graph" data-options="chart_options" style="height: 185px;"></div>
                 </div>
 
             </div>
@@ -55,13 +130,10 @@
                 </div>
             </div>
         </div>
-        <hr class="no-grid-gutter-h grid-gutter-margin-b no-margin-t">
 
-        <div class="stat-panel">
+        <div class="stat-panel fadeIn animated">
             <div class="stat-row">
 
-                <!--<div class="stat-cell col-sm-6  padding-sm-hr bordered no-border-r valign-middle">-->
-                <!--<div class="stat-panel text-center">-->
                 <div class="col-md-12">
                     <div class="panel  panel-dark widget-profile">
                         <div class="panel-heading text-left">
@@ -80,17 +152,17 @@
                                     </strong>
                                     </span>
                                     Smart Practice
-                                    <div class=" text-center pull-right">
+                                    <div class=" text-center pull-right" ng-if="activeGroupId == 'gmat' || activeGroupId == 'act' || activeGroupId == 'sat' && !loading">
                                         <div ng-show="score.tracks[track.id]!=null">
-                                            <button id="btn-score" class=" btn-lg float-right btn btn-labeled btn-info disabled"><span class="btn-label icon fa fa-bolt"></span>{{score.tracks[track.id]}}</button>
+
+                                            <button id="btn-score" class=" btn-lg float-right btn btn-labeled btn-info disabled">{{score.tracks[track.id]}}</button>
                                             <br>
-                                            <span class="text-xs valign-bottom">Score Prediction</span>
+                                            <span class="text-xs float-right valign-bottom">Your Score Prediction</span>
                                         </div>
                                         <div class="valign-middle" ng-show="score.tracks[track.id]==null">
                                             <br>
                                             <span>Not enough data</span>
                                         </div>
-                                        <!--<button id="btn-score" ng-show="score.tracks[track.id]==null" class=" float-right btn btn-labeled btn-info disabled"><span class="btn-label icon fa fa-bolt"></span>Not enough data</button>-->
                                     </div>
                                 </div>
                             </a>
@@ -100,8 +172,6 @@
 
                 </div>
 
-                <!--</div>-->
-                <!--</div>-->
             </div>
         </div>
 

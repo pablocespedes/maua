@@ -3633,7 +3633,7 @@ a:hover {
   background: #fafafa;
   border-bottom: 1px solid #e4e4e4;
   margin: -18px -18px 18px -18px;
-  padding: 20px 18px 20px 18px; }
+  padding: 3px 18px 0px 18px; }
   .page-header:before, .page-header:after {
     content: " ";
     display: table; }

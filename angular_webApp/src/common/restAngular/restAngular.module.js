@@ -2,7 +2,7 @@
      .config(function (RestangularProvider,$httpProvider,$provide) {
 
      var urlPattern = /http(s?)\:\/\/staging/.test(location.origin),
-         url = urlPattern ? 'https://api.staging.grockit.com':'https://api.grockit.com';
+         url = urlPattern ? 'http://api.staging.grockit.com':'https://api.grockit.com';
 
 
      request.factory = $provide.factory;
