@@ -48,9 +48,10 @@
   'grockitApp.services',
   'grockitApp.requests',
   'grockitApp.authServices',
+  'grockitApp.listenloopService',
   'grockitApp.practiceGame',
   'grockitApp.home',
-   'grockitApp.directives'
+  'grockitApp.directives'
 ]))
 );
 
