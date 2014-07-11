@@ -1,25 +1,21 @@
 angular.module('grockitApp.listenloopService', [])
     .factory('ListenloopUtility', function(){
 
-        // function load_script(userData){
-        //     $('<script>'+ 
-        //             'function fkVisitorData(){'+
-        //                 'return {'+
-        //                     '"email":'+userData.emailAddress+','+
-        //                     '"segment":'+userData.role+','+
-        //                     '"custom_properties":{'+
-        //                         '"full_name":'+userData.fullName+','+
-        //                         '"user_id":'+userData.userId+','+
-        //                         '"group":'+userData.currentGroup+','+
-        //                         '"env":"Grockit 2.0"'+
-        //                     '}'+
-        //                 '}'+
-        //             '}'+
-        //         '</script>').appendTo(document.body);
-        // }
-
         function load_script(userData){
-            $('<script>function fkVisitorData(){return {email:'+userData.emailAddress+',segment:'+userData.role+','custom_properties':{full_name:'+userData.fullName+',user_id:'+userData.userId+',group:'+userData.currentGroup+',env:"Grockit 2.0"}}}</script>').appendTo(document.body);
+            $('<script>'+ 
+                    'function fkVisitorData(){'+
+                        'return {'+
+                            '"email":"'+userData.emailAddress+'",'+
+                            '"segment":"'+userData.role+'",'+
+                            '"custom_properties":{'+
+                                '"full_name":"'+userData.fullName+'",'+
+                                '"user_id":"'+userData.userId+'",'+
+                                '"group":"'+userData.currentGroup+'",'+
+                                '"env":"Grockit 2.0"'+
+                            '}'+
+                        '}'+
+                    '}'+
+                '</script>').appendTo(document.body)
         }
 
         return {
