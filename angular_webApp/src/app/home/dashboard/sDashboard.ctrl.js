@@ -4,6 +4,8 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
     $scope.scoreLoading=true;
     Utilities.setActiveTab(0);
     $scope.activeGroupId= Utilities.getActiveGroup();
+    $scope.enableScore= !!($scope.activeGroupId == 'gmat' || $scope.activeGroupId == 'act' || $scope.activeGroupId == 'sat');
+
     var SimpleDashBoard= {
         fetchTracksData: function () {
             $scope.loading=true;
@@ -27,6 +29,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
                     $scope.totalScore = scorePrediction.data.total_score;
                     $scope.rangeInit = scorePrediction.data.range[0];
                     $scope.rangeEnd = scorePrediction.data.range[1];
+
                 }
 
                 $scope.scoreLoading=false;
@@ -62,6 +65,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
                         return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
                     }
                 };
+
             }
             else {
                 $scope.historyVisible = false;
@@ -72,6 +76,8 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
             $scope.loading=true;
             $scope.UserRequest.one($scope.user_id).customGET('history', {group: $scope.activeGroupId}).then(function (graphicResult) {
                 SimpleDashBoard.fillGraphic(graphicResult.data);
+
+
 
             }).catch(function error(error) {
 
@@ -86,7 +92,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         $scope.UserRequest = Users.one();
         $scope.user_id= userInfo.userId;
 
-        if($scope.activeGroupId == 'gmat' || $scope.activeGroupId == 'act' || $scope.activeGroupId == 'sat')
+        if($scope.enableScore)
             SimpleDashBoard.fetchScorePrediction();
 
 

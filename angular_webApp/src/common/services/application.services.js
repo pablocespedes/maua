@@ -96,7 +96,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
     })
 
     .factory('Alerts', function() {
-    return {
+     return {
         showAlert: function (alertMsg,type) {
 
             var options = {
@@ -109,9 +109,9 @@ angular.module('grockitApp.services', ['webStorageModule'])
         setErrorApiMsg : function(error){
             return 'Uh oh! We\'re having difficulty retrieving your data.';
         }
-    }
+     }
 
-});
+    });
 
 
 

@@ -1,5 +1,5 @@
 .loadingScore{
-  min-height: 79px;
+  min-height: 95px;
 }
 /*circle score panel*/
 #circularG{
@@ -9,7 +9,7 @@
 
 .circularG{
   position:absolute;
-  background-color:#FFFFFF;
+  background-color:#FFFFFF!important;
   width:7px;
   height:7px;
   -moz-border-radius:5px;

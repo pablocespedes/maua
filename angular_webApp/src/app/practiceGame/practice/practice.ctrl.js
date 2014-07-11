@@ -5,12 +5,13 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
     $scope.titleQuest=$scope.activeTracks.trackTitle;
     $scope.activeGroupId= Utilities.getActiveGroup();
     $scope.breadcrumbs = breadcrumbs;
-
     breadcrumbs.options = { 'practice': $scope.titleQuest };
+
     $scope.optionList = "abcdefghijklmnopqrstuvwxyz";
     $scope.nextActionTitle='Confirm Choice';
     $scope.questionItems=[];
     $scope.items=[];
+
     $scope.showExplanation = false;
     $scope.showVideo = false;
     $scope.setPosition=0;
@@ -175,7 +176,7 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
             /*video validation*/
             if ($scope.questionItems.youtube_video_id !== null) {
                 $scope.showVideo = true;
-               $scope.videoId = $scope.questionItems.youtube_video_id;
+                $scope.videoId = $scope.questionItems.youtube_video_id;
                 VideoService.setYouTubeTitle($scope.videoId).then(function(videoTime){
                     $scope.videoText='Video Explanation ('+videoTime+')';
                 });
@@ -327,8 +328,6 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
     //confirm choice
     $scope.nextAction = function() {
 
-
-
         if($scope.nextActionTitle=='Confirm Choice'){
             Practice.confirmChoice();
         }
@@ -339,8 +338,13 @@ practiceGame.controller('PracticeController',['$scope','Questions','Utilities','
     };
 
     $scope.revealExplanation = function(){
+        $scope.numerator=5;
         Practice.seeAnswer();
     };
+
+    $scope.entryChange = function(){
+
+    }
 
 
 }]);

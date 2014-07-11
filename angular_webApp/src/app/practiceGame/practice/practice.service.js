@@ -274,3 +274,47 @@ practiceGame.factory('satFactory', function () {
         }
     };
 });
+
+practiceGame.factory('numericEntry', function () {
+    return {
+        execute: function (scope) {
+
+            var nexAction = $('#nextAction'),
+                seeAnswer = $('#skipAction');
+            scope.$watch('modelEntry', function (newVal, oldVal) {
+                if(angular.isDefined(newVal) && newVal!=null) {
+                    nexAction.addClass('btn-primary');
+                    seeAnswer.addClass('hide');
+                }
+                else{
+                    nexAction.removeClass('btn-primary');
+                    seeAnswer.removeClass('hide');
+                }
+
+            });
+
+        }
+    };
+});
+
+practiceGame.factory('fractionEntry', function () {
+    return {
+        execute: function (scope) {
+
+            var nexAction = $('#nextAction'),
+                seeAnswer = $('#skipAction');
+            scope.$watch('modelEntry', function (newVal, oldVal) {
+                if(angular.isDefined(newVal) && newVal!=null) {
+                    nexAction.addClass('btn-primary');
+                    seeAnswer.addClass('hide');
+                }
+                else{
+                    nexAction.removeClass('btn-primary');
+                    seeAnswer.removeClass('hide');
+                }
+
+            });
+
+        }
+    };
+});
