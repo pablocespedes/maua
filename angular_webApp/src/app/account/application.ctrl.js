@@ -1,6 +1,5 @@
-NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$cookies,Groups,Alerts) {
-
-        $scope.url= Utilities.originalGrockit().url;
+NavController = function($rootScope,$scope, $location, Auth,Utilities, ListenloopUtility, Tracks,$cookies,Groups,Alerts) {
+    $scope.url= Utilities.originalGrockit().url;
     $scope.logOutUrl= Utilities.originalGrockit().url+'/logout';
     var errorMsg='';
     $rootScope.$on("init", function () {
@@ -48,7 +47,6 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
                 Alerts.showAlert('We are getting problems to find your subjects, if the problem persist please let\'s us know.','warning');
 
             }
-
         },
         fetchLeftNavTracksData: function(){
             var tracks = Tracks.one();
@@ -72,7 +70,7 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
                     $scope.selectedGroup =  Utilities.getActiveGroup();
                     Application.loadGroupMembership();
 
-
+                    ListenloopUtility.base(response);
                 }
             }).catch(function error(error) {
 
