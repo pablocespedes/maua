@@ -15,7 +15,8 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
                     groupMemberships:response.group_memberships,
                     currentGroup: currentGroup,
                     fullName: response.first_name,
-                    avatar_url: response.avatar_url
+                    avatar_url: response.avatar_url,
+                    emailAddress: response.email_address
                 };
 
             Utilities.setActiveGroup(currentGroup);

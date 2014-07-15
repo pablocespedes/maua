@@ -5,12 +5,65 @@ request.factory('Users', function(Restangular,Headers) {
 
 });
 
-
-request.factory('Questions', function(Restangular,Headers) {
+request.factory('practiceRequests', function(Restangular,Headers) {
     Headers.updateDefaultHeader();
-    return  Restangular.service('questions')
+
+    function practiceGames() {
+
+        var restPracticeGameObject = Restangular.service('practice_games').one();
+
+        return {
+            getQuestionNewSetByPractice: function (practiceGameId, tracks) {
+                return  restPracticeGameObject.one(practiceGameId, 'sample').customGET('', {'tracks[]': tracks});
+            },
+            createNewPracticeGame: function (activeGroupId) {
+                return  restPracticeGameObject.post('', {group_id: activeGroupId});
+            }
+        }
+    }
+
+    function roundSessions(){
+        var roundSessionObject=  Restangular.service('round_sessions').one();
+
+        return{
+            createQuestionPresentation : function(gameId,questionId){
+
+                return roundSessionObject.post('', {game_id: gameId, question_id: questionId});
+            }
+        }
+    }
+
+    function questionSets() {
+        var questionSetObject = Restangular.service('question_sets').one();
+
+        return{
+            getQuestionSetById: function (questionSetId) {
+                return  questionSetObject.one(questionSetId).customGET('');
+            }
+        }
+    }
+
+    function questions(){
+        var questionObject = Restangular.service('questions').one();
+
+        return  {
+            getQuestionById: function(questionId){
+                return  questionObject.one(questionId).customGET('');
+            }
+        }
+    }
+
+    return  {
+        practiceGames :  practiceGames,
+        roundSessions: roundSessions,
+        questionSets: questionSets,
+        questions: questions
+
+    }
 
 });
+
+
 
 request.factory('Groups', function(Restangular,Headers) {
     Headers.updateDefaultHeader();
@@ -29,26 +82,6 @@ request.factory('SubTracks', function(Restangular,Headers) {
     return  Restangular.service('subtracks')
 
 });
-
-request.factory('PracticeGames', function(Restangular,Headers) {
-    Headers.updateDefaultHeader();
-    return  Restangular.service('practice_games')
-
-});
-
-request.factory('RoundSessions', function(Restangular,Headers) {
-    Headers.updateDefaultHeader();
-    return  Restangular.service('round_sessions')
-
-});
-
-
-request.factory('QuestionSets', function(Restangular,Headers) {
-    Headers.updateDefaultHeader();
-    return  Restangular.service('question_sets')
-
-});
-
 
 request.factory('Headers', function(Restangular,$cookies) {
     return  {
@@ -96,4 +129,60 @@ request.factory("VideoService", function($q) {
     }
 });
 
+
+/*This code should be delete after Team approval*/
+
+/*
+
+request.factory('practiceGames', function(Restangular,Headers) {
+    Headers.updateDefaultHeader();
+    var practiceGameObject=  Restangular.service('practice_games').one();
+
+    return{
+        getQuestionNewSetByPractice: function(practiceGameId,tracks){
+            return  practiceGameObject.one(practiceGameId,'sample').customGET('',{'tracks[]':tracks});
+        },
+        createNewPracticeGame: function(activeGroupId){
+            return  practiceGameObject.post('',{group_id:activeGroupId});
+        }
+    }
+});
+
+request.factory('roundSessions', function(Restangular,Headers) {
+    Headers.updateDefaultHeader();
+    var roundSessionObject=  Restangular.service('round_sessions').one();
+    return{
+        createQuestionPresentation : function(gameId,questionId){
+            return roundSessionObject.post('', {game_id: gameId, question_id: questionId});
+        }
+    }
+});
+
+request.factory('questionSets', function(Restangular,Headers) {
+    Headers.updateDefaultHeader();
+    var questionSetObject = Restangular.service('question_sets').one();
+
+    return{
+        getQuestionSetById: function(questionSetId){
+            return  questionSetObject.one(questionSetId).customGET('');
+        }
+    }
+
+});
+
+request.factory('Questions', function(Restangular,Headers) {
+    Headers.updateDefaultHeader();
+    var questionObject = Restangular.service('questions').one();
+
+    return  {
+        getQuestionById: function(questionId){
+            return  questionObject.one(questionId).customGET('');
+        }
+    }
+
+});
+
+
+
+*/
 

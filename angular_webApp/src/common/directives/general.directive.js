@@ -1,19 +1,25 @@
 angular.module('grockitApp.directives', [])
     .directive('lineChart', function() {
 
-        function createChart(el_id, options) {
+        function createChart(el_id, options,score) {
             options.element = el_id;
+            if(score){
+                angular.element('#graphPanel').addClass('col-md-9');}
+            else{
+                angular.element('#graphPanel').addClass('col-md-12');}
+
             return new Morris.Line(options);
         }
         return {
             restrict: 'A',
             scope: {
-                options: '='
+                options: '=',
+                score:'='
             },
             replace: true,
             template: '<div></div>',
             link: function (scope, element, attrs) {
-                return createChart(attrs.id, scope.options)
+                return createChart(attrs.id, scope.options,scope.score)
             }
         }
 
@@ -55,5 +61,6 @@ angular.module('grockitApp.directives', [])
             }
         };
     });
+
 
 

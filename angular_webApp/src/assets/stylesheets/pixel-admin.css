@@ -3633,7 +3633,7 @@ a:hover {
   background: #fafafa;
   border-bottom: 1px solid #e4e4e4;
   margin: -18px -18px 18px -18px;
-  padding: 20px 18px 20px 18px; }
+  padding: 3px 18px 0px 18px; }
   .page-header:before, .page-header:after {
     content: " ";
     display: table; }
@@ -3714,6 +3714,7 @@ body:after,
   .animate-mm-sm #main-menu-toggle,
   .animate-mm-sm #main-wrapper,
   .animate-mm-sm footer,
+  .animate-mm-sm .footer,
   .animate-mm-sm #main-menu,
   .animate-mm-sm #content-wrapper,
   .animate-mm-sm #main-menu-bg {
@@ -3729,6 +3730,7 @@ body:after,
   .animate-mm-md #main-menu-toggle,
   .animate-mm-md #main-wrapper,
   .animate-mm-md footer,
+  .animate-mm-md .footer,
   .animate-mm-md #main-menu,
   .animate-mm-md #content-wrapper,
   .animate-mm-md #main-menu-bg {
@@ -3744,6 +3746,7 @@ body:after,
   .animate-mm-lg #main-menu-toggle,
   .animate-mm-lg #main-wrapper,
   .animate-mm-lg footer,
+  .animate-mm-lg .footer,
   .animate-mm-lg #main-menu,
   .animate-mm-lg #content-wrapper,
   .animate-mm-lg #main-menu-bg {
@@ -3758,6 +3761,7 @@ body:after,
 .disable-mm-animation #main-menu-toggle,
 .disable-mm-animation #main-wrapper,
 .disable-mm-animation footer,
+.disable-mm-animation .footer,
 .disable-mm-animation #main-menu,
 .disable-mm-animation #content-wrapper,
 .disable-mm-animation #main-menu-bg,
@@ -4452,6 +4456,8 @@ body:after,
 
     .mme footer {
         left: 184px; }
+    .mme .footer {
+        left: 184px; }
 
   .mme #content-wrapper{
     left: 184px; }
@@ -4463,8 +4469,9 @@ body:after,
 @media (min-width: 768px) {
   .mme #main-wrapper,
   .mme footer,
+  .mme .footer,
   #main-wrapper,
-  footer{
+  footer,.footer{
     padding-left: 240px; }
 
   .mme #content-wrapper,
@@ -4475,7 +4482,8 @@ body:after,
     left: 0; }
 
   .mmc #main-wrapper,
-  .mmc footer {
+  .mmc footer,
+  .mmc .footer {
     padding-left: 56px; }
 
   #main-navbar .navbar-header {

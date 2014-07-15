@@ -71,28 +71,34 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
         };
     })
 
-    .directive('ngNumericEntry', function() {
+    .directive('ngNumericEntry', function(numericEntry) {
         return {
             restrict: 'A',
+            replace: true,
             templateUrl : 'app/practiceGame/practice/directives.tpl/numericEntry.tpl.html',
-            link: function() {
-            },
             scope: {
-                items:'=items',
-                showExplanation:'='
+                showExplanation:'=',
+                numerator:'='
+            },
+            link: function(scope) {
+                numericEntry.execute(scope);
             }
+
         };
     })
 
-    .directive('ngFractionEntry', function() {
+    .directive('ngFractionEntry', function(fractionEntry) {
         return {
             restrict: 'A',
             templateUrl : 'app/practiceGame/practice/directives.tpl/fractionEntry.tpl.html',
-            link: function() {
+            scope: {
+                showExplanation:'=',
+                numerator:'=',
+                denominator:'='
 
             },
-            scope: {
-                items:'=items'
+            link: function(scope) {
+                fractionEntry.execute(scope);
             }
         };
     })

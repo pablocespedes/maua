@@ -1,4 +1,4 @@
-NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$cookies,Groups,Alerts) {
+NavController = function($rootScope,$scope, $location, Auth,Utilities, ListenloopUtility, Tracks,$cookies,Groups,Alerts) {
     $scope.url= Utilities.originalGrockit().url;
     $scope.logOutUrl= Utilities.originalGrockit().url+'/logout';
     var errorMsg='';
@@ -47,7 +47,6 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
                 Alerts.showAlert('We are getting problems to find your subjects, if the problem persist please let\'s us know.','warning');
 
             }
-
         },
         fetchLeftNavTracksData: function(){
             var tracks = Tracks.one();
@@ -70,6 +69,8 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
                     $scope.groupMemberships = response.groupMemberships;
                     $scope.selectedGroup =  Utilities.getActiveGroup();
                     Application.loadGroupMembership();
+
+                    ListenloopUtility.base(response);
                 }
             }).catch(function error(error) {
 
@@ -103,7 +104,7 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities,Tracks,$co
     };
 
     if(angular.isDefined($cookies.authorization_token)){
-        if($cookies.authorization_token!=null || authorization_token.$cookies!=''){
+        if($cookies.authorization_token!=null || $cookies.authorization_token!=''){
             Application.init();
         }
     }

@@ -1,42 +1,40 @@
 'use strict';
 home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','breadcrumbs','Alerts', function($scope,Users,History,Tracks,Utilities,Auth,breadcrumbs,Alerts) {
-
+    $scope.loading=true;
+    $scope.scoreLoading=true;
     Utilities.setActiveTab(0);
     $scope.activeGroupId= Utilities.getActiveGroup();
+    $scope.enableScore= !!($scope.activeGroupId == 'gmat' || $scope.activeGroupId == 'act' || $scope.activeGroupId == 'sat');
+
     var SimpleDashBoard= {
         fetchTracksData: function () {
+            $scope.loading=true;
             var tracks = Tracks.one();
-            $scope.UserRequest.one($scope.user_id).customGET('score_prediction', {group: $scope.activeGroupId}).then(function (scorePrediction) {
-                $scope.score = scorePrediction.data;
                 tracks.customGET('', {group_id: $scope.activeGroupId}).then(function (response) {
                     $scope.tracks = response.data.tracks;
+                    $scope.loading=false;
 
                 }).catch(function error(error) {
 
                     Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
                 });
 
-            }).catch(function error(error) {
-
-                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
-            });
         },
         fetchScorePrediction: function () {
-            $scope.UserRequest.one($scope.user_id).customGET('score_prediction',{group:$scope.activeGroupId}).then(function(response){
-                if(response.total_score!=null && response.range!=null) {
 
-                    $scope.scoreVisible=true;
-                    $scope.totalScore = response.total_score;
-                    $scope.rangeInit = response.range[0];
-                    $scope.rangeEnd = response.range[1];
-                    $scope.percent = Math.round(100 * response.range[0] / response.range[1]);
+            $scope.UserRequest.one($scope.user_id).customGET('score_prediction',{group:$scope.activeGroupId}).then(function(scorePrediction){
+                $scope.score = scorePrediction.data;
+                if(scorePrediction.data.total_score!=null && scorePrediction.data.range!=null) {
+
+                    $scope.totalScore = scorePrediction.data.total_score;
+                    $scope.rangeInit = scorePrediction.data.range[0];
+                    $scope.rangeEnd = scorePrediction.data.range[1];
+
                 }
-                else{
-                    $scope.scoreVisible=false;
-                }
+
+                $scope.scoreLoading=false;
 
             }).catch(function error(error) {
-
                 Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
             });
 
@@ -44,7 +42,6 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         fillGraphic: function (graphicData) {
             if(angular.isDefined(graphicData) && graphicData.history.length>0) {
                 $scope.historyVisible = true;
-                $scope.titleDashboard = 'Here is a snapshot of how you\'re doing!';
                 var response = History.findMissingDates(graphicData.history);
                 $scope.chart_options = {
                     data: response.Data,
@@ -68,15 +65,19 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
                         return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
                     }
                 };
+
             }
             else {
-                $scope.titleDashboard = 'You haven’t answered any questions yet.  Select a track below.';
                 $scope.historyVisible = false;
             }
+            $scope.loading=false;
         },
         getHistoryInformation: function () {
+            $scope.loading=true;
             $scope.UserRequest.one($scope.user_id).customGET('history', {group: $scope.activeGroupId}).then(function (graphicResult) {
                 SimpleDashBoard.fillGraphic(graphicResult.data);
+
+
 
             }).catch(function error(error) {
 
@@ -87,20 +88,23 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
     $scope.init = function(){
         var userInfo= Auth.getCurrentUserInfo();
-        $scope.user_id= userInfo.userId;
-
-        $scope.breadcrumbs = breadcrumbs;
-
-        $scope.scoreVisible=false;
-        $scope.historyVisible=false;
         //Declare User RestAngular Object
         $scope.UserRequest = Users.one();
+        $scope.user_id= userInfo.userId;
 
-        SimpleDashBoard.fetchScorePrediction();
+        if($scope.enableScore)
+            SimpleDashBoard.fetchScorePrediction();
+
 
         SimpleDashBoard.getHistoryInformation();
 
         SimpleDashBoard.fetchTracksData();
+
+
+        $scope.breadcrumbs = breadcrumbs;
+
+        $scope.historyVisible=false;
+
 
     };
 
@@ -120,7 +124,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
             Utilities.redirect('#/' +  $scope.activeGroupId+ '/dashboard/practice');
         }
         else{
-            bootbox.alert('You must select one track at least');
+            Alerts.showAlert('You must select one track at least', 'warning');
         }
 
 

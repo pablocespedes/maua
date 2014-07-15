@@ -1,5 +1,5 @@
 'use strict';
-
+/*Services to manage diretives logic*/
 practiceGame.factory('oneChoiceFactory', function () {
     return {
         execute: function () {
@@ -269,6 +269,137 @@ practiceGame.factory('satFactory', function () {
 
 
             });
+
+
+        }
+    };
+});
+
+practiceGame.factory('numericEntry', function () {
+    return {
+        execute: function (scope) {
+
+            var nexAction = $('#nextAction'),
+                seeAnswer = $('#skipAction');
+            scope.$watch('numerator', function (newVal, oldVal) {
+                if(angular.isDefined(newVal) && newVal!=null) {
+                    nexAction.addClass('btn-primary');
+                    seeAnswer.addClass('hide');
+                }
+                else{
+                    nexAction.removeClass('btn-primary');
+                    seeAnswer.removeClass('hide');
+                }
+
+            });
+
+        }
+    };
+});
+
+practiceGame.factory('fractionEntry', function () {
+    return {
+        execute: function (scope) {
+
+            var nexAction = $('#nextAction'),
+                seeAnswer = $('#skipAction');
+            scope.$watch('numerator', function (newVal, oldVal) {
+                if(angular.isDefined(newVal) && newVal!=null) {
+                    nexAction.addClass('btn-primary');
+                    seeAnswer.addClass('hide');
+                }
+                else{
+                    nexAction.removeClass('btn-primary');
+                    seeAnswer.removeClass('hide');
+                }
+
+            });
+
+        }
+    };
+});
+
+
+
+practiceGame.factory('newQuestionObject', function ($q,practiceRequests,Alerts) {
+
+    var responseObject= {
+        practiceGame:'',
+        questionObject:'',
+        questionSetsObject:'',
+        isDirectLink:false
+        }, deferred = $q.defer();
+
+    function responseBasedOnQuestionSets(params) {
+        practiceRequests.practiceGames().createNewPracticeGame(params.activeGroupId).then(function (result) {
+
+            var practiceObject = result.data.practice_game;
+            responseObject.practiceGame = practiceObject;
+
+            practiceRequests.practiceGames().getQuestionNewSetByPractice(practiceObject.id, params.tracks).then(function (result) {
+
+                responseObject.questionSetsObject = result.data.question_sets;
+
+                deferred.resolve(responseObject);
+            }).catch(function error(error) {
+                deferred.reject(error);
+                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+            });
+
+        }).catch(function error(error) {
+            deferred.reject(error);
+            Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+        });
+        return deferred.promise;
+
+    }
+
+    function responseBasedOnDirectLink(params) {
+        practiceRequests.practiceGames().createNewPracticeGame(params.activeGroupId).then(function (result) {
+
+            responseObject.practiceGame = result.data.practice_game;
+
+            practiceRequests.questions().getQuestionById(params.questionId).then(function (result) {
+
+                var questionObject = result.data.question;
+                responseObject.questionObject = questionObject;
+
+                practiceRequests.questionSets().getQuestionSetById(questionObject.question_set_id).then(function (result) {
+
+                    responseObject.questionSetsObject = result.data.question_set;
+                    responseObject.isDirectLink = true;
+                    deferred.resolve(responseObject);
+                }).catch(function error(error) {
+                    deferred.reject(error);
+                    Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+                });
+            });
+
+        }).catch(function error(error) {
+            deferred.reject(error);
+            Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+        });
+
+        return deferred.promise;
+
+    }
+
+
+    return {
+        definedQuestionResponse: function (params) {
+            if (params.tracks.length > 0) {
+
+                return responseBasedOnQuestionSets(params);
+
+            }
+            else if (angular.isDefined(params.questionId)) {
+                return responseBasedOnDirectLink(params);
+            }
+//            else {
+//                deferred.resolve(undefined);
+//                return deferred.promise;
+//
+//            }
 
 
         }

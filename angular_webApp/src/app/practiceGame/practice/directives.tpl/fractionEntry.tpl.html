@@ -1,4 +1,8 @@
 <div class="fractionEntry"  >
-    <input id="numerator " type="number" class="form-control" >
-    <input id="denominator" type="number" class="form-control" >
+    <input id="numerator " ng-model="numerator" type="number" class="form-control" >
+    <input id="denominator" ng-model="denominator"  type="number" class="form-control" >
+
+    <div id="explanationAnswerPanel" ng-show="hasExplanation({index : $index})" ng-if="showExplanation"  class="fadein " ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
+        <div class="explain-margin" ng-bind-html='item.explanation'></div>
+    </div>
 </div>
