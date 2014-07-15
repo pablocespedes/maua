@@ -104,7 +104,7 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities, Listenloo
     };
 
     if(angular.isDefined($cookies.authorization_token)){
-        if($cookies.authorization_token!=null || authorization_token.$cookies!=''){
+        if($cookies.authorization_token!=null || $cookies.authorization_token!=''){
             Application.init();
         }
     }

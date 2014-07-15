@@ -33,13 +33,10 @@
            });
            return deferred.promise;
        }},
-           controller: 'SimpleDashController',
-           access: {
-               authorizedRoles: [UserRoles.admin, UserRoles.member]
-           }
+           controller: 'SimpleDashController'
        })
 
-       .when('/:subject/dashboard/practice', {templateUrl: 'app/practiceGame/practice/practice.tpl.html', label: 'practice', resolve: {deps: function ($q, $rootScope) {
+       .when('/:subject/dashboard/practice/:questionId?', {templateUrl: 'app/practiceGame/practice/practice.tpl.html', label: 'practice', resolve: {deps: function ($q, $rootScope) {
                var deferred = $q.defer(),
                    essentials = [
                        filePath.practice.practiceCtrl,
@@ -55,9 +52,7 @@
 
                return deferred.promise;
            }}, controller: 'PracticeController',
-               access: {
-                   authorizedRoles: [UserRoles.admin, UserRoles.member]
-               }
+             reloadOnSearch: false
            });
 
        $routeProvider.otherwise({redirectTo:'/'});

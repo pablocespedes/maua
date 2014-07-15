@@ -48,6 +48,7 @@
 
 footer {
   position: fixed;
+  z-index: 20;
 }
 
 .theme-default footer {
@@ -73,24 +74,19 @@ footer {
   outline: 0;
   width: 100%;
   _height: 1px;
-  padding-left: 0px;
-  border: 1px solid #EEEBEB!important;
   background: #f1f1f1;
+  border: 1px solid #ccc;
+  border-bottom: 1px solid #aaa;
+}
 
+.f-content{
+  margin-bottom: 10px;
 
+}
 
-//  position: fixed;
-//  right: 0;
-//  bottom: 0;
-//  left: 0;
-//  width: 100%;
-//  background: #444;
-//  color: #fff;
-//  z-index: 99999;
-//  transition: color .3s;
-//  font-size: 24px;
-//  outline: 0;
-//  border: 0;
+.feedback-box{
+  padding-top: 12px;
+
 }
 
 .back-to-top {
@@ -190,9 +186,8 @@ footer {
 #practice-settings.open #practice-settings-toggler:hover {
  color: #fff;
 }
-//#practice-settings.open #practice-settings-toggler:before {
-// content: "\\f00d";
-//}
+
+
 #practice-settings-list {
  padding: 0;
  margin: 0;
@@ -234,7 +229,45 @@ footer {
  left: auto;
  right: -40px;
 }
+
 .right-to-left #practice-settings .practice-checkbox {
  right: auto;
  left: 20px;
 }
+
+
+#solutionarea {
+  min-height: 35px;
+  padding: 10px;
+  margin: 0 -10px;
+  border-bottom: 1px solid #c3c3c3;
+  overflow: visible;
+}
+
+
+.info-box {
+  background: #eee;
+  border: 1px solid #ccc;
+  border-bottom: 1px solid #aaa;
+  color: #333;
+  margin-right: -33px;
+  overflow-x: auto;
+  padding: 10px;
+  position: relative;
+  z-index: 10;
+  -webkit-box-shadow: 0 1px 2px #ccc;
+  box-shadow: 0 1px 2px #ccc;
+}
+.info-box:before {
+  content: " ";
+  display: block;
+  border-right: 7px solid transparent;
+  border-bottom: 8px solid #ccc;
+  width: 0;
+  height: 15px;
+  position: absolute;
+  right: -1px;
+  top: -24px;
+}
+
+
