@@ -95,6 +95,12 @@ angular.module('grockitApp.services', ['webStorageModule'])
             },
             setCurrentParam: function(key,param){
                 $route.current.pathParams[key]= param;
+            },
+            setInActiveBanner: function(param){
+                webStorage.add('active_banner', param);
+            },
+            getInActiveBanner: function(){
+                return webStorage.get('active_banner');
             }
 
 
