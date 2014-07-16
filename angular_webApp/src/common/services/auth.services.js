@@ -113,10 +113,8 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
             },
             updateUserInfo: function (currentUser) {
                 webStorage.add('currentUser', currentUser);
-            },
-            setActiveBanner: function(param){
-                $cookies.active_banner = param;
             }
+            
         };
     });
 
