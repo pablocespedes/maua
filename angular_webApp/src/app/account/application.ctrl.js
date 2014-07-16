@@ -60,6 +60,33 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities, Listenloo
                 Alerts.showAlert(errorMsg,'danger');
             });
         },
+        showBanner: function(){
+            var dialogOptions = {
+                title: "What's new in Grockit?",
+                message: "Hello! Welcome to the new Grockit! </br> " +
+                    "Here is a list of features that were added in this new version. </br> " +
+                    "Stay Tuned! More to come.",
+                buttons: {
+                    success: {
+                        label: "Do not show again",
+                        className: "btn-success",
+                        callback: function () {
+                            Auth.setActiveBanner("false");
+                        }
+                    },
+                    main: {
+                        label: "Show it later",
+                        className: "btn-primary",
+                        callback: function () {
+                            Auth.setActiveBanner(null);
+                        }
+                    }
+                }
+            };
+            if($cookies.active_banner==null || $cookies.active_banner=="true"){
+                Utilities.dialogService(dialogOptions);
+            }
+        },
         init: function(){
             $scope.linkedGroups=[];
             $scope.unLinkedGroups=[];
