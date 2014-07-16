@@ -84,6 +84,7 @@
 
                                 <div ng-bind-html='stimulus'></div>
                                 <br>
+                                <br>
                                 <!--answer-->
                                 <div id="answersPanels" ng-answers></div>
                             </div>
@@ -122,8 +123,8 @@
                 </div>
                 <div class="col-md-6 f-content feedback-box">
                     <div class="text-left">
-                       Problem with this question? Email
-                    <a href="mailto:feedback@grockit.com" title="">&nbsp; <i class="profile-list-icon fa fa-envelope" style="color: #888"></i>feedback@grockit.com
+                       Problem with this question?
+                    <a href="mailto:feedback@grockit.com?subject={{subjectMail}}&body={{mailBody}}" title="">&nbsp; <i class="profile-list-icon fa fa-envelope" style="color: #888"></i>&nbsp; feedback@grockit.com
                     </a>
 
                     </div>

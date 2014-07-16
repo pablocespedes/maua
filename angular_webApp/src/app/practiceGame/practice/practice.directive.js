@@ -78,7 +78,8 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
             templateUrl : 'app/practiceGame/practice/directives.tpl/numericEntry.tpl.html',
             scope: {
                 showExplanation:'=',
-                numerator:'='
+                numerator:'=',
+                questionInfo:'=questionInfo'
             },
             link: function(scope) {
                 numericEntry.execute(scope);

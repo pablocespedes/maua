@@ -1,5 +1,5 @@
 angular.module('grockitApp.services', ['webStorageModule'])
-    .factory('Utilities', function($http,webStorage,$rootScope,$location,$routeParams) {
+    .factory('Utilities', function($http,webStorage,$rootScope,$location,$routeParams,$route) {
            var trackData = {
                 tracks:[],
                 trackTitle:''
@@ -36,12 +36,12 @@ angular.module('grockitApp.services', ['webStorageModule'])
                     url : enviromentEvaluation(false)
                 };
             },
-            getActiveGroup: function(){
-                var currentGroup  = webStorage.get('currentUser').currentGroup;
-                    $rootScope.activeGroupId =currentGroup;
+            getActiveGroup: function() {
 
-                if(angular.isDefined($routeParams.subject) && currentGroup!=$routeParams.subject)
-                    this.redirect('#/' + currentGroup+ '/dashboard');
+                $rootScope.activeGroupId = webStorage.get('currentUser').currentGroup;
+
+//                if(angular.isDefined($routeParams.subject) && currentGroup!=$routeParams.subject)
+//                    this.redirect('#/' + currentGroup+ '/dashboard');
 
 
                 return  $rootScope.activeGroupId;
@@ -89,6 +89,12 @@ angular.module('grockitApp.services', ['webStorageModule'])
             },
             dialogService: function(options){
                 bootbox.dialog(options);
+            },
+            getCurrentParam: function(key){
+                return $route.current.pathParams[key];
+            },
+            setCurrentParam: function(key,param){
+                $route.current.pathParams[key]= param;
             }
 
 

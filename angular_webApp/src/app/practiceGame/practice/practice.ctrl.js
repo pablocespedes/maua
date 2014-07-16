@@ -3,12 +3,6 @@ practiceGame.controller('PracticeController',
     function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$route,$location,newQuestionObject) {
 
     $scope.loading=true;
-    $scope.activeTracks =Utilities.getActiveTrack();
-    $scope.titleQuest=$scope.activeTracks.trackTitle;
-    $scope.activeGroupId= Utilities.getActiveGroup();
-    $scope.breadcrumbs = breadcrumbs;
-    breadcrumbs.options = { 'practice': $scope.titleQuest };
-
     $scope.optionList = "abcdefghijklmnopqrstuvwxyz";
     $scope.nextActionTitle='Confirm Choice';
     $scope.questionItems=[];
@@ -47,6 +41,7 @@ practiceGame.controller('PracticeController',
         loadQuestion: function (questionResult,questionSetResult) {
             var setLayoutType = false;
             this.setCurrentQuestionId(questionResult.id);
+            this.setMailToInformation(questionResult.id);
             /*Create Round Session by Question*/
             practiceRequests.roundSessions().createQuestionPresentation($scope.practiceGameResponse.id, questionResult.id).then(function (result) {
                 $scope.answerObject = result.data;
@@ -304,11 +299,10 @@ practiceGame.controller('PracticeController',
             }
         },
         setCurrentQuestionId : function(questionId) {
-
             // set questionId to prevent route reloading
-            $route.current.pathParams['questionId'] = questionId;
+            Utilities.setCurrentParam('questionId',questionId);
 
-            $location.path($route.current.pathParams ['subject'] + '/dashboard/practice/' + questionId);
+            $location.path(Utilities.getCurrentParam('subject')+ '/dashboard/practice/' + questionId);
         },
         loadQuestionsSets: function(){
 
@@ -362,17 +356,29 @@ practiceGame.controller('PracticeController',
 
                 Utilities.dialogService(dialogOptions);
             }
+        },
+        setMailToInformation: function(questionId){
+            $scope.subjectMail= 'Problem with the question # '+questionId;
+            $scope.mailBody='Hello, I\'m getting problem with this question #'+questionId+' thanks for your help.';
         }
     };
 
 
 
     $scope.CreateNewGame= function(){
+
+        $scope.activeTracks =Utilities.getActiveTrack();
+        $scope.titleQuest=$scope.activeTracks.trackTitle;
+        $scope.activeGroupId= Utilities.getActiveGroup();
+        $scope.breadcrumbs = breadcrumbs;
+        breadcrumbs.options = { 'practice': $scope.titleQuest };
+
         var params={
             tracks: $scope.activeTracks.tracks,
             activeGroupId: $scope.activeGroupId,
-            questionId:$route.current.pathParams['questionId']
+            questionId:Utilities.getCurrentParam('questionId')
         };
+
         newQuestionObject.definedQuestionResponse(params).then(function(result){
 
             if(angular.isDefined(result)) {
