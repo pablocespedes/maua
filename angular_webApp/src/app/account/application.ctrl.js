@@ -96,7 +96,7 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities, Listenloo
                     $scope.groupMemberships = response.groupMemberships;
                     $scope.selectedGroup =  Utilities.getActiveGroup();
                     Application.loadGroupMembership();
-
+                    Application.showBanner();
                     ListenloopUtility.base(response);
                 }
             }).catch(function error(error) {
