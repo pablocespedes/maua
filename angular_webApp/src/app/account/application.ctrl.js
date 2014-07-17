@@ -72,19 +72,12 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities, Listenloo
                         label: "Do not show again",
                         className: "btn-success",
                         callback: function () {
-                            Auth.setActiveBanner("false");
-                        }
-                    },
-                    main: {
-                        label: "Show it later",
-                        className: "btn-primary",
-                        callback: function () {
-                            Auth.setActiveBanner(null);
+                            Utilities.setInActiveBanner(true);
                         }
                     }
                 }
             };
-            if($cookies.active_banner==null || $cookies.active_banner=="true"){
+            if(Utilities.getInActiveBanner()!=true){ 
                 Utilities.dialogService(dialogOptions);
             }
         },
