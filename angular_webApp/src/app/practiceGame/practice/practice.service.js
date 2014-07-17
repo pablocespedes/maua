@@ -305,7 +305,7 @@ practiceGame.factory('fractionEntry', function () {
 
             var nexAction = $('#nextAction'),
                 seeAnswer = $('#skipAction');
-            scope.$watch('numerator', function (newVal, oldVal) {
+            scope.$watch('portal.numerator', function (newVal, oldVal) {
                 if(angular.isDefined(newVal) && newVal!=null) {
                     nexAction.addClass('btn-primary');
                     seeAnswer.addClass('hide');

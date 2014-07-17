@@ -1,18 +1,17 @@
 NavController = function($rootScope,$scope, $location, Auth,Utilities, ListenloopUtility, Tracks,$cookies,Groups,Alerts) {
     $scope.url= Utilities.originalGrockit().url;
     $scope.logOutUrl= Utilities.originalGrockit().url+'/logout';
-    var errorMsg='';
+
+
     $rootScope.$on("init", function () {
         Application.init();
     });
-
 
     var Application = {
         loadGroupMembership: function(){
             if( $scope.currentUser.groupMemberships.length>0){
 
-                var groups = Groups.one();
-                groups.customGET('',{subdomain : 'www'}).then(function(result) {
+                Groups.getGroups().membershipGroups().then(function(result) {
                     var responseGroups = result.data.groups;
 
                     if (!!responseGroups) {
@@ -50,15 +49,12 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities, Listenloo
             }
         },
         fetchLeftNavTracksData: function(){
-            var tracks = Tracks.one();
-            tracks.customGET('',{group_id : $scope.selectedGroup}).then(function(result){
+            Tracks.getTracks().allByGroup($scope.selectedGroup).then(function(result){
                 var response = result.data;
                 $scope.tracksList = response.tracks;
 
             }).catch(function error(error) {
-
-                errorMsg= error.status +' '+ error.statusText;
-                Alerts.showAlert(errorMsg,'danger');
+                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
             });
         },
         showBanner: function(){
@@ -94,9 +90,7 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities, Listenloo
                     ListenloopUtility.base(response);
                 }
             }).catch(function error(error) {
-
-                errorMsg= error.status +' '+ error.statusText;
-                Alerts.showAlert(errorMsg,'danger');
+                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
             });
         }
     };

@@ -163,20 +163,32 @@
   }
   .answer-correct-panel{
     background: $answerCorrectPanelBg;
-    border-color: #d0e6be;
     color: $answerCorrectPanelCol;
     border: 1px solid transparent;
     border-radius: 5px;
     padding: 10px;
   }
   .answer-incorrect-panel{
-    background:  $lightInvalidRed;
-    border-color: #ebccd1;
+    background:  $lightInvalidGray;
     color: $invalidRed;
     border: 1px solid transparent;
     border-radius: 5px;
     padding: 10px;
+  }
+  .incorrectAnswer.choice #explanationAnswerPanel {
+    background:  $lightInvalidRed;
+    color: $invalidRed;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 10px;
+  }
 
+  .answer-incorrect-numEntry{
+    background:  $lightInvalidRed;
+    color: $invalidRed;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 10px;
   }
 
   .fractionEntry{

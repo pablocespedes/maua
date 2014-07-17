@@ -9,8 +9,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
     var SimpleDashBoard= {
         fetchTracksData: function () {
             $scope.loading=true;
-            var tracks = Tracks.one();
-                tracks.customGET('', {group_id: $scope.activeGroupId}).then(function (response) {
+                Tracks.getTracks().allByGroup($scope.activeGroupId).then(function (response) {
                     $scope.tracks = response.data.tracks;
                     $scope.loading=false;
 
@@ -21,8 +20,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
         },
         fetchScorePrediction: function () {
-
-            $scope.UserRequest.one($scope.user_id).customGET('score_prediction',{group:$scope.activeGroupId}).then(function(scorePrediction){
+            Users.getUser().scorePrediction($scope.user_id,$scope.activeGroupId).then(function(scorePrediction){
                 $scope.score = scorePrediction.data;
                 if(scorePrediction.data.total_score!=null && scorePrediction.data.range!=null) {
 
@@ -40,9 +38,12 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
         },
         fillGraphic: function (graphicData) {
+
             if(angular.isDefined(graphicData) && graphicData.history.length>0) {
                 $scope.historyVisible = true;
+
                 var response = History.findMissingDates(graphicData.history);
+
                 $scope.chart_options = {
                     data: response.Data,
                     xkey: 'day',
@@ -74,7 +75,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         },
         getHistoryInformation: function () {
             $scope.loading=true;
-            $scope.UserRequest.one($scope.user_id).customGET('history', {group: $scope.activeGroupId}).then(function (graphicResult) {
+            Users.getUser().history($scope.user_id,$scope.activeGroupId).then(function (graphicResult) {
                 SimpleDashBoard.fillGraphic(graphicResult.data);
 
 
@@ -88,8 +89,6 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
     $scope.init = function(){
         var userInfo= Auth.getCurrentUserInfo();
-        //Declare User RestAngular Object
-        $scope.UserRequest = Users.one();
         $scope.user_id= userInfo.userId;
 
         if($scope.enableScore)

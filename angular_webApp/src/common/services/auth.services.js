@@ -63,7 +63,7 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
                         Headers.setDefaultHeader(sessionId);
                         $cookies.authorization_token = sessionId;
 
-                        Users.one('self').get().then(function (result) {
+                        Users.getUser().self().then(function (result) {
 
                             var userData = setUserData(result.data.user,false);
 
@@ -100,7 +100,7 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
             getUpdateUserData: function () {
                 var deferred = $q.defer();
 
-                Users.one('self').get().then(function (result) {
+                Users.getUser().self().then(function (result) {
                     var userData = setUserData(result.data.user,true);
 
                     deferred.resolve(userData);

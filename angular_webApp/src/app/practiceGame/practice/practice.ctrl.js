@@ -77,7 +77,7 @@ practiceGame.controller('PracticeController',
                 });
 
                 $scope.position++;
-
+                Practice.removeBadImage();
             }).catch(function error(error) {
 
                 Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
@@ -216,6 +216,7 @@ practiceGame.controller('PracticeController',
                              * */
                             $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: value.id });
                             angular.element(selectIdButton).addClass('btn-danger');
+                            angular.element(selectIdButton).parents('#answer').addClass('incorrectAnswer');
                             $scope.answerStatus = false;
                         }
 
@@ -242,17 +243,21 @@ practiceGame.controller('PracticeController',
                 this.displayGeneralConfirmInfo();
 
                 var answers = $scope.questionItems.answers;
+                $scope.selectedAnswer='';
 
                 angular.forEach(answers, function (value) {
+                    /*evaluate just one time the quivalence between body and numerator*/
+                    var answerEval=(value.body==$scope.numerator);
 
+                  if(answerEval)
+                     $scope.selectedAnswer=value.answer_id;
 
-                    $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: value.id });
-                    if (!value.correct) {
-                       $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: value.id });
-                       $scope.answerStatus = false;
-                    }
+                   $scope.answerStatus = answerEval;
+
 
                 });
+
+                $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: $scope.selectedAnswer});
 
 
                 $scope.messageConfirmation=  $scope.answerStatus ? 'Your answer was correct': 'Your answer was incorrect';
@@ -336,9 +341,15 @@ practiceGame.controller('PracticeController',
         setMailToInformation: function(questionId){
             $scope.subjectMail= 'Problem with the question # '+questionId;
             $scope.mailBody='Hello, I\'m getting problem with this question #'+questionId+' thanks for your help.';
+        },
+        removeBadImage: function(){
+            /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
+            angular.element('img').error(function() {
+
+                angular.element('img').attr('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP==');
+            });
         }
     };
-
 
 
     $scope.CreateNewGame= function(){

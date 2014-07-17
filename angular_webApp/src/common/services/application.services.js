@@ -37,9 +37,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
                 };
             },
             getActiveGroup: function() {
-
                 $rootScope.activeGroupId = webStorage.get('currentUser').currentGroup;
-
                 return  $rootScope.activeGroupId;
             },
             setActiveGroup: function(activeGroupId){

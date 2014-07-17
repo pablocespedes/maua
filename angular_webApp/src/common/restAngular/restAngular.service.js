@@ -1,7 +1,27 @@
 
 request.factory('Users', function(Restangular,Headers) {
     Headers.updateDefaultHeader();
-    return  Restangular.service('users')
+
+    function getUser(){
+        var users = Restangular.service('users');
+
+        return {
+            self: function(){
+               return  users.one('self').get();
+            },
+            scorePrediction: function(userId,activeGroupId) {
+
+                return users.one().one(userId).customGET('score_prediction', {group: activeGroupId});
+            },
+            history: function(userId,activeGroupId) {
+                return  users.one().one(userId).customGET('history', {group: activeGroupId});
+            }
+        }
+    }
+
+    return {
+        getUser:getUser
+    }
 
 });
 
@@ -63,23 +83,41 @@ request.factory('practiceRequests', function(Restangular,Headers) {
 
 });
 
-
-
 request.factory('Groups', function(Restangular,Headers) {
     Headers.updateDefaultHeader();
-    return  Restangular.service('groups')
+
+    function getGroups(){
+        var groups = Restangular.service('groups').one();
+
+        return {
+            membershipGroups: function(){
+                return groups.customGET('',{subdomain : 'www'});
+            }
+        }
+    }
+
+    return {
+        getGroups:getGroups
+    }
+
 
 });
 
 request.factory('Tracks', function(Restangular,Headers) {
     Headers.updateDefaultHeader();
-    return  Restangular.service('tracks')
+    function getTracks(){
+        var tracks =  Restangular.service('tracks').one();
 
-});
+        return {
+            allByGroup: function(groupId){
+                return tracks.customGET('', {group_id: groupId});
+            }
+        }
+    }
 
-request.factory('SubTracks', function(Restangular,Headers) {
-    Headers.updateDefaultHeader();
-    return  Restangular.service('subtracks')
+    return {
+        getTracks:getTracks
+    }
 
 });
 
