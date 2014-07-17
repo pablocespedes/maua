@@ -6,7 +6,9 @@
 #practice{
 
   #Panel1 img {
-    width: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
   }
 
   .video-container {
@@ -27,7 +29,7 @@
   }
 
   .no-hover:hover{
-    background: transparent !important;
+    background: white !important;
   }
   .choice{
     margin-bottom: -1px;

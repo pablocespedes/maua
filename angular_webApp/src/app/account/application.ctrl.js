@@ -6,6 +6,7 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities, Listenloo
         Application.init();
     });
 
+
     var Application = {
         loadGroupMembership: function(){
             if( $scope.currentUser.groupMemberships.length>0){

@@ -1,7 +1,7 @@
 practiceGame.controller('PracticeController',
     ['$scope','practiceRequests','Utilities','breadcrumbs','VideoService','Alerts','$route','$location','newQuestionObject',
     function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$route,$location,newQuestionObject) {
-
+    $scope.portalC=$scope;
     $scope.loading=true;
     $scope.optionList = "abcdefghijklmnopqrstuvwxyz";
     $scope.nextActionTitle='Confirm Choice';
@@ -235,45 +235,21 @@ practiceGame.controller('PracticeController',
         numericEntryConfirmChoice: function() {
             this.resetLayout();
 
-            var selectedPosition = '', selectedOptions = [], selectedOptionsCount;
-
             /*Get selected answers*/
 
-            selectedOptionsCount= selectedOptions.length;
-            if (selectedOptionsCount > 0) {
+            if ($scope.numerator || $scope.denominator) {
 
                 this.displayGeneralConfirmInfo();
+
                 var answers = $scope.questionItems.answers;
 
-                angular.element('.choice button').removeClass('btn-primary');
                 angular.forEach(answers, function (value) {
 
-                    var selectIdButton = ('#' + value.id);
 
-                    /*set the correct class on the button*/
-                    if (value.correct) {
-                        if(Utilities.existsInArray(value.id,selectedOptions)) {
-                            /*Send answer response to server, important this line have to be inside this if
-                             * since just the users answers get into this evaluation
-                             * */
-                            $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: value.id });
-                        }
-                        else{
-                            $scope.answerStatus = false;
-                        }
-                        angular.element(selectIdButton).addClass('btn-success');
-
-                    }
-                    else{
-                        if(Utilities.existsInArray(value.id,selectedOptions)) {
-                            /*Send answer response to server, important this line have to be inside this if
-                             * since just the users answers get into this evaluation
-                             * */
-                            $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: value.id });
-                            angular.element(selectIdButton).addClass('btn-danger');
-                            $scope.answerStatus = false;
-                        }
-
+                    $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: value.id });
+                    if (!value.correct) {
+                       $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: value.id });
+                       $scope.answerStatus = false;
                     }
 
                 });
@@ -283,7 +259,7 @@ practiceGame.controller('PracticeController',
                 angular.element("#answercontent *").prop('disabled', true);
             }
             else {
-                Alerts.showAlert('Please select an option!','warning');
+                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'warning');
 
             }
 
@@ -291,7 +267,7 @@ practiceGame.controller('PracticeController',
         },
         evaluateConfirmMethod : function(){
             switch($scope.lastAnswerLoaded){
-                case 'numericEntry':
+                case 'NumericEntry':
                     Practice.numericEntryConfirmChoice();
                     break;
                 default:

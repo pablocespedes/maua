@@ -74,15 +74,15 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
     .directive('ngNumericEntry', function(numericEntry) {
         return {
             restrict: 'A',
-            replace: true,
             templateUrl : 'app/practiceGame/practice/directives.tpl/numericEntry.tpl.html',
             scope: {
                 showExplanation:'=',
-                numerator:'=',
-                questionInfo:'=questionInfo'
+                portal:'=',
+                answerExplanation:'='
             },
-            link: function(scope) {
-                numericEntry.execute(scope);
+
+            link: function(scope,attrs) {
+                numericEntry.execute(scope,attrs);
             }
 
         };

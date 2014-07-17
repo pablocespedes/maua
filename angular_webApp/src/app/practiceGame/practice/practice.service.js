@@ -277,11 +277,13 @@ practiceGame.factory('satFactory', function () {
 
 practiceGame.factory('numericEntry', function () {
     return {
-        execute: function (scope) {
+        execute: function (scope,attrs) {
 
             var nexAction = $('#nextAction'),
                 seeAnswer = $('#skipAction');
-            scope.$watch('numerator', function (newVal, oldVal) {
+
+            scope.$watch('portal.numerator', function (newVal, oldVal) {
+
                 if(angular.isDefined(newVal) && newVal!=null) {
                     nexAction.addClass('btn-primary');
                     seeAnswer.addClass('hide');
@@ -327,44 +329,47 @@ practiceGame.factory('newQuestionObject', function ($q,practiceRequests,Alerts) 
         questionObject:'',
         questionSetsObject:'',
         isDirectLink:false
-        }, deferred = $q.defer();
+        };
 
     function responseBasedOnQuestionSets(params) {
-        practiceRequests.practiceGames().createNewPracticeGame(params.activeGroupId).then(function (result) {
+        var deferred = $q.defer(),
+            createGame=practiceRequests.practiceGames().createNewPracticeGame(params.activeGroupId);
 
-            responseObject.practiceGame = result.data.practice_game;
-            practiceRequests.practiceGames().getQuestionNewSetByPractice(responseObject.practiceGame.id, params.tracks).then(function (result) {
+             createGame.then( function( game ){
 
-                responseObject.questionSetsObject = result.data.question_sets;
+                 responseObject.practiceGame = game.data.practice_game;
+                return practiceRequests.practiceGames().getQuestionNewSetByPractice(responseObject.practiceGame.id, params.tracks);
 
-                deferred.resolve(responseObject);
+            }).then( function( result ){
+
+                 responseObject.questionSetsObject = result.data.question_sets;
+
+                 deferred.resolve(responseObject);
 
             }).catch(function error(error) {
 
-                deferred.reject(error);
-                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+                 deferred.reject(error);
+                 Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
 
-            });
+             });
 
-        }).catch(function error(error) {
-
-            deferred.reject(error);
-            Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
-        });
       return deferred.promise;
 
     }
 
     function responseBasedOnDirectLink(params) {
+        var deferred = $q.defer(),
+            createGame= practiceRequests.practiceGames().createNewPracticeGame(params.activeGroupId),
+            getQuestion =practiceRequests.questions().getQuestionById(params.questionId);
 
-        practiceRequests.practiceGames().createNewPracticeGame(params.activeGroupId).then(function (result) {
+        $q.all([createGame,getQuestion]).then(function (result) {
+            var practiceG= result[0].data,questResponse=result[1].data;
 
-            responseObject.practiceGame = result.data.practice_game;
-            practiceRequests.questions().getQuestionById(params.questionId).then(function (result) {
+                responseObject.practiceGame = practiceG.practice_game;
 
-                responseObject.questionObject = result.data.question;
+                responseObject.questionObject = questResponse.question;
 
-                responseObject.questionSetsObject = result.data.question.question_set;
+                responseObject.questionSetsObject = questResponse.question.question_set;
 
                 responseObject.isDirectLink = true;
 
@@ -375,11 +380,7 @@ practiceGame.factory('newQuestionObject', function ($q,practiceRequests,Alerts) 
                 deferred.reject(error);
                 Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
             });
-        }).catch(function error(error) {
 
-            deferred.reject(error);
-            Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
-        });
 
         return deferred.promise;
 

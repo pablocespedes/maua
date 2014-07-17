@@ -13,15 +13,15 @@ angular.module('grockitApp.services', ['webStorageModule'])
               return location.host== '127.0.0.1:9000'  ? 'https://staging.grockit.com' : location.host=='ww2.grockit.com' ? 'https://grockit.com' :location.origin
             }
 
-         /*   local enviroment
-            if(isNewGrockit){
+            /*local enviroment*/
+          /*  if(isNewGrockit){
 
                 return location.host== '127.0.0.1:9000'  ? 'http://127.0.0.1:9000/' : location.origin+'/2.0';
             }
             else{
                 return location.host== '127.0.0.1:9000' ? 'https://staging.grockit.com' : location.host=='ww2.grockit.com' ? 'https://grockit.com' :location.origin
-            }*/
-
+            }
+*/
 
         }
 
@@ -39,10 +39,6 @@ angular.module('grockitApp.services', ['webStorageModule'])
             getActiveGroup: function() {
 
                 $rootScope.activeGroupId = webStorage.get('currentUser').currentGroup;
-
-//                if(angular.isDefined($routeParams.subject) && currentGroup!=$routeParams.subject)
-//                    this.redirect('#/' + currentGroup+ '/dashboard');
-
 
                 return  $rootScope.activeGroupId;
             },
