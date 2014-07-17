@@ -1,7 +1,8 @@
 NavController = function($rootScope,$scope, $location, Auth,Utilities, ListenloopUtility, Tracks,$cookies,Groups,Alerts) {
     $scope.url= Utilities.originalGrockit().url;
     $scope.logOutUrl= Utilities.originalGrockit().url+'/logout';
-    var errorMsg='';
+
+
     $rootScope.$on("init", function () {
         Application.init();
     });
@@ -10,8 +11,7 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities, Listenloo
         loadGroupMembership: function(){
             if( $scope.currentUser.groupMemberships.length>0){
 
-                var groups = Groups.one();
-                groups.customGET('',{subdomain : 'www'}).then(function(result) {
+                Groups.getGroups().membershipGroups().then(function(result) {
                     var responseGroups = result.data.groups;
 
                     if (!!responseGroups) {
@@ -49,16 +49,33 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities, Listenloo
             }
         },
         fetchLeftNavTracksData: function(){
-            var tracks = Tracks.one();
-            tracks.customGET('',{group_id : $scope.selectedGroup}).then(function(result){
+            Tracks.getTracks().allByGroup($scope.selectedGroup).then(function(result){
                 var response = result.data;
                 $scope.tracksList = response.tracks;
 
             }).catch(function error(error) {
-
-                errorMsg= error.status +' '+ error.statusText;
-                Alerts.showAlert(errorMsg,'danger');
+                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
             });
+        },
+        showBanner: function(){
+            var dialogOptions = {
+                title: "What's new in Grockit?",
+                message: "Hello! Welcome to the new Grockit! </br> " +
+                    "Here is a list of features that were added in this new version. </br> " +
+                    "Stay Tuned! More to come.",
+                buttons: {
+                    success: {
+                        label: "Do not show again",
+                        className: "btn-success",
+                        callback: function () {
+                            Utilities.setInActiveBanner(true);
+                        }
+                    }
+                }
+            };
+            if(Utilities.getInActiveBanner()!=true){ 
+                Utilities.dialogService(dialogOptions);
+            }
         },
         init: function(){
             $scope.linkedGroups=[];
@@ -69,13 +86,11 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities, Listenloo
                     $scope.groupMemberships = response.groupMemberships;
                     $scope.selectedGroup =  Utilities.getActiveGroup();
                     Application.loadGroupMembership();
-
+                    Application.showBanner();
                     ListenloopUtility.base(response);
                 }
             }).catch(function error(error) {
-
-                errorMsg= error.status +' '+ error.statusText;
-                Alerts.showAlert(errorMsg,'danger');
+                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
             });
         }
     };

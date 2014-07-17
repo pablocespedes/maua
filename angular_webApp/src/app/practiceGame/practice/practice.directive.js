@@ -74,14 +74,17 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
     .directive('ngNumericEntry', function(numericEntry) {
         return {
             restrict: 'A',
-            replace: true,
             templateUrl : 'app/practiceGame/practice/directives.tpl/numericEntry.tpl.html',
             scope: {
+                items:'=items',
                 showExplanation:'=',
-                numerator:'='
+                hasExplanation: '&',
+                portal:'=',
+                answerStatus:'='
             },
-            link: function(scope) {
-                numericEntry.execute(scope);
+
+            link: function(scope,attrs) {
+                numericEntry.execute(scope,attrs);
             }
 
         };
@@ -92,9 +95,11 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
             restrict: 'A',
             templateUrl : 'app/practiceGame/practice/directives.tpl/fractionEntry.tpl.html',
             scope: {
+                items:'=items',
                 showExplanation:'=',
-                numerator:'=',
-                denominator:'='
+                hasExplanation: '&',
+                portal:'=',
+                answerStatus:'='
 
             },
             link: function(scope) {

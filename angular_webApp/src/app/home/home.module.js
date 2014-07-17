@@ -33,7 +33,8 @@
            });
            return deferred.promise;
        }},
-           controller: 'SimpleDashController'
+           controller: 'SimpleDashController',
+           reloadOnSearch: true
        })
 
        .when('/:subject/dashboard/practice/:questionId?', {templateUrl: 'app/practiceGame/practice/practice.tpl.html', label: 'practice', resolve: {deps: function ($q, $rootScope) {

@@ -1,4 +1,4 @@
-angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
+angular.module("grockitApp.authServices", ['webStorageModule'])
     .constant('UserRoles', {
         admin: 'admin',
         member: 'member',
@@ -6,25 +6,31 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
     })
     .factory('Auth', function($cookies,UserRoles,webStorage,Users,Utilities,$location,$q,Headers) {
 
-        var setUserData = function(response) {
+        var updateSelectedGroup= function(defaultGroup){
+            /*Utilities.getCurrentParam('subject') will inspect the url searching for the subject parameter*/
+           return angular.isDefined(Utilities.getCurrentParam('subject')) ? Utilities.getCurrentParam('subject') :defaultGroup;
 
-            var currentGroup = response.group_memberships[0].group_id, //!!response.studying_for ? response.studying_for :
+        };
+
+        var setUserData = function(response,isUpdate) {
+
+            var defaultGroup = response.group_memberships[0].group_id, //!!response.studying_for ? response.studying_for :
                 currentUser = {
                     userId: response.id,
                     role: response.guest == true ? UserRoles.member : UserRoles.guest,
                     groupMemberships:response.group_memberships,
-                    currentGroup: currentGroup,
+                    currentGroup:isUpdate ? updateSelectedGroup(defaultGroup) : defaultGroup,
                     fullName: response.first_name,
                     avatar_url: response.avatar_url,
                     emailAddress: response.email_address
                 };
 
-            Utilities.setActiveGroup(currentGroup);
+            Utilities.setActiveGroup(currentUser.currentGroup);
 
             webStorage.add('currentUser', currentUser);
 
             return currentUser;
-        };
+    };
 
         return {
             isLoggedIn: function () {
@@ -57,9 +63,9 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
                         Headers.setDefaultHeader(sessionId);
                         $cookies.authorization_token = sessionId;
 
-                        Users.one('self').get().then(function (result) {
+                        Users.getUser().self().then(function (result) {
 
-                            var userData = setUserData(result.data.user);
+                            var userData = setUserData(result.data.user,false);
 
                             deferred.resolve(userData);
 
@@ -94,8 +100,8 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
             getUpdateUserData: function () {
                 var deferred = $q.defer();
 
-                Users.one('self').get().then(function (result) {
-                    var userData = setUserData(result.data.user);
+                Users.getUser().self().then(function (result) {
+                    var userData = setUserData(result.data.user,true);
 
                     deferred.resolve(userData);
 
@@ -108,6 +114,7 @@ angular.module("grockitApp.authServices", ['ngCookies','webStorageModule'])
             updateUserInfo: function (currentUser) {
                 webStorage.add('currentUser', currentUser);
             }
+            
         };
     });
 

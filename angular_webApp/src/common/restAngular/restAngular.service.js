@@ -1,7 +1,27 @@
 
 request.factory('Users', function(Restangular,Headers) {
     Headers.updateDefaultHeader();
-    return  Restangular.service('users')
+
+    function getUser(){
+        var users = Restangular.service('users');
+
+        return {
+            self: function(){
+               return  users.one('self').get();
+            },
+            scorePrediction: function(userId,activeGroupId) {
+
+                return users.one().one(userId).customGET('score_prediction', {group: activeGroupId});
+            },
+            history: function(userId,activeGroupId) {
+                return  users.one().one(userId).customGET('history', {group: activeGroupId});
+            }
+        }
+    }
+
+    return {
+        getUser:getUser
+    }
 
 });
 
@@ -63,23 +83,41 @@ request.factory('practiceRequests', function(Restangular,Headers) {
 
 });
 
-
-
 request.factory('Groups', function(Restangular,Headers) {
     Headers.updateDefaultHeader();
-    return  Restangular.service('groups')
+
+    function getGroups(){
+        var groups = Restangular.service('groups').one();
+
+        return {
+            membershipGroups: function(){
+                return groups.customGET('',{subdomain : 'www'});
+            }
+        }
+    }
+
+    return {
+        getGroups:getGroups
+    }
+
 
 });
 
 request.factory('Tracks', function(Restangular,Headers) {
     Headers.updateDefaultHeader();
-    return  Restangular.service('tracks')
+    function getTracks(){
+        var tracks =  Restangular.service('tracks').one();
 
-});
+        return {
+            allByGroup: function(groupId){
+                return tracks.customGET('', {group_id: groupId});
+            }
+        }
+    }
 
-request.factory('SubTracks', function(Restangular,Headers) {
-    Headers.updateDefaultHeader();
-    return  Restangular.service('subtracks')
+    return {
+        getTracks:getTracks
+    }
 
 });
 
@@ -128,61 +166,4 @@ request.factory("VideoService", function($q) {
         }
     }
 });
-
-
-/*This code should be delete after Team approval*/
-
-/*
-
-request.factory('practiceGames', function(Restangular,Headers) {
-    Headers.updateDefaultHeader();
-    var practiceGameObject=  Restangular.service('practice_games').one();
-
-    return{
-        getQuestionNewSetByPractice: function(practiceGameId,tracks){
-            return  practiceGameObject.one(practiceGameId,'sample').customGET('',{'tracks[]':tracks});
-        },
-        createNewPracticeGame: function(activeGroupId){
-            return  practiceGameObject.post('',{group_id:activeGroupId});
-        }
-    }
-});
-
-request.factory('roundSessions', function(Restangular,Headers) {
-    Headers.updateDefaultHeader();
-    var roundSessionObject=  Restangular.service('round_sessions').one();
-    return{
-        createQuestionPresentation : function(gameId,questionId){
-            return roundSessionObject.post('', {game_id: gameId, question_id: questionId});
-        }
-    }
-});
-
-request.factory('questionSets', function(Restangular,Headers) {
-    Headers.updateDefaultHeader();
-    var questionSetObject = Restangular.service('question_sets').one();
-
-    return{
-        getQuestionSetById: function(questionSetId){
-            return  questionSetObject.one(questionSetId).customGET('');
-        }
-    }
-
-});
-
-request.factory('Questions', function(Restangular,Headers) {
-    Headers.updateDefaultHeader();
-    var questionObject = Restangular.service('questions').one();
-
-    return  {
-        getQuestionById: function(questionId){
-            return  questionObject.one(questionId).customGET('');
-        }
-    }
-
-});
-
-
-
-*/
 

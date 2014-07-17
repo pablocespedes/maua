@@ -5412,8 +5412,8 @@ h6 .label {
   font-size: 12px;
   line-height: 18px;
   height: 18px;
-  padding-right: 15px;
-  margin: 1px 0 -1px 0; }
+  padding-right: 0px;
+  margin: 0 0 0 0; }
 
 .alert {
   background: #f9f1c7;

@@ -277,11 +277,13 @@ practiceGame.factory('satFactory', function () {
 
 practiceGame.factory('numericEntry', function () {
     return {
-        execute: function (scope) {
+        execute: function (scope,attrs) {
 
             var nexAction = $('#nextAction'),
                 seeAnswer = $('#skipAction');
-            scope.$watch('numerator', function (newVal, oldVal) {
+
+            scope.$watch('portal.numerator', function (newVal, oldVal) {
+
                 if(angular.isDefined(newVal) && newVal!=null) {
                     nexAction.addClass('btn-primary');
                     seeAnswer.addClass('hide');
@@ -303,7 +305,7 @@ practiceGame.factory('fractionEntry', function () {
 
             var nexAction = $('#nextAction'),
                 seeAnswer = $('#skipAction');
-            scope.$watch('numerator', function (newVal, oldVal) {
+            scope.$watch('portal.numerator', function (newVal, oldVal) {
                 if(angular.isDefined(newVal) && newVal!=null) {
                     nexAction.addClass('btn-primary');
                     seeAnswer.addClass('hide');
@@ -320,7 +322,6 @@ practiceGame.factory('fractionEntry', function () {
 });
 
 
-
 practiceGame.factory('newQuestionObject', function ($q,practiceRequests,Alerts) {
 
     var responseObject= {
@@ -328,57 +329,58 @@ practiceGame.factory('newQuestionObject', function ($q,practiceRequests,Alerts) 
         questionObject:'',
         questionSetsObject:'',
         isDirectLink:false
-        }, deferred = $q.defer();
+        };
 
     function responseBasedOnQuestionSets(params) {
-        practiceRequests.practiceGames().createNewPracticeGame(params.activeGroupId).then(function (result) {
+        var deferred = $q.defer(),
+            createGame=practiceRequests.practiceGames().createNewPracticeGame(params.activeGroupId);
 
-            var practiceObject = result.data.practice_game;
-            responseObject.practiceGame = practiceObject;
+             createGame.then( function( game ){
 
-            practiceRequests.practiceGames().getQuestionNewSetByPractice(practiceObject.id, params.tracks).then(function (result) {
+                 responseObject.practiceGame = game.data.practice_game;
+                return practiceRequests.practiceGames().getQuestionNewSetByPractice(responseObject.practiceGame.id, params.tracks);
 
-                responseObject.questionSetsObject = result.data.question_sets;
+            }).then( function( result ){
 
-                deferred.resolve(responseObject);
+                 responseObject.questionSetsObject = result.data.question_sets;
+
+                 deferred.resolve(responseObject);
+
             }).catch(function error(error) {
-                deferred.reject(error);
-                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
-            });
 
-        }).catch(function error(error) {
-            deferred.reject(error);
-            Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
-        });
-        return deferred.promise;
+                 deferred.reject(error);
+                 Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+
+             });
+
+      return deferred.promise;
 
     }
 
     function responseBasedOnDirectLink(params) {
-        practiceRequests.practiceGames().createNewPracticeGame(params.activeGroupId).then(function (result) {
+        var deferred = $q.defer(),
+            createGame= practiceRequests.practiceGames().createNewPracticeGame(params.activeGroupId),
+            getQuestion =practiceRequests.questions().getQuestionById(params.questionId);
 
-            responseObject.practiceGame = result.data.practice_game;
+        $q.all([createGame,getQuestion]).then(function (result) {
+            var practiceG= result[0].data,questResponse=result[1].data;
 
-            practiceRequests.questions().getQuestionById(params.questionId).then(function (result) {
+                responseObject.practiceGame = practiceG.practice_game;
 
-                var questionObject = result.data.question;
-                responseObject.questionObject = questionObject;
+                responseObject.questionObject = questResponse.question;
 
-                practiceRequests.questionSets().getQuestionSetById(questionObject.question_set_id).then(function (result) {
+                responseObject.questionSetsObject = questResponse.question.question_set;
 
-                    responseObject.questionSetsObject = result.data.question_set;
-                    responseObject.isDirectLink = true;
-                    deferred.resolve(responseObject);
-                }).catch(function error(error) {
-                    deferred.reject(error);
-                    Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
-                });
+                responseObject.isDirectLink = true;
+
+                deferred.resolve(responseObject);
+
+            }).catch(function error(error) {
+
+                deferred.reject(error);
+                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
             });
 
-        }).catch(function error(error) {
-            deferred.reject(error);
-            Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
-        });
 
         return deferred.promise;
 
@@ -387,21 +389,13 @@ practiceGame.factory('newQuestionObject', function ($q,practiceRequests,Alerts) 
 
     return {
         definedQuestionResponse: function (params) {
-            if (params.tracks.length > 0) {
 
-                return responseBasedOnQuestionSets(params);
-
-            }
-            else if (angular.isDefined(params.questionId)) {
-                return responseBasedOnDirectLink(params);
-            }
-//            else {
-//                deferred.resolve(undefined);
-//                return deferred.promise;
-//
-//            }
-
-
+                if (params.tracks.length > 0) {
+                    return responseBasedOnQuestionSets(params);
+                }
+                else if (angular.isDefined(params.questionId)) {
+                    return responseBasedOnDirectLink(params);
+                }
         }
     };
 });

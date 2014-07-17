@@ -1,7 +1,7 @@
 <div id="twoChoice" >
     <div class="list-group text-left">
 
-        <a ng-repeat="item in items" href="javascript:void(0)" class="choice list-group-item">
+        <a id="answer" ng-repeat="item in items" href="javascript:void(0)" class="choice list-group-item">
             <div class="middle">
                 <button id="{{item.id}}" type="button" class=" btn-option  btn-rounded letter" >{{item.option}}</button>
                 <input id="{{item.id}}" type="checkbox" name="choice"  value="false"  />

@@ -1,14 +1,8 @@
 practiceGame.controller('PracticeController',
     ['$scope','practiceRequests','Utilities','breadcrumbs','VideoService','Alerts','$route','$location','newQuestionObject',
     function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$route,$location,newQuestionObject) {
-
+    $scope.portalC=$scope;
     $scope.loading=true;
-    $scope.activeTracks =Utilities.getActiveTrack();
-    $scope.titleQuest=$scope.activeTracks.trackTitle;
-    $scope.activeGroupId= Utilities.getActiveGroup();
-    $scope.breadcrumbs = breadcrumbs;
-    breadcrumbs.options = { 'practice': $scope.titleQuest };
-
     $scope.optionList = "abcdefghijklmnopqrstuvwxyz";
     $scope.nextActionTitle='Confirm Choice';
     $scope.questionItems=[];
@@ -47,6 +41,7 @@ practiceGame.controller('PracticeController',
         loadQuestion: function (questionResult,questionSetResult) {
             var setLayoutType = false;
             this.setCurrentQuestionId(questionResult.id);
+            this.setMailToInformation(questionResult.id);
             /*Create Round Session by Question*/
             practiceRequests.roundSessions().createQuestionPresentation($scope.practiceGameResponse.id, questionResult.id).then(function (result) {
                 $scope.answerObject = result.data;
@@ -82,7 +77,7 @@ practiceGame.controller('PracticeController',
                 });
 
                 $scope.position++;
-
+                Practice.removeBadImage();
             }).catch(function error(error) {
 
                 Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
@@ -221,6 +216,7 @@ practiceGame.controller('PracticeController',
                              * */
                             $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: value.id });
                             angular.element(selectIdButton).addClass('btn-danger');
+                            angular.element(selectIdButton).parents('#answer').addClass('incorrectAnswer');
                             $scope.answerStatus = false;
                         }
 
@@ -240,55 +236,35 @@ practiceGame.controller('PracticeController',
         numericEntryConfirmChoice: function() {
             this.resetLayout();
 
-            var selectedPosition = '', selectedOptions = [], selectedOptionsCount;
-
             /*Get selected answers*/
 
-            selectedOptionsCount= selectedOptions.length;
-            if (selectedOptionsCount > 0) {
+            if ($scope.numerator || $scope.denominator) {
 
                 this.displayGeneralConfirmInfo();
+
                 var answers = $scope.questionItems.answers;
+                $scope.selectedAnswer='';
 
-                angular.element('.choice button').removeClass('btn-primary');
                 angular.forEach(answers, function (value) {
+                    /*evaluate just one time the quivalence between body and numerator*/
+                    var answerEval=(value.body==$scope.numerator);
 
-                    var selectIdButton = ('#' + value.id);
+                  if(answerEval)
+                     $scope.selectedAnswer=value.answer_id;
 
-                    /*set the correct class on the button*/
-                    if (value.correct) {
-                        if(Utilities.existsInArray(value.id,selectedOptions)) {
-                            /*Send answer response to server, important this line have to be inside this if
-                             * since just the users answers get into this evaluation
-                             * */
-                            $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: value.id });
-                        }
-                        else{
-                            $scope.answerStatus = false;
-                        }
-                        angular.element(selectIdButton).addClass('btn-success');
+                   $scope.answerStatus = answerEval;
 
-                    }
-                    else{
-                        if(Utilities.existsInArray(value.id,selectedOptions)) {
-                            /*Send answer response to server, important this line have to be inside this if
-                             * since just the users answers get into this evaluation
-                             * */
-                            $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: value.id });
-                            angular.element(selectIdButton).addClass('btn-danger');
-                            $scope.answerStatus = false;
-                        }
-
-                    }
 
                 });
+
+                $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: $scope.selectedAnswer});
 
 
                 $scope.messageConfirmation=  $scope.answerStatus ? 'Your answer was correct': 'Your answer was incorrect';
                 angular.element("#answercontent *").prop('disabled', true);
             }
             else {
-                Alerts.showAlert('Please select an option!','warning');
+                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'warning');
 
             }
 
@@ -296,7 +272,7 @@ practiceGame.controller('PracticeController',
         },
         evaluateConfirmMethod : function(){
             switch($scope.lastAnswerLoaded){
-                case 'numericEntry':
+                case 'NumericEntry':
                     Practice.numericEntryConfirmChoice();
                     break;
                 default:
@@ -304,11 +280,10 @@ practiceGame.controller('PracticeController',
             }
         },
         setCurrentQuestionId : function(questionId) {
-
             // set questionId to prevent route reloading
-            $route.current.pathParams['questionId'] = questionId;
+            Utilities.setCurrentParam('questionId',questionId);
 
-            $location.path($route.current.pathParams ['subject'] + '/dashboard/practice/' + questionId);
+            $location.path(Utilities.getCurrentParam('subject')+ '/dashboard/practice/' + questionId);
         },
         loadQuestionsSets: function(){
 
@@ -362,17 +337,35 @@ practiceGame.controller('PracticeController',
 
                 Utilities.dialogService(dialogOptions);
             }
+        },
+        setMailToInformation: function(questionId){
+            $scope.subjectMail= 'Problem with the question # '+questionId;
+            $scope.mailBody='Hello, I\'m getting problem with this question #'+questionId+' thanks for your help.';
+        },
+        removeBadImage: function(){
+            /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
+            angular.element('img').error(function() {
+
+                angular.element('img').attr('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP==');
+            });
         }
     };
 
 
-
     $scope.CreateNewGame= function(){
+
+        $scope.activeTracks =Utilities.getActiveTrack();
+        $scope.titleQuest=$scope.activeTracks.trackTitle;
+        $scope.activeGroupId= Utilities.getActiveGroup();
+        $scope.breadcrumbs = breadcrumbs;
+        breadcrumbs.options = { 'practice': $scope.titleQuest };
+
         var params={
             tracks: $scope.activeTracks.tracks,
             activeGroupId: $scope.activeGroupId,
-            questionId:$route.current.pathParams['questionId']
+            questionId:Utilities.getCurrentParam('questionId')
         };
+
         newQuestionObject.definedQuestionResponse(params).then(function(result){
 
             if(angular.isDefined(result)) {

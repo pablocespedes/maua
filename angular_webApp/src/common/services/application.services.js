@@ -1,5 +1,5 @@
 angular.module('grockitApp.services', ['webStorageModule'])
-    .factory('Utilities', function($http,webStorage,$rootScope,$location,$routeParams) {
+    .factory('Utilities', function($http,webStorage,$rootScope,$location,$routeParams,$route) {
            var trackData = {
                 tracks:[],
                 trackTitle:''
@@ -13,15 +13,15 @@ angular.module('grockitApp.services', ['webStorageModule'])
               return location.host== '127.0.0.1:9000'  ? 'https://staging.grockit.com' : location.host=='ww2.grockit.com' ? 'https://grockit.com' :location.origin
             }
 
-         /*   local enviroment
-            if(isNewGrockit){
+            /*local enviroment*/
+          /*  if(isNewGrockit){
 
                 return location.host== '127.0.0.1:9000'  ? 'http://127.0.0.1:9000/' : location.origin+'/2.0';
             }
             else{
                 return location.host== '127.0.0.1:9000' ? 'https://staging.grockit.com' : location.host=='ww2.grockit.com' ? 'https://grockit.com' :location.origin
-            }*/
-
+            }
+*/
 
         }
 
@@ -36,14 +36,8 @@ angular.module('grockitApp.services', ['webStorageModule'])
                     url : enviromentEvaluation(false)
                 };
             },
-            getActiveGroup: function(){
-                var currentGroup  = webStorage.get('currentUser').currentGroup;
-                    $rootScope.activeGroupId =currentGroup;
-
-                if(angular.isDefined($routeParams.subject) && currentGroup!=$routeParams.subject)
-                    this.redirect('#/' + currentGroup+ '/dashboard');
-
-
+            getActiveGroup: function() {
+                $rootScope.activeGroupId = webStorage.get('currentUser').currentGroup;
                 return  $rootScope.activeGroupId;
             },
             setActiveGroup: function(activeGroupId){
@@ -89,6 +83,18 @@ angular.module('grockitApp.services', ['webStorageModule'])
             },
             dialogService: function(options){
                 bootbox.dialog(options);
+            },
+            getCurrentParam: function(key){
+                return $route.current.pathParams[key];
+            },
+            setCurrentParam: function(key,param){
+                $route.current.pathParams[key]= param;
+            },
+            setInActiveBanner: function(param){
+                webStorage.add('active_banner', param);
+            },
+            getInActiveBanner: function(){
+                return webStorage.get('active_banner');
             }
 
 
