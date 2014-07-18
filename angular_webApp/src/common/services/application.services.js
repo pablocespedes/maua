@@ -14,17 +14,15 @@ angular.module('grockitApp.services', ['webStorageModule'])
             }
 
             /*local enviroment*/
-          /*  if(isNewGrockit){
+           /* if(isNewGrockit){
 
                 return location.host== '127.0.0.1:9000'  ? 'http://127.0.0.1:9000/' : location.origin+'/2.0';
             }
             else{
                 return location.host== '127.0.0.1:9000' ? 'https://staging.grockit.com' : location.host=='ww2.grockit.com' ? 'https://grockit.com' :location.origin
-            }
-*/
+            }*/
 
         }
-
         return {
             newGrockit: function(){
                 return {
@@ -88,34 +86,74 @@ angular.module('grockitApp.services', ['webStorageModule'])
                 return $route.current.pathParams[key];
             },
             setCurrentParam: function(key,param){
+                $route.current.pathParams[key]=null;
                 $route.current.pathParams[key]= param;
-            },
-            setInActiveBanner: function(param){
-                webStorage.add('active_banner', param);
-            },
-            getInActiveBanner: function(){
-                return webStorage.get('active_banner');
             }
+
 
 
         }
     })
 
     .factory('Alerts', function() {
-     return {
-        showAlert: function (alertMsg,type) {
+        return {
+            showAlert: function (alertMsg, type) {
 
-            var options = {
-                type: type,
-                namespace: 'pa_page_alerts_dark',
-                classes: 'alert-dark'
-            };
-            PixelAdmin.plugins.alerts.add(alertMsg, options);
-        },
-        setErrorApiMsg : function(error){
-            return 'Uh oh! We\'re having difficulty retrieving your data.';
+                var options = {
+                    type: type,
+                    namespace: 'pa_page_alerts_dark',
+                    classes: 'alert-dark'
+                };
+                PixelAdmin.plugins.alerts.add(alertMsg, options);
+            },
+            setErrorApiMsg: function (error) {
+                return 'Uh oh! We\'re having difficulty retrieving your data.';
+            }
         }
-     }
+
+    })
+
+    .factory('GrockitNewFeatures', function($http,webStorage,Utilities) {
+
+       function setInActiveBanner(param){
+            webStorage.add('active_banner', param);
+        }
+
+        function getInActiveBanner(){
+            return webStorage.get('active_banner');
+        }
+
+        return {
+            showMe: function () {
+
+                var dialogOptions = {
+                    title: "What's new in Grockit?",
+                    message: "",
+                    buttons: {
+                        success: {
+                            label: "Do not show again",
+                            className: "btn-success",
+                            callback: function () {
+                                setInActiveBanner(true);
+                            }
+                        }
+                    }
+                };
+
+
+                $http.get('/tpl./newFeatures2.0.html').success(function(data) {
+                    dialogOptions.message=data;
+
+                    if(getInActiveBanner()!=true){
+                        Utilities.dialogService(dialogOptions);
+                    }
+
+                }).error(function (jqXHR, textStatus, errorThrown) {
+
+               });
+            }
+
+        }
 
     });
 

@@ -57,26 +57,6 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities, Listenloo
                 Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
             });
         },
-        showBanner: function(){
-            var dialogOptions = {
-                title: "What's new in Grockit?",
-                message: "Hello! Welcome to the new Grockit! </br> " +
-                    "Here is a list of features that were added in this new version. </br> " +
-                    "Stay Tuned! More to come.",
-                buttons: {
-                    success: {
-                        label: "Do not show again",
-                        className: "btn-success",
-                        callback: function () {
-                            Utilities.setInActiveBanner(true);
-                        }
-                    }
-                }
-            };
-            if(Utilities.getInActiveBanner()!=true){ 
-                Utilities.dialogService(dialogOptions);
-            }
-        },
         init: function(){
             $scope.linkedGroups=[];
             $scope.unLinkedGroups=[];

@@ -33,11 +33,9 @@
            });
            return deferred.promise;
        }},
-           controller: 'SimpleDashController',
-           reloadOnSearch: true
+           controller: 'SimpleDashController'
        })
-
-       .when('/:subject/dashboard/practice/:questionId?', {templateUrl: 'app/practiceGame/practice/practice.tpl.html', label: 'practice', resolve: {deps: function ($q, $rootScope) {
+       .when('/:subject/dashboard/practice/:questionId', {templateUrl: 'app/practiceGame/practice/practice.tpl.html', label: 'practice', resolve: {deps: function ($q, $rootScope) {
                var deferred = $q.defer(),
                    essentials = [
                        filePath.practice.practiceCtrl,
@@ -53,7 +51,7 @@
 
                return deferred.promise;
            }}, controller: 'PracticeController',
-             reloadOnSearch: false
+              reloadOnSearch: false
            });
 
        $routeProvider.otherwise({redirectTo:'/'});
