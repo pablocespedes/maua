@@ -2,7 +2,6 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
     $scope.url= Utilities.originalGrockit().url;
     $scope.logOutUrl= Utilities.originalGrockit().url+'/logout';
 
-
     $rootScope.$on("init", function () {
         Application.init();
     });
