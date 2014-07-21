@@ -42,7 +42,6 @@
   'ngResource',
   'ngRoute',
   'ngSanitize',
-  'ngAnimate',
   'ngCookies',
   'grockitApp.services',
   'grockitApp.requests',
