@@ -1,4 +1,4 @@
-NavController = function($rootScope,$scope, $location, Auth,Utilities, ListenloopUtility, Tracks,$cookies,Groups,Alerts) {
+NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitNewFeatures, ListenloopUtility, Tracks,$cookies,Groups,Alerts) {
     $scope.url= Utilities.originalGrockit().url;
     $scope.logOutUrl= Utilities.originalGrockit().url+'/logout';
 
@@ -66,7 +66,7 @@ NavController = function($rootScope,$scope, $location, Auth,Utilities, Listenloo
                     $scope.groupMemberships = response.groupMemberships;
                     $scope.selectedGroup =  Utilities.getActiveGroup();
                     Application.loadGroupMembership();
-                    Application.showBanner();
+                    GrockitNewFeatures.showDialog();
                     ListenloopUtility.base(response);
                 }
             }).catch(function error(error) {
