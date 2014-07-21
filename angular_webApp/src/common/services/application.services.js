@@ -112,39 +112,18 @@ angular.module('grockitApp.services', ['webStorageModule'])
 
     })
 
-    .factory('GrockitNewFeatures', function($http,webStorage,Utilities) {
-
-       function setInActiveBanner(param){
-            webStorage.add('inactive_banner', param);
-        }
-
-        function getInActiveBanner(){
-            return webStorage.get('inactive_banner');
-        }
+    .factory('GrockitNewFeatures', function($http, Utilities) {
 
         return {
             showDialog: function () {
-
                 var dialogOptions = {
                     title: "What's new in Grockit?",
-                    message: "",
-                    buttons: {
-                        success: {
-                            label: "Do not show again",
-                            className: "btn-success",
-                            callback: function () {
-                                setInActiveBanner(true);
-                            }
-                        }
-                    }
+                    message: ""
                 };
 
                 $http.get('/common/templates/newFeatures2.0.html').success(function(data) {
                     dialogOptions.message=data;
-
-                    if(getInActiveBanner()!=true){
-                        Utilities.dialogService(dialogOptions);
-                    }
+                    Utilities.dialogService(dialogOptions);
 
                 }).error(function (jqXHR, textStatus, errorThrown) {
 
