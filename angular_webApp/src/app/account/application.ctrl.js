@@ -66,13 +66,16 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
                     $scope.groupMemberships = response.groupMemberships;
                     $scope.selectedGroup =  Utilities.getActiveGroup();
                     Application.loadGroupMembership();
-                    GrockitNewFeatures.showDialog();
                     ListenloopUtility.base(response);
                 }
             }).catch(function error(error) {
                 Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
             });
         }
+    };
+
+    $scope.showDialog = function(){
+        GrockitNewFeatures.showDialog();
     };
 
     $scope.selectGroup = function(index){
