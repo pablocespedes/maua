@@ -393,7 +393,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
 
         $scope.answerHasExplanation = function (index) {
             var answer = $scope.questionItems.answers[index];
-            return !(answer.explanation == null || angular.isUndefined(answer.explanation));
+            return !(answer.explanation == null || angular.isUndefined(answer.explanation)|| answer.explanation=='');
 
         };
 
