@@ -1,4 +1,3 @@
-'use strict';
 (function(app) {
  app.config(function($httpProvider) {
 
@@ -43,7 +42,6 @@
   'ngResource',
   'ngRoute',
   'ngSanitize',
-  'ngAnimate',
   'ngCookies',
   'grockitApp.services',
   'grockitApp.requests',

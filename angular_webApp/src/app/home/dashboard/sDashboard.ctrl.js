@@ -2,7 +2,8 @@
 home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','breadcrumbs','Alerts', function($scope,Users,History,Tracks,Utilities,Auth,breadcrumbs,Alerts) {
     $scope.loading=true;
     $scope.scoreLoading=true;
-    Utilities.setActiveTab(0);
+    Utilities.setActiveTab(1);
+
     $scope.activeGroupId= Utilities.getActiveGroup();
     $scope.enableScore= !!($scope.activeGroupId == 'gmat' || $scope.activeGroupId == 'act' || $scope.activeGroupId == 'sat');
 
@@ -118,9 +119,9 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
                 tracks: tracks,
                 trackTitle: trackTitle
             };
-            Utilities.setActiveTab(0);
+            Utilities.setActiveTab(1);
             Utilities.setActiveTrack(trackData);
-            Utilities.redirect('#/' +  $scope.activeGroupId+ '/dashboard/practice');
+            Utilities.redirect('#/' +  $scope.activeGroupId+ '/dashboard/practice/_');
         }
         else{
             Alerts.showAlert('You must select one track at least', 'warning');
