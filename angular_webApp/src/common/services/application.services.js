@@ -13,7 +13,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
               return location.host== '127.0.0.1:9000'  ? 'https://staging.grockit.com' : location.host=='ww2.grockit.com' ? 'https://grockit.com' :location.origin
             }
             /*local enviroment*/
-          /*  if(isNewGrockit){
+            /*if(isNewGrockit){
 
                 return location.host== '127.0.0.1:9000'  ? 'http://127.0.0.1:9000/' : location.origin+'/2.0';
             }
@@ -119,9 +119,9 @@ angular.module('grockitApp.services', ['webStorageModule'])
                 var dialogOptions = {
                     title: "What's new in Grockit?",
                     message: ""
-                };
-
-                $http.get('/common/templates/newFeatures2.0.html').success(function(data) {
+                    },
+                url= location.host== '127.0.0.1:9000'  ? 'http://127.0.0.1:9000/' : location.origin+'/2.0';
+                $http.get(url+'/common/templates/newFeatures2.0.html').success(function(data) {
                     dialogOptions.message=data;
                     Utilities.dialogService(dialogOptions);
 

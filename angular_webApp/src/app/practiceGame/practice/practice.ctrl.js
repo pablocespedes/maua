@@ -31,7 +31,6 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
         ];
 
 
-
     var Practice = {
         setLayoutBasedOnQuestionInfo: function (setLayout) {
             var panel1 = angular.element('#Panel1'),
@@ -115,6 +114,8 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
             this.loadQuestionsSet();
 
             //Enable/disable answer section
+            $scope.numerator = null;
+            $scope.denominator = null;
             angular.element('#answercontent *').removeClass('btn-primary btn-danger btn-success').removeAttr('disabled');
             $scope.showVideo = false;
             $scope.showExplanation = false;
@@ -302,7 +303,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
             Utilities.setCurrentParam('questionId', questionId);
             $location.path(Utilities.getCurrentParam('subject') + '/dashboard/practice/' + questionId);
         },
-        getQuestionSets: function() {
+        getQuestionSets: function () {
             var getQuestionSet = practiceRequests.practiceGames().getQuestionNewSetByPractice($scope.gameResponse.id, $scope.activeTracks.tracks);
 
             getQuestionSet.then(function (result) {
@@ -319,66 +320,69 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
         },
         loadQuestionsSet: function () {
 
-         if ($scope.questionSetList.length > 0) {
+            if ($scope.questionSetList.length > 0) {
 
-             /*if $scope.setPosition is bigger than $scope.questionSetList.length we already finish the list of question sets */
-             if ($scope.setPosition < $scope.questionSetList.length) {
+                /*if $scope.setPosition is bigger than $scope.questionSetList.length we already finish the list of question sets */
+                if ($scope.setPosition < $scope.questionSetList.length) {
 
-                 $scope.titleQuest = $scope.activeTracks.trackTitle;
+                    $scope.titleQuest = $scope.activeTracks.trackTitle;
 
-                 var setPosition = $scope.setPosition,
+                    var setPosition = $scope.setPosition,
 
-                 /* Iterate between all the question sets retrieved it by the API */
-                     questionSetResult = $scope.questionSetList[setPosition];
+                    /* Iterate between all the question sets retrieved it by the API */
+                        questionSetResult = $scope.questionSetList[setPosition];
 
-                 var position = $scope.position,
-                 /* questionsCount Give us the number of questions by questionSet*/
-                     questionsCount = questionSetResult.questions.length;
+                    var position = $scope.position,
+                        /* questionsCount Give us the number of questions by questionSet*/
+                        questionsCount = questionSetResult.questions.length;
 
-                 /* Iterate between all the question retrieved it by the API which belong to a specific Question set */
-                 var questionIdToRequest = questionSetResult.questions[position];
-                 if (position < questionsCount) {
+                    $scope.questByQSetTitle= questionsCount > 1 ? 'Question '+(position+1) +' of '+ (questionsCount): '';
 
-                     Practice.loadQuestion(questionIdToRequest)
-                 }
-                 else {
-                     $scope.position = 0;
-                     $scope.setPosition++;
-                     Practice.loadQuestionsSet();
-                 }
-             }
-             else {
-                 Practice.getQuestionSets();
-             }
+                    window.test = position +' '+questionsCount+" "+$scope.questByQSetTitle;
+                    /* Iterate between all the question retrieved it by the API which belong to a specific Question set */
+                    var questionIdToRequest = questionSetResult.questions[position];
+                    if (position < questionsCount) {
 
-         }
-         else {
+                        Practice.loadQuestion(questionIdToRequest)
+                    }
+                    else {
+                        $scope.position = 0;
+                        $scope.setPosition++;
+                        Practice.loadQuestionsSet();
+                    }
+                }
+                else {
+                    Practice.getQuestionSets();
+                }
 
-             var dialogOptions = {
-                 message: "Sorry, we can't show you questions for this topic yet. We're still working on them and should have them ready soon. " +
-                     "Please select a different topic for now or also you can answer" + '' +
-                     " questions in the old Grockit.. Thanks.",
-                 buttons: {
-                     success: {
-                         label: "Stay on New Grockit!",
-                         className: "btn-success",
-                         callback: function () {
-                             Utilities.redirect('#/' + $scope.activeGroupId + '/dashboard');
-                         }
-                     },
-                     main: {
-                         label: "Continue to Original Grockit!",
-                         className: "btn-primary",
-                         callback: function () {
-                             var url = Utilities.originalGrockit().url + '/' + $scope.activeGroupId;
-                             Utilities.redirect(url);
-                         }
-                     }
-                 }
-             };
+            }
+            else {
 
-             Utilities.dialogService(dialogOptions);
-         }
+                var dialogOptions = {
+                    message: "Sorry, we can't show you questions for this topic yet. We're still working on them and should have them ready soon. " +
+                        "Please select a different topic for now or also you can answer" + '' +
+                        " questions in the old Grockit.. Thanks.",
+                    buttons: {
+                        success: {
+                            label: "Stay on New Grockit!",
+                            className: "btn-success",
+                            callback: function () {
+                                Utilities.redirect('#/' + $scope.activeGroupId + '/dashboard');
+                            }
+                        },
+                        main: {
+                            label: "Continue to Original Grockit!",
+                            className: "btn-primary",
+                            callback: function () {
+                                var url = Utilities.originalGrockit().url + '/' + $scope.activeGroupId;
+                                Utilities.redirect(url);
+                            }
+                        }
+                    }
+                };
+
+                Utilities.dialogService(dialogOptions);
+            }
 
 
         },
@@ -433,7 +437,6 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
 
     };
 
-    //confirm choice
     $scope.nextAction = function () {
 
         if ($scope.nextActionTitle == 'Confirm Choice') {

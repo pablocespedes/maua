@@ -228,6 +228,7 @@ module.exports = function (grunt) {
         js: [
           '<%= yeoman.dist %>/app/**/*.js',
           '<%= yeoman.dist %>/common/*.js',
+          '<%= yeoman.dist %>/templates/*.html',
           '<%= yeoman.dist %>/index.html'],
         options: {
             assetsDirs: ['<%= yeoman.dist %>'        ,
