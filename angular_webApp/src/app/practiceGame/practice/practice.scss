@@ -5,6 +5,24 @@
 
 #practice{
 
+  .bad-numeric-input{
+    border-color: #e66454;
+  }
+  .correct-numeric-input {
+    border-color: #4cae4c;
+  }
+  .columnsContainer { position: relative; margin: .5em; }
+
+  .leftColumn { margin-bottom: .5em; }
+
+
+  /* MEDIA QUERIES */
+  @media screen and (min-width: 47.5em ) {
+
+    .rightColumn { top: 0; right: 0; }
+  }
+
+
   #Panel1 img {
     max-width: 100%;
     width: auto;
