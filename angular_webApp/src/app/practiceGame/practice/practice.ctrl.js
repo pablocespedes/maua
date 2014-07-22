@@ -12,7 +12,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
     $scope.nextActionTitle = 'Confirm Choice';
     $scope.questionItems = [];
     $scope.items = [];
-
+    $scope.answerStatus=null;
     $scope.showExplanation = false;
     $scope.showVideo = false;
     $scope.setPosition = 0;
@@ -119,6 +119,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
             angular.element('#answercontent *').removeClass('btn-primary btn-danger btn-success').removeAttr('disabled');
             $scope.showVideo = false;
             $scope.showExplanation = false;
+            $scope.answerStatus=null;
             $scope.nextActionTitle = 'Confirm Choice';
             $scope.messageConfirmation = '';
             angular.element('#nextAction').removeClass('btn-success');
@@ -336,9 +337,9 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
                         /* questionsCount Give us the number of questions by questionSet*/
                         questionsCount = questionSetResult.questions.length;
 
-                    $scope.questByQSetTitle= questionsCount > 1 ? 'Question '+(position+1) +' of '+ (questionsCount): '';
+                    $scope.questByQSetTitle= questionsCount > 1 ? 'Question '+(position+1) +' of '+ (questionsCount)+' for this set': '';
 
-                    window.test = position +' '+questionsCount+" "+$scope.questByQSetTitle;
+
                     /* Iterate between all the question retrieved it by the API which belong to a specific Question set */
                     var questionIdToRequest = questionSetResult.questions[position];
                     if (position < questionsCount) {

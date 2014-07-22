@@ -13,7 +13,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
               return location.host== '127.0.0.1:9000'  ? 'https://staging.grockit.com' : location.host=='ww2.grockit.com' ? 'https://grockit.com' :location.origin
             }
             /*local enviroment*/
-            /*if(isNewGrockit){
+           /* if(isNewGrockit){
 
                 return location.host== '127.0.0.1:9000'  ? 'http://127.0.0.1:9000/' : location.origin+'/2.0';
             }

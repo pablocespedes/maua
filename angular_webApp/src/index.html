@@ -56,11 +56,28 @@
     <!-- Scripts -->
     <script src="common/lib/scripts.js"></script>
     <script src="common/initRoutes.js"></script>
+
+    <!-- Pixel Admin's javascripts -->
+    <script src="assets/javascripts/bootstrap.min.js"></script>
+    <script src="assets/javascripts/bootbox.min.js"></script>
+    <script src="assets/javascripts/pixel-admin.min.js"></script>
+
+
 </head>
 <body class="theme-default main-menu-animated" ng-cloak>
 <!--<body class="theme-adminflare main-menu-animated dont-animate-mm-content-sm animate-mm-md animate-mm-lg" ng-cloak>-->
 
 <script>var init = [];</script>
+<script type="text/javascript">
+    //$( window ).load(function() {
+    init.push(function () {
+        // Javascript code here
+    });
+
+    window.PixelAdmin.start(init);
+    // });
+
+</script>
 <div id="main-wrapper" >
     <!-- 2. $MAIN_NAVIGATION ===========================================================================
         Main navigation
@@ -137,8 +154,8 @@
     <div id="main-menu" role="navigation" >
         <div id="main-menu-inner">
             <ul class="navigation">
-                <li>
-                    <a ng-click="showDialog()"><i class="menu-icon fa fa-gift"></i><span class="mm-text">What's new</span></a>
+                <li id="feature-modal">
+                    <a  ng-click="showDialog()"><i class="menu-icon fa fa-gift"></i><span class="mm-text">What's new</span></a>
                 </li>
 
                 <li>
@@ -251,21 +268,7 @@
 
 
 
-<!-- Pixel Admin's javascripts -->
-<script src="assets/javascripts/bootstrap.min.js"></script>
-<script src="assets/javascripts/bootbox.min.js"></script>
-<script src="assets/javascripts/pixel-admin.min.js"></script>
 
-<script type="text/javascript">
-   //$( window ).load(function() {
-        init.push(function () {
-            // Javascript code here
-        })
-        
-        window.PixelAdmin.start(init);
-   // });
-
-</script>
 <a href="#" class="back-to-top fa  fa-arrow-up"></a>
 </body>
 </html>

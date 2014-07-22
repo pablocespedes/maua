@@ -8,6 +8,10 @@
          "../app/practiceGame/practice/practice.scss";
 
 //general css
+
+#feature-modal{
+  cursor: pointer;
+}
 .panel-no-bg {
   margin-bottom: 18px;
   border: 1px solid transparent;
@@ -250,7 +254,7 @@ footer {
   border: 1px solid #ccc;
   border-bottom: 1px solid #aaa;
   color: #333;
-  margin-right: -33px;
+ /* margin-right: -33px;*/
   overflow-x: auto;
   padding: 10px;
   position: relative;
