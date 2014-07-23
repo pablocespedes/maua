@@ -4,7 +4,6 @@
     })
      .run(function ($rootScope, $location, Auth,Utilities,Alerts) {
          if(Auth.isLoggedIn()) {
-            // Utilities.getActiveGroup();
 
              if ($location.path() === '/' || $location.path() === '/' + Utilities.getActiveGroup() || $location.path() == '' || angular.isDefined($location.search()._token)) {
 
@@ -26,7 +25,6 @@
              Auth.setCurrentUser().then(function (userData) {
                  if (angular.isDefined(userData)) {
 
-                     $rootScope.$broadcast("init");
                      Utilities.redirect('#/' + Utilities.getActiveGroup() + "/dashboard");
                  }
              }).catch(function error(error) {

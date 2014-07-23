@@ -52,7 +52,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
 
             /*Get question and Create Round Session by Question*/
             var getQuestion = practiceRequests.questions().getQuestionById(questionToRequest),
-                questionPresentation = practiceRequests.roundSessions().createQuestionPresentation($scope.gameResponse.id, questionToRequest);
+                questionPresentation = practiceRequests.roundSessions().createQuestionPresentation($scope.gameResponseId, questionToRequest);
 
             $q.all([getQuestion, questionPresentation]).then(function (result) {
 
@@ -305,7 +305,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
             $location.path(Utilities.getCurrentParam('subject') + '/dashboard/practice/' + questionId);
         },
         getQuestionSets: function () {
-            var getQuestionSet = practiceRequests.practiceGames().getQuestionNewSetByPractice($scope.gameResponse.id, $scope.activeTracks.tracks);
+            var getQuestionSet = practiceRequests.practiceGames().getQuestionNewSetByPractice($scope.gameResponseId, $scope.activeTracks.tracks);
 
             getQuestionSet.then(function (result) {
 
@@ -406,7 +406,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
         var createGame = practiceRequests.practiceGames().createNewPracticeGame($scope.activeGroupId);
 
         createGame.then(function (game) {
-            $scope.gameResponse = game.data.practice_game;
+            $scope.gameResponseId = game.data.practice_game.id;
 
             if ($scope.activeTracks.tracks.length > 0) {
                 Practice.getQuestionSets();
