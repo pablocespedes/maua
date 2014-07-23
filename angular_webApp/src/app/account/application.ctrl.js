@@ -8,6 +8,8 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
 
     var Application = {
         loadGroupMembership: function(){
+            $scope.linkedGroups=[];
+            $scope.unLinkedGroups=[];
             if( $scope.currentUser.groupMemberships.length>0){
 
                 Groups.getGroups().membershipGroups().then(function(result) {
@@ -64,6 +66,7 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
                     $scope.currentUser = response;
                     $scope.groupMemberships = response.groupMemberships;
                     $scope.selectedGroup =  Utilities.getActiveGroup();
+                   // Application.fetchLeftNavTracksData();
                     Application.loadGroupMembership();
                     ListenloopUtility.base(response);
                 }

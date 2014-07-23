@@ -1,109 +1,13 @@
-practiceGame.controller('DetailDashController',['$scope','TagElement','History','Utilities',function($scope,TagElement,History,Utilities) {
+practiceGame.controller('TrackDashController',['$scope','TagElement','History','Utilities',function($scope,TagElement,History,Utilities) {
 
 
     $scope.init = function(){
-        Utilities.showFooter();
-        var easyPieChartDefaults = {
-            animate: 2000,
-            scaleColor: false,
-            lineWidth: 6,
-            lineCap: 'square',
-            size: 145,
-            trackColor: '#e5e5e5'
-        };
-        angular.element('#scoreP').easyPieChart(easyPieChartDefaults);
 
         FillGraphic();
     };
 
 
 
-    var test = function(){
-        return [
-            {
-                "day": "2013-12-04",
-                "total_questions": 2,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2013-12-10",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-01-04",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-01-10",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-01-13",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-01-19",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-01-24",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-01-29",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-02-04",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            },
-            {
-                "day": "2014-02-09",
-                "total_questions": 3,
-                "total_correct": 3,
-                "total_seconds": 12,
-                "total_xp_earned": 24,
-                "total_experience_points": 24
-            }
-
-        ];
-
-    };
 
     function FillGraphic(graphicData){
 

@@ -3,7 +3,6 @@
 
     })
      .run(function ($rootScope, $location, Auth,Utilities,Alerts) {
-
          if(Auth.isLoggedIn()) {
             // Utilities.getActiveGroup();
 
