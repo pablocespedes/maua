@@ -155,8 +155,14 @@ request.factory("VideoService", function($q) {
                         divisor_for_minutes = secs % (60 * 60),
                         minutes = Math.floor(divisor_for_minutes / 60),
                         divisor_for_seconds = divisor_for_minutes % 60,
-                        seconds = Math.ceil(divisor_for_seconds),
-                        time = (hours> 0 ? hours +':' : '') + (minutes>0 ? minutes+':' : '') + (seconds>0 ? seconds+' secs' :'');
+                        seconds = Math.ceil(divisor_for_seconds);
+
+                        if (hours   < 10) {hours   = "0"+hours;}
+                        if (minutes < 10) {minutes = "0"+minutes;}
+                        if (seconds < 10) {seconds = "0"+seconds;}
+                       // var time    = hours+':'+minutes+':'+seconds;
+
+                       var time = (hours> 0 ? hours +':' : '') + (minutes>0 ? minutes+':' : '') + (seconds>0 ? seconds+' secs' :'');
 
                 deferred.resolve(time);
 

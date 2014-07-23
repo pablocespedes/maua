@@ -4,15 +4,13 @@
     <div class="list-group text-left">
 
         <div ng-repeat="item in items" class="choice">
-
-            <div class="divisor" ng-if="($index % 2) ==0">
+            <div class="divisor" ng-if="($index % 3) ==0">
                 <br>
-
-                <div >Blank {{($index / 2) +1}}</div>
+                <div >Blank {{($index / 3) +1}}</div>
             </div>
             <a id="answer" href="javascript:void(0)" class=" list-group-item">
 
-                <div class="middle" data-group="{{(($index-($index%2))/2 )}}">
+                <div class="middle" data-group="{{(($index-($index%3))/3 )}}">
                     <button id="{{item.id}}" type="button" class="letter btn-option  btn-rounded letter" >{{item.option}}</button>
                     <input id="{{item.id}}" type="radio" name="choice" value="false"   />
                     <div class="content" >

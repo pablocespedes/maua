@@ -227,6 +227,7 @@
     position: relative;
     white-space: nowrap;
     border-bottom: 1px solid #000;
+    line-height: 36px;
   }
   div.sentence_correction_letter {
     position: absolute;
@@ -234,9 +235,10 @@
     left: 0;
     text-align: center;
     width: 100%;
+    line-height: 34px;
   }
   div.sentence_correction_stimulus {
-    line-height: 35px;
+
     margin-bottom: 5px;
   }
   /*End classes from old Grockit*/
