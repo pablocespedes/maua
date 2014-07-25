@@ -63,7 +63,7 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
                 if(response!=null){
                     $scope.currentUser = response;
                     $scope.selectedGroup =  Utilities.getActiveGroup();
-                   // Application.fetchLeftNavTracksData();
+                    Application.fetchLeftNavTracksData();
                     Application.loadGroupMembership();
                     ListenloopUtility.base(response);
                 }
@@ -83,7 +83,9 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
         $rootScope.groupTitle= $scope.groups.linkedGroups[index].name;
 
         $scope.currentUser.currentGroup=$scope.groups.linkedGroups[index].id;
+
         Auth.updateUserInfo($scope.currentUser);
+        Application.fetchLeftNavTracksData();
     };
 
     $scope.logOut= function(){
@@ -92,12 +94,29 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
 
     $scope.select= function(index) {
 
-        Utilities.clearActiveTab();
-        $scope.selected = index;
-        if(index>=0) {
-            var trackData = {'id': $scope.tracksList[index].id};
-            Utilities.setActiveTrack(trackData);
+        if(angular.isDefined(index)) {
+
+            if(index>=0) {
+
+                Utilities.clearActiveTab();
+                $scope.selected = index;
+
+                var tracks = [];
+                    tracks.push($scope.tracksList[index].id);
+
+                var trackData = {
+                    'id': $scope.tracksList[index].id,
+                    tracks: tracks,
+                    trackTitle: $scope.tracksList[index].name
+                };
+                Utilities.setActiveTrack(trackData);
+
+
+
+            }
+
         }
+
     };
 
     if(angular.isDefined($cookies.authorization_token)){

@@ -1,58 +1,80 @@
-practiceGame.controller('TrackDashController',['$scope','TagElement','History','Utilities',function($scope,TagElement,History,Utilities) {
+'use strict';
+practiceGame.controller('TrackDashController',['$scope','Users','History','Utilities','Auth','breadcrumbs','Alerts','Tracks',
+    function($scope,Users,History,Utilities,Auth,breadcrumbs,Alerts,Tracks) {
 
+    $scope.titleQuest = Utilities.getActiveTrack().trackTitle;
+    $scope.activeGroupId= Utilities.getActiveGroup();
 
-    $scope.init = function(){
+    var TrackDashboard = {
+            fetchTracksData: function () {
+                $scope.loading = true;
+                Tracks.getTracks().allByGroup($scope.activeGroupId).then(function (response) {
+                    $scope.tracks = response.data.tracks;
+                    $scope.loading = false;
 
-        FillGraphic();
-    };
+                }).catch(function error(error) {
 
+                    Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+                });
 
-
-
-    function FillGraphic(graphicData){
-
-        var response = History.findMissingDates(test());
-
-        /*  if(angular.isDefined(graphicData)){*/
-        Morris.Line({
-            element: 'detail-graph',
-            data:response.Data,
-            xkey: 'day',
-            ykeys: ['total_questions'],
-
-            labels: ['Questions Answered'],
-            lineColors: ['#fff'],
-            lineWidth: 2,
-            pointSize: 4,
-            numLines: response.MaxLine,
-            hideHover: true,
-            onlyIntegers:false,
-            gridLineColor: 'rgba(255,255,255,.5)',
-            resize: true,
-            gridTextColor: '#fff',
-            xLabels: "day",
-            xLabelFormat: function(d) {
-                return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate();
             },
-            dateFormat: function(date) {
-                var  d = new Date(date);
-                return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate() +', '+d.getFullYear();
+            fillTrackDashboardGraphic: function (graphicData) {
+                if (angular.isDefined(graphicData) && graphicData.history.length > 0) {
+                    $scope.historyVisible = true;
+
+                    var response = History.findMissingDates(graphicData.history);
+
+                    $scope.chart_options = {
+                        data: response.Data,
+                        xkey: 'day',
+                        ykeys: ['total_questions'],
+                        labels: ['Questions Answered'],
+                        lineColors: ['#2e9be2'],
+                        lineWidth: 2,
+                        pointSize: 4,
+                        numLines: response.MaxLine,
+                        hideHover: true,
+                        gridLineColor: '#2e9be2',
+                        resize: true,
+                        gridTextColor: '#1d89cf',
+                        xLabels: "day",
+                        xLabelFormat: function (d) {
+                            return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate();
+                        },
+                        dateFormat: function (date) {
+                            var d = new Date(date);
+                            return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+                        }
+                    };
+                }
+                else {
+                    $scope.historyVisible = false;
+                }
+                $scope.loading = false;
+            },
+            getHistoryInformationByTrack: function () {
+                $scope.loading = true;
+                Users.getUser().history($scope.user_id, $scope.activeGroupId).then(function (graphicResult) {
+                    TrackDashboard.fillTrackDashboardGraphic(graphicResult.data);
+
+                }).catch(function error(error) {
+
+                    Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+                });
             }
-        });
-        /* }*/
 
+        };
 
-    }
-
-
-    $scope.selectLevelCluster= function(event){
-        var element = angular.element(event.target),
-            value= element.attr('id'),
-            text= element.data('tag');
-        TagElement.add(value,text);
-
+    $scope.newChallenge= function(){
+        Utilities.redirect('https://grockit.com/assessment/introcards/70478c67-5f6d-4ed5-bc1f-8a5be486bff9');
     };
-
+    $scope.init = function () {
+        var userInfo= Auth.getCurrentUserInfo();
+        $scope.user_id= userInfo.userId;
+        $scope.breadcrumbs = breadcrumbs;
+        TrackDashboard.getHistoryInformationByTrack();
+        TrackDashboard.fetchTracksData();
+    };
     $scope.init();
 
 

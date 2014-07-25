@@ -130,6 +130,10 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
     };
 
+    $scope.newCatTest= function(){
+        Utilities.redirect('https://grockit.com/assessment/games/abc25cc0-f24f-0130-2370-1231390ef981');
+    };
+
     $scope.init();
 
 }]);
