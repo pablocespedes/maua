@@ -12,6 +12,17 @@
 #feature-modal{
   cursor: pointer;
 }
+.no-padding-l{
+  padding-left: 0px!important;
+}
+.no-padding-r{
+  padding-right: 0px!important;
+}
+.track-list-padding-hr{
+    padding-left: 5px!important;
+    padding-right: 5px!important;
+}
+
 .panel-no-bg {
   margin-bottom: 18px;
   border: 1px solid transparent;

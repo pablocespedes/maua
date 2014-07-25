@@ -22,7 +22,7 @@ var practiceGame =  angular.module("grockitApp.practiceGame",['ng-breadcrumbs'])
     };
 
 
-    $routeProvider.when('/:subject/dashboard-practice', {templateUrl: 'app/practiceGame/dashboard/dashboard.tpl.html',label: 'Dashboard', resolve: {deps: function ($q, $rootScope) {
+    $routeProvider.when('/:subject/track-dashboard', {templateUrl: 'app/practiceGame/dashboard/dashboard.tpl.html',label: 'Dashboard', resolve: {deps: function ($q, $rootScope) {
         var deferred = $q.defer(),
             essentials = [
                 filePath.dashboard.dashServ,
@@ -35,33 +35,11 @@ var practiceGame =  angular.module("grockitApp.practiceGame",['ng-breadcrumbs'])
         });
         return deferred.promise;
     }},
-    controller: 'DetailDashController',
-    access: {
-            authorizedRoles: [UserRoles.admin, UserRoles.member]
-        }
-
+    controller: 'TrackDashController'
     })
 
 
-    .when('/:subject/practice', {templateUrl: 'app/practiceGame/practice/practice.tpl.html', label: 'More Detail', resolve: {deps: function ($q, $rootScope) {
-        var deferred = $q.defer(),
-            essentials = [
-                filePath.practice.practiceCtrl,
-                filePath.practice.practiceDrctv,
-                filePath.practice.practiceServ,
-                filePath.practice.youtube
-            ];
-        $script(essentials, function () {
-            $rootScope.$apply(function () {
-                deferred.resolve();
-            });
-        });
-
-            return deferred.promise;
-    }}, controller: 'PracticeController'
-    })
-
-    .when('/:subject/practice/:questionId?', {templateUrl: 'app/practiceGame/practice/practice.tpl.html', label: 'More Detail', resolve: {deps: function ($q, $rootScope) {
+    .when('/:subject/track-dashboard/practice/:questionId', {templateUrl: 'app/practiceGame/practice/practice.tpl.html', label: 'More Detail', resolve: {deps: function ($q, $rootScope) {
             var deferred = $q.defer(),
                 essentials = [
                     filePath.practice.practiceCtrl,
@@ -77,8 +55,7 @@ var practiceGame =  angular.module("grockitApp.practiceGame",['ng-breadcrumbs'])
 
             return deferred.promise;
         }}, controller: 'PracticeController'
-    });
-
-        $routeProvider.otherwise({redirectTo:'/'});
+        });
+     $routeProvider.otherwise({redirectTo:'/'});
 
 });

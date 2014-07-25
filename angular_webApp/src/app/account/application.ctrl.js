@@ -2,17 +2,17 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
     $scope.url= Utilities.originalGrockit().url;
     $scope.logOutUrl= Utilities.originalGrockit().url+'/logout';
 
-    $rootScope.$on("init", function () {
-        Application.init();
-    });
 
     var Application = {
         loadGroupMembership: function(){
-            $scope.linkedGroups=[];
-            $scope.unLinkedGroups=[];
-            if( $scope.currentUser.groupMemberships.length>0){
+            $scope.groups={
+                linkedGroups:[],
+                unLinkedGroups:[]
+            };
 
-                Groups.getGroups().membershipGroups().then(function(result) {
+            if( $scope.currentUser.groupMemberships.length>0) {
+
+                Groups.getGroups().membershipGroups().then(function (result) {
                     var responseGroups = result.data.groups;
 
                     if (!!responseGroups) {
@@ -22,7 +22,7 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
                         /*save the Group Name to rootScope*/
                         $rootScope.groupTitle = studyingFor.name;
 
-                        var linkedGroups = $scope.groupMemberships;
+                        var linkedGroups = $scope.currentUser.groupMemberships;
 
                         angular.forEach(linkedGroups, function (val, index) {
 
@@ -30,13 +30,13 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
                                 var linkGroup = Utilities.findInArray(val.group_id, responseGroups, 'id');
 
                                 if (angular.isDefined(linkGroup)) {
-                                    $scope.linkedGroups.push(linkGroup);
+                                    $scope.groups.linkedGroups.push(linkGroup);
                                     var indexToRemove = Utilities.getIndexArray(responseGroups, 'id', val.group_id);
                                     responseGroups.splice(indexToRemove, 1);
                                 }
                             }
                         });
-                        $scope.unLinkedGroups = responseGroups;
+                        $scope.groups.unLinkedGroups = responseGroups;
                     }
 
                 }).catch(function error(error) {
@@ -59,14 +59,11 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
             });
         },
         init: function(){
-            $scope.linkedGroups=[];
-            $scope.unLinkedGroups=[];
             Auth.getUpdateUserData().then(function(response) {
                 if(response!=null){
                     $scope.currentUser = response;
-                    $scope.groupMemberships = response.groupMemberships;
                     $scope.selectedGroup =  Utilities.getActiveGroup();
-                   // Application.fetchLeftNavTracksData();
+                    Application.fetchLeftNavTracksData();
                     Application.loadGroupMembership();
                     ListenloopUtility.base(response);
                 }
@@ -83,10 +80,12 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
     $scope.selectGroup = function(index){
 
         /*update group Name*/
-        $rootScope.groupTitle= $scope.linkedGroups[index].name;
+        $rootScope.groupTitle= $scope.groups.linkedGroups[index].name;
 
-        $scope.currentUser.currentGroup=$scope.linkedGroups[index].id;
+        $scope.currentUser.currentGroup=$scope.groups.linkedGroups[index].id;
+
         Auth.updateUserInfo($scope.currentUser);
+        Application.fetchLeftNavTracksData();
     };
 
     $scope.logOut= function(){
@@ -95,12 +94,29 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
 
     $scope.select= function(index) {
 
-        Utilities.clearActiveTab();
-        $scope.selected = index;
-        if(index>=0) {
-            var trackData = {'id': $scope.tracksList[index].id};
-            Utilities.setActiveTrack(trackData);
+        if(angular.isDefined(index)) {
+
+            if(index>=0) {
+
+                Utilities.clearActiveTab();
+                $scope.selected = index;
+
+                var tracks = [];
+                    tracks.push($scope.tracksList[index].id);
+
+                var trackData = {
+                    'id': $scope.tracksList[index].id,
+                    tracks: tracks,
+                    trackTitle: $scope.tracksList[index].name
+                };
+                Utilities.setActiveTrack(trackData);
+
+
+
+            }
+
         }
+
     };
 
     if(angular.isDefined($cookies.authorization_token)){
