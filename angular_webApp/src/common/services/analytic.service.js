@@ -1,4 +1,4 @@
-angular.module('grockitApp.listenloopService', [])
+angular.module('grockitApp.analyticService', [])
     .factory('ListenloopUtility', function(){
 
         function load_script(userData){
