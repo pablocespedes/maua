@@ -262,8 +262,25 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
 
                 this.displayGeneralConfirmInfo();
 
+                if('NumericEntryFraction'==""){
+
+                  /*  var f = new Fraction(0.3333);
+                    f; //0.3333333333
+                    f.toString(); // 6004799502560181/18014398509481984
+                    f.approx //0.33333
+                    f.approx.toString() //3333/10000
+
+                    var g = new Fraction(2/3);
+                    g; //0.6666666666666666
+                    g.toString(); //6004799503160661/9007199254740992
+                    g.approx //0.6666666666666666
+                    g.approx.toString() //2/3*/
+
+
+                }
+
                 var answers = $scope.questionItems.answers;
-                $scope.selectedAnswer = '';
+                $scope.selectedAnswer = 0;
 
                 angular.forEach(answers, function (value) {
                     /*evaluate just one time the quivalence between body and numerator*/
@@ -273,7 +290,6 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
                         $scope.selectedAnswer = value.answer_id;
 
                     $scope.answerStatus = answerEval;
-
 
                 });
 
@@ -455,3 +471,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
 
     $scope.CreateNewGame();
 }]);
+
+
+
+

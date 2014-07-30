@@ -22,8 +22,9 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
                     currentGroup:isUpdate ? updateSelectedGroup(defaultGroup) : defaultGroup,
                     fullName: response.first_name,
                     avatar_url: response.avatar_url,
-                    emailAddress: response.email_address
-                };
+                    emailAddress: response.email_address,
+                    trackData:  webStorage.get('currentUser').trackData
+        };
 
             Utilities.setActiveGroup(currentUser.currentGroup);
 

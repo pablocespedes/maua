@@ -8,7 +8,7 @@
 
 <div id="dashboard-practice">
 <div class="page-header">
-    <h2><i class="fa fa-dashboard page-header-icon"></i>&nbsp;&nbsp;<span ng-bind="titleQuest"></span> Dashboard!
+    <h2><i class="fa fa-dashboard page-header-icon"></i>&nbsp;&nbsp;<span ng-bind="trackInfo.titleQuest"></span> Dashboard!
     </h2><br>
 </div>
 
@@ -54,7 +54,7 @@
         </div>
     </div>
 
-    <div class="bounceInDown animated">
+    <div style="display: none;" class="bounceInDown animated">
 
         <div class="row ">
 
@@ -80,11 +80,14 @@
         </div>
 
 
-    <div class="row" style="display: none">
-    <div class="col-md-12">
+    <div class="row" >
+    <div class="col-md-12 no-padding">
 
         <div class="panel topic-content panel-dark widget-profile">
             <div class="panel-heading">
+                <button class="float-right btn btn-labeled  btn-primary btn-flat" ng-click="StartPractice($index)">
+                    <span class="btn-label icon fa fa-lightbulb-o"></span>Start</button>
+
                 <span class="panel-title"><i class="panel-title-icon fa fa-tasks"></i>
                 Select Topics</span>
             </div>
@@ -92,13 +95,13 @@
             <div class="widget-profile-counters">
 
                 <div class=" item-tag">
-                    <div class="col-md-2 bar-col">
+                    <div class="col-md-3 bar-col">
                         <div class="  text-center">
                             <div class="progress progress-striped active">
                                 <div data-toggle='tooltip' data-placement='bottom' data-original-title='Accuracy(Percent Correct) 10%'
                                      class="progress-bar progress-bar-success" style="width: 90%;"></div>
                             </div>
-                            30% completed
+                            30% accurate
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -107,47 +110,39 @@
                             <h4>Questions</h4>
                         </div>
                     </div>
-                    <div class="col-md-3  tag-col">
+                    <div class="col-md-4  tag-col">
                         <div class="  text-center">
                             <h2>Number of Properties</h2>Algebra,Exponents,etc.
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="  text-center">
-                            <button class="btn btn-lg btn-outline btn-labeled btn-flat btn-primary video-btn">
-                                <span class="btn-label icon fa fa-play-circle"></span>
-                                Video
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-md-3 ">
-                        <div class="  text-center">
-                            <div class="btn-group btn-group-lg">
-                                <button class="btn btn-lg btn-labeled btn-primary btn-flat dropdown-toggle" data-toggle="dropdown" >
 
-                                    <span class="btn-label icon fa fa-plus"></span>Add to Practice &nbsp;&nbsp;<i class="fa fa-caret-down"></i>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a id="45" data-tag="Number of Properties" ng-click="selectLevelCluster($event)">Easy</a>
-                                    </li>
-                                    <li><a id="46" data-tag="Number of Properties" ng-click="selectLevelCluster($event)">Medium</a>
-                                    </li>
-                                    <li><a id="47" data-tag="Number of Properties" ng-click="selectLevelCluster($event)">Hard</a>
-                                    </li>
-                                </ul>
+
+                    <div class="col-md-3 ">
+                        <div class="  text-right">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-info">
+                                    <input type="checkbox"> Easy
+                                </label>
+                                <label class="btn btn-info active">
+                                    <input type="checkbox"> Medium
+                                </label>
+                                <label class="btn btn-info active">
+                                    <input type="checkbox"> Hard
+                                </label>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <div class=" item-tag" >
-                    <div class="col-md-2 bar-col">
+                    <div class="col-md-3 bar-col">
                         <div class="  text-center">
                             <div class="progress progress-striped active">
                                 <div data-toggle='tooltip' data-placement='bottom'
                                      data-original-title='Accuracy(Percent Correct) 10%' class="progress-bar progress-bar-warning" style="width: 60%;"></div>
                             </div>
-                            30% completed
+                            30% accurate
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -158,35 +153,28 @@
                             <h4>Questions</h4>
                         </div>
                     </div>
-                    <div class="col-md-3  tag-col">
+                    <div class="col-md-4  tag-col">
                         <div class="  text-center">
                             <h2>Number of Properties</h2>Algebra,Exponents,etc.
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="  text-center">
-                            <button class="btn btn-lg btn-outline btn-labeled btn-flat btn-primary video-btn">
-                                <span class="btn-label icon fa fa-play-circle"></span>
-                                Video
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-md-3 ">
-                        <div class="  text-center">
-                            <div class="btn-group btn-group-lg">
-                                <button class="btn btn-lg btn-labeled btn-primary btn-flat dropdown-toggle" data-toggle="dropdown" >
 
-                                    <span class="btn-label icon fa fa-plus"></span>Add to Practice &nbsp;&nbsp;<i class="fa fa-caret-down"></i>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a id="45" data-tag="Number of Properties" ng-click="selectLevelCluster($event)">Easy</a>
-                                    </li>
-                                    <li><a id="46" data-tag="Number of Properties" ng-click="selectLevelCluster($event)">Medium</a>
-                                    </li>
-                                    <li><a id="47" data-tag="Number of Properties" ng-click="selectLevelCluster($event)">Hard</a>
-                                    </li>
-                                </ul>
+
+                    <div class="col-md-3 ">
+                        <div class="  text-right">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-info">
+                                    <input type="checkbox"> Easy
+                                </label>
+                                <label class="btn btn-info active">
+                                    <input type="checkbox"> Medium
+                                </label>
+                                <label class="btn btn-info active">
+                                    <input type="checkbox"> Hard
+                                </label>
                             </div>
+
+
                         </div>
                     </div>
                 </div>

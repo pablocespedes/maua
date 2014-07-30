@@ -4,9 +4,9 @@ angular.module('grockitApp.directives', [])
         function createChart(el_id, options,score) {
             options.element = el_id;
             if(score){
-                angular.element('#graphPanel').addClass('col-md-9');}
+                angular.element('#columnGraph').addClass('col-sm-8');}
             else{
-                angular.element('#graphPanel').addClass('col-md-12');}
+                angular.element('#columnGraph').addClass('col-md-12');}
 
             return new Morris.Line(options);
         }

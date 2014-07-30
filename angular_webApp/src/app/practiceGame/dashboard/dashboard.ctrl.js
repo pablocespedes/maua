@@ -2,7 +2,13 @@
 practiceGame.controller('TrackDashController',['$scope','Users','History','Utilities','Auth','breadcrumbs','Alerts','Tracks',
     function($scope,Users,History,Utilities,Auth,breadcrumbs,Alerts,Tracks) {
 
-    $scope.titleQuest = Utilities.getActiveTrack().trackTitle;
+    var trackData=Utilities.getActiveTrack();
+    $scope.trackInfo ={
+        titleQuest : trackData.trackTitle,
+        trackId : trackData.id
+    };
+
+
     $scope.activeGroupId= Utilities.getActiveGroup();
 
     var TrackDashboard = {
@@ -54,7 +60,7 @@ practiceGame.controller('TrackDashController',['$scope','Users','History','Utili
             },
             getHistoryInformationByTrack: function () {
                 $scope.loading = true;
-                Users.getUser().history($scope.user_id, $scope.activeGroupId).then(function (graphicResult) {
+                Users.getUser().history($scope.user_id, $scope.activeGroupId,$scope.trackInfo.trackId).then(function (graphicResult) {
                     TrackDashboard.fillTrackDashboardGraphic(graphicResult.data);
 
                 }).catch(function error(error) {

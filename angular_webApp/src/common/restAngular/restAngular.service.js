@@ -13,8 +13,8 @@ request.factory('Users', function(Restangular,Headers) {
 
                 return users.one().one(userId).customGET('score_prediction', {group: activeGroupId});
             },
-            history: function(userId,activeGroupId) {
-                return  users.one().one(userId).customGET('history', {group: activeGroupId});
+            history: function(userId,activeGroupId,trackId) {
+                return  users.one().one(userId).customGET('history', {group: activeGroupId, trackId:trackId});
             }
         }
     }

@@ -41,10 +41,12 @@ angular.module('grockitApp.services', ['webStorageModule'])
                 $rootScope.activeGroupId = activeGroupId;
             },
             getActiveTrack: function () {
-                return trackData;
+                return webStorage.get('currentUser').trackData;
             },
             setActiveTrack: function (data) {
-                trackData=data;
+                var currentUser = webStorage.get('currentUser');
+                currentUser.trackData=data;
+                webStorage.add('currentUser', currentUser);
             },
             findInArray: function (element, array, filter) {
                 return  $.grep(array, function (val) {

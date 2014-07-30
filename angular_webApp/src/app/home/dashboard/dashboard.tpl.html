@@ -39,23 +39,23 @@
             </div>
         </div>
 
-        <div class="row " ng-if="historyVisible">
+        <div class="row bounceInDown animated" ng-if="historyVisible">
             <div class="col-sm-12">
               <span>Here's a chart of the questions you've answered. The more questions you answer, the more you'll improve!</span>
             </div>
-            <div class="col-sm-8 no-padding-hr">
+            <div id="columnGraph" class=" no-padding-hr">
                 <div class="panel" ng-if="historyVisible">
                     <div class="panel-body no-padding">
                         <div id="graphPanel" class="no-padding-l">
-                            <div line-chart id="hero-graph" data-options="chart_options" style="height: 183px;"></div>
+                            <div line-chart id="hero-graph" data-options="chart_options" score="enableScore" style="height: 183px;"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4 no-padding-r">
+            <div class="col-sm-4 no-padding-r" ng-if="enableScore">
                   <div class="panel">
                       <div class="panel-body no-padding">
-                          <div style="height: 183px;"  ng-if="enableScore">
+                          <div style="height: 183px;"  >
                               <div class="stat-panel">
 
                                   <div class="stat-cell bg-info valign-middle">
@@ -107,28 +107,7 @@
 
        <div class="bounceInDown animated">
 
-        <div class="row ">
 
-            <div class="panel widget-tasks">
-                <div class="panel-heading">
-                    <span class="panel-title">
-                       <h4> <i class="panel-title-icon fa fa-star-o"></i>Full Length Computer Adaptive Test (CAT)
-                    <span class="float-right text-sm">You can take up to 5 CATs</span></h4>
-                    </span>
-                </div>
-                <div class="panel-body ui-sortable">
-                    <div class="row no-padding-r">
-                        <button class="btn btn-primary btn-lg float-right" ng-click="newCatTest()">Start CAT&nbsp; &#10095;</button>
-
-                        <p>Think you're ready for a full length practice test? Set aside 3 hours and go for it!</p>
-                        <p class="text-sm"><b>Note: </b><span>The CAT must be done in a single sitting, so make sure to carve out enough time before you begin.</span></p>
-                    </div>
-
-
-                </div>
-            </div>
-
-        </div>
 
         <div class="stat-panel bounceIn animated" style="display: none">
             <div class="stat-row">
@@ -206,6 +185,29 @@
 
             </div>
 
+
+        <div class="row " style="display: none">
+
+               <div class="panel widget-tasks">
+                   <div class="panel-heading">
+                    <span class="panel-title">
+                       <h4> <i class="panel-title-icon fa fa-star-o"></i>Full Length Computer Adaptive Test (CAT)
+                           <span class="float-right text-sm">You can take up to 5 CATs</span></h4>
+                    </span>
+                   </div>
+                   <div class="panel-body ui-sortable">
+                       <div class="row no-padding-r">
+                           <button class="btn btn-primary btn-lg float-right" ng-click="newCatTest()">Start CAT&nbsp; &#10095;</button>
+
+                           <p>Think you're ready for a full length practice test? Set aside 3 hours and go for it!</p>
+                           <p class="text-sm"><b>Note: </b><span>The CAT must be done in a single sitting, so make sure to carve out enough time before you begin.</span></p>
+                       </div>
+
+
+                   </div>
+               </div>
+
+           </div>
 
        </div>
 
