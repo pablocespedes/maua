@@ -14,17 +14,19 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
 
         var setUserData = function(response,isUpdate) {
 
-            var defaultGroup = response.group_memberships[0].group_id, //!!response.studying_for ? response.studying_for :
+            var defaultGroup = response.group_memberships[0].group_id,
+                trackData=  webStorage.get('currentUser') !=null &&
+                            angular.isDefined(webStorage.get('currentUser').trackData) ? webStorage.get('currentUser').trackData : '',
                 currentUser = {
                     userId: response.id,
                     role: response.guest == true ? UserRoles.member : UserRoles.guest,
-                    groupMemberships:response.group_memberships,
-                    currentGroup:isUpdate ? updateSelectedGroup(defaultGroup) : defaultGroup,
+                    groupMemberships: response.group_memberships,
+                    currentGroup: isUpdate ? updateSelectedGroup(defaultGroup) : defaultGroup,
                     fullName: response.first_name,
                     avatar_url: response.avatar_url,
                     emailAddress: response.email_address,
-                    trackData:  webStorage.get('currentUser').trackData
-        };
+                    trackData: trackData
+                };
 
             Utilities.setActiveGroup(currentUser.currentGroup);
 
