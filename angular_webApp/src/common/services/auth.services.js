@@ -22,8 +22,9 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
                     currentGroup:isUpdate ? updateSelectedGroup(defaultGroup) : defaultGroup,
                     fullName: response.first_name,
                     avatar_url: response.avatar_url,
-                    emailAddress: response.email_address
-                };
+                    emailAddress: response.email_address,
+                    trackData:  webStorage.get('currentUser').trackData
+        };
 
             Utilities.setActiveGroup(currentUser.currentGroup);
 
@@ -34,10 +35,7 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
 
         return {
             isLoggedIn: function () {
-                if((webStorage.get('currentUser') == null || "") || ( angular.isUndefined($cookies.authorization_token) || $cookies.authorization_token == ''))
-                    return false;
-                else
-                    return true;
+                return !((webStorage.get('currentUser') == null || "") || ( angular.isUndefined($cookies.authorization_token) || $cookies.authorization_token == ''))
 
             },
             logout: function () {

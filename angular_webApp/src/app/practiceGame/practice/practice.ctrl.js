@@ -101,7 +101,8 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
             });
         },
         resetLayout: function () {
-            $scope.titleQuest = $scope.titleQuest + ' Explanation';
+            $scope.titleQuest='';
+            $scope.titleQuest = $scope.activeTracks.trackTitle + ' Explanation';
             this.setLayoutBasedOnQuestionInfo(true);
             angular.element('#skipAction').addClass('hide');
             angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
@@ -129,6 +130,18 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
             });
 
         },
+        tagResourcesInfo: function(){
+            var tags = [];
+
+            angular.forEach($scope.questionItems.tags, function (value) {
+                tags.push({
+                    name:value.name,
+                    tagResource: Utilities.getYoutubeVideosInfo(value.tag_resources)
+                });
+            });
+            $scope.tags = tags;
+
+        },
         seeAnswer: function () {
             this.resetLayout();
 
@@ -150,7 +163,10 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
 
             /*Get answers from the previous request and Explain*/
             var answers = $scope.questionItems.answers;
-            $scope.tags = $scope.questionItems.tags;
+
+            /*Evaluate tag resources info, get video Ids and video time*/
+            Practice.tagResourcesInfo();
+
             $scope.xpTag = $scope.questionItems.experience_points;
 
 
@@ -185,8 +201,8 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
                 });
             }
 
-            /*Get answers from the previous request and Explain*/
-            $scope.tags = $scope.questionItems.tags;
+            /*Evaluate tag resources info, get video Ids and video time*/
+            Practice.tagResourcesInfo();
             $scope.xpTag = $scope.questionItems.experience_points;
 
             /* Work with the styles to shown result
@@ -262,8 +278,25 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
 
                 this.displayGeneralConfirmInfo();
 
+                if('NumericEntryFraction'==""){
+
+                  /*  var f = new Fraction(0.3333);
+                    f; //0.3333333333
+                    f.toString(); // 6004799502560181/18014398509481984
+                    f.approx //0.33333
+                    f.approx.toString() //3333/10000
+
+                    var g = new Fraction(2/3);
+                    g; //0.6666666666666666
+                    g.toString(); //6004799503160661/9007199254740992
+                    g.approx //0.6666666666666666
+                    g.approx.toString() //2/3*/
+
+
+                }
+
                 var answers = $scope.questionItems.answers;
-                $scope.selectedAnswer = '';
+                $scope.selectedAnswer = 0;
 
                 angular.forEach(answers, function (value) {
                     /*evaluate just one time the quivalence between body and numerator*/
@@ -273,7 +306,6 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
                         $scope.selectedAnswer = value.answer_id;
 
                     $scope.answerStatus = answerEval;
-
 
                 });
 
@@ -325,7 +357,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
 
                 /*if $scope.setPosition is bigger than $scope.questionSetList.length we already finish the list of question sets */
                 if ($scope.setPosition < $scope.questionSetList.length) {
-
+                    $scope.titleQuest='';
                     $scope.titleQuest = $scope.activeTracks.trackTitle;
 
                     var setPosition = $scope.setPosition,
@@ -353,7 +385,8 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
                     }
                 }
                 else {
-                    Practice.getQuestionSets();
+                   /*If we finish with the first load of questions id/question sets que create a new game*/
+                    $scope.CreateNewGame();
                 }
 
             }
@@ -399,7 +432,6 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
             });
         }
     };
-
 
     $scope.CreateNewGame = function () {
 
@@ -455,3 +487,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
 
     $scope.CreateNewGame();
 }]);
+
+
+
+

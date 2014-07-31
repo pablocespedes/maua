@@ -1,4 +1,4 @@
-NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitNewFeatures, ListenloopUtility, Tracks,$cookies,Groups,Alerts) {
+NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitNewFeatures, ListenloopUtility, Tracks,$cookies,Groups,Alerts,$route) {
     $scope.url= Utilities.originalGrockit().url;
     $scope.logOutUrl= Utilities.originalGrockit().url+'/logout';
 
@@ -50,6 +50,7 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
             }
         },
         fetchLeftNavTracksData: function(){
+            $scope.tracksList=[];
             Tracks.getTracks().allByGroup($scope.selectedGroup).then(function(result){
                 var response = result.data;
                 $scope.tracksList = response.tracks;
@@ -85,6 +86,7 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
         $scope.currentUser.currentGroup=$scope.groups.linkedGroups[index].id;
 
         Auth.updateUserInfo($scope.currentUser);
+        $scope.selectedGroup =  Utilities.getActiveGroup();
         Application.fetchLeftNavTracksData();
     };
 
@@ -111,7 +113,7 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
                 };
                 Utilities.setActiveTrack(trackData);
 
-
+                $route.reload();
 
             }
 

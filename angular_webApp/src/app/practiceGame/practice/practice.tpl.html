@@ -50,7 +50,26 @@
                                 <span class="panel-title">Question Data</span>
                             </div>
                             <div class="panel-body">
-                                &nbsp;Question Tags: <label ng-repeat="tag in tags" style="margin-left: 4px" class="label label-info" ng-bind="tag.name"></label>
+                                &nbsp;Skills used in this question:
+                                <div ng-repeat="tag in tags">
+
+                                  <label style="margin-left: 4px" class="label label-info" ng-bind="tag.name"></label>
+                                    <div ng-repeat="tr in tag.tagResource" style="display:inline;">
+
+                                        <button ng-if="tr.resourceType == 'youtube'" style="margin-left: 4px" class="btn btn-flat btn-xs btn-labeled btn-default" youtube rel="{{tr.videoId}}">
+                                          <span>Refresher {{$index+1}} ({{tr.videoTime}})</span>
+                                            <span class="btn-label icon fa  fa-play-circle-o"></span>
+                                        </button>
+                                        <a ng-if="tr.resourceType == 'blog'" ng-href="{{tr.videoId}}" target="_blank">
+                                        <button  style="margin-left: 4px" class="btn btn-flat btn-xs btn-labeled btn-default">
+                                            Refresher {{$index+1}}
+                                            <span class="btn-label icon fa  fa-quote-left"></span>
+                                        </button>
+                                        </a>
+                                    </div>
+
+
+                                </div>
                                 <br>
                                 &nbsp;Difficulty: <label style="margin-left: 4px" class="label label-default" ng-bind="xpTag"></label><br>
 
@@ -128,9 +147,7 @@
         </div>
     </div>
 </footer>
-<!--
-<span ng-init="CreateNewGame()"></span>-->
 
-
+<div ng-custom-topics></div>
 
 

@@ -12,15 +12,8 @@
 
          RestangularProvider.setFullResponse(true);
          RestangularProvider.setBaseUrl(url);
-         RestangularProvider.setDefaultRequestParams({ 'grockit': new Date().getTime() });
-         //var cache = $cacheFactory('http');
-       //  RestangularProvider.setDefaultHttpFields({cache: cache});
-//         RestangularProvider.setResponseInterceptor(function(response, operation) {
-//             if (operation === 'put' || operation === 'post' || operation === 'delete') {
-//                 cache.removeAll();
-//             }
-//             return response;
-//         });
+         RestangularProvider.setDefaultRequestParams({ 'timeStamp': new Date().getTime() });
+
 
 
  });

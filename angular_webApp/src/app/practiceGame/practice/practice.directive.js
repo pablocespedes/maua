@@ -1,10 +1,10 @@
 
-practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
+practiceGame.directive('ngOneChoice', function(questionTypesService) {
     return {
         restrict: 'A',
         templateUrl : 'app/practiceGame/practice/directives.tpl/oneChoice.tpl.html',
         link: function() {
-            oneChoiceFactory.execute();
+            questionTypesService.oneChoiceFactory();
         },
         scope: {
             items:'=items',
@@ -14,12 +14,12 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
     };
 })
 
-    .directive('ngMultipleChoice', function(multipleChoiceFactory) {
+    .directive('ngMultipleChoice', function(questionTypesService) {
         return {
             restrict: 'A',
             templateUrl : 'app/practiceGame/practice/directives.tpl/multipleChoice.tpl.html',
             link: function() {
-                multipleChoiceFactory.execute();
+                questionTypesService.multipleChoiceFactory();
             },
             scope: {
                 items:'=items',
@@ -29,12 +29,12 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
         };
     })
 
-    .directive('ngMultipleMatrix2x3', function(matrix2x3ChoiceFactory) {
+    .directive('ngMultipleMatrix2x3', function(questionTypesService) {
         return {
             restrict: 'A',
             templateUrl : 'app/practiceGame/practice/directives.tpl/matrix2x3.tpl.html',
             link: function() {
-                matrix2x3ChoiceFactory.execute();
+                questionTypesService.matrix2x3ChoiceFactory();
             },
             scope: {
                 items:'=items',
@@ -44,12 +44,12 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
         };
     })
 
-    .directive('ngMultipleMatrix3x3', function(matrix3x3ChoiceFactory) {
+    .directive('ngMultipleMatrix3x3', function(questionTypesService) {
         return {
             restrict: 'A',
             templateUrl : 'app/practiceGame/practice/directives.tpl/matrix3x3.tpl.html',
             link: function() {
-                matrix3x3ChoiceFactory.execute();
+                questionTypesService.matrix3x3ChoiceFactory();
             },
             scope: {
                 items:'=items',
@@ -59,19 +59,19 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
         };
     })
 
-    .directive('ngSat', function(satFactory) {
+    .directive('ngSat', function(questionTypesService) {
         return {
             restrict: 'A',
             templateUrl : 'app/practiceGame/practice/directives.tpl/sat.tpl.html',
             link: function() {
-                satFactory.execute();
+                questionTypesService.satFactory();
             },
             scope: {
             }
         };
     })
 
-    .directive('ngNumericEntry', function(numericEntry) {
+    .directive('ngNumericEntry', function(questionTypesService) {
         return {
             restrict: 'A',
             templateUrl : 'app/practiceGame/practice/directives.tpl/numericEntry.tpl.html',
@@ -83,14 +83,14 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
                 answerStatus:'='
             },
 
-            link: function(scope,attrs) {
-                numericEntry.execute(scope,attrs);
+            link: function(scope) {
+                questionTypesService.numericEntry(scope);
             }
 
         };
     })
 
-    .directive('ngFractionEntry', function(fractionEntry) {
+    .directive('ngFractionEntry', function(questionTypesService) {
         return {
             restrict: 'A',
             templateUrl : 'app/practiceGame/practice/directives.tpl/fractionEntry.tpl.html',
@@ -103,18 +103,18 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
 
             },
             link: function(scope) {
-                fractionEntry.execute(scope);
+                questionTypesService.fractionEntry(scope);
             }
         };
     })
 
-    .directive('ngTwoChoice', function(multipleChoiceTwoCorrect) {
+    .directive('ngTwoChoice', function(questionTypesService) {
 
         return {
             restrict: 'A',
             templateUrl : 'app/practiceGame/practice/directives.tpl/twoChoice.tpl.html',
             link: function() {
-                multipleChoiceTwoCorrect.execute();
+                questionTypesService.multipleChoiceTwoCorrect();
             },
             scope: {
                 items:'=items',
@@ -128,6 +128,58 @@ practiceGame.directive('ngOneChoice', function(oneChoiceFactory) {
         return {
             restrict: 'A',
             templateUrl : 'app/practiceGame/practice/directives.tpl/answers.tpl.html'
+
+        };
+    })
+
+    .directive('ngCustomTopics', function(){
+
+        function setSelect2Settings(){
+            var elm= $('#practice-list select');
+            elm.select2({
+                allowClear: true
+            });
+
+            elm.on("change", function(e) {
+                if (e.added) {
+                    // You can add other filters here like
+                    // if e.val == option_x_of_interest or
+                    // if e.added.text == some_text_of_interest
+                    // Then add a custom CSS class my-custom-css to the <li> added
+                    $(e.added.element).css("background",'#f4b04f');
+                    //$('.select2-search-choice').css("background",'#f4b04f');
+                }
+            });
+        }
+
+        function togglePanel(){
+
+            $('.practice-settings-switcher').switcher({
+                theme: 'square',
+                on_state_content: '<span class="fa fa-check" style="font-size:11px;"></span>',
+                off_state_content: '<span class="fa fa-times" style="font-size:11px;"></span>'
+            });
+
+            // Demo panel toggle
+            $('#practice-settings-toggler').click(function () {
+                $('#practice-settings').toggleClass('open');
+                return false;
+            });
+
+            // Toggle switchers on label click
+            $('#practice-settings-list li > span').click(function () {
+                $(this).parents('li').find('.switcher').click();
+            });
+
+        }
+
+        return {
+            restrict: 'A',
+            templateUrl : 'app/practiceGame/practice/directives.tpl/custom-practice.tpl.html',
+            link: function () {
+                setSelect2Settings();
+                togglePanel();
+            }
 
         };
     });
