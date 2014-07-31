@@ -35,10 +35,7 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
 
         return {
             isLoggedIn: function () {
-                if((webStorage.get('currentUser') == null || "") || ( angular.isUndefined($cookies.authorization_token) || $cookies.authorization_token == ''))
-                    return false;
-                else
-                    return true;
+                return !((webStorage.get('currentUser') == null || "") || ( angular.isUndefined($cookies.authorization_token) || $cookies.authorization_token == ''))
 
             },
             logout: function () {

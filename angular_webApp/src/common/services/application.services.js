@@ -1,36 +1,88 @@
 angular.module('grockitApp.services', ['webStorageModule'])
-    .factory('Utilities', function($http,webStorage,$rootScope,$location,$routeParams,$route) {
-           var trackData = {
-                tracks:[],
-                trackTitle:''
-            };
+    .factory('Utilities', function($http,webStorage,$rootScope,$location,$routeParams,$route,VideoService,$q) {
 
-        function enviromentEvaluation(isNewGrockit){
-            if(isNewGrockit){
-               return location.host== '127.0.0.1:9000'  ? 'https://grockit.com' : location.origin+'/2.0';
-            }
-            else{
-              return location.host== '127.0.0.1:9000'  ? 'https://staging.grockit.com' : location.host=='ww2.grockit.com' ? 'https://grockit.com' :location.origin
-            }
-            /*local enviroment*/
-           /* if(isNewGrockit){
 
-                return location.host== '127.0.0.1:9000'  ? 'http://127.0.0.1:9000/' : location.origin+'/2.0';
-            }
-            else{
-                return location.host== '127.0.0.1:9000' ? 'https://staging.grockit.com' : location.host=='ww2.grockit.com' ? 'https://grockit.com' :location.origin
-            }*/
+        var internalUtilities ={
+            grockitHostEvaluation : function (isNewGrockit) {
+                if (isNewGrockit) {
+                    return location.host == '127.0.0.1:9000' ? 'https://grockit.com' : location.origin + '/2.0';
+                }
+                else {
+                    return location.host == '127.0.0.1:9000' ? 'https://staging.grockit.com' : location.host == 'ww2.grockit.com' ? 'https://grockit.com' : location.origin
+                }
+                /*local enviroment*/
+                /* if(isNewGrockit){
 
-        }
+                 return location.host== '127.0.0.1:9000'  ? 'http://127.0.0.1:9000/' : location.origin+'/2.0';
+                 }
+                 else{
+                 return location.host== '127.0.0.1:9000' ? 'https://staging.grockit.com' : location.host=='ww2.grockit.com' ? 'https://grockit.com' :location.origin
+                 }*/
+
+            },
+            getYoutubeVideosId: function(url) {
+                var deferred = $q.defer();
+
+                var id = '';
+                url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+                if (url[2] !== undefined) {
+                    id = url[2].split(/[^0-9a-z_]/i);
+                    id = id[0];
+                }
+                else {
+                    id = url;
+                }
+
+                deferred.resolve(id);
+                return deferred.promise;
+            },
+            getResourceObject: function(resourceObject) {
+                var nDeferred = $q.defer();
+                var videoObject = {},videoId='';
+                if (resourceObject.resource_type=="youtube") {
+                        var video = internalUtilities.getYoutubeVideosId(resourceObject.resource);
+                        video.then(function(idVid){
+                            videoId=idVid;
+                           return  VideoService.setYouTubeTitle(idVid);
+
+                        }).then(function (videoTime) {
+                            videoObject = {
+                                videoTime: videoTime,
+                                videoId: videoId,
+                                resourceType: resourceObject.resource_type
+                            };
+                            nDeferred.resolve(videoObject);
+                        });
+                }
+                else {
+                    videoObject = {
+                        videoTime: null,
+                        videoId: decodeURIComponent(resourceObject.resource),
+                        resourceType: resourceObject.resource_type
+                    };
+                    nDeferred.resolve(videoObject);
+                }
+
+
+
+                return nDeferred.promise;
+
+
+
+            }
+
+        };
+
+
         return {
             newGrockit: function(){
                 return {
-                    url : enviromentEvaluation(true)
+                    url : internalUtilities.grockitHostEvaluation(true)
                 };
             },
             originalGrockit: function(){
                 return {
-                    url : enviromentEvaluation(false)
+                    url : internalUtilities.grockitHostEvaluation(false)
                 };
             },
             getActiveGroup: function() {
@@ -64,8 +116,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
                 return  ($.inArray(element, array)!==-1);
             },
             encodeRedirect: function (redirectUrl, url) {
-                var fUrl = redirectUrl + encodeURIComponent(url);
-                window.location.href = fUrl;
+                window.location.href = redirectUrl + encodeURIComponent(url);
             },
             redirect: function (url) {
                 var basePath = $location.host=='127.0.0.1' || 'grockit.firstfactoryinc.com' ? '' : 'v2';
@@ -89,7 +140,22 @@ angular.module('grockitApp.services', ['webStorageModule'])
             setCurrentParam: function(key,param){
                 $route.current.pathParams[key]=null;
                 $route.current.pathParams[key]= param;
+            },
+            getYoutubeVideosInfo: function(resources) {
+                var videoDataList = [];
+
+                angular.forEach(resources, function (value) {
+
+                    internalUtilities.getResourceObject(value).then(function(rObject) {
+                        videoDataList.push(rObject);
+                    });
+
+                });
+
+                return videoDataList;
+
             }
+
 
 
 
