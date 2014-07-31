@@ -169,9 +169,12 @@ angular.module('grockitApp.services', ['webStorageModule'])
                 var options = {
                     type: type,
                     namespace: 'pa_page_alerts_dark',
-                    classes: 'alert-dark'
+                    classes: 'alert-dark',
+                    auto_close: 30 /*seconds*/
                 };
-                PixelAdmin.plugins.alerts.add(alertMsg, options);
+                setTimeout(function () {
+                    PixelAdmin.plugins.alerts.add(alertMsg, options);
+                },250);
             },
             setErrorApiMsg: function (error) {
                 return 'Uh oh! We\'re having difficulty retrieving your data.';
