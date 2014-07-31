@@ -341,8 +341,15 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
 
             getQuestionSet.then(function (result) {
 
-                $scope.questionSetList = result.data.question_sets;
-                Practice.loadQuestionsSet();
+                if(result.data.question_sets.length>0){
+                    $scope.questionSetList = result.data.question_sets;
+                    Practice.loadQuestionsSet();
+                }
+                else{
+                    Alerts.showAlert('You already answered all '+$scope.activeTracks.trackTitle+' questions. Please select another one.', 'warning');
+                    Utilities.redirect('#/' + $scope.activeGroupId+ "/dashboard");
+                }
+
 
             }).catch(function error(error) {
 
@@ -386,7 +393,9 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
                 }
                 else {
                    /*If we finish with the first load of questions id/question sets que create a new game*/
-                    $scope.CreateNewGame();
+                    $scope.setPosition=0;
+                    Practice.setCurrentQuestionId('_');
+                    Practice.getQuestionSets();
                 }
 
             }
