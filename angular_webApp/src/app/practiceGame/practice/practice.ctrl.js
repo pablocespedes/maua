@@ -31,6 +31,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
         ];
 
 
+
     var Practice = {
         setLayoutBasedOnQuestionInfo: function (setLayout) {
             var panel1 = angular.element('#Panel1'),
@@ -91,9 +92,9 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
                     value["option"] = options[index];
                     $scope.items.push(value);
                 });
-
                 $scope.position++;
                 Practice.removeBadImage();
+
                 $scope.loading = false;
             }).catch(function error(error) {
 
@@ -346,7 +347,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
                     Practice.loadQuestionsSet();
                 }
                 else{
-                    Alerts.showAlert('You already answered all '+$scope.activeTracks.trackTitle+' questions. Please select another one.', 'warning');
+                    Alerts.showAlert('Congrats, you answered all of our '+$scope.activeTracks.trackTitle+' questions! Please select another section to practice.', 'warning');
                     Utilities.redirect('#/' + $scope.activeGroupId+ "/dashboard");
                 }
 
@@ -495,6 +496,11 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
     };
 
     $scope.CreateNewGame();
+
+
+
+
+
 }]);
 
 

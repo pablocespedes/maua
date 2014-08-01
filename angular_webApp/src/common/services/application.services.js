@@ -57,7 +57,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
                 else {
                     videoObject = {
                         videoTime: null,
-                        videoId: decodeURIComponent(resourceObject.resource),
+                        videoId: decodeURIComponent(resourceObject.resource).replace(/"/g, ""),
                         resourceType: resourceObject.resource_type
                     };
                     nDeferred.resolve(videoObject);
