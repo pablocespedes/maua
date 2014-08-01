@@ -272,7 +272,7 @@ module.exports = function (grunt) {
 
                     [/(auth.services\.js)/, 'Replacing references to auth services'],
 
-                    [/(listenloop.service\.js)/, 'Replacing references to ListenLoop services'],
+                    [/(analytic.service\.js)/, 'Replacing references to Analytic services'],
 
                     [/(jquery.grockit\.js)/, 'Replacing references to practice module'],
 
