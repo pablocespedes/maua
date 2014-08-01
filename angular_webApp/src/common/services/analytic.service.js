@@ -39,11 +39,13 @@ angular.module('grockitApp.analyticService', [])
 
         return {
             classic: function(){
-                var _gaq = _gaq || [];
-                _gaq.push(['_setAccount', GA_classic_id]);
-                _gaq.push(['_setDomainName', '.grockit.com']);
-                _gaq.push(['_trackPageview']);
-                _gaq.push(['_trackPageLoadTime']);
+                $('<script>'+ 
+                    'var _gaq = _gaq || [];'+
+                    '_gaq.push(["_setAccount", "UA-44112604-1"]);'+
+                    '_gaq.push(["_setDomainName", ".grockit.com"]);'+
+                    '_gaq.push(["_trackPageview"]);'+
+                    '_gaq.push(["_trackPageLoadTime"]);'+
+                '</script>').appendTo(document.body)
 
                 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
                 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
