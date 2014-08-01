@@ -188,7 +188,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
         return {
             showDialog: function () {
                 var dialogOptions = {
-                    title: "Welcome to Grockit 2.0",
+                    title: "Welcome to Grockit 2.0 Beta",
                     message: ""
                     },
                 url= location.host== '127.0.0.1:9000'  ? 'http://127.0.0.1:9000/' : location.origin+'/2.0';
