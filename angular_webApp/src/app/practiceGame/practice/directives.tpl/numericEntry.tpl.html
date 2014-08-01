@@ -6,9 +6,10 @@
         <div id="explanationAnswerPanel" ng-show="hasExplanation({index : $index})" ng-if="showExplanation"  class="fadein " ng-class="{'answer-correct-panel': answerStatus, 'answer-incorrect-numEntry': !answerStatus}">
             <div class="explain-margin" ng-bind-html='item.explanation'></div>
         </div>
+        <div ng-if="showExplanation"  class="fadein ">
+            Correct answer:
 
-        <div ng-if="showExplanation"  class="fadein answer-correct-panel">
-            <div class="explain-margin" ng-bind-html='item.body'></div>
+            <div class="answer-correct-panel explain-margin" ng-bind-html='item.body'></div>
         </div>
     </div>
 

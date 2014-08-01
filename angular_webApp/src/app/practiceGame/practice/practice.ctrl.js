@@ -101,7 +101,8 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
             });
         },
         resetLayout: function () {
-            $scope.titleQuest = $scope.titleQuest + ' Explanation';
+            $scope.titleQuest='';
+            $scope.titleQuest = $scope.activeTracks.trackTitle + ' Explanation';
             this.setLayoutBasedOnQuestionInfo(true);
             angular.element('#skipAction').addClass('hide');
             angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
@@ -129,6 +130,18 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
             });
 
         },
+        tagResourcesInfo: function(){
+            var tags = [];
+
+            angular.forEach($scope.questionItems.tags, function (value) {
+                tags.push({
+                    name:value.name,
+                    tagResource: Utilities.getYoutubeVideosInfo(value.tag_resources)
+                });
+            });
+            $scope.tags = tags;
+
+        },
         seeAnswer: function () {
             this.resetLayout();
 
@@ -150,7 +163,10 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
 
             /*Get answers from the previous request and Explain*/
             var answers = $scope.questionItems.answers;
-            $scope.tags = $scope.questionItems.tags;
+
+            /*Evaluate tag resources info, get video Ids and video time*/
+            Practice.tagResourcesInfo();
+
             $scope.xpTag = $scope.questionItems.experience_points;
 
 
@@ -185,8 +201,8 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
                 });
             }
 
-            /*Get answers from the previous request and Explain*/
-            $scope.tags = $scope.questionItems.tags;
+            /*Evaluate tag resources info, get video Ids and video time*/
+            Practice.tagResourcesInfo();
             $scope.xpTag = $scope.questionItems.experience_points;
 
             /* Work with the styles to shown result
@@ -325,8 +341,15 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
 
             getQuestionSet.then(function (result) {
 
-                $scope.questionSetList = result.data.question_sets;
-                Practice.loadQuestionsSet();
+                if(result.data.question_sets.length>0){
+                    $scope.questionSetList = result.data.question_sets;
+                    Practice.loadQuestionsSet();
+                }
+                else{
+                    Alerts.showAlert('You already answered all '+$scope.activeTracks.trackTitle+' questions. Please select another one.', 'warning');
+                    Utilities.redirect('#/' + $scope.activeGroupId+ "/dashboard");
+                }
+
 
             }).catch(function error(error) {
 
@@ -341,7 +364,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
 
                 /*if $scope.setPosition is bigger than $scope.questionSetList.length we already finish the list of question sets */
                 if ($scope.setPosition < $scope.questionSetList.length) {
-
+                    $scope.titleQuest='';
                     $scope.titleQuest = $scope.activeTracks.trackTitle;
 
                     var setPosition = $scope.setPosition,
@@ -369,6 +392,9 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
                     }
                 }
                 else {
+                   /*If we finish with the first load of questions id/question sets que create a new game*/
+                    $scope.setPosition=0;
+                    Practice.setCurrentQuestionId('_');
                     Practice.getQuestionSets();
                 }
 
@@ -415,7 +441,6 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
             });
         }
     };
-
 
     $scope.CreateNewGame = function () {
 
