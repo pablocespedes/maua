@@ -43,7 +43,7 @@
   'grockitApp.services',
   'grockitApp.requests',
   'grockitApp.authServices',
-  'grockitApp.listenloopService',
+  'grockitApp.analyticService',
   'grockitApp.practiceGame',
   'grockitApp.home',
   'grockitApp.directives'
