@@ -1,4 +1,4 @@
-practiceGame.controller('PracticeController',['$scope','practiceRequests','Utilities','breadcrumbs','VideoService','Alerts','$location','$q',function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$location,$q) {
+practiceGame.controller('PracticeController',['$scope','practiceRequests','Utilities','breadcrumbs','VideoService','Alerts','$location','$q','$sce',function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$location,$q,$sce) {
 
     $scope.activeTracks = Utilities.getActiveTrack();
     $scope.titleQuest = $scope.activeTracks.trackTitle;
@@ -83,7 +83,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
 
                 /*Set the layout based on the question info*/
                 Practice.setLayoutBasedOnQuestionInfo(setLayoutType);
-                $scope.stimulus = $scope.questionItems.stimulus;
+                $scope.stimulus =$sce.trustAsHtml($scope.questionItems.stimulus);
 
                 var options = $scope.optionList.toUpperCase().split(""),
                     answers = $scope.questionItems.answers;
