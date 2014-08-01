@@ -98,7 +98,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
         SimpleDashBoard.getHistoryInformation();
 
-        //SimpleDashBoard.fetchTracksData();
+        SimpleDashBoard.fetchTracksData();
 
 
         $scope.breadcrumbs = breadcrumbs;
