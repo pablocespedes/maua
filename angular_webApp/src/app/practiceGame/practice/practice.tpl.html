@@ -57,13 +57,12 @@
                                     <div ng-repeat="tr in tag.tagResource" style="display:inline;">
 
                                         <button ng-if="tr.resourceType == 'youtube'" style="margin-left: 4px" class="btn btn-flat btn-xs btn-labeled btn-default" youtube rel="{{tr.videoId}}">
-                                          <span>Refresher {{$index+1}} ({{tr.videoTime}})</span>
-                                            <span class="btn-label icon fa  fa-play-circle-o"></span>
+                                          <span><span class="btn-label icon fa  fa-play-circle-o"></span>Refresher {{$index+1}} ({{tr.videoTime}})</span>
+
                                         </button>
                                         <a ng-if="tr.resourceType == 'blog'" ng-href="{{tr.videoId}}" target="_blank">
                                         <button  style="margin-left: 4px" class="btn btn-flat btn-xs btn-labeled btn-default">
-                                            Refresher {{$index+1}}
-                                            <span class="btn-label icon fa  fa-quote-left"></span>
+                                            <span><span class="btn-label icon fa  fa-quote-left"></span> Refresher {{$index+1}}</span>
                                         </button>
                                         </a>
                                     </div>
@@ -148,6 +147,8 @@
     </div>
 </footer>
 
+<!--
 <div ng-custom-topics></div>
+-->
 
 
