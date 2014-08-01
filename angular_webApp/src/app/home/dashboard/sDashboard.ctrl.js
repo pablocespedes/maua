@@ -14,9 +14,9 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
                     $scope.tracks = response.data.tracks;
                     $scope.loading=false;
 
-                }).catch(function error(error) {
+                }).catch(function error(e) {
 
-                    Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+                    Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
                 });
 
         },
@@ -33,8 +33,8 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
                 $scope.scoreLoading=false;
 
-            }).catch(function error(error) {
-                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+            }).catch(function error(e) {
+                Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
             });
 
         },
@@ -81,9 +81,9 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
 
 
-            }).catch(function error(error) {
+            }).catch(function error(e) {
 
-                Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+                Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
             });
         }
     };
