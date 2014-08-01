@@ -35,27 +35,18 @@ angular.module('grockitApp.analyticService', [])
 
     .factory('GaUtility', function(){
 
-        function load_ga_script(userData){
-            $()
-        }
-        google_account = "UA-44112604-1";
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', google_account]);
-        _gaq.push(['_setDomainName', '.grockit.com']);
-        if(Auth.isLoggedIn)
-        {
-            _gaq.push(['_setCustomVar', 1, 'Studying_For', userData.currentGroup, 1]);
-            _gaq.push(['_setCustomVar', 2, 'User_Type', userData.role, 2]);
-            _gaq.push(['_setCustomVar', 3, 'Last_Lobby', userData.currentGroup, 3]);
-            _gaq.push(['_setCustomVar', 4, 'User_ID', userData.userId, 4]);
-            _gaq.push(['_trackPageview']);
-            _gaq.push(['_trackPageLoadTime']);
-            function(){
+        return {
+            classic: function(){
                 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
                 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga,s);
-            }();
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            },
+            UA: function(){
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            }
         }
-
 
     });
