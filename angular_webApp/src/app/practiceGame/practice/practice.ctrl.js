@@ -449,8 +449,19 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
 
         createGame.then(function (game) {
             $scope.gameResponseId = game.data.practice_game.id;
+            var questionId =Utilities.getCurrentParam('questionId');
 
-            if ($scope.activeTracks.tracks.length > 0) {
+            if (angular.isUndefined(Utilities.getCurrentParam('questionId')) || questionId =='_') {
+                Practice.getQuestionSets();
+            }
+            else if(questionId !='_'){
+                Practice.loadQuestion(questionId);
+            }
+            else{
+                Alerts.showAlert('Oh sorry, We have problems to load your question, please let us know on feedback@grockit.com.', 'danger');
+            }
+
+          /*  if ($scope.activeTracks.tracks.length > 0) {
                 Practice.getQuestionSets();
             }
             else if (angular.isDefined(Utilities.getCurrentParam('questionId'))) {
@@ -463,7 +474,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
                 bootbox.alert('You must select one track at least', function () {
                     Utilities.redirect('#/' + $scope.activeGroupId + '/dashboard');
                 });
-            }
+            }*/
 
         }).catch(function error(error) {
 
