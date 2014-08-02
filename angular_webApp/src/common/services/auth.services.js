@@ -50,10 +50,9 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
                 }
             },
             setCurrentUser: function () {
-               var  oldSite= ($location.host=='127.0.0.1' || 'grockit.firstfactoryinc.com') ? Utilities.originalGrockit().url+'/login?redirect=' : '' + '/login?redirect=',
-                    newSite= Utilities.newGrockit().url,
-                    params =$location.url().match(/.*[?&]_token=([^&]+)(&|$)/),
-                    token = (params ? params[1] : ""),
+
+                var params =$location.url().match(/.*[?&]_token=([^&]+)(&|$)/),
+                    token = (params ? params[1] : ""),userData=undefined,
                     deferred = $q.defer();
 
                 try {
@@ -65,7 +64,7 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
 
                         Users.getUser().self().then(function (result) {
 
-                            var userData = setUserData(result.data.user,false);
+                            userData = setUserData(result.data.user,false);
 
                             deferred.resolve(userData);
 
@@ -75,15 +74,7 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
 
                     }
                     else {
-
-                        if ($location.path() == '' || $location.path() == '/') {
-                            newSite = newSite + '#/?' + '_token';
-                        }
-                        else {
-                            newSite = newSite + '/?' + '_token';
-                        }
-
-                        Utilities.encodeRedirect(oldSite, newSite);
+                        deferred.resolve(userData);
 
                     }
                     return deferred.promise;
