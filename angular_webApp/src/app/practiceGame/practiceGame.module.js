@@ -56,6 +56,6 @@ var practiceGame =  angular.module("grockitApp.practiceGame",['ng-breadcrumbs'])
             return deferred.promise;
         }}, controller: 'PracticeController'
         });
-     $routeProvider.otherwise({redirectTo:'/'});
+    // $routeProvider.otherwise({redirectTo:'/'});
 
 });

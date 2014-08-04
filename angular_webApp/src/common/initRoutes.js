@@ -12,7 +12,8 @@ var paths={
     generalDirectives:'common/directives/general.directive.js',
     authServices:'common/services/auth.services.js',
     accountCtrl:'app/account/application.ctrl.js',
-    app:'app/app.js'
+    app:'app/app.js',
+    dev: 'dev/dev.ctrl.js'
 };
 
 $script([
@@ -31,7 +32,9 @@ $script([
     .ready('init', function(){
         $script([
             paths.restAngularFactory,
-            paths.accountCtrl
+            paths.accountCtrl,
+            paths.dev
+
         ], function() {
             angular.bootstrap(document, ['grockitApp']);
         });

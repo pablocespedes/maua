@@ -54,6 +54,6 @@
               reloadOnSearch: false
            });
 
-       $routeProvider.otherwise({redirectTo:'/'});
+      // $routeProvider.otherwise({redirectTo:'/'});
    });
 

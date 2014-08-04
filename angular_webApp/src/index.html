@@ -65,23 +65,19 @@
 
 </head>
 <body class="theme-default main-menu-animated" ng-cloak>
-<!--<body class="theme-adminflare main-menu-animated dont-animate-mm-content-sm animate-mm-md animate-mm-lg" ng-cloak>-->
 
 <script>var init = [];</script>
 <script type="text/javascript">
-    //$( window ).load(function() {
     init.push(function () {
         // Javascript code here
     });
 
     window.PixelAdmin.start(init);
-    // });
 
 </script>
 <div id="main-wrapper" >
-    <!-- 2. $MAIN_NAVIGATION ===========================================================================
-        Main navigation
-    -->
+
+
     <div ng-controller="NavController">
     <div id="main-navbar" class="navbar navbar-inverse" role="navigation">
         <!-- Main menu toggle -->
@@ -150,6 +146,7 @@
         </div>
         <!-- / .navbar-inner -->
     </div>
+
     <!-- / #main-navbar -->
     <div id="main-menu" role="navigation" >
         <div id="main-menu-inner">
@@ -196,6 +193,7 @@
         <!-- / #main-menu-inner -->
     </div>
     </div>
+
     <!-- / #main-menu -->
     <div id="content-wrapper">
         <div ng-view>
@@ -209,7 +207,8 @@
 
 
 </div>
-<!-- / #main-wrapper -->
+
+
 
 
 
