@@ -6,7 +6,7 @@
 
          if (Auth.isLoggedIn()) {
 
-             if ($location.path() === '/' || $location.path() === '/' + Utilities.getActiveGroup() || $location.path() == '' || angular.isDefined($location.search()._token)) {
+             if ($location.path() === '/' || $location.path() === '/' + Utilities.getActiveGroup() || $location.path() == '') {
 
                  Auth.getUpdateUserData().then(function (response) {
                      if (response != null) {
@@ -22,20 +22,9 @@
              }
          }
          else {
-
+             Alerts.showAlert('Permission Denied..', 'danger');
             //send to login page
          }
-
-       /*  $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
-                 event.preventDefault();
-
-                 if(Auth.isLoggedIn()) {
-                     Utilities.redirect('#/' + Utilities.getActiveGroup() + '/dashboard');
-                 } else {
-                     Utilities.redirect('#/development/setCookie');
-                 }
-         });*/
-
 
      });
 }(angular.module("grockitApp", [

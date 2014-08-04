@@ -128,9 +128,6 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
 
             Application.init();
         }
-        else{
-            Utilities.redirect('#/dev/setCookie');
-        }
     }
 
 };

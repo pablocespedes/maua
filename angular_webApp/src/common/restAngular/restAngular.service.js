@@ -125,12 +125,12 @@ request.factory('Headers', function(Restangular,$cookies) {
     return  {
         setDefaultHeader:function(sessionId){
 
-            Restangular.setDefaultHeaders({'Authorization':'Token token='+'"'+sessionId+'"'});
+            Restangular.setDefaultHeaders({'Authorization':'Token token='+'"'+sessionId+'="'});
 
         },
         updateDefaultHeader:function(){
 
-            Restangular.setDefaultHeaders({'Authorization':'Token token='+'"'+$cookies.authorization_token+'"'});
+            Restangular.setDefaultHeaders({'Authorization':'Token token='+'"'+$cookies._app_server_session+'="'});
 
         }
     }

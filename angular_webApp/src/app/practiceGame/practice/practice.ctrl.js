@@ -5,7 +5,7 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
     $scope.activeGroupId = Utilities.getActiveGroup();
     $scope.breadcrumbs = breadcrumbs;
     breadcrumbs.options = { 'practice': $scope.titleQuest };
-
+    $scope.isUniqueQuestionLoad=false;
     $scope.portalC = $scope;
     $scope.loading = true;
     $scope.optionList = "abcdefghijklmnopqrstuvwxyz";
@@ -361,72 +361,49 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
         },
         loadQuestionsSet: function () {
 
-            if ($scope.questionSetList.length > 0) {
+            if(!$scope.isUniqueQuestionLoad) {
 
-                /*if $scope.setPosition is bigger than $scope.questionSetList.length we already finish the list of question sets */
-                if ($scope.setPosition < $scope.questionSetList.length) {
-                    $scope.titleQuest='';
-                    $scope.titleQuest = $scope.activeTracks.trackTitle;
+                if (angular.isDefined($scope.questionSetList) && $scope.questionSetList.length > 0) {
 
-                    var setPosition = $scope.setPosition,
+                    /*if $scope.setPosition is bigger than $scope.questionSetList.length we already finish the list of question sets */
+                    if ($scope.setPosition < $scope.questionSetList.length) {
+                        $scope.titleQuest = '';
+                        $scope.titleQuest = $scope.activeTracks.trackTitle;
 
-                    /* Iterate between all the question sets retrieved it by the API */
-                        questionSetResult = $scope.questionSetList[setPosition];
+                        var setPosition = $scope.setPosition,
 
-                    var position = $scope.position,
+                        /* Iterate between all the question sets retrieved it by the API */
+                            questionSetResult = $scope.questionSetList[setPosition];
+
+                        var position = $scope.position,
                         /* questionsCount Give us the number of questions by questionSet*/
-                        questionsCount = questionSetResult.questions.length;
+                            questionsCount = questionSetResult.questions.length;
 
-                    $scope.questByQSetTitle= questionsCount > 1 ? 'Question '+(position+1) +' of '+ (questionsCount)+' for this set': '';
+                        $scope.questByQSetTitle = questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + (questionsCount) + ' for this set' : '';
 
 
-                    /* Iterate between all the question retrieved it by the API which belong to a specific Question set */
-                    var questionIdToRequest = questionSetResult.questions[position];
-                    if (position < questionsCount) {
+                        /* Iterate between all the question retrieved it by the API which belong to a specific Question set */
+                        var questionIdToRequest = questionSetResult.questions[position];
+                        if (position < questionsCount) {
 
-                        Practice.loadQuestion(questionIdToRequest)
-                    }
-                    else {
-                        $scope.position = 0;
-                        $scope.setPosition++;
-                        Practice.loadQuestionsSet();
-                    }
-                }
-                else {
-                   /*If we finish with the first load of questions id/question sets que create a new game*/
-                    $scope.setPosition=0;
-                    Practice.setCurrentQuestionId('_');
-                    Practice.getQuestionSets();
-                }
-
-            }
-            else {
-
-                var dialogOptions = {
-                    message: "Sorry, we can't show you questions for this topic yet. We're still working on them and should have them ready soon. " +
-                        "Please select a different topic for now or also you can answer" + '' +
-                        " questions in the old Grockit.. Thanks.",
-                    buttons: {
-                        success: {
-                            label: "Stay on New Grockit!",
-                            className: "btn-success",
-                            callback: function () {
-                                Utilities.redirect('#/' + $scope.activeGroupId + '/dashboard');
-                            }
-                        },
-                        main: {
-                            label: "Continue to Original Grockit!",
-                            className: "btn-primary",
-                            callback: function () {
-                                var url = Utilities.originalGrockit().url + '/' + $scope.activeGroupId;
-                                Utilities.redirect(url);
-                            }
+                            Practice.loadQuestion(questionIdToRequest)
+                        }
+                        else {
+                            $scope.position = 0;
+                            $scope.setPosition++;
+                            Practice.loadQuestionsSet();
                         }
                     }
-                };
+                    else {
+                        /*If we finish with the first load of questions id/question sets que create a new game*/
+                        $scope.setPosition = 0;
+                        Practice.setCurrentQuestionId('_');
+                        Practice.getQuestionSets();
+                    }
 
-                Utilities.dialogService(dialogOptions);
+                }
             }
+
 
 
         },
@@ -452,9 +429,13 @@ practiceGame.controller('PracticeController',['$scope','practiceRequests','Utili
             var questionId =Utilities.getCurrentParam('questionId');
 
             if (angular.isUndefined(Utilities.getCurrentParam('questionId')) || questionId =='_') {
+                $scope.isUniqueQuestionLoad=false;
                 Practice.getQuestionSets();
+
             }
             else if(questionId !='_'){
+                $scope.isUniqueQuestionLoad=true;
+                angular.element('#nextAction').addClass('hide');
                 Practice.loadQuestion(questionId);
             }
             else{
