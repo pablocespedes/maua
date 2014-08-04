@@ -19,7 +19,7 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
                             angular.isDefined(webStorage.get('currentUser').trackData) ? webStorage.get('currentUser').trackData : '',
                 currentUser = {
                     userId: response.id,
-                    role: response.guest == true ? UserRoles.member : UserRoles.guest,
+                    role: response.guest ? UserRoles.guest : UserRoles.member,
                     groupMemberships: response.group_memberships,
                     currentGroup: isUpdate ? updateSelectedGroup(defaultGroup) : defaultGroup,
                     fullName: response.first_name,
@@ -37,13 +37,13 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
 
         return {
             isLoggedIn: function () {
-                return !((webStorage.get('currentUser') == null || "") || ( angular.isUndefined($cookies.authorization_token) || $cookies.authorization_token == ''))
+                return !((webStorage.get('currentUser') == null || "") || ( angular.isUndefined($cookies._app_server_session) || $cookies._app_server_session == ''))
 
             },
             logout: function () {
                 try {
                     webStorage.remove('currentUser');
-                    $cookies.authorization_token='';
+                    $cookies._app_server_session='';
 
 
                 } catch (e) {
@@ -89,10 +89,11 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
                 return webStorage.get('currentUser');
             },
             getUpdateUserData: function () {
-                var deferred = $q.defer();
-
+                var deferred = $q.defer(),
+                    sessionId = $cookies._app_server_session + '=';
+                Headers.setDefaultHeader(sessionId);
                 Users.getUser().self().then(function (result) {
-                    var userData = setUserData(result.data.user,true);
+                    var userData = setUserData(result.data.user,false);
 
                     deferred.resolve(userData);
 
@@ -104,8 +105,10 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
             },
             updateUserInfo: function (currentUser) {
                 webStorage.add('currentUser', currentUser);
+            },
+            setToken: function(key,value){
+                $cookies[key]=value;
             }
-            
         };
     });
 

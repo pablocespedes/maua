@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div ng-controller="DevController" style="margin-top: 50px"  class="row">
+    <div ng-if="isDev"  class="col-md-4 col-xs-offset-4">
+
+        <div class="panel panel-success panel-dark widget-profile">
+            <div class="panel-heading">
+                <div class="widget-profile-bg-icon"><i class="fa fa-flask"></i></div>
+                <div class="widget-profile-header">
+                    <span>Set cookie</span><br>
+                </div>
+            </div> <!-- / .panel-heading -->
+            <div class="list-group">
+                <a href="#" class="list-group-item">
+                    <i class="fa fa-envelope-o list-group-icon"></i>
+
+                    <input id="cookie" ng-model="token">
+
+                    <button ng-click="setToken()">Set Cookie</button>
+
+                </a>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

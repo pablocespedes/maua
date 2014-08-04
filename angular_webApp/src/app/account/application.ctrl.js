@@ -123,9 +123,13 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
 
     };
 
-    if(angular.isDefined($cookies.authorization_token)){
-        if($cookies.authorization_token!=null || $cookies.authorization_token!=''){
+    if(angular.isDefined($cookies._app_server_session)){
+        if($cookies._app_server_session!=null && $cookies._app_server_session!=''){
+
             Application.init();
+        }
+        else{
+            Utilities.redirect('#/dev/setCookie');
         }
     }
 
