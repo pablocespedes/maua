@@ -35,8 +35,8 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
       return ( !!$cookies["authentication_token"] );
     },
     logout: function() {
-      $cookies["authentication_token"] = '';
       webStorage.remove('currentUser');
+      $location.url("/logout");
     },
     getCurrentUserInfo: function() {
       return webStorage.get('currentUser');
