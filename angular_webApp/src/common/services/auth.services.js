@@ -4,7 +4,7 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
         member: 'member',
         guest: 'guest'
     })
-    .factory('Auth', function($cookies,UserRoles,webStorage,Users,Utilities,$location,$q,Headers) {
+    .factory('Auth', function($cookies, UserRoles, webStorage, Users, Utilities, $location, $q,Headers) {
 
         var updateSelectedGroup= function(defaultGroup){
             /*Utilities.getCurrentParam('subject') will inspect the url searching for the subject parameter*/
@@ -38,14 +38,13 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
 
         return {
             isLoggedIn: function () {
-                return ((webStorage.get('currentUser') != null) && ($cookies._app_server_session!=null && $cookies._app_server_session!=''))
+                return ( !$cookies._app_server_session );
 
             },
             logout: function () {
                 try {
                     webStorage.remove('currentUser');
                     $cookies._app_server_session='';
-
 
                 } catch (e) {
                 }
@@ -54,9 +53,10 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
                 return webStorage.get('currentUser');
             },
             getUpdateUserData: function () {
-                var deferred = $q.defer(),
-                    sessionId = $cookies._app_server_session + '=';
-                Headers.setDefaultHeader(sessionId);
+                var deferred = $q.defer();
+
+                Headers.updateDefaultHeader();
+
                 Users.getUser().self().then(function (result) {
                     var userData = setUserData(result.data.user);
 
@@ -73,7 +73,9 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
             },
             setToken: function(key,value){
                 $cookies[key]=value;
-            }
+            },
+
+
         };
     });
 

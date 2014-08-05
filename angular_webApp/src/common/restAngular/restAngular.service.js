@@ -121,17 +121,23 @@ request.factory('Tracks', function(Restangular,Headers) {
 
 });
 
-request.factory('Headers', function(Restangular,$cookies) {
+
+
+request.factory('Headers', function(Restangular, $cookies) {
+    var getCookie = function(key) {
+            var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+            return keyValue ? keyValue[2] : null;
+    };
+
     return  {
-        setDefaultHeader:function(sessionId){
-
-            Restangular.setDefaultHeaders({'Authorization':'Token token='+'"'+sessionId+'="'});
-
+        setDefaultHeader: function(sessionId) {
+            Restangular.setDefaultHeaders({'Authorization':'Token token=' + '"' + sessionId + '"'});
         },
-        updateDefaultHeader:function(){
 
-            Restangular.setDefaultHeaders({'Authorization':'Token token='+'"'+$cookies._app_server_session+'="'});
-
+        updateDefaultHeader: function() {
+            var sessionId = getCookie("_app_server_session");
+            $cookies["_app_server_session"] = sessionId;
+            this.setDefaultHeader(sessionId);
         }
     }
 });
