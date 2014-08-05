@@ -123,9 +123,9 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
 
     };
 
-    if(angular.isDefined(Headers.getCookie('_app_server_session'))) {
+    if(angular.isDefined(Headers.getCookie('authentication_token'))) {
         Headers.updateDefaultHeader();
-        if( !!Headers.getCookie('_app_server_session') ) {
+        if( !!Headers.getCookie('authentication_token') ) {
             Application.init();
         }
         else {
