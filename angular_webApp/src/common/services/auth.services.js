@@ -38,13 +38,13 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
 
         return {
             isLoggedIn: function () {
-                return ( !!$cookies._app_server_session );
+                return ( !!Headers.getCookie('_app_server_session') );
 
             },
             logout: function () {
                 try {
                     webStorage.remove('currentUser');
-                    $cookies._app_server_session='';
+                   // $cookies._app_server_session='';
 
                 } catch (e) {
                 }
@@ -70,10 +70,8 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
             },
             updateUserInfo: function (currentUser) {
                 webStorage.add('currentUser', currentUser);
-            },
-            setToken: function(key,value){
-                $cookies[key]=value;
             }
+
 
 
         };

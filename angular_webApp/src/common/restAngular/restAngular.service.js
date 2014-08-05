@@ -123,11 +123,8 @@ request.factory('Tracks', function(Restangular,Headers) {
 
 
 
-request.factory('Headers', function(Restangular, $cookies) {
-    var getCookie = function(key) {
-            var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
-            return keyValue ? keyValue[2] : null;
-    };
+request.factory('Headers', function(Restangular) {
+
 
     return  {
         setDefaultHeader: function(sessionId) {
@@ -135,10 +132,14 @@ request.factory('Headers', function(Restangular, $cookies) {
         },
 
         updateDefaultHeader: function() {
-            var sessionId = getCookie("_app_server_session");
-            $cookies["_app_server_session"] = sessionId;
+            var sessionId = this.getCookie("_app_server_session");
             this.setDefaultHeader(sessionId);
+        },
+        getCookie :function(key) {
+            var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+            return keyValue ? keyValue[2] : null;
         }
+
     }
 });
 
