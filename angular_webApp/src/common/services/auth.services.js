@@ -38,7 +38,7 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
 
         return {
             isLoggedIn: function () {
-                return ( !$cookies._app_server_session );
+                return ( !!$cookies._app_server_session );
 
             },
             logout: function () {
@@ -73,7 +73,7 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
             },
             setToken: function(key,value){
                 $cookies[key]=value;
-            },
+            }
 
 
         };

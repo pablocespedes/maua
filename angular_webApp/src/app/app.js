@@ -21,10 +21,7 @@
 
              }
          }
-         else {
-             Alerts.showAlert('Permission Denied..', 'danger');
-            //send to login page
-         }
+
 
      });
 }(angular.module("grockitApp", [
