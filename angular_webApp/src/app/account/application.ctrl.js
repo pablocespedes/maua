@@ -1,4 +1,4 @@
-NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitNewFeatures, ListenloopUtility, GaUtility, Tracks,$cookies,Groups,Alerts,$route) {
+NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitNewFeatures, ListenloopUtility, GaUtility, Tracks,$cookies,Groups,Alerts,$route,Headers) {
     $scope.url= Utilities.originalGrockit().url;
     $scope.logOutUrl= Utilities.originalGrockit().url+'/logout';
 
@@ -124,6 +124,7 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
     };
 
     if(angular.isDefined($cookies._app_server_session)) {
+        Headers.updateDefaultHeader();
         if( !!$cookies._app_server_session ) {
             Application.init();
         }

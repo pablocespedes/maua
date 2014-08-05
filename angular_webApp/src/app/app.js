@@ -6,7 +6,7 @@
 
          if (Auth.isLoggedIn()) {
 
-             if ($location.path() === '/' || $location.path() === '/' + Utilities.getActiveGroup() || $location.path() == '') {
+            // if ($location.path() === '/' || $location.path() === '/' + Utilities.getActiveGroup() || $location.path() == '') {
 
                  Auth.getUpdateUserData().then(function (response) {
                      if (response != null) {
@@ -19,7 +19,7 @@
                      Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
                  });
 
-             }
+             //}
          }
 
 
