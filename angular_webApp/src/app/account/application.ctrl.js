@@ -124,8 +124,12 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
     };
 
     if(angular.isDefined($cookies._app_server_session)) {
-        if( !$cookies._app_server_session ) {
+        if( !!$cookies._app_server_session ) {
             Application.init();
+        }
+        else {
+            Alerts.showAlert('Permission Denied..', 'danger');
+            //send to login page
         }
     }
 
