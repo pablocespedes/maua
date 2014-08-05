@@ -64,7 +64,7 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
 								if (response != null) {
 										$scope.currentUser = response;
 										$scope.selectedGroup = Utilities.getActiveGroup();
-										Application.fetchLeftNavTracksData();
+										//Application.fetchLeftNavTracksData();
 										Application.loadGroupMembership();
 										ListenloopUtility.base(response);
 										GaUtility.classic();
