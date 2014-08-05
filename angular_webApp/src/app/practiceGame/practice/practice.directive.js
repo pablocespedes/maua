@@ -132,56 +132,56 @@ practiceGame.directive('ngOneChoice', function(questionTypesService) {
         };
     })
 
-    .directive('ngCustomTopics', function(){
+    .directive('ngCustomTopics', function() {
 
-        function setSelect2Settings(){
-            var elm= $('#practice-list select');
-            elm.select2({
-                allowClear: true
-            });
+		function setSelect2Settings() {
+				var elm = $('#practice-list select');
+				elm.select2({
+						allowClear: true
+				});
 
-            elm.on("change", function(e) {
-                if (e.added) {
-                    // You can add other filters here like
-                    // if e.val == option_x_of_interest or
-                    // if e.added.text == some_text_of_interest
-                    // Then add a custom CSS class my-custom-css to the <li> added
-                    $(e.added.element).css("background",'#f4b04f');
-                    //$('.select2-search-choice').css("background",'#f4b04f');
-                }
-            });
-        }
+				elm.on("change", function (e) {
+						if (e.added) {
+								// You can add other filters here like
+								// if e.val == option_x_of_interest or
+								// if e.added.text == some_text_of_interest
+								// Then add a custom CSS class my-custom-css to the <li> added
+								$(e.added.element).css("background", '#f4b04f');
+								//$('.select2-search-choice').css("background",'#f4b04f');
+						}
+				});
+		}
 
-        function togglePanel(){
+		function togglePanel() {
 
-            $('.practice-settings-switcher').switcher({
-                theme: 'square',
-                on_state_content: '<span class="fa fa-check" style="font-size:11px;"></span>',
-                off_state_content: '<span class="fa fa-times" style="font-size:11px;"></span>'
-            });
+				$('.practice-settings-switcher').switcher({
+						theme: 'square',
+						on_state_content: '<span class="fa fa-check" style="font-size:11px;"></span>',
+						off_state_content: '<span class="fa fa-times" style="font-size:11px;"></span>'
+				});
 
-            // Demo panel toggle
-            $('#practice-settings-toggler').click(function () {
-                $('#practice-settings').toggleClass('open');
-                return false;
-            });
+				// Demo panel toggle
+				$('#practice-settings-toggler').click(function () {
+						$('#practice-settings').toggleClass('open');
+						return false;
+				});
 
-            // Toggle switchers on label click
-            $('#practice-settings-list li > span').click(function () {
-                $(this).parents('li').find('.switcher').click();
-            });
+				// Toggle switchers on label click
+				$('#practice-settings-list li > span').click(function () {
+						$(this).parents('li').find('.switcher').click();
+				});
 
-        }
+		}
 
-        return {
-            restrict: 'A',
-            templateUrl : 'app/practiceGame/practice/directives.tpl/custom-practice.tpl.html',
-            link: function () {
-                setSelect2Settings();
-                togglePanel();
-            }
+		return {
+				restrict: 'A',
+				templateUrl: 'app/practiceGame/practice/directives.tpl/custom-practice.tpl.html',
+				link: function () {
+						setSelect2Settings();
+						togglePanel();
+				}
 
-        };
-    });
+		};
+});
 
 
