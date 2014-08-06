@@ -61,23 +61,23 @@ angular.module('grockitApp.directives', [])
         $(element).YouTubeModal({autoplay: 0, height: 480, width: '100%'});
       }
     };
-  });
+  })
 .directive('scorePrediction', function() {
-  return {
-    restrict: 'A',
-  templateUrl: 'common/templates/directives/scorePrediction.tpl.html',
-  scope: {
-    groupTitle: '=',
-  totalScore: '=',
-  rangeInit: '=',
-  rangeEnd: '=',
-  isVisible: '=',
-  noScoreMessage: '@'
-  },
-  link: function(scope, element, attrs) {
-    scope.hasScore = function() {
-      return (scope.totalScore !== null && scope.totalScore > 0);
+    return {
+      restrict: 'A',
+      templateUrl: 'common/templates/directives/scorePrediction.tpl.html',
+      scope: {
+        groupTitle: '=',
+        totalScore: '=',
+        rangeInit: '=',
+        rangeEnd: '=',
+        isVisible: '=',
+        noScoreMessage: '@'
+      },
+      link: function (scope, element, attrs) {
+        scope.hasScore = function () {
+          return (scope.totalScore !== null && scope.totalScore > 0);
+        };
+      }
     };
-  }
-  };
-});
+  });
