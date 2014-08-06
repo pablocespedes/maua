@@ -60,6 +60,19 @@ angular.module('grockitApp.directives', [])
                 $(element).YouTubeModal({autoplay:0, height: 480, width:'100%'});
             }
         };
+    })
+    .directive('scorePrediction', function() {
+      return {
+        restrict: 'A',
+        templateUrl: 'common/templates/directives/scorePrediction.tpl.html',
+        scope: {
+            groupTitle: '=',
+            totalScore: '=',
+            rangeInit: '=',
+            rangeEnd: '=',
+            isVisible: '='
+        }
+      };
     });
 
 
