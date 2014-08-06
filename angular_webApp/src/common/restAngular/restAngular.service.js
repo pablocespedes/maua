@@ -106,11 +106,12 @@ request.factory('Groups', function(Restangular,Headers) {
 request.factory('Tracks', function(Restangular,Headers) {
   Headers.updateDefaultHeader();
   function getTracks(){
-    var tracks =  Restangular.service('tracks').one();
+    var tracks =  Restangular.service('tracks').one(), trackData=null;
 
     return {
-      allByGroup: function(groupId){
-        return tracks.customGET('', {group_id: groupId});
+      allByGroup: function(groupId,shouldUpdate){
+        trackData = trackData==null || shouldUpdate ? tracks.customGET('', {group_id: groupId}) : trackData;
+        return trackData;
       }
     }
   }

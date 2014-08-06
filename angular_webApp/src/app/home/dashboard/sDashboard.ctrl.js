@@ -1,23 +1,23 @@
 'use strict';
 home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','breadcrumbs','Alerts', function($scope,Users,History,Tracks,Utilities,Auth,breadcrumbs,Alerts) {
-		$scope.loading = true;
-		$scope.scoreLoading = true;
-		Utilities.setActiveTab(1);
+  $scope.loading = true;
+  $scope.scoreLoading = true;
+  Utilities.setActiveTab(1);
 
 		$scope.activeGroupId = Utilities.getActiveGroup();
 		$scope.enableScore = ($scope.activeGroupId === 'gmat' || $scope.activeGroupId === 'act' || $scope.activeGroupId === 'sat');
 
-		var SimpleDashBoard = {
-				fetchTracksData: function() {
-						$scope.loading = true;
-						Tracks.getTracks().allByGroup($scope.activeGroupId).then(function (response) {
-								$scope.tracks = response.data.tracks;
-								$scope.loading = false;
+  var SimpleDashBoard = {
+    fetchTracksData: function () {
+      $scope.loading = true;
+      Tracks.getTracks().allByGroup($scope.activeGroupId,true).then(function (response) {
+        $scope.tracks = response.data.tracks;
+        $scope.loading = false;
 
-						}).catch(function error(e) {
+      }).catch(function error(e) {
 
-								Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
-						});
+        Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
+      });
 
 				},
 				fetchScorePrediction: function() {
@@ -35,109 +35,108 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
                   $scope.rangeInit = 0;
                   $scope.rangeEnd = 0;
                 }
+        $scope.scoreLoading = false;
 
-								$scope.scoreLoading = false;
+      }).catch(function error(e) {
+        Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
+      });
 
-						}).catch(function error(e) {
-								Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
-						});
+    },
+    fillGraphic: function (graphicData) {
 
-				},
-				fillGraphic: function(graphicData) {
+      if (angular.isDefined(graphicData) && graphicData.history.length > 0) {
+        $scope.historyVisible = true;
 
-						if (angular.isDefined(graphicData) && graphicData.history.length > 0) {
-								$scope.historyVisible = true;
+        var response = History.findMissingDates(graphicData.history);
 
-								var response = History.findMissingDates(graphicData.history);
+        $scope.chart_options = {
+          data: response.Data,
+          xkey: 'day',
+          ykeys: ['total_questions'],
+          labels: ['Questions Answered'],
+          lineColors: ['#2e9be2'],
+          lineWidth: 2,
+          pointSize: 4,
+          numLines: response.MaxLine,
+          hideHover: true,
+          gridLineColor: '#2e9be2',//'rgba(255,255,255,.5)',
+          resize: true,
+          gridTextColor: '#1d89cf',
+          xLabels: "day",
+          xLabelFormat: function (d) {
+            return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate();
+          },
+          dateFormat: function (date) {
+            var d = new Date(date);
+            return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+          }
+        };
 
-								$scope.chart_options = {
-										data: response.Data,
-										xkey: 'day',
-										ykeys: ['total_questions'],
-										labels: ['Questions Answered'],
-										lineColors: ['#2e9be2'],
-										lineWidth: 2,
-										pointSize: 4,
-										numLines: response.MaxLine,
-										hideHover: true,
-										gridLineColor: '#2e9be2',//'rgba(255,255,255,.5)',
-										resize: true,
-										gridTextColor: '#1d89cf',
-										xLabels: "day",
-										xLabelFormat: function (d) {
-												return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate();
-										},
-										dateFormat: function (date) {
-												var d = new Date(date);
-												return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
-										}
-								};
-
-						}
-						else {
-								$scope.historyVisible = false;
-						}
-						$scope.loading = false;
-				},
-				getHistoryInformation: function () {
-						$scope.loading = true;
-						Users.getUser().history($scope.user_id, $scope.activeGroupId).then(function (graphicResult) {
-								SimpleDashBoard.fillGraphic(graphicResult.data);
-
-
-						}).catch(function error(e) {
-
-								Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
-						});
-				}
-		};
-
-		$scope.init = function() {
-				var userInfo = Auth.getCurrentUserInfo();
-				$scope.user_id = userInfo.userId;
-
-				if ($scope.enableScore)
-						SimpleDashBoard.fetchScorePrediction();
+      }
+      else {
+        $scope.historyVisible = false;
+      }
+      $scope.loading = false;
+    },
+    getHistoryInformation: function () {
+      $scope.loading = true;
+      Users.getUser().history($scope.user_id, $scope.activeGroupId).then(function (graphicResult) {
+        SimpleDashBoard.fillGraphic(graphicResult.data);
 
 
-				SimpleDashBoard.getHistoryInformation();
+      }).catch(function error(e) {
 
-				SimpleDashBoard.fetchTracksData();
+        Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
+      });
+    }
+  };
 
+  $scope.init = function () {
+    var userInfo = Auth.getCurrentUserInfo();
+    $scope.user_id = userInfo.userId;
 
-				$scope.breadcrumbs = breadcrumbs;
-
-				$scope.historyVisible = false;
-
-
-		};
-
-		$scope.StartPractice = function(index) {
-				if (angular.isDefined(index)) {
-
-						var tracks = [],
-						trackTitle = $scope.tracks[index].name;
-						tracks.push($scope.tracks[index].id);
-
-						var trackData = {
-								tracks: tracks,
-								trackTitle: trackTitle
-						};
-						Utilities.setActiveTab(1);
-						Utilities.setActiveTrack(trackData);
-						Utilities.redirect('#/' + $scope.activeGroupId + '/dashboard/practice/_');
-				}
-				else {
-						Alerts.showAlert('You must select one track at least', 'warning');
-				}
+    if ($scope.enableScore)
+      SimpleDashBoard.fetchScorePrediction();
 
 
-		};
+    SimpleDashBoard.getHistoryInformation();
 
-		$scope.newCatTest = function () {
-				Utilities.redirect('https://grockit.com/assessment/games/abc25cc0-f24f-0130-2370-1231390ef981');
-		};
+    SimpleDashBoard.fetchTracksData();
 
-		$scope.init();
+
+    $scope.breadcrumbs = breadcrumbs;
+
+    $scope.historyVisible = false;
+
+
+  };
+
+  $scope.StartPractice = function (index) {
+    if (angular.isDefined(index)) {
+
+      var tracks = [],
+        trackTitle = $scope.tracks[index].name;
+      tracks.push($scope.tracks[index].id);
+
+      var trackData = {
+        tracks: tracks,
+        trackTitle: trackTitle
+      };
+      Utilities.setActiveTab(1);
+      Utilities.setActiveTrack(trackData);
+      Utilities.redirect('#/' + $scope.activeGroupId + '/dashboard/practice/_');
+    }
+    else {
+      Alerts.showAlert('You must select one track at least', 'warning');
+    }
+
+
+  };
+
+  $scope.newCatTest = function () {
+    Utilities.redirect('https://grockit.com/assessment/games/abc25cc0-f24f-0130-2370-1231390ef981');
+  };
+
+  $scope.init();
 
 }]);
