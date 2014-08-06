@@ -36,7 +36,6 @@ angular.module('grockitApp.directives', [])
         options: '='
       },
       link: function (scope, element, attrs) {
-
         scope.percent = scope.percent || 0;
 
         var pieChart = $(element).easyPieChart({
