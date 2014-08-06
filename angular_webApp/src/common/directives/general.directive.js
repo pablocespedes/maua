@@ -36,7 +36,6 @@ angular.module('grockitApp.directives', [])
         options: '='
       },
       link: function (scope, element, attrs) {
-
         scope.percent = scope.percent || 0;
 
         var pieChart = $(element).easyPieChart({
@@ -59,11 +58,26 @@ angular.module('grockitApp.directives', [])
     return {
       restrict: 'A',
       link: function (scope, element, attrs) {
-
         $(element).YouTubeModal({autoplay: 0, height: 480, width: '100%'});
       }
     };
   });
-
-
-
+.directive('scorePrediction', function() {
+  return {
+    restrict: 'A',
+  templateUrl: 'common/templates/directives/scorePrediction.tpl.html',
+  scope: {
+    groupTitle: '=',
+  totalScore: '=',
+  rangeInit: '=',
+  rangeEnd: '=',
+  isVisible: '=',
+  noScoreMessage: '@'
+  },
+  link: function(scope, element, attrs) {
+    scope.hasScore = function() {
+      return (scope.totalScore !== null && scope.totalScore > 0);
+    };
+  }
+  };
+});

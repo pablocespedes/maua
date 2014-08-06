@@ -4,8 +4,8 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
   $scope.scoreLoading = true;
   Utilities.setActiveTab(1);
 
-  $scope.activeGroupId = Utilities.getActiveGroup();
-  $scope.enableScore = !!($scope.activeGroupId == 'gmat' || $scope.activeGroupId == 'act' || $scope.activeGroupId == 'sat');
+		$scope.activeGroupId = Utilities.getActiveGroup();
+		$scope.enableScore = ($scope.activeGroupId === 'gmat' || $scope.activeGroupId === 'act' || $scope.activeGroupId === 'sat');
 
   var SimpleDashBoard = {
     fetchTracksData: function () {
@@ -19,18 +19,22 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
       });
 
-    },
-    fetchScorePrediction: function () {
-      Users.getUser().scorePrediction($scope.user_id, $scope.activeGroupId).then(function (scorePrediction) {
-        $scope.score = scorePrediction.data;
-        if (scorePrediction.data.total_score != null && scorePrediction.data.range != null) {
+				},
+				fetchScorePrediction: function() {
+						Users.getUser().scorePrediction($scope.user_id, $scope.activeGroupId).then(function (scorePrediction) {
+              console.log(scorePrediction);
+								$scope.score = scorePrediction.data;
+								if (scorePrediction.data.total_score != null && scorePrediction.data.range != null) {
 
-          $scope.totalScore = scorePrediction.data.total_score;
-          $scope.rangeInit = scorePrediction.data.range[0];
-          $scope.rangeEnd = scorePrediction.data.range[1];
+										$scope.totalScore = scorePrediction.data.total_score;
+										$scope.rangeInit = scorePrediction.data.range[0];
+										$scope.rangeEnd = scorePrediction.data.range[1];
 
-        }
-
+								} else {
+                  $scope.totalScore = 0;
+                  $scope.rangeInit = 0;
+                  $scope.rangeEnd = 0;
+                }
         $scope.scoreLoading = false;
 
       }).catch(function error(e) {
