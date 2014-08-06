@@ -1,0 +1,46 @@
+<div class="panel">
+  <div class="panel-body no-padding">
+    <div style="height: 183px;"  >
+      <div class="stat-panel">
+        <div class="stat-cell bg-info valign-middle">
+          <div ng-if="isVisible" class="loadingScore">
+            <i class="fa fa-trophy bg-icon"></i>
+            <div id="circularG" class="text-lg">
+              <div id="circularG_1" class="circularG">
+              </div>
+              <div id="circularG_2" class="circularG">
+              </div>
+              <div id="circularG_3" class="circularG">
+              </div>
+              <div id="circularG_4" class="circularG">
+              </div>
+              <div id="circularG_5" class="circularG">
+              </div>
+              <div id="circularG_6" class="circularG">
+              </div>
+              <div id="circularG_7" class="circularG">
+              </div>
+              <div id="circularG_8" class="circularG">
+              </div>
+            </div>
+            <br>
+            <br>
+            <span class=" text-sm"> Your Overall <span ng-bind="groupTitle"></span> Score Prediction</span>
+          </div>
+          <div ng-if="!isVisible" class="bounceIn animated">
+            <i class="fa fa-trophy bg-icon"></i>
+            <span class="text-xlg">
+              <strong ng-if="hasScore()" ng-bind="totalScore"></strong>
+              <strong ng-if="!hasScore()" ng-bind="noScoreMessage"></strong>
+            </span>
+            <br>
+            <span ng-show="hasScore()" class="text-bg"><span ng-bind="rangeInit"></span>-<span ng-bind="rangeEnd"></span></span>
+            <br>
+            <span ng-show="hasScore()" class="text-sm"> Your Overall <span ng-bind="groupTitle"></span> Score Prediction</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

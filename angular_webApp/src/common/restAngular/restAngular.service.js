@@ -106,11 +106,12 @@ request.factory('Groups', function(Restangular,Headers) {
 request.factory('Tracks', function(Restangular,Headers) {
   Headers.updateDefaultHeader();
   function getTracks(){
-    var tracks =  Restangular.service('tracks').one();
+    var tracks =  Restangular.service('tracks').one(), trackData=null;
 
     return {
-      allByGroup: function(groupId){
-        return tracks.customGET('', {group_id: groupId});
+      allByGroup: function(groupId,shouldUpdate){
+        trackData = trackData==null || shouldUpdate ? tracks.customGET('', {group_id: groupId}) : trackData;
+        return trackData;
       }
     }
   }
@@ -148,35 +149,41 @@ request.factory('Headers', function(Restangular) {
 /*Custom request*/
 request.factory("VideoService", function($q) {
 
-  return{
-    setYouTubeTitle: function(youtubeId) {
-      var deferred = $q.defer();
-      var url = "https://gdata.youtube.com/feeds/api/videos/" + youtubeId + "?v=2&alt=json";
-      $.ajax({
-        url: url,
-        dataType: 'jsonp',
-        cache: true,
-        success: function (data){
-          var secs = data.entry.media$group.yt$duration.seconds,
-          hours = Math.floor(secs / (60 * 60)),
-          divisor_for_minutes = secs % (60 * 60),
-          minutes = Math.floor(divisor_for_minutes / 60),
-          divisor_for_seconds = divisor_for_minutes % 60,
-          seconds = Math.ceil(divisor_for_seconds);
+		return{
+				setYouTubeTitle: function (youtubeId) {
+						var deferred = $q.defer();
+						var url = "https://gdata.youtube.com/feeds/api/videos/" + youtubeId + "?v=2&alt=json";
+						$.ajax({
+								url: url,
+								dataType: 'jsonp',
+								cache: true,
+								success: function (data) {
+										var secs = data.entry.media$group.yt$duration.seconds,
+										hours = Math.floor(secs / (60 * 60)),
+										divisor_for_minutes = secs % (60 * 60),
+										minutes = Math.floor(divisor_for_minutes / 60),
+										divisor_for_seconds = divisor_for_minutes % 60,
+										seconds = Math.ceil(divisor_for_seconds);
 
-          if (hours   < 10) {hours   = "0"+hours;}
-          if (minutes < 10) {minutes = "0"+minutes;}
-          if (seconds < 10) {seconds = "0"+seconds;}
-                       // var time    = hours+':'+minutes+':'+seconds;
+										if (hours < 10) {
+												hours = "0" + hours;
+										}
+										if (minutes < 10) {
+												minutes = "0" + minutes;
+										}
+										if (seconds < 10) {
+												seconds = "0" + seconds;
+										}
+										// var time    = hours+':'+minutes+':'+seconds;
 
-                       var time = (hours> 0 ? hours +':' : '') + (minutes>0 ? minutes+':' : '') + (seconds>0 ? seconds+' secs' :'');
+										var time = (hours > 0 ? hours + ':' : '') + (minutes > 0 ? minutes + ':' : '') + (seconds > 0 ? seconds + ' secs' : '');
 
-                       deferred.resolve(time);
+										deferred.resolve(time);
 
-                     }
-                   });
-      return deferred.promise;
-    }
-  }
+								}
+						});
+						return deferred.promise;
+				}
+		}
 });
 

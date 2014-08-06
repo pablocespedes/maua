@@ -29,11 +29,11 @@ $script([
     paths.app
 ],'init')
 
-    .ready('init', function(){
-        $script([
-            paths.restAngularFactory,
-            paths.accountCtrl
-        ], function() {
-            angular.bootstrap(document, ['grockitApp']);
-        });
-    });
+    .ready('init', function() {
+		$script([
+				paths.restAngularFactory,
+				paths.accountCtrl
+		], function () {
+				angular.bootstrap(document, ['grockitApp']);
+		});
+});
