@@ -31,7 +31,9 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 										$scope.rangeEnd = scorePrediction.data.range[1];
 
 								} else {
-                  $scope.enableScore = false;
+                  $scope.totalScore = 0;
+                  $scope.rangeInit = 0;
+                  $scope.rangeEnd = 0;
                 }
 
 								$scope.scoreLoading = false;

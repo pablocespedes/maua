@@ -66,11 +66,17 @@ angular.module('grockitApp.directives', [])
         restrict: 'A',
         templateUrl: 'common/templates/directives/scorePrediction.tpl.html',
         scope: {
-            groupTitle: '=',
-            totalScore: '=',
-            rangeInit: '=',
-            rangeEnd: '=',
-            isVisible: '='
+          groupTitle: '=',
+          totalScore: '=',
+          rangeInit: '=',
+          rangeEnd: '=',
+          isVisible: '=',
+          noScoreMessage: '@'
+        },
+        link: function(scope, element, attrs) {
+          scope.hasScore = function() {
+            return (scope.totalScore !== null && scope.totalScore > 0);
+          };
         }
       };
     });
