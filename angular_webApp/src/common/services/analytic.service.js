@@ -34,44 +34,44 @@ angular.module('grockitApp.analyticService', [])
     })
 
     .factory('GaUtility', function() {
-		GA_classic_id = "UA-44112604-1";
-		GA_UA_id = "UA-44112604-4";
+    GA_classic_id = "UA-44112604-1";
+    GA_UA_id = "UA-44112604-4";
 
-		return {
-				classic: function () {
-						$('<script>' +
-						'var _gaq = _gaq || [];' +
-						'_gaq.push(["_setAccount", "UA-44112604-1"]);' +
-						'_gaq.push(["_setDomainName", ".grockit.com"]);' +
-						'_gaq.push(["_trackPageview"]);' +
-						'_gaq.push(["_trackPageLoadTime"]);' +
-						'</script>').appendTo(document.body)
+    return {
+      classic: function () {
+        $('<script>' +
+          'var _gaq = _gaq || [];' +
+          '_gaq.push(["_setAccount", "UA-44112604-1"]);' +
+          '_gaq.push(["_setDomainName", ".grockit.com"]);' +
+          '_gaq.push(["_trackPageview"]);' +
+          '_gaq.push(["_trackPageLoadTime"]);' +
+          '</script>').appendTo(document.body)
 
-						var ga = document.createElement('script');
-						ga.type = 'text/javascript';
-						ga.async = true;
-						ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-						var s = document.getElementsByTagName('script')[0];
-						s.parentNode.insertBefore(ga, s);
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
 
-				},
-				UA: function () {
-						(function (i, s, o, g, r, a, m) {
-								i['GoogleAnalyticsObject'] = r;
-								i[r] = i[r] || function () {
-										(i[r].q = i[r].q || []).push(arguments)
-								}, i[r].l = 1 * new Date();
-								a = s.createElement(o),
-								m = s.getElementsByTagName(o)[0];
-								a.async = 1;
-								a.src = g;
-								m.parentNode.insertBefore(a, m)
-						})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+      },
+      UA: function () {
+        (function (i, s, o, g, r, a, m) {
+          i['GoogleAnalyticsObject'] = r;
+          i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+          }, i[r].l = 1 * new Date();
+          a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+          a.async = 1;
+          a.src = g;
+          m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-						ga('create', GA_UA_id, 'grockit.com');
-						ga('send', 'pageview');
+        ga('create', GA_UA_id, 'grockit.com');
+        ga('send', 'pageview');
 
-				}
-		}
+      }
+    }
 
-});
+  });
