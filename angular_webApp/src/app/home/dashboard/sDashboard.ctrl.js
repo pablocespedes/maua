@@ -4,7 +4,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
   $scope.scoreLoading = true;
   Utilities.setActiveTab(1);
 
-  $scope.activeGroupId = Utilities.getActiveGroup();
+
   $scope.enableScore = ($scope.activeGroupId === 'gmat' || $scope.activeGroupId === 'act' || $scope.activeGroupId === 'sat');
 
   var SimpleDashBoard = {
@@ -92,21 +92,22 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
   };
 
   $scope.init = function () {
-    var userInfo = Auth.getCurrentUserInfo();
-    $scope.user_id = userInfo.userId;
-
-    if ($scope.enableScore)
-      SimpleDashBoard.fetchScorePrediction();
-
-
-    SimpleDashBoard.getHistoryInformation();
-
-    SimpleDashBoard.fetchTracksData();
+    Auth.getCurrentUserInfo().then(function (userInfo) {
+      $scope.user_id = userInfo.userId;
+      $scope.activeGroupId = userInfo.currentGroup;
+      if ($scope.enableScore)
+        SimpleDashBoard.fetchScorePrediction();
 
 
-    $scope.breadcrumbs = breadcrumbs;
+      SimpleDashBoard.getHistoryInformation();
 
-    $scope.historyVisible = false;
+      SimpleDashBoard.fetchTracksData();
+
+
+      $scope.breadcrumbs = breadcrumbs;
+
+      $scope.historyVisible = false;
+    });
 
 
   };

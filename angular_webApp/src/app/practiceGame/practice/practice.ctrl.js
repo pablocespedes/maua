@@ -1,5 +1,5 @@
-practiceGame.controller('PracticeController',['$scope','practiceRequests','Utilities','breadcrumbs','VideoService','Alerts','$location','$q','$sce','Tracks',
-function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$location,$q,$sce,Tracks) {
+practiceGame.controller('PracticeController',['$scope','practiceRequests','Utilities','breadcrumbs','VideoService','Alerts','$location','$q','$sce',
+function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$location,$q,$sce) {
 
   $scope.activeTracks = Utilities.getActiveTrack();
   $scope.titleQuest = $scope.activeTracks.trackTitle;
@@ -95,7 +95,7 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
         $scope.template = $scope.actualView;
         $scope.questionItems = questionResult;
 
-        $scope.questionInformation = questionResult.question_set.info;
+        $scope.questionInformation = $sce.trustAsHtml(questionResult.question_set.info);
 
         /*Find if there is a question info defined or retrieve it by the API*/
         setLayoutType = angular.isDefined($scope.questionInformation) && $scope.questionInformation != null && $scope.questionInformation != '' ? true : false;

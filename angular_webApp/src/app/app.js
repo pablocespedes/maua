@@ -7,10 +7,9 @@
        Auth.getUpdateUserData().then(function (response) {
 
          if (response != null) {
-           var group = angular.isDefined(Utilities.getActiveGroup()) ? Utilities.getActiveGroup() : response.currentGroup;
-           if ($location.path() === '/' || $location.path() === '/' + group || $location.path() == '') {
+           if ($location.path() === '/' || $location.path() === '/' + response.currentGroup || $location.path() == '') {
 
-             Utilities.redirect('#/' + Utilities.getActiveGroup() + '/dashboard');
+             Utilities.redirect('#/' + response.currentGroup+ '/dashboard');
 
            }
          }
