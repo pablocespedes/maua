@@ -11,9 +11,13 @@
   .correct-numeric-input {
     border-color: #4cae4c;
   }
-  .columnsContainer { position: relative; margin: .5em; }
+  .columnsContainer {
+    position: relative;
+    margin: .5em;
 
-  .leftColumn { margin-bottom: .5em; }
+  }
+
+  .leftColumn { margin-bottom: .5em; text-align: justify; }
 
 
   /* MEDIA QUERIES */

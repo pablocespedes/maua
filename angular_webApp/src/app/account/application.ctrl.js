@@ -17,7 +17,7 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
 
           if (!!responseGroups) {
 
-            var studyingFor = Utilities.findInArray($scope.selectedGroup, responseGroups, 'id');
+            var studyingFor = Utilities.findInArray($scope.activeGroupId, responseGroups, 'id');
 
             /*save the Group Name to rootScope*/
             $rootScope.groupTitle = studyingFor.name;
@@ -51,7 +51,7 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
     },
     fetchLeftNavTracksData: function () {
       $scope.tracksList = [];
-      Tracks.getTracks().allByGroup($scope.selectedGroup).then(function (result) {
+      Tracks.getTracks().allByGroup($scope.activeGroupId).then(function (result) {
         var response = result.data;
         $scope.tracksList = response.tracks;
 
@@ -60,11 +60,11 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
       });
     },
     init: function () {
-      Auth.getUpdateUserData().then(function (response) {
+      Auth.getCurrentUserInfo().then(function (response) {
         if (response != null) {
           $scope.currentUser = response;
-          $scope.selectedGroup = Utilities.getActiveGroup();
-          //Application.fetchLeftNavTracksData();
+
+          $scope.activeGroupId = response.currentGroup;
           Application.loadGroupMembership();
           ListenloopUtility.base(response);
           GaUtility.classic();
@@ -88,7 +88,7 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
     $scope.currentUser.currentGroup = $scope.groups.linkedGroups[index].id;
 
     Auth.updateUserInfo($scope.currentUser);
-    $scope.selectedGroup = Utilities.getActiveGroup();
+    $scope.activeGroupId = Utilities.getActiveGroup();
     // Application.fetchLeftNavTracksData();
   };
 
