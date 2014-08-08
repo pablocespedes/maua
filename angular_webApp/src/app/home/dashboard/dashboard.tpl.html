@@ -1,10 +1,4 @@
-<ul class="breadcrumb breadcrumb-page">
-    <div class="breadcrumb-label text-light-gray">You are here:&nbsp;</div>
-    <li ng-repeat="breadcrumb in breadcrumbs.get() track by breadcrumb.path" ng-class="{ active: $last }">
-        <a ng-if="!$last" ng-href="#{{ breadcrumb.path }}" ng-bind="breadcrumb.label" class="margin-right-xs"></a>
-        <span ng-if="$last" ng-bind="breadcrumb.label"></span>
-    </li>
-</ul>
+<div breadcrumb breadcrumbs="breadcrumbs.get()"></div>
 
 <div id="simpleDash">
     <div class="page-header">
@@ -14,30 +8,7 @@
 
     <div class="profile-content">
 
-        <div class="col-md-6 col-lg-offset-5" ng-if="!historyVisible && loading">
-            <div id="inTurnFadingTextG" >
-                <div id="inTurnFadingTextG_1" class="inTurnFadingTextG">
-                    L</div>
-                <div id="inTurnFadingTextG_2" class="inTurnFadingTextG">
-                    o</div>
-                <div id="inTurnFadingTextG_3" class="inTurnFadingTextG">
-                    a</div>
-                <div id="inTurnFadingTextG_4" class="inTurnFadingTextG">
-                    d</div>
-                <div id="inTurnFadingTextG_5" class="inTurnFadingTextG">
-                    i</div>
-                <div id="inTurnFadingTextG_6" class="inTurnFadingTextG">
-                    n</div>
-                <div id="inTurnFadingTextG_7" class="inTurnFadingTextG">
-                    g</div>
-                <div id="inTurnFadingTextG_8" class="inTurnFadingTextG">
-                    .</div>
-                <div id="inTurnFadingTextG_9" class="inTurnFadingTextG">
-                    .</div>
-                <div id="inTurnFadingTextG_10" class="inTurnFadingTextG">
-                    .</div>
-            </div>
-        </div>
+      <div fading-text word="'Loading...'" is-visible="!historyVisible && loading"></div>
 
         <div class="row fadeIn animated" ng-if="historyVisible">
             <div class="col-sm-12">
@@ -110,32 +81,7 @@
                         </div>
 
                         <div class="list-group text-left">
-
-                            <a ng-repeat="track in tracks" href="javascript:void(0)" class="list-group-item">
-                                <div class="row track-list-padding-hr">
-                                    <button class="float-left btn btn-labeled btn-lg btn-primary btn-flat" ng-click="StartPractice($index)"><span class="btn-label icon fa fa-lightbulb-o"></span>Start</button>
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="text-xlg">
-                                    <strong>
-                                        <span ng-bind="track.short_name"></span>
-                                    </strong>
-                                    </span>
-                                    Smart Practice
-                                    <div class=" text-center pull-right" ng-if="enableScore && !loading">
-                                        <div ng-show="score.tracks[track.id]!=null">
-
-                                            <button id="btn-score" class=" btn-lg float-right btn btn-labeled btn-info disabled">{{score.tracks[track.id]}}</button>
-                                            <br>
-                                            <span class="text-xs float-right valign-bottom">Your Score Prediction</span>
-                                        </div>
-                                        <div class="valign-middle" ng-show="score.tracks[track.id]==null">
-                                            <br>
-                                            <span>Not enough data</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-
+                            <div track-list tracks="tracks" start-practice="StartPractice" get-title="getTitle" get-score="getScore" is-visible="enableScore && !loading"></div>
                         </div>
                     </div>
 

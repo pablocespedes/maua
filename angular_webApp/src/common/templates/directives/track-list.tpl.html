@@ -1,0 +1,23 @@
+<a ng-repeat="track in tracks" href="javascript:void(0)" class="list-group-item">
+  <div class="row track-list-padding-hr">
+    <button class="float-left btn btn-labeled btn-lg btn-primary btn-flat" ng-click="startPractice($index)"><span class="btn-label icon fa fa-lightbulb-o"></span>Start</button>
+    &nbsp; &nbsp; &nbsp;
+    <span class="text-xlg">
+      <strong>
+        <span ng-bind="getTitle(track)"></span>
+      </strong>
+    </span>
+    Smart Practice
+    <div class=" text-center pull-right" ng-if="isVisible">
+      <div ng-show="hasScore(track)">
+        <button id="btn-score" class=" btn-lg float-right btn btn-labeled btn-info disabled">{{getScore(track)}}</button>
+        <br>
+        <span class="text-xs float-right valign-bottom">Your Score Prediction</span>
+      </div>
+      <div class="valign-middle" ng-hide="hasScore(track)">
+        <br>
+        <span>Not enough data</span>
+      </div>
+    </div>
+  </div>
+</a>
