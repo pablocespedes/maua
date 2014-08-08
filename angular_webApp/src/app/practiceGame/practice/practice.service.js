@@ -249,41 +249,46 @@ practiceGame.factory('questionTypesService', function () {
   }
 
   function numericEntry(scope) {
-
-    var nexAction = $('#nextAction'),
-      seeAnswer = $('#skipAction');
-
     scope.$watch('portal.numerator', function (newVal, oldVal) {
-
-      if (angular.isDefined(newVal) && newVal != null) {
-        nexAction.addClass('btn-primary');
-        seeAnswer.addClass('hide');
-      }
-      else {
-        nexAction.removeClass('btn-primary');
-        seeAnswer.removeClass('hide');
-      }
-
+      handleValidation(newVal);
     });
-
   }
 
   function fractionEntry(scope) {
-
-    var nexAction = $('#nextAction'),
-      seeAnswer = $('#skipAction');
     scope.$watch('portal.numerator', function (newVal, oldVal) {
-      if (angular.isDefined(newVal) && newVal != null) {
+      scope.isNumeratorValid = validateNumber(newVal);
+      handleValidation(scope.isNumeratorValid && scope.isDenominatorValid);
+    });
+    scope.$watch('portal.denominator', function (newVal, oldVal) {
+      scope.isDenominatorValid = validateNumber(newVal);
+      handleValidation(scope.isNumeratorValid && scope.isDenominatorValid);
+    });
+  }
+
+  function validateNumber(value) {
+      if (angular.isUndefined(value) || value === '') {
+        return null;
+      } else {
+        console.log(value);
+        value = value * 1;
+        console.log(value);
+        return (angular.isDefined(value) && value != null && !isNaN(value) && angular.isNumber(value));
+      }
+  }
+
+  var nexAction = $('#nextAction'),
+      seeAnswer = $('#skipAction');
+  function handleValidation(isValid) {
+      if (isValid) {
+        console.log("add");
         nexAction.addClass('btn-primary');
         seeAnswer.addClass('hide');
       }
       else {
+        console.log("remove");
         nexAction.removeClass('btn-primary');
         seeAnswer.removeClass('hide');
       }
-
-    });
-
   }
 
   return {

@@ -81,106 +81,143 @@ angular.module('grockitApp.directives', [])
       }
     };
   })
-.directive('questionTiming', function() {
-  return {
-    restrict: 'A',
-    replace:true,
-    templateUrl: 'common/templates/directives/questionTiming.tpl.html',
-    scope: {
-      data: '='
-    }
-  };
-})
-.directive('questionTags', function() {
-  return {
-    restrict: 'A',
-    replace:true,
-    templateUrl: 'common/templates/directives/questionsTags.tpl.html',
-    scope: {
-      tags: '=',
-      xp: '='
-    }
-  };
-})
+.directive('trackList', function() {
+    return {
+      restrict: 'A',
+      templateUrl: 'common/templates/directives/track-list.tpl.html',
+      scope: {
+        tracks: '=',
+        startPractice: '=',
+        getTitle: '=',
+        getScore: '=',
+        isVisible: '='
+      },
+      link: function (scope, element, attrs) {
+        scope.hasScore = function (track) {
+          return (scope.getScore(track) !== null && scope.getScore(track) > 0);
+        };
+      }
+    };
+  })
+.directive('breadcrumb', function() {
+    return {
+      restrict: 'A',
+      templateUrl: 'common/templates/directives/breadcrumb.tpl.html',
+      scope: {
+        breadcrumbs: '='
+      }
+    };
+  })
+.directive('fadingText', function() {
+    return {
+      restrict: 'A',
+      templateUrl: 'common/templates/directives/fading-text.tpl.html',
+      scope: {
+        word: '=',
+        isVisible: '='
+      }
+    };
+  })
+  .directive('questionTiming', function() {
+    return {
+      restrict: 'A',
+      replace:true,
+      templateUrl: 'common/templates/directives/questionTiming.tpl.html',
+      scope: {
+        data: '='
+      }
+    };
+  })
+  .directive('questionTags', function() {
+    return {
+      restrict: 'A',
+      replace:true,
+      templateUrl: 'common/templates/directives/questionsTags.tpl.html',
+      scope: {
+        tags: '=',
+        xp: '='
+      }
+    };
+  })
 
-.directive('answerType', function ($compile) {
+  .directive('answerType', function ($compile) {
 
-  var fractionTpl = '<div ng-fraction-entry answer-status="answerStatus" ' +
-      'portal="portalC" items="items" show-explanation="showExplanation" ' +
-      'has-explanation="answerHasExplanation(index)" >' +
-      '</div>',
+    var fractionTpl = '<div ng-fraction-entry answer-status="answerStatus" ' +
+        'portal="portalC" items="items" show-explanation="showExplanation" ' +
+        'has-explanation="answerHasExplanation(index)" >' +
+        '</div>',
 
-    matrix2x3Tpl = '<div ng-multiple-matrix2x3 items="items" show-explanation="showExplanation"' +
-      'has-explanation="answerHasExplanation(index)"></div>',
+      matrix2x3Tpl = '<div ng-multiple-matrix2x3 items="items" show-explanation="showExplanation"' +
+        'has-explanation="answerHasExplanation(index)"></div>',
 
-    matrix3x3Tpl = ' <div ng-multiple-matrix3x3 items="items" show-explanation="showExplanation" ' +
-      'has-explanation="answerHasExplanation(index)"></div>',
+      matrix3x3Tpl = ' <div ng-multiple-matrix3x3 items="items" show-explanation="showExplanation" ' +
+        'has-explanation="answerHasExplanation(index)"></div>',
 
-    multipleChoiceTpl = '<div ng-multiple-choice items="items" show-explanation="showExplanation" ></div>',
+      multipleChoiceTpl = '<div ng-multiple-choice items="items" show-explanation="showExplanation" ></div>',
 
-    numericEntryTpl = '<div ng-numeric-entry answer-status="answerStatus" portal="portalC" items="items" ' +
-      'show-explanation="showExplanation" has-explanation="answerHasExplanation(index)"></div>',
+      numericEntryTpl = '<div ng-numeric-entry answer-status="answerStatus" portal="portalC" items="items" ' +
+        'show-explanation="showExplanation" has-explanation="answerHasExplanation(index)"></div>',
 
-    oneChoiceTpl = '<div ng-one-choice items="items" show-explanation="showExplanation" ' +
-      'has-explanation="answerHasExplanation(index)"></div>',
+      oneChoiceTpl = '<div ng-one-choice items="items" show-explanation="showExplanation" ' +
+        'has-explanation="answerHasExplanation(index)"></div>',
 
-    satTpl = ' <div ng-sat></div>',
+      satTpl = ' <div ng-sat></div>',
 
-    twoChoiceTpl = '<div  ng-two-choice items="items" show-explanation="showExplanation" ' +
-      'has-explanation="answerHasExplanation(index)"></div>';
+      twoChoiceTpl = '<div  ng-two-choice items="items" show-explanation="showExplanation" ' +
+        'has-explanation="answerHasExplanation(index)"></div>';
 
-  var getAnswerTemplate = function (questionKind) {
-    var template = '';
+    var getAnswerTemplate = function (questionKind) {
+      var template = '';
 
-    switch (questionKind) {
-      case 'MultipleChoiceOneCorrect':
-        template = oneChoiceTpl;
-        break;
-      case 'MultipleChoiceOneOrMoreCorrect':
-        template = multipleChoiceTpl;
-        break;
-      case 'MultipleChoiceMatrixTwoByThree':
-        template = matrix2x3Tpl;
-        break;
-      case 'MultipleChoiceMatrixThreeByThree':
-        template = matrix3x3Tpl;
-        break;
-      case 'NumericEntryFraction':
-        template = fractionTpl;
-        break;
-      case 'NumericEntry':
-        template = numericEntryTpl;
-        break;
-      case 'sat':
-        template = satTpl;
-        break;
-      case 'MultipleChoiceTwoCorrect':
-        template = twoChoiceTpl;
-        break;
+      switch (questionKind) {
+        case 'MultipleChoiceOneCorrect':
+          template = oneChoiceTpl;
+          break;
+        case 'MultipleChoiceOneOrMoreCorrect':
+          template = multipleChoiceTpl;
+          break;
+        case 'MultipleChoiceMatrixTwoByThree':
+          template = matrix2x3Tpl;
+          break;
+        case 'MultipleChoiceMatrixThreeByThree':
+          template = matrix3x3Tpl;
+          break;
+        case 'NumericEntryFraction':
+          template = fractionTpl;
+          break;
+        case 'NumericEntry':
+          template = numericEntryTpl;
+          break;
+        case 'sat':
+          template = satTpl;
+          break;
+        case 'MultipleChoiceTwoCorrect':
+          template = twoChoiceTpl;
+          break;
 
-    }
+      }
 
-    return template;
-  };
+      return template;
+    };
 
-  var linker = function (scope, element, attrs) {
-    element.html(getAnswerTemplate(attrs.content)).show();
-    $compile(element.contents())(scope);
-
-    scope.$watch('lastAnswerLoaded', function(value){
-
-      element.html(getAnswerTemplate(value)).show();
+    var linker = function (scope, element, attrs) {
+      element.html(getAnswerTemplate(attrs.content)).show();
       $compile(element.contents())(scope);
 
+      scope.$watch('lastAnswerLoaded', function(value){
 
-    });
+        element.html(getAnswerTemplate(value)).show();
+        $compile(element.contents())(scope);
 
-  };
 
-  return {
-    restrict: "A",
-    replace: true,
-    scope: false,
-    link: linker
-  };
-});
+      });
+
+    };
+
+    return {
+      restrict: "A",
+      replace: true,
+      scope: false,
+      link: linker
+    };
+  });
