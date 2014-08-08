@@ -1,154 +1,133 @@
 <ul class="breadcrumb breadcrumb-page">
-    <div class="breadcrumb-label text-light-gray">You are here:&nbsp;</div>
-    <li ng-repeat="breadcrumb in breadcrumbs.get() track by breadcrumb.path" ng-class="{ active: $last }">
-        <a ng-if="!$last" ng-href="#{{ breadcrumb.path }}" ng-bind="breadcrumb.label" class="margin-right-xs"></a>
-        <span ng-if="$last" ng-bind="breadcrumb.label"></span>
-    </li>
+		<div class="breadcrumb-label text-light-gray">You are here:&nbsp;</div>
+		<li ng-repeat="breadcrumb in breadcrumbs.get() track by breadcrumb.path" ng-class="{ active: $last }">
+				<a ng-if="!$last" ng-href="#{{ breadcrumb.path }}" ng-bind="breadcrumb.label" class="margin-right-xs"></a>
+				<span ng-if="$last" ng-bind="breadcrumb.label"></span>
+		</li>
 </ul>
 
 <div id="practice" class="panel">
 
 
-    <div class="panel-heading">
-        <span class="panel-title"> <label title="" class="title" ng-bind="titleQuest"></label></span>
+		<div class="panel-heading">
+				<span class="panel-title"> <label title="" class="title" ng-bind="titleQuest"></label></span>
 
-        <div class="answer-status float-right" ng-if="showExplanation">
-            <span class="badge" ng-class="{'badge-success': answerStatus, 'badge-danger': !answerStatus}" ng-bind="messageConfirmation"></span>
-        </div>
-   </div>
-    <div class="panel-body">
-        <div id="parent" class="col-md-12">
-            <div class="col-md-6 col-lg-offset-5">
-               <div id="inTurnFadingTextG" ng-show="loading">
-                                <div id="inTurnFadingTextG_1" class="inTurnFadingTextG">
-                                    L</div>
-                                <div id="inTurnFadingTextG_2" class="inTurnFadingTextG">
-                                    o</div>
-                                <div id="inTurnFadingTextG_3" class="inTurnFadingTextG">
-                                    a</div>
-                                <div id="inTurnFadingTextG_4" class="inTurnFadingTextG">
-                                    d</div>
-                                <div id="inTurnFadingTextG_5" class="inTurnFadingTextG">
-                                    i</div>
-                                <div id="inTurnFadingTextG_6" class="inTurnFadingTextG">
-                                    n</div>
-                                <div id="inTurnFadingTextG_7" class="inTurnFadingTextG">
-                                    g</div>
-                                <div id="inTurnFadingTextG_8" class="inTurnFadingTextG">
-                                    .</div>
-                                <div id="inTurnFadingTextG_9" class="inTurnFadingTextG">
-                                    .</div>
-                                <div id="inTurnFadingTextG_10" class="inTurnFadingTextG">
-                                    .</div>
-               </div>
-            </div>
+				<div class="answer-status float-right" ng-if="showExplanation">
+						<span class="badge" ng-class="{'badge-success': answerStatus, 'badge-danger': !answerStatus}" ng-bind="messageConfirmation"></span>
+				</div>
+		</div>
+		<div class="panel-body">
+				<div id="parent" class="col-md-12">
+						<div class="col-md-6 col-lg-offset-5">
+								<div id="inTurnFadingTextG" ng-show="loading">
+										<div id="inTurnFadingTextG_1" class="inTurnFadingTextG">
+												L</div>
+										<div id="inTurnFadingTextG_2" class="inTurnFadingTextG">
+												o</div>
+										<div id="inTurnFadingTextG_3" class="inTurnFadingTextG">
+												a</div>
+										<div id="inTurnFadingTextG_4" class="inTurnFadingTextG">
+												d</div>
+										<div id="inTurnFadingTextG_5" class="inTurnFadingTextG">
+												i</div>
+										<div id="inTurnFadingTextG_6" class="inTurnFadingTextG">
+												n</div>
+										<div id="inTurnFadingTextG_7" class="inTurnFadingTextG">
+												g</div>
+										<div id="inTurnFadingTextG_8" class="inTurnFadingTextG">
+												.</div>
+										<div id="inTurnFadingTextG_9" class="inTurnFadingTextG">
+												.</div>
+										<div id="inTurnFadingTextG_10" class="inTurnFadingTextG">
+												.</div>
+								</div>
+						</div>
 
-                <div id="PanelQuestion"  class="row columnsContainer" ng-show="!loading">
-                    <div id="Panel1" class="col-md-6 leftColumn">
-                        <div class="panel" ng-if="showExplanation" >
-                            <div class="panel-heading">
-                                <span class="panel-title">Question Data</span>
-                            </div>
-                            <div class="panel-body">
-                                &nbsp;Skills used in this question:
-                                <div ng-repeat="tag in tags">
+						<div id="PanelQuestion" class="row columnsContainer" ng-show="!loading">
+								<div id="Panel1" class="col-md-6 leftColumn">
 
-                                  <label style="margin-left: 4px" class="label label-info" ng-bind="tag.name"></label>
-                                    <div ng-repeat="tr in tag.tagResource" style="display:inline;">
+										<div ng-if="showExplanation">
+												<div question-tags xp="xpTag" tags="tags"></div>
 
-                                        <button ng-if="tr.resourceType == 'youtube'" style="margin-left: 4px" class="btn btn-flat btn-xs btn-labeled btn-default" youtube rel="{{tr.videoId}}">
-                                          <span><span class="btn-label icon fa  fa-play-circle-o"></span>Refresher {{$index+1}} ({{tr.videoTime}})</span>
+										</div>
 
-                                        </button>
-                                        <a ng-if="tr.resourceType == 'blog'" ng-href="{{tr.videoId}}" target="_blank">
-                                        <button  style="margin-left: 4px" class="btn btn-flat btn-xs btn-labeled btn-default">
-                                            <span><span class="btn-label icon fa  fa-quote-left"></span> Refresher {{$index+1}}</span>
-                                        </button>
-                                        </a>
-                                    </div>
+										<div ng-if="showExplanation">
+												<div question-timing></div>
 
+										</div>
 
-                                </div>
-                                <br>
-                                &nbsp;Difficulty: <label style="margin-left: 4px" class="label label-default" ng-bind="xpTag"></label><br>
+										<div id="question-explain" class="question-explain explain-margin" ng-if="showExplanation">
 
-                            </div>
-                        </div>
+												<span ng-bind-html='questionExplanation'></span>
 
-                        <div id="question-explain" class="question-explain explain-margin" ng-if="showExplanation" >
+												<div id="videoExplain" ng-if="showVideo">
+														<br>
+														<div class="video-container">
+																<button youtube rel="{{videoId}}" class="btn btn-flat btn-labeled btn-primary" id="videoExplainbtn">
+																		<span class="btn-label text-lg icon fa fa-youtube-play"></span><span ng-bind="videoText"></span>
+																</button>
 
-                        <span ng-bind-html='questionExplanation'></span>
+														</div>
+												</div>
+										</div>
+										<div class="sentence_correction_stimulus" ng-bind-html='questionInformation'>
+										</div>
+								</div>
 
-                            <div id="videoExplain" ng-if="showVideo"><br>
-                                <div class="video-container">
-                                        <button youtube rel="{{videoId}}" class="btn btn-flat btn-labeled btn-primary" id="videoExplainbtn">
-                                        <span class="btn-label text-lg icon fa fa-youtube-play"></span><span ng-bind="videoText"></span></button>
+								<div id="Panel2" class="page page-home col-md-6 rightColumn">
+										<div id="answercontent" class="info-box">
+												<div id="solutionarea">
+														<span ng-bind="questByQSetTitle"></span>
+														<div ng-bind-html='stimulus'></div>
+														<br>
 
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sentence_correction_stimulus" ng-bind-html='questionInformation'>
-                        </div>
-                    </div>
+														<!--answer-->
+														<div answer-type content="{{lastAnswerLoaded}}"></div>
+														<!--<div id="answersPanels" ng-answers></div>-->
+												</div>
 
-                    <div id="Panel2"  class="page page-home col-md-6 rightColumn">
-                        <div id="answercontent" class="info-box">
-                            <div id="solutionarea">
-                                <span ng-bind="questByQSetTitle"></span>
-                                <div ng-bind-html='stimulus'></div>
-                                <br>
-
-                                <!--answer-->
-                                <div id="answersPanels" ng-answers></div>
-                            </div>
-
-                            <!--<div class="answer-buttons">-->
-
-                            <!--</div>-->
-                        </div>
+										</div>
 
 
+								</div>
+						</div>
 
-                    </div>
-                </div>
+				</div>
 
-        </div>
+		</div>
+		<div class="panel-footer">
 
-    </div>
-    <div class="panel-footer">
-
-    </div>
+		</div>
 
 </div>
 <div class="push">
-    <!--//-->
+		<!--//-->
 </div>
 <footer class="" role="navigation">
-    <div id="topics" class="footer">
-        <div class="row">
-            <div>
-                <div class="col-md-6 f-content float-right">
-                    <div class="text-right">
-                        <a id="skipAction" ng-click="revealExplanation()">Don't know? See answer.</a>&nbsp;
-                        <button id="nextAction" class="btn  btn-lg  btn-flat" ng-click="nextAction()" ng-bind="nextActionTitle"></button>
-                    </div>
+		<div id="topics" class="footer">
+				<div class="row">
+						<div>
+								<div class="col-md-6 f-content float-right">
+										<div class="text-right">
+												<a id="skipAction" ng-click="revealExplanation()">Don't know? See answer.</a>&nbsp;
+												<button id="nextAction" class="btn  btn-lg  btn-flat" ng-click="nextAction()" ng-bind="nextActionTitle"></button>
+										</div>
 
-                </div>
-                <div class="col-md-6 f-content feedback-box">
-                    <div class="text-left">
-                       Problem with this question?
-                    <a href="mailto:feedback@grockit.com?subject={{subjectMail}}" title="">&nbsp; <i class="profile-list-icon fa fa-envelope" style="color: #888"></i>&nbsp; feedback@grockit.com
-                    </a>
+								</div>
+								<div class="col-md-6 f-content feedback-box">
+										<div class="text-left">
+												Problem with this question?
+												<a href="mailto:feedback@grockit.com?subject={{subjectMail}}" title="">&nbsp; <i class="profile-list-icon fa fa-envelope" style="color: #888"></i>&nbsp; feedback@grockit.com
+												</a>
 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+										</div>
+								</div>
+						</div>
+				</div>
+		</div>
 </footer>
 
 <!--
 <div ng-custom-topics></div>
 -->
-
 

@@ -86,7 +86,7 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
         angular.element('.choice.active').removeClass('active');
 
         if ($scope.lastAnswerLoaded == '' || $scope.lastAnswerLoaded != questionResult.kind) {
-          $scope.currentA = Utilities.findInArray(questionResult.kind, $scope.directives, 'type').id;
+        //  $scope.currentA = Utilities.findInArray(questionResult.kind, $scope.directives, 'type').id;
           $scope.lastAnswerLoaded = questionResult.kind;
         }
 
