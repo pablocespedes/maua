@@ -1,5 +1,6 @@
 angular.module('grockitApp.services', ['webStorageModule'])
-.factory('Utilities', function($http,webStorage,$rootScope,$location,$routeParams,$route,VideoService,$q) {
+.factory('Utilities', function($http,webStorage,$location,$route,VideoService,$q) {
+
   var internalUtilities = {
     grockitHostEvaluation : function (isNewGrockit) {
       if (isNewGrockit) {
@@ -76,13 +77,8 @@ angular.module('grockitApp.services', ['webStorageModule'])
    },
    getActiveGroup: function () {
      if (!!webStorage.get('currentUser')) {
-       $rootScope.activeGroupId = webStorage.get('currentUser').currentGroup;
+       return webStorage.get('currentUser').currentGroup;
      }
-
-     return  $rootScope.activeGroupId;
-   },
-   setActiveGroup: function (activeGroupId) {
-     $rootScope.activeGroupId = activeGroupId;
    },
    getActiveTrack: function () {
      return webStorage.get('currentUser').trackData;
@@ -127,7 +123,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
      bootbox.dialog(options);
    },
    getCurrentParam: function (key) {
-     return $route.current.pathParams[key];
+     return angular.isDefined($route.current)? $route.current.pathParams[key] : undefined;
    },
    setCurrentParam: function (key, param) {
      $route.current.pathParams[key] = null;

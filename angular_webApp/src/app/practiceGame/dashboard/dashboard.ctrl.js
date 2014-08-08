@@ -9,7 +9,6 @@ function($scope,Users,History,Utilities,Auth,breadcrumbs,Alerts,Tracks) {
   };
 
 
-  $scope.activeGroupId = Utilities.getActiveGroup();
 
   var TrackDashboard = {
     fetchTracksData: function () {
@@ -75,11 +74,14 @@ function($scope,Users,History,Utilities,Auth,breadcrumbs,Alerts,Tracks) {
     Utilities.redirect('https://grockit.com/assessment/introcards/70478c67-5f6d-4ed5-bc1f-8a5be486bff9');
   };
   $scope.init = function () {
-    var userInfo = Auth.getCurrentUserInfo();
-    $scope.user_id = userInfo.userId;
-    $scope.breadcrumbs = breadcrumbs;
-    TrackDashboard.getHistoryInformationByTrack();
-    TrackDashboard.fetchTracksData();
+    Auth.getCurrentUserInfo().then(function(userInfo){
+      $scope.activeGroupId=userInfo.currentGroup;
+      $scope.user_id = userInfo.userId;
+      $scope.breadcrumbs = breadcrumbs;
+      TrackDashboard.getHistoryInformationByTrack();
+      TrackDashboard.fetchTracksData();
+    });
+
   };
   $scope.init();
 
