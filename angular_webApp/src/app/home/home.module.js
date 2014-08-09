@@ -35,7 +35,7 @@ var home =  angular.module("grockitApp.home",['ng-breadcrumbs']).config(function
   }},
     controller: 'SimpleDashController'
   })
-    .when('/:subject/dashboard/practice/:questionId', {templateUrl: 'app/practiceGame/practice/practice.tpl.html', label: 'practice', resolve: {deps: function ($q, $rootScope) {
+    .when('/:subject/dashboard/practice/:questionId', {templateUrl: 'app/practiceGame/practice/practice-mockup.tpl.html', label: 'practice', resolve: {deps: function ($q, $rootScope) {
       var deferred = $q.defer(),
         essentials = [
           filePath.practice.practiceCtrl,
