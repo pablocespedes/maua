@@ -1,10 +1,10 @@
 <div class="row" >
-  <div class="col-sm-3">
+  <div class="col-sm-2">
     <p class="">Review the Skills in this Question:</p>
     Difficulty:
-    <label style="margin-left: 4px" class="label label-default" ng-bind="xp"></label>
+    <label style="margin-left: 4px" class="label label-default" ng-bind="xp" data-toggle="tooltip" data-placement="bottom" title="Grockit questions are categorized in 5 levels: 2, 4, 8, 16 and 32. These levels are calibrated automatically based on previous answers by users like you."></label>
   </div>
-  <div class="col-sm-3" ng-repeat="tag in tags" style="text-align: left;">
+  <div class="col-sm-2" ng-repeat="tag in tags" style="text-align: left;">
     <div ng-repeat="tr in tag.tagResource" >
 
       <button ng-if="tr.resourceType == 'youtube'" style="margin-left: 4px" class="btn btn-flat btn-xs btn-labeled btn-default" youtube rel="{{tr.videoId}}">

@@ -189,6 +189,17 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
     };
   })
 
+  .directive('questionTagsOnly', function() {
+    return {
+      restrict: 'A',
+      replace:true,
+      templateUrl: 'app/practiceGame/practice/directives.tpl/questionsTagsOnly.tpl.html',
+      scope: {
+        tags: '=',
+        xp: '='
+      }
+    };
+  })
   .directive('questionTags', function() {
     return {
       restrict: 'A',
