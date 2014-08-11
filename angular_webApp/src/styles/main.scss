@@ -296,21 +296,46 @@ footer {
 
 .practice-header  {
   .practice-element {
-    border: 1px solid #E2E2E2;
+    //border: 1px solid #EDEDED;
+    //border: 1px solid #000;
+    font-size: 13px;
   }
   .practice-xl {
-    height: 80px;
+    height: 42px;
   }
   .practice-sm {
     height: 25px;
     padding-top: 2px;
   }
-  .practice-level {
+  .practice-align {
     text-align: center;
   }
 }
 
-.not-sure {
+.practice-result {
+  width: 3%;
+  line-height: 45px;
+}
+
+.practice-result .fa {
+  font-size: 20px;
+}
+
+.practice-offset {
+  width: 22%;
+}
+
+.practice-data {
+  font-weight:bold;
+  font-size: 16px;
+  color: #555;
+}
+
+.practice-tags {
+  padding: 5px;
+}
+
+.cloud-text {
   padding: 2px;
   height: 14px;
   width: 70px;
@@ -320,8 +345,4 @@ footer {
   margin: auto;
   line-height: 10px;
   margin-bottom: 2px;
-}
-
-.sentence_correction_stimulus, .question-explain{
-  width: 200%;
 }
