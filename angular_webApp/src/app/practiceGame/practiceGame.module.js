@@ -1,7 +1,7 @@
 'use strict';
 
 var practiceGame =  angular.module("grockitApp.practiceGame",['ng-breadcrumbs'])
-    .config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide,UserRoles) {
+    .config(function ($httpProvider,$routeProvider, $controllerProvider, $compileProvider, $provide) {
     practiceGame.controller = $controllerProvider.register;
     practiceGame.directive = $compileProvider.directive;
     practiceGame.routeProvider = $routeProvider;

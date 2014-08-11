@@ -29,21 +29,25 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
     },
     fetchScorePrediction: function () {
+      console.log('FETCHING SCORE');
       Users.getUser().scorePrediction($scope.user_id, $scope.activeGroupId).then(function (scorePrediction) {
 
+        var scoreData = {};
         $scope.score = scorePrediction.data;
         if (scorePrediction.data.total_score != null && scorePrediction.data.range != null) {
 
-          $scope.totalScore = scorePrediction.data.total_score;
-          $scope.rangeInit = scorePrediction.data.range[0];
-          $scope.rangeEnd = scorePrediction.data.range[1];
+          scoreData.totalScore = scorePrediction.data.total_score;
+          scoreData.rangeInit = scorePrediction.data.range[0];
+          scoreData.rangeEnd = scorePrediction.data.range[1];
 
         } else {
-          $scope.totalScore = 0;
-          $scope.rangeInit = 0;
-          $scope.rangeEnd = 0;
+          scoreData.totalScore = 0;
+          scoreData.rangeInit = 0;
+          scoreData.rangeEnd = 0;
         }
         $scope.scoreLoading = false;
+        console.log(scoreData);
+        $scope.scoreData = scoreData;
 
       }).catch(function error(e) {
         Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
