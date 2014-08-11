@@ -6,6 +6,7 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
   $scope.activeGroupId = Utilities.getActiveGroup();
   $scope.breadcrumbs = breadcrumbs;
   breadcrumbs.options = { 'practice': $scope.titleQuest };
+
   $scope.isUniqueQuestionLoad = false;
   $scope.portalC = $scope;
   $scope.loading = true;
@@ -19,17 +20,6 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
   $scope.setPosition = 0;
   $scope.position = 0;
   $scope.lastAnswerLoaded = '';
-  $scope.directives =
-    [
-      { id: '1', type: 'MultipleChoiceOneCorrect'},
-      { id: '2', type: 'MultipleChoiceOneOrMoreCorrect'},
-      { id: '3', type: 'MultipleChoiceMatrixTwoByThree'},
-      { id: '4', type: 'MultipleChoiceMatrixThreeByThree'},
-      { id: '5', type: 'NumericEntryFraction'},
-      { id: '6', type: 'NumericEntry'},
-      { id: '7', type: 'sat'},
-      {id: '8', type: 'MultipleChoiceTwoCorrect'}
-    ];
 
 
   var Practice = {
@@ -163,7 +153,7 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
       $scope.tags = tags;
 
     },
-    seeAnswer: function () {
+    showAnswer: function () {
       this.resetLayout();
 
       /*Question Explanation*/
@@ -499,7 +489,7 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
   };
 
   $scope.revealExplanation = function () {
-    Practice.seeAnswer();
+    Practice.showAnswer();
   };
 
   $scope.CreateNewGame();

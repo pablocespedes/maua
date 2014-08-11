@@ -1,0 +1,32 @@
+<div>
+
+<ng-switch on="currentA">
+
+    <div ng-switch-when="5">
+        <div ng-fraction-entry answer-status="answerStatus" portal="portalC" items="items" show-explanation="showExplanation" has-explanation="answerHasExplanation(index)" ></div>
+    </div>
+    <div ng-switch-when="3">
+        <div ng-multiple-matrix2x3 items="items" show-explanation="showExplanation" has-explanation="answerHasExplanation(index)"></div>
+    </div>
+    <div ng-switch-when="4">
+        <div ng-multiple-matrix3x3 items="items" show-explanation="showExplanation" has-explanation="answerHasExplanation(index)"></div>
+    </div>
+    <div ng-switch-when="2">
+        <div ng-multiple-choice items="items" show-explanation="showExplanation" ></div>
+    </div>
+    <div ng-switch-when="6">
+        <div ng-numeric-entry answer-status="answerStatus" portal="portalC" items="items" show-explanation="showExplanation" has-explanation="answerHasExplanation(index)"></div>
+    </div>
+    <div ng-switch-when="1">
+        <div  ng-one-choice items="items" show-explanation="showExplanation" has-explanation="answerHasExplanation(index)"></div>
+    </div>
+    <div ng-switch-when="7">
+        <div ng-sat></div>
+    </div>
+    <div ng-switch-when="8">
+        <div  ng-two-choice items="items" show-explanation="showExplanation" has-explanation="answerHasExplanation(index)"></div>
+    </div>
+</ng-switch>
+
+</div>
+

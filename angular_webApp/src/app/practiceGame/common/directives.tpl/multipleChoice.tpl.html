@@ -1,0 +1,18 @@
+<div id="multipleChoice" >
+    <div class="list-group text-left">
+        <a id="answer" ng-repeat="item in items" href="javascript:void(0)" class="choice list-group-item">
+            <div class="middle">
+                <button id="{{item.id}}" type="button" class="btn-option letter" >{{item.option}}</button>
+                <input id="{{item.id}}" type="checkbox" name="choice"  value="{{item.position}}"  />
+                <div class="content" >
+                    <div ng-bind-html="item.body"></div>
+                </div>
+            </div>
+            <div id="explanationAnswerPanel" ng-show="hasExplanation({index : $index})"  ng-if="showExplanation" class="fadein " ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
+                <div class="explain-margin" ng-bind-html='item.explanation'></div>
+            </div>
+        </a>
+
+    </div>
+
+</div>

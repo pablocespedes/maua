@@ -4,10 +4,12 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
   $scope.scoreLoading = true;
   $scope.getTitle = function(track) {
     return track.short_name;
-  }
+  };
+
   $scope.getScore = function(track) {
     return ($scope.score) ? $scope.score.tracks[track.id] : null;
-  }
+  };
+
   Utilities.setActiveTab(1);
 
 
