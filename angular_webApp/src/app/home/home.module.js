@@ -7,11 +7,9 @@ var home =  angular.module("grockitApp.home",['ng-breadcrumbs']).config(function
   home.service = $provide.service;
 
   var filePath = {
-    practice: {
-      practiceCtrl: 'app/practiceGame/practice/practice.ctrl.js',
-      practiceDrctv: 'app/practiceGame/practice/practice.directive.js',
-      practiceServ: 'app/practiceGame/practice/practice.service.js',
-      youtube: 'assets/javascripts/youtubeModal/bootstrap.youtubepopup.js'
+    trackDashboard: {
+      dashCtrl: 'app/home/track-dashboard/dashboard.ctrl.js',
+      dashServ: 'app/home/track-dashboard/dashboard.service.js'
     },
     dashboard: {
       dashCtrl: 'app/home/dashboard/sDashboard.ctrl.js',
@@ -35,25 +33,22 @@ var home =  angular.module("grockitApp.home",['ng-breadcrumbs']).config(function
   }},
     controller: 'SimpleDashController'
   })
-    .when('/:subject/dashboard/practice/:questionId', {templateUrl: 'app/practiceGame/practice/practice.tpl.html', label: 'practice', resolve: {deps: function ($q, $rootScope) {
+  .when('/:subject/track-dashboard', {templateUrl: 'app/home/track-dashboard/dashboard.tpl.html', label: 'Dashboard', resolve: {deps: function ($q, $rootScope) {
       var deferred = $q.defer(),
         essentials = [
-          filePath.practice.practiceCtrl,
-          filePath.practice.practiceDrctv,
-          filePath.practice.practiceServ,
-          filePath.practice.youtube
+          filePath.trackDashboard.dashServ,
+          filePath.trackDashboard.dashCtrl
         ];
       $script(essentials, function () {
+        // all dependencies have now been loaded by $script.js so resolve the promise
         $rootScope.$apply(function () {
           deferred.resolve();
         });
       });
-
       return deferred.promise;
-    }}, controller: 'PracticeController',
-      reloadOnSearch: false
+    }},
+      controller: 'TrackDashController'
     });
 
-  // $routeProvider.otherwise({redirectTo:'/'});
 });
 

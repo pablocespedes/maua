@@ -4,7 +4,7 @@
 @import  "../styles/_variables.scss",
          "../styles/spinners.scss",
          "../app/home/dashboard/dashboard.scss",
-         "../app/practiceGame/dashboard/dashboard.scss",
+         "../app/home/track-dashboard/dashboard.scss",
          "../app/practiceGame/practice/practice.scss";
 
 //general css
@@ -288,4 +288,36 @@ footer {
   top: -24px;
 }
 
+.reset-layout {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
 
+.practice-header  {
+  .practice-element {
+    border: 1px solid #E2E2E2;
+  }
+  .practice-xl {
+    height: 80px;
+  }
+  .practice-sm {
+    height: 25px;
+    padding-top: 2px;
+  }
+  .practice-level {
+    text-align: center;
+  }
+}
+
+.not-sure {
+  padding: 2px;
+  height: 14px;
+  width: 70px;
+  border: 1px solid #E2E2E2;
+  border-radius: 10px;
+  font-size: 10px;
+  margin: auto;
+  line-height: 10px;
+  margin-bottom: 2px;
+}

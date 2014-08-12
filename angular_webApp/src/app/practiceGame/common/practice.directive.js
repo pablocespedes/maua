@@ -178,7 +178,7 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
     };
   })
 
-  .directive('questionTiming', function() {
+.directive('questionTiming', function() {
     return {
       restrict: 'A',
       replace:true,
@@ -189,7 +189,7 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
     };
   })
 
-  .directive('questionTags', function() {
+.directive('questionTags', function() {
     return {
       restrict: 'A',
       replace:true,
@@ -201,7 +201,7 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
     };
   })
 
-  .directive('answerType', function ($compile) {
+.directive('answerType', function ($compile) {
 
     var fractionTpl = '<div fraction-entry answer-status="answerStatus" ' +
         'portal="portalC" items="items" show-explanation="showExplanation" ' +
