@@ -2,10 +2,17 @@
 home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','breadcrumbs','Alerts', function($scope,Users,History,Tracks,Utilities,Auth,breadcrumbs,Alerts) {
   $scope.loading = true;
   $scope.scoreLoading = true;
+  $scope.getTitle = function(track) {
+    return track.short_name;
+  };
+
+  $scope.getScore = function(track) {
+    return ($scope.score) ? $scope.score.tracks[track.id] : null;
+  };
+
   Utilities.setActiveTab(1);
 
 
-  $scope.enableScore = ($scope.activeGroupId === 'gmat' || $scope.activeGroupId === 'act' || $scope.activeGroupId === 'sat');
 
   var SimpleDashBoard = {
     fetchTracksData: function () {
@@ -23,19 +30,21 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
     fetchScorePrediction: function () {
       Users.getUser().scorePrediction($scope.user_id, $scope.activeGroupId).then(function (scorePrediction) {
 
+        var scoreData = {};
         $scope.score = scorePrediction.data;
         if (scorePrediction.data.total_score != null && scorePrediction.data.range != null) {
 
-          $scope.totalScore = scorePrediction.data.total_score;
-          $scope.rangeInit = scorePrediction.data.range[0];
-          $scope.rangeEnd = scorePrediction.data.range[1];
+          scoreData.totalScore = scorePrediction.data.total_score;
+          scoreData.rangeInit = scorePrediction.data.range[0];
+          scoreData.rangeEnd = scorePrediction.data.range[1];
 
         } else {
-          $scope.totalScore = 0;
-          $scope.rangeInit = 0;
-          $scope.rangeEnd = 0;
+          scoreData.totalScore = 0;
+          scoreData.rangeInit = 0;
+          scoreData.rangeEnd = 0;
         }
         $scope.scoreLoading = false;
+        $scope.scoreData = scoreData;
 
       }).catch(function error(e) {
         Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
@@ -95,6 +104,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
     Auth.getCurrentUserInfo().then(function (userInfo) {
       $scope.user_id = userInfo.userId;
       $scope.activeGroupId = userInfo.currentGroup;
+      $scope.enableScore = ($scope.activeGroupId === 'gmat' || $scope.activeGroupId === 'act' || $scope.activeGroupId === 'sat');
       if ($scope.enableScore)
         SimpleDashBoard.fetchScorePrediction();
 

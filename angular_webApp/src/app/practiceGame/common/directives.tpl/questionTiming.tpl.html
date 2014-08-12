@@ -1,0 +1,41 @@
+<div class="widget-profile-counters row practice-header">
+
+  <div class="col-xs-1 practice-element practice-xl label label-danger">X</div>
+
+  <div class="col-xs-1 label label-danger practice-element practice-xl">
+    Your Time:<br>
+    <span ng-bind="data.yourtime"></span> 37 sec</div>
+
+  <div class="col-xs-2 practice-element practice-xl">You are<br>
+    <span class="label-success">&nbsp;<i class="fa fa-arrow-down"></i> <span ng-bind="data.youAreIn"></span>8</span>
+    <br>seconds faster than the average</div><div class="col-xs-1 practice-element practice-xl">
+    Average:<br>
+    <span ng-bind="data.average"></span>45 sec</div>
+
+  <div class="col-xs-3 practice-element practice-xl">
+    <p>Grock's Advice:</p>
+    <span>Its ok to get questions wrong, but you'll want to...</span>
+  </div>
+
+  <div class="col-xs-1 practice-element practice-xl">
+    <p>
+    Answered
+    </p>
+    <span ng-bind="data.answered"></span>6,453 times</div>
+
+  <div class="col-xs-1 practice-element practice-xl practice-level">
+    <p>
+      Level
+    </p>
+    <span>16</span>
+    <div class="not-sure">
+      What's the ...
+    </div>
+  </div>
+  
+  <div class="col-xs-2 practice-element practice-xl">
+    <span ng-bind="data.percentCorrectly"></span>87%<br>
+    of users answered correctly
+  </div>
+
+</div>

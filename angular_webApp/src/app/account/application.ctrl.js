@@ -66,6 +66,7 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
 
           $scope.activeGroupId = response.currentGroup;
           Application.loadGroupMembership();
+          //Application.fetchLeftNavTracksData();
           ListenloopUtility.base(response);
           GaUtility.classic();
           GaUtility.UA();
@@ -89,7 +90,7 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
 
     Auth.updateUserInfo($scope.currentUser);
     $scope.activeGroupId = Utilities.getActiveGroup();
-    // Application.fetchLeftNavTracksData();
+    Application.fetchLeftNavTracksData();
   };
 
   $scope.logOut = function () {

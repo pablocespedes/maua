@@ -266,29 +266,26 @@ practiceGame.factory('questionTypesService', function () {
   }
 
   function validateNumber(value) {
-      if (angular.isUndefined(value) || value === '') {
-        return null;
-      } else {
-        console.log(value);
-        value = value * 1;
-        console.log(value);
-        return (angular.isDefined(value) && value != null && !isNaN(value) && angular.isNumber(value));
-      }
+    if (angular.isUndefined(value) || value === '') {
+      return null;
+    } else {
+      value = value * 1;
+      return (angular.isDefined(value) && value != null && !isNaN(value) && angular.isNumber(value));
+    }
   }
 
   var nexAction = $('#nextAction'),
-      seeAnswer = $('#skipAction');
+    seeAnswer = $('#skipAction');
+
   function handleValidation(isValid) {
-      if (isValid) {
-        console.log("add");
-        nexAction.addClass('btn-primary');
-        seeAnswer.addClass('hide');
-      }
-      else {
-        console.log("remove");
-        nexAction.removeClass('btn-primary');
-        seeAnswer.removeClass('hide');
-      }
+    if (isValid) {
+      nexAction.addClass('btn-primary');
+      seeAnswer.addClass('hide');
+    }
+    else {
+      nexAction.removeClass('btn-primary');
+      seeAnswer.removeClass('hide');
+    }
   }
 
   return {
@@ -303,10 +300,7 @@ practiceGame.factory('questionTypesService', function () {
   };
 });
 
-
-
-
-practiceGame.factory('Fraction', function () {
+practiceGame.factory('fraction', function () {
 
 
   function Fraction(n, d) {
@@ -390,4 +384,274 @@ practiceGame.factory('Fraction', function () {
   return {
     evaluate: Fraction
   };
+});
+
+
+practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, Alerts, $sce, VideoService) {
+
+  var optionList = "abcdefghijklmnopqrstuvwxyz", answerStatus = null;
+
+  var Practice = {
+    /*This methods takes care to set the practice layout based on the API response*/
+    setLayoutBasedOnQuestionInfo: function (setLayout) {
+      var panel1 = angular.element('#Panel1'),
+        panel2 = angular.element('#Panel2');
+
+      if (setLayout) {
+        panel1.removeClass('col-md-offset-3');
+        panel2.removeClass('col-md-offset-3');
+      }
+      else {
+        panel1.addClass('col-md-offset-3');
+        panel2.addClass('col-md-offset-3');
+      }
+    },
+    resetLayout: function () {
+
+      this.setLayoutBasedOnQuestionInfo(true);
+      angular.element('#skipAction').addClass('hide');
+      angular.element('#nextAction').removeClass('btn-primary');
+      angular.element('.list-group *').addClass('no-hover');
+
+    },
+    usersRunOutQuestions: function () {
+      var options = {
+        message: "You've answered all of the adaptive questions we have for you in " + $scope.activeTracks.trackTitle + ".  " +
+          "That's a lot of practice.  Would you like to work on a different track or go back to the main dashboard? ",
+        title: "Congratulations!",
+        buttons: {
+          main: {
+            label: "Go to Dashboard",
+            className: "btn-primary",
+            callback: function () {
+              Utilities.redirect('#/' + $scope.activeGroupId + "/dashboard");
+            }
+          }
+        }
+      };
+
+      Utilities.dialogService(options);
+
+    },
+    removeBadImage: function () {
+      /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
+      angular.element('img').error(function () {
+
+        angular.element('img').attr('src', '');
+      });
+    },
+    confirmChoice: function (questionResult, roundSessionAnswer) {
+      var selectedPosition = '', selectedOptions = [], selectedOptionsCount, i = 0;
+
+      /*Get selected answers*/
+      angular.element('.choice input[value=true]').each(function () {
+        selectedPosition = angular.element(this).attr('id');
+        selectedOptions.push(selectedPosition);
+      });
+
+      selectedOptionsCount = selectedOptions.length;
+      if (selectedOptionsCount > 0) {
+
+
+        var answers = questionResult.answers;
+
+        angular.element('.choice button').removeClass('btn-primary');
+        angular.forEach(answers, function (value) {
+
+          var selectIdButton = ('#' + value.id);
+
+          /*set the correct class on the button*/
+          if (value.correct) {
+            if (Utilities.existsInArray(value.id, selectedOptions)) {
+              /*Send answer response to server, important this line have to be inside this if
+               * since just the users answers get into this evaluation
+               * */
+
+              practiceRequests.roundSessions().updateAnswer(roundSessionAnswer.id, value.id);
+            }
+            else {
+              answerStatus = false;
+            }
+            angular.element(selectIdButton).addClass('btn-success');
+
+          }
+          else {
+            if (Utilities.existsInArray(value.id, selectedOptions)) {
+              /*Send answer response to server, important this line have to be inside this if
+               * since just the users answers get into this evaluation
+               * */
+              practiceRequests.roundSessions().updateAnswer(roundSessionAnswer.id, value.id);
+              angular.element(selectIdButton).addClass('btn-danger');
+              angular.element(selectIdButton).parents('#answer').addClass('incorrectAnswer');
+              answerStatus = false;
+            }
+
+          }
+
+        });
+
+        angular.element("#answercontent *").prop('disabled', true);
+
+        return answerStatus ? 'Your answer was correct' : 'Your answer was incorrect';
+      }
+      else {
+
+        Alerts.showAlert('Please select an option!', 'warning');
+
+      }
+    },
+    numericEntryConfirmChoice: function (numerator,denominator) {
+
+      var userAnswer = 0;
+      /*Get selected answers*/
+
+      if (numerator || denominator) {
+        this.resetLayout();
+        this.displayGeneralConfirmInfo();
+
+        if ($scope.lastAnswerLoaded == 'NumericEntryFraction') {
+
+          userAnswer = $scope.numerator + '/' + $scope.denominator;
+        }
+        else {
+          userAnswer = $scope.numerator;
+        }
+
+        var answers = $scope.questionItems.answers;
+        $scope.selectedAnswer = 0;
+
+        angular.forEach(answers, function (value) {
+          /*evaluate just one time the quivalence between body and numerator*/
+          var answerEval = (value.body == userAnswer);
+
+          if (answerEval)
+            $scope.selectedAnswer = value.answer_id;
+
+          $scope.answerStatus = answerEval;
+
+        });
+
+        $scope.answerObject.one($scope.roundSessionAnswer.id).put({answer_id: $scope.selectedAnswer});
+
+
+        $scope.messageConfirmation = $scope.answerStatus ? 'Your answer was correct' : 'Your answer was incorrect';
+        angular.element("#answercontent *").prop('disabled', true);
+      }
+      else {
+        Alerts.showAlert(Alerts.setErrorApiMsg(error), 'warning');
+
+      }
+
+
+    },
+    loadQuestion: function (questionToRequest, gameId) {
+      var deferred = $q.defer(),
+        setLayoutType = false, resultObject = {},
+
+      /*Get question and Create Round Session by Question*/
+        getQuestion = practiceRequests.questions().getQuestionById(questionToRequest),
+        questionPresentation = practiceRequests.roundSessions().createQuestionPresentation(gameId, questionToRequest);
+
+      $q.all([getQuestion, questionPresentation]).then(function (result) {
+
+        resultObject.questionResult = result[0].data.question;
+        resultObject.answerObject = result[1].data;
+        resultObject.roundSessionAnswer = result[1].data.round_session;
+
+        /*@Jose TODO This can be performed on a better way*/
+        angular.element('.choice.active').removeClass('active');
+
+        if (resultObject.lastAnswerLoaded == '' || resultObject.lastAnswerLoaded != resultObject.questionResult.kind) {
+          resultObject.lastAnswerLoaded = resultObject.questionResult.kind;
+        }
+
+        resultObject.items = [];
+        resultObject.stimulus = "";
+
+        resultObject.questionInformation = $sce.trustAsHtml(resultObject.questionResult.question_set.info);
+
+        /*Find if there is a question info defined or retrieve it by the API*/
+        setLayoutType = angular.isDefined(resultObject.questionInformation) && resultObject.questionInformation != null && resultObject.questionInformation != '' ? true : false;
+
+        /*Set the layout based on the question info*/
+        Practice.setLayoutBasedOnQuestionInfo(setLayoutType);
+        resultObject.stimulus = $sce.trustAsHtml(resultObject.questionResult.stimulus);
+
+        var options = optionList.toUpperCase().split(""),
+          answers = resultObject.questionResult.answers;
+        angular.forEach(answers, function (value, index) {
+
+          value["option"] = options[index];
+          resultObject.items.push(value);
+        });
+        Practice.removeBadImage();
+        deferred.resolve(resultObject);
+
+      })
+        .catch(function error(error) {
+          deferred.reject(resultObject);
+          Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+        });
+
+      return deferred.promise;
+
+    },
+    displayGeneralConfirmInfo: function (questionResult) {
+      var deferred = $q.defer(), generalObject = {}, tags = [];
+      /* Question Explanation*/
+      generalObject.questionExplanation = questionResult.explanation;
+
+      if (generalObject.questionExplanation != null)
+        generalObject.showExplanation = true;
+
+
+      /*Evaluate tag resources info, get video Ids and video time*/
+
+      angular.forEach(questionResult.tags, function (value) {
+        tags.push({
+          name: value.name,
+          tagResource: Utilities.getYoutubeVideosInfo(value.tag_resources)
+        });
+      });
+      generalObject.tags = tags;
+      generalObject.xpTag = questionResult.experience_points;
+
+      /* Work with the styles to shown result
+       define is some answer is bad.*/
+      answerStatus = true;
+
+      /* video validation*/
+      if (questionResult.youtube_video_id !== null) {
+        generalObject.showVideo = true;
+        generalObject.videoId = questionResult.youtube_video_id;
+        VideoService.setYouTubeTitle(generalObject.videoId).then(function (videoTime) {
+          generalObject.videoText = 'Video Explanation (' + videoTime + ')';
+          deferred.resolve(generalObject);
+        });
+      }
+      else {
+        deferred.resolve(generalObject);
+      }
+
+      return deferred.promise;
+
+    }
+  };
+
+
+  return {
+
+    loadQuestion: function (questionToRequest, gameResponseId) {
+      return Practice.loadQuestion(questionToRequest, gameResponseId);
+    },
+    confirmChoice: function (questionResult, roundSessionAnswer) {
+      return Practice.confirmChoice(questionResult, roundSessionAnswer);
+    },
+    resetLayout: function () {
+      return Practice.resetLayout();
+    },
+    displayGeneralConfirmInfo: function (questionResult) {
+      return Practice.displayGeneralConfirmInfo(questionResult);
+    }
+  }
 });
