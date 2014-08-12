@@ -54,6 +54,7 @@ angular.module('grockitApp.directives', [])
       }
     };
   })
+
 .directive('youtube',function() {
     return {
       restrict: 'A',
@@ -62,6 +63,7 @@ angular.module('grockitApp.directives', [])
       }
     };
   })
+
 .directive('scorePrediction', function() {
     return {
       restrict: 'A',
@@ -81,6 +83,7 @@ angular.module('grockitApp.directives', [])
       }
     };
   })
+
 .directive('trackList', function() {
     return {
       restrict: 'A',
@@ -99,6 +102,7 @@ angular.module('grockitApp.directives', [])
       }
     };
   })
+
 .directive('breadcrumb', function() {
     return {
       restrict: 'A',
@@ -108,6 +112,7 @@ angular.module('grockitApp.directives', [])
       }
     };
   })
+
 .directive('fadingText', function() {
     return {
       restrict: 'A',
@@ -115,6 +120,66 @@ angular.module('grockitApp.directives', [])
       scope: {
         word: '=',
         isVisible: '='
+      }
+    };
+  })
+
+.directive("trackToggle", function(){
+    return {
+      scope: {},
+      restrict: 'A',
+      transclude:true,
+      templateUrl: 'common/templates/directives/toggle-element.tpl.html',
+      link: function(scope){
+        scope.toggled = false;
+
+        scope.toggle = function(){
+          scope.toggled = !scope.toggled;
+        }
+      }
+    }
+ })
+
+.directive('btnRadio',function() {
+  var activeClass = 'btn-info';
+
+  return {
+    require: 'ngModel',
+    link: function(scope, element, attrs, ngModelCtrl) {
+
+      var value = scope.$eval(attrs.btnRadio);
+
+      //model -> UI
+      scope.$watch(function() {
+        return ngModelCtrl.$modelValue;
+      }, function(modelValue) {
+        if (angular.equals(modelValue, value)) {
+          element.addClass(activeClass);
+        } else {
+          element.removeClass(activeClass);
+        }
+      });
+
+      //ui->model
+      element.bind('click', function() {
+        if (!element.hasClass(activeClass)) {
+          scope.$apply(function() {
+            ngModelCtrl.$setViewValue(value);
+          });
+        }
+      });
+    }
+  };
+})
+
+.directive('topicList', function() {
+    return {
+      restrict: 'A',
+      templateUrl: 'common/templates/directives/topics-list.tpl.html',
+      scope: {
+      },
+      link: function (scope, element, attrs) {
+
       }
     };
   });

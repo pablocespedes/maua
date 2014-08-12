@@ -115,7 +115,7 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
       $scope.titleQuest = $scope.activeTracks.trackTitle + ' Explanation';
       this.setLayoutBasedOnQuestionInfo(true);
       angular.element('#skipAction').addClass('hide');
-      angular.element('#nextAction').removeClass('btn-primary').addClass('btn-success');
+      angular.element('#nextAction').removeClass('btn-primary');
       angular.element('.list-group *').addClass('no-hover');
       $scope.nextActionTitle = 'Next Question';
 
@@ -134,7 +134,6 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
       $scope.answerStatus = null;
       $scope.nextActionTitle = 'Confirm Choice';
       $scope.messageConfirmation = '';
-      angular.element('#nextAction').removeClass('btn-success');
       angular.element('#skipAction').removeClass('hide');
       angular.element('#answersPanels').removeClass().addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
         angular.element(this).removeClass();

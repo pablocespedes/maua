@@ -49,6 +49,9 @@ request.factory('practiceRequests', function(Restangular,Headers) {
       createQuestionPresentation : function(gameId,questionId){
 
         return roundSessionObject.post('', {game_id: gameId, question_id: questionId});
+      },
+      updateAnswer: function(roundSessionAnswerId,answerId){
+        roundSessionObject.one(roundSessionAnswerId).put({answer_id: answerId});
       }
     }
   }
