@@ -80,4 +80,41 @@ angular.module('grockitApp.directives', [])
         };
       }
     };
+  })
+.directive('trackList', function() {
+    return {
+      restrict: 'A',
+      templateUrl: 'common/templates/directives/track-list.tpl.html',
+      scope: {
+        tracks: '=',
+        startPractice: '=',
+        getTitle: '=',
+        getScore: '=',
+        isVisible: '='
+      },
+      link: function (scope, element, attrs) {
+        scope.hasScore = function (track) {
+          return (scope.getScore(track) !== null && scope.getScore(track) > 0);
+        };
+      }
+    };
+  })
+.directive('breadcrumb', function() {
+    return {
+      restrict: 'A',
+      templateUrl: 'common/templates/directives/breadcrumb.tpl.html',
+      scope: {
+        breadcrumbs: '='
+      }
+    };
+  })
+.directive('fadingText', function() {
+    return {
+      restrict: 'A',
+      templateUrl: 'common/templates/directives/fading-text.tpl.html',
+      scope: {
+        word: '=',
+        isVisible: '='
+      }
+    };
   });

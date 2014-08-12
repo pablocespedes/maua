@@ -1,8 +1,21 @@
-<div breadcrumb breadcrumbs="breadcrumbs.get()"></div>
+<div class="panel">
+  <div class="row practice-header reset-layout">
+    <div class="col-md-6 practice-element practice-sm">
+      <div class="reset-layout" breadcrumb breadcrumbs="breadcrumbs.get()"></div>
+    </div>
+    <div class="col-md-3 practice-element practice-sm">
+      Practice Time: 9:34
+    </div>
+    <div class="col-md-3 practice-element practice-sm">
+      This Question: 1:24
+    </div>
+  </div>
+  <div ng-if="showExplanation" class="reset-layout" question-timing></div>
+  <div ng-if="showExplanation" class="practice-tags" question-tags xp="xpTag" tags="tags"></div>
+</div>
+
 
 <div id="practice" class="panel">
-
-
   <div class="panel-heading">
     <span class="panel-title"> <label title="" class="title" ng-bind="titleQuest"></label></span>
 
@@ -17,16 +30,6 @@
 
       <div id="PanelQuestion" class="row columnsContainer" ng-show="!loading">
         <div id="Panel1" class="col-md-6 leftColumn">
-
-          <div ng-if="showExplanation">
-            <div question-tags xp="xpTag" tags="tags"></div>
-
-          </div>
-
-          <div ng-if="showExplanation">
-            <div question-timing></div>
-
-          </div>
 
           <div id="question-explain" class="question-explain explain-margin" ng-if="showExplanation">
 
@@ -57,7 +60,7 @@
               <div answer-type content="{{lastAnswerLoaded}}"></div>
               <!--<div id="answersPanels" ng-answers></div>-->
             </div>
-
+            <div ng-if="showExplanation" class="practice-tags" question-tags-only xp="xpTag" tags="tags"></div>
           </div>
 
 
@@ -68,10 +71,10 @@
 
   </div>
   <div class="panel-footer">
-
   </div>
 
 </div>
+
 <div class="push">
   <!--//-->
 </div>

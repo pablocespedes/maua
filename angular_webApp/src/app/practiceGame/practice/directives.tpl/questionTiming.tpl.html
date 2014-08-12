@@ -1,0 +1,46 @@
+<div class="widget-profile-counters row practice-header">
+
+  <div class="col-xs-1 practice-element practice-xl label practice-result" ng-class="{ 'label-danger':false, 'label-success':true}">
+    <i ng-if="false" class="fa fa-times"></i>
+    <i ng-if="true" class="fa fa-check"></i>
+  </div>
+
+  <div class="col-xs-1 label label-danger practice-element practice-xl">
+    Your Time:<br>
+    <span ng-bind="data.yourtime"></span><span class="practice-data">37 </span>sec</div>
+
+  <div class="col-xs-2 practice-element practice-xl">You are
+    <span class="label-success">&nbsp;<i class="fa fa-arrow-down"></i> <span ng-bind="data.youAreIn"></span> <span class="practice-data" style="padding-right: 4px;">8</span></span>
+    seconds faster than the average</div><div class="col-xs-1 practice-element practice-xl">
+    Average:<br>
+    <span class="practice-data" ng-bind="data.average"></span>
+    <span class="practice-data">45 </span>
+    sec
+  </div>
+
+  <div class="col-xs-4 practice-element practice-xl">
+    <span>Grock's Advice:</span>
+    <br>
+    <span>Its ok to get questions wrong, but you'll want to...</span>
+  </div>
+
+  <div class="col-xs-1 practice-element practice-xl practice-align">
+    <span>
+      Level
+    </span>
+    <span>16</span>
+    <div class="cloud-text">
+      What's the ...
+    </div>
+  </div>
+  
+  <div class="col-xs-2 practice-element practice-xl practice-offset">
+    <span ng-bind="data.percentCorrectly"></span>
+    <span class="practice-data">
+      87%
+    </span>
+    <br>
+    of users answered correctly
+  </div>
+
+</div>

@@ -1,5 +1,5 @@
 
-practiceGame.directive('ngOneChoice', function(questionTypesService) {
+practiceGame.directive('oneChoice', function(questionTypesService) {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/practice/directives.tpl/oneChoice.tpl.html',
@@ -14,7 +14,7 @@ practiceGame.directive('ngOneChoice', function(questionTypesService) {
   };
 })
 
-.directive('ngMultipleChoice', function(questionTypesService) {
+.directive('multipleChoice', function(questionTypesService) {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/practice/directives.tpl/multipleChoice.tpl.html',
@@ -29,7 +29,7 @@ practiceGame.directive('ngOneChoice', function(questionTypesService) {
     };
   })
 
-.directive('ngMultipleMatrix2x3', function(questionTypesService) {
+.directive('multipleMatrix2x3', function(questionTypesService) {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/practice/directives.tpl/matrix2x3.tpl.html',
@@ -44,7 +44,7 @@ practiceGame.directive('ngOneChoice', function(questionTypesService) {
     };
   })
 
-.directive('ngMultipleMatrix3x3', function(questionTypesService) {
+.directive('multipleMatrix3x3', function(questionTypesService) {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/practice/directives.tpl/matrix3x3.tpl.html',
@@ -59,7 +59,7 @@ practiceGame.directive('ngOneChoice', function(questionTypesService) {
     };
   })
 
-.directive('ngSat', function(questionTypesService) {
+.directive('sat', function(questionTypesService) {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/practice/directives.tpl/sat.tpl.html',
@@ -71,7 +71,7 @@ practiceGame.directive('ngOneChoice', function(questionTypesService) {
     };
   })
 
-.directive('ngNumericEntry', function(questionTypesService) {
+.directive('numericEntry', function(questionTypesService) {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/practice/directives.tpl/numericEntry.tpl.html',
@@ -90,7 +90,7 @@ practiceGame.directive('ngOneChoice', function(questionTypesService) {
     };
   })
 
-.directive('ngFractionEntry', function(questionTypesService) {
+.directive('fractionEntry', function(questionTypesService) {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/practice/directives.tpl/fractionEntry.tpl.html',
@@ -108,7 +108,7 @@ practiceGame.directive('ngOneChoice', function(questionTypesService) {
     };
   })
 
-.directive('ngTwoChoice', function(questionTypesService) {
+.directive('twoChoice', function(questionTypesService) {
 
     return {
       restrict: 'A',
@@ -124,13 +124,13 @@ practiceGame.directive('ngOneChoice', function(questionTypesService) {
     };
   })
 
-.directive('ngAnswers', function() {
+/*.directive('ngAnswers', function() {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/practice/directives.tpl/answers.tpl.html'
 
     };
-  })
+  })*/
 
 .directive('ngCustomTopics', function() {
 
@@ -142,12 +142,8 @@ practiceGame.directive('ngOneChoice', function(questionTypesService) {
 
       elm.on("change", function (e) {
         if (e.added) {
-          // You can add other filters here like
-          // if e.val == option_x_of_interest or
-          // if e.added.text == some_text_of_interest
-          // Then add a custom CSS class my-custom-css to the <li> added
+
           $(e.added.element).css("background", '#f4b04f');
-          //$('.select2-search-choice').css("background",'#f4b04f');
         }
       });
     }
@@ -160,13 +156,11 @@ practiceGame.directive('ngOneChoice', function(questionTypesService) {
         off_state_content: '<span class="fa fa-times" style="font-size:11px;"></span>'
       });
 
-      // Demo panel toggle
       $('#practice-settings-toggler').click(function () {
         $('#practice-settings').toggleClass('open');
         return false;
       });
 
-      // Toggle switchers on label click
       $('#practice-settings-list li > span').click(function () {
         $(this).parents('li').find('.switcher').click();
       });
@@ -181,6 +175,122 @@ practiceGame.directive('ngOneChoice', function(questionTypesService) {
         togglePanel();
       }
 
+    };
+  })
+
+  .directive('questionTiming', function() {
+    return {
+      restrict: 'A',
+      replace:true,
+      templateUrl: 'app/practiceGame/practice/directives.tpl/questionTiming.tpl.html',
+      scope: {
+        data: '='
+      }
+    };
+  })
+
+  .directive('questionTagsOnly', function() {
+    return {
+      restrict: 'A',
+      replace:true,
+      templateUrl: 'app/practiceGame/practice/directives.tpl/questionsTagsOnly.tpl.html',
+      scope: {
+        tags: '=',
+        xp: '='
+      }
+    };
+  })
+  .directive('questionTags', function() {
+    return {
+      restrict: 'A',
+      replace:true,
+      templateUrl: 'app/practiceGame/practice/directives.tpl/questionsTags.tpl.html',
+      scope: {
+        tags: '=',
+        xp: '='
+      }
+    };
+  })
+
+  .directive('answerType', function ($compile) {
+
+    var fractionTpl = '<div fraction-entry answer-status="answerStatus" ' +
+        'portal="portalC" items="items" show-explanation="showExplanation" ' +
+        'has-explanation="answerHasExplanation(index)" >' +
+        '</div>',
+
+      matrix2x3Tpl = '<div multiple-matrix2x3 items="items" show-explanation="showExplanation"' +
+        'has-explanation="answerHasExplanation(index)"></div>',
+
+      matrix3x3Tpl = ' <div multiple-matrix3x3 items="items" show-explanation="showExplanation" ' +
+        'has-explanation="answerHasExplanation(index)"></div>',
+
+      multipleChoiceTpl = '<div multiple-choice items="items" show-explanation="showExplanation" ></div>',
+
+      numericEntryTpl = '<div numeric-entry answer-status="answerStatus" portal="portalC" items="items" ' +
+        'show-explanation="showExplanation" has-explanation="answerHasExplanation(index)"></div>',
+
+      oneChoiceTpl = '<div one-choice items="items" show-explanation="showExplanation" ' +
+        'has-explanation="answerHasExplanation(index)"></div>',
+
+      satTpl = ' <div sat></div>',
+
+      twoChoiceTpl = '<div  two-choice items="items" show-explanation="showExplanation" ' +
+        'has-explanation="answerHasExplanation(index)"></div>';
+
+    var getAnswerTemplate = function (questionKind) {
+      var template = '';
+
+      switch (questionKind) {
+        case 'MultipleChoiceOneCorrect':
+          template = oneChoiceTpl;
+          break;
+        case 'MultipleChoiceOneOrMoreCorrect':
+          template = multipleChoiceTpl;
+          break;
+        case 'MultipleChoiceMatrixTwoByThree':
+          template = matrix2x3Tpl;
+          break;
+        case 'MultipleChoiceMatrixThreeByThree':
+          template = matrix3x3Tpl;
+          break;
+        case 'NumericEntryFraction':
+          template = fractionTpl;
+          break;
+        case 'NumericEntry':
+          template = numericEntryTpl;
+          break;
+        case 'sat':
+          template = satTpl;
+          break;
+        case 'MultipleChoiceTwoCorrect':
+          template = twoChoiceTpl;
+          break;
+
+      }
+
+      return template;
+    };
+
+    var linker = function (scope, element, attrs) {
+      element.html(getAnswerTemplate(attrs.content)).show();
+      $compile(element.contents())(scope);
+
+      scope.$watch('lastAnswerLoaded', function(value){
+
+        element.html(getAnswerTemplate(value)).show();
+        $compile(element.contents())(scope);
+
+
+      });
+
+    };
+
+    return {
+      restrict: "A",
+      replace: true,
+      scope: false,
+      link: linker
     };
   });
 

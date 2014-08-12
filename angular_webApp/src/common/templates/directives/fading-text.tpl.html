@@ -1,0 +1,7 @@
+<div class="col-md-6 col-lg-offset-5" ng-if="isVisible">
+  <div id="inTurnFadingTextG" >
+    <div id="inTurnFadingTextG_{{$index + 1}}" ng-repeat="letter in word track by $index" class="inTurnFadingTextG">
+      {{letter}}
+    </div>
+  </div>
+</div>

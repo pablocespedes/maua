@@ -1,11 +1,12 @@
-practiceGame.controller('PracticeController',['$scope','practiceRequests','Utilities','breadcrumbs','VideoService','Alerts','$location','$q','$sce','Tracks',
-function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$location,$q,$sce,Tracks) {
+practiceGame.controller('PracticeController',['$scope','practiceRequests','Utilities','breadcrumbs','VideoService','Alerts','$location','$q','$sce',
+function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$location,$q,$sce) {
 
   $scope.activeTracks = Utilities.getActiveTrack();
   $scope.titleQuest = $scope.activeTracks.trackTitle;
   $scope.activeGroupId = Utilities.getActiveGroup();
   $scope.breadcrumbs = breadcrumbs;
   breadcrumbs.options = { 'practice': $scope.titleQuest };
+
   $scope.isUniqueQuestionLoad = false;
   $scope.portalC = $scope;
   $scope.loading = true;
@@ -19,17 +20,6 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
   $scope.setPosition = 0;
   $scope.position = 0;
   $scope.lastAnswerLoaded = '';
-  $scope.directives =
-    [
-      { id: '1', type: 'MultipleChoiceOneCorrect'},
-      { id: '2', type: 'MultipleChoiceOneOrMoreCorrect'},
-      { id: '3', type: 'MultipleChoiceMatrixTwoByThree'},
-      { id: '4', type: 'MultipleChoiceMatrixThreeByThree'},
-      { id: '5', type: 'NumericEntryFraction'},
-      { id: '6', type: 'NumericEntry'},
-      { id: '7', type: 'sat'},
-      {id: '8', type: 'MultipleChoiceTwoCorrect'}
-    ];
 
 
   var Practice = {
@@ -86,7 +76,7 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
         angular.element('.choice.active').removeClass('active');
 
         if ($scope.lastAnswerLoaded == '' || $scope.lastAnswerLoaded != questionResult.kind) {
-          $scope.currentA = Utilities.findInArray(questionResult.kind, $scope.directives, 'type').id;
+        //  $scope.currentA = Utilities.findInArray(questionResult.kind, $scope.directives, 'type').id;
           $scope.lastAnswerLoaded = questionResult.kind;
         }
 
@@ -95,7 +85,7 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
         $scope.template = $scope.actualView;
         $scope.questionItems = questionResult;
 
-        $scope.questionInformation = questionResult.question_set.info;
+        $scope.questionInformation = $sce.trustAsHtml(questionResult.question_set.info);
 
         /*Find if there is a question info defined or retrieve it by the API*/
         setLayoutType = angular.isDefined($scope.questionInformation) && $scope.questionInformation != null && $scope.questionInformation != '' ? true : false;
@@ -163,7 +153,7 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
       $scope.tags = tags;
 
     },
-    seeAnswer: function () {
+    showAnswer: function () {
       this.resetLayout();
 
       /*Question Explanation*/
@@ -499,7 +489,7 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
   };
 
   $scope.revealExplanation = function () {
-    Practice.seeAnswer();
+    Practice.showAnswer();
   };
 
   $scope.CreateNewGame();

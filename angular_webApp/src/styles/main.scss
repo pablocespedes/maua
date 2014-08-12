@@ -4,7 +4,7 @@
 @import  "../styles/_variables.scss",
          "../styles/spinners.scss",
          "../app/home/dashboard/dashboard.scss",
-         "../app/practiceGame/dashboard/dashboard.scss",
+         "../app/home/track-dashboard/dashboard.scss",
          "../app/practiceGame/practice/practice.scss";
 
 //general css
@@ -288,4 +288,68 @@ footer {
   top: -24px;
 }
 
+.reset-layout {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
 
+.practice-header  {
+  .practice-element {
+    //border: 1px solid #EDEDED;
+    //border: 1px solid #000;
+    font-size: 13px;
+  }
+  .practice-xl {
+    height: 42px;
+  }
+  .practice-sm {
+    height: 25px;
+    padding-top: 2px;
+  }
+  .practice-align {
+    text-align: center;
+  }
+}
+
+.practice-result {
+  width: 3%;
+  line-height: 45px;
+}
+
+.practice-result .fa {
+  font-size: 20px;
+}
+
+.practice-offset {
+  width: 22%;
+}
+
+.practice-data {
+  font-weight:bold;
+  font-size: 16px;
+  color: #555;
+}
+
+.practice-tags {
+  padding: 5px;
+}
+
+.cloud-text {
+  padding: 2px;
+  height: 14px;
+  width: 70px;
+  border: 1px solid #E2E2E2;
+  border-radius: 10px;
+  font-size: 10px;
+  margin: auto;
+  line-height: 10px;
+  margin-bottom: 2px;
+}
+
+
+.tooltip-container {
+  .tooltip-inner {
+    text-align: left;
+  }
+}

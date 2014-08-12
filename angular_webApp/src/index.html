@@ -48,7 +48,6 @@
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/lodash/dist/lodash.compat.js"></script>
     <script src="bower_components/restangular/dist/restangular.js"></script>
-    <script src="bower_components/elasticsearch/elasticsearch.angular.min.js"></script>
     <script src="bower_components/webStorageModule/angular-webstorage.js"></script>
     <script src="bower_components/ng-breadcrumbs/dist/ng-breadcrumbs.min.js"></script>
     <!-- endbower -->
@@ -182,11 +181,9 @@
                     <a ng-href="{{url}}/reviews"><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
                 </li>
                 <li  class="btn-success" >
-                    <a ng-href="{{url}}"><i class="menu-icon fa fa-mail-forward"></i><span style="color: white" class="mm-text">Switch to Original Grockit</span></a>
+                    <a ng-href="{{url}}/{{activeGroupId}}"><i class="menu-icon fa fa-mail-forward"></i><span style="color: white" class="mm-text">Switch to Original Grockit</span></a>
                 </li>
-              <!--  <li>
-                    <a href="#/practice"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Questions Types</span></a>
-                </li>-->
+
             </ul>
             <!-- / .navigation -->
         </div>
@@ -207,11 +204,6 @@
 
 
 </div>
-
-
-
-
-
 
 
 <a href="#" class="back-to-top fa  fa-arrow-up"></a>
