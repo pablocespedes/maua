@@ -1,5 +1,13 @@
-practiceGame.controller('PracticeController',['$scope','practiceRequests','Utilities','breadcrumbs','VideoService','Alerts','$location','$q','$sce',
-function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$location,$q,$sce) {
+practiceGame.controller('PracticeController',['$scope','practiceRequests','Utilities','breadcrumbs','VideoService','Alerts','$location','$q','$sce', 'Timer',
+function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$location,$q,$sce, Timer) {
+
+  $scope.practiceTimer = Timer.create();
+  $scope.practiceTimer.start();
+
+  $scope.questionTimer = Timer.create();
+  setTimeout(function() {
+    $scope.questionTimer.start();
+  }, 4000);
 
   $scope.activeTracks = Utilities.getActiveTrack();
   $scope.titleQuest = $scope.activeTracks.trackTitle;
