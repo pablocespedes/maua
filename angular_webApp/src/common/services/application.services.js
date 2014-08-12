@@ -190,10 +190,88 @@ angular.module('grockitApp.services', ['webStorageModule'])
     }
 
   }
+  })
+.service('ServiceFactory', function() {
+  this.items = [];
+  this.lastId = 1;
+  this.add = function(item) {
+    item.serviceId = this.lastId++;
+    if (!this.get(item.serviceId)) {
+      this.items.push(item);
+    }
+  };
+  this.equals = function(item, serviceId) {
+    return item.serviceId === serviceId; 
+  };
+  this.get = function(serviceId) {
+    var self = this;
+    return _.find(this.items, function(item) { return self.equals(item, serviceId); });
+  };
+  this.remove = function(item) {
+    var self = this;
+    this.items = _.reject(this.items, function(storedItem) { return self.equals(item, storedItem.serviceId); });
+  };
+})
 
-  });
+.factory('Timer', ['$interval', 'ServiceFactory',
+    function($interval, ServiceFactory) {
+      var createTimer = function() {
+        var timer = {
+          seconds: 0,
+          interval: null,
+          start: function() {
+            var timer = this;
+            this.interval = $interval(function() {
+              timer.seconds++;
+            }, 1000);
+          },
+          pause: function() {
+            $interval.cancel(this.interval);
+          },
+          reset: function() {
+            this.seconds = 0;
+            this.pause();
+          }
+        };
+        return timer;
+      };
+      return {
+        create: function() {
+          var timer = createTimer();
+          ServiceFactory.add(timer);
+          return timer;
+        },
+        destroy: function(timer) {
+          $interval.cancel(timer.interval);
+          ServiceFactory.remove(timer);
+        }
+      };
+    }])
+.factory('DateFormatter', function() {
+  var formatSeconds = function(seconds) {;
+    var secs = seconds
+        hours = Math.floor(secs / (60 * 60)),
+        divisor_for_minutes = secs % (60 * 60),
+        minutes = Math.floor(divisor_for_minutes / 60),
+        divisor_for_seconds = divisor_for_minutes % 60,
+        seconds = Math.ceil(divisor_for_seconds);
 
+    if (hours < 10) {
+      hours = "0" + hours;
+    }
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    if (seconds < 10) {
+      seconds = "0" + seconds;
+    }
+    // var time = hours+':'+minutes+':'+seconds;
 
-
-
-
+    var time = (hours > 0 ? hours + ':' : '') + 
+      (minutes >= 0 ? minutes + ':' : '') + (seconds >= 0 ? seconds : '');
+    return time;
+  };
+  return {
+    formatSeconds: formatSeconds
+  };
+});
