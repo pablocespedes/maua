@@ -4,10 +4,10 @@
       <div class="reset-layout" breadcrumb breadcrumbs="breadcrumbs.get()"></div>
     </div>
     <div class="col-md-3 practice-element practice-sm">
-      Practice Time: 9:34
+      Practice Time: <span class="practice-data">{{ practiceTimer.seconds | formatSeconds}}</span>
     </div>
     <div class="col-md-3 practice-element practice-sm">
-      This Question: 1:24
+      This Question: <span class="practice-data">{{ questionTimer.seconds | formatSeconds}}</span>
     </div>
   </div>
   <div ng-if="showExplanation" class="reset-layout" question-timing></div>
