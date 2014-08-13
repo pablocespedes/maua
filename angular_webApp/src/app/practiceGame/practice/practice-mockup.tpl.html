@@ -15,38 +15,52 @@
 </div>
 
 
-<div id="practice" class="panel">
-  <div class="panel-heading">
-    <span class="panel-title"> <label title="" class="title" ng-bind="titleQuest"></label></span>
+<div id="practice">
 
-    <div class="answer-status float-right" ng-if="showExplanation">
-      <span class="badge" ng-class="{'badge-success': answerStatus, 'badge-danger': !answerStatus}" ng-bind="messageConfirmation"></span>
-    </div>
-  </div>
-  <div class="panel-body">
-    <div id="parent" class="col-md-12">
+    <div id="parent">
 
       <div fading-text word="'Loading...'" is-visible="loading"></div>
 
       <div id="PanelQuestion" class="row columnsContainer" ng-show="!loading">
+
         <div id="Panel1" class="col-md-6 leftColumn">
 
           <div id="question-explain" class="question-explain explain-margin" ng-if="showExplanation">
 
-            <span ng-bind-html='questionExplanation'></span>
+		          <div class="panel colourable">
+				          <div class="panel-heading">
+						          <span class="panel-title"><i class="panel-title-icon fa fa-flask"></i>Question Explanation</span>
+				          </div>
+				          <div class="panel-body">
+						          <span ng-bind-html='questionExplanation'></span>
 
-            <div id="videoExplain" ng-if="showVideo">
-              <br>
-              <div class="video-container">
-                <button youtube rel="{{videoId}}" class="btn btn-flat btn-labeled btn-primary" id="videoExplainbtn">
-                  <span class="btn-label text-lg icon fa fa-youtube-play"></span><span ng-bind="videoText"></span>
-                </button>
+						          <div id="videoExplain" ng-if="showVideo">
+								          <br>
+								          <div class="video-container">
+										          <button youtube rel="{{videoId}}" class="btn btn-flat btn-labeled btn-primary" id="videoExplainbtn">
+												          <span class="btn-label text-lg icon fa fa-youtube-play"></span><span ng-bind="videoText"></span>
+										          </button>
 
-              </div>
-            </div>
+								          </div>
+						          </div>
+				          </div>
+		          </div>
+
           </div>
-          <div class="sentence_correction_stimulus" ng-bind-html='questionInformation'>
+
+          <div class="sentence_correction_stimulus" ng-class="{'question-explain explain-margin':questionInformation!=''}"
+               ng-if="questionInformation!=''">
+		          <div class="panel colourable">
+				          <div class="panel-heading">
+						          <span class="panel-title"><i class="panel-title-icon fa fa-flask"></i>Question Information</span>
+				          </div>
+				          <div class="panel-body">
+						          <span ng-bind-html='questionInformation'></span>
+
+				          </div>
+		          </div>
           </div>
+
         </div>
 
         <div id="Panel2" class="page page-home col-md-6 rightColumn">
@@ -69,9 +83,8 @@
 
     </div>
 
-  </div>
-  <div class="panel-footer">
-  </div>
+
+
 
 </div>
 

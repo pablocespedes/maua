@@ -75,7 +75,7 @@ footer {
 }
 
 .push {
-  height: 90px;
+  height: 130px;
 }
 
 .hide-footer{
@@ -265,9 +265,9 @@ footer {
 
 
 .info-box {
-  background: #eee;
-  border: 1px solid #ccc;
-  border-bottom: 1px solid #aaa;
+  /*background: #eee;*/
+ // border: 1px solid #ccc;
+  //border-bottom: 1px solid #aaa;
   color: #333;
   overflow-x: auto;
   padding: 10px;
@@ -275,6 +275,12 @@ footer {
   z-index: 10;
   -webkit-box-shadow: 0 1px 2px #ccc;
   box-shadow: 0 1px 2px #ccc;
+
+  background: #f2f2f2;
+  border-color: #bcbcbc;
+  border: 1px solid #e3e3de;
+  border-radius: 5px;
+
 }
 .info-box:before {
   content: " ";
