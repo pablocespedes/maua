@@ -1,6 +1,113 @@
+.row-fluid .span2 {
+  width: 10.529915%!important;
+  margin-left: 0.564103%!important;
+}
 
 #skipAction {
   cursor: pointer;
+}
+
+/*
+
+.span1 {
+  width: 2.982906%!important;
+  margin-left: 1.564103%!important;
+}
+.row-fluid .yourTime {
+  width: 5.529915%!important;
+  margin-left: 0.564103%!important;
+}
+.row-fluid .span6 {
+  width: 53.717949%!important;
+  margin-left: 0.564103%!important;
+}
+.row-fluid .custom-span {
+  width: 6.529915%!important;
+  margin-left: 0.564103%!important;
+}
+
+@media (max-width: 979px) and (min-width: 768px) {
+  .row-fluid .span6 {
+    width: 48.61878453038674%;
+    margin-left: 0.564103%!important;
+  }
+  .row-fluid .span2 {
+    width: 10.529915%!important;
+    margin-left: 0.564103%!important;
+  }
+
+  .span1 {
+    width: 2.982906%!important;
+    margin-left: 1.564103%!important;
+  }
+  .row-fluid .yourTime {
+    width: 5.529915%!important;
+    margin-left: 0.564103%!important;
+  }
+  .row-fluid .custom-span {
+    width: 6.529915%!important;
+    margin-left: 0.564103%!important;
+  }
+
+}
+*/
+
+
+
+ul.summary-list > li {
+  border-right: 1px solid #eaeaea;
+}
+
+.check{
+    height: 70px;
+    width: 50px;
+    margin: 9px 0px 10px 0px;
+    font-size: 10px;
+    background-color: #fff !important;
+    -webkit-box-shadow: 0 0px 5px #ddd !important;
+    -moz-box-shadow: 0 0px 5px #ddd!important;
+    box-shadow: 0 0px 5px #ddd !important;
+    display: block !important;
+    color: #646464 !important;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    -webkit-transition: all 0.3s ease !important;
+    -moz-transition: all 0.3s ease !important;
+    -ms-transition: all 0.3s ease !important;
+    -o-transition: all 0.3s ease !important;
+    transition: all 0.3s ease !important;
+  }
+.icon-btn {
+  border-radius: 20px;
+  height: 70px;
+  width: 50px;
+  margin: 10px 0px 10px 0px;
+  padding: 16px 0px 0px 0px;
+  font-size: 10px;
+  background-color: #fff !important;
+  -webkit-box-shadow: 0 0px 5px #ddd !important;
+  -moz-box-shadow: 0 0px 5px #ddd!important;
+  box-shadow: 0 0px 5px #ddd !important;
+  display: block !important;
+  color: #646464 !important;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  -webkit-transition: all 0.3s ease !important;
+  -moz-transition: all 0.3s ease !important;
+  -ms-transition: all 0.3s ease !important;
+  -o-transition: all 0.3s ease !important;
+  transition: all 0.3s ease !important;
+}
+
+.row-fluid.icon-btn {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+.row-fluid.check {
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 
 #practice{

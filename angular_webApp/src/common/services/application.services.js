@@ -248,8 +248,8 @@ angular.module('grockitApp.services', ['webStorageModule'])
       };
     }])
 .factory('DateFormatter', function() {
-  var formatSeconds = function(seconds) {;
-    var secs = seconds
+  var formatSeconds = function(seconds) {
+    var secs = seconds,
         hours = Math.floor(secs / (60 * 60)),
         divisor_for_minutes = secs % (60 * 60),
         minutes = Math.floor(divisor_for_minutes / 60),
