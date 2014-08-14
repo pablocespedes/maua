@@ -1,89 +1,103 @@
-<div class="row practice-header">
-  <div class="col-md-6 practice-element practice-sm">
-    <div class="reset-layout" breadcrumb breadcrumbs="breadcrumbs.get()"></div>
-  </div>
-  <div class="col-md-3 practice-element practice-sm">
-    Practice Time: 9:34
-  </div>
-  <div class="col-md-3 practice-element practice-sm">
-    This Question: 1:24
-  </div>
+<div class="row-fluid row reset-layout">
+		<section class="">
+				<div class="no-padding">
+								<div class="col-md-8 no-padding">
+										<div class="reset-layout" breadcrumb breadcrumbs="breadcrumbs.get()"></div>
+								</div>
+								<div class="col-md-2 no-padding text-right">
+										Practice Time: <span class="practice-data">{{ practiceTimer.seconds | formatSeconds}}</span>
+								</div>
+								<div class="col-md-2 no-padding text-right" style="padding-right: 9px!important;">
+										This Question: <span class="practice-data">{{ questionTimer.seconds | formatSeconds}}</span>
+								</div>
+				</div>
+		</section>
 </div>
 
-<div question-timing></div>
-<div class="row">
-
-  <div class="col-md-6">
-    <div question-tags xp="xpTag" tags="tags"></div>
-
-    <div id="practice" class="panel">
-      <div class="panel-heading">
-        <span class="panel-title"> <label title="" class="title" ng-bind="titleQuest"></label></span>
-
-        <div class="answer-status float-right" ng-if="showExplanation">
-          <span class="badge" ng-class="{'badge-success': answerStatus, 'badge-danger': !answerStatus}" ng-bind="messageConfirmation"></span>
-        </div>
-      </div>
-      <div class="panel-body">
-        <div id="parent" class="col-md-12">
-
-          <div fading-text word="'Loading...'" is-visible="loading"></div>
-
-          <div id="PanelQuestion" class="row columnsContainer" ng-show="!loading">
-            <div id="Panel1" class="col-md-6 leftColumn">
-
-              <div ng-if="showExplanation">
-
-              </div>
+<div ng-if="showExplanation" class="reset-layout" question-timing></div>
+<div ng-if="showExplanation"  question-tags xp="xpTag" tags="tagsResources"></div>
 
 
-              <div id="question-explain" class="question-explain explain-margin" ng-if="showExplanation">
+<div id="practice">
 
-                <span ng-bind-html='questionExplanation'></span>
+    <div id="parent">
 
-                <div id="videoExplain" ng-if="showVideo">
-                  <br>
-                  <div class="video-container">
-                    <button youtube rel="{{videoId}}" class="btn btn-flat btn-labeled btn-primary" id="videoExplainbtn">
-                      <span class="btn-label text-lg icon fa fa-youtube-play"></span><span ng-bind="videoText"></span>
-                    </button>
+      <div fading-text word="'Loading...'" is-visible="loading"></div>
 
-                  </div>
-                </div>
-              </div>
-              <div class="sentence_correction_stimulus" ng-bind-html='questionInformation'>
-              </div>
-            </div>
+      <div id="PanelQuestion" class="row columnsContainer" ng-show="!loading">
 
+        <div id="Panel1" class="col-md-6 leftColumn">
+
+          <div id="question-explain" class=" explain-margin" ng-if="showExplanation">
+
+		          <div class="panel colourable">
+				          <div class="panel-heading">
+						          <span class="panel-title"><i class="panel-title-icon fa fa-flask"></i>Question Explanation</span>
+				          </div>
+				          <div class="panel-body">
+						          <span ng-bind-html='questionExplanation'></span>
+
+						          <div id="videoExplain" ng-if="showVideo">
+								          <br>
+								          <div class="video-container">
+										          <button youtube rel="{{videoId}}" class="btn btn-flat btn-labeled btn-primary" id="videoExplainbtn">
+												          <span class="btn-label text-lg icon fa fa-youtube-play"></span><span ng-bind="videoText"></span>
+										          </button>
+
+								          </div>
+						          </div>
+				          </div>
+		          </div>
+
+          </div>
+
+          <div class="sentence_correction_stimulus" ng-class="{' explain-margin':questionInformation!=''}"
+               ng-if="questionInformation!=''">
+		          <div class="panel colourable">
+				          <div class="panel-heading">
+						          <span class="panel-title"><i class="panel-title-icon fa fa-flask"></i>Question Information</span>
+				          </div>
+				          <div class="panel-body">
+						          <span ng-bind-html='questionInformation'></span>
+
+				          </div>
+		          </div>
           </div>
 
         </div>
 
-      </div>
-      <div class="panel-footer">
+        <div id="Panel2" class="page page-home col-md-6 rightColumn">
+		        <div class="panel colourable">
+				        <div class="panel-heading">
+						        <span class="panel-title"><i class="panel-title-icon fa fa-flask"></i>Answers</span>
+				        </div>
+				        <div class="panel-body">
+						        <div id="answercontent" class="info-box">
+								        <div id="solutionarea">
+										        <span ng-bind="questByQSetTitle"></span>
+										        <div ng-bind-html='stimulus'></div>
+										        <br>
 
+										        <!--answer-->
+										        <div answer-type content="{{lastAnswerLoaded}}"></div>
+								        </div>
+								        <div ng-if="showExplanation" class="practice-tags" question-tags-only xp="xpTag" tags="tags"></div>
+						        </div>
+
+				        </div>
+		        </div>
+
+
+
+
+        </div>
       </div>
 
     </div>
-  </div>
 
 
-  <div id="Panel2" class="page page-home col-md-6">
-    <div id="answercontent" class="info-box">
-      <div id="solutionarea">
-        <span ng-bind="questByQSetTitle"></span>
-        <div ng-bind-html='stimulus'></div>
-        <br>
-
-        <!--answer-->
-        <div answer-type content="{{lastAnswerLoaded}}"></div>
-        <!--<div id="answersPanels" ng-answers></div>-->
-      </div>
-
-    </div>
 
 
-  </div>
 </div>
 
 <div class="push">

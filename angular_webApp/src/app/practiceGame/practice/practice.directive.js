@@ -124,14 +124,6 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
     };
   })
 
-/*.directive('ngAnswers', function() {
-    return {
-      restrict: 'A',
-      templateUrl: 'app/practiceGame/practice/directives.tpl/answers.tpl.html'
-
-    };
-  })*/
-
 .directive('ngCustomTopics', function() {
 
     function setSelect2Settings() {
@@ -189,10 +181,20 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
     };
   })
 
-  .directive('questionTags', function() {
+  .directive('questionTagsOnly', function() {
     return {
       restrict: 'A',
       replace:true,
+      templateUrl: 'app/practiceGame/practice/directives.tpl/questionsTagsOnly.tpl.html',
+      scope: {
+        tags: '=',
+        xp: '='
+      }
+    };
+  })
+  .directive('questionTags', function() {
+    return {
+      restrict: 'A',
       templateUrl: 'app/practiceGame/practice/directives.tpl/questionsTags.tpl.html',
       scope: {
         tags: '=',

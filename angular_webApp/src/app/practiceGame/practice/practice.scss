@@ -1,6 +1,138 @@
+.mix-filter {
+  list-style: none;
+  margin: 0 0 20px 0;
+  padding: 0;
+}
 
+.mix-filter li {
+  color: #555;
+  cursor: pointer;
+  padding: 6px 15px;
+  margin-right: 2px;
+  margin-bottom: 5px;
+  background: #eee;
+  display: inline-block;
+}
+filter li.active {
+  color: #fff;
+  background: #0da3e2;
+}
+
+.practice-header  {
+  .practice-element-sm {
+    width: 6.55%
+  }
+  .practice-element {
+    //border: 1px solid #EDEDED;
+    //border: 1px solid #000;
+    font-size: 13px;
+  }
+  .practice-xl {
+    height: 42px;
+  }
+  .practice-sm {
+    height: 25px;
+    padding-top: 2px;
+  }
+  .practice-align {
+    text-align: center;
+  }
+}
+
+.practice-result {
+  line-height: 45px;
+}
+
+.practice-result .fa {
+  font-size: 20px;
+}
+
+.practice-offset {
+  width: 44%;
+}
+
+.practice-data {
+  font-weight:bold;
+  font-size: 18px;
+  color: #555;
+}
+
+.cloud-text {
+  padding: 2px;
+  height: 14px;
+  width: 70px;
+  border: 1px solid #E2E2E2;
+  border-radius: 10px;
+  font-size: 10px;
+  margin: auto;
+  line-height: 10px;
+  margin-bottom: 2px;
+}
+
+
+.row-fluid .span2 {
+  width:12.529915%;
+  margin-left: 0.564103%!important;
+}
+.row-fluid .span3 {
+  width: 27.8%;
+  margin-left: 0.564103%!important;
+}
 #skipAction {
   cursor: pointer;
+}
+
+
+
+.check{
+    height: 70px;
+    width: 50px;
+    margin: 9px 0px 10px 0px;
+    font-size: 10px;
+    background-color: #fff !important;
+    -webkit-box-shadow: 0 0px 5px #ddd !important;
+    -moz-box-shadow: 0 0px 5px #ddd!important;
+    box-shadow: 0 0px 5px #ddd !important;
+    display: block !important;
+    color: #646464 !important;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    -webkit-transition: all 0.3s ease !important;
+    -moz-transition: all 0.3s ease !important;
+    -ms-transition: all 0.3s ease !important;
+    -o-transition: all 0.3s ease !important;
+    transition: all 0.3s ease !important;
+  }
+.icon-btn {
+  height: 70px;
+  width: 50px;
+  margin: 10px 0px 10px 0px;
+  padding: 16px 0px 0px 0px;
+  font-size: 10px;
+  background-color: #fff !important;
+  -webkit-box-shadow: 0 0px 5px #ddd !important;
+  -moz-box-shadow: 0 0px 5px #ddd!important;
+  box-shadow: 0 0px 5px #ddd !important;
+  display: block !important;
+  color: #646464 !important;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  -webkit-transition: all 0.3s ease !important;
+  -moz-transition: all 0.3s ease !important;
+  -ms-transition: all 0.3s ease !important;
+  -o-transition: all 0.3s ease !important;
+  transition: all 0.3s ease !important;
+}
+
+.row-fluid.icon-btn {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+.row-fluid.check {
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 
 #practice{
@@ -13,7 +145,6 @@
   }
   .columnsContainer {
     position: relative;
-    margin: .5em;
 
   }
 

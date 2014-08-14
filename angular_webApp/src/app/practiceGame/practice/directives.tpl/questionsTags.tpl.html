@@ -1,30 +1,55 @@
-<div class="panel" >
-<div class="panel-heading">
-				<span class="panel-title">Question Data</span>
-		</div>
-		<div class="panel-body">
-				&nbsp;Skills used in this question:
+						<ul class="mix-filter">
+								<li class="filter btn" ng-repeat="tr in tags">
+					   <button ng-if="tr.resource_type == 'youtube'" class="youtube" youtube rel="{{tr.resource}}">
+							   <span class="btn-label icon fa  fa-play-circle-o"></span>{{tr.name}} Refresher {{$index+1}} ({{tr.videoTime}})
+					   </button>
+					<span ng-if="tr.resource_type == 'blog'" >
+					<a ng-href="{{tr.resource}}" target="_blank">
+							<span class="btn-label icon fa  fa-quote-left"></span> {{tr.name}} Refresher {{$index+1}}
+					</a>
+				</span>
+
+								</li>
+
+
+						</ul>
+
+
+
+<!--
+<div class="" >
+		<div class="row">
+				<div class="col-md-3">
+						&nbsp;Skills used in this question:
+				</div>
 				<div ng-repeat="tag in tags" style="text-align: left;">
+						<div ng-repeat="tr in tag.tagResource" >
 
-						<label style="margin-left: 4px" class="label label-info" ng-bind="tag.name"></label>
-						<div ng-repeat="tr in tag.tagResource" style="display:inline;">
-
-								<button ng-if="tr.resourceType == 'youtube'" style="margin-left: 4px" class="btn btn-flat btn-xs btn-labeled btn-default" youtube rel="{{tr.videoId}}">
-										<span><span class="btn-label icon fa  fa-play-circle-o"></span>Refresher {{$index+1}} ({{tr.videoTime}})</span>
+								<button ng-if="tr.resourceType == 'youtube'" style="margin-left: 4px;display: inline;" class="btn btn-flat btn-xs btn-labeled btn-default" youtube rel="{{tr.videoId}}">
+										<span><span class="btn-label icon fa  fa-play-circle-o"></span>{{tag.name}} Refresher {{$index+1}} ({{tr.videoTime}})</span>
 
 								</button>
 								<a ng-if="tr.resourceType == 'blog'" ng-href="{{tr.videoId}}" target="_blank">
-										<button style="margin-left: 4px" class="btn btn-flat btn-xs btn-labeled btn-default">
-												<span><span class="btn-label icon fa  fa-quote-left"></span> Refresher {{$index+1}}</span>
+										<button style="margin-left: 4px;display: inline;" class="btn btn-flat btn-xs btn-labeled btn-default">
+												<span><span class="btn-label icon fa  fa-quote-left"></span> {{tag.name}} Refresher {{$index+1}}</span>
 										</button>
 								</a>
 						</div>
-
-
 				</div>
-				<br>&nbsp;Difficulty:
-				<label style="margin-left: 4px" class="label label-default" ng-bind="xp"></label>
-				<br>
-
 		</div>
 </div>
+-->
+
+
+
+
+
+
+<!--<div class="row" >-->
+  <!--<div class="col-sm-2">-->
+    <!--<p class="">Review the Skills in this Question:</p>-->
+  <!--</div>-->
+ <!---->
+<!--</div>-->
+
+

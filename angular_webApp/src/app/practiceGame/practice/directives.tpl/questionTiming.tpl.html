@@ -1,28 +1,53 @@
-<div class="panel" >
-<div class="widget-profile-counters">
-		<div class="panel-heading">
-				<span class="panel-title">Question Timing</span>
-		</div>
-		<div class="panel-body">
-		<div class="col-xs-2 label label-danger">
-				Your Time:<br>
-				<span ng-bind="data.yourtime">37</span> sec</div>
-		<div class="col-xs-3">You are<br>
-				<span class="label-success">&nbsp;<i class="fa fa-arrow-down"></i> <span ng-bind="data.youAreIn">8</span></span>
-				<br>seconds faster than the average</div><div class="col-xs-2">
-		Average:<br>
-		<span ng-bind="data.average">45</span> sec</div>
+<div class="row-fluid">
+  <span class="check span1">
+				<span ng-class="{ 'bg-danger':false, 'bg-success':true}" class="bg-success stat-cell no-padding text-center text-slg span1">
+						<i ng-if="false" class="fa fa-times"></i>
+						<i ng-if="true" class="fa fa-check"></i>
+				</span>
+  </span>
+  <span class="icon-btn span2 ">
+			<div>	<span ng-bind="data.yourtime"></span><span class="practice-data">37s </span><br>
+					Your Time
+			</div>
+</span>
+		<span class="icon-btn span2">
+				<div>
+    <span class="badge badge-success">
+		    &nbsp;<i class="fa fa-arrow-down"></i> <span ng-bind="data.youAreIn"></span>
+			   <span class="practice-data" style="padding-right: 4px;">8s</span>
+    </span>
+						<br>
+						You are faster than the average</div>
+		</span>
+			<span class="icon-btn span3">
+				<div><span>Grock's Advice:</span>
+						<br>
+						<span>Its ok to get questions wrong, but you'll want to...</span></div>
+</span>
+		<span class="icon-btn span2 " >
+				<div>
+						<span ng-bind="data.average"></span>
+						<span class="practice-data">45s</span>
+						<br>
+						Average
+				</div>
+</span>
+		<span class="icon-btn span2" >
+				<div>
+						<span class="practice-data">16</span><br>
+						Level
+						<!--	<div class="cloud-text">
+									What's the ...
+							</div>-->
+				</div>
+</span>
+		<span class="icon-btn span2" >
+				<div> <span ng-bind="data.percentCorrectly"></span>
+					 <span class="practice-data">
+       87%
+      </span>
+						<br>users answered correctly
+				</div>
+</span>
 
-		<div class="col-xs-2">
-				Answered<br>
-				<span ng-bind="data.answered">6,453</span><br>times</div>
-
-		<div class="col-xs-3">
-				<span ng-bind="data.percentCorrectly">87%</span><br>
-				of users answered correctly
-		</div>
-
- </div>
 </div>
-</div>
-

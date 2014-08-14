@@ -1,5 +1,13 @@
-practiceGame.controller('PracticeController',['$scope','practiceRequests','Utilities','breadcrumbs','VideoService','Alerts','$location','$q','$sce',
-function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$location,$q,$sce) {
+practiceGame.controller('PracticeController',['$scope','practiceRequests','Utilities','breadcrumbs','VideoService','Alerts','$location','$q','$sce', 'Timer',
+function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$location,$q,$sce, Timer) {
+
+  $scope.practiceTimer = Timer.create();
+  $scope.practiceTimer.start();
+
+  $scope.questionTimer = Timer.create();
+  setTimeout(function() {
+    $scope.questionTimer.start();
+  }, 4000);
 
   $scope.activeTracks = Utilities.getActiveTrack();
   $scope.titleQuest = $scope.activeTracks.trackTitle;
@@ -141,15 +149,30 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
 
     },
     tagResourcesInfo: function () {
-      var tags = [];
+      var tagsResources = [],tgR={};
+
 
       angular.forEach($scope.questionItems.tags, function (value) {
-        tags.push({
-          name: value.name,
-          tagResource: Utilities.getYoutubeVideosInfo(value.tag_resources)
+        var tagR = value.tag_resources;
+
+        angular.forEach(tagR,function(val){
+
+          tgR ={
+            name:value.name,
+            resource_type: val.resource_type,
+            resource: val.resource_type=='youtube' ? Utilities.getYoutubeVideosId(val.resource) : val.resource
+          };
+
+          tagsResources.push(tgR);
+
         });
+
+
       });
-      $scope.tags = tags;
+
+
+      $scope.tags = $scope.questionItems.tags;
+      $scope.tagsResources=tagsResources;
 
     },
     showAnswer: function () {
