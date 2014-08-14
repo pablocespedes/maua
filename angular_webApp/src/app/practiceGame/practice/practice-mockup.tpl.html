@@ -1,153 +1,21 @@
-
-
 <div class="row-fluid row reset-layout">
-
 		<section class="">
 				<div class="no-padding">
-								<div class="col-md-5 no-padding">
+								<div class="col-md-8 no-padding">
 										<div class="reset-layout" breadcrumb breadcrumbs="breadcrumbs.get()"></div>
 								</div>
-								<div class="col-md-3 no-padding">
+								<div class="col-md-2 no-padding text-right">
 										Practice Time: <span class="practice-data">{{ practiceTimer.seconds | formatSeconds}}</span>
 								</div>
-								<div class="col-md-3 no-padding">
+								<div class="col-md-2 no-padding text-right" style="padding-right: 9px!important;">
 										This Question: <span class="practice-data">{{ questionTimer.seconds | formatSeconds}}</span>
 								</div>
-					<!--	<div class="col-md-1 bg-success stat-cell no-padding text-center text-slg" >
-								<span ng-class="{ 'bg-danger':false, 'bg-success':true}">
-																<i ng-if="false" class="fa fa-times"></i>
-																<i ng-if="true" class="fa fa-check"></i>
-														</span>
-						</div>-->
 				</div>
 		</section>
-
 </div>
-
-<!--
-<div class="row practice-header reset-layout">
-		<div class="col-md-6 practice-element practice-sm">
-				<div class="reset-layout" breadcrumb breadcrumbs="breadcrumbs.get()"></div>
-		</div>
-		<div class="col-md-2 practice-element practice-sm">
-				Practice Time: <span class="practice-data">{{ practiceTimer.seconds | formatSeconds}}</span>
-		</div>
-		<div class="col-md-2 practice-element practice-sm">
-				This Question: <span class="practice-data">{{ questionTimer.seconds | formatSeconds}}</span>
-		</div>
-		<div class="float-right practice-element practice-xl label-success practice-result">
-														<span ng-class="{ 'label-danger':false, 'label-success':true}">
-																<i ng-if="false" class="fa fa-times"></i>
-																<i ng-if="true" class="fa fa-check"></i>
-														</span>
-		</div>
-</div>
-
--->
-
-
 
 <div ng-if="showExplanation" class="reset-layout" question-timing></div>
-
-<div class="row-fluid">
-<span class="check span1" >
-								<span ng-class="{ 'bg-danger':false, 'bg-success':true}" class="bg-success stat-cell no-padding text-center text-slg span1">
-																<i ng-if="false" class="fa fa-times"></i>
-																<i ng-if="true" class="fa fa-check"></i>
-														</span>
-		</span>
-		<span class="icon-btn span2 yourTime" href="#">
-			<div>	Your Time:<br>
-    <span ng-bind="data.yourtime"></span><span class="practice-data">37 </span>sec</div>
-		</span>
-		<span class="icon-btn span2" href="#">
-				<div>
-				You are
-    <span class="label-success">&nbsp;<i class="fa fa-arrow-down"></i> <span ng-bind="data.youAreIn"></span>
-		  <span class="practice-data" style="padding-right: 4px;">8</span></span>
-    seconds faster than the average</div>
-		</span>
-		<span class="icon-btn span2 yourTime" href="#">
-				<div>
-						Average:<br>
-						<span ng-bind="data.average"></span>
-						<span class="practice-data">45</span>
-						sec</div>
-		</span>
-
-		<span class="icon-btn span2 custom-span" href="#">
-				<div>
-			  <span> Level </span>
-    <span class="practice-data">16</span>
-    <div class="cloud-text">
-		    What's the ...
-    </div>
-				</div>
-		</span>
-		<span class="icon-btn span2" href="#">
-				<div> <span ng-bind="data.percentCorrectly"></span>
-    <span class="practice-data">
-      87%
-    </span>
-						<br>
-						of users answered correctly</div>
-		</span>
-
-</div>
-
-<div class="row-fluid">
-		<span class="icon-btn span12" href="#">
-				<div><span>Grock's Advice:</span>
-						<br>
-						<span>Its ok to get questions wrong, but you'll want to...</span></div>
-		</span>
-</div>
-
-
-
-<!--
-<div class="" ng-repeat="tag in tags" >
-		<div ng-repeat="tr in tag.tagResource" >
-
-				<button ng-if="tr.resourceType == 'youtube'" style="margin-left: 4px" class="btn btn-flat btn-xs btn-labeled btn-default" youtube rel="{{tr.videoId}}">
-						<span><span class="btn-label icon fa  fa-play-circle-o"></span>{{tag.name}} Refresher {{$index+1}} ({{tr.videoTime}})</span>
-
-				</button>
-				<a ng-if="tr.resourceType == 'blog'" ng-href="{{tr.videoId}}" target="_blank">
-						<button style="margin-left: 4px" class="btn btn-flat btn-xs btn-labeled btn-default">
-								<span><span class="btn-label icon fa  fa-quote-left"></span> {{tag.name}} Refresher {{$index+1}}</span>
-						</button>
-				</a>
-		</div>
-</div>
--->
-
-<!--
-<div class="panel">
-  <div class="row practice-header reset-layout">
-    <div class="col-md-6 practice-element practice-sm">
-      <div class="reset-layout" breadcrumb breadcrumbs="breadcrumbs.get()"></div>
-    </div>
-    <div class="col-md-3 practice-element practice-sm">
-      Practice Time: <span class="practice-data">{{ practiceTimer.seconds | formatSeconds}}</span>
-    </div>
-    <div class="col-md-3 practice-element practice-sm">
-      This Question: <span class="practice-data">{{ questionTimer.seconds | formatSeconds}}</span>
-    </div>
-  </div>
-
-
--->
-
-
-
-
-
-  <!--<div ng-if="showExplanation" class="reset-layout" question-timing></div>-->
-  <!--<div ng-if="showExplanation" class="practice-tags" question-tags xp="xpTag" tags="tags"></div>-->
-<!--
-</div>
--->
+<div ng-if="showExplanation"  question-tags xp="xpTag" tags="tagsResources"></div>
 
 
 <div id="practice">
@@ -199,18 +67,27 @@
         </div>
 
         <div id="Panel2" class="page page-home col-md-6 rightColumn">
-          <div id="answercontent" class="info-box">
-            <div id="solutionarea">
-              <span ng-bind="questByQSetTitle"></span>
-              <div ng-bind-html='stimulus'></div>
-              <br>
+		        <div class="panel colourable">
+				        <div class="panel-heading">
+						        <span class="panel-title"><i class="panel-title-icon fa fa-flask"></i>Answers</span>
+				        </div>
+				        <div class="panel-body">
+						        <div id="answercontent" class="info-box">
+								        <div id="solutionarea">
+										        <span ng-bind="questByQSetTitle"></span>
+										        <div ng-bind-html='stimulus'></div>
+										        <br>
 
-              <!--answer-->
-              <div answer-type content="{{lastAnswerLoaded}}"></div>
-              <!--<div id="answersPanels" ng-answers></div>-->
-            </div>
-            <div ng-if="showExplanation" class="practice-tags" question-tags-only xp="xpTag" tags="tags"></div>
-          </div>
+										        <!--answer-->
+										        <div answer-type content="{{lastAnswerLoaded}}"></div>
+								        </div>
+								        <div ng-if="showExplanation" class="practice-tags" question-tags-only xp="xpTag" tags="tags"></div>
+						        </div>
+
+				        </div>
+		        </div>
+
+
 
 
         </div>

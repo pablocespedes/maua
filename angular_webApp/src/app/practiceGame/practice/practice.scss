@@ -1,62 +1,88 @@
-.row-fluid .span2 {
-  width: 10.529915%!important;
-  margin-left: 0.564103%!important;
+.mix-filter {
+  list-style: none;
+  margin: 0 0 20px 0;
+  padding: 0;
 }
 
+.mix-filter li {
+  color: #555;
+  cursor: pointer;
+  padding: 6px 15px;
+  margin-right: 2px;
+  margin-bottom: 5px;
+  background: #eee;
+  display: inline-block;
+}
+filter li.active {
+  color: #fff;
+  background: #0da3e2;
+}
+
+.practice-header  {
+  .practice-element-sm {
+    width: 6.55%
+  }
+  .practice-element {
+    //border: 1px solid #EDEDED;
+    //border: 1px solid #000;
+    font-size: 13px;
+  }
+  .practice-xl {
+    height: 42px;
+  }
+  .practice-sm {
+    height: 25px;
+    padding-top: 2px;
+  }
+  .practice-align {
+    text-align: center;
+  }
+}
+
+.practice-result {
+  line-height: 45px;
+}
+
+.practice-result .fa {
+  font-size: 20px;
+}
+
+.practice-offset {
+  width: 44%;
+}
+
+.practice-data {
+  font-weight:bold;
+  font-size: 18px;
+  color: #555;
+}
+
+.cloud-text {
+  padding: 2px;
+  height: 14px;
+  width: 70px;
+  border: 1px solid #E2E2E2;
+  border-radius: 10px;
+  font-size: 10px;
+  margin: auto;
+  line-height: 10px;
+  margin-bottom: 2px;
+}
+
+
+.row-fluid .span2 {
+  width:12.529915%;
+  margin-left: 0.564103%!important;
+}
+.row-fluid .span3 {
+  width: 27.8%;
+  margin-left: 0.564103%!important;
+}
 #skipAction {
   cursor: pointer;
 }
 
-/*
 
-.span1 {
-  width: 2.982906%!important;
-  margin-left: 1.564103%!important;
-}
-.row-fluid .yourTime {
-  width: 5.529915%!important;
-  margin-left: 0.564103%!important;
-}
-.row-fluid .span6 {
-  width: 53.717949%!important;
-  margin-left: 0.564103%!important;
-}
-.row-fluid .custom-span {
-  width: 6.529915%!important;
-  margin-left: 0.564103%!important;
-}
-
-@media (max-width: 979px) and (min-width: 768px) {
-  .row-fluid .span6 {
-    width: 48.61878453038674%;
-    margin-left: 0.564103%!important;
-  }
-  .row-fluid .span2 {
-    width: 10.529915%!important;
-    margin-left: 0.564103%!important;
-  }
-
-  .span1 {
-    width: 2.982906%!important;
-    margin-left: 1.564103%!important;
-  }
-  .row-fluid .yourTime {
-    width: 5.529915%!important;
-    margin-left: 0.564103%!important;
-  }
-  .row-fluid .custom-span {
-    width: 6.529915%!important;
-    margin-left: 0.564103%!important;
-  }
-
-}
-*/
-
-
-
-ul.summary-list > li {
-  border-right: 1px solid #eaeaea;
-}
 
 .check{
     height: 70px;
@@ -79,7 +105,6 @@ ul.summary-list > li {
     transition: all 0.3s ease !important;
   }
 .icon-btn {
-  border-radius: 20px;
   height: 70px;
   width: 50px;
   margin: 10px 0px 10px 0px;

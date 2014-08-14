@@ -1,51 +1,53 @@
-
-
-
-<div class="widget-profile-counters row practice-header">
-
-  <div class="col-xs-1 practice-element practice-xl label practice-result" ng-class="{ 'label-danger':false, 'label-success':true}">
-    <i ng-if="false" class="fa fa-times"></i>
-    <i ng-if="true" class="fa fa-check"></i>
-  </div>
-
-  <div class="col-xs-1 practice-element-sm label label-danger practice-element practice-xl">
-    Your Time:<br>
-    <span ng-bind="data.yourtime"></span><span class="practice-data">37 </span>sec</div>
-
-  <div class="col-xs-2 practice-element practice-xl">
-		  You are
-    <span class="label-success">&nbsp;<i class="fa fa-arrow-down"></i> <span ng-bind="data.youAreIn"></span> <span class="practice-data" style="padding-right: 4px;">8</span></span>
-    seconds faster than the average</div><div class="col-xs-1 practice-element-sm practice-element practice-xl">
-    Average:<br>
-    <span class="practice-data" ng-bind="data.average"></span>
-    <span class="practice-data">45 </span>
-    sec
-  </div>
-
-  <div class="col-xs-1 practice-element-sm practice-element practice-xl practice-align">
-    <span>
-      Level
+<div class="row-fluid">
+  <span class="check span1">
+				<span ng-class="{ 'bg-danger':false, 'bg-success':true}" class="bg-success stat-cell no-padding text-center text-slg span1">
+						<i ng-if="false" class="fa fa-times"></i>
+						<i ng-if="true" class="fa fa-check"></i>
+				</span>
+  </span>
+  <span class="icon-btn span2 ">
+			<div>	<span ng-bind="data.yourtime"></span><span class="practice-data">37s </span><br>
+					Your Time
+			</div>
+</span>
+		<span class="icon-btn span2">
+				<div>
+    <span class="badge badge-success">
+		    &nbsp;<i class="fa fa-arrow-down"></i> <span ng-bind="data.youAreIn"></span>
+			   <span class="practice-data" style="padding-right: 4px;">8s</span>
     </span>
-    <br>
-    <span class="practice-data">16</span>
-    <div class="cloud-text">
-      What's the ...
-    </div>
-  </div>
-  
-  <div class="col-xs-2 practice-element practice-xl practice-align">
-    <span ng-bind="data.percentCorrectly"></span>
-    <span class="practice-data">
-      87%
-    </span>
-    <br>
-    of users answered correctly
-  </div>
-
-  <div class="col-xs-4 practice-element practice-xl practice-offset">
-    <span>Grock's Advice:</span>
-    <br>
-    <span>Its ok to get questions wrong, but you'll want to...</span>
-  </div>
+						<br>
+						You are faster than the average</div>
+		</span>
+			<span class="icon-btn span3">
+				<div><span>Grock's Advice:</span>
+						<br>
+						<span>Its ok to get questions wrong, but you'll want to...</span></div>
+</span>
+		<span class="icon-btn span2 " >
+				<div>
+						<span ng-bind="data.average"></span>
+						<span class="practice-data">45s</span>
+						<br>
+						Average
+				</div>
+</span>
+		<span class="icon-btn span2" >
+				<div>
+						<span class="practice-data">16</span><br>
+						Level
+						<!--	<div class="cloud-text">
+									What's the ...
+							</div>-->
+				</div>
+</span>
+		<span class="icon-btn span2" >
+				<div> <span ng-bind="data.percentCorrectly"></span>
+					 <span class="practice-data">
+       87%
+      </span>
+						<br>users answered correctly
+				</div>
+</span>
 
 </div>

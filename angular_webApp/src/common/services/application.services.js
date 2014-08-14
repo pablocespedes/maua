@@ -10,22 +10,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
         return location.host == '127.0.0.1:9000' ? 'https://staging.grockit.com' : location.host == 'ww2.grockit.com' ? 'https://grockit.com' : location.origin
       }
     },
-    getYoutubeVideosId: function(url) {
-      var deferred = $q.defer();
 
-      var id = '';
-      url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-      if (url[2] !== undefined) {
-        id = url[2].split(/[^0-9a-z_]/i);
-        id = id[0];
-      }
-      else {
-        id = url;
-      }
-
-      deferred.resolve(id);
-      return deferred.promise;
-    },
     getResourceObject: function(resourceObject) {
       var nDeferred = $q.defer();
       var videoObject = {},videoId='';
@@ -129,18 +114,18 @@ angular.module('grockitApp.services', ['webStorageModule'])
      $route.current.pathParams[key] = null;
      $route.current.pathParams[key] = param;
    },
-   getYoutubeVideosInfo: function (resources) {
-     var videoDataList = [];
+   getYoutubeVideosId: function(url) {
 
-     angular.forEach(resources, function (value) {
-
-       internalUtilities.getResourceObject(value).then(function (rObject) {
-         videoDataList.push(rObject);
-       });
-
-     });
-
-     return videoDataList;
+     var id = '';
+     url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+     if (url[2] !== undefined) {
+       id = url[2].split(/[^0-9a-z_]/i);
+       id = id[0];
+     }
+     else {
+       id = url;
+     }
+     return id;
 
    }
 
