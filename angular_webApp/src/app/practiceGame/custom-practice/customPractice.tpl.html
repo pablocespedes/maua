@@ -5,7 +5,7 @@
 								<div class="reset-layout" breadcrumb breadcrumbs="breadcrumbs.get()"></div>
 						</div>
 						<div class="col-md-4 no-padding">
-								<div question-share-list quest-count="questCount"></div>
+								<div question-share-list quest-count="questCount" ></div>
 						</div>
 						<div class="col-md-2 no-padding text-right">
 								Practice Time: <span class="practice-data">{{ practiceTimer.seconds | formatSeconds}}</span>
@@ -17,7 +17,8 @@
 		</section>
 </div>
 
-<div ng-if="showExplanation" class="reset-layout" question-timing data="timingData" tags-r="tagsResources"></div>
+<div ng-if="showExplanation" class="reset-layout" question-timing data="timingData" tags-r="tagsResources"
+     your-time="questionTimer.seconds | formatSeconds" answer-status="answerStatus"></div>
 
 
 <div id="practice">

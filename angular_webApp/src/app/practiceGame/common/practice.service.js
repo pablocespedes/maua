@@ -539,7 +539,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
         angular.element("#answercontent *").prop('disabled', true);
 
-        return answerStatus ? 'Your answer was correct' : 'Your answer was incorrect';
+        return answerStatus;
       }
       else {
 
@@ -705,8 +705,9 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
         practiceRequests.roundSessions().updateAnswer(roundSessionAnswer.id, selectedAnswer);
 
 
-        resultObject.messageConfirmation = resultObject.answerStatus ? 'Your answer was correct' : 'Your answer was incorrect';
         angular.element("#answercontent *").prop('disabled', true);
+        return resultObject.answerStatus ;
+
       }
       else {
         Alerts.showAlert(Alerts.setErrorApiMsg(error), 'warning');

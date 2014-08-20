@@ -38,9 +38,7 @@ practiceGame.controller('CustomPracticeController',['$scope','practiceSrv','Util
           customPractice.setTimingInformation(questionId);
         });
       },
-      confirmAnswer: function () {
-        $scope.nextActionTitle = 'Next Question';
-        $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer);
+      displayExplanationInfo : function(){
         if (angular.isDefined($scope.answerStatus)) {
           practiceSrv.displayGeneralConfirmInfo($scope.questionResult).then(function (generalInfo) {
             $scope.showExplanation = generalInfo.showExplanation;
@@ -53,6 +51,11 @@ practiceGame.controller('CustomPracticeController',['$scope','practiceSrv','Util
 
           });
         }
+      },
+      confirmAnswer: function () {
+        $scope.nextActionTitle = 'Next Question';
+        $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer);
+        customPractice.displayExplanationInfo();
       },
       resetLayout: function () {
         $scope.titleQuest = '';
@@ -159,9 +162,8 @@ practiceGame.controller('CustomPracticeController',['$scope','practiceSrv','Util
         options.questionResult = $scope.questionResult;
         options.roundSessionAnswer = $scope.roundSessionAnswer;
 
-        var result = practiceSrv.doNotKnowAnswer(options);
-        $scope.answerStatus=result.messageConfirmation;
-        $scope.messageConfirmation=result.messageConfirmation;
+        $scope.answerStatus = practiceSrv.numericEntryConfirmChoice(options);
+        customPractice.displayExplanationInfo();
 
       },
       nextQuestion: function () {
@@ -185,7 +187,7 @@ practiceGame.controller('CustomPracticeController',['$scope','practiceSrv','Util
       setTimingInformation: function(questionId){
         practiceSrv.getTimingInformation($scope.activeTracks.tracks,$scope.activeGroupId,questionId).then(function(result){
           $scope.timingData= result[0];
-          console.log($scope.timingData)
+
         })
       },
       initPracticeTimer: function(){

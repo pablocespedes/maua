@@ -38,7 +38,7 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         });
       },
       confirmAnswer: function(){
-        // $scope.nextActionTitle = 'Next Question';
+
         $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult,$scope.roundSessionAnswer);
         if(angular.isDefined($scope.answerStatus)){
           practiceSrv.displayGeneralConfirmInfo($scope.questionResult).then(function(generalInfo){
@@ -96,7 +96,9 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         $scope.messageConfirmation=result.messageConfirmation;
 
       },
-
+      feedbackInfo: function(questionId){
+        $scope.subjectMail= practiceSrv.setMailToInformation(questionId,$scope.titleQuest);
+      },
       initTimers: function(){
         $scope.practiceTimer = Timer.create();
         $scope.practiceTimer.start();

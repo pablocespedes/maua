@@ -1,16 +1,9 @@
 <div class="row state-overview">
-		<div class="col-sm-1 timing-padding">
-				<section class="panel">
-						<div ng-class="{ 'bg-danger':false, 'bg-success':true}" class="timing-check  bg-success text-center text-slg no-padding-vr">
-						<i ng-if="false" class="fa fa-times"></i>
-						<i ng-if="true" class="fa fa-check"></i>
-						</div>
-				</section>
-		</div>
+
 		<div class="col-lg-2 col-sm-3 timing-padding">
 				<section class="panel">
 						<div class="timing-box">
-								<span ng-bind="data.yourtime"></span><span class="practice-data">37s </span><br>
+								<span class="practice-data"><span ng-bind="yourTime"></span>s </span><br>
 								Your time to answer
 						</div>
 				</section>
@@ -37,7 +30,7 @@
 						</div>
 				</section>
 		</div>
-		<div class="col-lg-1 col-sm-2 timing-padding">
+		<div class="col-lg-2 col-sm-2 timing-padding">
 				<section class="panel">
 						<div class="timing-box">
 								<span class="practice-data">16</span><br>
@@ -56,7 +49,15 @@
 						</div>
 				</section>
 		</div>
-		<div class="col-lg-5 col-sm-7 timing-padding">
+		<div class="col-lg-2 col-sm-3 timing-padding">
+				<section class="panel">
+						<div ng-class="{ 'bg-danger':!answerStatus, 'bg-success':answerStatus}" class="timing-check text-center text-slg no-padding-vr">
+								<i ng-if="false" class="fa fa-times"></i>
+								<i ng-if="true" class="fa fa-check"></i>
+						</div>
+				</section>
+		</div>
+		<div class="col-lg-12 col-md-7 col-sm-7 timing-padding">
 				<section class="panel">
 
 						<div class="timing-skills ">

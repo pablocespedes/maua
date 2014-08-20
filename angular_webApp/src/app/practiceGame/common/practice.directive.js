@@ -176,6 +176,8 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
       templateUrl: 'app/practiceGame/common/directives.tpl/questionTiming.tpl.html',
       scope: {
         data: '=',
+        yourTime: '=',
+        answerStatus:'=',
         tagsR: '='
       }
     };
