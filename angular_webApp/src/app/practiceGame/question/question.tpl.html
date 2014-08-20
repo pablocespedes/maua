@@ -8,10 +8,10 @@
 								<div question-share-list quest-count="questCount" ></div>
 						</div>
 						<div class="col-md-2 no-padding text-right">
-								Practice Time: <span class="practice-data">{{ practiceTimer.seconds | formatSeconds}}</span>
+								Practice Time: <span class="practice-data" ng-bind="practiceTimer.seconds | formatSeconds"></span>
 						</div>
 						<div class="col-md-2 no-padding text-right" style="padding-right: 9px!important;">
-								This Question: <span class="practice-data">{{ questionTimer.seconds | formatSeconds}}</span>
+								This Question: <span class="practice-data" ng-bind="questionTimer.seconds | formatSeconds"></span>
 						</div>
 				</div>
 		</section>

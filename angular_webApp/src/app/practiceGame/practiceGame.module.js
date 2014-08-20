@@ -9,10 +9,6 @@ var practiceGame =  angular.module("grockitApp.practiceGame",['ng-breadcrumbs'])
     practiceGame.service = $provide.service;
 
     var filePath = {
-      practice: {
-        practiceCtrl: 'app/practiceGame/practice/practice.ctrl.js',
-        practiceDrctv: 'app/practiceGame/practice/practice.directive.js'
-      },
       common:{
         practiceDct: 'app/practiceGame/common/practice.directive.js',
         practiceSrv: 'app/practiceGame/common/practice.service.js',

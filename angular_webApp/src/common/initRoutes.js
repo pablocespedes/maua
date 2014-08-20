@@ -14,7 +14,6 @@ var paths={
     authServices:'common/services/auth.services.js',
     accountCtrl:'app/account/application.ctrl.js',
     app:'app/app.js'
-    // dev: 'dev/dev.ctrl.js'
 };
 
 $script([
