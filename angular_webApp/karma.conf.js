@@ -22,6 +22,7 @@ module.exports = function(config) {
       'src/bower_components/angular-route/angular-route.js',
       'src/bower_components/lodash/dist/lodash.min.js',
       'src/bower_components/restangular/dist/restangular.min.js',
+
       'src/common/restAngular/*.js',
       'src/common/directives/*.js',
       'src/common/filters/*.js',

@@ -1,0 +1,245 @@
+[
+  {
+    "question_id": "259cb08a-1076-b17e-de2b-56a73b398315",
+    "avg_time_to_answer": 73,
+    "avg_time_to_answer_correctly": 68,
+    "avg_time_to_answer_incorrectly": 114,
+    "total_answered": 971,
+    "total_answered_correctly": 386,
+    "total_answered_incorrectly": 585,
+    "answers": [
+      {
+        "answer_id": "b669be05-08fd-a627-576e-9acb3ac0a144",
+        "answered": 173,
+        "percent_answered": 18
+      },
+      {
+        "answer_id": "73ba1ec8-48f2-b0ec-c687-a3bbd1fe6a63",
+        "answered": 210,
+        "percent_answered": 22
+      },
+      {
+        "answer_id": "6668199c-70cb-79f3-6fa8-c127582a138b",
+        "answered": 386,
+        "percent_answered": 41
+      },
+      {
+        "answer_id": "414c5292-2b08-d78e-81ad-29c304998545",
+        "answered": 89,
+        "percent_answered": 9
+      },
+      {
+        "answer_id": "3a109f8d-88e4-1a64-f323-e57818a154db",
+        "answered": 113,
+        "percent_answered": 12
+      }
+    ],
+    "timings": [
+      {
+        "seconds_passed": 0,
+        "total_answered": 25,
+        "total_answered_correctly": 9
+      },
+      {
+        "seconds_passed": 5,
+        "total_answered": 87,
+        "total_answered_correctly": 54
+      },
+      {
+        "seconds_passed": 10,
+        "total_answered": 119,
+        "total_answered_correctly": 76
+      },
+      {
+        "seconds_passed": 15,
+        "total_answered": 143,
+        "total_answered_correctly": 91
+      },
+      {
+        "seconds_passed": 20,
+        "total_answered": 174,
+        "total_answered_correctly": 104
+      },
+      {
+        "seconds_passed": 25,
+        "total_answered": 219,
+        "total_answered_correctly": 117
+      },
+      {
+        "seconds_passed": 30,
+        "total_answered": 250,
+        "total_answered_correctly": 127
+      },
+      {
+        "seconds_passed": 35,
+        "total_answered": 297,
+        "total_answered_correctly": 141
+      },
+      {
+        "seconds_passed": 40,
+        "total_answered": 342,
+        "total_answered_correctly": 161
+      },
+      {
+        "seconds_passed": 45,
+        "total_answered": 377,
+        "total_answered_correctly": 168
+      },
+      {
+        "seconds_passed": 50,
+        "total_answered": 417,
+        "total_answered_correctly": 180
+      },
+      {
+        "seconds_passed": 55,
+        "total_answered": 457,
+        "total_answered_correctly": 193
+      },
+      {
+        "seconds_passed": 60,
+        "total_answered": 494,
+        "total_answered_correctly": 206
+      },
+      {
+        "seconds_passed": 65,
+        "total_answered": 535,
+        "total_answered_correctly": 223
+      },
+      {
+        "seconds_passed": 70,
+        "total_answered": 578,
+        "total_answered_correctly": 239
+      },
+      {
+        "seconds_passed": 75,
+        "total_answered": 612,
+        "total_answered_correctly": 253
+      },
+      {
+        "seconds_passed": 80,
+        "total_answered": 647,
+        "total_answered_correctly": 267
+      },
+      {
+        "seconds_passed": 85,
+        "total_answered": 675,
+        "total_answered_correctly": 281
+      },
+      {
+        "seconds_passed": 90,
+        "total_answered": 698,
+        "total_answered_correctly": 288
+      },
+      {
+        "seconds_passed": 95,
+        "total_answered": 725,
+        "total_answered_correctly": 294
+      },
+      {
+        "seconds_passed": 100,
+        "total_answered": 750,
+        "total_answered_correctly": 301
+      },
+      {
+        "seconds_passed": 105,
+        "total_answered": 770,
+        "total_answered_correctly": 310
+      },
+      {
+        "seconds_passed": 110,
+        "total_answered": 785,
+        "total_answered_correctly": 313
+      },
+      {
+        "seconds_passed": 115,
+        "total_answered": 805,
+        "total_answered_correctly": 322
+      },
+      {
+        "seconds_passed": 120,
+        "total_answered": 818,
+        "total_answered_correctly": 326
+      },
+      {
+        "seconds_passed": 125,
+        "total_answered": 824,
+        "total_answered_correctly": 330
+      },
+      {
+        "seconds_passed": 130,
+        "total_answered": 836,
+        "total_answered_correctly": 333
+      },
+      {
+        "seconds_passed": 135,
+        "total_answered": 847,
+        "total_answered_correctly": 335
+      },
+      {
+        "seconds_passed": 140,
+        "total_answered": 857,
+        "total_answered_correctly": 339
+      },
+      {
+        "seconds_passed": 145,
+        "total_answered": 862,
+        "total_answered_correctly": 341
+      },
+      {
+        "seconds_passed": 150,
+        "total_answered": 865,
+        "total_answered_correctly": 342
+      },
+      {
+        "seconds_passed": 155,
+        "total_answered": 875,
+        "total_answered_correctly": 346
+      },
+      {
+        "seconds_passed": 160,
+        "total_answered": 887,
+        "total_answered_correctly": 348
+      },
+      {
+        "seconds_passed": 165,
+        "total_answered": 895,
+        "total_answered_correctly": 352
+      },
+      {
+        "seconds_passed": 170,
+        "total_answered": 899,
+        "total_answered_correctly": 355
+      },
+      {
+        "seconds_passed": 175,
+        "total_answered": 903,
+        "total_answered_correctly": 356
+      },
+      {
+        "seconds_passed": 180,
+        "total_answered": 914,
+        "total_answered_correctly": 361
+      },
+      {
+        "seconds_passed": 185,
+        "total_answered": 916,
+        "total_answered_correctly": 362
+      },
+      {
+        "seconds_passed": 190,
+        "total_answered": 920,
+        "total_answered_correctly": 364
+      },
+      {
+        "seconds_passed": 195,
+        "total_answered": 922,
+        "total_answered_correctly": 365
+      },
+      {
+        "seconds_passed": 200,
+        "total_answered": 924,
+        "total_answered_correctly": 366
+      }
+    ]
+  }
+]

@@ -1,0 +1,100 @@
+[
+  {
+    "question_id": "9ac2b1a4-5a52-38e0-2a09-a79ceb46da0a",
+    "avg_time_to_answer": 39,
+    "avg_time_to_answer_correctly": 34,
+    "avg_time_to_answer_incorrectly": 21,
+    "total_answered": 23,
+    "total_answered_correctly": 16,
+    "total_answered_incorrectly": 7,
+    "answers": [
+      {
+        "answer_id": "d5640854-c8b4-e789-b588-a213f6080566",
+        "answered": 4,
+        "percent_answered": 17
+      },
+      {
+        "answer_id": "b864543c-926d-500b-aa3b-ebb71873f7f4",
+        "answered": 17,
+        "percent_answered": 73
+      },
+      {
+        "answer_id": "62f5e946-4662-8412-a71f-43b8c21e4b41",
+        "answered": 2,
+        "percent_answered": 8
+      },
+      {
+        "answer_id": "b95632f5-ffcb-47a8-0072-24281570693e",
+        "answered": 0,
+        "percent_answered": 0
+      },
+      {
+        "answer_id": "3508041c-ac42-5e42-8204-dcaa08612410",
+        "answered": 0,
+        "percent_answered": 0
+      },
+      {
+        "answer_id": "79fcb96a-7f93-9590-d42f-5c3b9824a7dd",
+        "answered": 0,
+        "percent_answered": 0
+      }
+    ],
+    "timings": [
+      {
+        "seconds_passed": 15,
+        "total_answered": 1,
+        "total_answered_correctly": 1
+      },
+      {
+        "seconds_passed": 20,
+        "total_answered": 5,
+        "total_answered_correctly": 5
+      },
+      {
+        "seconds_passed": 30,
+        "total_answered": 11,
+        "total_answered_correctly": 10
+      },
+      {
+        "seconds_passed": 35,
+        "total_answered": 13,
+        "total_answered_correctly": 12
+      },
+      {
+        "seconds_passed": 40,
+        "total_answered": 14,
+        "total_answered_correctly": 12
+      },
+      {
+        "seconds_passed": 45,
+        "total_answered": 16,
+        "total_answered_correctly": 12
+      },
+      {
+        "seconds_passed": 50,
+        "total_answered": 19,
+        "total_answered_correctly": 14
+      },
+      {
+        "seconds_passed": 55,
+        "total_answered": 20,
+        "total_answered_correctly": 15
+      },
+      {
+        "seconds_passed": 65,
+        "total_answered": 21,
+        "total_answered_correctly": 15
+      },
+      {
+        "seconds_passed": 70,
+        "total_answered": 22,
+        "total_answered_correctly": 15
+      },
+      {
+        "seconds_passed": 80,
+        "total_answered": 23,
+        "total_answered_correctly": 16
+      }
+    ]
+  }
+]
