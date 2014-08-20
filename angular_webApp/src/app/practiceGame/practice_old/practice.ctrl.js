@@ -50,6 +50,17 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
         Utilities.dialogService(options);
 
     },
+    resetLayout: function () {
+      $scope.titleQuest = '';
+      $scope.titleQuest = $scope.activeTracks.trackTitle + ' Explanation';
+      this.setLayoutBasedOnQuestionInfo(true);
+      angular.element('#skipAction').addClass('hide');
+      angular.element('#nextAction').removeClass('btn-primary');
+      angular.element('.list-group *').addClass('no-hover');
+      $scope.nextActionTitle = 'Next Question';
+
+
+    },
     setLayoutBasedOnQuestionInfo: function (setLayout) {
       var panel1 = angular.element('#Panel1'),
         panel2 = angular.element('#Panel2');
@@ -63,184 +74,12 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
         panel2.addClass('col-md-offset-3');
       }
     },
-    loadQuestion: function (questionToRequest) {
+    removeBadImage: function () {
+      /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
+      angular.element('img').error(function () {
 
-      var setLayoutType = false;
-
-
-      /*Get question and Create Round Session by Question*/
-      var getQuestion = practiceRequests.questions().getQuestionById(questionToRequest),
-        questionPresentation = practiceRequests.roundSessions().createQuestionPresentation($scope.gameResponseId, questionToRequest);
-
-      $q.all([getQuestion, questionPresentation]).then(function (result) {
-
-        var questionResult = result[0].data.question;
-        $scope.answerObject = result[1].data;
-        $scope.roundSessionAnswer = $scope.answerObject.round_session;
-
-        Practice.setCurrentQuestionId(questionResult.id);
-        Practice.setMailToInformation(questionResult.id);
-
-        angular.element('.choice.active').removeClass('active');
-
-        if ($scope.lastAnswerLoaded == '' || $scope.lastAnswerLoaded != questionResult.kind) {
-        //  $scope.currentA = Utilities.findInArray(questionResult.kind, $scope.directives, 'type').id;
-          $scope.lastAnswerLoaded = questionResult.kind;
-        }
-
-        $scope.items = [];
-        $scope.stimulus = "";
-        $scope.template = $scope.actualView;
-        $scope.questionItems = questionResult;
-
-        $scope.questionInformation = $sce.trustAsHtml(questionResult.question_set.info);
-
-        /*Find if there is a question info defined or retrieve it by the API*/
-        setLayoutType = angular.isDefined($scope.questionInformation) && $scope.questionInformation != null && $scope.questionInformation != '' ? true : false;
-
-        /*Set the layout based on the question info*/
-        Practice.setLayoutBasedOnQuestionInfo(setLayoutType);
-        $scope.stimulus = $sce.trustAsHtml($scope.questionItems.stimulus);
-
-        var options = $scope.optionList.toUpperCase().split(""),
-          answers = $scope.questionItems.answers;
-        angular.forEach(answers, function (value, index) {
-
-          value["option"] = options[index];
-          $scope.items.push(value);
-        });
-        $scope.position++;
-        Practice.removeBadImage();
-
-        $scope.loading = false;
-      }).catch(function error(error) {
-
-        Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+        angular.element('img').attr('src', '');
       });
-    },
-    resetLayout: function () {
-      $scope.titleQuest = '';
-      $scope.titleQuest = $scope.activeTracks.trackTitle + ' Explanation';
-      this.setLayoutBasedOnQuestionInfo(true);
-      angular.element('#skipAction').addClass('hide');
-      angular.element('#nextAction').removeClass('btn-primary');
-      angular.element('.list-group *').addClass('no-hover');
-      $scope.nextActionTitle = 'Next Question';
-
-
-    },
-    nextQuestion: function () {
-      $scope.isUniqueQuestionLoad = false;
-      this.loadQuestionsSet();
-
-      //Enable/disable answer section
-      $scope.numerator = null;
-      $scope.denominator = null;
-      angular.element('#answercontent *').removeClass('btn-primary btn-danger btn-success').removeAttr('disabled');
-      $scope.showVideo = false;
-      $scope.showExplanation = false;
-      $scope.answerStatus = null;
-      $scope.nextActionTitle = 'Confirm Choice';
-      $scope.messageConfirmation = '';
-      angular.element('#skipAction').removeClass('hide');
-      angular.element('#answersPanels').removeClass().addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
-        angular.element(this).removeClass();
-      });
-
-    },
-    tagResourcesInfo: function () {
-      var tagsResources = [],tgR={};
-
-
-      angular.forEach($scope.questionItems.tags, function (value) {
-        var tagR = value.tag_resources;
-
-        angular.forEach(tagR,function(val){
-
-          tgR ={
-            name:value.name,
-            resource_type: val.resource_type,
-            resource: val.resource_type=='youtube' ? Utilities.getYoutubeVideosId(val.resource) : val.resource
-          };
-
-          tagsResources.push(tgR);
-
-        });
-
-
-      });
-
-
-      $scope.tags = $scope.questionItems.tags;
-      $scope.tagsResources=tagsResources;
-
-    },
-    showAnswer: function () {
-      this.resetLayout();
-
-      /*Question Explanation*/
-      $scope.questionExplanation = $scope.questionItems.explanation;
-
-      if ($scope.questionExplanation != null)
-        $scope.showExplanation = true;
-
-
-      /*video validation*/
-      if ($scope.questionItems.youtube_video_id !== null) {
-        $scope.showVideo = true;
-        $scope.videoId = $scope.questionItems.youtube_video_id;
-        VideoService.setYouTubeTitle($scope.videoId).then(function (videoTime) {
-          $scope.videoText = 'Video Explanation (' + videoTime + ')';
-        });
-      }
-
-      /*Get answers from the previous request and Explain*/
-      var answers = $scope.questionItems.answers;
-
-      /*Evaluate tag resources info, get video Ids and video time*/
-      Practice.tagResourcesInfo();
-
-      $scope.xpTag = $scope.questionItems.experience_points;
-
-
-      /*   Work with the styles to shown result
-       define is some answer is bad.*/
-      angular.element('.choice button').removeClass('btn-primary');
-
-      angular.forEach(answers, function (value, key) {
-        var selectIdButton = '#' + value.id;
-        if (value.correct) {
-          angular.element(selectIdButton).addClass('btn-success');
-        }
-      });
-
-      angular.element("#answercontent *").prop('disabled', true);
-
-    },
-    displayGeneralConfirmInfo: function () {
-      /* Question Explanation*/
-      $scope.questionExplanation = $scope.questionItems.explanation;
-
-      if ($scope.questionExplanation != null)
-        $scope.showExplanation = true;
-
-
-      /* video validation*/
-      if ($scope.questionItems.youtube_video_id !== null) {
-        $scope.showVideo = true;
-        $scope.videoId = $scope.questionItems.youtube_video_id;
-        VideoService.setYouTubeTitle($scope.videoId).then(function (videoTime) {
-          $scope.videoText = 'Video Explanation (' + videoTime + ')';
-        });
-      }
-
-      /*Evaluate tag resources info, get video Ids and video time*/
-      Practice.tagResourcesInfo();
-      $scope.xpTag = $scope.questionItems.experience_points;
-
-      /* Work with the styles to shown result
-       define is some answer is bad.*/
-      $scope.answerStatus = true;
     },
     confirmChoice: function () {
 
@@ -359,6 +198,176 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
 
 
     },
+    loadQuestion: function (questionToRequest) {
+
+      var setLayoutType = false;
+
+
+      /*Get question and Create Round Session by Question*/
+      var getQuestion = practiceRequests.questions().getQuestionById(questionToRequest),
+        questionPresentation = practiceRequests.roundSessions().createQuestionPresentation($scope.gameResponseId, questionToRequest);
+
+      $q.all([getQuestion, questionPresentation]).then(function (result) {
+
+        var questionResult = result[0].data.question;
+        $scope.answerObject = result[1].data;
+        $scope.roundSessionAnswer = $scope.answerObject.round_session;
+
+        Practice.setCurrentQuestionId(questionResult.id);
+        Practice.setMailToInformation(questionResult.id);
+
+        angular.element('.choice.active').removeClass('active');
+
+        if ($scope.lastAnswerLoaded == '' || $scope.lastAnswerLoaded != questionResult.kind) {
+        //  $scope.currentA = Utilities.findInArray(questionResult.kind, $scope.directives, 'type').id;
+          $scope.lastAnswerLoaded = questionResult.kind;
+        }
+
+        $scope.items = [];
+        $scope.stimulus = "";
+        $scope.template = $scope.actualView;
+        $scope.questionItems = questionResult;
+
+        $scope.questionInformation = $sce.trustAsHtml(questionResult.question_set.info);
+
+        /*Find if there is a question info defined or retrieve it by the API*/
+        setLayoutType = angular.isDefined($scope.questionInformation) && $scope.questionInformation != null && $scope.questionInformation != '' ? true : false;
+
+        /*Set the layout based on the question info*/
+        Practice.setLayoutBasedOnQuestionInfo(setLayoutType);
+        $scope.stimulus = $sce.trustAsHtml($scope.questionItems.stimulus);
+
+        var options = $scope.optionList.toUpperCase().split(""),
+          answers = $scope.questionItems.answers;
+        angular.forEach(answers, function (value, index) {
+
+          value["option"] = options[index];
+          $scope.items.push(value);
+        });
+        $scope.position++;
+        Practice.removeBadImage();
+
+        $scope.loading = false;
+      }).catch(function error(error) {
+
+        Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+      });
+    },
+    displayGeneralConfirmInfo: function () {
+      /* Question Explanation*/
+      $scope.questionExplanation = $scope.questionItems.explanation;
+
+      if ($scope.questionExplanation != null)
+        $scope.showExplanation = true;
+
+
+      /* video validation*/
+      if ($scope.questionItems.youtube_video_id !== null) {
+        $scope.showVideo = true;
+        $scope.videoId = $scope.questionItems.youtube_video_id;
+        VideoService.setYouTubeTitle($scope.videoId).then(function (videoTime) {
+          $scope.videoText = 'Video Explanation (' + videoTime + ')';
+        });
+      }
+
+      /*Evaluate tag resources info, get video Ids and video time*/
+      Practice.tagResourcesInfo();
+      $scope.xpTag = $scope.questionItems.experience_points;
+
+      /* Work with the styles to shown result
+       define is some answer is bad.*/
+      $scope.answerStatus = true;
+    },
+
+    nextQuestion: function () {
+      $scope.isUniqueQuestionLoad = false;
+      this.loadQuestionsSet();
+
+      //Enable/disable answer section
+      $scope.numerator = null;
+      $scope.denominator = null;
+      angular.element('#answercontent *').removeClass('btn-primary btn-danger btn-success').removeAttr('disabled');
+      $scope.showVideo = false;
+      $scope.showExplanation = false;
+      $scope.answerStatus = null;
+      $scope.nextActionTitle = 'Confirm Choice';
+      $scope.messageConfirmation = '';
+      angular.element('#skipAction').removeClass('hide');
+      angular.element('#answersPanels').removeClass().addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+        angular.element(this).removeClass();
+      });
+
+    },
+    tagResourcesInfo: function () {
+      var tagsResources = [],tgR={};
+
+
+      angular.forEach($scope.questionItems.tags, function (value) {
+        var tagR = value.tag_resources;
+
+        angular.forEach(tagR,function(val){
+
+          tgR ={
+            name:value.name,
+            resource_type: val.resource_type,
+            resource: val.resource_type=='youtube' ? Utilities.getYoutubeVideosId(val.resource) : val.resource
+          };
+
+          tagsResources.push(tgR);
+
+        });
+
+
+      });
+
+
+      $scope.tags = $scope.questionItems.tags;
+      $scope.tagsResources=tagsResources;
+
+    },
+    showAnswer: function () {
+      this.resetLayout();
+
+      /*Question Explanation*/
+      $scope.questionExplanation = $scope.questionItems.explanation;
+
+      if ($scope.questionExplanation != null)
+        $scope.showExplanation = true;
+
+
+      /*video validation*/
+      if ($scope.questionItems.youtube_video_id !== null) {
+        $scope.showVideo = true;
+        $scope.videoId = $scope.questionItems.youtube_video_id;
+        VideoService.setYouTubeTitle($scope.videoId).then(function (videoTime) {
+          $scope.videoText = 'Video Explanation (' + videoTime + ')';
+        });
+      }
+
+      /*Get answers from the previous request and Explain*/
+      var answers = $scope.questionItems.answers;
+
+      /*Evaluate tag resources info, get video Ids and video time*/
+      Practice.tagResourcesInfo();
+
+      $scope.xpTag = $scope.questionItems.experience_points;
+
+
+      /*   Work with the styles to shown result
+       define is some answer is bad.*/
+      angular.element('.choice button').removeClass('btn-primary');
+
+      angular.forEach(answers, function (value, key) {
+        var selectIdButton = '#' + value.id;
+        if (value.correct) {
+          angular.element(selectIdButton).addClass('btn-success');
+        }
+      });
+
+      angular.element("#answercontent *").prop('disabled', true);
+
+    },
+
     evaluateConfirmMethod: function () {
       switch ($scope.lastAnswerLoaded) {
         case 'NumericEntry':
@@ -369,6 +378,7 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
           Practice.confirmChoice();
       }
     },
+
     setCurrentQuestionId: function (questionId) {
 
       Utilities.setCurrentParam('questionId', questionId);
@@ -452,13 +462,6 @@ function($scope,practiceRequests,Utilities,breadcrumbs,VideoService,Alerts,$loca
     setMailToInformation: function (questionId) {
 
       $scope.subjectMail = 'Problem with ' + $scope.titleQuest + ' question #' + questionId;
-    },
-    removeBadImage: function () {
-      /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
-      angular.element('img').error(function () {
-
-        angular.element('img').attr('src', '');
-      });
     }
   };
 

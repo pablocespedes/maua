@@ -135,7 +135,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
       };
       Utilities.setActiveTab(1);
       Utilities.setActiveTrack(trackData);
-      Utilities.redirect('#/' + $scope.activeGroupId + '/dashboard/practice/_');
+      Utilities.redirect('#/' + $scope.activeGroupId + '/custom-practice/');
     }
     else {
       Alerts.showAlert('You must select one track at least', 'warning');

@@ -11,9 +11,7 @@ var practiceGame =  angular.module("grockitApp.practiceGame",['ng-breadcrumbs'])
     var filePath = {
       practice: {
         practiceCtrl: 'app/practiceGame/practice/practice.ctrl.js',
-        practiceDrctv: 'app/practiceGame/practice/practice.directive.js',
-        practiceServ: 'app/practiceGame/practice/practice.service.js',
-        youtube: 'assets/javascripts/youtubeModal/bootstrap.youtubepopup.js'
+        practiceDrctv: 'app/practiceGame/practice/practice.directive.js'
       },
       common:{
         practiceDct: 'app/practiceGame/common/practice.directive.js',
@@ -28,49 +26,8 @@ var practiceGame =  angular.module("grockitApp.practiceGame",['ng-breadcrumbs'])
       }
     };
 
-    $routeProvider.when('/:subject/dashboard/practice/:questionId', {templateUrl: 'app/practiceGame/practice/practice.tpl.html',
-      label: 'practice',
-      resolve: {deps: function ($q, $rootScope) {
-        var deferred = $q.defer(),
-          essentials = [
-            filePath.practice.practiceCtrl,
-            filePath.practice.practiceDrctv,
-            filePath.practice.practiceServ,
-            filePath.practice.youtube
-          ];
-        $script(essentials, function () {
-          $rootScope.$apply(function () {
-            deferred.resolve();
-          });
-        });
 
-        return deferred.promise;
-      }}, controller: 'PracticeController',
-      reloadOnSearch: false
-    });
-
-    $routeProvider.when('/:subject/dashboard/practice/:questionId', {templateUrl: 'app/practiceGame/practice/practice-mockup.tpl.html',
-      label: 'practice',
-      resolve: {deps: function ($q, $rootScope) {
-        var deferred = $q.defer(),
-          essentials = [
-            filePath.practice.practiceCtrl,
-            filePath.practice.practiceDrctv,
-            filePath.practice.practiceServ,
-            filePath.practice.youtube
-          ];
-        $script(essentials, function () {
-          $rootScope.$apply(function () {
-            deferred.resolve();
-          });
-        });
-
-        return deferred.promise;
-      }}, controller: 'PracticeController',
-      reloadOnSearch: false
-    })
-
-    .when('/:subject/question/:questionId', {templateUrl: 'app/practiceGame/question/question.tpl.html',
+    $routeProvider.when('/:subject/question/:questionId', {templateUrl: 'app/practiceGame/question/question.tpl.html',
       label: 'practice',
       resolve: {deps: function ($q, $rootScope) {
         var deferred = $q.defer(),
@@ -97,8 +54,8 @@ var practiceGame =  angular.module("grockitApp.practiceGame",['ng-breadcrumbs'])
         var deferred = $q.defer(),
           essentials = [
             filePath.customPractice.practiceCtrl,
-            filePath.common.practiceDrctv,
-            filePath.common.practiceServ,
+            filePath.common.practiceDct,
+            filePath.common.practiceSrv,
             filePath.common.youtube
           ];
         $script(essentials, function () {

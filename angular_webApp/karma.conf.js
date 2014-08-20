@@ -11,15 +11,25 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'src/bower_components/jquery/dist/jquery.min.js',
       'src/bower_components/angular/angular.js',
       'src/bower_components/angular-mocks/angular-mocks.js',
       'src/bower_components/angular-resource/angular-resource.js',
       'src/bower_components/angular-cookies/angular-cookies.js',
       'src/bower_components/angular-sanitize/angular-sanitize.js',
+      'src/bower_components/ng-breadcrumbs/dist/ng-breadcrumbs.min.js',
+      'src/bower_components/webStorageModule/angular-webstorage.js',
       'src/bower_components/angular-route/angular-route.js',
-      'src/app/*.js',
+      'src/bower_components/lodash/dist/lodash.min.js',
+      'src/bower_components/restangular/dist/restangular.min.js',
+      'src/common/restAngular/*.js',
+      'src/common/directives/*.js',
+      'src/common/filters/*.js',
+      'src/common/services/*.js',
+      'src/app/home/*.js',
+      'src/app/practiceGame/*.js',
       'src/app/**/*.js',
-      'test/mock/**/*.js',
+      'src/app/*.js',
       'test/spec/**/*.js'
     ],
 

@@ -1,9 +1,12 @@
 <div class="row-fluid row reset-layout">
 		<section class="">
 				<div class="no-padding">
-								<div class="col-md-8 no-padding">
+								<div class="col-md-4 no-padding">
 										<div class="reset-layout" breadcrumb breadcrumbs="breadcrumbs.get()"></div>
 								</div>
+						<div class="col-md-4 no-padding">
+					<div question-share-list></div>
+						</div>
 								<div class="col-md-2 no-padding text-right">
 										Practice Time: <span class="practice-data">{{ practiceTimer.seconds | formatSeconds}}</span>
 								</div>
@@ -14,8 +17,7 @@
 		</section>
 </div>
 
-<div ng-if="showExplanation" class="reset-layout" question-timing></div>
-<div ng-if="showExplanation"  question-tags xp="xpTag" tags="tagsResources"></div>
+<div ng-if="showExplanation" class="reset-layout" question-timing  tags-r="tagsResources"></div>
 
 
 <div id="practice">
@@ -32,7 +34,7 @@
 
 		          <div class="panel colourable">
 				          <div class="panel-heading">
-						          <span class="panel-title"><i class="panel-title-icon fa fa-flask"></i>Question Explanation</span>
+						          <span class="panel-title"><i class="panel-title-icon fa fa-folder-open"></i>Explanation</span>
 				          </div>
 				          <div class="panel-body">
 						          <span ng-bind-html='questionExplanation'></span>
@@ -48,14 +50,12 @@
 						          </div>
 				          </div>
 		          </div>
-
           </div>
-
           <div class="sentence_correction_stimulus" ng-class="{' explain-margin':questionInformation!=''}"
                ng-if="questionInformation!=''">
 		          <div class="panel colourable">
 				          <div class="panel-heading">
-						          <span class="panel-title"><i class="panel-title-icon fa fa-flask"></i>Question Information</span>
+						          <span class="panel-title"><i class="panel-title-icon fa fa-info-circle"></i>Information</span>
 				          </div>
 				          <div class="panel-body">
 						          <span ng-bind-html='questionInformation'></span>
@@ -63,9 +63,7 @@
 				          </div>
 		          </div>
           </div>
-
         </div>
-
         <div id="Panel2" class="page page-home col-md-6 rightColumn">
 		        <div class="panel colourable">
 				        <div class="panel-heading">
