@@ -489,7 +489,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
     },
     confirmChoice: function (questionResult, roundSessionAnswer) {
       var selectedPosition = '', selectedOptions = [], selectedOptionsCount, i = 0, answerStatus = true;
-      ;
+
 
       /*Get selected answers*/
       angular.element('.choice input[value=true]').each(function () {

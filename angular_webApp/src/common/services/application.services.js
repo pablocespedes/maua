@@ -73,10 +73,13 @@ angular.module('grockitApp.services', ['webStorageModule'])
      currentUser.trackData = data;
      webStorage.add('currentUser', currentUser);
    },
-   findInArray: function (element, array, filter) {
-     return  $.grep(array, function (val) {
-       return val[filter] == element;
-     })[0];
+   findInCollection: function (collection, filter) {
+    return  _.find(collection,filter);
+
+   },
+   mergeCollection: function (collection1, collection2) {
+     return  _.merge(collection1,collection2);
+
    },
    getIndexArray: function (arr, key, val) {
      for (var i = 0; i < arr.length; i++) {
