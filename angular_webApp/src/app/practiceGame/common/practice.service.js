@@ -276,6 +276,7 @@ practiceGame.factory('questionTypesService', function () {
 
   var nexAction = $('#nextAction'),
     seeAnswer = $('#skipAction');
+
   function handleValidation(isValid) {
     if (isValid) {
       nexAction.addClass('btn-primary');
@@ -386,9 +387,9 @@ practiceGame.factory('fraction', function () {
   };
 });
 
-practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, Alerts, $sce, VideoService,practiceTimer) {
+practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, Alerts, $sce, VideoService, practiceTimer) {
 
-  var optionList = "abcdefghijklmnopqrstuvwxyz", answerStatus = null;
+  var optionList = "abcdefghijklmnopqrstuvwxyz";
 
   var Practice = {
     /*This methods takes care to set the practice layout based on the API response*/
@@ -434,7 +435,6 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
   };
 
   return {
-
     loadQuestion: function (questionToRequest, gameId) {
       var deferred = $q.defer(),
         setLayoutType = false, resultObject = {},
@@ -488,7 +488,8 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
     },
     confirmChoice: function (questionResult, roundSessionAnswer) {
-      var selectedPosition = '', selectedOptions = [], selectedOptionsCount, i = 0;
+      var selectedPosition = '', selectedOptions = [], selectedOptionsCount, i = 0, answerStatus = true;
+      ;
 
       /*Get selected answers*/
       angular.element('.choice input[value=true]').each(function () {
@@ -563,7 +564,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
         generalObject.showExplanation = true;
 
       /*Evaluate tag resources info, get video Ids and video time*/
-      var tagsResources = [],tgR={};
+      var tagsResources = [], tgR = {};
 
       angular.forEach(questionResult.tags, function (value) {
         var tagR = value.tag_resources;
@@ -586,7 +587,8 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
       /* Work with the styles to shown result
        define is some answer is bad.*/
-      answerStatus = true;
+      /*
+       answerStatus = true;*/
 
       /* video validation*/
       if (questionResult.youtube_video_id !== null) {
@@ -613,13 +615,11 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
         resultObject.showExplanation = true;
 
 
-
-
       /*Get answers from the previous request and Explain*/
       var answers = questionResult.answers;
 
       /*Evaluate tag resources info, get video Ids and video time*/
-      var tagsResources = [],tgR={};
+      var tagsResources = [], tgR = {};
 
       angular.forEach(questionResult.tags, function (value) {
         var tagR = value.tag_resources;
@@ -672,10 +672,10 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
     },
     numericEntryConfirmChoice: function (options) {
 
-      var userAnswer = 0, resultObject={},selectedAnswer = 0,answers='',
-        numerator=options.numerator,
-        denominator=options.denominator,lastAnswerLoaded=options.lastAnswerLoaded,
-        questionResult=options.questionResult,roundSessionAnswer=options.roundSessionAnswer;
+      var userAnswer = 0, resultObject = {}, selectedAnswer = 0, answers = '',
+        numerator = options.numerator,
+        denominator = options.denominator, lastAnswerLoaded = options.lastAnswerLoaded,
+        questionResult = options.questionResult, roundSessionAnswer = options.roundSessionAnswer;
       /*Get selected answers*/
 
       if (numerator || denominator) {
@@ -706,7 +706,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
 
         angular.element("#answercontent *").prop('disabled', true);
-        return resultObject.answerStatus ;
+        return resultObject.answerStatus;
 
       }
       else {
@@ -716,10 +716,10 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
 
     },
-    getTimingInformation : function(trackId,groupId,questionId){
-      return practiceTimer.getTimingData(trackId,groupId,questionId).query().$promise;
+    getTimingInformation: function (trackId, groupId, questionId) {
+      return practiceTimer.getTimingData(trackId, groupId, questionId).query().$promise;
     },
-    setMailToInformation: function (questionId,titleQuest) {
+    setMailToInformation: function (questionId, titleQuest) {
       return 'Problem with ' + titleQuest + ' question #' + questionId;
     }
 
@@ -727,12 +727,12 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 });
 
 
-practiceGame.factory("practiceTimer", function($resource) {
+practiceGame.factory("practiceTimer", function ($resource) {
 
   return {
-    getTimingData: function(trackId,groupId,questionId){
-      var  url = location.host == '127.0.0.1:9000' ? 'http://127.0.0.1:9000/' : location.origin + '/2.0/',
-        requestUrl =url+'data/'+groupId+'/'+trackId+'/'+questionId+".json";
+    getTimingData: function (trackId, groupId, questionId) {
+      var url = location.host == '127.0.0.1:9000' ? 'http://127.0.0.1:9000/' : location.origin + '/2.0/',
+        requestUrl = url + 'data/' + groupId + '/' + trackId + '/' + questionId + ".json";
 
       return $resource(requestUrl, {}, {
         query: { method: "GET", isArray: true }

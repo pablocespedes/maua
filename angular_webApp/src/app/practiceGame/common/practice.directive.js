@@ -1,5 +1,4 @@
-
-practiceGame.directive('oneChoice', function(questionTypesService) {
+practiceGame.directive('oneChoice', function (questionTypesService) {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/oneChoice.tpl.html',
@@ -14,7 +13,7 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
   };
 })
 
-.directive('multipleChoice', function(questionTypesService) {
+  .directive('multipleChoice', function (questionTypesService) {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/common/directives.tpl/multipleChoice.tpl.html',
@@ -29,7 +28,7 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
     };
   })
 
-.directive('multipleMatrix2x3', function(questionTypesService) {
+  .directive('multipleMatrix2x3', function (questionTypesService) {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/common/directives.tpl/matrix2x3.tpl.html',
@@ -44,7 +43,7 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
     };
   })
 
-.directive('multipleMatrix3x3', function(questionTypesService) {
+  .directive('multipleMatrix3x3', function (questionTypesService) {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/common/directives.tpl/matrix3x3.tpl.html',
@@ -59,7 +58,7 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
     };
   })
 
-.directive('sat', function(questionTypesService) {
+  .directive('sat', function (questionTypesService) {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/common/directives.tpl/sat.tpl.html',
@@ -71,7 +70,7 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
     };
   })
 
-.directive('numericEntry', function(questionTypesService) {
+  .directive('numericEntry', function (questionTypesService) {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/common/directives.tpl/numericEntry.tpl.html',
@@ -90,7 +89,7 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
     };
   })
 
-.directive('fractionEntry', function(questionTypesService) {
+  .directive('fractionEntry', function (questionTypesService) {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/common/directives.tpl/fractionEntry.tpl.html',
@@ -108,7 +107,7 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
     };
   })
 
-.directive('twoChoice', function(questionTypesService) {
+  .directive('twoChoice', function (questionTypesService) {
 
     return {
       restrict: 'A',
@@ -124,7 +123,7 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
     };
   })
 
-.directive('ngCustomTopics', function() {
+  .directive('ngCustomTopics', function () {
 
     function setSelect2Settings() {
       var elm = $('#practice-list select');
@@ -170,20 +169,30 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
     };
   })
 
-.directive('questionTiming', function() {
+  .directive('questionTiming', function () {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/common/directives.tpl/questionTiming.tpl.html',
       scope: {
         data: '=',
         yourTime: '=',
-        answerStatus:'=',
+        answerStatus: '=',
+        xpTag: '=',
         tagsR: '='
+      },
+      link: function (scope) {
+        scope.compAvgStatus = ((scope.yourTime - scope.data.avg_time_to_answer) > 0);
+
+        if (scope.compAvgStatus)
+          scope.compAvg = (scope.yourTime - scope.data.avg_time_to_answer);
+        else
+          scope.compAvg = -(scope.yourTime - scope.data.avg_time_to_answer);
+
       }
     };
   })
 
-.directive('questionTagsOnly', function() {
+  .directive('questionTagsOnly', function () {
     return {
       restrict: 'A',
       replace: true,
@@ -193,7 +202,7 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
       }
     };
   })
-.directive('questionTags', function() {
+  .directive('questionTags', function () {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/common/directives.tpl/questionsTags.tpl.html',
@@ -203,7 +212,7 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
     };
   })
 
-.directive('answerType', function ($compile) {
+  .directive('answerType', function ($compile) {
 
     var fractionTpl = '<div fraction-entry answer-status="answerStatus" ' +
         'portal="portalC" items="items" show-explanation="showExplanation" ' +
@@ -286,7 +295,7 @@ practiceGame.directive('oneChoice', function(questionTypesService) {
   })
 
 
-  .directive('questionShareList', function() {
+  .directive('questionShareList', function () {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/common/directives.tpl/questionShareList.tpl.html',

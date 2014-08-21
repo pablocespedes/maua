@@ -44,6 +44,7 @@ practiceGame.controller('CustomPracticeController',['$scope','practiceSrv','Util
             $scope.showExplanation = generalInfo.showExplanation;
             $scope.questionExplanation = generalInfo.questionExplanation;
             $scope.showVideo = generalInfo.showVideo;
+            $scope.tagsResources = generalInfo.tagsResources;
             $scope.videoId = generalInfo.videoId;
             $scope.videoText = generalInfo.videoText;
             $scope.tags = generalInfo.tags;
