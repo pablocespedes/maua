@@ -159,7 +159,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
 
 })
 
-.factory('GrockitNewFeatures', function($http, Utilities) {
+.factory('GrockitNewFeatures', function($http, Utilities,environmentCons) {
 
   return {
     showDialog: function () {
@@ -167,7 +167,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
           title: "Welcome to Grockit 2.0 Beta",
           message: ""
         },
-        url = location.host == '127.0.0.1:9000' ? 'http://127.0.0.1:9000/' : location.origin + '/2.0';
+        url = location.host == '127.0.0.1:9000' ? environmentCons.localGrockit : environmentCons.liveGrockit;
       $http.get(url + '/common/templates/newFeatures2.0.html').success(function (data) {
         dialogOptions.message = data;
         Utilities.dialogService(dialogOptions);
@@ -179,6 +179,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
 
   }
   })
+
 .service('ServiceFactory', function() {
   this.items = [];
   this.lastId = 1;
@@ -235,6 +236,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
         }
       };
     }])
+
 .factory('DateFormatter', function() {
   var formatSeconds = function(seconds) {
     var secs = seconds,

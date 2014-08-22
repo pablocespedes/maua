@@ -22,12 +22,18 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
 
     var timer = {
       setTimingInformation: function (questionId,correctAnswerId) {
-        practiceSrv.getTimingInformation($scope.activeTracks.tracks, $scope.activeGroupId, questionId).then(function (result) {
 
-          $scope.timingData = result[0];
-          Utilities.mergeCollection($scope.items, result[0].answers);
-          $scope.percentAnswered= Utilities.findInCollection(result[0].answers, { 'answer_id':correctAnswerId }).percent_answered;
-        })
+        practiceSrv.getTimingInformation($scope.activeTracks.tracks, $scope.activeGroupId, questionId).success(function (result) {
+          if(angular.isDefined(result)){
+            $scope.showTiming=true;
+            $scope.timingData = result[0];
+            Utilities.mergeCollection($scope.items, result[0].answers);
+            $scope.percentAnswered= Utilities.findInCollection(result[0].answers, { 'answer_id':correctAnswerId }).percent_answered;
+          }
+
+        }).error(function (error) {
+          $scope.showTiming=false;
+        });
       },
       initPracticeTimer: function () {
         $scope.practiceTimer = Timer.create();

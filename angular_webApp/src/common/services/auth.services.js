@@ -4,6 +4,7 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
   member: 'member',
   guest: 'guest'
 })
+
 .factory('Auth', function($cookies, UserRoles, webStorage, Users, Utilities, $location, $q,Headers) {
 
     function defaultGroup(user){
