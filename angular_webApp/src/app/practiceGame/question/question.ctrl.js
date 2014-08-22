@@ -2,17 +2,16 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
   function($scope,practiceSrv,Utilities,breadcrumbs,Alerts,practiceRequests,Timer) {
 
     $scope.activeTracks = Utilities.getActiveTrack();
-    $scope.titleQuest = $scope.activeTracks.trackTitle;
     $scope.activeGroupId = Utilities.getActiveGroup();
     $scope.breadcrumbs = breadcrumbs;
-    breadcrumbs.options = { 'practice': $scope.titleQuest };
+    breadcrumbs.options = { 'practice': $scope.activeTracks.trackTitle };
 
     $scope.portalC = $scope;
     $scope.loading = true;
     $scope.nextActionTitle = 'Confirm Choice';
     $scope.questionItems = [];
-    $scope.practiceTimer='00:00';
-    $scope.questionTimer='00:00';
+    $scope.practiceTimer = '00:00';
+    $scope.questionTimer = '00:00';
     $scope.answerStatus = null;
     $scope.showExplanation = false;
     $scope.showVideo = false;
@@ -21,7 +20,51 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
     $scope.lastAnswerLoaded = '';
 
 
+    var timer = {
+      setTimingInformation: function (questionId, correctAnswerId) {
+        practiceSrv.getTimingInformation($scope.activeTracks.tracks, $scope.activeGroupId, questionId).then(function (result) {
+
+          $scope.timingData = result[0];
+          Utilities.mergeCollection($scope.items, result[0].answers);
+          $scope.percentAnswered = Utilities.findInCollection(result[0].answers, { 'answer_id': correctAnswerId }).percent_answered;
+        })
+      },
+      initPracticeTimer: function () {
+        $scope.practiceTimer = Timer.create();
+      },
+      initQuestionTimer: function () {
+        $scope.questionTimer = Timer.create();
+      },
+      resetQuestionTimer: function () {
+        $scope.questionTimer.reset();
+        $scope.questionTimer.start();
+        timer.restartPracticeTimer();
+      },
+      restartPracticeTimer: function () {
+        $scope.practiceTimer.start();
+      },
+      pauseTimers: function () {
+        $scope.practiceTimer.pause();
+        $scope.questionTimer.pause();
+      },
+      destroyTimers: function(){
+        Timer.destroy($scope.practiceTimer);
+        Timer.destroy($scope.questionTimer);
+
+      }
+    };
+
     var Question = {
+      bindExplanationInfo: function (info) {
+        $scope.showExplanation = info.showExplanation;
+        $scope.questionExplanation = info.questionExplanation;
+        $scope.showVideo = info.showVideo;
+        $scope.tagsResources = info.tagsResources;
+        $scope.videoId = info.videoId;
+        $scope.videoText = info.videoText;
+        $scope.tags = info.tags;
+        $scope.xpTag = info.xpTag;
+      },
       presentQuestion: function (questionId, gameId) {
         practiceSrv.loadQuestion(questionId, gameId).then(function (result) {
           $scope.questionResult = result.questionResult;
@@ -33,43 +76,35 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
           $scope.items = result.items;
           $scope.loading = false;
           $scope.position++;
-          customPractice.resetQuestionTimer();
-          customPractice.setTimingInformation(questionId);
+
+          /*find correct answer to be send to timing section*/
+          var correctAnswerId = Utilities.findInCollection(result.questionResult.answers, { 'correct': true }).id;
+          timer.resetQuestionTimer();
+          Question.feedbackInfo(questionId);
+          timer.setTimingInformation(questionId, correctAnswerId);
         });
       },
-      confirmAnswer: function(){
-
-        $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult,$scope.roundSessionAnswer);
-        if(angular.isDefined($scope.answerStatus)){
-          practiceSrv.displayGeneralConfirmInfo($scope.questionResult).then(function(generalInfo){
-            $scope.showExplanation= generalInfo.showExplanation;
-            $scope.questionExplanation= generalInfo.questionExplanation;
-            $scope.showVideo = generalInfo.showVideo;
-            $scope.videoId = generalInfo.videoId;
-            $scope.videoText=generalInfo.videoText;
-            $scope.tags=generalInfo.tags;
-            $scope.xpTag=generalInfo.xpTag;
+      displayExplanationInfo: function () {
+        if (angular.isDefined($scope.answerStatus)) {
+          $scope.nextActionTitle = 'Next Question';
+          practiceSrv.displayGeneralConfirmInfo($scope.questionResult).then(function (generalInfo) {
+            Question.bindExplanationInfo(generalInfo);
 
           });
         }
       },
+      confirmAnswer: function () {
+        $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer);
+        Question.displayExplanationInfo();
+      },
       resetLayout: function () {
-        angular.element('#nextAction').removeClass('hide');
-        $scope.titleQuest = '';
-        $scope.titleQuest = $scope.activeTracks.trackTitle + ' Explanation';
+
         practiceSrv.resetLayout();
       },
-      doNotKnowAnswer: function(){
+      doNotKnowAnswer: function () {
         this.resetLayout();
-        practiceSrv.doNotKnowAnswer($scope.questionResult).then(function(result) {
-          $scope.questionExplanation = result.questionExplanation;
-          $scope.showExplanation = result.showExplanation;
-          $scope.tagsResources = result.tagsResources;
-          $scope.showVideo = result.showVideo;
-          $scope.videoId = result.videoId;
-          $scope.videoText = result.videoText;
-          $scope.tags = result.tags;
-          $scope.xpTag = result.xpTag;
+        practiceSrv.doNotKnowAnswer($scope.questionResult).then(function (generalInfo) {
+          Question.bindExplanationInfo(generalInfo);
         });
 
       },
@@ -83,43 +118,38 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
             Question.confirmAnswer();
         }
       },
-      numericConfirmAnswer: function() {
-        var options ={};
-        options.numerator=$scope.numerator ;
+      numericConfirmAnswer: function () {
+        var options = {};
+        options.numerator = $scope.numerator;
         options.denominator = $scope.denominator;
         options.lastAnswerLoaded = $scope.lastAnswerLoaded;
         options.questionResult = $scope.questionResult;
         options.roundSessionAnswer = $scope.roundSessionAnswer;
 
-        var result = practiceSrv.doNotKnowAnswer(options);
-        $scope.answerStatus=result.messageConfirmation;
-        $scope.messageConfirmation=result.messageConfirmation;
+        $scope.answerStatus = practiceSrv.numericEntryConfirmChoice(options);
+        Question.displayExplanationInfo();
 
       },
-      feedbackInfo: function(questionId){
-        $scope.subjectMail= practiceSrv.setMailToInformation(questionId,$scope.titleQuest);
+      nextQuestion: function () {
+        $scope.numerator = null;
+        $scope.denominator = null;
+        angular.element('#answercontent *').removeClass('btn-primary btn-danger btn-success').removeAttr('disabled');
+        $scope.showVideo = false;
+        $scope.showExplanation = false;
+        $scope.answerStatus = null;
+        $scope.nextActionTitle = 'Confirm Choice';
+        $scope.messageConfirmation = '';
+        angular.element('#skipAction').removeClass('hide');
+        angular.element('#nextAction').removeClass('btn-primary');
+        angular.element('#answersPanels').addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+          angular.element(this).removeClass();
+        });
+
       },
-      initTimers: function(){
-        $scope.practiceTimer = Timer.create();
-        $scope.practiceTimer.start();
-        $scope.questionTimer = Timer.create();
-        $scope.questionTimer.start();
-      },
-      resetQuestionTimer: function(){
-        $scope.questionTimer.reset();
-        $scope.questionTimer.start();
-        this.restartPracticeTimer();
-      },
-      restartPracticeTimer: function(){
-        $scope.practiceTimer.start();
-      },
-      pausePracticeTimer: function(){
-        $scope.practiceTimer.pause();
-      },
-      destroyTimers: function(){
-       Timer.destroy( $scope.practiceTimer );
-       Timer.destroy($scope.questionTimer);
+      feedbackInfo: function (questionId) {
+        $scope.subjectMail = practiceSrv.setMailToInformation(questionId,$scope.activeTracks.trackTitle);
       }
+
     };
 
     $scope.CreateNewGame = function () {
@@ -127,12 +157,13 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
       var createGame = practiceRequests.practiceGames().createNewPracticeGame($scope.activeGroupId);
 
       createGame.then(function (game) {
-        var gameResponseId = game.data.practice_game.id,
-            questionId = Utilities.getCurrentParam('questionId');
+        $scope.gameId = game.data.practice_game.id;
+         var questionId = Utilities.getCurrentParam('questionId');
 
         if (angular.isDefined(questionId)) {
-          Question.presentQuestion(questionId,gameResponseId);
-          Question.initTimers();
+          Question.presentQuestion(questionId, $scope.gameId);
+          timer.initPracticeTimer();
+          timer.initQuestionTimer();
         }
         else {
           Alerts.showAlert('Oh sorry, We have problems to load your question, please let us know on feedback@grockit.com.', 'danger');
@@ -155,11 +186,18 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
     };
 
     $scope.nextAction = function () {
-      Question.evaluateConfirmMethod();
-        Question.destroyTimers();
+      timer.pauseTimers();
+      if ($scope.nextActionTitle == 'Confirm Choice') {
+        Question.evaluateConfirmMethod();
+      }
+      else {
+        timer.destroy();
+      }
+
     };
 
     $scope.revealExplanation = function () {
+      timer.pauseTimers();
       Question.doNotKnowAnswer();
     };
 
