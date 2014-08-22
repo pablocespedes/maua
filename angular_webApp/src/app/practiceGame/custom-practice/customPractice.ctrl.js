@@ -91,6 +91,12 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       },
       confirmAnswer: function () {
         $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer);
+        var question = _.find($scope.questions, function(storedQuestion) { return storedQuestion.id === $scope.currentId; });
+        question.answerStatus = $scope.answerStatus;
+        question.statusClass = '';
+        if (angular.isDefined) {
+          question.statusClass = question.answerStatus ? 'bg-success' : 'bg-danger';
+        }
         customPractice.displayExplanationInfo();
       },
       resetLayout: function () {
@@ -123,6 +129,13 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         });
 
       },
+      createQuestionSharedList: function(questions) {
+        if (angular.isUndefined($scope.questions)) {
+          $scope.questions = _.map(questions, function(questionId) {
+            return {id: questionId};
+          });
+        }
+      },
       loadQuestionsSet: function () {
 
         if (angular.isDefined($scope.questionSetList) && $scope.questionSetList.length > 0) {
@@ -140,12 +153,14 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             var position = $scope.position,
             /* questionsCount Give us the number of questions by questionSet*/
               questionsCount = questionSetResult.questions.length;
-            $scope.questCount = questionsCount;
+            $scope.questCount = questionSetResult.questions;
+            customPractice.createQuestionSharedList(questionSetResult.questions);
             $scope.questByQSetTitle = questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + (questionsCount) + ' for this set' : '';
 
 
             /* Iterate between all the question retrieved it by the API which belong to a specific Question set */
             var questionIdToRequest = questionSetResult.questions[position];
+            $scope.currentId = questionIdToRequest;
             if (position < questionsCount) {
 
               customPractice.presentQuestion(questionIdToRequest, $scope.gameId)
@@ -254,7 +269,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         customPractice.nextQuestion();
       }
     };
-
+    
     $scope.revealExplanation = function () {
       timer.pauseTimers();
       customPractice.doNotKnowAnswer();
