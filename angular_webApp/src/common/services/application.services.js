@@ -1,13 +1,13 @@
 angular.module('grockitApp.services', ['webStorageModule'])
-.factory('Utilities', function($http,webStorage,$location,$route,VideoService,$q) {
+.factory('Utilities', function($http,webStorage,$location,$route,VideoService,$q,environmentCons) {
 
   var internalUtilities = {
     grockitHostEvaluation : function (isNewGrockit) {
       if (isNewGrockit) {
-        return location.host == '127.0.0.1:9000' ? 'https://grockit.com' : location.origin + '/2.0/';
+        return location.host == '127.0.0.1:9000' ? environmentCons.oldGrockit :environmentCons.liveGrockit;
       }
       else {
-        return location.host == '127.0.0.1:9000' ? 'https://staging.grockit.com' : location.host == 'ww2.grockit.com' ? 'https://grockit.com' : location.origin
+        return location.host == '127.0.0.1:9000' ? environmentCons.stagingGrockit : location.host == environmentCons.ww2Grockit2 ? environmentCons.oldGrockit : location.origin
       }
     },
 
@@ -95,7 +95,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
      window.location.href = redirectUrl + encodeURIComponent(url);
    },
    redirect: function (url) {
-     var basePath = $location.host == '127.0.0.1' || 'grockit.firstfactoryinc.com' ? '' : 'v2';
+     var basePath = $location.host == '127.0.0.1' ? '' : 'v2';
      window.location.href = basePath + url;
    },
    setActiveTab: function (position) {

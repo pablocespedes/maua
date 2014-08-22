@@ -22,12 +22,12 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
 
     var timer = {
       setTimingInformation: function (questionId, correctAnswerId) {
-        practiceSrv.getTimingInformation($scope.activeTracks.tracks, $scope.activeGroupId, questionId).success(function (result) {
+        practiceSrv.getTimingInformation($scope.activeTracks.tracks, $scope.activeGroupId, questionId).$promise.then(function (result) {
           $scope.showTiming=true;
           $scope.timingData = result[0];
           Utilities.mergeCollection($scope.items, result[0].answers);
           $scope.percentAnswered = Utilities.findInCollection(result[0].answers, { 'answer_id': correctAnswerId }).percent_answered;
-        }).error(function (error) {
+        }).catch(function (error) {
           $scope.showTiming=false;
         });
       },
