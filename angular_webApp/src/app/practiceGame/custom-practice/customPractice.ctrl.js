@@ -2,10 +2,10 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
   function ($scope, practiceSrv, Utilities, breadcrumbs, practiceRequests, Alerts, Timer) {
 
     $scope.activeTracks = Utilities.getActiveTrack();
-    $scope.titleQuest = $scope.activeTracks.trackTitle;
+
     $scope.activeGroupId = Utilities.getActiveGroup();
     $scope.breadcrumbs = breadcrumbs;
-    breadcrumbs.options = { 'practice': $scope.titleQuest };
+    breadcrumbs.options = { 'practice': $scope.activeTracks.trackTitle };
 
     $scope.portalC = $scope;
     $scope.loading = true;
@@ -100,8 +100,6 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         customPractice.displayExplanationInfo();
       },
       resetLayout: function () {
-        $scope.titleQuest = '';
-        $scope.titleQuest = $scope.activeTracks.trackTitle + ' Explanation';
         $scope.nextActionTitle = 'Next Question';
         practiceSrv.resetLayout();
       },
@@ -142,8 +140,6 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
 
           /*if $scope.setPosition is bigger than $scope.questionSetList.length we already finish the list of question sets */
           if ($scope.setPosition < $scope.questionSetList.length) {
-            $scope.titleQuest = '';
-            $scope.titleQuest = $scope.activeTracks.trackTitle;
 
             var setPosition = $scope.setPosition,
 
@@ -224,13 +220,13 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         $scope.messageConfirmation = '';
         angular.element('#skipAction').removeClass('hide');
         angular.element('#nextAction').removeClass('btn-primary');
-        angular.element('#answersPanels').removeClass().addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+        angular.element('#answersPanels').addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
           angular.element(this).removeClass();
         });
 
       },
       feedbackInfo: function (questionId) {
-        $scope.subjectMail = practiceSrv.setMailToInformation(questionId, $scope.titleQuest);
+        $scope.subjectMail = practiceSrv.setMailToInformation(questionId, $scope.activeTracks.trackTitle);
       }
     };
 
