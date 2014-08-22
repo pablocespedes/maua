@@ -1,41 +1,78 @@
-<div class="widget-profile-counters row practice-header">
+<div class="row state-overview">
 
-  <div class="col-xs-1 practice-element practice-xl label label-danger">X</div>
+		<div class="col-lg-2 col-sm-3 timing-padding">
+				<section class="panel">
+						<div class="timing-box">
+								<span class="practice-data"><span ng-bind="yourTime"></span>s </span><br>
+								Your time to answer
+						</div>
+				</section>
+		</div>
+		<div class="col-lg-2 col-sm-3 timing-padding">
+				<section class="panel">
+						<div class="timing-box">
+								<span class="practice-data"><span ng-bind="data.avg_time_to_answer"></span>s</span>
+								<br>
+								Average time to answer
+						</div>
+				</section>
+		</div>
+		<div class="col-lg-2 col-sm-3 timing-padding">
+				<section class="panel">
 
-  <div class="col-xs-1 label label-danger practice-element practice-xl">
-    Your Time:<br>
-    <span ng-bind="data.yourtime"></span> 37 sec</div>
+						<div class="timing-box">
+							 <span class="badge"
+							       ng-class="{ 'bg-success': !compAvgStatus, 'bg-danger': compAvgStatus}">
+       &nbsp;<i ng-class="{'fa fa-arrow-down':!compAvgStatus, 'fa fa-arrow-up':compAvgStatus}"></i>
 
-  <div class="col-xs-2 practice-element practice-xl">You are<br>
-    <span class="label-success">&nbsp;<i class="fa fa-arrow-down"></i> <span ng-bind="data.youAreIn"></span>8</span>
-    <br>seconds faster than the average</div><div class="col-xs-1 practice-element practice-xl">
-    Average:<br>
-    <span ng-bind="data.average"></span>45 sec</div>
+        <span class="practice-data" style="padding-right: 4px;"><span ng-bind="compAvg"></span>s</span>
+       </span>
+								<br>
 
-  <div class="col-xs-3 practice-element practice-xl">
-    <p>Grock's Advice:</p>
-    <span>Its ok to get questions wrong, but you'll want to...</span>
-  </div>
+								<p ng-if="!compAvgStatus">You are faster than the average</p>
 
-  <div class="col-xs-1 practice-element practice-xl">
-    <p>
-    Answered
-    </p>
-    <span ng-bind="data.answered"></span>6,453 times</div>
+								<p ng-if="compAvgStatus">You are slower than the average</p>
+						</div>
+				</section>
+		</div>
+		<div class="col-lg-2 col-sm-2 timing-padding">
+				<section class="panel">
+						<div class="timing-box">
+								<span class="practice-data" ng-bind="xpTag"></span><br>
+								<i class="panel-title-icon fa fa-info-circle"></i>Level
+						</div>
+				</section>
+		</div>
+		<div class="col-lg-2 col-sm-3 timing-padding">
+				<section class="panel">
+						<div class="timing-box">
+					 <span class="practice-data">
+       		<span ng-bind="percentAnswered"></span>%
+      </span>
+								<br>of users answered <br> this question correctly
+						</div>
+				</section>
+		</div>
+		<div class="col-lg-2 col-sm-3 timing-padding">
+				<section class="panel">
+						<div ng-class="{ 'bg-danger':!answerStatus, 'bg-success':answerStatus}"
+						     class="timing-check text-center text-slg no-padding-vr">
+								<i ng-if="!answerStatus" class="fa fa-times"></i>
+								<i ng-if="answerStatus" class="fa fa-check"></i>
+						</div>
+				</section>
+		</div>
+		<div class="col-lg-12 col-md-6 col-sm-6 timing-padding">
 
-  <div class="col-xs-1 practice-element practice-xl practice-level">
-    <p>
-      Level
-    </p>
-    <span>16</span>
-    <div class="not-sure">
-      What's the ...
-    </div>
-  </div>
-  
-  <div class="col-xs-2 practice-element practice-xl">
-    <span ng-bind="data.percentCorrectly"></span>87%<br>
-    of users answered correctly
-  </div>
-
+				<section class="panel colourable">
+						<div class="panel-heading">
+								<span class="panel-title"><i class="panel-title-icon fa fa-folder-open"></i>Skills to Review
+								</span>
+						</div>
+						<div class="panel-body no-padding">
+								<div question-tags tags="tagsR"></div>
+						</div>
+				</section>
+		</div>
 </div>
+

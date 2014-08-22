@@ -1,0 +1,40 @@
+[
+  {
+    "question_id": "ca74e49d-3953-8804-f8e7-d2e22af67a60",
+    "avg_time_to_answer": 11,
+    "avg_time_to_answer_correctly": 11,
+    "avg_time_to_answer_incorrectly": 0,
+    "total_answered": 2,
+    "total_answered_correctly": 2,
+    "total_answered_incorrectly": 0,
+    "answers": [
+      {
+        "answer_id": "f7d8c9db-fb73-17a6-40ef-1dcdbdf96532",
+        "answered": 0,
+        "percent_answered": 0
+      },
+      {
+        "answer_id": "94744e83-6bf2-eb82-7d96-1d1da9796de9",
+        "answered": 0,
+        "percent_answered": 0
+      },
+      {
+        "answer_id": "c6df2afb-8d42-5464-1410-02c65bc3b274",
+        "answered": 0,
+        "percent_answered": 0
+      },
+      {
+        "answer_id": "89f051be-625e-1707-2f9b-411055dcef47",
+        "answered": 2,
+        "percent_answered": 100
+      }
+    ],
+    "timings": [
+      {
+        "seconds_passed": 10,
+        "total_answered": 2,
+        "total_answered_correctly": 2
+      }
+    ]
+  }
+]

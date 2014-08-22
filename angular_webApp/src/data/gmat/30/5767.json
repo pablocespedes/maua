@@ -1,0 +1,45 @@
+[
+  {
+    "question_id": "5767",
+    "avg_time_to_answer": 7,
+    "avg_time_to_answer_correctly": 7,
+    "avg_time_to_answer_incorrectly": 0,
+    "total_answered": 7,
+    "total_answered_correctly": 7,
+    "total_answered_incorrectly": 0,
+    "answers": [
+      {
+        "answer_id": "26594",
+        "answered": 0,
+        "percent_answered": 0
+      },
+      {
+        "answer_id": "26595",
+        "answered": 0,
+        "percent_answered": 0
+      },
+      {
+        "answer_id": "26596",
+        "answered": 7,
+        "percent_answered": 100
+      }
+    ],
+    "timings": [
+      {
+        "seconds_passed": 0,
+        "total_answered": 1,
+        "total_answered_correctly": 1
+      },
+      {
+        "seconds_passed": 5,
+        "total_answered": 4,
+        "total_answered_correctly": 4
+      },
+      {
+        "seconds_passed": 10,
+        "total_answered": 7,
+        "total_answered_correctly": 7
+      }
+    ]
+  }
+]

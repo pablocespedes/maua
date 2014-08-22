@@ -14,7 +14,8 @@
                     </div>
                 </div>
                 <div id="explanationAnswerPanel" ng-show="hasExplanation({index : $index})"  ng-if="showExplanation" class="fadein " ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
-                    <div class="explain-margin" ng-bind-html='item.explanation'></div>
+                    <div class="explain-margin" ng-bind-html='item.explanation'></div><br>
+		                <div class="answer-percent"><strong> {{item.percent_answered}}%</strong> of users answered this choice</div>
                 </div>
             </a>
         </div>

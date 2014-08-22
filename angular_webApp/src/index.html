@@ -20,12 +20,14 @@
     <script type="text/javascript"> window.jQuery || document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">'+"<"+"/script>"); </script>
     <![endif]-->
     <!-- Pixel Admin's stylesheets -->
-    <link href="assets/stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="assets/stylesheets/pixel-admin.min.css" rel="stylesheet" type="text/css">
+		<link href="assets/stylesheets/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
+		<link href="assets/stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="assets/stylesheets/pixel-admin.min.css" rel="stylesheet" type="text/css">
      <link href="assets/stylesheets/widgets.min.css" rel="stylesheet" type="text/css">
     <link href="assets/stylesheets/rtl.min.css" rel="stylesheet" type="text/css">
     <link href="assets/stylesheets/themes.min.css" rel="stylesheet" type="text/css">
-    <!--[if lt IE 9]>
+
+		<!--[if lt IE 9]>
     <script src="assets/javascripts/ie.min.js"></script>
     <![endif]-->
     <!-- bower:css -->
@@ -180,8 +182,8 @@
                 <li>
                     <a ng-href="{{url}}/reviews"><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
                 </li>
-                <li  class="btn-success" >
-                    <a ng-href="{{url}}/{{activeGroupId}}"><i class="menu-icon fa fa-mail-forward"></i><span style="color: white" class="mm-text">Switch to Original Grockit</span></a>
+                <li>
+                    <a class="old-grockit" ng-href="{{url}}/{{activeGroupId}}"><i class="menu-icon fa fa-mail-forward"></i><span style="color: white" class="mm-text">Switch to Original Grockit</span></a>
                 </li>
 
             </ul>

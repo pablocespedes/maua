@@ -5,7 +5,7 @@
          "../styles/spinners.scss",
          "../app/home/dashboard/dashboard.scss",
          "../app/home/track-dashboard/dashboard.scss",
-         "../app/practiceGame/practice/practice.scss";
+         "../app/practiceGame/common/practice.scss";
 
 //general css
 #main-navbar .navbar-header a {
@@ -24,6 +24,11 @@
 .track-list-padding-hr{
     padding-left: 5px!important;
     padding-right: 5px!important;
+}
+
+.old-grockit{
+  background-color: #054E7D;
+  color: $white;
 }
 
 .panel-no-bg {
@@ -75,7 +80,7 @@ footer {
 }
 
 .push {
-  height: 90px;
+  height: 130px;
 }
 
 .hide-footer{
@@ -265,9 +270,9 @@ footer {
 
 
 .info-box {
-  background: #eee;
-  border: 1px solid #ccc;
-  border-bottom: 1px solid #aaa;
+  /*background: #eee;*/
+ // border: 1px solid #ccc;
+  //border-bottom: 1px solid #aaa;
   color: #333;
   overflow-x: auto;
   padding: 10px;
@@ -275,6 +280,12 @@ footer {
   z-index: 10;
   -webkit-box-shadow: 0 1px 2px #ccc;
   box-shadow: 0 1px 2px #ccc;
+
+  background: #f2f2f2;
+  border-color: #bcbcbc;
+  border: 1px solid #e3e3de;
+  border-radius: 5px;
+
 }
 .info-box:before {
   content: " ";
@@ -294,21 +305,6 @@ footer {
   border: none !important;
 }
 
-.practice-header  {
-  .practice-element {
-    border: 1px solid #E2E2E2;
-  }
-  .practice-xl {
-    height: 80px;
-  }
-  .practice-sm {
-    height: 25px;
-    padding-top: 2px;
-  }
-  .practice-level {
-    text-align: center;
-  }
-}
 
 .not-sure {
   padding: 2px;
@@ -320,4 +316,9 @@ footer {
   margin: auto;
   line-height: 10px;
   margin-bottom: 2px;
+}
+.tooltip-container {
+  .tooltip-inner {
+    text-align: left;
+  }
 }

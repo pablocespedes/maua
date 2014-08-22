@@ -1,6 +1,89 @@
 
+
+
+
+.practice-header  {
+  .practice-element-sm {
+    width: 6.55%
+  }
+  .practice-element {
+    //border: 1px solid #EDEDED;
+    //border: 1px solid #000;
+    font-size: 13px;
+  }
+  .practice-xl {
+    height: 42px;
+  }
+  .practice-sm {
+    height: 25px;
+    padding-top: 2px;
+  }
+  .practice-align {
+    text-align: center;
+  }
+}
+
+.practice-result {
+  line-height: 45px;
+}
+
+.practice-result .fa {
+  font-size: 20px;
+}
+
+.practice-offset {
+  width: 44%;
+}
+
+.practice-data {
+  font-weight:bold;
+  font-size: 18px;
+  color: #555;
+}
+
+
+
+.timing-check {
+  height: 70px;
+  text-align: center;
+}
+.timing-padding{
+  margin-bottom: -17px;
+  padding-left: 3px !important;
+  padding-right: 3px !important;
+}
+
+
 #skipAction {
   cursor: pointer;
+}
+
+.timing-skills{
+  height: 100%;
+  text-align: left;
+  margin-top: -10px;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.timing-box{
+  height: 70px;
+  text-align: center;
+  padding-top: 11px;
+}
+.state-overview{
+  margin-left: -1px;
+  margin-right: -1px;
+}
+
+
+.row-fluid.icon-btn {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+.row-fluid.check {
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 
 #practice{
@@ -13,7 +96,6 @@
   }
   .columnsContainer {
     position: relative;
-    margin: .5em;
 
   }
 
@@ -224,7 +306,10 @@
     color: white;
   }
 
-
+.answer-percent{
+  color: black;
+  font-size: 14px;
+}
 /*Class from old Grockit*/
   div.sentence_correction_underline {
     display: inline;
@@ -247,6 +332,145 @@
   }
   /*End classes from old Grockit*/
 
+
 }
+
+/*
+
+*/
+/*Media Queries*//*
+
+
+
+*/
+/*==========  Mobile First Method  ==========*//*
+
+
+*/
+/* Custom, iPhone Retina *//*
+
+@media only screen and (min-width : 320px) {
+  .icon-btn {
+    height: 70px;
+    width: 50%;
+
+  }
+}
+
+*/
+/* Extra Small Devices, Phones *//*
+
+@media only screen and (min-width : 480px) {
+  .icon-btn {
+    height: 70px;
+    width: 50%;
+
+  }
+}
+
+*/
+/* Small Devices, Tablets *//*
+
+@media only screen and (min-width : 768px) {
+  .icon-btn {
+    height: 70px;
+    width: 50%;
+
+  }
+}
+
+*/
+/* Medium Devices, Desktops *//*
+
+@media only screen and (min-width : 992px) {
+  .icon-btn {
+    height: 70px;
+    width: 50%;
+
+  }
+}
+
+*/
+/* Large Devices, Wide Screens *//*
+
+@media only screen and (min-width : 1200px) {
+  .icon-btn {
+    height: 70px;
+    width: 50%;
+
+  }
+}
+
+
+
+*/
+/*==========  Non-Mobile First Method  ==========*//*
+
+
+*/
+/* Large Devices, Wide Screens *//*
+
+@media only screen and (max-width : 1200px) {
+  .icon-btn {
+    height: 70px;
+    width: 50%;
+
+  }
+}
+
+*/
+/* Medium Devices, Desktops *//*
+
+@media only screen and (max-width : 992px) {
+  .icon-btn {
+    height: 70px;
+    width: 50%;
+
+  }
+}
+
+*/
+/* Small Devices, Tablets *//*
+
+@media only screen and (max-width : 768px) {
+  .icon-btn {
+    height: 70px;
+    width: 50%;
+
+  }
+}
+
+*/
+/* Extra Small Devices, Phones *//*
+
+@media only screen and (max-width : 480px) {
+  .icon-btn {
+    height: 70px;
+    width: 50%;
+
+  }
+}
+
+*/
+/* Custom, iPhone Retina *//*
+
+@media only screen and (max-width : 320px) {
+  .icon-btn {
+    height: 70px;
+    width: 50%;
+
+  }
+}
+
+@media only screen and (max-width : 641px) {
+  .icon-btn {
+    height: 70px;
+    width: 50%;
+
+  }
+
+
+}
+*/
 
 

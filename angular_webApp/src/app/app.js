@@ -29,6 +29,7 @@
   'ngSanitize',
   'ngCookies',
   'grockitApp.services',
+  'grockitApp.filters',
   'grockitApp.requests',
   'grockitApp.authServices',
   'grockitApp.analyticService',
