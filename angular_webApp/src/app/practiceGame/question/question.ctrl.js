@@ -88,7 +88,7 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
       },
       displayExplanationInfo: function () {
         if (angular.isDefined($scope.answerStatus)) {
-          $scope.nextActionTitle = 'Next Question';
+          angular.element('#nextAction').addClass('hide');
           practiceSrv.displayGeneralConfirmInfo($scope.questionResult).then(function (generalInfo) {
             Question.bindExplanationInfo(generalInfo);
 

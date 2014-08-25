@@ -77,6 +77,15 @@ angular.module('grockitApp.services', ['webStorageModule'])
     return  _.find(collection,filter);
 
    },
+   mapObject: function(collection, key,getter){
+
+     return _.map(collection, function(val) {
+       var obj = {};
+       obj[key]= getter(val);
+       return obj;
+     });
+
+   },
    mergeCollection: function (collection1, collection2) {
      return  _.merge(collection1,collection2);
 
@@ -95,8 +104,9 @@ angular.module('grockitApp.services', ['webStorageModule'])
      window.location.href = redirectUrl + encodeURIComponent(url);
    },
    redirect: function (url) {
+
      var basePath = $location.host == '127.0.0.1' ? '' : 'v2';
-     window.location.href = basePath + url;
+     window.location.href =  url;
    },
    setActiveTab: function (position) {
      this.clearActiveTab();

@@ -57,6 +57,21 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
 
 
     var customPractice = {
+      createQuestionSharedList: function(questions) {
+
+        if (angular.isUndefined($scope.questions)) {
+          $scope.questions =  Utilities.mapObject(questions,'id',function(question){return question});
+        }
+      },
+      setAnswerStatusToSharedList: function() {
+        var question = Utilities.findInCollection($scope.questions,{ 'id': $scope.currentId });
+        question.answerStatus = $scope.answerStatus;
+        question.statusClass = '';
+        if (angular.isDefined(question.answerStatus)) {
+          question.statusClass = question.answerStatus ? 'bg-success' : 'bg-danger';
+        }
+
+      },
       bindExplanationInfo: function (info) {
         $scope.showExplanation = info.showExplanation;
         $scope.questionExplanation = info.questionExplanation;
@@ -97,12 +112,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       },
       confirmAnswer: function () {
         $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer);
-        var question = _.find($scope.questions, function(storedQuestion) { return storedQuestion.id === $scope.currentId; });
-        question.answerStatus = $scope.answerStatus;
-        question.statusClass = '';
-        if (angular.isDefined) {
-          question.statusClass = question.answerStatus ? 'bg-success' : 'bg-danger';
-        }
+        customPractice.setAnswerStatusToSharedList();
         customPractice.displayExplanationInfo();
       },
       resetLayout: function () {
@@ -133,13 +143,6 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         });
 
       },
-      createQuestionSharedList: function(questions) {
-        if (angular.isUndefined($scope.questions)) {
-          $scope.questions = _.map(questions, function(questionId) {
-            return {id: questionId};
-          });
-        }
-      },
       loadQuestionsSet: function () {
 
         if (angular.isDefined($scope.questionSetList) && $scope.questionSetList.length > 0) {
@@ -155,7 +158,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             var position = $scope.position,
             /* questionsCount Give us the number of questions by questionSet*/
               questionsCount = questionSetResult.questions.length;
-            $scope.questCount = questionSetResult.questions;
+
             customPractice.createQuestionSharedList(questionSetResult.questions);
             $scope.questByQSetTitle = questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + (questionsCount) + ' for this set' : '';
 
