@@ -2,6 +2,8 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
   function($scope,practiceSrv,Utilities,breadcrumbs,Alerts,practiceRequests,Timer) {
 
     $scope.activeTracks = Utilities.getActiveTrack();
+    $scope.questionAnalytics = ($scope.activeGroupId === 'gmat' || $scope.activeGroupId === 'act' || $scope.activeGroupId === 'sat' || $scope.activeGroupId === 'gre');
+
     $scope.activeGroupId = Utilities.getActiveGroup();
     $scope.breadcrumbs = breadcrumbs;
     breadcrumbs.options = { 'practice': $scope.activeTracks.trackTitle };
@@ -83,6 +85,7 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
           var correctAnswerId = Utilities.findInCollection(result.questionResult.answers, { 'correct': true }).id;
           timer.resetQuestionTimer();
           Question.feedbackInfo(questionId);
+          if($scope.questionAnalytics)
           timer.setTimingInformation(questionId, correctAnswerId);
         });
       },
