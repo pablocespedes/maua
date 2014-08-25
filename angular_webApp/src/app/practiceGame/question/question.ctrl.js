@@ -111,10 +111,11 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
 
       },
       evaluateConfirmMethod: function () {
+        this.resetLayout();
         switch ($scope.lastAnswerLoaded) {
           case 'NumericEntry':
           case 'NumericEntryFraction':
-            Question.numericEntryConfirmChoice();
+            Question.numericConfirmAnswer();
             break;
           default:
             Question.confirmAnswer();
