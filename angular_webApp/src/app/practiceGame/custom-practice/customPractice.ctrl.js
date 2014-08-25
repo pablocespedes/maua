@@ -55,10 +55,8 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       }
     };
 
-
     var customPractice = {
       createQuestionSharedList: function(questions) {
-        console.log('creating shared list');
         if (angular.isUndefined($scope.questions)) {
           $scope.questions =  Utilities.mapObject(questions,'id',function(question){return question});
         }
@@ -175,7 +173,31 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
               $scope.setPosition++;
               // New set, delete the questions, this way they are reinitialized
               delete $scope.questions;
-              customPractice.loadQuestionsSet();
+
+              var msg={
+                message: "You've finished this set of questions. Would you like to continue or switch tracks?",
+                title: "Congrats!",
+                buttons: {
+                  main: {
+                    label: "Dashboard &#10548;",
+                    className: "btn-primary",
+                    callback: function() {
+                      Utilities.redirect('#/' + $scope.activeGroupId+ '/dashboard');
+                    }
+                  },
+                  success: {
+                    label: "Continue &#10095;",
+                    className: "btn-info",
+                    callback: function() {
+                      customPractice.loadQuestionsSet();
+
+                    }
+                  }
+
+                }
+              };
+
+              Utilities.dialogService(msg);
             }
           }
           else {
