@@ -125,8 +125,8 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         getQuestionSet.then(function (result) {
 
           if (result.data.question_sets.length > 0) {
-
             $scope.questionSetList = result.data.question_sets;
+
             customPractice.loadQuestionsSet();
           }
           else {
