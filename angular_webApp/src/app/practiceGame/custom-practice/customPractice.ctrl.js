@@ -220,6 +220,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       },
       evaluateConfirmMethod: function () {
         $scope.userConfirmed = true;
+        this.resetLayout();
         switch ($scope.lastAnswerLoaded) {
           case 'NumericEntry':
           case 'NumericEntryFraction':
