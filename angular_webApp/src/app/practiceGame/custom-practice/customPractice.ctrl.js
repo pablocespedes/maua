@@ -2,8 +2,9 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
   function ($scope, practiceSrv, Utilities, breadcrumbs, practiceRequests, Alerts, Timer) {
 
     $scope.activeTracks = Utilities.getActiveTrack();
-
     $scope.activeGroupId = Utilities.getActiveGroup();
+    $scope.questionAnalytics = ($scope.activeGroupId === 'gmat' || $scope.activeGroupId === 'act' || $scope.activeGroupId === 'sat' || $scope.activeGroupId === 'gre');
+
     $scope.breadcrumbs = breadcrumbs;
     breadcrumbs.options = { 'practice': $scope.activeTracks.trackTitle };
     $scope.tagsResources=[];
@@ -31,7 +32,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             $scope.percentAnswered= Utilities.findInCollection(result[0].answers, { 'answer_id':correctAnswerId }).percent_answered;
           }
 
-        }).catch(function (error) {
+        }).catch(function (e) {
           $scope.showTiming=false;
         });
       },
@@ -96,7 +97,9 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
           var correctAnswerId =Utilities.findInCollection(result.questionResult.answers, { 'correct':true }).id;
           timer.resetQuestionTimer();
           customPractice.feedbackInfo(questionId);
+          if($scope.questionAnalytics)
           timer.setTimingInformation(questionId,correctAnswerId);
+
         });
       },
       displayExplanationInfo: function () {
