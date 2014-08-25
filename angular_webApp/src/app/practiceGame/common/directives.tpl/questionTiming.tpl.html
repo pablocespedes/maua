@@ -32,9 +32,9 @@
       <span class="practice-data" ng-if="!confirmed"> <i class="fa fa-minus"></i> </span>
       <br>
 
-      <p ng-if="!compAvgStatus">You took less time than the average</p>
+      <p ng-if="!compAvgStatus && confirmed">You took less time than the average</p>
 
-      <p ng-if="compAvgStatus">You took more time than the average</p>
+      <p ng-if="compAvgStatus && confirmed">You took more time than the average</p>
     </div>
     </section>
   </div>
@@ -42,7 +42,7 @@
     <section class="panel">
     <div class="timing-box">
       <span class="practice-data" ng-bind="xpTag | level"></span><br>
-      <i class="panel-title-icon fa fa-info-circle"></i>Level
+      <span>Difficulty</span>
     </div>
     </section>
   </div>
