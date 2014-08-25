@@ -6,7 +6,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
     $scope.activeGroupId = Utilities.getActiveGroup();
     $scope.breadcrumbs = breadcrumbs;
     breadcrumbs.options = { 'practice': $scope.activeTracks.trackTitle };
-
+    $scope.tagsResources=[];
     $scope.portalC = $scope;
     $scope.loading = true;
     $scope.nextActionTitle = 'Confirm Choice';
@@ -61,9 +61,9 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
           $scope.questions =  Utilities.mapObject(questions,'id',function(question){return question});
         }
       },
-      setAnswerStatusToSharedList: function() {
+      setAnswerStatusToSharedList: function(answerStatus) {
         var question = Utilities.findInCollection($scope.questions,{ 'id': $scope.currentId });
-        question.answerStatus = $scope.answerStatus;
+        question.answerStatus = answerStatus;
         question.statusClass = '';
         if (angular.isDefined(question.answerStatus)) {
           question.statusClass = question.answerStatus ? 'bg-success' : 'bg-danger';
@@ -110,7 +110,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       },
       confirmAnswer: function () {
         $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer);
-        customPractice.setAnswerStatusToSharedList();
+        customPractice.setAnswerStatusToSharedList($scope.answerStatus);
         customPractice.displayExplanationInfo();
       },
       resetLayout: function () {
@@ -238,6 +238,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         options.roundSessionAnswer = $scope.roundSessionAnswer;
 
         $scope.answerStatus = practiceSrv.numericEntryConfirmChoice(options);
+        customPractice.setAnswerStatusToSharedList($scope.answerStatus);
         customPractice.displayExplanationInfo();
 
       },
