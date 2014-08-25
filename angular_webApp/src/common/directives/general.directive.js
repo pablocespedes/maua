@@ -182,4 +182,19 @@ angular.module('grockitApp.directives', [])
 
       }
     };
-  });
+  })
+.directive('questionSharePopover', function () {
+  return {
+    restrict: 'A',
+    template: '<span class="label label-default question-status {{quest.statusClass}}">{{label}}</span>',
+    link: function (scope, el, attrs) {
+      scope.label = attrs.popoverLabel;
+      $(el).popover({
+        trigger: 'click',
+        html: true,
+        content: attrs.popoverHtml,
+        placement: attrs.popoverPlacement
+      });
+    }
+  };
+});

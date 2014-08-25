@@ -387,7 +387,7 @@ practiceGame.factory('fraction', function () {
   };
 });
 
-practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, Alerts, $sce, VideoService, practiceTimer) {
+practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, Alerts, $sce, VideoService, environmentCons,$resource) {
 
   var optionList = "abcdefghijklmnopqrstuvwxyz";
 
@@ -717,27 +717,13 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
     },
     getTimingInformation: function (trackId, groupId, questionId) {
-      return practiceTimer.getTimingData(trackId, groupId, questionId).query().$promise;
+       var url = environmentCons.timingData+ groupId+'/'+trackId+'/'+questionId+'.json';
+      return $resource(url).query({array:true});
+
     },
     setMailToInformation: function (questionId, titleQuest) {
       return 'Problem with ' + titleQuest + ' question #' + questionId;
     }
 
   }
-});
-
-
-practiceGame.factory("practiceTimer", function ($resource) {
-
-  return {
-    getTimingData: function (trackId, groupId, questionId) {
-      var url = location.host == '127.0.0.1:9000' ? 'http://127.0.0.1:9000/' : location.origin + '/2.0/',
-        requestUrl = url + 'data/' + groupId + '/' + trackId + '/' + questionId + ".json";
-
-      return $resource(requestUrl, {}, {
-        query: { method: "GET", isArray: true }
-      });
-    }
-  }
-
 });

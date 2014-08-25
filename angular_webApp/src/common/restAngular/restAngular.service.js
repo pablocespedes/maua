@@ -125,8 +125,6 @@ request.factory('Tracks', function(Restangular,Headers) {
 
 });
 
-
-
 request.factory('Headers', function(Restangular) {
 
 
@@ -147,15 +145,13 @@ request.factory('Headers', function(Restangular) {
   }
 });
 
-
-
 /*Custom request*/
-request.factory("VideoService", function($q) {
+request.factory("VideoService", function($q,environmentCons) {
 
 		return{
 				setYouTubeTitle: function (youtubeId) {
 						var deferred = $q.defer();
-						var url = "https://gdata.youtube.com/feeds/api/videos/" + youtubeId + "?v=2&alt=json";
+						var url = environmentCons.youtubeAPI+ youtubeId + "?v=2&alt=json";
 						$.ajax({
 								url: url,
 								dataType: 'jsonp',

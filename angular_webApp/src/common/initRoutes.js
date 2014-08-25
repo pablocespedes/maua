@@ -2,7 +2,7 @@
 
 var paths={
     jqueryGrockit:'common/jquery.grockit.js',
-    //underscore:'common/lib/underscore.js',
+    constants:'common/constants/application.constants.js',
     restAngularFactory:'common/restAngular/restAngular.service.js',
     restAngular:'common/restAngular/restAngular.module.js',
     home:'app/home/home.module.js',
@@ -17,7 +17,7 @@ var paths={
 };
 
 $script([
-    //paths.underscore,
+    paths.constants,
     paths.jqueryGrockit,
     paths.generalServices,
     paths.generalFilters,

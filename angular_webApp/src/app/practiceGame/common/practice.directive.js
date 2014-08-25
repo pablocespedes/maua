@@ -179,9 +179,12 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
         answerStatus: '=',
         percentAnswered:'=',
         xpTag: '=',
-        tagsR: '='
+        tagsR: '=',
+        lastAnswerLoaded:'='
       },
       link: function (scope) {
+        scope.showPercAnswered = !(scope.lastAnswerLoaded==='NumericEntry' || scope.lastAnswerLoaded === 'NumericEntryFraction');
+
         scope.compAvgStatus = ((scope.yourTime - scope.data.avg_time_to_answer) > 0);
 
         if (scope.compAvgStatus)
@@ -296,13 +299,18 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
   })
 
 
-  .directive('questionShareList', function () {
+  .directive('questionShareList', function (environmentCons) {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/common/directives.tpl/questionShareList.tpl.html',
       scope: {
-        questCount: '='
+        questCount: '=',
+        currentGroup:'='
+      },
+      link: function(scope){
+        scope.currentDomain= environmentCons.localGrockit +'#/'+scope.currentGroup +'/question/';
       }
+
     };
   });
 

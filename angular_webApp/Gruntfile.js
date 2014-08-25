@@ -244,6 +244,7 @@ module.exports = function (grunt) {
                 '<%= yeoman.dist %>/common/directives',
                 '<%= yeoman.dist %>/common/services',
                 '<%= yeoman.dist %>/common/filters',
+              '<%= yeoman.dist %>/common/constants',
                 '<%= yeoman.dist %>/app',
                 '<%= yeoman.dist %>/common',
                 '<%= yeoman.dist %>/common/lib'
@@ -278,6 +279,8 @@ module.exports = function (grunt) {
                     [/(auth.services\.js)/, 'Replacing references to auth services'],
 
                     [/(application.filters\.js)/, 'Replacing references to application filters'],
+
+                   [/(application.constants\.js)/, 'Replacing references to application constants'],
 
                     [/(analytic.service\.js)/, 'Replacing references to Analytic services'],
 

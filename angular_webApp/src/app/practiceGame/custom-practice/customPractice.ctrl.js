@@ -22,12 +22,18 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
 
     var timer = {
       setTimingInformation: function (questionId,correctAnswerId) {
-        practiceSrv.getTimingInformation($scope.activeTracks.tracks, $scope.activeGroupId, questionId).then(function (result) {
 
-          $scope.timingData = result[0];
-          Utilities.mergeCollection($scope.items, result[0].answers);
-          $scope.percentAnswered= Utilities.findInCollection(result[0].answers, { 'answer_id':correctAnswerId }).percent_answered;
-        })
+        practiceSrv.getTimingInformation($scope.activeTracks.tracks, $scope.activeGroupId, questionId).$promise.then(function (result) {
+          if(angular.isDefined(result)){
+            $scope.showTiming=true;
+            $scope.timingData = result[0];
+            Utilities.mergeCollection($scope.items, result[0].answers);
+            $scope.percentAnswered= Utilities.findInCollection(result[0].answers, { 'answer_id':correctAnswerId }).percent_answered;
+          }
+
+        }).catch(function (error) {
+          $scope.showTiming=false;
+        });
       },
       initPracticeTimer: function () {
         $scope.practiceTimer = Timer.create();
@@ -51,6 +57,21 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
 
 
     var customPractice = {
+      createQuestionSharedList: function(questions) {
+
+        if (angular.isUndefined($scope.questions)) {
+          $scope.questions =  Utilities.mapObject(questions,'id',function(question){return question});
+        }
+      },
+      setAnswerStatusToSharedList: function() {
+        var question = Utilities.findInCollection($scope.questions,{ 'id': $scope.currentId });
+        question.answerStatus = $scope.answerStatus;
+        question.statusClass = '';
+        if (angular.isDefined(question.answerStatus)) {
+          question.statusClass = question.answerStatus ? 'bg-success' : 'bg-danger';
+        }
+
+      },
       bindExplanationInfo: function (info) {
         $scope.showExplanation = info.showExplanation;
         $scope.questionExplanation = info.questionExplanation;
@@ -91,6 +112,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       },
       confirmAnswer: function () {
         $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer);
+        customPractice.setAnswerStatusToSharedList();
         customPractice.displayExplanationInfo();
       },
       resetLayout: function () {
@@ -136,12 +158,14 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             var position = $scope.position,
             /* questionsCount Give us the number of questions by questionSet*/
               questionsCount = questionSetResult.questions.length;
-            $scope.questCount = questionsCount;
+
+            customPractice.createQuestionSharedList(questionSetResult.questions);
             $scope.questByQSetTitle = questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + (questionsCount) + ' for this set' : '';
 
 
             /* Iterate between all the question retrieved it by the API which belong to a specific Question set */
             var questionIdToRequest = questionSetResult.questions[position];
+            $scope.currentId = questionIdToRequest;
             if (position < questionsCount) {
 
               customPractice.presentQuestion(questionIdToRequest, $scope.gameId)
@@ -250,7 +274,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         customPractice.nextQuestion();
       }
     };
-
+    
     $scope.revealExplanation = function () {
       timer.pauseTimers();
       customPractice.doNotKnowAnswer();

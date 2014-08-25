@@ -69,8 +69,15 @@
 .timing-box{
   height: 70px;
   text-align: center;
-  padding-top: 11px;
+  padding-top: 8px;
 }
+
+.timing-answeredC{
+  height: 70px;
+  text-align: center;
+  padding-top: 4px;
+}
+
 .state-overview{
   margin-left: -1px;
   margin-right: -1px;
@@ -330,147 +337,15 @@
 
     margin-bottom: 5px;
   }
+
   /*End classes from old Grockit*/
 
 
 }
 
-/*
 
-*/
-/*Media Queries*//*
-
-
-
-*/
-/*==========  Mobile First Method  ==========*//*
-
-
-*/
-/* Custom, iPhone Retina *//*
-
-@media only screen and (min-width : 320px) {
-  .icon-btn {
-    height: 70px;
-    width: 50%;
-
-  }
+.question-status {
+  width: 24px;
+  margin-left: 2px;
+  margin-bottom: 2px;
 }
-
-*/
-/* Extra Small Devices, Phones *//*
-
-@media only screen and (min-width : 480px) {
-  .icon-btn {
-    height: 70px;
-    width: 50%;
-
-  }
-}
-
-*/
-/* Small Devices, Tablets *//*
-
-@media only screen and (min-width : 768px) {
-  .icon-btn {
-    height: 70px;
-    width: 50%;
-
-  }
-}
-
-*/
-/* Medium Devices, Desktops *//*
-
-@media only screen and (min-width : 992px) {
-  .icon-btn {
-    height: 70px;
-    width: 50%;
-
-  }
-}
-
-*/
-/* Large Devices, Wide Screens *//*
-
-@media only screen and (min-width : 1200px) {
-  .icon-btn {
-    height: 70px;
-    width: 50%;
-
-  }
-}
-
-
-
-*/
-/*==========  Non-Mobile First Method  ==========*//*
-
-
-*/
-/* Large Devices, Wide Screens *//*
-
-@media only screen and (max-width : 1200px) {
-  .icon-btn {
-    height: 70px;
-    width: 50%;
-
-  }
-}
-
-*/
-/* Medium Devices, Desktops *//*
-
-@media only screen and (max-width : 992px) {
-  .icon-btn {
-    height: 70px;
-    width: 50%;
-
-  }
-}
-
-*/
-/* Small Devices, Tablets *//*
-
-@media only screen and (max-width : 768px) {
-  .icon-btn {
-    height: 70px;
-    width: 50%;
-
-  }
-}
-
-*/
-/* Extra Small Devices, Phones *//*
-
-@media only screen and (max-width : 480px) {
-  .icon-btn {
-    height: 70px;
-    width: 50%;
-
-  }
-}
-
-*/
-/* Custom, iPhone Retina *//*
-
-@media only screen and (max-width : 320px) {
-  .icon-btn {
-    height: 70px;
-    width: 50%;
-
-  }
-}
-
-@media only screen and (max-width : 641px) {
-  .icon-btn {
-    height: 70px;
-    width: 50%;
-
-  }
-
-
-}
-*/
-
-

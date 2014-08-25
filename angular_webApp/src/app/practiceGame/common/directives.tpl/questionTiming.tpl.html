@@ -43,9 +43,9 @@
 						</div>
 				</section>
 		</div>
-		<div class="col-lg-2 col-sm-3 timing-padding">
+		<div ng-if="showPercAnswered" class="col-lg-2 col-sm-3 timing-padding">
 				<section class="panel">
-						<div class="timing-box">
+						<div class="timing-answeredC">
 					 <span class="practice-data">
        		<span ng-bind="percentAnswered"></span>%
       </span>
@@ -62,7 +62,7 @@
 						</div>
 				</section>
 		</div>
-		<div class="col-lg-12 col-md-6 col-sm-6 timing-padding">
+		<div class="col-lg-12 col-md-6 col-sm-6 timing-padding" ng-if="tagsR.length>0">
 
 				<section class="panel colourable">
 						<div class="panel-heading">

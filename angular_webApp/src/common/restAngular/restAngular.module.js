@@ -1,8 +1,8 @@
 var request = angular.module("grockitApp.requests",['restangular'])
-     .config(function (RestangularProvider,$httpProvider,$provide) {
+     .config(function (RestangularProvider,$httpProvider,$provide,environmentCons) {
 
 		var urlPattern = /http(s?)\:\/\/staging/.test(location.origin),
-		url = urlPattern ? 'http://api.staging.grockit.com' : 'https://api.grockit.com';
+		url = urlPattern ? environmentCons.stagingAPI : environmentCons.liveAPI;
 
 
 		request.factory = $provide.factory;
