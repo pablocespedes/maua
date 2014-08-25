@@ -178,6 +178,7 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
         yourTime: '=',
         answerStatus: '=',
         percentAnswered:'=',
+        confirmed:'=',
         xpTag: '=',
         tagsR: '=',
         lastAnswerLoaded:'='

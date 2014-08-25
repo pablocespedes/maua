@@ -211,6 +211,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
 
       },
       doNotKnowAnswer: function () {
+        $scope.userConfirmed = false;
         this.resetLayout();
         practiceSrv.doNotKnowAnswer($scope.questionResult).then(function (generalInfo) {
           customPractice.bindExplanationInfo(generalInfo);
@@ -218,6 +219,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
 
       },
       evaluateConfirmMethod: function () {
+        $scope.userConfirmed = true;
         switch ($scope.lastAnswerLoaded) {
           case 'NumericEntry':
           case 'NumericEntryFraction':
