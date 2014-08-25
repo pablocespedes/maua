@@ -1,78 +1,84 @@
 <div class="row state-overview">
 
-		<div class="col-lg-2 col-sm-3 timing-padding">
-				<section class="panel">
-						<div class="timing-box">
-								<span class="practice-data"><span ng-bind="yourTime"></span>s </span><br>
-								Your time to answer
-						</div>
-				</section>
-		</div>
-		<div class="col-lg-2 col-sm-3 timing-padding">
-				<section class="panel">
-						<div class="timing-box">
-								<span class="practice-data"><span ng-bind="data.avg_time_to_answer"></span>s</span>
-								<br>
-								Average time to answer
-						</div>
-				</section>
-		</div>
-		<div class="col-lg-2 col-sm-3 timing-padding">
-				<section class="panel">
+  <div class="col-lg-2 col-sm-3 timing-padding">
+    <section class="panel">
+    <div class="timing-box">
+      <span class="practice-data" ng-if="confirmed"><span ng-bind="yourTime"></span>s </span>
+      <span class="practice-data" ng-if="!confirmed"> <i class="fa fa-minus"></i> </span>
+      <br>
+      Your time to answer
+    </div>
+    </section>
+  </div>
+  <div class="col-lg-2 col-sm-3 timing-padding">
+    <section class="panel">
+    <div class="timing-box">
+      <span class="practice-data" ><span ng-bind="data.avg_time_to_answer"></span>s</span>
+      <br>
+      Average time to answer
+    </div>
+    </section>
+  </div>
+  <div class="col-lg-2 col-sm-3 timing-padding">
+    <section class="panel">
 
-						<div class="timing-box">
-							 <span class="badge"
-							       ng-class="{ 'bg-success': !compAvgStatus, 'bg-danger': compAvgStatus}">
-       &nbsp;<i ng-class="{'fa fa-arrow-down':!compAvgStatus, 'fa fa-arrow-up':compAvgStatus}"></i>
+    <div class="timing-box">
+      <span class="badge" ng-if="confirmed"
+        ng-class="{ 'bg-success': !compAvgStatus, 'bg-danger': compAvgStatus}">
+        &nbsp;<i ng-class="{'fa fa-arrow-down':!compAvgStatus, 'fa fa-arrow-up':compAvgStatus}"></i>
 
         <span class="practice-data" style="padding-right: 4px;"><span ng-bind="compAvg"></span>s</span>
-       </span>
-								<br>
-
-								<p ng-if="!compAvgStatus">You are faster than the average</p>
-
-								<p ng-if="compAvgStatus">You are slower than the average</p>
-						</div>
-				</section>
-		</div>
-		<div class="col-lg-2 col-sm-2 timing-padding">
-				<section class="panel">
-						<div class="timing-box">
-								<span class="practice-data" ng-bind="xpTag | level"></span><br>
-								<i class="panel-title-icon fa fa-info-circle"></i>Level
-						</div>
-				</section>
-		</div>
-		<div ng-if="showPercAnswered" class="col-lg-2 col-sm-3 timing-padding">
-				<section class="panel">
-						<div class="timing-answeredC">
-					 <span class="practice-data">
-       		<span ng-bind="percentAnswered"></span>%
       </span>
-								<br>of users answered <br> this question correctly
-						</div>
-				</section>
-		</div>
-		<div class="col-lg-2 col-sm-3 timing-padding">
-				<section class="panel">
-						<div ng-class="{ 'bg-danger':!answerStatus, 'bg-success':answerStatus}"
-						     class="timing-check text-center text-slg no-padding-vr">
-								<i ng-if="!answerStatus" class="fa fa-times"></i>
-								<i ng-if="answerStatus" class="fa fa-check"></i>
-						</div>
-				</section>
-		</div>
-		<div class="col-lg-12 col-md-6 col-sm-6 timing-padding" ng-if="tagsR.length>0">
+      <span class="practice-data" ng-if="!confirmed"> <i class="fa fa-minus"></i> </span>
+      <br>
 
-				<section class="panel colourable">
-						<div class="panel-heading">
-								<span class="panel-title"><i class="panel-title-icon fa fa-folder-open"></i>Skills to Review
-								</span>
-						</div>
-						<div class="panel-body no-padding">
-								<div question-tags tags="tagsR"></div>
-						</div>
-				</section>
-		</div>
+      <p ng-if="!compAvgStatus">You took less time than the average</p>
+
+      <p ng-if="compAvgStatus">You took more time than the average</p>
+    </div>
+    </section>
+  </div>
+  <div class="col-lg-2 col-sm-2 timing-padding">
+    <section class="panel">
+    <div class="timing-box">
+      <span class="practice-data" ng-bind="xpTag | level"></span><br>
+      <i class="panel-title-icon fa fa-info-circle"></i>Level
+    </div>
+    </section>
+  </div>
+  <div ng-if="showPercAnswered" class="col-lg-2 col-sm-3 timing-padding">
+    <section class="panel">
+    <div class="timing-answeredC">
+      <span class="practice-data">
+        <span ng-bind="percentAnswered"></span>%
+      </span>
+      <br>of users answered <br> this question correctly
+    </div>
+    </section>
+  </div>
+  <div class="col-lg-2 col-sm-3 timing-padding">
+    <section class="panel">
+    <div ng-class="{ 'bg-danger':!answerStatus, 'bg-success':answerStatus}" ng-if="confirmed"
+      class="timing-check text-center text-slg no-padding-vr">
+      <i ng-if="!answerStatus" class="fa fa-times"></i>
+      <i ng-if="answerStatus" class="fa fa-check"></i>
+    </div>
+    <div class="bg-default timing-check text-center text-slg no-padding-vr" ng-if="!confirmed">
+      <i class="fa fa-minus"></i>
+    </div>
+    </section>
+  </div>
+  <div class="col-lg-12 col-md-6 col-sm-6 timing-padding" ng-if="tagsR.length>0">
+
+    <section class="panel colourable">
+    <div class="panel-heading">
+      <span class="panel-title"><i class="panel-title-icon fa fa-folder-open"></i>Skills to Review
+      </span>
+    </div>
+    <div class="panel-body no-padding">
+      <div question-tags tags="tagsR"></div>
+    </div>
+    </section>
+  </div>
 </div>
 
