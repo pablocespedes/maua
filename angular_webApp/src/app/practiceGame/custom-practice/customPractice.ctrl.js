@@ -58,7 +58,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
 
     var customPractice = {
       createQuestionSharedList: function(questions) {
-
+        console.log('creating shared list');
         if (angular.isUndefined($scope.questions)) {
           $scope.questions =  Utilities.mapObject(questions,'id',function(question){return question});
         }
@@ -173,6 +173,8 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             else {
               $scope.position = 0;
               $scope.setPosition++;
+              // New set, delete the questions, this way they are reinitialized
+              delete $scope.questions;
               customPractice.loadQuestionsSet();
             }
           }
