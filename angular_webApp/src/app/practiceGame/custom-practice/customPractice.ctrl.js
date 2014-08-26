@@ -113,7 +113,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       },
       confirmAnswer: function () {
         $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer);
-        customPractice.setAnswerStatusToSharedList($scope.answerStatus);
+       /* customPractice.setAnswerStatusToSharedList($scope.answerStatus);*/
         customPractice.displayExplanationInfo();
       },
       resetLayout: function () {
@@ -160,13 +160,14 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             /* questionsCount Give us the number of questions by questionSet*/
               questionsCount = questionSetResult.questions.length;
 
-            customPractice.createQuestionSharedList(questionSetResult.questions);
+            /*customPractice.createQuestionSharedList(questionSetResult.questions);*/
             $scope.questByQSetTitle = questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + (questionsCount) + ' for this set' : '';
 
 
             /* Iterate between all the question retrieved it by the API which belong to a specific Question set */
             var questionIdToRequest = questionSetResult.questions[position];
             $scope.currentId = questionIdToRequest;
+
             if (position < questionsCount) {
 
               customPractice.presentQuestion(questionIdToRequest, $scope.gameId)
@@ -174,8 +175,8 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             else {
               $scope.position = 0;
               $scope.setPosition++;
-              // New set, delete the questions, this way they are reinitialized
-              delete $scope.questions;
+             /* New set, delete the questions, this way they are reinitialized*/
+             /* delete $scope.questions;*/
 
               var msg={
                 message: "You've finished this set of questions. Would you like to continue or switch tracks?",
@@ -242,7 +243,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         options.roundSessionAnswer = $scope.roundSessionAnswer;
 
         $scope.answerStatus = practiceSrv.numericEntryConfirmChoice(options);
-        customPractice.setAnswerStatusToSharedList($scope.answerStatus);
+        /*customPractice.setAnswerStatusToSharedList($scope.answerStatus);*/
         customPractice.displayExplanationInfo();
 
       },
