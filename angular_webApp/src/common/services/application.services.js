@@ -278,25 +278,4 @@ angular.module('grockitApp.services', ['webStorageModule'])
   return {
     formatSeconds: formatSeconds
   };
-})
-
-.factory('Messages', function(Utilities) {
-  var loadingMessages = [
-    'Spinning up the hamster...',
-    'Shovelling coal into the server...',
-    'Programming the flux capacitor',
-    'Adjusting data for your IQ...',
-    'Generating next funny line...',
-    'Entertaining you while you wait...',
-    'Improving your reading skills...',
-    'Dividing eternity by zero, please be patient...',
-    'Just stalling to simulate activity...',
-    'Adding random changes to your data...',
-    'Waiting for approval from Bill Gates...'
-  ];
-  return {
-    getLoadingMessage: function() {
-      return loadingMessages[Utilities.random(loadingMessages.length - 1)];
-    }
-  };
 });

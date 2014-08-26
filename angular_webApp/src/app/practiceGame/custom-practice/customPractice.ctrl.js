@@ -1,5 +1,5 @@
-practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'Utilities', 'breadcrumbs', 'practiceRequests', 'Alerts', 'Timer', 'Messages',
-  function ($scope, practiceSrv, Utilities, breadcrumbs, practiceRequests, Alerts, Timer, Messages) {
+practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'Utilities', 'breadcrumbs', 'practiceRequests', 'Alerts', 'Timer', 'SplashMessages',
+  function ($scope, practiceSrv, Utilities, breadcrumbs, practiceRequests, Alerts, Timer, SplashMessages) {
 
     $scope.activeTracks = Utilities.getActiveTrack();
     $scope.activeGroupId = Utilities.getActiveGroup();
@@ -20,7 +20,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
     $scope.setPosition = 0;
     $scope.position = 0;
     $scope.lastAnswerLoaded = '';
-    $scope.loadingMessage = Messages.getLoadingMessage();
+    $scope.loadingMessage = SplashMessages.getLoadingMessage();
 
     var timer = {
       setTimingInformation: function (questionId,correctAnswerId) {
@@ -133,7 +133,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
           }
           else {
             /*if user run out of the questions show message*/
-            practiceSrv.usersRunOutQuestions();
+            practiceSrv.usersRunOutQuestions($scope.activeTracks.trackTitle,$scope.activeGroupId);
 
           }
 

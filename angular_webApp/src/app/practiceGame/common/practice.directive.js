@@ -299,7 +299,6 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
     };
   })
 
-
   .directive('questionShareList', function (environmentCons) {
     return {
       restrict: 'A',
@@ -310,6 +309,18 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
       },
       link: function(scope){
         scope.currentDomain= environmentCons.localGrockit +'#/'+scope.currentGroup +'/question/';
+      }
+
+    };
+  })
+
+  .directive('splashMessage', function() {
+    return {
+      restrict: 'A',
+      templateUrl: 'app/practiceGame/common/directives.tpl/splash-message.tpl.html',
+      scope: {
+        isVisible: '=',
+        word:'='
       }
 
     };
