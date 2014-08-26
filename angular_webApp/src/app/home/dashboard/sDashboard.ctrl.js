@@ -2,6 +2,7 @@
 home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','breadcrumbs','Alerts', function($scope,Users,History,Tracks,Utilities,Auth,breadcrumbs,Alerts) {
   $scope.loading = true;
   $scope.scoreLoading = true;
+  $scope.loadingMessage = 'Loading...';
   $scope.getTitle = function(track) {
     return track.short_name;
   };
