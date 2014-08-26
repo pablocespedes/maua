@@ -120,6 +120,9 @@ angular.module('grockitApp.directives', [])
       scope: {
         word: '=',
         isVisible: '='
+      },
+      link: function(scope, elem, atttrs) {
+        scope.word = scope.word.split("");
       }
     };
   })
