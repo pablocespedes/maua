@@ -17,7 +17,7 @@
 	</section>
 </div>
 
-<div ng-if="showExplanation && showTiming" class="reset-layout" question-timing data="timingData" tags-r="tagsResources"
+<div ng-if="showExplanation && showTiming && questionAnalytics" class="reset-layout" question-timing data="timingData" tags-r="tagsResources" confirmed="userConfirmed"
      your-time="questionTimer.seconds" answer-status="answerStatus" xp-tag="xpTag" percent-answered="percentAnswered"
      last-answer-loaded="lastAnswerLoaded"></div>
 
@@ -74,7 +74,7 @@
 					</div>
 					<div class="panel-body">
 						<div id="answercontent" class="info-box">
-							<div id="solutionarea">
+							<div id="solutionarea" >
 								<span ng-bind="questByQSetTitle"></span>
 
 								<div ng-bind-html='stimulus'></div>
@@ -83,7 +83,7 @@
 								<!--answer-->
 								<div answer-type content="{{lastAnswerLoaded}}"></div>
 							</div>
-							<div ng-if="showExplanation" class="practice-tags" question-tags-only xp="xpTag" tags="tags"></div>
+							<div ng-if="showExplanation" class=" practice-tags" question-tags-only xp="xpTag" tags="tags"></div>
 						</div>
 
 					</div>

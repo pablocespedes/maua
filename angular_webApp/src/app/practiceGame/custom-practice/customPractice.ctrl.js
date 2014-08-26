@@ -2,11 +2,12 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
   function ($scope, practiceSrv, Utilities, breadcrumbs, practiceRequests, Alerts, Timer) {
 
     $scope.activeTracks = Utilities.getActiveTrack();
-
     $scope.activeGroupId = Utilities.getActiveGroup();
+    $scope.questionAnalytics = ($scope.activeGroupId === 'gmat' || $scope.activeGroupId === 'act' || $scope.activeGroupId === 'sat' || $scope.activeGroupId === 'gre');
+
     $scope.breadcrumbs = breadcrumbs;
     breadcrumbs.options = { 'practice': $scope.activeTracks.trackTitle };
-
+    $scope.tagsResources=[];
     $scope.portalC = $scope;
     $scope.loading = true;
     $scope.nextActionTitle = 'Confirm Choice';
@@ -31,7 +32,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             $scope.percentAnswered= Utilities.findInCollection(result[0].answers, { 'answer_id':correctAnswerId }).percent_answered;
           }
 
-        }).catch(function (error) {
+        }).catch(function (e) {
           $scope.showTiming=false;
         });
       },
@@ -55,17 +56,15 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       }
     };
 
-
     var customPractice = {
       createQuestionSharedList: function(questions) {
-
         if (angular.isUndefined($scope.questions)) {
           $scope.questions =  Utilities.mapObject(questions,'id',function(question){return question});
         }
       },
-      setAnswerStatusToSharedList: function() {
+      setAnswerStatusToSharedList: function(answerStatus) {
         var question = Utilities.findInCollection($scope.questions,{ 'id': $scope.currentId });
-        question.answerStatus = $scope.answerStatus;
+        question.answerStatus = answerStatus;
         question.statusClass = '';
         if (angular.isDefined(question.answerStatus)) {
           question.statusClass = question.answerStatus ? 'bg-success' : 'bg-danger';
@@ -98,7 +97,9 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
           var correctAnswerId =Utilities.findInCollection(result.questionResult.answers, { 'correct':true }).id;
           timer.resetQuestionTimer();
           customPractice.feedbackInfo(questionId);
+          if($scope.questionAnalytics)
           timer.setTimingInformation(questionId,correctAnswerId);
+
         });
       },
       displayExplanationInfo: function () {
@@ -112,7 +113,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       },
       confirmAnswer: function () {
         $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer);
-        customPractice.setAnswerStatusToSharedList();
+        customPractice.setAnswerStatusToSharedList($scope.answerStatus);
         customPractice.displayExplanationInfo();
       },
       resetLayout: function () {
@@ -173,7 +174,33 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             else {
               $scope.position = 0;
               $scope.setPosition++;
-              customPractice.loadQuestionsSet();
+              // New set, delete the questions, this way they are reinitialized
+              delete $scope.questions;
+
+              var msg={
+                message: "You've finished this set of questions. Would you like to continue or switch tracks?",
+                title: "Congrats!",
+                buttons: {
+                  main: {
+                    label: "Dashboard &#10548;",
+                    className: "btn-primary",
+                    callback: function() {
+                      Utilities.redirect('#/' + $scope.activeGroupId+ '/dashboard');
+                    }
+                  },
+                  success: {
+                    label: "Continue &#10095;",
+                    className: "btn-info",
+                    callback: function() {
+                      customPractice.loadQuestionsSet();
+
+                    }
+                  }
+
+                }
+              };
+
+              Utilities.dialogService(msg);
             }
           }
           else {
@@ -187,6 +214,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
 
       },
       doNotKnowAnswer: function () {
+        $scope.userConfirmed = false;
         this.resetLayout();
         practiceSrv.doNotKnowAnswer($scope.questionResult).then(function (generalInfo) {
           customPractice.bindExplanationInfo(generalInfo);
@@ -194,6 +222,8 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
 
       },
       evaluateConfirmMethod: function () {
+        $scope.userConfirmed = true;
+        this.resetLayout();
         switch ($scope.lastAnswerLoaded) {
           case 'NumericEntry':
           case 'NumericEntryFraction':
@@ -212,6 +242,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         options.roundSessionAnswer = $scope.roundSessionAnswer;
 
         $scope.answerStatus = practiceSrv.numericEntryConfirmChoice(options);
+        customPractice.setAnswerStatusToSharedList($scope.answerStatus);
         customPractice.displayExplanationInfo();
 
       },

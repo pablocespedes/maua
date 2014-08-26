@@ -3,4 +3,9 @@ angular.module('grockitApp.filters', [])
   return function(seconds) {
     return DateFormatter.formatSeconds(seconds);
   };
-}]);
+}])
+.filter('level', function(Level) {
+  return function(input) {
+    return Level.getMessage(input);
+  };
+});
