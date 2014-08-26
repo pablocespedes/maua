@@ -77,6 +77,10 @@ angular.module('grockitApp.services', ['webStorageModule'])
     return  _.find(collection,filter);
 
    },
+   random: function(min, max) {
+      min = min | 0;
+      return _.random(min, max);
+    },
    mapObject: function(collection, key,getter){
 
      return _.map(collection, function(val) {
@@ -273,5 +277,26 @@ angular.module('grockitApp.services', ['webStorageModule'])
   };
   return {
     formatSeconds: formatSeconds
+  };
+})
+
+.factory('Messages', function(Utilities) {
+  var loadingMessages = [
+    'Spinning up the hamster...',
+    'Shovelling coal into the server...',
+    'Programming the flux capacitor',
+    'Adjusting data for your IQ...',
+    'Generating next funny line...',
+    'Entertaining you while you wait...',
+    'Improving your reading skills...',
+    'Dividing eternity by zero, please be patient...',
+    'Just stalling to simulate activity...',
+    'Adding random changes to your data...',
+    'Waiting for approval from Bill Gates...'
+  ];
+  return {
+    getLoadingMessage: function() {
+      return loadingMessages[Utilities.random(loadingMessages.length - 1)];
+    }
   };
 });

@@ -1,5 +1,5 @@
-practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'Utilities', 'breadcrumbs', 'practiceRequests', 'Alerts', 'Timer',
-  function ($scope, practiceSrv, Utilities, breadcrumbs, practiceRequests, Alerts, Timer) {
+practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'Utilities', 'breadcrumbs', 'practiceRequests', 'Alerts', 'Timer', 'Messages',
+  function ($scope, practiceSrv, Utilities, breadcrumbs, practiceRequests, Alerts, Timer, Messages) {
 
     $scope.activeTracks = Utilities.getActiveTrack();
     $scope.activeGroupId = Utilities.getActiveGroup();
@@ -20,6 +20,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
     $scope.setPosition = 0;
     $scope.position = 0;
     $scope.lastAnswerLoaded = '';
+    $scope.loadingMessage = Messages.getLoadingMessage();
 
     var timer = {
       setTimingInformation: function (questionId,correctAnswerId) {
