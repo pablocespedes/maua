@@ -406,25 +406,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
         panel2.addClass('col-md-offset-3');
       }
     },
-    usersRunOutQuestions: function () {
-      var options = {
-        message: "You've answered all of the adaptive questions we have for you in " + $scope.activeTracks.trackTitle + ".  " +
-          "That's a lot of practice.  Would you like to work on a different track or go back to the main dashboard? ",
-        title: "Congratulations!",
-        buttons: {
-          main: {
-            label: "Go to Dashboard",
-            className: "btn-primary",
-            callback: function () {
-              Utilities.redirect('#/' + $scope.activeGroupId + "/dashboard");
-            }
-          }
-        }
-      };
 
-      Utilities.dialogService(options);
-
-    },
     removeBadImage: function () {
       /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
       angular.element('img').error(function () {
@@ -723,8 +705,26 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
     },
     setMailToInformation: function (questionId, titleQuest) {
       return 'Problem with ' + titleQuest + ' question #' + questionId;
-    }
+    },
+    usersRunOutQuestions: function (trackTitle,activeGroupId) {
+      var options = {
+        message: "You've answered all of the adaptive questions we have for you in " + trackTitle + ".  " +
+          "That's a lot of practice.  Would you like to work on a different track or go back to the main dashboard? ",
+        title: "Congratulations!",
+        buttons: {
+          main: {
+            label: "Go to Dashboard",
+            className: "btn-primary",
+            callback: function () {
+              Utilities.redirect('#/' + activeGroupId + "/dashboard");
+            }
+          }
+        }
+      };
 
+      Utilities.dialogService(options);
+
+    }
   }
 });
 
@@ -736,3 +736,26 @@ practiceGame.factory('Level', function() {
     }
   };
 });
+
+
+practiceGame.factory('SplashMessages', function(Utilities) {
+    var loadingMessages = [
+      'Spinning up the hamster...',
+      'Shovelling coal into the server...',
+      'Programming the flux capacitor',
+      'Adjusting data for your IQ...',
+      'Generating next funny line...',
+      'Entertaining you while you wait...',
+      'Improving your reading skills...',
+      'Dividing eternity by zero, please be patient...',
+      'Just stalling to simulate activity...',
+      'Adding random changes to your data...',
+      'Waiting for approval from Bill Gates...'
+    ];
+    return {
+      getLoadingMessage: function() {
+        return loadingMessages[Utilities.random(loadingMessages.length - 1)];
+      }
+    };
+  });
+

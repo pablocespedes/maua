@@ -90,20 +90,21 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         });
       },
       displayExplanationInfo: function () {
-        if (angular.isDefined($scope.answerStatus)) {
-          angular.element('#nextAction').addClass('hide');
           practiceSrv.displayGeneralConfirmInfo($scope.questionResult).then(function (generalInfo) {
             Question.bindExplanationInfo(generalInfo);
 
           });
-        }
       },
       confirmAnswer: function () {
         $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer);
-        Question.displayExplanationInfo();
+        if (angular.isDefined($scope.answerStatus)) {
+          this.resetLayout();
+          Question.displayExplanationInfo();
+
+        }
       },
       resetLayout: function () {
-
+        angular.element('#nextAction').addClass('hide');
         practiceSrv.resetLayout();
       },
       doNotKnowAnswer: function () {
@@ -133,7 +134,11 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         options.roundSessionAnswer = $scope.roundSessionAnswer;
 
         $scope.answerStatus = practiceSrv.numericEntryConfirmChoice(options);
-        Question.displayExplanationInfo();
+        if (angular.isDefined($scope.answerStatus)) {
+          this.resetLayout();
+          Question.displayExplanationInfo();
+
+        }
 
       },
       nextQuestion: function () {

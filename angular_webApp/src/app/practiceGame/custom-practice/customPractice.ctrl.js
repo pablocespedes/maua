@@ -1,10 +1,9 @@
-practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'Utilities', 'breadcrumbs', 'practiceRequests', 'Alerts', 'Timer',
-  function ($scope, practiceSrv, Utilities, breadcrumbs, practiceRequests, Alerts, Timer) {
+practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'Utilities', 'breadcrumbs', 'practiceRequests', 'Alerts', 'Timer', 'SplashMessages',
+  function ($scope, practiceSrv, Utilities, breadcrumbs, practiceRequests, Alerts, Timer, SplashMessages) {
 
     $scope.activeTracks = Utilities.getActiveTrack();
     $scope.activeGroupId = Utilities.getActiveGroup();
     $scope.questionAnalytics = ($scope.activeGroupId === 'gmat' || $scope.activeGroupId === 'act' || $scope.activeGroupId === 'sat' || $scope.activeGroupId === 'gre');
-
     $scope.breadcrumbs = breadcrumbs;
     breadcrumbs.options = { 'practice': $scope.activeTracks.trackTitle };
     $scope.tagsResources=[];
@@ -20,6 +19,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
     $scope.setPosition = 0;
     $scope.position = 0;
     $scope.lastAnswerLoaded = '';
+    $scope.loadingMessage = SplashMessages.getLoadingMessage();
 
     var timer = {
       setTimingInformation: function (questionId,correctAnswerId) {
@@ -103,18 +103,19 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         });
       },
       displayExplanationInfo: function () {
-        if (angular.isDefined($scope.answerStatus)) {
           $scope.nextActionTitle = 'Next Question';
           practiceSrv.displayGeneralConfirmInfo($scope.questionResult).then(function (generalInfo) {
             customPractice.bindExplanationInfo(generalInfo);
 
           });
-        }
       },
       confirmAnswer: function () {
         $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer);
-        customPractice.setAnswerStatusToSharedList($scope.answerStatus);
-        customPractice.displayExplanationInfo();
+        if (angular.isDefined($scope.answerStatus)) {
+          this.resetLayout();
+          /* customPractice.setAnswerStatusToSharedList($scope.answerStatus);*/
+          customPractice.displayExplanationInfo();
+        }
       },
       resetLayout: function () {
         $scope.nextActionTitle = 'Next Question';
@@ -132,7 +133,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
           }
           else {
             /*if user run out of the questions show message*/
-            practiceSrv.usersRunOutQuestions();
+            practiceSrv.usersRunOutQuestions($scope.activeTracks.trackTitle,$scope.activeGroupId);
 
           }
 
@@ -160,13 +161,14 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             /* questionsCount Give us the number of questions by questionSet*/
               questionsCount = questionSetResult.questions.length;
 
-            customPractice.createQuestionSharedList(questionSetResult.questions);
+            /*customPractice.createQuestionSharedList(questionSetResult.questions);*/
             $scope.questByQSetTitle = questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + (questionsCount) + ' for this set' : '';
 
 
             /* Iterate between all the question retrieved it by the API which belong to a specific Question set */
             var questionIdToRequest = questionSetResult.questions[position];
             $scope.currentId = questionIdToRequest;
+
             if (position < questionsCount) {
 
               customPractice.presentQuestion(questionIdToRequest, $scope.gameId)
@@ -174,8 +176,8 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             else {
               $scope.position = 0;
               $scope.setPosition++;
-              // New set, delete the questions, this way they are reinitialized
-              delete $scope.questions;
+             /* New set, delete the questions, this way they are reinitialized*/
+             /* delete $scope.questions;
 
               var msg={
                 message: "You've finished this set of questions. Would you like to continue or switch tracks?",
@@ -200,7 +202,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
                 }
               };
 
-              Utilities.dialogService(msg);
+              Utilities.dialogService(msg);*/
             }
           }
           else {
@@ -223,7 +225,6 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       },
       evaluateConfirmMethod: function () {
         $scope.userConfirmed = true;
-        this.resetLayout();
         switch ($scope.lastAnswerLoaded) {
           case 'NumericEntry':
           case 'NumericEntryFraction':
@@ -242,8 +243,11 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         options.roundSessionAnswer = $scope.roundSessionAnswer;
 
         $scope.answerStatus = practiceSrv.numericEntryConfirmChoice(options);
-        customPractice.setAnswerStatusToSharedList($scope.answerStatus);
-        customPractice.displayExplanationInfo();
+        if (angular.isDefined($scope.answerStatus)) {
+          this.resetLayout();
+          /* customPractice.setAnswerStatusToSharedList($scope.answerStatus);*/
+          customPractice.displayExplanationInfo();
+        }
 
       },
       nextQuestion: function () {

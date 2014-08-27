@@ -77,6 +77,10 @@ angular.module('grockitApp.services', ['webStorageModule'])
     return  _.find(collection,filter);
 
    },
+   random: function(min, max) {
+      min = min | 0;
+      return _.random(min, max);
+    },
    mapObject: function(collection, key,getter){
 
      return _.map(collection, function(val) {
