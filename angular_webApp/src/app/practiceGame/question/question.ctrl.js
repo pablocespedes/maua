@@ -1,5 +1,5 @@
-practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities','breadcrumbs','Alerts','practiceRequests','Timer',
-  function($scope,practiceSrv,Utilities,breadcrumbs,Alerts,practiceRequests,Timer) {
+practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities','breadcrumbs','Alerts','practiceRequests','Timer', 'SplashMessages',
+  function($scope,practiceSrv,Utilities,breadcrumbs,Alerts,practiceRequests,Timer, SplashMessages) {
 
     $scope.activeTracks = Utilities.getActiveTrack();
     $scope.questionAnalytics = ($scope.activeGroupId === 'gmat' || $scope.activeGroupId === 'act' || $scope.activeGroupId === 'sat' || $scope.activeGroupId === 'gre');
@@ -20,6 +20,7 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
     $scope.setPosition = 0;
     $scope.position = 0;
     $scope.lastAnswerLoaded = '';
+    $scope.loadingMessage = SplashMessages.getLoadingMessage();
 
 
     var timer = {
