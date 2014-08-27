@@ -168,11 +168,20 @@
                     <a ng-href="{{url}}/{{activeGroupId}}/study_plan"><i class="menu-icon fa fa-tasks"></i><span class="mm-text">Study Plan</span></a>
                 </li>
                 <li>
-                    <a ng-href="{{url}}/{{activeGroupId}}/video_courses"><i class="menu-icon fa fa-video-camera"></i><span class="mm-text">Video Courses</span></a>
+                    <a ng-href="{{url}}/{{activeGroupId}}/video_courses"><i class="menu-icon fa fa-video-camera"></i><span class="mm-text">Video Library</span></a>
                 </li>
+
+		              <li ng-if="activeGroupId!='gre'">
+				             <a ng-href="{{url}}/{{activeGroupId}}/custom_games/new"><i class="menu-icon fa fa-book"></i><span class="mm-text">Custom Practice</span></a>
+		              </li>
                 <li>
                     <a ng-href="{{url}}/{{activeGroupId}}/social"><i class="menu-icon fa fa-users"></i><span class="mm-text">Group Practice</span></a>
                 </li>
+		            <li>
+				            <a ng-if="activeGroupId==='gre'" href="http://grockit.tv/grepracticetest"><i class="menu-icon fa fa-lightbulb-o"></i><span class="mm-text">Take a Full Length Test</span></a>
+				            <a ng-if="activeGroupId==='gmat'" ng-href="{{url}}/{{activeGroupId}}/join_cat_game"><i class="menu-icon fa fa-lightbulb-o"></i><span class="mm-text">Take a Full Length Test</span></a>
+		            </li>
+
                 <li>
                     <a ng-href="{{url}}/{{activeGroupId}}/tutoring"><i class="menu-icon fa  fa-briefcase"></i><span class="mm-text">Tutoring</span></a>
                 </li>
