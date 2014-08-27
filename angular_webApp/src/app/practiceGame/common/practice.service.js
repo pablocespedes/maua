@@ -250,7 +250,8 @@ practiceGame.factory('questionTypesService', function () {
 
   function numericEntry(scope) {
     scope.$watch('portal.numerator', function (newVal, oldVal) {
-      handleValidation(newVal);
+      scope.isNumeratorValid = validateNumber(newVal);
+      handleValidation(scope.isNumeratorValid);
     });
   }
 
@@ -274,10 +275,11 @@ practiceGame.factory('questionTypesService', function () {
     }
   }
 
-  var nexAction = $('#nextAction'),
-    seeAnswer = $('#skipAction');
+
 
   function handleValidation(isValid) {
+    var nexAction = $('#nextAction'),
+      seeAnswer = $('#skipAction');
     if (isValid) {
       nexAction.addClass('btn-primary');
       seeAnswer.addClass('hide');
@@ -455,6 +457,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
         angular.forEach(answers, function (value, index) {
 
           value["option"] = options[index];
+          value["selected"] = false;
           resultObject.items.push(value);
         });
         Practice.removeBadImage();

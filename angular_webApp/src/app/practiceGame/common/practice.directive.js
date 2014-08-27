@@ -2,7 +2,11 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/oneChoice.tpl.html',
-    link: function () {
+    link: function (scope) {
+      scope.selectAnswer= function(index){
+
+      };
+
       questionTypesService.oneChoiceFactory();
     },
     scope: {
@@ -180,7 +184,6 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
         percentAnswered:'=',
         confirmed:'=',
         xpTag: '=',
-        tagsR: '=',
         lastAnswerLoaded:'='
       },
       link: function (scope) {
