@@ -1,9 +1,10 @@
 <div id="oneChoice">
     <div class="list-group text-left">
 
-        <a id="answer" ng-repeat="item in items" href="javascript:void(0)" class="choice list-group-item">
+        <a id="answer" ng-repeat="item in items" href="javascript:void(0)" class="choice list-group-item" ng-click="selectAnswer($index)">
             <strong><span class="float-right {{item.position}}"></span></strong>
             <div class="middle">
+		            <span ng-if="showExplanation" class="float-right">&#10094;</span>
                 <button id="{{item.id}}" type="button" class=" btn-option  btn-rounded letter" >{{item.option}}</button>
                 <input id="{{item.id}}" type="checkbox" name="choice"  value="false"  />
                 <div class="content" >
