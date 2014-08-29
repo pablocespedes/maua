@@ -27,33 +27,6 @@ angular.module('grockitApp.directives', [])
     }
 
   })
-.directive('easypiechart',function() {
-    return {
-      restrict: 'A',
-      require: '?ngModel',
-      scope: {
-        percent: '=',
-        options: '='
-      },
-      link: function (scope, element, attrs) {
-        scope.percent = scope.percent || 0;
-
-        var pieChart = $(element).easyPieChart({
-          animate: 2000,
-          scaleColor: false,
-          lineWidth: 3,
-          lineCap: 'square',
-          size: 145,
-          barColor: 'white',
-          trackColor: 'white'
-        }).data('easyPieChart').update(scope.percent);
-
-        scope.$watch('percent', function (newVal, oldVal) {
-          pieChart.update(newVal);
-        });
-      }
-    };
-  })
 
 .directive('youtube',function() {
     return {

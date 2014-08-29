@@ -1,13 +1,27 @@
-practiceGame.directive('oneChoice', function (questionTypesService) {
+practiceGame.directive('oneChoice', function () {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/oneChoice.tpl.html',
     link: function (scope) {
-      scope.selectAnswer= function(index){
+      scope.selectAnswer = function (index) {
+        _.forEach(scope.items, function (answer, i) { if (index != i) answer.selected = false; });
+
+        var answer = scope.items[index],
+          nexAction = $('#nextAction'),
+          seeAnswer = $('#skipAction');
+
+        $('.choice button').removeClass('btn-primary btn-danger');
+        if (!answer.selected) {
+          answer.selected = true;
+          nexAction.addClass('btn-primary');
+          seeAnswer.addClass('hide');
+        } else {
+          answer.selected = false;
+          nexAction.removeClass('btn-primary');
+          seeAnswer.removeClass('hide');
+        }
 
       };
-
-      questionTypesService.oneChoiceFactory();
     },
     scope: {
       items: '=items',
@@ -17,12 +31,28 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
   };
 })
 
-  .directive('multipleChoice', function (questionTypesService) {
+  .directive('multipleChoice', function () {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/common/directives.tpl/multipleChoice.tpl.html',
-      link: function () {
-        questionTypesService.multipleChoiceFactory();
+      link: function (scope) {
+        scope.selectAnswer = function (index) {
+          var answers = scope.items[index],
+            nexAction = $('#nextAction'),
+            seeAnswer = $('#skipAction');
+
+          if (!answers.selected) {
+            answers.selected = true;
+            nexAction.addClass('btn-primary');
+            seeAnswer.addClass('hide');
+          } else {
+            answers.selected = false;
+            if (!_.find(scope.items, { 'selected': true })) {
+              nexAction.removeClass('btn-primary');
+              seeAnswer.removeClass('hide');
+            }
+          }
+        };
       },
       scope: {
         items: '=items',
@@ -32,12 +62,37 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
     };
   })
 
-  .directive('multipleMatrix2x3', function (questionTypesService) {
+  .directive('multipleMatrix2x3', function () {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/common/directives.tpl/matrix2x3.tpl.html',
-      link: function () {
-        questionTypesService.matrix2x3ChoiceFactory();
+      link: function (scope) {
+        var answers = _.forEach(scope.items, function (answer, i) {answer["matrix_group"] = ((i - (i % 3)) / 3 );});
+        scope.selectAnswer = function (index, mGroup) {
+          var answer = answers[index],
+            answerId = answer.id,
+            nexAction = $('#nextAction'),
+            seeAnswer = $('#skipAction'),
+            currentSection = _.filter(answers, function (answer) { return answer.matrix_group == mGroup}),
+            trueSelected = _.filter(currentSection, { 'selected': true });
+
+          if (trueSelected) {
+            _.forEach(currentSection, function (answer) { if (answerId != answer.id) answer.selected = false; });
+          }
+
+          if (!answer.selected) {
+            answer.selected = true;
+            nexAction.addClass('btn-primary');
+            seeAnswer.addClass('hide');
+          } else {
+            answer.selected = false;
+            if (!_.find(scope.items, { 'selected': true })) {
+              nexAction.removeClass('btn-primary');
+              seeAnswer.removeClass('hide');
+            }
+          }
+
+        };
       },
       scope: {
         items: '=items',
@@ -47,12 +102,38 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
     };
   })
 
-  .directive('multipleMatrix3x3', function (questionTypesService) {
+  .directive('multipleMatrix3x3', function () {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/common/directives.tpl/matrix3x3.tpl.html',
-      link: function () {
-        questionTypesService.matrix3x3ChoiceFactory();
+      link: function (scope) {
+
+        var answers = _.forEach(scope.items, function (answer, i) {answer["matrix_group"] = ((i - (i % 3)) / 3 );});
+        scope.selectAnswer = function (index, mGroup) {
+          var answer = answers[index],
+            answerId = answer.id,
+            nexAction = $('#nextAction'),
+            seeAnswer = $('#skipAction'),
+            currentSection = _.filter(answers, function (answer) { return answer.matrix_group == mGroup}),
+            trueSelected = _.filter(currentSection, { 'selected': true });
+
+          if (trueSelected) {
+            _.forEach(currentSection, function (answer) { if (answerId != answer.id) answer.selected = false; });
+          }
+
+          if (!answer.selected) {
+            answer.selected = true;
+            nexAction.addClass('btn-primary');
+            seeAnswer.addClass('hide');
+          } else {
+            answer.selected = false;
+            if (!_.find(scope.items, { 'selected': true })) {
+              nexAction.removeClass('btn-primary');
+              seeAnswer.removeClass('hide');
+            }
+          }
+
+        };
       },
       scope: {
         items: '=items',
@@ -61,6 +142,47 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
       }
     };
   })
+
+  .directive('twoChoice', function () {
+    var options = [];
+    return {
+      restrict: 'A',
+      templateUrl: 'app/practiceGame/common/directives.tpl/twoChoice.tpl.html',
+      link: function (scope) {
+        scope.selectAnswer = function (index) {
+          var answer = scope.items[index],
+            nexAction = $('#nextAction'),
+            seeAnswer = $('#skipAction');
+          if (!answer.selected) {
+            /*validation which takes care to keep just 2 options selected*/
+            if (options.length >= 2) {
+              var ansR = _.find(scope.items, { 'id': options[0] });
+              ansR.selected = false;
+              options = _.filter(options, function (num, i) { return i != 0 });
+            }
+            options.push(answer.id);
+            answer.selected = true;
+            nexAction.addClass('btn-primary');
+            seeAnswer.addClass('hide');
+          } else {
+            options = _.filter(options, function (num) { return num != answer.id });
+            answer.selected = false;
+            if (!_.find(scope.items, { 'selected': true })) {
+              nexAction.removeClass('btn-primary');
+              seeAnswer.removeClass('hide');
+            }
+          }
+
+        };
+      },
+      scope: {
+        items: '=items',
+        showExplanation: '=',
+        hasExplanation: '&'
+      }
+    };
+  })
+
 
   .directive('sat', function (questionTypesService) {
     return {
@@ -107,22 +229,6 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
       },
       link: function (scope) {
         questionTypesService.fractionEntry(scope);
-      }
-    };
-  })
-
-  .directive('twoChoice', function (questionTypesService) {
-
-    return {
-      restrict: 'A',
-      templateUrl: 'app/practiceGame/common/directives.tpl/twoChoice.tpl.html',
-      link: function () {
-        questionTypesService.multipleChoiceTwoCorrect();
-      },
-      scope: {
-        items: '=items',
-        showExplanation: '=',
-        hasExplanation: '&'
       }
     };
   })
@@ -181,13 +287,13 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
         data: '=',
         yourTime: '=',
         answerStatus: '=',
-        percentAnswered:'=',
-        confirmed:'=',
+        percentAnswered: '=',
+        confirmed: '=',
         xpTag: '=',
-        lastAnswerLoaded:'='
+        lastAnswerLoaded: '='
       },
       link: function (scope) {
-        scope.showPercAnswered = !(scope.lastAnswerLoaded==='NumericEntry' || scope.lastAnswerLoaded === 'NumericEntryFraction');
+        scope.showPercAnswered = !(scope.lastAnswerLoaded === 'NumericEntry' || scope.lastAnswerLoaded === 'NumericEntryFraction');
 
         scope.compAvgStatus = ((scope.yourTime - scope.data.avg_time_to_answer) > 0);
 
@@ -308,22 +414,22 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
       templateUrl: 'app/practiceGame/common/directives.tpl/questionShareList.tpl.html',
       scope: {
         questCount: '=',
-        currentGroup:'='
+        currentGroup: '='
       },
-      link: function(scope){
-        scope.currentDomain= environmentCons.localGrockit +'#/'+scope.currentGroup +'/question/';
+      link: function (scope) {
+        scope.currentDomain = environmentCons.localGrockit + '#/' + scope.currentGroup + '/question/';
       }
 
     };
   })
 
-  .directive('splashMessage', function() {
+  .directive('splashMessage', function () {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/common/directives.tpl/splash-message.tpl.html',
       scope: {
         isVisible: '=',
-        word:'='
+        word: '='
       }
 
     };

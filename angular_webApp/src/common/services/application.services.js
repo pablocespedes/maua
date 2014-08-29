@@ -101,15 +101,11 @@ angular.module('grockitApp.services', ['webStorageModule'])
      }
      return -1;
    },
-   existsInArray: function (element, array) {
-     return  ($.inArray(element, array) !== -1);
-   },
    encodeRedirect: function (redirectUrl, url) {
      window.location.href = redirectUrl + encodeURIComponent(url);
    },
    redirect: function (url) {
 
-     var basePath = $location.host == '127.0.0.1' ? '' : 'v2';
      window.location.href =  url;
    },
    setActiveTab: function (position) {

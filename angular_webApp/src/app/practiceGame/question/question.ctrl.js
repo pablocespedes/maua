@@ -96,7 +96,7 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
           });
       },
       confirmAnswer: function () {
-        $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer);
+        $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer,$scope.items);
         if (angular.isDefined($scope.answerStatus)) {
           this.resetLayout();
           Question.displayExplanationInfo();
@@ -152,10 +152,9 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         $scope.messageConfirmation = '';
         angular.element('#skipAction').removeClass('hide');
         angular.element('#nextAction').removeClass('btn-primary');
-        angular.element('#answersPanels').addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+        angular.element('#PanelQuestion').addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
           angular.element(this).removeClass();
         });
-
       },
       feedbackInfo: function (questionId) {
         $scope.subjectMail = practiceSrv.setMailToInformation(questionId,$scope.activeTracks.trackTitle);

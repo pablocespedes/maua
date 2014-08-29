@@ -110,7 +110,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
           });
       },
       confirmAnswer: function () {
-        $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer);
+        $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer,$scope.items);
         if (angular.isDefined($scope.answerStatus)) {
           this.resetLayout();
           /* customPractice.setAnswerStatusToSharedList($scope.answerStatus);*/
@@ -161,21 +161,22 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             /* questionsCount Give us the number of questions by questionSet*/
               questionsCount = questionSetResult.questions.length;
 
-            /*customPractice.createQuestionSharedList(questionSetResult.questions);*/
-            $scope.questByQSetTitle = questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + (questionsCount) + ' for this set' : '';
-
-
             /* Iterate between all the question retrieved it by the API which belong to a specific Question set */
-            var questionIdToRequest = questionSetResult.questions[position];
-            $scope.currentId = questionIdToRequest;
-
             if (position < questionsCount) {
+
+              /*customPractice.createQuestionSharedList(questionSetResult.questions);*/
+              $scope.questByQSetTitle = questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + (questionsCount) + ' for this set' : '';
+
+
+              var questionIdToRequest = questionSetResult.questions[position];
+              $scope.currentId = questionIdToRequest;
 
               customPractice.presentQuestion(questionIdToRequest, $scope.gameId)
             }
             else {
               $scope.position = 0;
               $scope.setPosition++;
+              customPractice.loadQuestionsSet();
              /* New set, delete the questions, this way they are reinitialized*/
              /* delete $scope.questions;
 
@@ -264,7 +265,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         $scope.messageConfirmation = '';
         angular.element('#skipAction').removeClass('hide');
         angular.element('#nextAction').removeClass('btn-primary');
-        angular.element('#answersPanels').addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+        angular.element('#PanelQuestion').addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
           angular.element(this).removeClass();
         });
 
