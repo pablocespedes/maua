@@ -183,7 +183,6 @@ practiceGame.directive('oneChoice', function () {
     };
   })
 
-
   .directive('sat', function (questionTypesService) {
     return {
       restrict: 'A',
@@ -316,6 +315,7 @@ practiceGame.directive('oneChoice', function () {
       }
     };
   })
+
   .directive('questionTags', function () {
     return {
       restrict: 'A',

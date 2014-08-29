@@ -174,9 +174,8 @@ practiceGame.factory('fraction', function () {
 
 practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, Alerts, $sce, VideoService, environmentCons,$resource) {
 
-  var optionList = "abcdefghijklmnopqrstuvwxyz";
-
-  var Practice = {
+  var optionList = "abcdefghijklmnopqrstuvwxyz",
+      Practice = {
     /*This methods takes care to set the practice layout based on the API response*/
     setLayoutBasedOnQuestionInfo: function (setLayout) {
       var panel1 = angular.element('#Panel1'),

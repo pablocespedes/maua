@@ -57,7 +57,7 @@ angular.module('grockitApp.directives', [])
     };
   })
 
-.directive('trackList', function() {
+.directive('trackList', function(Utilities) {
     return {
       restrict: 'A',
       templateUrl: 'common/templates/directives/track-list.tpl.html',
@@ -72,6 +72,11 @@ angular.module('grockitApp.directives', [])
         scope.hasScore = function (track) {
           return (scope.getScore(track) !== null && scope.getScore(track) > 0);
         };
+
+        scope.getYourScorePredictionUrl = function(track){
+          var baseUrl=Utilities.originalGrockit(false).url;
+          Utilities.redirect(baseUrl+'/assessment/for_track/'+track.id);
+        }
       }
     };
   })
