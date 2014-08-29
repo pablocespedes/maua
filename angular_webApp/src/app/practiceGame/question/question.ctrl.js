@@ -1,5 +1,5 @@
-practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities','breadcrumbs','Alerts','practiceRequests','Timer',
-  function($scope,practiceSrv,Utilities,breadcrumbs,Alerts,practiceRequests,Timer) {
+practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities','breadcrumbs','Alerts','practiceRequests','Timer', 'SplashMessages',
+  function($scope,practiceSrv,Utilities,breadcrumbs,Alerts,practiceRequests,Timer, SplashMessages) {
 
     $scope.activeTracks = Utilities.getActiveTrack();
     $scope.questionAnalytics = ($scope.activeGroupId === 'gmat' || $scope.activeGroupId === 'act' || $scope.activeGroupId === 'sat' || $scope.activeGroupId === 'gre');
@@ -20,6 +20,7 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
     $scope.setPosition = 0;
     $scope.position = 0;
     $scope.lastAnswerLoaded = '';
+    $scope.loadingMessage = SplashMessages.getLoadingMessage();
 
 
     var timer = {
@@ -70,9 +71,10 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         $scope.xpTag = info.xpTag;
       },
       presentQuestion: function (questionId, gameId) {
-        practiceSrv.loadQuestion(questionId, gameId).then(function (result) {
+        practiceSrv.getRoundSession(questionId,gameId).then(function(result){  $scope.roundSessionAnswer = result.roundSessionAnswer; });
+
+        practiceSrv.loadQuestion(questionId).then(function (result) {
           $scope.questionResult = result.questionResult;
-          $scope.roundSessionAnswer = result.roundSessionAnswer;
           $scope.lastAnswerLoaded = result.lastAnswerLoaded;
           $scope.questionInformation = result.questionInformation;
           $scope.stimulus = result.stimulus;
@@ -96,7 +98,7 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
           });
       },
       confirmAnswer: function () {
-        $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer);
+        $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer,$scope.items);
         if (angular.isDefined($scope.answerStatus)) {
           this.resetLayout();
           Question.displayExplanationInfo();
@@ -115,7 +117,6 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
 
       },
       evaluateConfirmMethod: function () {
-        this.resetLayout();
         switch ($scope.lastAnswerLoaded) {
           case 'NumericEntry':
           case 'NumericEntryFraction':
@@ -152,10 +153,9 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         $scope.messageConfirmation = '';
         angular.element('#skipAction').removeClass('hide');
         angular.element('#nextAction').removeClass('btn-primary');
-        angular.element('#answersPanels').addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+        angular.element('#PanelQuestion').addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
           angular.element(this).removeClass();
         });
-
       },
       feedbackInfo: function (questionId) {
         $scope.subjectMail = practiceSrv.setMailToInformation(questionId,$scope.activeTracks.trackTitle);

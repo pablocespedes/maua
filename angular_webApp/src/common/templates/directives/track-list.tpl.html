@@ -14,10 +14,10 @@
         <br>
         <span class="text-xs float-right valign-bottom">Your Score Prediction</span>
       </div>
-      <div class="valign-middle" ng-hide="hasScore(track)">
-        <br>
-        <span>Not enough data</span>
+      <div ng-hide="hasScore(track)">
+		      <button class="get-score-prediction btn-lg float-right btn btn-labeled btn-info" ng-click="getYourScorePredictionUrl(track)">Get your Score Prediction</button>
       </div>
+
     </div>
   </div>
 </a>
