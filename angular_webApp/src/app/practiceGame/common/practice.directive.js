@@ -371,6 +371,7 @@ practiceGame.directive('oneChoice', function () {
         case 'NumericEntryFraction':
           template = fractionTpl;
           break;
+        case 'SPR':
         case 'NumericEntry':
           template = numericEntryTpl;
           break;
@@ -423,7 +424,18 @@ practiceGame.directive('oneChoice', function () {
     };
   })
 
-  .directive('splashMessage', function () {
+  .directive('questionCount', function() {
+    return {
+      restrict: 'A',
+      templateUrl: 'app/practiceGame/common/directives.tpl/questionCount.tpl.html',
+      scope: {
+        currentCount: '=',
+        maxCount: '='
+      }
+    }
+  })
+
+  .directive('splashMessage', function() {
     return {
       restrict: 'A',
       templateUrl: 'app/practiceGame/common/directives.tpl/splash-message.tpl.html',
