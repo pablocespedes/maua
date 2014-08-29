@@ -157,19 +157,19 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             /* Iterate between all the question sets retrieved it by the API */
               questionSetResult = $scope.questionSetList[setPosition];
 
-            var position = $scope.position,
+            var position = $scope.position;
             /* questionsCount Give us the number of questions by questionSet*/
-              questionsCount = questionSetResult.questions.length;
+            $scope.questionsCount = questionSetResult.questions.length;
 
             /*customPractice.createQuestionSharedList(questionSetResult.questions);*/
-            $scope.questByQSetTitle = questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + (questionsCount) + ' for this set' : '';
+            $scope.questByQSetTitle = $scope.questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + ($scope.questionsCount) + ' for this set' : '';
 
 
             /* Iterate between all the question retrieved it by the API which belong to a specific Question set */
             var questionIdToRequest = questionSetResult.questions[position];
             $scope.currentId = questionIdToRequest;
 
-            if (position < questionsCount) {
+            if (position < $scope.questionsCount) {
 
               customPractice.presentQuestion(questionIdToRequest, $scope.gameId)
             }

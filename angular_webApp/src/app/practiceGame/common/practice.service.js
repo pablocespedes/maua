@@ -721,7 +721,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 });
 
 practiceGame.factory('Level', function() {
-  var messages = {2: 'Easy', 4: 'Easy/Medium', 8: 'Medium', 16: 'Medium/Hard', 32: 'Hard'};
+  var messages = {2: 'Lowest', 4: 'Low', 8: 'Average', 16: 'High', 32: 'Highest'};
   return {
     getMessage: function(level) {
       return messages[level];

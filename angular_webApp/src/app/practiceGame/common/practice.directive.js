@@ -265,6 +265,7 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
         case 'NumericEntryFraction':
           template = fractionTpl;
           break;
+        case 'SPR':
         case 'NumericEntry':
           template = numericEntryTpl;
           break;
@@ -315,6 +316,17 @@ practiceGame.directive('oneChoice', function (questionTypesService) {
       }
 
     };
+  })
+
+  .directive('questionCount', function() {
+    return {
+      restrict: 'A',
+      templateUrl: 'app/practiceGame/common/directives.tpl/questionCount.tpl.html',
+      scope: {
+        currentCount: '=',
+        maxCount: '='
+      }
+    }
   })
 
   .directive('splashMessage', function() {
