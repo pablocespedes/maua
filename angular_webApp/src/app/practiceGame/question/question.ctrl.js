@@ -118,6 +118,7 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
       evaluateConfirmMethod: function () {
         this.resetLayout();
         switch ($scope.lastAnswerLoaded) {
+          case 'SPR':
           case 'NumericEntry':
           case 'NumericEntryFraction':
             Question.numericConfirmAnswer();
