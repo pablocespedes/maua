@@ -71,9 +71,10 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         $scope.xpTag = info.xpTag;
       },
       presentQuestion: function (questionId, gameId) {
-        practiceSrv.loadQuestion(questionId, gameId).then(function (result) {
+        practiceSrv.getRoundSession(questionId,gameId).then(function(result){  $scope.roundSessionAnswer = result.roundSessionAnswer; });
+
+        practiceSrv.loadQuestion(questionId).then(function (result) {
           $scope.questionResult = result.questionResult;
-          $scope.roundSessionAnswer = result.roundSessionAnswer;
           $scope.lastAnswerLoaded = result.lastAnswerLoaded;
           $scope.questionInformation = result.questionInformation;
           $scope.stimulus = result.stimulus;
@@ -116,7 +117,6 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
 
       },
       evaluateConfirmMethod: function () {
-        this.resetLayout();
         switch ($scope.lastAnswerLoaded) {
           case 'NumericEntry':
           case 'NumericEntryFraction':

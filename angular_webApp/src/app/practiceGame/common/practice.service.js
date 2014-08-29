@@ -172,46 +172,55 @@ practiceGame.factory('fraction', function () {
   };
 });
 
-practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, Alerts, $sce, VideoService, environmentCons,$resource) {
+practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, Alerts, $sce, VideoService, environmentCons, $resource) {
 
   var optionList = "abcdefghijklmnopqrstuvwxyz",
-      Practice = {
-    /*This methods takes care to set the practice layout based on the API response*/
-    setLayoutBasedOnQuestionInfo: function (setLayout) {
-      var panel1 = angular.element('#Panel1'),
-        panel2 = angular.element('#Panel2');
+    Practice = {
+      /*This methods takes care to set the practice layout based on the API response*/
+      setLayoutBasedOnQuestionInfo: function (setLayout) {
+        var panel1 = angular.element('#Panel1'),
+          panel2 = angular.element('#Panel2');
 
-      if (setLayout) {
-        panel1.removeClass('col-md-offset-3');
-        panel2.removeClass('col-md-offset-3');
+        if (setLayout) {
+          panel1.removeClass('col-md-offset-3');
+          panel2.removeClass('col-md-offset-3');
 
+        }
+        else {
+          panel1.addClass('col-md-offset-3');
+          panel2.addClass('col-md-offset-3');
+        }
+      },
+      removeBadImage: function () {
+        /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
+        angular.element('img').error(function () {
+
+          angular.element('img').attr('src', '');
+        });
       }
-      else {
-        panel1.addClass('col-md-offset-3');
-        panel2.addClass('col-md-offset-3');
-      }
-    },
-    removeBadImage: function () {
-      /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
-      angular.element('img').error(function () {
-
-        angular.element('img').attr('src', '');
-      });
-    }
-  };
+    };
 
   return {
-    loadQuestion: function (questionToRequest, gameId) {
+    getRoundSession: function (questionToRequest, gameId) {
+      var deferred = $q.defer(), resultObject = {};
+      practiceRequests.roundSessions().createQuestionPresentation(gameId, questionToRequest).then(function (result) {
+
+        resultObject.roundSessionAnswer = result.data.round_session;
+        deferred.resolve(resultObject);
+
+      }).catch(function error(error) {
+        deferred.reject(resultObject);
+        Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+      });
+      return deferred.promise;
+    },
+    loadQuestion: function (questionToRequest) {
       var deferred = $q.defer(),
-        setLayoutType = false, resultObject = {},
+        setLayoutType = false, resultObject = {};
 
-      /*Get question and Create Round Session by Question*/
-        getQuestion = practiceRequests.questions().getQuestionById(questionToRequest),
-        questionPresentation = practiceRequests.roundSessions().createQuestionPresentation(gameId, questionToRequest);
+      practiceRequests.questions().getQuestionById(questionToRequest).then(function (result) {
 
-      $q.all([getQuestion, questionPresentation]).then(function (result) {
-
-        resultObject.questionResult = result[0].data.question;
+        resultObject.questionResult = result.data.question;
 
         if (resultObject.lastAnswerLoaded == '' || resultObject.lastAnswerLoaded != resultObject.questionResult.kind) {
           resultObject.lastAnswerLoaded = resultObject.questionResult.kind;
@@ -224,9 +233,6 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
         /*Set the layout based on the question info*/
         Practice.setLayoutBasedOnQuestionInfo(setLayoutType);
 
-        resultObject.answerObject = result[1].data;
-        resultObject.roundSessionAnswer = result[1].data.round_session;
-
         /*@Jose TODO This can be performed on a better way*/
         angular.element('.choice.active').removeClass('active');
 
@@ -237,12 +243,13 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
         var options = optionList.toUpperCase().split(""),
           answers = resultObject.questionResult.answers;
-        angular.forEach(answers, function (value, index) {
 
-          value["option"] = options[index];
+        for (var i = 0; i < answers.length; i++) {
+          var value = answers[i];
+          value["option"] = options[i];
           value["selected"] = false;
           resultObject.items.push(value);
-        });
+        }
         Practice.removeBadImage();
         deferred.resolve(resultObject);
 
@@ -255,14 +262,14 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
       return deferred.promise;
 
     },
-    confirmChoice: function (questionResult, roundSessionAnswer,answers) {
+    confirmChoice: function (questionResult, roundSessionAnswer, answers) {
       var selectedPosition = '', selectedOptions = [], selectedOptionsCount, i = 0, answerStatus = true;
 
       /*Get selected answers*/
 
       angular.forEach(answers, function (answer) {
-        if(answer.selected) {
-          selectedPosition = angular.isDefined(answer.answer_id)? answer.answer_id : answer.id;
+        if (answer.selected) {
+          selectedPosition = angular.isDefined(answer.answer_id) ? answer.answer_id : answer.id;
           selectedOptions.push(selectedPosition);
         }
       });
@@ -278,7 +285,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
           /*set the correct class on the button*/
           if (value.correct) {
-            if (Utilities.findInCollection(selectedOptions,value.id)) {
+            if (Utilities.findInCollection(selectedOptions, value.id)) {
               /*Send answer response to server, important this line have to be inside this if
                * since just the users answers get into this evaluation
                * */
@@ -292,7 +299,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
           }
           else {
-            if (Utilities.findInCollection(selectedOptions,function(val){ return val === value.id})) {
+            if (Utilities.findInCollection(selectedOptions, function (val) { return val === value.id})) {
               /*Send answer response to server, important this line have to be inside this if
                * since just the users answers get into this evaluation
                * */
@@ -323,13 +330,13 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
       angular.element('.list-group *').addClass('no-hover');
 
     },
-    parseTagsAndResources: function(tags) {
+    parseTagsAndResources: function (tags) {
       var parsedTags = [],
-          parsedResources = [],
-          tgR = {};
+        parsedResources = [],
+        tgR = {};
       angular.forEach(tags, function (value) {
         var tagR = value.tag_resources;
-        if (!_.find(parsedTags, function(tag) { return tag.name === value.name; }))
+        if (!Utilities.findInCollection(parsedTags, function (tag) { return tag.name === value.name; }))
           parsedTags.push(value);
         angular.forEach(tagR, function (val) {
           tgR = {
@@ -343,7 +350,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
       return {tags: parsedTags, resources: parsedResources};
     },
     displayGeneralConfirmInfo: function (questionResult) {
-      var deferred = $q.defer(), generalObject = {}, tags = [];
+      var deferred = $q.defer(), generalObject = {};
       /* Question Explanation*/
       generalObject.questionExplanation = questionResult.explanation;
 
@@ -357,12 +364,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
       generalObject.tags = parsedTags.tags;
       generalObject.xpTag = questionResult.experience_points;
 
-      /* Work with the styles to shown result
-       define is some answer is bad.*/
-      /*
-       answerStatus = true;*/
-
-      /* video validation*/
+       /* video validation*/
       if (questionResult.youtube_video_id !== null) {
         generalObject.showVideo = true;
         generalObject.videoId = questionResult.youtube_video_id;
@@ -474,14 +476,14 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
     },
     getTimingInformation: function (trackId, groupId, questionId) {
-       var url = environmentCons.timingData+ groupId+'/'+trackId+'/'+questionId+'.json';
-      return $resource(url).query({array:true});
+      var url = environmentCons.timingData + groupId + '/' + trackId + '/' + questionId + '.json';
+      return $resource(url).query({array: true});
 
     },
     setMailToInformation: function (questionId, titleQuest) {
       return 'Problem with ' + titleQuest + ' question #' + questionId;
     },
-    usersRunOutQuestions: function (trackTitle,activeGroupId) {
+    usersRunOutQuestions: function (trackTitle, activeGroupId) {
       var options = {
         message: "You've answered all of the adaptive questions we have for you in " + trackTitle + ".  " +
           "That's a lot of practice.  Would you like to work on a different track or go back to the main dashboard? ",
@@ -503,16 +505,16 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
   }
 });
 
-practiceGame.factory('Level', function() {
+practiceGame.factory('Level', function () {
   var messages = {2: 'Easy', 4: 'Easy/Medium', 8: 'Medium', 16: 'Medium/Hard', 32: 'Hard'};
   return {
-    getMessage: function(level) {
+    getMessage: function (level) {
       return messages[level];
     }
   };
 });
 
-practiceGame.factory('SplashMessages', function(Utilities) {
+practiceGame.factory('SplashMessages', function (Utilities) {
   var loadingMessages = [
     'Spinning up the hamster...',
     'Shovelling coal into the server...',
