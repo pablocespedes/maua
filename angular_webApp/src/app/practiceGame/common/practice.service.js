@@ -324,6 +324,25 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
       angular.element('.list-group *').addClass('no-hover');
 
     },
+    parseTagsAndResources: function(tags) {
+      var parsedTags = [],
+          parsedResources = [],
+          tgR = {};
+      angular.forEach(tags, function (value) {
+        var tagR = value.tag_resources;
+        if (!_.find(parsedTags, function(tag) { return tag.name === value.name; }))
+          parsedTags.push(value);
+        angular.forEach(tagR, function (val) {
+          tgR = {
+            name: value.name,
+            resource_type: val.resource_type,
+            resource: val.resource_type == 'youtube' ? Utilities.getYoutubeVideosId(val.resource) : val.resource
+          };
+          parsedResources.push(tgR);
+        });
+      });
+      return {tags: parsedTags, resources: parsedResources};
+    },
     displayGeneralConfirmInfo: function (questionResult) {
       var deferred = $q.defer(), generalObject = {}, tags = [];
       /* Question Explanation*/
@@ -333,25 +352,10 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
         generalObject.showExplanation = true;
 
       /*Evaluate tag resources info, get video Ids and video time*/
-      var tagsResources = [], tgR = {};
+      var parsedTags = this.parseTagsAndResources(questionResult.tags);
 
-      angular.forEach(questionResult.tags, function (value) {
-        var tagR = value.tag_resources;
-
-        angular.forEach(tagR, function (val) {
-
-          tgR = {
-            name: value.name,
-            resource_type: val.resource_type,
-            resource: val.resource_type == 'youtube' ? Utilities.getYoutubeVideosId(val.resource) : val.resource
-          };
-          tagsResources.push(tgR);
-
-        });
-      });
-
-      generalObject.tagsResources = tagsResources;
-      generalObject.tags = questionResult.tags;
+      generalObject.tagsResources = parsedTags.resources;
+      generalObject.tags = parsedTags.tags;
       generalObject.xpTag = questionResult.experience_points;
 
       /* Work with the styles to shown result
@@ -388,25 +392,10 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
       var answers = questionResult.answers;
 
       /*Evaluate tag resources info, get video Ids and video time*/
-      var tagsResources = [], tgR = {};
+      var parsedTags = this.parseTagsAndResources(questionResult.tags);
 
-      angular.forEach(questionResult.tags, function (value) {
-        var tagR = value.tag_resources;
-
-        angular.forEach(tagR, function (val) {
-
-          tgR = {
-            name: value.name,
-            resource_type: val.resource_type,
-            resource: val.resource_type == 'youtube' ? Utilities.getYoutubeVideosId(val.resource) : val.resource
-          };
-          tagsResources.push(tgR);
-
-        });
-      });
-
-      resultObject.tagsResources = tagsResources;
-      resultObject.tags = questionResult.tags;
+      resultObject.tagsResources = parsedTags.resources;
+      resultObject.tags = parsedTags.tags;
 
       resultObject.xpTag = questionResult.experience_points;
 
