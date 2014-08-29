@@ -3,216 +3,6 @@
 
 practiceGame.factory('questionTypesService', function () {
 
-  var removeItem = function (options, idInput) {
-    return $.grep(options, function (value) {
-      return value != idInput;
-    });
-  };
-
-
-  function oneChoiceFactory() {
-    var content = $('#parent');
-    content.on('click', '#oneChoice .middle', function (e) {
-      if (e.handled !== true) // This will prevent event triggering more then once
-      {
-        var choice = $(e.target).closest('.choice'),
-          input = choice.find('[type="checkbox"]'),
-          button = choice.find(':button'),
-          isChecked = input.is(':checked'),
-          hasPrimary = button.hasClass('btn-primary'),
-          nexAction = $('#nextAction'),
-          seeAnswer = $('#skipAction');
-
-
-        $('.choice').find('[type="checkbox"]').prop('value', false);
-        $('.choice button').removeClass('btn-primary btn-danger');
-
-
-        if (!isChecked && !hasPrimary) {
-          input.prop('value', true);
-          button.addClass('btn-primary');
-          nexAction.addClass('btn-primary');
-          seeAnswer.addClass('hide');
-        } else {
-          nexAction.removeClass('btn-primary');
-          seeAnswer.removeClass('hide');
-          input.prop('value', false);
-          button.removeClass('btn-primary');
-        }
-      }
-      e.handled = true;
-
-
-    });
-  }
-
-  function multipleChoiceFactory() {
-    var content = $('#parent');
-    content.on('click', '#multipleChoice .middle', function (e) {
-      if (e.handled !== true) // This will prevent event triggering more then once
-      {
-        var choice = $(e.target).closest('.choice'),
-          general = $('.choice .middle button'),
-          input = choice.find('[type="checkbox"]'),
-          choiceB = choice.find('.middle'),
-          button = choiceB.find('.letter'),
-          isChecked = input.is(':checked'),
-          hasPrimary = button.hasClass('btn-primary'),
-          nexAction = $('#nextAction'),
-          seeAnswer = $('#skipAction');
-
-        if (!isChecked && !hasPrimary) {
-          input.prop('value', true);
-          button.addClass('btn-primary');
-          nexAction.addClass('btn-primary');
-          seeAnswer.addClass('hide');
-        } else {
-          input.prop('value', false);
-          button.removeClass('btn-primary');
-          if (!general.hasClass('btn-primary')) {
-            nexAction.removeClass('btn-primary');
-            seeAnswer.removeClass('hide');
-          }
-
-        }
-        e.handled = true;
-      }
-
-    });
-
-  }
-
-  function matrix2x3ChoiceFactory() {
-    var content = $('#parent');
-    content.on('click', '#matrix2x3 .middle', function (e) {
-
-      if (e.handled !== true) // This will prevent event triggering more then once
-      {
-        var choice = $(e.target).closest('.choice'),
-          general = $('.choice .middle button'),
-          input = choice.find('[type="radio"]'),
-          choiceB = choice.find('.middle'),
-          button = choiceB.find('.letter'),
-          isChecked = input.is(':checked'),
-          hasPrimary = button.hasClass('btn-primary'),
-          nexAction = $('#nextAction'),
-          seeAnswer = $('#skipAction'),
-          limitSelection = choice.parent().find('[data-group=' + choiceB.data('group') + ']');
-
-        if (limitSelection.find('button').hasClass('btn-primary')) {
-          limitSelection.find('button').removeClass('btn-primary');
-          limitSelection.find('input').prop('value', false);
-        }
-
-        if (!isChecked && !hasPrimary) {
-          input.prop('value', true);
-          button.addClass('btn-primary');
-          nexAction.addClass('btn-primary');
-          seeAnswer.addClass('hide');
-        } else {
-          input.prop('value', false);
-          button.removeClass('btn-primary');
-          if (!general.hasClass('btn-primary')) {
-            nexAction.removeClass('btn-primary');
-            seeAnswer.removeClass('hide');
-          }
-        }
-      }
-      e.handled = true;
-    });
-
-  }
-
-  function matrix3x3ChoiceFactory() {
-    var content = $('#parent');
-    content.on('click', '#matrix3x3 .middle', function (e) {
-
-      if (e.handled !== true) // This will prevent event triggering more then once
-      {
-        var choice = $(e.target).closest('.choice'),
-          input = choice.find('[type="radio"]'),
-          general = $('.choice .middle button'),
-          choiceB = choice.find('.middle'),
-          button = choiceB.find('.letter'),
-          isChecked = input.is(':checked'),
-          hasPrimary = button.hasClass('btn-primary'),
-          nexAction = $('#nextAction'),
-          seeAnswer = $('#skipAction'),
-          limitSelection = choice.parent().find('[data-group=' + choiceB.data('group') + ']');
-
-        if (limitSelection.find('button').hasClass('btn-primary')) {
-          limitSelection.find('button').removeClass('btn-primary');
-          limitSelection.find('input').prop('value', false);
-        }
-        if (!isChecked && !hasPrimary) {
-          input.prop('value', true);
-          button.addClass('btn-primary');
-          nexAction.addClass('btn-primary');
-          seeAnswer.addClass('hide');
-        } else {
-          input.prop('value', false);
-          button.removeClass('btn-primary');
-          if (!general.hasClass('btn-primary')) {
-            nexAction.removeClass('btn-primary');
-            seeAnswer.removeClass('hide');
-          }
-        }
-      }
-      e.handled = true;
-
-    });
-  }
-
-  function multipleChoiceTwoCorrect() {
-    var content = $('#parent'),
-      options = [];
-    content.on('click', '#twoChoice .middle', function (e) {
-      if (e.handled !== true) // This will prevent event triggering more then once
-      {
-        var choice = $(e.target).closest('.choice'),
-          input = choice.find('[type="checkbox"]'),
-          idInput = input.attr('id'),
-          choiceB = choice.find('.middle'),
-          button = choiceB.find('.letter'),
-          isChecked = input.is(':checked'),
-          hasPrimary = button.hasClass('btn-primary'),
-          nexAction = $('#nextAction'),
-          seeAnswer = $('#skipAction');
-
-
-        // normal flow, this just identify when check or uncheck
-        if (!isChecked && !hasPrimary) {
-
-          // validation which takes care to keep just 2 options selected
-          if (options.length >= 2) {
-            var itemToRemove = options[0];
-            options = removeItem(options, itemToRemove);
-            var removedButton = $('button#' + itemToRemove), removeInput = removedButton.parent().find('input');
-            removeInput.prop('value', false);
-            removedButton.removeClass('btn-primary');
-            event.preventDefault();
-          }
-
-          options.push(idInput);
-          input.prop('value', true);
-          button.addClass('btn-primary');
-          nexAction.addClass('btn-primary');
-          seeAnswer.addClass('hide');
-        } else {
-          options = removeItem(options, idInput);
-
-          nexAction.removeClass('btn-primary');
-          seeAnswer.removeClass('hide');
-          input.prop('value', false);
-          button.removeClass('btn-primary');
-        }
-      }
-      e.handled = true;
-
-    });
-
-  }
-
   function satFactory() {
     var content = $('#parent');
     content.on('click', '#sat .column-matrix', function (e) {
@@ -267,15 +57,13 @@ practiceGame.factory('questionTypesService', function () {
   }
 
   function validateNumber(value) {
-    if (angular.isUndefined(value) || value === '') {
+    if (angular.isUndefined(value) || value === '' || value === null) {
       return null;
     } else {
       value = value * 1;
       return (angular.isDefined(value) && value != null && !isNaN(value) && angular.isNumber(value));
     }
   }
-
-
 
   function handleValidation(isValid) {
     var nexAction = $('#nextAction'),
@@ -291,11 +79,6 @@ practiceGame.factory('questionTypesService', function () {
   }
 
   return {
-    oneChoiceFactory: oneChoiceFactory,
-    multipleChoiceFactory: multipleChoiceFactory,
-    matrix2x3ChoiceFactory: matrix2x3ChoiceFactory,
-    matrix3x3ChoiceFactory: matrix3x3ChoiceFactory,
-    multipleChoiceTwoCorrect: multipleChoiceTwoCorrect,
     satFactory: satFactory,
     numericEntry: numericEntry,
     fractionEntry: fractionEntry
@@ -391,9 +174,8 @@ practiceGame.factory('fraction', function () {
 
 practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, Alerts, $sce, VideoService, environmentCons,$resource) {
 
-  var optionList = "abcdefghijklmnopqrstuvwxyz";
-
-  var Practice = {
+  var optionList = "abcdefghijklmnopqrstuvwxyz",
+      Practice = {
     /*This methods takes care to set the practice layout based on the API response*/
     setLayoutBasedOnQuestionInfo: function (setLayout) {
       var panel1 = angular.element('#Panel1'),
@@ -402,13 +184,13 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
       if (setLayout) {
         panel1.removeClass('col-md-offset-3');
         panel2.removeClass('col-md-offset-3');
+
       }
       else {
         panel1.addClass('col-md-offset-3');
         panel2.addClass('col-md-offset-3');
       }
     },
-
     removeBadImage: function () {
       /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
       angular.element('img').error(function () {
@@ -430,19 +212,10 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
       $q.all([getQuestion, questionPresentation]).then(function (result) {
 
         resultObject.questionResult = result[0].data.question;
-        resultObject.answerObject = result[1].data;
-        resultObject.roundSessionAnswer = result[1].data.round_session;
-
-        /*@Jose TODO This can be performed on a better way*/
-        angular.element('.choice.active').removeClass('active');
 
         if (resultObject.lastAnswerLoaded == '' || resultObject.lastAnswerLoaded != resultObject.questionResult.kind) {
           resultObject.lastAnswerLoaded = resultObject.questionResult.kind;
         }
-
-        resultObject.items = [];
-        resultObject.stimulus = "";
-
         resultObject.questionInformation = $sce.trustAsHtml(resultObject.questionResult.question_set.info);
 
         /*Find if there is a question info defined or retrieve it by the API*/
@@ -450,6 +223,16 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
         /*Set the layout based on the question info*/
         Practice.setLayoutBasedOnQuestionInfo(setLayoutType);
+
+        resultObject.answerObject = result[1].data;
+        resultObject.roundSessionAnswer = result[1].data.round_session;
+
+        /*@Jose TODO This can be performed on a better way*/
+        angular.element('.choice.active').removeClass('active');
+
+        resultObject.items = [];
+        resultObject.stimulus = "";
+
         resultObject.stimulus = $sce.trustAsHtml(resultObject.questionResult.stimulus);
 
         var options = optionList.toUpperCase().split(""),
@@ -472,30 +255,30 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
       return deferred.promise;
 
     },
-    confirmChoice: function (questionResult, roundSessionAnswer) {
+    confirmChoice: function (questionResult, roundSessionAnswer,answers) {
       var selectedPosition = '', selectedOptions = [], selectedOptionsCount, i = 0, answerStatus = true;
 
-
       /*Get selected answers*/
-      angular.element('.choice input[value=true]').each(function () {
-        selectedPosition = angular.element(this).attr('id');
-        selectedOptions.push(selectedPosition);
+
+      angular.forEach(answers, function (answer) {
+        if(answer.selected) {
+          selectedPosition = angular.isDefined(answer.answer_id)? answer.answer_id : answer.id;
+          selectedOptions.push(selectedPosition);
+        }
       });
 
       selectedOptionsCount = selectedOptions.length;
       if (selectedOptionsCount > 0) {
 
-
-        var answers = questionResult.answers;
-
         angular.element('.choice button').removeClass('btn-primary');
+
         angular.forEach(answers, function (value) {
 
           var selectIdButton = ('#' + value.id);
 
           /*set the correct class on the button*/
           if (value.correct) {
-            if (Utilities.existsInArray(value.id, selectedOptions)) {
+            if (Utilities.findInCollection(selectedOptions,value.id)) {
               /*Send answer response to server, important this line have to be inside this if
                * since just the users answers get into this evaluation
                * */
@@ -509,7 +292,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
           }
           else {
-            if (Utilities.existsInArray(value.id, selectedOptions)) {
+            if (Utilities.findInCollection(selectedOptions,function(val){ return val === value.id})) {
               /*Send answer response to server, important this line have to be inside this if
                * since just the users answers get into this evaluation
                * */
@@ -729,25 +512,24 @@ practiceGame.factory('Level', function() {
   };
 });
 
-
 practiceGame.factory('SplashMessages', function(Utilities) {
-    var loadingMessages = [
-      'Spinning up the hamster...',
-      'Shovelling coal into the server...',
-      'Programming the flux capacitor',
-      'Adjusting data for your IQ...',
-      'Generating next funny line...',
-      'Entertaining you while you wait...',
-      'Improving your reading skills...',
-      'Dividing eternity by zero, please be patient...',
-      'Just stalling to simulate activity...',
-      'Adding random changes to your data...',
-      'Waiting for approval from Bill Gates...'
-    ];
-    return {
-      getLoadingMessage: function() {
-        return loadingMessages[Utilities.random(loadingMessages.length - 1)];
-      }
-    };
-  });
+  var loadingMessages = [
+    'Spinning up the hamster...',
+    'Shovelling coal into the server...',
+    'Programming the flux capacitor',
+    'Adjusting data for your IQ...',
+    'Generating next funny line...',
+    'Entertaining you while you wait...',
+    'Improving your reading skills...',
+    'Dividing eternity by zero, please be patient...',
+    'Just stalling to simulate activity...',
+    'Adding random changes to your data...',
+    'Waiting for approval from Bill Gates...'
+  ];
+  return {
+    getLoadingMessage: function () {
+      return loadingMessages[Utilities.random(loadingMessages.length - 1)];
+    }
+  };
+});
 

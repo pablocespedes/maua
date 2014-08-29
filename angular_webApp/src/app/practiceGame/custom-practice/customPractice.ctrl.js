@@ -110,7 +110,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
           });
       },
       confirmAnswer: function () {
-        $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer);
+        $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer,$scope.items);
         if (angular.isDefined($scope.answerStatus)) {
           this.resetLayout();
           /* customPractice.setAnswerStatusToSharedList($scope.answerStatus);*/
@@ -164,18 +164,16 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             /*customPractice.createQuestionSharedList(questionSetResult.questions);*/
             $scope.questByQSetTitle = $scope.questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + ($scope.questionsCount) + ' for this set' : '';
 
-
-            /* Iterate between all the question retrieved it by the API which belong to a specific Question set */
-            var questionIdToRequest = questionSetResult.questions[position];
-            $scope.currentId = questionIdToRequest;
-
             if (position < $scope.questionsCount) {
+              var questionIdToRequest = questionSetResult.questions[position];
+              $scope.currentId = questionIdToRequest;
 
               customPractice.presentQuestion(questionIdToRequest, $scope.gameId)
             }
             else {
               $scope.position = 0;
               $scope.setPosition++;
+              customPractice.loadQuestionsSet();
              /* New set, delete the questions, this way they are reinitialized*/
              /* delete $scope.questions;
 
@@ -226,6 +224,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       evaluateConfirmMethod: function () {
         $scope.userConfirmed = true;
         switch ($scope.lastAnswerLoaded) {
+          case 'SPR':
           case 'NumericEntry':
           case 'NumericEntryFraction':
             customPractice.numericConfirmAnswer();
@@ -264,7 +263,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         $scope.messageConfirmation = '';
         angular.element('#skipAction').removeClass('hide');
         angular.element('#nextAction').removeClass('btn-primary');
-        angular.element('#answersPanels').addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+        angular.element('#PanelQuestion').addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
           angular.element(this).removeClass();
         });
 
