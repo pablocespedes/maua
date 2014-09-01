@@ -164,6 +164,7 @@ angular.module('grockitApp.directives', [])
       }
     };
   })
+
 .directive('questionSharePopover', function () {
   return {
     restrict: 'A',
@@ -178,4 +179,14 @@ angular.module('grockitApp.directives', [])
       });
     }
   };
-});
+})
+
+ .directive('historyChart', function() {
+    return {
+      restrict: 'A',
+      templateUrl: 'common/templates/directives/dashboard-history.tpl.html',
+      scope: {
+        historyInfo: '='
+      }
+    };
+  });

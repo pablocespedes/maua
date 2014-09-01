@@ -1,14 +1,4 @@
-home.factory('History', function() {
-
-  function getIndex(srcArray, field) {
-    var i, l, index;
-    index = {};
-    for (i = 0, l = srcArray.length; i < l; i++) {
-      index[srcArray[i][field]] = srcArray[i];
-    }
-    return index;
-  }
-
+home.factory('History', function () {
   function formatDate(date) {
     var d = date.getDate();
     var m = date.getMonth() + 1;
@@ -16,44 +6,45 @@ home.factory('History', function() {
     return '' + y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
   }
 
-  function createDefaultObject(datestr) {
-    return {
-      "day": datestr,
-      "total_questions": 0,
-      "total_correct": 0,
-      "total_seconds": 0,
-      "total_xp_earned": 0,
-      "total_experience_points": 0
-    };
+  function getLastWeekDatesRange() {
+    var datesRange = {},
+      curr = new Date, // get current date
+      first = curr.getDate() - curr.getDay(), // First day is the day of the month - the day of the week
+      last = first + 6; // last day is the first day + 6
+
+    datesRange.startDate = formatDate(new Date(curr.setDate(first)));
+    datesRange.endDate = formatDate(new Date(curr.setDate(last)));
+    return datesRange;
   }
 
+
   return {
-    findMissingDates: function (data) {
+    getTotalQuestionsAnswered: function (historyData) {
+      var questArray = _.pluck(historyData.history, 'total_questions');
 
-      var dest = [], datestr = '', src = data,
-        index = getIndex(src, 'day'), max = 0, i = 0,
-      //get boundaries
-        first = new Date(src[0].day),
-        last = new Date(src[src.length - 1].day);
-
-      for (var d = first; d.getTime() <= last.getTime(); d.setDate(d.getDate() + 1)) {
-
-        datestr = formatDate(d);
-        if (index[datestr]) {
-          //this date exists in response , copy it
-          dest.push(index[datestr]);
-        } else {
-          //this date does not exist,then create a default
-          dest.push(createDefaultObject(datestr));
-        }
-        if (dest[i].total_questions > max) {
-          max = dest[i].total_questions;
-        }
-        i++;
-      }
-      max = max >= 5 ? 6 : max + 1;
-      return {"Data": dest, "MaxLine": max };
-
+      return  _.reduce(questArray, function (sum, num) {
+        return sum + num;
+      });
+    },
+    getLastWeekQuestionsAnswered: function (historyData) {
+      var lastWeekData = getLastWeekDatesRange(),
+        filteredData = _.filter(historyData.history, function (data) {
+          return data.day >= lastWeekData.startDate && data.day <= lastWeekData.endDate;
+        }),
+        questArray = _.pluck(filteredData, 'total_questions');
+      return  _.reduce(questArray, function (sum, num) {
+        return sum + num;
+      });
+    },
+    getTodayQuestionsAnswered: function(historyData){
+      var today = formatDate(new Date),
+       filteredData = _.filter(historyData.history, function (data) {
+        return data.day ==today;
+       }),
+        questArray = _.pluck(filteredData, 'total_questions');
+      return  _.reduce(questArray, function (sum, num) {
+        return sum + num;
+      });
     }
   }
 });

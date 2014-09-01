@@ -242,9 +242,10 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
         resultObject.stimulus = $sce.trustAsHtml(resultObject.questionResult.stimulus);
 
         var options = optionList.toUpperCase().split(""),
-          answers = resultObject.questionResult.answers;
+          answers = resultObject.questionResult.answers,
+          len= answers.length,i;
 
-        for (var i = 0; i < answers.length; i++) {
+        for (i = 0; i < len; i++) {
           var value = answers[i];
           value["option"] = options[i];
           value["selected"] = false;
@@ -263,17 +264,16 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
     },
     confirmChoice: function (questionResult, roundSessionAnswer, answers) {
-      var selectedPosition = '', selectedOptions = [], selectedOptionsCount, i = 0, answerStatus = true;
+      var selectedPosition = '', selectedOptions = [], selectedOptionsCount,i, answerStatus = true,len= answers.length;
 
       /*Get selected answers*/
-
-      angular.forEach(answers, function (answer) {
+      for (i = 0; i < len; i++) {
+        var answer = answers[i];
         if (answer.selected) {
           selectedPosition = angular.isDefined(answer.answer_id) ? answer.answer_id : answer.id;
           selectedOptions.push(selectedPosition);
         }
-      });
-
+      }
       selectedOptionsCount = selectedOptions.length;
       if (selectedOptionsCount > 0) {
 

@@ -117,11 +117,12 @@
                     <!-- / .navbar-nav -->
                     <div class="right clearfix">
                         <ul class="nav navbar-nav pull-right right-navbar-nav">
-                            <li class="dropdown">
-                             <a ng-href="#/{{activeGroupId}}/practice" class="dropdown-toggle user-menu" style="display: none;">
-                                    <button class="btn btn-flat btn-labeled btn-success btn-labeled" ><span class="btn-label icon fa fa-play"></span>Resume</button>
-                             </a>
-                            </li>
+		                        <li id="feature-modal" class=" dropdown">
+				                        <a  ng-click="showDialog()">
+						                        <i class="menu-icon fa fa-gift"></i>
+						                        <span class="mm-text">What's new</span>
+				                        </a>
+		                        </li>
                             <li class="dropdown">
 
 
@@ -152,10 +153,6 @@
     <div id="main-menu" role="navigation" >
         <div id="main-menu-inner">
             <ul class="navigation">
-                <li id="feature-modal">
-                    <a  ng-click="showDialog()"><i class="menu-icon fa fa-gift"></i><span class="mm-text">What's new</span></a>
-                </li>
-
                 <li>
                     <a ng-href="#/{{activeGroupId}}/dashboard" ng-click="select($index)"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Dashboard</span></a>
                 </li>
@@ -164,10 +161,10 @@
                     <a id="{{track.id}}" ng-href="#/{{activeGroupId}}/track-dashboard"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn" ng-bind="track.short_name"></span></a>
                 </li>
 
-                <li>
+                <li ng-if="!studyPlanHide">
                     <a ng-href="{{url}}/{{activeGroupId}}/study_plan"><i class="menu-icon fa fa-tasks"></i><span class="mm-text">Study Plan</span></a>
                 </li>
-                <li>
+                <li ng-if="!videoLibHide">
                     <a ng-href="{{url}}/{{activeGroupId}}/video_courses"><i class="menu-icon fa fa-video-camera"></i><span class="mm-text">Video Library</span></a>
                 </li>
 

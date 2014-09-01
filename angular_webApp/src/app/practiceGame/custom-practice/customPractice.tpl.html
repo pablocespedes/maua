@@ -4,10 +4,7 @@
       <div class="col-md-4 no-padding">
         <div class="reset-layout" breadcrumb breadcrumbs="breadcrumbs.get()"></div>
       </div>
-      <!--	<div class="col-md-4 no-padding">
-        <div question-share-list quest-count="questions" current-group="activeGroupId" ></div>
-      </div>-->
-      <div class="col-md-4 no-padding">
+      <div ng-if="questionsCount>1" class="col-md-4 no-padding">
         <div question-count current-count="position" max-count="questionsCount" ></div>
       </div>
       <div class="col-md-2 no-padding text-right" ng-if="!loading">

@@ -1,9 +1,27 @@
-NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitNewFeatures, ListenloopUtility, GaUtility, Tracks,$cookies,Groups,Alerts,$route,Headers) {
+NavController = function ($rootScope, $scope, $location, Auth, Utilities, GrockitNewFeatures, ListenloopUtility, GaUtility, Tracks, $cookies, Groups, Alerts, $route, Headers) {
   $scope.url = Utilities.originalGrockit().url;
   $scope.logOutUrl = Utilities.originalGrockit().url + '/logout';
 
 
   var Application = {
+    hideVideoOption : function(groupId){
+      $scope.videoLibHide = (groupId === 'ap_calculus' ||
+        groupId === 'ap_psychology' ||
+        groupId === 'ap_us_history' ||
+        groupId === 'ap_world_history'||
+        groupId === 'academy' ||
+        groupId === 'iim-cat'
+        );
+    },
+    hideStudyPlan: function(groupId){
+      $scope.studyPlanHide = (groupId === 'ap_psychology' ||
+        groupId === 'ap_world_history'||
+        groupId === 'gre' ||
+        groupId === 'lsat' ||
+        groupId === 'iim-cat'
+        );
+
+    },
     loadGroupMembership: function () {
       $scope.groups = {
         linkedGroups: [],
@@ -17,8 +35,8 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
 
           if (!!responseGroups) {
 
-            var objFilter ={'id':$scope.activeGroupId},
-                studyingFor = Utilities.findInCollection(responseGroups,objFilter);
+            var objFilter = {'id': $scope.activeGroupId},
+              studyingFor = Utilities.findInCollection(responseGroups, objFilter);
 
             /*save the Group Name to rootScope*/
             $rootScope.groupTitle = studyingFor.name;
@@ -28,8 +46,8 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
             angular.forEach(linkedGroups, function (val, index) {
 
               if (!!linkedGroups[index]) {
-                var linkGroupFilter= {'id':val.group_id},
-                    linkGroup = Utilities.findInCollection(responseGroups, linkGroupFilter);
+                var linkGroupFilter = {'id': val.group_id},
+                  linkGroup = Utilities.findInCollection(responseGroups, linkGroupFilter);
 
                 if (angular.isDefined(linkGroup)) {
                   $scope.groups.linkedGroups.push(linkGroup);
@@ -67,6 +85,9 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
           $scope.currentUser = response;
 
           $scope.activeGroupId = response.currentGroup;
+
+          Application.hideVideoOption($scope.activeGroupId);
+          Application.hideStudyPlan($scope.activeGroupId);
           Application.loadGroupMembership();
           //Application.fetchLeftNavTracksData();
           ListenloopUtility.base(response);
@@ -92,7 +113,8 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
 
     Auth.updateUserInfo($scope.currentUser);
     $scope.activeGroupId = Utilities.getActiveGroup();
-    //Application.fetchLeftNavTracksData();
+    Application.hideVideoOption($scope.activeGroupId);
+    Application.hideStudyPlan($scope.activeGroupId);
   };
 
   $scope.logOut = function () {

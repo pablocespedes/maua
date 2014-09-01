@@ -1,8 +1,11 @@
 'use strict';
-home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','breadcrumbs','Alerts', function($scope,Users,History,Tracks,Utilities,Auth,breadcrumbs,Alerts) {
+home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','Alerts', function($scope,Users,History,Tracks,Utilities,Auth,Alerts) {
   $scope.loading = true;
   $scope.scoreLoading = true;
   $scope.loadingMessage = 'Loading...';
+  Utilities.setActiveTab(0);
+
+
   $scope.getTitle = function(track) {
     return track.short_name;
   };
@@ -10,9 +13,6 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
   $scope.getScore = function(track) {
     return ($scope.score) ? $scope.score.tracks[track.id] : null;
   };
-
-  Utilities.setActiveTab(1);
-
 
 
   var SimpleDashBoard = {
@@ -52,46 +52,21 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
       });
 
     },
-    fillGraphic: function (graphicData) {
-
-      if (angular.isDefined(graphicData) && graphicData.history.length > 0) {
-        $scope.historyVisible = true;
-
-        var response = History.findMissingDates(graphicData.history);
-
-        $scope.chart_options = {
-          data: response.Data,
-          xkey: 'day',
-          ykeys: ['total_questions'],
-          labels: ['Questions Answered'],
-          lineColors: ['#2e9be2'],
-          lineWidth: 2,
-          pointSize: 4,
-          numLines: response.MaxLine,
-          hideHover: true,
-          gridLineColor: '#2e9be2',//'rgba(255,255,255,.5)',
-          resize: true,
-          gridTextColor: '#1d89cf',
-          xLabels: "day",
-          xLabelFormat: function (d) {
-            return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate();
-          },
-          dateFormat: function (date) {
-            var d = new Date(date);
-            return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
-          }
-        };
-
-      }
-      else {
-        $scope.historyVisible = false;
-      }
-      $scope.loading = false;
-    },
     getHistoryInformation: function () {
       $scope.loading = true;
       Users.getUser().history($scope.user_id, $scope.activeGroupId).then(function (graphicResult) {
-        SimpleDashBoard.fillGraphic(graphicResult.data);
+        var graphicData= graphicResult.data;
+        if (angular.isDefined(graphicData) && graphicData.history.length > 0) {
+          $scope.historyVisible = true;
+          $scope.historyInfo={};
+          $scope.historyInfo.totalQuest = History.getTotalQuestionsAnswered(graphicData);
+          $scope.historyInfo.totalQuestLastW =History.getLastWeekQuestionsAnswered(graphicData);
+          $scope.historyInfo.totalQuestToday =History.getTodayQuestionsAnswered(graphicData);
+          $scope.loading = false;
+        }
+        else{
+          $scope.historyVisible = false;
+        }
 
 
       }).catch(function error(e) {
@@ -113,9 +88,6 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
       SimpleDashBoard.getHistoryInformation();
 
       SimpleDashBoard.fetchTracksData();
-
-
-      $scope.breadcrumbs = breadcrumbs;
 
       $scope.historyVisible = false;
     });
