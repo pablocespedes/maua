@@ -106,7 +106,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         tracks: tracks,
         trackTitle: trackTitle
       };
-      Utilities.setActiveTab(1);
+      Utilities.setActiveTab(0);
       Utilities.setActiveTrack(trackData);
       Utilities.redirect('#/' + $scope.activeGroupId + '/custom-practice/');
     }

@@ -1,7 +1,7 @@
 <div id="simpleDash">
 		<div class="page-header">
 				<div class="col-sm-8 no-padding-r">
-						<h2>&nbsp;&nbsp;Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
+						<h2>Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
 						</h2>
 				</div>
 				<br>
@@ -12,7 +12,7 @@
 				<div fading-text word="loadingMessage" is-visible="!historyVisible && loading"></div>
 
 				<div class="row" ng-if="historyVisible">
-						<div class="col-lg-4 no-padding-l">
+						<div class="col-lg-4">
 								<div class="no-padding">
 										<div class="stat-panel">
 												<div class="stat-row">
@@ -37,7 +37,7 @@
 										</div>
 								</div>
 						</div>
-						<div class="col-lg-4 no-padding-r" ng-if="enableScore">
+						<div class="col-lg-4" ng-if="enableScore">
 								<div class="no-padding">
 										<div score-prediction group-title="$root.groupTitle" total-score="scoreData.totalScore"
 										     range-init="scoreData.rangeInit" range-end="scoreData.rangeEnd" is-visible="scoreLoading"
@@ -49,7 +49,7 @@
 		</div>
 
 		<div class="row fadeIn animated">
-				<div class="col-md-12 no-padding">
+				<div class="col-md-12">
 						<div class="panel topic-content panel-dark widget-profile">
 								<div class="panel-heading">
               <span class="panel-title"> <h4><i class="panel-title-icon fa fa-fire"></i>Grockit’s Smart Practice</h4>
