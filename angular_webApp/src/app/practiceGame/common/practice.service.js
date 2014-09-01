@@ -476,9 +476,16 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
     usersRunOutQuestions: function (trackTitle, activeGroupId) {
       var options = {
         message: "You've answered all of the adaptive questions we have for you in " + trackTitle + ".  " +
-          "That's a lot of practice.  Would you like to work on a different track or go back to the main dashboard? ",
+          "That's a lot of practice.  Would you like to review questions you've answered or go back to the main dashboard? ",
         title: "Congratulations!",
         buttons: {
+          review: {
+            label: "Go to Review",
+            className: "btn-info",
+            callback: function () {
+              Utilities.redirect('https://grockit.com/reviews');
+            }
+          },
           main: {
             label: "Go to Dashboard",
             className: "btn-primary",
@@ -486,6 +493,8 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
               Utilities.redirect('#/' + activeGroupId + "/dashboard");
             }
           }
+
+
         }
       };
 

@@ -189,4 +189,12 @@ angular.module('grockitApp.directives', [])
         historyInfo: '='
       }
     };
-  });
+  })
+
+.directive('searchInput', function() {
+  return {
+    restrict: 'A',
+    templateUrl: 'common/templates/directives/search-input.tpl.html'
+  };
+});
+
