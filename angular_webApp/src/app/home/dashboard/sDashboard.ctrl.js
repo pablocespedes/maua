@@ -119,7 +119,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
   $scope.newChallenge = function () {
 
-    Utilities.redirect('https://grockit.com/assessment/games/abc25cc0-f24f-0130-2370-1231390ef981');
+   alert("we're still working to give you this feature. ;)")
   };
 
   $scope.init();
