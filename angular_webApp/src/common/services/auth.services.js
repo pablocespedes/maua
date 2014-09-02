@@ -1,9 +1,6 @@
 angular.module("grockitApp.authServices", ['webStorageModule'])
-.constant('UserRoles', {
-  admin: 'admin',
-  member: 'member',
-  guest: 'guest'
-})
+
+
 .factory('Auth', function($cookies, UserRoles, webStorage, Users, Utilities, $location, $q,Headers) {
 
     function defaultGroup(user){
@@ -50,13 +47,24 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
         }
         else{
           deferred=updateUserPromise;
+
+          /*Enable this for unit testing */
+          /*var auth = "dXNlcl9pZD1lNzU5ZWRlMC1lOGM1LTAxMzAtNTNlNi0xMjMxMzkwZWY5ODE";
+          Headers.setDefaultHeader(auth);
+
+          Users.getUser().self().then(function (result) {
+            var userData = setUserData(result.data.user);
+            deferred.resolve(userData);
+          }).catch(function error(e) {
+            deferred.resolve(webStorage.get('currentUser'));
+          });*/
+
         }
         return deferred.promise;
 
       },
       getUpdateUserData: function () {
         updateUserPromise = $q.defer();
-
         Headers.updateDefaultHeader();
         Users.getUser().self().then(function (result) {
           var userData = setUserData(result.data.user);

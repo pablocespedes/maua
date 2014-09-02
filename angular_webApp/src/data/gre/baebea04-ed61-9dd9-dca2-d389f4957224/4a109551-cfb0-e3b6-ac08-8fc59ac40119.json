@@ -1,0 +1,85 @@
+[
+  {
+    "question_id": "4a109551-cfb0-e3b6-ac08-8fc59ac40119",
+    "avg_time_to_answer": 44,
+    "avg_time_to_answer_correctly": 45,
+    "avg_time_to_answer_incorrectly": 12,
+    "total_answered": 19,
+    "total_answered_correctly": 15,
+    "total_answered_incorrectly": 4,
+    "answers": [
+      {
+        "answer_id": "61ff981c-30bc-8487-aa58-b7d317dc3837",
+        "answered": 14,
+        "percent_answered": 77
+      },
+      {
+        "answer_id": "07a07da8-b1fe-31f0-b31f-e2a097640524",
+        "answered": 0,
+        "percent_answered": 0
+      },
+      {
+        "answer_id": "22361d3b-3b4a-b8f4-b59c-9434517a146c",
+        "answered": 2,
+        "percent_answered": 11
+      },
+      {
+        "answer_id": "865b6f74-c674-d1a0-e620-535ae1891690",
+        "answered": 0,
+        "percent_answered": 0
+      }
+    ],
+    "timings": [
+      {
+        "seconds_passed": 5,
+        "total_answered": 4,
+        "total_answered_correctly": 4
+      },
+      {
+        "seconds_passed": 15,
+        "total_answered": 6,
+        "total_answered_correctly": 6
+      },
+      {
+        "seconds_passed": 20,
+        "total_answered": 7,
+        "total_answered_correctly": 6
+      },
+      {
+        "seconds_passed": 25,
+        "total_answered": 9,
+        "total_answered_correctly": 8
+      },
+      {
+        "seconds_passed": 30,
+        "total_answered": 11,
+        "total_answered_correctly": 9
+      },
+      {
+        "seconds_passed": 40,
+        "total_answered": 14,
+        "total_answered_correctly": 11
+      },
+      {
+        "seconds_passed": 50,
+        "total_answered": 15,
+        "total_answered_correctly": 12
+      },
+      {
+        "seconds_passed": 60,
+        "total_answered": 16,
+        "total_answered_correctly": 13
+      },
+      {
+        "seconds_passed": 80,
+        "total_answered": 17,
+        "total_answered_correctly": 14
+      },
+      {
+        "seconds_passed": 85,
+        "total_answered": 18,
+        "total_answered_correctly": 14
+      }
+    ]
+  }
+]

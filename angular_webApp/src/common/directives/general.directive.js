@@ -27,33 +27,6 @@ angular.module('grockitApp.directives', [])
     }
 
   })
-.directive('easypiechart',function() {
-    return {
-      restrict: 'A',
-      require: '?ngModel',
-      scope: {
-        percent: '=',
-        options: '='
-      },
-      link: function (scope, element, attrs) {
-        scope.percent = scope.percent || 0;
-
-        var pieChart = $(element).easyPieChart({
-          animate: 2000,
-          scaleColor: false,
-          lineWidth: 3,
-          lineCap: 'square',
-          size: 145,
-          barColor: 'white',
-          trackColor: 'white'
-        }).data('easyPieChart').update(scope.percent);
-
-        scope.$watch('percent', function (newVal, oldVal) {
-          pieChart.update(newVal);
-        });
-      }
-    };
-  })
 
 .directive('youtube',function() {
     return {
@@ -84,7 +57,7 @@ angular.module('grockitApp.directives', [])
     };
   })
 
-.directive('trackList', function() {
+.directive('trackList', function(Utilities) {
     return {
       restrict: 'A',
       templateUrl: 'common/templates/directives/track-list.tpl.html',
@@ -99,6 +72,11 @@ angular.module('grockitApp.directives', [])
         scope.hasScore = function (track) {
           return (scope.getScore(track) !== null && scope.getScore(track) > 0);
         };
+
+        scope.getYourScorePredictionUrl = function(track){
+          var baseUrl=Utilities.originalGrockit(false).url;
+          Utilities.redirect(baseUrl+'/assessment/for_track/'+track.id);
+        }
       }
     };
   })
@@ -120,6 +98,9 @@ angular.module('grockitApp.directives', [])
       scope: {
         word: '=',
         isVisible: '='
+      },
+      link: function(scope, elem, atttrs) {
+        scope.word = scope.word.split("");
       }
     };
   })
@@ -182,4 +163,19 @@ angular.module('grockitApp.directives', [])
 
       }
     };
-  });
+  })
+.directive('questionSharePopover', function () {
+  return {
+    restrict: 'A',
+    template: '<span class="label label-default question-status {{quest.statusClass}}">{{label}}</span>',
+    link: function (scope, el, attrs) {
+      scope.label = attrs.popoverLabel;
+      $(el).popover({
+        trigger: 'click',
+        html: true,
+        content: attrs.popoverHtml,
+        placement: attrs.popoverPlacement
+      });
+    }
+  };
+});

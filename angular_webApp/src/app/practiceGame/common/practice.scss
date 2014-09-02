@@ -1,6 +1,103 @@
 
+
+
+
+.practice-header  {
+  .practice-element-sm {
+    width: 6.55%
+  }
+  .practice-element {
+    //border: 1px solid #EDEDED;
+    //border: 1px solid #000;
+    font-size: 13px;
+  }
+  .practice-xl {
+    height: 42px;
+  }
+  .practice-sm {
+    height: 25px;
+    padding-top: 2px;
+  }
+  .practice-align {
+    text-align: center;
+  }
+}
+
+.practice-result {
+  line-height: 45px;
+}
+
+.practice-result .fa {
+  font-size: 20px;
+}
+
+.practice-offset {
+  width: 44%;
+}
+
+.practice-data {
+  font-weight:bold;
+  font-size: 18px;
+  color: #555;
+}
+
+.practice-tags {
+  margin-top: 10px;
+}
+
+.timing-check {
+  height: 70px;
+  text-align: center;
+}
+.timing-padding{
+  margin-bottom: -17px;
+  padding-left: 3px !important;
+  padding-right: 3px !important;
+}
+
+.tags-only{
+  text-align: left;
+  display: inline;
+  padding-left: 5px;
+}
+
 #skipAction {
   cursor: pointer;
+}
+
+.timing-skills{
+  height: 100%;
+  text-align: left;
+  margin-top: -10px;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.timing-box{
+  height: 70px;
+  text-align: center;
+  padding-top: 8px;
+}
+
+.timing-answeredC{
+  height: 70px;
+  text-align: center;
+  padding-top: 4px;
+}
+
+.state-overview{
+  margin-left: -1px;
+  margin-right: -1px;
+}
+
+
+.row-fluid.icon-btn {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+.row-fluid.check {
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 
 #practice{
@@ -13,7 +110,6 @@
   }
   .columnsContainer {
     position: relative;
-    margin: .5em;
 
   }
 
@@ -224,7 +320,10 @@
     color: white;
   }
 
-
+.answer-percent{
+  color: black;
+  font-size: 14px;
+}
 /*Class from old Grockit*/
   div.sentence_correction_underline {
     display: inline;
@@ -245,8 +344,83 @@
 
     margin-bottom: 5px;
   }
+
   /*End classes from old Grockit*/
+
 
 }
 
 
+.question-status {
+  width: 24px;
+  margin-left: 2px;
+  margin-bottom: 2px;
+}
+
+
+.msg {
+  margin-top: 50px;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom:2px;
+}
+.loader_box {
+  text-align: center;
+  width: 320px;
+  border: 1px solid #999;
+  padding: 1px;
+  height: 8px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.loader {
+  width: 0;
+  height: 100%;
+  background-color: #6188F5;
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  /*background-size*/
+  -webkit-background-size: 16px 8px;
+  -moz-background-size: 16px 8px;
+  -o-background-size: 16px 8px;
+  background-size: 16px 8px;
+  background-image: -webkit-linear-gradient(315deg,transparent,transparent 33%,rgba(0, 0, 0, 0.12) 33%,rgba(0, 0, 0, 0.12) 66%,transparent 66%,transparent);
+  background-image: -moz-linear-gradient(315deg,transparent,transparent 33%,rgba(0, 0, 0, 0.12) 33%,rgba(0, 0, 0, 0.12) 66%,transparent 66%,transparent);
+  background-image: -o-linear-gradient(315deg,transparent,transparent 33%,rgba(0, 0, 0, 0.12) 33%,rgba(0, 0, 0, 0.12) 66%,transparent 66%,transparent);
+  background-image: linear-gradient(315deg,transparent,transparent 33%,rgba(0, 0, 0, 0.12) 33%,rgba(0, 0, 0, 0.12) 66%,transparent 66%,transparent);
+  /*animation*/
+  -webkit-animation: load 5s linear 0 infinite;
+  -moz-animation: load 5s linear 0 infinite;
+  -ms-animation: load 5s linear 0 infinite;
+  -o-animation: load 5s linear 0 infinite;
+  animation: load 5s linear 0 infinite;
+}
+/* Then animate the stuff */
+@-webkit-keyframes load {
+  0% { width: 0% ;
+    background-position:0 0;}
+  100% { width: 100%;
+    background-position:-40px 0;
+  }
+}
+@-ms-keyframes load {
+  0% { width: 0% ;
+    background-position:0 0;}
+  100% { width: 100%;
+    background-position:-40px 0;
+  }
+}
+@-o-keyframes load {
+  0% { width: 0% ;
+    background-position:0 0;}
+  100% { width: 100%;
+    background-position:-40px 0;
+  }
+}
+@keyframes load {
+  0% { width: 0% ;
+    background-position:0 0;}
+  100% { width: 100%;
+    background-position:-40px 0;
+  }
+}

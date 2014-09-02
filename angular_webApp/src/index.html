@@ -20,12 +20,14 @@
     <script type="text/javascript"> window.jQuery || document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">'+"<"+"/script>"); </script>
     <![endif]-->
     <!-- Pixel Admin's stylesheets -->
-    <link href="assets/stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="assets/stylesheets/pixel-admin.min.css" rel="stylesheet" type="text/css">
+		<link href="assets/stylesheets/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
+		<link href="assets/stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="assets/stylesheets/pixel-admin.min.css" rel="stylesheet" type="text/css">
      <link href="assets/stylesheets/widgets.min.css" rel="stylesheet" type="text/css">
     <link href="assets/stylesheets/rtl.min.css" rel="stylesheet" type="text/css">
     <link href="assets/stylesheets/themes.min.css" rel="stylesheet" type="text/css">
-    <!--[if lt IE 9]>
+
+		<!--[if lt IE 9]>
     <script src="assets/javascripts/ie.min.js"></script>
     <![endif]-->
     <!-- bower:css -->
@@ -166,11 +168,20 @@
                     <a ng-href="{{url}}/{{activeGroupId}}/study_plan"><i class="menu-icon fa fa-tasks"></i><span class="mm-text">Study Plan</span></a>
                 </li>
                 <li>
-                    <a ng-href="{{url}}/{{activeGroupId}}/video_courses"><i class="menu-icon fa fa-video-camera"></i><span class="mm-text">Video Courses</span></a>
+                    <a ng-href="{{url}}/{{activeGroupId}}/video_courses"><i class="menu-icon fa fa-video-camera"></i><span class="mm-text">Video Library</span></a>
                 </li>
+
+		              <li ng-if="activeGroupId!='gre'">
+				             <a ng-href="{{url}}/{{activeGroupId}}/custom_games/new"><i class="menu-icon fa fa-book"></i><span class="mm-text">Custom Practice</span></a>
+		              </li>
                 <li>
                     <a ng-href="{{url}}/{{activeGroupId}}/social"><i class="menu-icon fa fa-users"></i><span class="mm-text">Group Practice</span></a>
                 </li>
+		            <li>
+				            <a ng-if="activeGroupId==='gre'" href="http://grockit.tv/grepracticetest"><i class="menu-icon fa fa-lightbulb-o"></i><span class="mm-text">Take a Full Length Test</span></a>
+				            <a ng-if="activeGroupId==='gmat'" ng-href="{{url}}/{{activeGroupId}}/join_cat_game"><i class="menu-icon fa fa-lightbulb-o"></i><span class="mm-text">Take a Full Length Test</span></a>
+		            </li>
+
                 <li>
                     <a ng-href="{{url}}/{{activeGroupId}}/tutoring"><i class="menu-icon fa  fa-briefcase"></i><span class="mm-text">Tutoring</span></a>
                 </li>
@@ -180,8 +191,8 @@
                 <li>
                     <a ng-href="{{url}}/reviews"><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
                 </li>
-                <li  class="btn-success" >
-                    <a ng-href="{{url}}/{{activeGroupId}}"><i class="menu-icon fa fa-mail-forward"></i><span style="color: white" class="mm-text">Switch to Original Grockit</span></a>
+                <li>
+                    <a class="old-grockit" ng-href="{{url}}/{{activeGroupId}}"><i class="menu-icon fa fa-mail-forward"></i><span style="color: white" class="mm-text">Switch to Original Grockit</span></a>
                 </li>
 
             </ul>

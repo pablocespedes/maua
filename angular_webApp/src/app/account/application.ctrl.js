@@ -17,7 +17,8 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
 
           if (!!responseGroups) {
 
-            var studyingFor = Utilities.findInArray($scope.activeGroupId, responseGroups, 'id');
+            var objFilter ={'id':$scope.activeGroupId},
+                studyingFor = Utilities.findInCollection(responseGroups,objFilter);
 
             /*save the Group Name to rootScope*/
             $rootScope.groupTitle = studyingFor.name;
@@ -27,7 +28,8 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
             angular.forEach(linkedGroups, function (val, index) {
 
               if (!!linkedGroups[index]) {
-                var linkGroup = Utilities.findInArray(val.group_id, responseGroups, 'id');
+                var linkGroupFilter= {'id':val.group_id},
+                    linkGroup = Utilities.findInCollection(responseGroups, linkGroupFilter);
 
                 if (angular.isDefined(linkGroup)) {
                   $scope.groups.linkedGroups.push(linkGroup);
@@ -90,7 +92,7 @@ NavController = function($rootScope,$scope, $location, Auth, Utilities, GrockitN
 
     Auth.updateUserInfo($scope.currentUser);
     $scope.activeGroupId = Utilities.getActiveGroup();
-    Application.fetchLeftNavTracksData();
+    //Application.fetchLeftNavTracksData();
   };
 
   $scope.logOut = function () {

@@ -1,25 +1,38 @@
 <div id="matrix3x3">
-    <div class="list-group text-left">
-        <div ng-repeat="item in items" class="choice">
-            <div class="divisor" ng-if="($index % 3) ==0">
-                <br>
-                <div >Blank {{($index / 3) +1}}</div>
-            </div>
-            <a id="answer" href="javascript:void(0)" class="list-group-item">
-                <div class="middle" data-group="{{(($index-($index%3))/3 )}}">
-                    <button id="{{item.id}}" type="button" class="letter btn-option  btn-rounded letter" >{{item.option}}</button>
-                    <input id="{{item.id}}" type="radio" name="choice" value="false"   />
-                    <div class="content" >
-                        <div ng-bind-html="item.body"></div>
-                    </div>
-                </div>
-                <div id="explanationAnswerPanel" ng-show="hasExplanation({index : $index})"  ng-if="showExplanation" class="fadein " ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
-                    <div class="explain-margin" ng-bind-html='item.explanation'></div>
-                </div>
-            </a>
-        </div>
+		<div class="list-group text-left">
+				<div ng-repeat="item in items" class="choice">
+						<div class="divisor" ng-if="($index % 3) ==0">
+								<br>
 
-    </div>
+								<div>Blank {{($index / 3) +1}}</div>
+						</div>
+						<a id="answer" href="javascript:void(0)" class="list-group-item"
+						   ng-click="selectAnswer($index,(($index-($index%3))/3 ))">
+								<div class="middle" data-group="{{(($index-($index%3))/3 )}}">
+										<span ng-if="showExplanation && item.selected==true" class="float-right">&#10094;</span>
+										<button id="{{item.id}}" type="button" class="letter btn-option  btn-rounded letter"
+										        ng-class="{'btn-primary':item.selected}">{{item.option}}
+										</button>
+										<input id="{{item.id}}" type="radio" name="choice" value="false"/>
+
+										<div class="content">
+												<div ng-bind-html="item.body"></div>
+										</div>
+								</div>
+								<div id="explanationAnswerPanel" ng-if="showExplanation" class="fadein "
+								     ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
+										<div ng-show="hasExplanation({index : $index})">
+												<div class="explain-margin" ng-bind-html='item.explanation'></div>
+												<br>
+										</div>
+										<div ng-if="item.percent_answered>0" class="answer-percent"><strong> {{item.percent_answered}}%</strong> of
+												users answered this choice
+										</div>
+								</div>
+						</a>
+				</div>
+
+		</div>
 
 </div>
 

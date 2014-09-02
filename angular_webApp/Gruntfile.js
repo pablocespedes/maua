@@ -42,7 +42,7 @@ module.exports = function (grunt) {
         tasks: ['newer:jshint:test', 'karma']
       },
       compass: {
-        files: ['<%= yeoman.src %>/styles/{,*/}*.{scss,sass}'],
+        files: ['<%= yeoman.src %>/app/**/*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
       },
       gruntfile: {
@@ -235,12 +235,16 @@ module.exports = function (grunt) {
                 '<%= yeoman.dist %>/app/account',
                 '<%= yeoman.dist %>/app/home',
                 '<%= yeoman.dist %>/app/home/dashboard/',
-                '<%= yeoman.dist %>/app/practiceGame/dashboard',
-                '<%= yeoman.dist %>/app/practiceGame/practice',
+                '<%= yeoman.dist %>/app/home/track-dashboard',
+                '<%= yeoman.dist %>/app/practiceGame/common',
+                '<%= yeoman.dist %>/app/practiceGame/custom-practice',
+                '<%= yeoman.dist %>/app/practiceGame/question',
                 '<%= yeoman.dist %>/app/practiceGame',
                 '<%= yeoman.dist %>/common/restAngular',
                 '<%= yeoman.dist %>/common/directives',
                 '<%= yeoman.dist %>/common/services',
+                '<%= yeoman.dist %>/common/filters',
+              '<%= yeoman.dist %>/common/constants',
                 '<%= yeoman.dist %>/app',
                 '<%= yeoman.dist %>/common',
                 '<%= yeoman.dist %>/common/lib'
@@ -259,7 +263,9 @@ module.exports = function (grunt) {
                     /*Change references for practice controllers and services*/
                     [/(dashboard.ctrl\.js)/, 'Replacing references to dashboard ctrl'],
                     [/(dashboard.service\.js)/, 'Replacing references to dashboard service'],
-                    [/(practice.ctrl\.js)/, 'Replacing references to practice ctrl'],
+                    [/(customPractice.ctrl\.js)/, 'Replacing references to practice ctrl'],
+                    [/(question.ctrl\.js)/, 'Replacing references to question directive'],
+
                     [/(practice.directive\.js)/, 'Replacing references to practice directive'],
                     [/(practice.service\.js)/, 'Replacing references to practice service'],
                     [/(practiceGame.module\.js)/, 'Replacing references to practice module'],
@@ -271,6 +277,10 @@ module.exports = function (grunt) {
                     [/(application.services\.js)/, 'Replacing references to general services'],
 
                     [/(auth.services\.js)/, 'Replacing references to auth services'],
+
+                    [/(application.filters\.js)/, 'Replacing references to application filters'],
+
+                   [/(application.constants\.js)/, 'Replacing references to application constants'],
 
                     [/(analytic.service\.js)/, 'Replacing references to Analytic services'],
 

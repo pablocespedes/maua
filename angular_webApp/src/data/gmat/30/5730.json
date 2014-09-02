@@ -1,0 +1,35 @@
+[
+  {
+    "question_id": "5730",
+    "avg_time_to_answer": 7,
+    "avg_time_to_answer_correctly": 7,
+    "avg_time_to_answer_incorrectly": 4,
+    "total_answered": 3,
+    "total_answered_correctly": 2,
+    "total_answered_incorrectly": 1,
+    "answers": [
+      {
+        "answer_id": "26465",
+        "answered": 1,
+        "percent_answered": 33
+      },
+      {
+        "answer_id": "26466",
+        "answered": 2,
+        "percent_answered": 66
+      }
+    ],
+    "timings": [
+      {
+        "seconds_passed": 5,
+        "total_answered": 2,
+        "total_answered_correctly": 1
+      },
+      {
+        "seconds_passed": 10,
+        "total_answered": 3,
+        "total_answered_correctly": 2
+      }
+    ]
+  }
+]

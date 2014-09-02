@@ -1,31 +1,16 @@
 angular.module('grockitApp.services', ['webStorageModule'])
-.factory('Utilities', function($http,webStorage,$location,$route,VideoService,$q) {
+.factory('Utilities', function($http,webStorage,$location,$route,VideoService,$q,environmentCons) {
 
   var internalUtilities = {
     grockitHostEvaluation : function (isNewGrockit) {
       if (isNewGrockit) {
-        return location.host == '127.0.0.1:9000' ? 'https://grockit.com' : location.origin + '/2.0/';
+        return location.host == '127.0.0.1:9000' ? environmentCons.oldGrockit :environmentCons.liveGrockit;
       }
       else {
-        return location.host == '127.0.0.1:9000' ? 'https://staging.grockit.com' : location.host == 'ww2.grockit.com' ? 'https://grockit.com' : location.origin
+        return location.host == '127.0.0.1:9000' ? environmentCons.stagingGrockit : location.host == environmentCons.ww2Grockit2 ? environmentCons.oldGrockit : location.origin
       }
     },
-    getYoutubeVideosId: function(url) {
-      var deferred = $q.defer();
 
-      var id = '';
-      url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-      if (url[2] !== undefined) {
-        id = url[2].split(/[^0-9a-z_]/i);
-        id = id[0];
-      }
-      else {
-        id = url;
-      }
-
-      deferred.resolve(id);
-      return deferred.promise;
-    },
     getResourceObject: function(resourceObject) {
       var nDeferred = $q.defer();
       var videoObject = {},videoId='';
@@ -88,10 +73,26 @@ angular.module('grockitApp.services', ['webStorageModule'])
      currentUser.trackData = data;
      webStorage.add('currentUser', currentUser);
    },
-   findInArray: function (element, array, filter) {
-     return  $.grep(array, function (val) {
-       return val[filter] == element;
-     })[0];
+   findInCollection: function (collection, filter) {
+    return  _.find(collection,filter);
+
+   },
+   random: function(min, max) {
+      min = min | 0;
+      return _.random(min, max);
+    },
+   mapObject: function(collection, key,getter){
+
+     return _.map(collection, function(val) {
+       var obj = {};
+       obj[key]= getter(val);
+       return obj;
+     });
+
+   },
+   mergeCollection: function (collection1, collection2) {
+     return  _.merge(collection1,collection2);
+
    },
    getIndexArray: function (arr, key, val) {
      for (var i = 0; i < arr.length; i++) {
@@ -100,15 +101,12 @@ angular.module('grockitApp.services', ['webStorageModule'])
      }
      return -1;
    },
-   existsInArray: function (element, array) {
-     return  ($.inArray(element, array) !== -1);
-   },
    encodeRedirect: function (redirectUrl, url) {
      window.location.href = redirectUrl + encodeURIComponent(url);
    },
    redirect: function (url) {
-     var basePath = $location.host == '127.0.0.1' || 'grockit.firstfactoryinc.com' ? '' : 'v2';
-     window.location.href = basePath + url;
+
+     window.location.href =  url;
    },
    setActiveTab: function (position) {
      this.clearActiveTab();
@@ -129,18 +127,18 @@ angular.module('grockitApp.services', ['webStorageModule'])
      $route.current.pathParams[key] = null;
      $route.current.pathParams[key] = param;
    },
-   getYoutubeVideosInfo: function (resources) {
-     var videoDataList = [];
+   getYoutubeVideosId: function(url) {
 
-     angular.forEach(resources, function (value) {
-
-       internalUtilities.getResourceObject(value).then(function (rObject) {
-         videoDataList.push(rObject);
-       });
-
-     });
-
-     return videoDataList;
+     var id = '';
+     url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+     if (url[2] !== undefined) {
+       id = url[2].split(/[^0-9a-z_]/i);
+       id = id[0];
+     }
+     else {
+       id = url;
+     }
+     return id;
 
    }
 
@@ -171,7 +169,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
 
 })
 
-.factory('GrockitNewFeatures', function($http, Utilities) {
+.factory('GrockitNewFeatures', function($http, Utilities,environmentCons) {
 
   return {
     showDialog: function () {
@@ -179,7 +177,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
           title: "Welcome to Grockit 2.0 Beta",
           message: ""
         },
-        url = location.host == '127.0.0.1:9000' ? 'http://127.0.0.1:9000/' : location.origin + '/2.0';
+        url = location.host == '127.0.0.1:9000' ? environmentCons.localGrockit : environmentCons.liveGrockit;
       $http.get(url + '/common/templates/newFeatures2.0.html').success(function (data) {
         dialogOptions.message = data;
         Utilities.dialogService(dialogOptions);
@@ -190,10 +188,90 @@ angular.module('grockitApp.services', ['webStorageModule'])
     }
 
   }
+  })
 
-  });
+.service('ServiceFactory', function() {
+  this.items = [];
+  this.lastId = 1;
+  this.add = function(item) {
+    item.serviceId = this.lastId++;
+    if (!this.get(item.serviceId)) {
+      this.items.push(item);
+    }
+  };
+  this.equals = function(item, serviceId) {
+    return item.serviceId === serviceId; 
+  };
+  this.get = function(serviceId) {
+    var self = this;
+    return _.find(this.items, function(item) { return self.equals(item, serviceId); });
+  };
+  this.remove = function(item) {
+    var self = this;
+    this.items = _.reject(this.items, function(storedItem) { return self.equals(item, storedItem.serviceId); });
+  };
+})
 
+.factory('Timer', ['$interval', 'ServiceFactory',
+    function($interval, ServiceFactory) {
+      var createTimer = function() {
+        var timer = {
+          seconds: 0,
+          interval: null,
+          start: function() {
+            var timer = this;
+            this.interval = $interval(function() {
+              timer.seconds++;
+            }, 1000);
+          },
+          pause: function() {
+            $interval.cancel(this.interval);
+          },
+          reset: function() {
+            this.seconds = 0;
+            this.pause();
+          }
+        };
+        return timer;
+      };
+      return {
+        create: function() {
+          var timer = createTimer();
+          ServiceFactory.add(timer);
+          return timer;
+        },
+        destroy: function(timer) {
+          $interval.cancel(timer.interval);
+          ServiceFactory.remove(timer);
+        }
+      };
+    }])
 
+.factory('DateFormatter', function() {
+  var formatSeconds = function(seconds) {
+    var secs = seconds,
+        hours = Math.floor(secs / (60 * 60)),
+        divisor_for_minutes = secs % (60 * 60),
+        minutes = Math.floor(divisor_for_minutes / 60),
+        divisor_for_seconds = divisor_for_minutes % 60,
+        seconds = Math.ceil(divisor_for_seconds);
 
+    if (hours < 10) {
+      hours = "0" + hours;
+    }
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    if (seconds < 10) {
+      seconds = "0" + seconds;
+    }
+    // var time = hours+':'+minutes+':'+seconds;
 
-
+    var time = (hours > 0 ? hours + ':' : '') + 
+      (minutes >= 0 ? minutes + ':' : '') + (seconds >= 0 ? seconds : '');
+    return time;
+  };
+  return {
+    formatSeconds: formatSeconds
+  };
+});

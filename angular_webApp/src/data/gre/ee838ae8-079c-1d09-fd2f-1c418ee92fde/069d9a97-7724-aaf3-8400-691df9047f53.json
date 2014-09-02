@@ -1,0 +1,85 @@
+[
+  {
+    "question_id": "069d9a97-7724-aaf3-8400-691df9047f53",
+    "avg_time_to_answer": 76,
+    "avg_time_to_answer_correctly": 71,
+    "avg_time_to_answer_incorrectly": 189,
+    "total_answered": 17,
+    "total_answered_correctly": 5,
+    "total_answered_incorrectly": 12,
+    "answers": [
+      {
+        "answer_id": "dc2f4c40-4237-40ac-a6aa-b44a0eaff188",
+        "answered": 5,
+        "percent_answered": 33
+      },
+      {
+        "answer_id": "1f7a6ead-5fae-8ba4-bdb6-a1427a1a442f",
+        "answered": 4,
+        "percent_answered": 26
+      },
+      {
+        "answer_id": "3e5e91db-41ec-6ae5-4e00-9d55f0bb18bd",
+        "answered": 8,
+        "percent_answered": 53
+      }
+    ],
+    "timings": [
+      {
+        "seconds_passed": 0,
+        "total_answered": 3,
+        "total_answered_correctly": 0
+      },
+      {
+        "seconds_passed": 5,
+        "total_answered": 4,
+        "total_answered_correctly": 0
+      },
+      {
+        "seconds_passed": 15,
+        "total_answered": 5,
+        "total_answered_correctly": 0
+      },
+      {
+        "seconds_passed": 20,
+        "total_answered": 6,
+        "total_answered_correctly": 1
+      },
+      {
+        "seconds_passed": 35,
+        "total_answered": 8,
+        "total_answered_correctly": 2
+      },
+      {
+        "seconds_passed": 45,
+        "total_answered": 9,
+        "total_answered_correctly": 2
+      },
+      {
+        "seconds_passed": 60,
+        "total_answered": 11,
+        "total_answered_correctly": 2
+      },
+      {
+        "seconds_passed": 85,
+        "total_answered": 12,
+        "total_answered_correctly": 3
+      },
+      {
+        "seconds_passed": 95,
+        "total_answered": 13,
+        "total_answered_correctly": 4
+      },
+      {
+        "seconds_passed": 110,
+        "total_answered": 14,
+        "total_answered_correctly": 4
+      },
+      {
+        "seconds_passed": 120,
+        "total_answered": 15,
+        "total_answered_correctly": 5
+      }
+    ]
+  }
+]

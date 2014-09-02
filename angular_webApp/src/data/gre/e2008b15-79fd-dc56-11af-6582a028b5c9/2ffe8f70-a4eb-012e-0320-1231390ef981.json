@@ -1,0 +1,250 @@
+[
+  {
+    "question_id": "2ffe8f70-a4eb-012e-0320-1231390ef981",
+    "avg_time_to_answer": 140,
+    "avg_time_to_answer_correctly": 192,
+    "avg_time_to_answer_incorrectly": 193,
+    "total_answered": 241,
+    "total_answered_correctly": 88,
+    "total_answered_incorrectly": 153,
+    "answers": [
+      {
+        "answer_id": "300db7f0-a4eb-012e-0320-1231390ef981",
+        "answered": 44,
+        "percent_answered": 19
+      },
+      {
+        "answer_id": "300fe8d0-a4eb-012e-0320-1231390ef981",
+        "answered": 174,
+        "percent_answered": 77
+      },
+      {
+        "answer_id": "30119670-a4eb-012e-0320-1231390ef981",
+        "answered": 21,
+        "percent_answered": 9
+      },
+      {
+        "answer_id": "30204480-a4eb-012e-0320-1231390ef981",
+        "answered": 0,
+        "percent_answered": 0
+      },
+      {
+        "answer_id": "30246ed0-a4eb-012e-0320-1231390ef981",
+        "answered": 0,
+        "percent_answered": 0
+      },
+      {
+        "answer_id": "6581a5a8-56be-28ab-e6b0-1c08e34d063d",
+        "answered": 0,
+        "percent_answered": 0
+      },
+      {
+        "answer_id": "87f4e993-a3c2-3491-5463-37585102eacd",
+        "answered": 1,
+        "percent_answered": 0
+      },
+      {
+        "answer_id": "117b48b3-4bdf-00e2-b959-ab56fea123de",
+        "answered": 0,
+        "percent_answered": 0
+      },
+      {
+        "answer_id": "638c0c30-1640-455e-880f-a07e71a29ea7",
+        "answered": 0,
+        "percent_answered": 0
+      }
+    ],
+    "timings": [
+      {
+        "seconds_passed": 5,
+        "total_answered": 2,
+        "total_answered_correctly": 0
+      },
+      {
+        "seconds_passed": 10,
+        "total_answered": 11,
+        "total_answered_correctly": 3
+      },
+      {
+        "seconds_passed": 15,
+        "total_answered": 19,
+        "total_answered_correctly": 8
+      },
+      {
+        "seconds_passed": 20,
+        "total_answered": 26,
+        "total_answered_correctly": 13
+      },
+      {
+        "seconds_passed": 25,
+        "total_answered": 33,
+        "total_answered_correctly": 17
+      },
+      {
+        "seconds_passed": 30,
+        "total_answered": 34,
+        "total_answered_correctly": 18
+      },
+      {
+        "seconds_passed": 35,
+        "total_answered": 37,
+        "total_answered_correctly": 20
+      },
+      {
+        "seconds_passed": 40,
+        "total_answered": 44,
+        "total_answered_correctly": 23
+      },
+      {
+        "seconds_passed": 45,
+        "total_answered": 56,
+        "total_answered_correctly": 30
+      },
+      {
+        "seconds_passed": 50,
+        "total_answered": 62,
+        "total_answered_correctly": 32
+      },
+      {
+        "seconds_passed": 55,
+        "total_answered": 74,
+        "total_answered_correctly": 38
+      },
+      {
+        "seconds_passed": 60,
+        "total_answered": 89,
+        "total_answered_correctly": 46
+      },
+      {
+        "seconds_passed": 65,
+        "total_answered": 98,
+        "total_answered_correctly": 48
+      },
+      {
+        "seconds_passed": 70,
+        "total_answered": 108,
+        "total_answered_correctly": 52
+      },
+      {
+        "seconds_passed": 75,
+        "total_answered": 114,
+        "total_answered_correctly": 55
+      },
+      {
+        "seconds_passed": 80,
+        "total_answered": 123,
+        "total_answered_correctly": 59
+      },
+      {
+        "seconds_passed": 85,
+        "total_answered": 132,
+        "total_answered_correctly": 61
+      },
+      {
+        "seconds_passed": 90,
+        "total_answered": 138,
+        "total_answered_correctly": 64
+      },
+      {
+        "seconds_passed": 95,
+        "total_answered": 142,
+        "total_answered_correctly": 65
+      },
+      {
+        "seconds_passed": 100,
+        "total_answered": 154,
+        "total_answered_correctly": 70
+      },
+      {
+        "seconds_passed": 105,
+        "total_answered": 159,
+        "total_answered_correctly": 71
+      },
+      {
+        "seconds_passed": 110,
+        "total_answered": 164,
+        "total_answered_correctly": 73
+      },
+      {
+        "seconds_passed": 115,
+        "total_answered": 172,
+        "total_answered_correctly": 73
+      },
+      {
+        "seconds_passed": 120,
+        "total_answered": 179,
+        "total_answered_correctly": 75
+      },
+      {
+        "seconds_passed": 125,
+        "total_answered": 183,
+        "total_answered_correctly": 76
+      },
+      {
+        "seconds_passed": 130,
+        "total_answered": 185,
+        "total_answered_correctly": 77
+      },
+      {
+        "seconds_passed": 135,
+        "total_answered": 189,
+        "total_answered_correctly": 78
+      },
+      {
+        "seconds_passed": 140,
+        "total_answered": 190,
+        "total_answered_correctly": 78
+      },
+      {
+        "seconds_passed": 145,
+        "total_answered": 195,
+        "total_answered_correctly": 78
+      },
+      {
+        "seconds_passed": 150,
+        "total_answered": 201,
+        "total_answered_correctly": 80
+      },
+      {
+        "seconds_passed": 155,
+        "total_answered": 208,
+        "total_answered_correctly": 82
+      },
+      {
+        "seconds_passed": 160,
+        "total_answered": 210,
+        "total_answered_correctly": 83
+      },
+      {
+        "seconds_passed": 165,
+        "total_answered": 215,
+        "total_answered_correctly": 83
+      },
+      {
+        "seconds_passed": 170,
+        "total_answered": 217,
+        "total_answered_correctly": 83
+      },
+      {
+        "seconds_passed": 175,
+        "total_answered": 220,
+        "total_answered_correctly": 84
+      },
+      {
+        "seconds_passed": 180,
+        "total_answered": 221,
+        "total_answered_correctly": 84
+      },
+      {
+        "seconds_passed": 185,
+        "total_answered": 222,
+        "total_answered_correctly": 84
+      },
+      {
+        "seconds_passed": 190,
+        "total_answered": 225,
+        "total_answered_correctly": 84
+      }
+    ]
+  }
+]

@@ -1,18 +1,30 @@
-<div id="twoChoice" >
-    <div class="list-group text-left">
+<div id="twoChoice">
+		<div class="list-group text-left">
 
-        <a id="answer" ng-repeat="item in items" href="javascript:void(0)" class="choice list-group-item">
-            <div class="middle">
-                <button id="{{item.id}}" type="button" class=" btn-option  btn-rounded letter" >{{item.option}}</button>
-                <input id="{{item.id}}" type="checkbox" name="choice"  value="false"  />
-                <div class="content" >
-                    <div ng-bind-html="item.body"></div>
-                </div>
-            </div>
-            <div id="explanationAnswerPanel" ng-show="hasExplanation({index : $index})"  ng-if="showExplanation"  class="fadein " ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
-                <div class="explain-margin" ng-bind-html='item.explanation'></div>
-            </div>
-        </a>
+				<a id="answer" ng-repeat="item in items" href="javascript:void(0)" class="choice list-group-item"
+				   ng-click="selectAnswer($index)">
+						<div class="middle">
+								<span ng-if="showExplanation && item.selected==true" class="float-right">&#10094;</span>
+								<button id="{{item.id}}" type="button" class=" btn-option  btn-rounded letter"
+								        ng-class="{'btn-primary':item.selected}">{{item.option}}
+								</button>
+								<input id="{{item.id}}" type="checkbox" name="choice" value="false"/>
 
-    </div>
+								<div class="content">
+										<div ng-bind-html="item.body"></div>
+								</div>
+						</div>
+						<div id="explanationAnswerPanel" ng-if="showExplanation" class="fadein "
+						     ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
+								<div ng-show="hasExplanation({index : $index})">
+										<div class="explain-margin" ng-bind-html='item.explanation'></div>
+										<br>
+								</div>
+								<div ng-if="item.percent_answered>0" class="answer-percent"><strong> {{item.percent_answered}}%</strong> of
+										users answered this choice
+								</div>
+						</div>
+				</a>
+
+		</div>
 </div>
