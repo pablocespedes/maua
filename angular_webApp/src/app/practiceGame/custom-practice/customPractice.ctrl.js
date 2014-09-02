@@ -28,7 +28,10 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
           if(angular.isDefined(result)){
             $scope.showTiming=true;
             $scope.timingData = result[0];
+
             Utilities.mergeCollection($scope.items, result[0].answers);
+
+
             $scope.percentAnswered= Utilities.findInCollection(result[0].answers, { 'answer_id':correctAnswerId }).percent_answered;
           }
 
@@ -74,12 +77,16 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       bindExplanationInfo: function (info) {
         $scope.showExplanation = info.showExplanation;
         $scope.questionExplanation = info.questionExplanation;
-        $scope.showVideo = info.showVideo;
         $scope.tagsResources = info.tagsResources;
-        $scope.videoId = info.videoId;
-        $scope.videoText = info.videoText;
         $scope.tags = info.tags;
         $scope.xpTag = info.xpTag;
+      },
+      bindVideoExplanationInfo: function(){
+        practiceSrv.getVideoExplanation($scope.questionResult).then(function (videoInfo) {
+          $scope.showVideo = videoInfo.showVideo;
+          $scope.videoId = videoInfo.videoId;
+          $scope.videoText = videoInfo.videoText;
+        });
       },
       presentQuestion: function (questionId, gameId) {
 
@@ -106,10 +113,9 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       },
       displayExplanationInfo: function () {
           $scope.nextActionTitle = 'Next Question';
-          practiceSrv.displayGeneralConfirmInfo($scope.questionResult).then(function (generalInfo) {
-            customPractice.bindExplanationInfo(generalInfo);
-
-          });
+          var generalInfo= practiceSrv.displayGeneralConfirmInfo($scope.questionResult);
+           customPractice.bindExplanationInfo(generalInfo);
+           customPractice.bindVideoExplanationInfo($scope.questionResult);
       },
       confirmAnswer: function () {
         $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer,$scope.items);
@@ -159,17 +165,14 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             /* Iterate between all the question sets retrieved it by the API */
               questionSetResult = $scope.questionSetList[setPosition];
 
-            var position = $scope.position,
+            var position = $scope.position;
             /* questionsCount Give us the number of questions by questionSet*/
-              questionsCount = questionSetResult.questions.length;
+            $scope.questionsCount = questionSetResult.questions.length;
 
-            /* Iterate between all the question retrieved it by the API which belong to a specific Question set */
-            if (position < questionsCount) {
+            /*customPractice.createQuestionSharedList(questionSetResult.questions);*/
+            $scope.questByQSetTitle = $scope.questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + ($scope.questionsCount) + ' for this set' : '';
 
-              /*customPractice.createQuestionSharedList(questionSetResult.questions);*/
-              $scope.questByQSetTitle = questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + (questionsCount) + ' for this set' : '';
-
-
+            if (position < $scope.questionsCount) {
               var questionIdToRequest = questionSetResult.questions[position];
               $scope.currentId = questionIdToRequest;
 
@@ -229,6 +232,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       evaluateConfirmMethod: function () {
         $scope.userConfirmed = true;
         switch ($scope.lastAnswerLoaded) {
+          case 'SPR':
           case 'NumericEntry':
           case 'NumericEntryFraction':
             customPractice.numericConfirmAnswer();
