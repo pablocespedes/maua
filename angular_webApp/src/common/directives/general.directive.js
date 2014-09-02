@@ -1,32 +1,4 @@
 angular.module('grockitApp.directives', [])
-.directive('lineChart', function() {
-
-    function createChart(el_id, options, score) {
-      options.element = el_id;
-      if (score) {
-        angular.element('#columnGraph').addClass('col-sm-8');
-      }
-      else {
-        angular.element('#columnGraph').addClass('col-md-12');
-      }
-
-      return new Morris.Line(options);
-    }
-
-    return {
-      restrict: 'A',
-      scope: {
-        options: '=',
-        score: '='
-      },
-      replace: true,
-      template: '<div></div>',
-      link: function (scope, element, attrs) {
-        return createChart(attrs.id, scope.options, scope.score)
-      }
-    }
-
-  })
 
 .directive('youtube',function() {
     return {
@@ -165,23 +137,7 @@ angular.module('grockitApp.directives', [])
     };
   })
 
-.directive('questionSharePopover', function () {
-  return {
-    restrict: 'A',
-    template: '<span class="label label-default question-status {{quest.statusClass}}">{{label}}</span>',
-    link: function (scope, el, attrs) {
-      scope.label = attrs.popoverLabel;
-      $(el).popover({
-        trigger: 'click',
-        html: true,
-        content: attrs.popoverHtml,
-        placement: attrs.popoverPlacement
-      });
-    }
-  };
-})
-
- .directive('historyChart', function() {
+.directive('historyChart', function() {
     return {
       restrict: 'A',
       templateUrl: 'common/templates/directives/dashboard-history.tpl.html',
@@ -196,5 +152,16 @@ angular.module('grockitApp.directives', [])
     restrict: 'A',
     templateUrl: 'common/templates/directives/search-input.tpl.html'
   };
-});
+})
+
+.directive('challengeDashboard', function() {
+    return {
+      restrict: 'A',
+      templateUrl: 'common/templates/directives/dashboard-challenge.tpl.html',
+      scope: {
+        goChallenge: '&goChallenge',
+        titleQuest: '='
+      }
+    };
+  });
 

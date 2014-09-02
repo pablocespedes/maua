@@ -28,7 +28,10 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
           if(angular.isDefined(result)){
             $scope.showTiming=true;
             $scope.timingData = result[0];
+
             Utilities.mergeCollection($scope.items, result[0].answers);
+
+
             $scope.percentAnswered= Utilities.findInCollection(result[0].answers, { 'answer_id':correctAnswerId }).percent_answered;
           }
 
