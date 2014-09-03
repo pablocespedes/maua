@@ -37,25 +37,25 @@ NavController = function ($rootScope, $scope, $location, Auth, Utilities, Grocki
 
             var objFilter = {'id': $scope.activeGroupId},
               studyingFor = Utilities.findInCollection(responseGroups, objFilter);
+            if(angular.isDefined(studyingFor)){
+              /*save the Group Name to rootScope*/
+              $rootScope.groupTitle = studyingFor.name;
+            }
+            var linkedGroups = $scope.currentUser.groupMemberships,len = linkedGroups.length,i;
 
-            /*save the Group Name to rootScope*/
-            $rootScope.groupTitle = studyingFor.name;
-
-            var linkedGroups = $scope.currentUser.groupMemberships;
-
-            angular.forEach(linkedGroups, function (val, index) {
-
-              if (!!linkedGroups[index]) {
-                var linkGroupFilter = {'id': val.group_id},
+            for (i = 0; i < len; i++) {
+              var lG = linkedGroups[i];
+              if (!!lG) {
+                var linkGroupFilter = {'id': lG.group_id},
                   linkGroup = Utilities.findInCollection(responseGroups, linkGroupFilter);
 
                 if (angular.isDefined(linkGroup)) {
                   $scope.groups.linkedGroups.push(linkGroup);
-                  var indexToRemove = Utilities.getIndexArray(responseGroups, 'id', val.group_id);
+                  var indexToRemove = Utilities.getIndexArray(responseGroups, 'id', lG.group_id);
                   responseGroups.splice(indexToRemove, 1);
                 }
               }
-            });
+            }
             $scope.groups.unLinkedGroups = responseGroups;
           }
 
