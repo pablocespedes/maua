@@ -36,8 +36,8 @@ request.factory('practiceRequests', function(Restangular,Headers) {
       getQuestionNewSetByPractice: function (practiceGameId, tracks) {
         return  restPracticeGameObject.one(practiceGameId, 'sample').customGET('', {'tracks[]': tracks});
       },
-      createNewPracticeGame: function (activeGroupId) {
-        return  restPracticeGameObject.post('', {group_id: activeGroupId});
+      createNewPracticeGame: function (groupId,trackId) {
+        return  Restangular.service(groupId).one('tracks').one(trackId).post('practice');
       }
     }
   }
