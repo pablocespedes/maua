@@ -186,3 +186,18 @@ request.factory("VideoService", function($q,environmentCons) {
 		}
 });
 
+request.factory('Challenge', function(Restangular,Headers) {
+  Headers.updateDefaultHeader();
+  function challengeGames(){
+    return {
+      getChallenge: function(groupId){
+        return Restangular.service(groupId).one('challenge_games').customGET();
+      }
+    }
+  }
+
+  return {
+    challengeGames:challengeGames
+  }
+
+});
