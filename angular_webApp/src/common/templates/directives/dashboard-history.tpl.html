@@ -1,0 +1,23 @@
+<div class="stat-panel">
+		<div class="stat-row">
+				<div class="stat-cell col-sm-4 no-padding bordered valign-top">
+						<!-- Small padding, without top padding, extra small horizontal padding -->
+						<h4 class="padding-sm no-padding-t padding-xs-hr"><i class="fa  fa-tachometer text-primary"></i>&nbsp;&nbsp;History</h4>
+						<!-- Without margin -->
+						<ul class="list-group no-margin">
+								<!-- Without left and right borders, extra small horizontal padding, without background, no border radius -->
+								<li class="list-group-item no-border-hr padding-xs-hr no-bg no-border-radius">
+										Total questions answered <span class="label label-pa-purple pull-right" ng-bind="historyInfo.totalQuest"></span>
+								</li> <!-- / .list-group-item -->
+								<!-- Without left and right borders, extra small horizontal padding, without background -->
+								<li class="list-group-item no-border-hr padding-xs-hr no-bg">
+										Questions answered last week <span class="label label-danger pull-right" ng-bind="historyInfo.totalQuestLastW"></span>
+								</li> <!-- / .list-group-item -->
+								<!-- Without left and right borders, without bottom border, extra small horizontal padding, without background -->
+								<li class="list-group-item no-border-hr no-border-b padding-xs-hr no-bg">
+										Questions answered Today <span class="label label-success pull-right" ng-bind="historyInfo.totalQuestToday"></span>
+								</li> <!-- / .list-group-item -->
+						</ul>
+				</div>
+		</div>
+</div>

@@ -63,12 +63,16 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
       bindExplanationInfo: function (info) {
         $scope.showExplanation = info.showExplanation;
         $scope.questionExplanation = info.questionExplanation;
-        $scope.showVideo = info.showVideo;
         $scope.tagsResources = info.tagsResources;
-        $scope.videoId = info.videoId;
-        $scope.videoText = info.videoText;
         $scope.tags = info.tags;
         $scope.xpTag = info.xpTag;
+      },
+      bindVideoExplanationInfo: function(){
+        practiceSrv.getVideoExplanation($scope.questionResult).then(function (videoInfo) {
+          $scope.showVideo = videoInfo.showVideo;
+          $scope.videoId = videoInfo.videoId;
+          $scope.videoText = videoInfo.videoText;
+        });
       },
       presentQuestion: function (questionId, gameId) {
         practiceSrv.getRoundSession(questionId,gameId).then(function(result){  $scope.roundSessionAnswer = result.roundSessionAnswer; });
@@ -92,10 +96,9 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         });
       },
       displayExplanationInfo: function () {
-          practiceSrv.displayGeneralConfirmInfo($scope.questionResult).then(function (generalInfo) {
-            Question.bindExplanationInfo(generalInfo);
-
-          });
+        var generalInfo= practiceSrv.displayGeneralConfirmInfo($scope.questionResult);
+        customPractice.bindExplanationInfo(generalInfo);
+        customPractice.bindVideoExplanationInfo($scope.questionResult);
       },
       confirmAnswer: function () {
         $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer,$scope.items);
@@ -118,6 +121,7 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
       },
       evaluateConfirmMethod: function () {
         switch ($scope.lastAnswerLoaded) {
+          case 'SPR':
           case 'NumericEntry':
           case 'NumericEntryFraction':
             Question.numericConfirmAnswer();

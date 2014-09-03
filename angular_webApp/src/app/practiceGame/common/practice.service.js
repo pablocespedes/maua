@@ -145,7 +145,7 @@ practiceGame.factory('fraction', function () {
 
   }
 
-  //The approx precision
+//The approx precision
   Fraction.precision = 10;
 
   Fraction.prototype.gcd = function () {
@@ -242,9 +242,10 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
         resultObject.stimulus = $sce.trustAsHtml(resultObject.questionResult.stimulus);
 
         var options = optionList.toUpperCase().split(""),
-          answers = resultObject.questionResult.answers;
+          answers = resultObject.questionResult.answers,
+          len = answers.length, i;
 
-        for (var i = 0; i < answers.length; i++) {
+        for (i = 0; i < len; i++) {
           var value = answers[i];
           value["option"] = options[i];
           value["selected"] = false;
@@ -263,34 +264,20 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
     },
     confirmChoice: function (questionResult, roundSessionAnswer, answers) {
-      var selectedPosition = '', selectedOptions = [], selectedOptionsCount, i = 0, answerStatus = true;
-
-      /*Get selected answers*/
-
-      angular.forEach(answers, function (answer) {
-        if (answer.selected) {
-          selectedPosition = angular.isDefined(answer.answer_id) ? answer.answer_id : answer.id;
-          selectedOptions.push(selectedPosition);
-        }
-      });
-
-      selectedOptionsCount = selectedOptions.length;
-      if (selectedOptionsCount > 0) {
-
+      var i, answerStatus = true, len = answers.length,
+        areSelectedAnswers = _.filter(answers, {'selected': true});
+      if (areSelectedAnswers.length > 0) {
         angular.element('.choice button').removeClass('btn-primary');
 
-        angular.forEach(answers, function (value) {
-
-          var selectIdButton = ('#' + value.id);
-
-          /*set the correct class on the button*/
-          if (value.correct) {
-            if (Utilities.findInCollection(selectedOptions, value.id)) {
+        for (i = 0; i < len; i++) {
+          var answer = answers[i], selectIdButton = ('#' + answer.id);
+          if (answer.correct) {
+            if (answer.selected) {
               /*Send answer response to server, important this line have to be inside this if
                * since just the users answers get into this evaluation
                * */
 
-              practiceRequests.roundSessions().updateAnswer(roundSessionAnswer.id, value.id);
+              practiceRequests.roundSessions().updateAnswer(roundSessionAnswer.id, answer.id);
             }
             else {
               answerStatus = false;
@@ -299,11 +286,11 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
           }
           else {
-            if (Utilities.findInCollection(selectedOptions, function (val) { return val === value.id})) {
+            if (answer.selected) {
               /*Send answer response to server, important this line have to be inside this if
                * since just the users answers get into this evaluation
                * */
-              practiceRequests.roundSessions().updateAnswer(roundSessionAnswer.id, value.id);
+              practiceRequests.roundSessions().updateAnswer(roundSessionAnswer.id, answer.id);
               angular.element(selectIdButton).addClass('btn-danger');
               angular.element(selectIdButton).parents('#answer').addClass('incorrectAnswer');
               answerStatus = false;
@@ -311,17 +298,16 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
           }
 
-        });
-
+        }
         angular.element("#answercontent *").prop('disabled', true);
 
         return answerStatus;
+
       }
       else {
-
         Alerts.showAlert('Please select an option!', 'warning');
-
       }
+
     },
     resetLayout: function () {
       Practice.setLayoutBasedOnQuestionInfo(true);
@@ -350,7 +336,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
       return {tags: parsedTags, resources: parsedResources};
     },
     displayGeneralConfirmInfo: function (questionResult) {
-      var deferred = $q.defer(), generalObject = {};
+      var generalObject = {};
       /* Question Explanation*/
       generalObject.questionExplanation = questionResult.explanation;
 
@@ -363,22 +349,26 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
       generalObject.tagsResources = parsedTags.resources;
       generalObject.tags = parsedTags.tags;
       generalObject.xpTag = questionResult.experience_points;
+      return generalObject;
+    },
+    getVideoExplanation: function(questionResult){
+      var deferred = $q.defer(), videoObject={};
 
-       /* video validation*/
+      /* video validation*/
       if (questionResult.youtube_video_id !== null) {
-        generalObject.showVideo = true;
-        generalObject.videoId = questionResult.youtube_video_id;
-        VideoService.setYouTubeTitle(generalObject.videoId).then(function (videoTime) {
-          generalObject.videoText = 'Video Explanation (' + videoTime + ')';
-          deferred.resolve(generalObject);
+        videoObject.showVideo = true;
+        videoObject.videoId = questionResult.youtube_video_id;
+        VideoService.setYouTubeTitle(videoObject.videoId).then(function (videoTime) {
+          videoObject.videoText = 'Video Explanation (' + videoTime + ')';
+          deferred.resolve(videoObject);
         });
       }
       else {
-        deferred.resolve(generalObject);
+        deferred.resolve(videoObject);
       }
 
-      return deferred.promise;
 
+      return deferred.promise;
     },
     doNotKnowAnswer: function (questionResult) {
       var deferred = $q.defer(), resultObject = {};
@@ -486,9 +476,16 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
     usersRunOutQuestions: function (trackTitle, activeGroupId) {
       var options = {
         message: "You've answered all of the adaptive questions we have for you in " + trackTitle + ".  " +
-          "That's a lot of practice.  Would you like to work on a different track or go back to the main dashboard? ",
+          "That's a lot of practice.  Would you like to review questions you've answered or go back to the main dashboard? ",
         title: "Congratulations!",
         buttons: {
+          review: {
+            label: "Go to Review",
+            className: "btn-info",
+            callback: function () {
+              Utilities.redirect('https://grockit.com/reviews');
+            }
+          },
           main: {
             label: "Go to Dashboard",
             className: "btn-primary",
@@ -496,6 +493,8 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
               Utilities.redirect('#/' + activeGroupId + "/dashboard");
             }
           }
+
+
         }
       };
 
@@ -505,8 +504,9 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
   }
 });
 
+
 practiceGame.factory('Level', function () {
-  var messages = {2: 'Easy', 4: 'Easy/Medium', 8: 'Medium', 16: 'Medium/Hard', 32: 'Hard'};
+  var messages = {2: 'Lowest', 4: 'Low', 8: 'Medium', 16: 'High', 32: 'Highest'};
   return {
     getMessage: function (level) {
       return messages[level];

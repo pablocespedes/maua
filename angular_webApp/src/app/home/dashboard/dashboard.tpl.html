@@ -1,110 +1,94 @@
-<div breadcrumb breadcrumbs="breadcrumbs.get()"></div>
-
 <div id="simpleDash">
-    <div class="page-header">
-        <h2><i class="fa fa-dashboard page-header-icon"></i>&nbsp;&nbsp;Welcome to Grockit <span ng-bind="$root.groupTitle"></span> 2.0 Beta!
-        </h2><br>
-    </div>
+		<div class="page-header">
+				<div class="row">
+						<div class="col-lg-6 no-padding-r">
+								<h2>Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
+								</h2>
+						</div>
+						<!--<div class="col-lg-6 col-xs-12 col-sm-8 no-padding-r ">
+								<div search-input></div>
+						</div>-->
+				</div>
 
-    <div class="profile-content">
+				<br>
+		</div>
 
-      <div fading-text word="loadingMessage" is-visible="!historyVisible && loading"></div>
+		<div class="profile-content">
 
-        <div class="row fadeIn animated" ng-if="historyVisible">
-            <div class="col-sm-12">
-              <span>Here's a chart of the questions you've answered. The more questions you answer, the more you'll improve!</span>
-            </div>
-            <div id="columnGraph" class=" no-padding-hr">
-                <div class="panel" ng-if="historyVisible">
-                    <div class="panel-body no-padding">
-                        <div id="graphPanel" class="no-padding-l">
-                            <div line-chart id="hero-graph" data-options="chart_options" score="enableScore" style="height: 183px;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4 no-padding-r" ng-if="enableScore">
-              <div score-prediction group-title="$root.groupTitle" total-score="scoreData.totalScore" range-init="scoreData.rangeInit" range-end="scoreData.rangeEnd" is-visible="scoreLoading" no-score-message="Not enough data."></div>
-            </div>
-        </div>
+				<div fading-text word="loadingMessage" is-visible="!historyVisible && loading"></div>
 
-       <div class="fadeIn animated">
+				<div class="row" ng-if="historyVisible">
+						<div class="col-lg-4">
+								<div class="no-padding">
+										<div class="stat-panel">
+												<div class="stat-row">
+														<div class="stat-cell col-sm-4 no-padding bordered valign-top dash-widget">
+																<h4 class="padding-sm no-padding-t padding-xs-hr"><i class="fa fa-info text-primary"></i>&nbsp;&nbsp;How
+																		to use grockit?</h4>
+																<ul class=" no-margin">
+																		<li class=" no-border-hr padding-xs-hr no-bg no-border-radius">
+																				Try to answer about 20 questions per day!
+																		</li>
+																		<li class=" no-border-hr padding-xs-hr no-bg">
+																				Read more about how <a class="cursor-a" target="_blank" href="#">Grockit</a> works
+																		</li>
+																</ul>
+														</div>
+												</div>
+										</div>
+								</div>
+						</div>
+						<div class="col-lg-4">
+								<div class="no-padding">
+										<div history-chart history-info="historyInfo">
+										</div>
+								</div>
+						</div>
+						<div class="col-lg-4" ng-if="enableScore">
+								<div class="no-padding">
+										<div score-prediction group-title="$root.groupTitle" total-score="scoreData.totalScore"
+										     range-init="scoreData.rangeInit" range-end="scoreData.rangeEnd" is-visible="scoreLoading"
+										     no-score-message="Not enough data."></div>
+								</div>
 
+						</div>
+				</div>
+		</div>
 
+		<div class="row fadeIn animated">
+				<div class="col-md-12">
+						<div class="panel topic-content panel-dark widget-profile">
+								<div class="panel-heading">
+              <span class="panel-title"> <h4><i class="panel-title-icon fa fa-fire"></i>Grockit’s Smart Practice</h4>
+              </span>
+								</div>
 
-        <div class="stat-panel fadeIn animated" style="display: none">
-            <div class="stat-row">
-                <div class="col-md-12">
-                    <div class="panel  panel-dark widget-profile">
-                        <div class="panel-heading text-left">
-                            <h4><i class="panel-title-icon fa fa-fire"></i>Let's get started! Diagnostic</h4>
-                        </div>
+								<div class="list-group text-left">
+										<div track-list tracks="tracks" start-practice="StartPractice" get-title="getTitle" get-score="getScore"
+										     is-visible="enableScore && !loading"></div>
+								</div>
+						</div>
 
-                        <div class="list-group text-left">
-                            <a ng-repeat="track in tracks" href="javascript:void(0)" class="list-group-item">
-                                <div class="row">
-                                    <span class="label label-warning text-bg text-slim">Pending</span>
-                                    JumpStart your <span class="text-xlg"><strong><span ng-bind="track.short_name"></span></strong> </span>practice in just 12 questions
-                                    <button class="float-right btn btn-lg btn-success">Start</button>
-                                </div>
-                            </a>
+				</div>
+		</div>
 
-                        </div>
-                    </div>
+		<div class="row fadeIn animated">
+				<div class="col-md-12">
+						<div class="panel topic-content panel-dark widget-profile">
+								<div class="panel-heading">
+            <span class="panel-title">
+            <h4><i class="panel-title-icon fa fa-star-o"></i>Challenge</h4>
+          </span>
+								</div>
 
-                </div>
-            </div>
-        </div>
+								<div challenge-dashboard go-challenge="newChallenge()" title-quest="$root.groupTitle"></div>
 
+						</div>
 
-        <div class="row fadeIn animated">
-            <div class="col-md-12 no-padding">
-                    <div class="panel topic-content panel-dark widget-profile">
+				</div>
+		</div>
 
-                        <div class="panel-heading">
-
-                        <span class="panel-title">
-                           <h4> <i class="panel-title-icon fa fa-fire"></i>
-                             Let Grockit’s smart engine choose items in your personal strike zone</h4>
-                        </span>
-                        </div>
-
-                        <div class="list-group text-left">
-                            <div track-list tracks="tracks" start-practice="StartPractice" get-title="getTitle" get-score="getScore" is-visible="enableScore && !loading"></div>
-                        </div>
-                    </div>
-
-        </div>
-       </div>
-
-
-        <div class="row " style="display: none">
-
-               <div class="panel widget-tasks">
-                   <div class="panel-heading">
-                    <span class="panel-title">
-                       <h4> <i class="panel-title-icon fa fa-star-o"></i>Full Length Computer Adaptive Test (CAT)
-                           <span class="float-right text-sm">You can take up to 5 CATs</span></h4>
-                    </span>
-                   </div>
-                   <div class="panel-body ui-sortable">
-                       <div class="row no-padding-r">
-                           <button class="btn btn-primary btn-lg float-right" ng-click="newCatTest()">Start CAT&nbsp; &#10095;</button>
-
-                           <p>Think you're ready for a full length practice test? Set aside 3 hours and go for it!</p>
-                           <p class="text-sm"><b>Note: </b><span>The CAT must be done in a single sitting, so make sure to carve out enough time before you begin.</span></p>
-                       </div>
-
-
-                   </div>
-               </div>
-
-           </div>
-
-       </div>
-
-        <div class="push"></div>
-    </div>
+		<div class="push"></div>
 </div>
 
 
