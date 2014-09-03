@@ -80,9 +80,9 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
           var response = result.data;
           if(!_.isEmpty(response.challenge_games)){
             $scope.isChallengeAvailable=true;
-            var currentChallenge = _.find(response.challenge_games,function(r){ return r.challenge_games.group_id === groupId}).challenge_games;
-            $scope.challengeButton = currentChallenge.name;
-            $scope.challengeId=currentChallenge.id;
+            $scope.challengesGames = response.challenge_games;
+              //_.find(response.challenge_games,function(r){ return r.challenge_games.group_id === groupId}).challenge_games;
+
           }
       });
     }
@@ -131,11 +131,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
   };
 
-  $scope.newChallenge = function () {
-    var baseUrl = Utilities.originalGrockit().url;
-     Utilities.redirect(baseUrl+'/assessment/introcards/'+$scope.challengeId);
 
-  };
 
   $scope.init();
 

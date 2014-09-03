@@ -15,8 +15,10 @@
 </div>
 
 <div ng-if="showExplanation && showTiming && questionAnalytics" class="reset-layout" question-timing data="timingData"
+     confirmed="userConfirmed"
      your-time="questionTimer.seconds" answer-status="answerStatus" xp-tag="xpTag" percent-answered="percentAnswered"
      last-answer-loaded="lastAnswerLoaded"></div>
+
 
 
 <div id="practice">
