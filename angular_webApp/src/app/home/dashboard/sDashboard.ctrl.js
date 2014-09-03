@@ -1,6 +1,7 @@
 'use strict';
 home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','Alerts', function($scope,Users,History,Tracks,Utilities,Auth,Alerts) {
   $scope.loading = true;
+  $scope.isChallengeAvailable=false;
   $scope.scoreLoading = true;
   $scope.loadingMessage = 'Loading...';
   Utilities.setActiveTab(0);
@@ -73,6 +74,15 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
         Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
       });
+    },
+    getChallenge: function(){
+      Users.getUser().self().then(function(result){
+          var response = result.data.user;
+          if(!_.isEmpty(response.challenge_games)){
+            $scope.isChallengeAvailable=true;
+
+          }
+      });
     }
   };
 
@@ -88,6 +98,8 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
       SimpleDashBoard.getHistoryInformation();
 
       SimpleDashBoard.fetchTracksData();
+
+      SimpleDashBoard.getChallenge();
 
       $scope.historyVisible = false;
     });
@@ -119,7 +131,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
   $scope.newChallenge = function () {
 
-   alert("we're still working to give you this feature. ;)")
+
   };
 
   $scope.init();
