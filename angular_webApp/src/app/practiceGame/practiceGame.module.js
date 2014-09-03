@@ -44,7 +44,7 @@ var practiceGame =  angular.module("grockitApp.practiceGame",['ng-breadcrumbs'])
       reloadOnSearch: false
     })
 
-    .when('/:subject/custom-practice', {templateUrl: 'app/practiceGame/custom-practice/customPractice.tpl.html',
+    .when('/:subject/dashboard/custom-practice', {templateUrl: 'app/practiceGame/custom-practice/customPractice.tpl.html',
       label: 'practice',
       resolve: {deps: function ($q, $rootScope) {
         var deferred = $q.defer(),

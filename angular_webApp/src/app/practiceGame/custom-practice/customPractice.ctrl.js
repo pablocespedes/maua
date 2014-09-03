@@ -5,7 +5,10 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
     $scope.activeGroupId = Utilities.getActiveGroup();
     $scope.questionAnalytics = ($scope.activeGroupId === 'gmat' || $scope.activeGroupId === 'act' || $scope.activeGroupId === 'sat' || $scope.activeGroupId === 'gre');
     $scope.breadcrumbs = breadcrumbs;
-    breadcrumbs.options = { 'practice': $scope.activeTracks.trackTitle };
+    breadcrumbs.options = { 
+      'practice': $scope.activeTracks.trackTitle
+    };
+    console.log($scope.breadcrumbs);
     $scope.tagsResources=[];
     $scope.portalC = $scope;
     $scope.loading = true;

@@ -1,94 +1,103 @@
 <div id="simpleDash">
-		<div class="page-header">
-				<div class="row">
-						<div class="col-lg-6 no-padding-r">
-								<h2>Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
-								</h2>
-						</div>
-						<!--<div class="col-lg-6 col-xs-12 col-sm-8 no-padding-r ">
-								<div search-input></div>
-						</div>-->
-				</div>
+  <div class="page-header">
+    <div class="row">
+      <div class="col-lg-6 no-padding-r">
+        <h2>Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
+        </h2>
+      </div>
+      <!--<div class="col-lg-6 col-xs-12 col-sm-8 no-padding-r ">
+                <div search-input></div>
+            </div>-->
+    </div>
 
-				<br>
-		</div>
+    <br>
+  </div>
 
-		<div class="profile-content">
+  <div class="profile-content">
 
-				<div fading-text word="loadingMessage" is-visible="!historyVisible && loading"></div>
+    <div fading-text word="loadingMessage" is-visible="!historyVisible && loading"></div>
 
-				<div class="row" ng-if="historyVisible">
-						<div class="col-lg-4">
-								<div class="no-padding">
-										<div class="stat-panel">
-												<div class="stat-row">
-														<div class="stat-cell col-sm-4 no-padding bordered valign-top dash-widget">
-																<h4 class="padding-sm no-padding-t padding-xs-hr"><i class="fa fa-info text-primary"></i>&nbsp;&nbsp;How
-																		to use grockit?</h4>
-																<ul class=" no-margin">
-																		<li class=" no-border-hr padding-xs-hr no-bg no-border-radius">
-																				Try to answer about 20 questions per day!
-																		</li>
-																		<li class=" no-border-hr padding-xs-hr no-bg">
-																				Read more about how <a class="cursor-a" target="_blank" href="#">Grockit</a> works
-																		</li>
-																</ul>
-														</div>
-												</div>
-										</div>
-								</div>
-						</div>
-						<div class="col-lg-4">
-								<div class="no-padding">
-										<div history-chart history-info="historyInfo">
-										</div>
-								</div>
-						</div>
-						<div class="col-lg-4" ng-if="enableScore">
-								<div class="no-padding">
-										<div score-prediction group-title="$root.groupTitle" total-score="scoreData.totalScore"
-										     range-init="scoreData.rangeInit" range-end="scoreData.rangeEnd" is-visible="scoreLoading"
-										     no-score-message="Not enough data."></div>
-								</div>
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="no-padding">
+          <div class="stat-panel">
+            <div class="stat-row">
+              <div class="stat-cell col-sm-4 no-padding bordered valign-top dash-widget">
+                <h4 class="padding-sm no-padding-t padding-xs-hr"><i class="fa fa-info text-primary"></i>&nbsp;&nbsp;How
+                  to use grockit?</h4>
+                <ul class=" no-margin">
+                  <li class=" no-border-hr padding-xs-hr no-bg no-border-radius">
+                  Try to answer about 20 questions per day!
+                  </li>
+                  <li class=" no-border-hr padding-xs-hr no-bg">
+                  Read more about how <a class="cursor-a" target="_blank" href="#">Grockit</a> works
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="no-padding">
+          <div history-chart history-info="historyInfo">
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4" ng-if="!enableScore">
+        <div class="no-padding">
+          <div class="stat-panel">
+            <div class="stat-row">
+              <div class="stat-cell col-sm-4 no-padding bordered valign-top dash-widget"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4" ng-if="enableScore">
+        <div class="no-padding">
+          <div score-prediction group-title="$root.groupTitle" total-score="scoreData.totalScore"
+            range-init="scoreData.rangeInit" range-end="scoreData.rangeEnd" is-visible="scoreLoading"
+            no-score-message="Not enough data."></div>
+        </div>
 
-						</div>
-				</div>
-		</div>
+      </div>
+    </div>
+  </div>
 
-		<div class="row fadeIn animated">
-				<div class="col-md-12">
-						<div class="panel topic-content panel-dark widget-profile">
-								<div class="panel-heading">
-              <span class="panel-title"> <h4><i class="panel-title-icon fa fa-fire"></i>Grockit’s Smart Practice</h4>
-              </span>
-								</div>
+  <div class="row fadeIn animated">
+    <div class="col-md-12">
+      <div class="panel topic-content panel-dark widget-profile">
+        <div class="panel-heading">
+          <span class="panel-title"> <h4><i class="panel-title-icon fa fa-fire"></i>Grockit’s Smart Practice</h4>
+          </span>
+        </div>
 
-								<div class="list-group text-left">
-										<div track-list tracks="tracks" start-practice="StartPractice" get-title="getTitle" get-score="getScore"
-										     is-visible="enableScore && !loading"></div>
-								</div>
-						</div>
+        <div class="list-group text-left">
+          <div track-list tracks="tracks" start-practice="StartPractice" get-title="getTitle" get-score="getScore"
+            is-visible="enableScore && !loading"></div>
+        </div>
+      </div>
 
-				</div>
-		</div>
+    </div>
+  </div>
 
-		<div class="row fadeIn animated" ng-if="isChallengeAvailable">
-				<div class="col-md-12">
-						<div class="panel topic-content panel-dark widget-profile">
-								<div class="panel-heading">
-            <span class="panel-title">
+  <div class="row fadeIn animated" ng-if="isChallengeAvailable">
+    <div class="col-md-12">
+      <div class="panel topic-content panel-dark widget-profile">
+        <div class="panel-heading">
+          <span class="panel-title">
             <h4><i class="panel-title-icon fa fa-star-o"></i>Challenge</h4>
           </span>
-								</div>
+        </div>
 
-								<div challenge-dashboard go-challenge="newChallenge()" title-quest="$root.groupTitle"></div>
+        <div challenge-dashboard go-challenge="newChallenge()" title-quest="$root.groupTitle"></div>
 
-						</div>
+      </div>
 
-				</div>
-		</div>
+    </div>
+  </div>
 
-		<div class="push"></div>
+  <div class="push"></div>
 </div>
 
 

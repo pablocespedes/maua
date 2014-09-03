@@ -4,6 +4,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
   $scope.isChallengeAvailable=false;
   $scope.scoreLoading = true;
   $scope.loadingMessage = 'Loading...';
+  $scope.historyVisible = false;
   Utilities.setActiveTab(0);
 
 
@@ -101,7 +102,6 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
       SimpleDashBoard.getChallenge();
 
-      $scope.historyVisible = false;
     });
 
 
