@@ -146,9 +146,9 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
           }
 
 
-        }).catch(function error(error) {
+        }).catch(function errorHandler(e) {
 
-          Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+          Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
 
         });
 
@@ -291,9 +291,9 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         timer.initPracticeTimer();
         timer.initQuestionTimer();
 
-      }).catch(function error(error) {
+      }).catch(function errorHandler(e) {
 
-        Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+        Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
 
       });
 

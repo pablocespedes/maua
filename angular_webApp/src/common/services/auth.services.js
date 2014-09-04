@@ -71,7 +71,7 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
         Users.getUser().self().then(function (result) {
           var userData = setUserData(result.data.user);
           updateUserPromise.resolve(userData);
-        }).catch(function error(e) {
+        }).catch(function errorHandler(e) {
           updateUserPromise.resolve(webStorage.get('currentUser'));
         });
 

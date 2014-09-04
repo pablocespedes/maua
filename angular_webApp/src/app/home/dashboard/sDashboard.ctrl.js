@@ -23,7 +23,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         $scope.tracks = response.data.tracks;
         $scope.loading = false;
 
-      }).catch(function error(e) {
+      }).catch(function errorHandler(e) {
 
         Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
       });
@@ -48,7 +48,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         $scope.scoreLoading = false;
         $scope.scoreData = scoreData;
 
-      }).catch(function error(e) {
+      }).catch(function errorHandler(e) {
         Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
       });
 
@@ -70,7 +70,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         }
 
 
-      }).catch(function error(e) {
+      }).catch(function errorHandler(e) {
 
         Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
       });

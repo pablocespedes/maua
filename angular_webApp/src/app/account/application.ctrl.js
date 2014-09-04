@@ -59,9 +59,9 @@ NavController = function ($rootScope, $scope, $location, Auth, Utilities, Grocki
             $scope.groups.unLinkedGroups = responseGroups;
           }
 
-        }).catch(function error(error) {
+        }).catch(function errorHandler(e) {
 
-          Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+          Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
         });
       }
       else {
@@ -75,8 +75,8 @@ NavController = function ($rootScope, $scope, $location, Auth, Utilities, Grocki
         var response = result.data;
         $scope.tracksList = response.tracks;
 
-      }).catch(function error(error) {
-        Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+      }).catch(function errorHandler(e) {
+        Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
       });
     },
     init: function () {
@@ -94,8 +94,8 @@ NavController = function ($rootScope, $scope, $location, Auth, Utilities, Grocki
           GaUtility.classic();
           GaUtility.UA();
         }
-      }).catch(function error(error) {
-        Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+      }).catch(function errorHandler(e) {
+        Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
       });
     }
   };
