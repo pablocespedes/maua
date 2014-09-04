@@ -62,15 +62,39 @@
   padding-right: 20px;
 }
 
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+/* Styles */
+  #topics  {
+    padding-right: 0px !important;
+    .confirm-container, .feedback-container {
+      padding: 0 !important;
+      float: none;
+      div {
+        text-align: center;
+      }
+    }
+    .row {
+      margin-left: 0 !important;
+    }
+    span {
+      display: block;
+    }
+  }
+}
 
 #topics{
-  margin-left: 20px;
-  padding-right: 37px;
+  padding-right: 20px;
   padding-top: 10px;
   min-height: 50px;
   padding-bottom: 5px;
   //  box-shadow: 0 3px 1px #555, 0 -2px 4px #555;
 
+}
+#topics .row {
+  margin-left: 10px;
 }
 
 footer {

@@ -117,23 +117,21 @@
 <footer class="" role="navigation">
   <div id="topics" class="footer">
     <div class="row">
-      <div>
-        <div class="col-md-6 f-content float-right" ng-if="!loading">
-          <div class="text-right">
-            <a id="skipAction" ng-click="revealExplanation()">Don't know? See answer.</a>&nbsp;
-            <button id="nextAction" class="btn  btn-lg  btn-flat" ng-click="nextAction()"
-              ng-bind="nextActionTitle"></button>
-          </div>
-
+      <div class="confirm-container col-sm-6 f-content float-right" ng-if="!loading">
+        <div class="text-right">
+          <a id="skipAction" ng-click="revealExplanation()">Don't know? See answer.</a>&nbsp;
+          <button id="nextAction" class="btn  btn-lg  btn-flat" ng-click="nextAction()"
+            ng-bind="nextActionTitle"></button>
         </div>
-        <div class="col-md-6 f-content feedback-box">
-          <div class="text-left">
+      </div>
+      <div class="feedback-container col-sm-6 f-content feedback-box">
+        <div class="text-left">
+          <span>
             Problem with this question?
-            <a href="mailto:feedback@grockit.com?subject={{subjectMail}}" title="">&nbsp; <i
-                class="profile-list-icon fa fa-envelope" style="color: #888"></i>&nbsp; feedback@grockit.com
-            </a>
-
-          </div>
+          </span>
+          <a href="mailto:feedback@grockit.com?subject={{subjectMail}}" title="">&nbsp; <i
+              class="profile-list-icon fa fa-envelope" style="color: #888"></i>&nbsp; feedback@grockit.com
+          </a>
         </div>
       </div>
     </div>
