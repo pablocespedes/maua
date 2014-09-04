@@ -14,8 +14,8 @@
            }
          }
 
-       }).catch(function error(error) {
-         Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+       }).catch(function errorHandler(e) {
+         Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
        });
      }
      else {

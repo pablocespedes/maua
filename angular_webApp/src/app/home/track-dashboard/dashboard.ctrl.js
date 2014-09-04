@@ -17,9 +17,9 @@ function($scope,Users,History,Utilities,Auth,breadcrumbs,Alerts,Tracks) {
         $scope.tracks = response.data.tracks;
         $scope.loading = false;
 
-      }).catch(function error(error) {
+      }).catch(function errorHandler(e) {
 
-        Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+        Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
       });
 
     },
@@ -62,9 +62,9 @@ function($scope,Users,History,Utilities,Auth,breadcrumbs,Alerts,Tracks) {
       Users.getUser().history($scope.user_id, $scope.activeGroupId, $scope.trackInfo.trackId).then(function (graphicResult) {
         TrackDashboard.fillTrackDashboardGraphic(graphicResult.data);
 
-      }).catch(function error(error) {
+      }).catch(function errorHandler(e) {
 
-        Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+        Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
       });
     }
 

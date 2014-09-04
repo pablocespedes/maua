@@ -208,7 +208,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
         resultObject.roundSessionAnswer = result.data.round_session;
         deferred.resolve(resultObject);
 
-      }).catch(function error(error) {
+      }).catch(function errorHandler(e) {
         deferred.reject(resultObject);
         Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
       });
@@ -255,9 +255,9 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
         deferred.resolve(resultObject);
 
       })
-        .catch(function error(error) {
+        .catch(function errorHandler(e) {
           deferred.reject(resultObject);
-          Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+          Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
         });
 
       return deferred.promise;
