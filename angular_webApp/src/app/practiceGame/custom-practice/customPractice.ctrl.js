@@ -285,8 +285,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
     };
 
     $scope.CreateNewGame = function () {
-
-      var createGame = practiceRequests.practiceGames().createNewPracticeGame($scope.activeGroupId);
+      var createGame = practiceRequests.practiceGames().createNewPracticeGame($scope.activeGroupId,$scope.activeTracks.tracks[0]);
 
       createGame.then(function (game) {
         $scope.gameId = game.data.practice_game.id;

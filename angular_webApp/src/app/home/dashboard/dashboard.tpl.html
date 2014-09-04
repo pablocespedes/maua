@@ -27,10 +27,14 @@
                   to use grockit?</h4>
                 <ul class=" no-margin">
                   <li class=" no-border-hr padding-xs-hr no-bg no-border-radius">
-                  Try to answer about 20 questions per day!
+                  “<a href="http://en.wikipedia.org/wiki/Grok"><b>Grok</b></a> means to understand so thoroughly that
+                  the observer becomes a part of the observed.”
                   </li>
-                  <li class=" no-border-hr padding-xs-hr no-bg">
-                  Read more about how <a class="cursor-a" target="_blank" href="#">Grockit</a> works
+                  <li class=" no-border-hr padding-xs-hr no-bg no-border-radius">
+                  <b>More questions</b> means more points. Try to answer at least 20 questions each day.
+                  </li>
+                  <li class=" no-border-hr padding-xs-hr no-bg no-border-radius">
+                  Smart Practice mode selects the perfect questions that are in your personal “strike zone”
                   </li>
                 </ul>
               </div>
@@ -41,15 +45,6 @@
       <div class="col-lg-4">
         <div class="no-padding">
           <div history-chart history-info="historyInfo">
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4" ng-if="!enableScore">
-        <div class="no-padding">
-          <div class="stat-panel">
-            <div class="stat-row">
-              <div class="stat-cell col-sm-4 no-padding bordered valign-top dash-widget"></div>
-            </div>
           </div>
         </div>
       </div>
@@ -68,7 +63,7 @@
     <div class="col-md-12">
       <div class="panel topic-content panel-dark widget-profile">
         <div class="panel-heading">
-          <span class="panel-title"> <h4><i class="panel-title-icon fa fa-fire"></i>Grockit’s Smart Practice</h4>
+          <span class="panel-title"> <h4><i class="panel-title-icon fa fa-fire"></i>Smart Practice</h4>
           </span>
         </div>
 
@@ -83,22 +78,20 @@
 
   <div class="row fadeIn animated" ng-if="isChallengeAvailable">
     <div class="col-md-12">
+
       <div class="panel topic-content panel-dark widget-profile">
         <div class="panel-heading">
-          <span class="panel-title">
-            <h4><i class="panel-title-icon fa fa-star-o"></i>Challenge</h4>
+          <span class="panel-title"> <h4><i class="panel-title-icon fa fa-fire"></i>Challenge</h4>
           </span>
         </div>
 
-        <div challenge-dashboard go-challenge="newChallenge()" title-quest="$root.groupTitle"></div>
+        <div class="list-group text-left">
+          <div challenge-dashboard challenges="challengesGames"></div>
+        </div>
 
       </div>
-
     </div>
+
+    <div class="push"></div>
   </div>
-
-  <div class="push"></div>
 </div>
-
-
-

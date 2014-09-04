@@ -1,5 +1,5 @@
 'use strict';
-home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','Alerts', function($scope,Users,History,Tracks,Utilities,Auth,Alerts) {
+home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','Alerts','Challenge', function($scope,Users,History,Tracks,Utilities,Auth,Alerts,Challenge) {
   $scope.loading = true;
   $scope.isChallengeAvailable=false;
   $scope.scoreLoading = true;
@@ -76,11 +76,13 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
       });
     },
-    getChallenge: function(){
-      Users.getUser().self().then(function(result){
-          var response = result.data.user;
+    getChallenge: function(groupId){
+      Challenge.challengeGames().getChallenge(groupId).then(function(result){
+          var response = result.data;
           if(!_.isEmpty(response.challenge_games)){
             $scope.isChallengeAvailable=true;
+            $scope.challengesGames = response.challenge_games;
+              //_.find(response.challenge_games,function(r){ return r.challenge_games.group_id === groupId}).challenge_games;
 
           }
       });
@@ -100,7 +102,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
       SimpleDashBoard.fetchTracksData();
 
-      SimpleDashBoard.getChallenge();
+      SimpleDashBoard.getChallenge($scope.activeGroupId);
 
     });
 
@@ -129,10 +131,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
   };
 
-  $scope.newChallenge = function () {
 
-
-  };
 
   $scope.init();
 
