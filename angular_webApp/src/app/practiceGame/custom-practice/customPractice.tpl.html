@@ -121,7 +121,7 @@
         <div class="col-md-6 f-content float-right" ng-if="!loading">
           <div class="text-right">
             <a id="skipAction" ng-click="revealExplanation()">Don't know? See answer.</a>&nbsp;
-            <button id="nextAction" class="btn  btn-lg  btn-flat" ng-click="nextAction()"
+            <button id="nextAction" class="btn  btn-lg  btn-flat" ng-disabled="isDisabled" ng-click="nextAction()"
               ng-bind="nextActionTitle"></button>
           </div>
 

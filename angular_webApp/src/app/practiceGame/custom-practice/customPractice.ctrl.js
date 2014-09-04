@@ -1,5 +1,5 @@
-practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'Utilities', 'breadcrumbs', 'practiceRequests', 'Alerts', 'Timer', 'SplashMessages',
-  function ($scope, practiceSrv, Utilities, breadcrumbs, practiceRequests, Alerts, Timer, SplashMessages) {
+practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'Utilities', 'breadcrumbs', 'practiceRequests', 'Alerts', 'Timer', 'SplashMessages','$timeout',
+  function ($scope, practiceSrv, Utilities, breadcrumbs, practiceRequests, Alerts, Timer, SplashMessages,$timeout) {
 
     $scope.activeTracks = Utilities.getActiveTrack();
     $scope.activeGroupId = Utilities.getActiveGroup();
@@ -20,7 +20,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
     $scope.position = 0;
     $scope.lastAnswerLoaded = '';
     $scope.loadingMessage = SplashMessages.getLoadingMessage();
-
+    $scope.isDisabled=false;
     var timer = {
       setTimingInformation: function (questionId,correctAnswerId) {
 
@@ -80,6 +80,10 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         $scope.tagsResources = info.tagsResources;
         $scope.tags = info.tags;
         $scope.xpTag = info.xpTag;
+        $scope.nextActionTitle = 'Next Question';
+        $timeout(function(){
+          $scope.isDisabled=false;
+        }, 200);
       },
       bindVideoExplanationInfo: function(){
         practiceSrv.getVideoExplanation($scope.questionResult).then(function (videoInfo) {
@@ -112,7 +116,6 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         });
       },
       displayExplanationInfo: function () {
-          $scope.nextActionTitle = 'Next Question';
           var generalInfo= practiceSrv.displayGeneralConfirmInfo($scope.questionResult);
            customPractice.bindExplanationInfo(generalInfo);
            customPractice.bindVideoExplanationInfo($scope.questionResult);
@@ -309,9 +312,11 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
     $scope.nextAction = function () {
       timer.pauseTimers();
       if ($scope.nextActionTitle == 'Confirm Choice') {
+        $scope.isDisabled=true;
         customPractice.evaluateConfirmMethod();
       }
       else {
+
         customPractice.nextQuestion();
       }
     };
