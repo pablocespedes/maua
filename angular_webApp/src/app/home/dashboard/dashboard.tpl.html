@@ -53,9 +53,9 @@
   <div class="row fadeIn animated">
     <div class="col-md-12">
       <div class="panel topic-content panel-dark widget-profile">
-        <div class="panel-heading">
+        <div class="panel-heading dashboard-title">
           <span class="panel-title"> <h4><i class="panel-title-icon fa fa-fire"></i>Smart Practice
-          <a class="disabled panel-title float-right" style="color: #555;">Customize Your Practice</a>
+          <button class="float-right btn btn-labeled btn-default btn-flat btn-customize-practice" ng-disabled="true"><span class="btn-label icon fa fa-cog"></span>Customize Your Practice</button>
           </h4>
           </span>
         </div>
@@ -69,7 +69,7 @@
   <div class="row fadeIn animated" ng-if="isChallengeAvailable">
     <div class="col-md-12">
       <div class="panel topic-content panel-dark widget-profile">
-        <div class="panel-heading">
+        <div class="panel-heading dashboard-title">
           <span class="panel-title"> <h4><i class="panel-title-icon fa fa-fire"></i>Challenge</h4>
           </span>
         </div>

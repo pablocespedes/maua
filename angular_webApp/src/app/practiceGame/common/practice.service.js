@@ -85,93 +85,6 @@ practiceGame.factory('questionTypesService', function () {
   };
 });
 
-
-practiceGame.factory('fraction', function () {
-
-
-  function Fraction(n, d) {
-    if ("number" !== typeof n)
-      throw new TypeError("Excptected Parameter to be of type number");
-
-    var strings = n.toString(2).split("."); //Split the number by its decimal point
-
-    if (strings.length > 1 && !d) { //No denominator given and n is a float
-
-      var floats = [strings[1].substr(0, 27), strings[1].substr(27, 54)]; //Split into to parts
-
-      var int64 = [
-          parseInt(floats[0], 2) << 1,
-          parseInt(floats[1], 2) << 1
-      ];
-
-      var denominator = Math.pow(2, strings[1].length + 1); //
-      var numerator = int64[0] * Math.pow(2, floats[1].length);
-
-      numerator += int64[1];
-      numerator += parseInt(strings[0], 2) * denominator;
-
-      this.numerator = numerator;
-      this.denominator = denominator;
-      this.reduce();
-
-      this.approx = approx(n);
-
-    } else if (strings.length < 2 && !d) { // If no denominator and n is an int
-      this.numerator = n;
-      this.denominator = 1;
-    } else { //if n and d
-      this.numerator = n;
-      this.denominator = d;
-    }
-
-    function approx(f, n) {
-      n = n || 0;
-      var fraction = new Fraction(1, 1);
-
-      var float = Math.pow(f, -1);
-      var rec = ~~float;
-      var decimal = float - rec;
-
-      if (float.toPrecision(Fraction.precision) == rec)
-        return new Fraction(1, rec);
-      var _fraction = approx(decimal, n + 1);
-
-      fraction.denominator = rec * _fraction.denominator + _fraction.numerator;
-      fraction.numerator = _fraction.denominator;
-
-      return fraction;
-
-    }
-
-  }
-
-//The approx precision
-  Fraction.precision = 10;
-
-  Fraction.prototype.gcd = function () {
-    return (function gcd(u, v) {
-      return ((u > 0) ? gcd(v % u, u) : v);
-    })(numerator, denominator);
-  };
-  Fraction.prototype.reduce = function () {
-    var _gcd = this.gcd();
-    this.numerator /= _gcd;
-    this.denominator /= _gcd;
-  };
-
-  Fraction.prototype.valueOf = function () {
-    return numerator / denominator;
-  };
-  Fraction.prototype.toString = function () {
-    return numerator + "/" + denominator;
-  };
-
-
-  return {
-    evaluate: Fraction
-  };
-});
-
 practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, Alerts, $sce, VideoService, environmentCons, $resource) {
 
   var optionList = "abcdefghijklmnopqrstuvwxyz",
@@ -421,7 +334,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
     },
     numericEntryConfirmChoice: function (options) {
 
-      var userAnswer = 0, resultObject = {}, selectedAnswer = 0, answers = '',
+      var userAnswer = 0, selectedAnswer = 0,answerStatus=true, answers = '',
         numerator = options.numerator,
         denominator = options.denominator, lastAnswerLoaded = options.lastAnswerLoaded,
         questionResult = options.questionResult, roundSessionAnswer = options.roundSessionAnswer;
@@ -430,7 +343,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
       if (numerator || denominator) {
 
 
-        if (lastAnswerLoaded == 'NumericEntryFraction') {
+        if (numerator>0 && denominator>0) {
 
           userAnswer = numerator + '/' + denominator;
         }
@@ -439,23 +352,25 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
         }
 
         answers = questionResult.answers;
+        var len = answers.length,i;
         selectedAnswer = 0;
 
-        angular.forEach(answers, function (value) {
-          /*evaluate just one time the quivalence between body and numerator*/
-          var answerEval = (value.body == userAnswer);
+        for (i = 0; i < len; i++) {
+          var answer= answers[i],roundAnswer=(eval(userAnswer).toFixed(1)),
+
+          /*evaluate just one time the equivalence between body and numerator*/
+            answerEval = (answer.body === userAnswer || eval(answer.body).toFixed(1) === roundAnswer);
 
           if (answerEval)
-            selectedAnswer = value.answer_id;
+            selectedAnswer = answer.answer_id;
 
-          resultObject.answerStatus = answerEval;
+          answerStatus = answerEval;
+        };
 
-        });
         practiceRequests.roundSessions().updateAnswer(roundSessionAnswer.id, selectedAnswer);
 
-
         angular.element("#answercontent *").prop('disabled', true);
-        return resultObject.answerStatus;
+        return answerStatus;
 
       }
       else {
