@@ -1,12 +1,12 @@
 'use strict';
 home.controller('SimpleDashController', ['$scope', 'Users', 'History', 'Tracks', 'Utilities', 'Auth', 'Alerts', 'Challenge',
   function($scope, Users, History, Tracks, Utilities, Auth, Alerts, Challenge) {
-    $scope.loading = true;
-    $scope.isChallengeAvailable = false;
-    $scope.scoreLoading = true;
-    $scope.loadingMessage = 'Loading...';
-    Utilities.setActiveTab(0);
-
+  $scope.loading = true;
+  $scope.isChallengeAvailable=false;
+  $scope.scoreLoading = true;
+  $scope.loadingMessage = 'Loading...';
+  $scope.historyVisible = false;
+  Utilities.setActiveTab(0);
 
     $scope.getTitle = function(track) {
       return track.short_name;

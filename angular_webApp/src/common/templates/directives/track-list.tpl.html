@@ -9,7 +9,8 @@
     </span>
     <div class=" text-center pull-right" ng-if="isVisible">
       <div ng-show="hasScore(track)">
-        <button id="btn-score" class=" btn-lg float-right btn btn-labeled btn-info disabled">{{getScore(track)}}</button>
+      <!-- data-toggle="tooltip" data-placement="top" title="" data-original-title="To be determined." -->
+        <button  class=" btn-lg float-right btn btn-labeled btn-info">{{getScore(track)}}</button>
         <br>
         <span class="text-xs float-right valign-bottom">Your Score Prediction</span>
       </div>
