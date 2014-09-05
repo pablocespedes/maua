@@ -14,4 +14,10 @@ angular.module('grockitApp.constants', [])
     youtubeAPI: 'https://gdata.youtube.com/feeds/api/videos/',
     stagingAPI: 'http://api.staging.grockit.com',
     liveAPI: 'https://api.grockit.com'
+})
+.constant('imageVersion',{
+    thumbnail:'thumbnail',
+    pinkyNail:'pinkynail',
+    original:'original',
+    large:'large'
 });

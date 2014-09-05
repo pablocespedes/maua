@@ -1,6 +1,7 @@
 'use strict';
-home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','Alerts', function($scope,Users,History,Tracks,Utilities,Auth,Alerts) {
+home.controller('SimpleDashController',['$scope','Users','History','Tracks','Utilities','Auth','Alerts','Challenge', function($scope,Users,History,Tracks,Utilities,Auth,Alerts,Challenge) {
   $scope.loading = true;
+  $scope.isChallengeAvailable=false;
   $scope.scoreLoading = true;
   $scope.loadingMessage = 'Loading...';
   Utilities.setActiveTab(0);
@@ -22,7 +23,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         $scope.tracks = response.data.tracks;
         $scope.loading = false;
 
-      }).catch(function error(e) {
+      }).catch(function errorHandler(e) {
 
         Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
       });
@@ -47,7 +48,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         $scope.scoreLoading = false;
         $scope.scoreData = scoreData;
 
-      }).catch(function error(e) {
+      }).catch(function errorHandler(e) {
         Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
       });
 
@@ -69,9 +70,20 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
         }
 
 
-      }).catch(function error(e) {
+      }).catch(function errorHandler(e) {
 
         Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
+      });
+    },
+    getChallenge: function(groupId){
+      Challenge.challengeGames().getChallenge(groupId).then(function(result){
+          var response = result.data;
+          if(!_.isEmpty(response.challenge_games)){
+            $scope.isChallengeAvailable=true;
+            $scope.challengesGames = response.challenge_games;
+              //_.find(response.challenge_games,function(r){ return r.challenge_games.group_id === groupId}).challenge_games;
+
+          }
       });
     }
   };
@@ -88,6 +100,8 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
       SimpleDashBoard.getHistoryInformation();
 
       SimpleDashBoard.fetchTracksData();
+
+      SimpleDashBoard.getChallenge($scope.activeGroupId);
 
       $scope.historyVisible = false;
     });
@@ -117,10 +131,7 @@ home.controller('SimpleDashController',['$scope','Users','History','Tracks','Uti
 
   };
 
-  $scope.newChallenge = function () {
 
-   alert("we're still working to give you this feature. ;)")
-  };
 
   $scope.init();
 

@@ -154,13 +154,22 @@ angular.module('grockitApp.directives', [])
   };
 })
 
-.directive('challengeDashboard', function() {
+.directive('challengeDashboard', function(Utilities) {
     return {
       restrict: 'A',
       templateUrl: 'common/templates/directives/dashboard-challenge.tpl.html',
       scope: {
-        goChallenge: '&goChallenge',
-        titleQuest: '='
+        challenges: '='
+      },
+      link: function(scope){
+        scope.newChallenge = function (index) {
+          var currentChallenge = scope.challenges[index];
+          scope.challengeId=currentChallenge.id;
+          var baseUrl = Utilities.originalGrockit().url;
+          Utilities.redirect(baseUrl+'/assessment/introcards/'+scope.challengeId);
+
+        };
+
       }
     };
   });

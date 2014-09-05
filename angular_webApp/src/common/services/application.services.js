@@ -162,7 +162,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
         PixelAdmin.plugins.alerts.add(alertMsg, options);
       },250);
     },
-    setErrorApiMsg: function (error) {
+    setErrorApiMsg: function (e) {
       return 'Uh oh! We\'re having difficulty retrieving your data.';
     }
   }

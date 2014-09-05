@@ -146,9 +146,9 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
           }
 
 
-        }).catch(function error(error) {
+        }).catch(function errorHandler(e) {
 
-          Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+          Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
 
         });
 
@@ -282,8 +282,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
     };
 
     $scope.CreateNewGame = function () {
-
-      var createGame = practiceRequests.practiceGames().createNewPracticeGame($scope.activeGroupId);
+      var createGame = practiceRequests.practiceGames().createNewPracticeGame($scope.activeGroupId,$scope.activeTracks.tracks[0]);
 
       createGame.then(function (game) {
         $scope.gameId = game.data.practice_game.id;
@@ -292,9 +291,9 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         timer.initPracticeTimer();
         timer.initQuestionTimer();
 
-      }).catch(function error(error) {
+      }).catch(function errorHandler(e) {
 
-        Alerts.showAlert(Alerts.setErrorApiMsg(error), 'danger');
+        Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
 
       });
 
