@@ -284,53 +284,35 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
       return deferred.promise;
     },
     doNotKnowAnswer: function (questionResult) {
-      var deferred = $q.defer(), resultObject = {};
+      var resultObject = {};
       /*Question Explanation*/
       resultObject.questionExplanation = questionResult.explanation;
 
       if (resultObject.questionExplanation != null)
         resultObject.showExplanation = true;
 
-
       /*Get answers from the previous request and Explain*/
-      var answers = questionResult.answers;
-
-      /*Evaluate tag resources info, get video Ids and video time*/
-      var parsedTags = this.parseTagsAndResources(questionResult.tags);
+      var answers = questionResult.answers,len=questionResult.answers.length,i,
+          parsedTags = this.parseTagsAndResources(questionResult.tags);
 
       resultObject.tagsResources = parsedTags.resources;
       resultObject.tags = parsedTags.tags;
 
       resultObject.xpTag = questionResult.experience_points;
 
-
       /*   Work with the styles to shown result
        define is some answer is bad.*/
       angular.element('.choice button').removeClass('btn-primary');
 
-      angular.forEach(answers, function (value, key) {
-        var selectIdButton = '#' + value.id;
-        if (value.correct) {
+      for (i = 0; i < len; i++) {
+          var answer = answers[i], selectIdButton = '#' + answer.id;
+        if (answer.correct) {
           angular.element(selectIdButton).addClass('btn-success');
         }
-      });
+      };
 
       angular.element("#answercontent *").prop('disabled', true);
-
-      /*video validation*/
-      if (questionResult.youtube_video_id !== null) {
-        resultObject.showVideo = true;
-        resultObject.videoId = questionResult.youtube_video_id;
-        VideoService.setYouTubeTitle(resultObject.videoId).then(function (videoTime) {
-          resultObject.videoText = 'Video Explanation (' + videoTime + ')';
-          deferred.resolve(resultObject);
-        });
-      }
-      else {
-        deferred.resolve(resultObject);
-      }
-
-      return deferred.promise;
+      return resultObject;
     },
     numericEntryConfirmChoice: function (options) {
 
@@ -352,11 +334,11 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
         }
 
         answers = questionResult.answers;
-        var len = answers.length,i;
+        var len = answers.length,i,roundAnswer=(eval(userAnswer).toFixed(1));
         selectedAnswer = 0;
 
         for (i = 0; i < len; i++) {
-          var answer= answers[i],roundAnswer=(eval(userAnswer).toFixed(1)),
+          var answer= answers[i],
 
           /*evaluate just one time the equivalence between body and numerator*/
             answerEval = (answer.body === userAnswer || eval(answer.body).toFixed(1) === roundAnswer);

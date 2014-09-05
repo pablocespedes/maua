@@ -206,10 +206,12 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       },
       doNotKnowAnswer: function() {
         $scope.userConfirmed = false;
-        this.resetLayout();
-        practiceSrv.doNotKnowAnswer($scope.questionResult).then(function(generalInfo) {
-          customPractice.bindExplanationInfo(generalInfo);
-        });
+         var generalResult = practiceSrv.doNotKnowAnswer($scope.questionResult);
+         customPractice.bindVideoExplanationInfo($scope.questionResult);
+        if (angular.isDefined(generalResult)) {
+           this.resetLayout();
+           customPractice.bindExplanationInfo(generalResult);
+        }
       },
       evaluateConfirmMethod: function() {
         $scope.userConfirmed = true;

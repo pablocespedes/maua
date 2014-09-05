@@ -113,10 +113,12 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         practiceSrv.resetLayout();
       },
       doNotKnowAnswer: function () {
-        this.resetLayout();
-        practiceSrv.doNotKnowAnswer($scope.questionResult).then(function (generalInfo) {
-          Question.bindExplanationInfo(generalInfo);
-        });
+         var generalResult = practiceSrv.doNotKnowAnswer($scope.questionResult);
+         customPractice.bindVideoExplanationInfo($scope.questionResult);
+        if (angular.isDefined(generalResult)) {
+           this.resetLayout();
+           customPractice.bindExplanationInfo(generalResult);
+        }
 
       },
       evaluateConfirmMethod: function () {
