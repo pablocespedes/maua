@@ -1,3 +1,4 @@
+'use strict';
 (function(app) {
  app.config(function($httpProvider) {
 

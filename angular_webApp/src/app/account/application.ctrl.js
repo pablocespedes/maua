@@ -1,4 +1,5 @@
-NavController = function ($rootScope, $scope, $location, Auth, Utilities, GrockitNewFeatures, ListenloopUtility, GaUtility, Tracks, $cookies, Groups, Alerts, $route, Headers) {
+'use strict';
+var NavController = function ($rootScope, $scope, $location, Auth, Utilities, GrockitNewFeatures, ListenloopUtility, GaUtility, Tracks, $cookies, Groups, Alerts, $route, Headers) {
   $scope.url = Utilities.originalGrockit().url;
   $scope.logOutUrl = Utilities.originalGrockit().url + '/logout';
 
@@ -36,7 +37,7 @@ NavController = function ($rootScope, $scope, $location, Auth, Utilities, Grocki
           if (!!responseGroups) {
 
             var objFilter = {'id': $scope.activeGroupId},
-              studyingFor = Utilities.findInCollection(responseGroups, objFilter);
+            studyingFor = Utilities.findInCollection(responseGroups, objFilter);
             if(angular.isDefined(studyingFor)){
               /*save the Group Name to rootScope*/
               $rootScope.groupTitle = studyingFor.name;
@@ -47,7 +48,7 @@ NavController = function ($rootScope, $scope, $location, Auth, Utilities, Grocki
               var lG = linkedGroups[i];
               if (!!lG) {
                 var linkGroupFilter = {'id': lG.group_id},
-                  linkGroup = Utilities.findInCollection(responseGroups, linkGroupFilter);
+                linkGroup = Utilities.findInCollection(responseGroups, linkGroupFilter);
 
                 if (angular.isDefined(linkGroup)) {
                   $scope.groups.linkedGroups.push(linkGroup);

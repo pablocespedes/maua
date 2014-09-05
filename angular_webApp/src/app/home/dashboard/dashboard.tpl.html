@@ -1,99 +1,83 @@
 <div id="simpleDash">
-		<div class="page-header">
-				<div class="row">
-						<div class="col-lg-6 no-padding-r">
-								<h2>Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
-								</h2>
-						</div>
-						<!--<div class="col-lg-6 col-xs-12 col-sm-8 no-padding-r ">
-								<div search-input></div>
-						</div>-->
-				</div>
-
-				<br>
-		</div>
-
-		<div class="profile-content">
-
-				<div fading-text word="loadingMessage" is-visible="!historyVisible && loading"></div>
-
-				<div class="row" ng-if="historyVisible">
-						<div class="col-lg-4">
-								<div class="no-padding">
-										<div class="stat-panel">
-												<div class="stat-row">
-														<div class="stat-cell col-sm-4 no-padding bordered valign-top dash-widget">
-																<h4 class="padding-sm no-padding-t padding-xs-hr"><i class="fa fa-info text-primary"></i>&nbsp;&nbsp;How
-																		to use grockit?</h4>
-																<ul class=" no-margin">
-																		<li class=" no-border-hr padding-xs-hr no-bg no-border-radius">
-																				“<a href="http://en.wikipedia.org/wiki/Grok"><b>Grok</b></a> means to understand so thoroughly that
-																				the observer becomes a part of the observed.”
-																		</li>
-																		<li class=" no-border-hr padding-xs-hr no-bg no-border-radius">
-																				<b>More questions</b> means <b>more points</b>. Try to answer <b>at least 20 questions</b> each day.
-																		</li>
-																		<li class=" no-border-hr padding-xs-hr no-bg no-border-radius">
-																				<b>Smart Practice</b> mode selects the perfect questions that are in your personal “strike zone”.
-																		</li>
-																</ul>
-														</div>
-												</div>
-										</div>
-								</div>
-						</div>
-						<div class="col-lg-4">
-								<div class="no-padding">
-										<div history-chart history-info="historyInfo">
-										</div>
-								</div>
-						</div>
-						<div class="col-lg-4" ng-if="enableScore">
-								<div class="no-padding">
-										<div score-prediction group-title="$root.groupTitle" total-score="scoreData.totalScore"
-										     range-init="scoreData.rangeInit" range-end="scoreData.rangeEnd" is-visible="scoreLoading"
-										     no-score-message="Not enough data."></div>
-								</div>
-
-						</div>
-				</div>
-		</div>
-
-		<div class="row fadeIn animated">
-				<div class="col-md-12">
-						<div class="panel topic-content panel-dark widget-profile">
-								<div class="panel-heading">
-              <span class="panel-title"> <h4><i class="panel-title-icon fa fa-fire"></i>Smart Practice</h4>
-              </span>
-								</div>
-
-								<div class="list-group text-left">
-										<div track-list tracks="tracks" start-practice="StartPractice" get-title="getTitle" get-score="getScore"
-										     is-visible="enableScore && !loading"></div>
-								</div>
-						</div>
-
-				</div>
-		</div>
-
-		<div class="row fadeIn animated" ng-if="isChallengeAvailable">
-				<div class="col-md-12">
-
-						<div class="panel topic-content panel-dark widget-profile">
-								<div class="panel-heading">
-              <span class="panel-title"> <h4><i class="panel-title-icon fa fa-fire"></i>Challenge</h4>
-              </span>
-								</div>
-
-								<div class="list-group text-left">
-										<div challenge-dashboard challenges="challengesGames"></div>
-								</div>
-
-						</div>
-				</div>
-
-				<div class="push"></div>
-		</div>
-
-
-
+  <div class="page-header">
+    <div class="row">
+      <div class="col-lg-6 no-padding-r">
+        <h2>Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
+        </h2>
+      </div>
+    </div>
+    <br>
+  </div>
+  <div class="profile-content">
+    <div fading-text word="loadingMessage" is-visible="!historyVisible && loading"></div>
+    <div class="row" ng-if="historyVisible">
+      <div class="col-lg-4">
+        <div class="no-padding">
+          <div class="stat-panel">
+            <div class="stat-row">
+              <div class="stat-cell col-sm-4 no-padding bordered valign-top dash-widget">
+                <h4 class="padding-sm no-padding-t padding-xs-hr"><i class="fa fa-info text-primary"></i>&nbsp;&nbsp;How
+                to use grockit?</h4>
+                <ul class=" no-margin">
+                  <li class=" no-border-hr padding-xs-hr no-bg no-border-radius text-left">
+                    “<a href="http://en.wikipedia.org/wiki/Grok"><b>Grok</b>: to understand thoroughly</a>.”
+                    <b>Grockit</b>: the best way to do [test] practice.
+                  </li>
+                  <li class=" no-border-hr padding-xs-hr no-bg no-border-radius text-left">
+                    <b>More questions</b> means <b>more points</b>. Try to answer <b>at least 20 questions</b> each day.
+                  </li>
+                  <li class=" no-border-hr padding-xs-hr no-bg no-border-radius text-left">
+                    <b>Smart Practice</b> selects questions in your personal “strike zone”.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="no-padding">
+          <div history-chart history-info="historyInfo">
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4" ng-if="enableScore">
+        <div class="no-padding">
+          <div score-prediction group-title="$root.groupTitle" total-score="scoreData.totalScore"
+            range-init="scoreData.rangeInit" range-end="scoreData.rangeEnd" is-visible="scoreLoading"
+          no-score-message="Not enough data."></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row fadeIn animated">
+    <div class="col-md-12">
+      <div class="panel topic-content panel-dark widget-profile">
+        <div class="panel-heading dashboard-title">
+          <span class="panel-title"> <h4><i class="panel-title-icon fa fa-fire"></i>Smart Practice
+          <button class="float-right btn btn-labeled btn-default btn-flat btn-customize-practice" ng-disabled="true"><span class="btn-label icon fa fa-cog"></span>Customize Your Practice</button>
+          </h4>
+          </span>
+        </div>
+        <div class="list-group text-left">
+          <div track-list tracks="tracks" start-practice="StartPractice" get-title="getTitle" get-score="getScore"
+          is-visible="enableScore && !loading"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row fadeIn animated" ng-if="isChallengeAvailable">
+    <div class="col-md-12">
+      <div class="panel topic-content panel-dark widget-profile">
+        <div class="panel-heading dashboard-title">
+          <span class="panel-title"> <h4><i class="panel-title-icon fa fa-fire"></i>Challenge</h4>
+          </span>
+        </div>
+        <div class="list-group text-left">
+          <div challenge-dashboard challenges="challengesGames"></div>
+        </div>
+      </div>
+    </div>
+    <div class="push"></div>
+  </div>
+</div>
