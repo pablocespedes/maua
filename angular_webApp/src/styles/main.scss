@@ -64,13 +64,15 @@
 
 
 #topics{
-  margin-left: 20px;
-  padding-right: 37px;
+  padding-right: 20px;
   padding-top: 10px;
   min-height: 50px;
   padding-bottom: 5px;
   //  box-shadow: 0 3px 1px #555, 0 -2px 4px #555;
 
+}
+#topics .row {
+  margin-left: 10px;
 }
 
 footer {
@@ -108,13 +110,43 @@ footer {
 
 .f-content{
   margin-bottom: 10px;
-
 }
 
 .feedback-box{
   padding-top: 12px;
-
+  height: 41px;
 }
+.text-footer-r{
+  text-align: right;
+}
+.text-footer-l{
+   text-align: left;
+}
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  #topics  {
+   .feedback-box{
+     padding-top: 12px;
+     height: 41px;
+     float: right!important;
+    }
+    .text-footer-r{
+       text-align: center;
+    }
+    .text-footer-l{
+       text-align: center;
+    }
+    .row {
+      margin-left: 10px;
+    }
+  }
+}
+
+/* #topics .row {
+margin-left: 62px;
+} */
 
 .back-to-top {
   position: fixed;

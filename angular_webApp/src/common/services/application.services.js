@@ -1,5 +1,5 @@
 angular.module('grockitApp.services', ['webStorageModule'])
-.factory('Utilities', function($http,webStorage,$location,$route,VideoService,$q,environmentCons) {
+.factory('Utilities', function($http,webStorage,$location,$route,VideoService,$q,environmentCons,$window) {
 
   var internalUtilities = {
     grockitHostEvaluation : function (isNewGrockit) {
@@ -37,19 +37,13 @@ angular.module('grockitApp.services', ['webStorageModule'])
         };
         nDeferred.resolve(videoObject);
       }
-
-
-
       return nDeferred.promise;
-
-
-
     }
 
   };
 
 
- return {
+  return {
    newGrockit: function () {
      return {
        url: internalUtilities.grockitHostEvaluation(true)
@@ -76,76 +70,72 @@ angular.module('grockitApp.services', ['webStorageModule'])
    findInCollection: function (collection, filter) {
     return  _.find(collection,filter);
 
-   },
-   random: function(min, max) {
-      min = min | 0;
-      return _.random(min, max);
-    },
-   mapObject: function(collection, key,getter){
+  },
+  random: function(min, max) {
+    min = min | 0;
+    return _.random(min, max);
+  },
+  mapObject: function(collection, key,getter){
 
-     return _.map(collection, function(val) {
-       var obj = {};
-       obj[key]= getter(val);
-       return obj;
-     });
+   return _.map(collection, function(val) {
+     var obj = {};
+     obj[key]= getter(val);
+     return obj;
+   });
 
-   },
-   mergeCollection: function (collection1, collection2) {
-     return  _.merge(collection1,collection2);
+ },
+ mergeCollection: function (collection1, collection2) {
+   return  _.merge(collection1,collection2);
 
-   },
-   getIndexArray: function (arr, key, val) {
-     for (var i = 0; i < arr.length; i++) {
-       if (arr[i][key] == val)
-         return i;
-     }
-     return -1;
-   },
-   encodeRedirect: function (redirectUrl, url) {
-     window.location.href = redirectUrl + encodeURIComponent(url);
-   },
-   redirect: function (url) {
-
-     window.location.href =  url;
-   },
-   setActiveTab: function (position) {
-     this.clearActiveTab();
-     var menuList = angular.element('div#main-menu-inner ul.navigation li');
-     angular.element(menuList[position]).addClass('active');
-
-   },
-   clearActiveTab: function () {
-     angular.element('div#main-menu-inner ul.navigation li').removeClass('active');
-   },
-   dialogService: function (options) {
-     bootbox.dialog(options);
-   },
-   getCurrentParam: function (key) {
-     return angular.isDefined($route.current)? $route.current.pathParams[key] : undefined;
-   },
-   setCurrentParam: function (key, param) {
-     $route.current.pathParams[key] = null;
-     $route.current.pathParams[key] = param;
-   },
-   getYoutubeVideosId: function(url) {
-
-     var id = '';
-     url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-     if (url[2] !== undefined) {
-       id = url[2].split(/[^0-9a-z_]/i);
-       id = id[0];
-     }
-     else {
-       id = url;
-     }
-     return id;
-
+ },
+ getIndexArray: function (arr, key, val) {
+   for (var i = 0; i < arr.length; i++) {
+     if (arr[i][key] == val)
+       return i;
    }
+   return -1;
+ },
+ internalRedirect: function (url) {
+   $location.path(url);
+ },
+ redirect: function (url) {
 
+   $window.location.href =  url;
+ },
+ setActiveTab: function (position) {
+   this.clearActiveTab();
+   var menuList = angular.element('div#main-menu-inner ul.navigation li');
+   angular.element(menuList[position]).addClass('active');
 
+ },
+ clearActiveTab: function () {
+   angular.element('div#main-menu-inner ul.navigation li').removeClass('active');
+ },
+ dialogService: function (options) {
+   bootbox.dialog(options);
+ },
+ getCurrentParam: function (key) {
+   return angular.isDefined($route.current)? $route.current.pathParams[key] : undefined;
+ },
+ setCurrentParam: function (key, param) {
+   $route.current.pathParams[key] = null;
+   $route.current.pathParams[key] = param;
+ },
+ getYoutubeVideosId: function(url) {
 
+   var id = '';
+   url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+   if (url[2] !== undefined) {
+     id = url[2].split(/[^0-9a-z_]/i);
+     id = id[0];
+   }
+   else {
+     id = url;
+   }
+   return id;
 
  }
+}
 })
 
 .factory('Alerts', function() {
@@ -174,10 +164,10 @@ angular.module('grockitApp.services', ['webStorageModule'])
   return {
     showDialog: function () {
       var dialogOptions = {
-          title: "Welcome to Grockit 2.0 Beta",
-          message: ""
-        },
-        url = location.host == '127.0.0.1:9000' ? environmentCons.localGrockit : environmentCons.liveGrockit;
+        title: "Welcome to Grockit 2.0 Beta",
+        message: ""
+      },
+      url = location.host == '127.0.0.1:9000' ? environmentCons.localGrockit : environmentCons.liveGrockit;
       $http.get(url + '/common/templates/newFeatures2.0.html').success(function (data) {
         dialogOptions.message = data;
         Utilities.dialogService(dialogOptions);
@@ -188,7 +178,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
     }
 
   }
-  })
+})
 
 .service('ServiceFactory', function() {
   this.items = [];
@@ -200,7 +190,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
     }
   };
   this.equals = function(item, serviceId) {
-    return item.serviceId === serviceId; 
+    return item.serviceId === serviceId;
   };
   this.get = function(serviceId) {
     var self = this;
@@ -213,48 +203,48 @@ angular.module('grockitApp.services', ['webStorageModule'])
 })
 
 .factory('Timer', ['$interval', 'ServiceFactory',
-    function($interval, ServiceFactory) {
-      var createTimer = function() {
-        var timer = {
-          seconds: 0,
-          interval: null,
-          start: function() {
-            var timer = this;
-            this.interval = $interval(function() {
-              timer.seconds++;
-            }, 1000);
-          },
-          pause: function() {
-            $interval.cancel(this.interval);
-          },
-          reset: function() {
-            this.seconds = 0;
-            this.pause();
-          }
-        };
-        return timer;
-      };
-      return {
-        create: function() {
-          var timer = createTimer();
-          ServiceFactory.add(timer);
-          return timer;
+  function($interval, ServiceFactory) {
+    var createTimer = function() {
+      var timer = {
+        seconds: 0,
+        interval: null,
+        start: function() {
+          var timer = this;
+          this.interval = $interval(function() {
+            timer.seconds++;
+          }, 1000);
         },
-        destroy: function(timer) {
-          $interval.cancel(timer.interval);
-          ServiceFactory.remove(timer);
+        pause: function() {
+          $interval.cancel(this.interval);
+        },
+        reset: function() {
+          this.seconds = 0;
+          this.pause();
         }
       };
-    }])
+      return timer;
+    };
+    return {
+      create: function() {
+        var timer = createTimer();
+        ServiceFactory.add(timer);
+        return timer;
+      },
+      destroy: function(timer) {
+        $interval.cancel(timer.interval);
+        ServiceFactory.remove(timer);
+      }
+    };
+  }])
 
 .factory('DateFormatter', function() {
   var formatSeconds = function(seconds) {
     var secs = seconds,
-        hours = Math.floor(secs / (60 * 60)),
-        divisor_for_minutes = secs % (60 * 60),
-        minutes = Math.floor(divisor_for_minutes / 60),
-        divisor_for_seconds = divisor_for_minutes % 60,
-        seconds = Math.ceil(divisor_for_seconds);
+    hours = Math.floor(secs / (60 * 60)),
+    divisor_for_minutes = secs % (60 * 60),
+    minutes = Math.floor(divisor_for_minutes / 60),
+    divisor_for_seconds = divisor_for_minutes % 60,
+    seconds = Math.ceil(divisor_for_seconds);
 
     if (hours < 10) {
       hours = "0" + hours;
@@ -267,8 +257,8 @@ angular.module('grockitApp.services', ['webStorageModule'])
     }
     // var time = hours+':'+minutes+':'+seconds;
 
-    var time = (hours > 0 ? hours + ':' : '') + 
-      (minutes >= 0 ? minutes + ':' : '') + (seconds >= 0 ? seconds : '');
+    var time = (hours > 0 ? hours + ':' : '') +
+    (minutes >= 0 ? minutes + ':' : '') + (seconds >= 0 ? seconds : '');
     return time;
   };
   return {

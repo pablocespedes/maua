@@ -22,7 +22,6 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
     $scope.lastAnswerLoaded = '';
     $scope.loadingMessage = SplashMessages.getLoadingMessage();
 
-
     var timer = {
       setTimingInformation: function (questionId, correctAnswerId) {
         practiceSrv.getTimingInformation($scope.activeTracks.tracks, $scope.activeGroupId, questionId).$promise.then(function (result) {
@@ -119,7 +118,6 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
            this.resetLayout();
            customPractice.bindExplanationInfo(generalResult);
         }
-
       },
       evaluateConfirmMethod: function () {
         switch ($scope.lastAnswerLoaded) {

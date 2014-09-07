@@ -2,11 +2,11 @@
 home.controller('SimpleDashController', ['$scope', 'Users', 'History', 'Tracks', 'Utilities', 'Auth', 'Alerts', 'Challenge',
   function($scope, Users, History, Tracks, Utilities, Auth, Alerts, Challenge) {
     $scope.loading = true;
-    $scope.isChallengeAvailable = false;
+    $scope.isChallengeAvailable=false;
     $scope.scoreLoading = true;
     $scope.loadingMessage = 'Loading...';
+    $scope.historyVisible = false;
     Utilities.setActiveTab(0);
-
 
     $scope.getTitle = function(track) {
       return track.short_name;
@@ -79,10 +79,9 @@ home.controller('SimpleDashController', ['$scope', 'Users', 'History', 'Tracks',
           if (!_.isEmpty(response.challenge_games)) {
             $scope.isChallengeAvailable = true;
             $scope.challengesGames = response.challenge_games;
-                        //_.find(response.challenge_games,function(r){ return r.challenge_games.group_id === groupId}).challenge_games;
 
-                      }
-                    });
+          }
+        });
       }
     };
 
@@ -118,11 +117,16 @@ home.controller('SimpleDashController', ['$scope', 'Users', 'History', 'Tracks',
         };
         Utilities.setActiveTab(0);
         Utilities.setActiveTrack(trackData);
-        Utilities.redirect('#/' + $scope.activeGroupId + '/custom-practice/');
+        Utilities.internalRedirect('/' + $scope.activeGroupId + '/custom-practice/');
       } else {
         Alerts.showAlert('You must select one track at least', 'warning');
       }
     };
+
+    $scope.customPractice = function(){
+       var baseUrl = Utilities.originalGrockit().url;
+      Utilities.redirect(baseUrl+'/'+$scope.activeGroupId+'/custom_games/new');
+    }
     $scope.init();
 
-}]);
+  }]);
