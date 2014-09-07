@@ -10,8 +10,8 @@
          if (response != null) {
            if ($location.path() === '/' || $location.path() === '/' + response.currentGroup || $location.path() == '') {
 
-             Utilities.redirect('#/' + response.currentGroup+ '/dashboard');
-
+            Utilities.internalRedirect('/' + response.currentGroup+ '/dashboard');
+            /*$location.path('/' + response.currentGroup+ '/dashboard')*/
            }
          }
 

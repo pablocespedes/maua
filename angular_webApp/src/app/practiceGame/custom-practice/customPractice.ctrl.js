@@ -140,6 +140,8 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
           /* customPractice.setAnswerStatusToSharedList($scope.answerStatus);*/
           customPractice.displayExplanationInfo();
         }
+        else
+           $scope.isDisabled = false;
       },
       resetLayout: function() {
         $scope.nextActionTitle = 'Next Question';
@@ -212,6 +214,8 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
            this.resetLayout();
            customPractice.bindExplanationInfo(generalResult);
         }
+        else
+           $scope.isDisabled = false;
       },
       evaluateConfirmMethod: function() {
         $scope.userConfirmed = true;

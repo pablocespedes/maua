@@ -387,7 +387,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
             label: "Go to Dashboard",
             className: "btn-primary",
             callback: function () {
-              Utilities.redirect('#/' + activeGroupId + "/dashboard");
+              Utilities.internalRedirect('/' + activeGroupId + "/dashboard");
             }
           }
 
