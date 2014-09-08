@@ -22,7 +22,6 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
     $scope.lastAnswerLoaded = '';
     $scope.loadingMessage = SplashMessages.getLoadingMessage();
 
-
     var timer = {
       setTimingInformation: function (questionId, correctAnswerId) {
         practiceSrv.getTimingInformation($scope.activeTracks.tracks, $scope.activeGroupId, questionId).$promise.then(function (result) {
@@ -113,11 +112,12 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         practiceSrv.resetLayout();
       },
       doNotKnowAnswer: function () {
-        this.resetLayout();
-        practiceSrv.doNotKnowAnswer($scope.questionResult).then(function (generalInfo) {
-          Question.bindExplanationInfo(generalInfo);
-        });
-
+         var generalResult = practiceSrv.doNotKnowAnswer($scope.questionResult);
+         customPractice.bindVideoExplanationInfo($scope.questionResult);
+        if (angular.isDefined(generalResult)) {
+           this.resetLayout();
+           customPractice.bindExplanationInfo(generalResult);
+        }
       },
       evaluateConfirmMethod: function () {
         switch ($scope.lastAnswerLoaded) {

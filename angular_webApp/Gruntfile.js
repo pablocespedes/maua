@@ -42,7 +42,7 @@ module.exports = function (grunt) {
         tasks: ['newer:jshint:test', 'karma']
       },
       compass: {
-        files: ['<%= yeoman.src %>/app/**/*.{scss,sass}'],
+        files: ['<%= yeoman.src %>/**/*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
       },
       gruntfile: {
@@ -325,7 +325,6 @@ module.exports = function (grunt) {
                   expand: true,
                   cwd: '<%= yeoman.dist %>',
                  // src: ['app/**/*.js','common/**/*.js'],
-                  src: [],
                   dest: '<%= yeoman.dist %>'
               }]
           }

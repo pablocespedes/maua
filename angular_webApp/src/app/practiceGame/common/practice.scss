@@ -1,7 +1,3 @@
-
-
-
-
 .practice-header  {
   .practice-element-sm {
     width: 6.55%
@@ -103,7 +99,9 @@
   margin-top: 0;
   margin-bottom: 20px;
 }
-
+.no-hover:hover{
+  background: white !important;
+}
 #practice{
 
   .bad-numeric-input{
@@ -150,9 +148,7 @@
     height: 100%;
   }
 
-  .no-hover:hover{
-    background: white !important;
-  }
+
   .choice{
     margin-bottom: -1px;
   }
