@@ -9,6 +9,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
     breadcrumbs.options = {
       'practice': $scope.activeTracks.trackTitle
     };
+    $scope.maxOpts=[];
     $scope.tagsResources = [];
     $scope.portalC = $scope;
     $scope.loading = true;
@@ -112,6 +113,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
           $scope.questionInformation = result.questionInformation;
           $scope.stimulus = result.stimulus;
           $scope.items = [];
+          $scope.maxOpts=[];
           $scope.items = result.items;
           $scope.loading = false;
           $scope.position++;
@@ -308,6 +310,9 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       customPractice.doNotKnowAnswer();
     };
 
+    $scope.test = function(){
+      return 'http://www.w3schools.com/html/mov_bbb.mp4';
+    }
     $scope.CreateNewGame();
 
   }

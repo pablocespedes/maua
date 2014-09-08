@@ -67,13 +67,13 @@ practiceGame.directive('oneChoice', function () {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/matrix2x3.tpl.html',
     link: function (scope) {
-      var answers = _.forEach(scope.items, function (answer, i) {answer["matrix_group"] = ((i - (i % 3)) / 3 );});
+
       scope.selectAnswer = function (index, mGroup) {
-        var answer = answers[index],
+        var answer = scope.items[index],
         answerId = answer.id,
         nexAction = $('#nextAction'),
         seeAnswer = $('#skipAction'),
-        currentSection = _.filter(answers, function (answer) { return answer.matrix_group == mGroup}),
+        currentSection = _.filter(scope.items, function (answer) { return answer.matrix_group == mGroup}),
         trueSelected = _.filter(currentSection, { 'selected': true });
 
         if (trueSelected) {
@@ -107,14 +107,12 @@ practiceGame.directive('oneChoice', function () {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/matrix3x3.tpl.html',
     link: function (scope) {
-
-      var answers = _.forEach(scope.items, function (answer, i) {answer["matrix_group"] = ((i - (i % 3)) / 3 );});
       scope.selectAnswer = function (index, mGroup) {
-        var answer = answers[index],
+        var answer = scope.items[index],
         answerId = answer.id,
         nexAction = $('#nextAction'),
         seeAnswer = $('#skipAction'),
-        currentSection = _.filter(answers, function (answer) { return answer.matrix_group == mGroup}),
+        currentSection = _.filter(scope.items, function (answer) { return answer.matrix_group == mGroup}),
         trueSelected = _.filter(currentSection, { 'selected': true });
 
         if (trueSelected) {
@@ -144,28 +142,29 @@ practiceGame.directive('oneChoice', function () {
 })
 
 .directive('twoChoice', function () {
-  var options = [];
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/twoChoice.tpl.html',
     link: function (scope) {
+      scope.maxOpt=[];
       scope.selectAnswer = function (index) {
+
         var answer = scope.items[index],
         nexAction = $('#nextAction'),
         seeAnswer = $('#skipAction');
         if (!answer.selected) {
           /*validation which takes care to keep just 2 options selected*/
-          if (options.length >= 2) {
-            var ansR = _.find(scope.items, { 'id': options[0] });
+          if (scope.maxOpt.length >= 2) {
+            var ansR = _.find(scope.items, { 'id': scope.maxOpt[0] });
             ansR.selected = false;
-            options = _.filter(options, function (num, i) { return i != 0 });
+            scope.maxOpt = _.filter(scope.maxOpt, function (num, i) { return i != 0 });
           }
-          options.push(answer.id);
+          scope.maxOpt.push(answer.id);
           answer.selected = true;
           nexAction.addClass('btn-primary');
           seeAnswer.addClass('hide');
         } else {
-          options = _.filter(options, function (num) { return num != answer.id });
+          scope.maxOpt = _.filter(scope.maxOpt, function (num) { return num != answer.id });
           answer.selected = false;
           if (!_.find(scope.items, { 'selected': true })) {
             nexAction.removeClass('btn-primary');
@@ -176,6 +175,7 @@ practiceGame.directive('oneChoice', function () {
       };
     },
     scope: {
+      maxOpt:'=',
       items: '=items',
       showExplanation: '=',
       hasExplanation: '&'
@@ -396,7 +396,7 @@ practiceGame.directive('oneChoice', function () {
 
   satTpl = ' <div sat></div>',
 
-  twoChoiceTpl = '<div  two-choice items="items" show-explanation="showExplanation" ' +
+  twoChoiceTpl = '<div  two-choice items="items" max-opt="maxOpts" show-explanation="showExplanation" ' +
   'has-explanation="answerHasExplanation(index)"></div>';
 
   var getAnswerTemplate = function (questionKind) {
