@@ -9,12 +9,12 @@ practiceGame.factory('questionTypesService', function () {
       if (e.handled !== true) // This will prevent event triggering more then once
       {
         var choice = $(e.target),
-          choiceVal = choice.text(),
-          selectedGroup = $(e.target).parents('td').data('group'),
-          groups = $(e.target).parents('.choice').find('[data-group=' + selectedGroup + ']'),
-          hasPrimary = choice.hasClass('btn-primary'),
-          nexAction = $('#nextAction'),
-          seeAnswer = $('#skipAction');
+        choiceVal = choice.text(),
+        selectedGroup = $(e.target).parents('td').data('group'),
+        groups = $(e.target).parents('.choice').find('[data-group=' + selectedGroup + ']'),
+        hasPrimary = choice.hasClass('btn-primary'),
+        nexAction = $('#nextAction'),
+        seeAnswer = $('#skipAction');
 
         groups.find('[type=button]').removeClass('btn-primary');
         groups.find('[type=button]').addClass('btn-outline');
@@ -36,82 +36,85 @@ practiceGame.factory('questionTypesService', function () {
     });
 
 
-  }
+}
 
-  function numericEntry(scope) {
-    scope.$watch('portal.numerator', function (newVal, oldVal) {
-      scope.isNumeratorValid = validateNumber(newVal);
-      handleValidation(scope.isNumeratorValid);
-    });
-  }
+function numericEntry(scope) {
+  scope.$watch('portal.numerator', function (newVal, oldVal) {
+    scope.isNumeratorValid = validateNumber(newVal);
+    handleValidation(scope.isNumeratorValid);
+  });
+}
 
-  function fractionEntry(scope) {
-    scope.$watch('portal.numerator', function (newVal, oldVal) {
-      scope.isNumeratorValid = validateNumber(newVal);
-      handleValidation(scope.isNumeratorValid && scope.isDenominatorValid);
-    });
-    scope.$watch('portal.denominator', function (newVal, oldVal) {
-      scope.isDenominatorValid = validateNumber(newVal);
-      handleValidation(scope.isNumeratorValid && scope.isDenominatorValid);
-    });
-  }
+function fractionEntry(scope) {
+  scope.$watch('portal.numerator', function (newVal, oldVal) {
+    scope.isNumeratorValid = validateNumber(newVal);
+    handleValidation(scope.isNumeratorValid && scope.isDenominatorValid);
+  });
+  scope.$watch('portal.denominator', function (newVal, oldVal) {
+    scope.isDenominatorValid = validateNumber(newVal);
+    handleValidation(scope.isNumeratorValid && scope.isDenominatorValid);
+  });
+}
 
-  function validateNumber(value) {
-    if (angular.isUndefined(value) || value === '' || value === null) {
-      return null;
-    } else {
-      value = value * 1;
-      return (angular.isDefined(value) && value != null && !isNaN(value) && angular.isNumber(value));
-    }
+function validateNumber(value) {
+  if (angular.isUndefined(value) || value === '' || value === null) {
+    return null;
+  } else {
+    value = value * 1;
+    return (angular.isDefined(value) && value != null && !isNaN(value) && angular.isNumber(value));
   }
+}
 
-  function handleValidation(isValid) {
-    var nexAction = $('#nextAction'),
-      seeAnswer = $('#skipAction');
-    if (isValid) {
-      nexAction.addClass('btn-primary');
-      seeAnswer.addClass('hide');
-    }
-    else {
-      nexAction.removeClass('btn-primary');
-      seeAnswer.removeClass('hide');
-    }
+function handleValidation(isValid) {
+  var nexAction = $('#nextAction'),
+  seeAnswer = $('#skipAction');
+  if (isValid) {
+    nexAction.addClass('btn-primary');
+    seeAnswer.addClass('hide');
   }
+  else {
+    nexAction.removeClass('btn-primary');
+    seeAnswer.removeClass('hide');
+  }
+}
 
-  return {
-    satFactory: satFactory,
-    numericEntry: numericEntry,
-    fractionEntry: fractionEntry
-  };
+return {
+  satFactory: satFactory,
+  numericEntry: numericEntry,
+  fractionEntry: fractionEntry
+};
 });
 
 practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, Alerts, $sce, VideoService, environmentCons, $resource) {
 
   var optionList = "abcdefghijklmnopqrstuvwxyz",
-    Practice = {
-      /*This methods takes care to set the practice layout based on the API response*/
-      setLayoutBasedOnQuestionInfo: function (setLayout) {
-        var panel1 = angular.element('#Panel1'),
-          panel2 = angular.element('#Panel2');
+  Practice = {
+    /*This methods takes care to set the practice layout based on the API response*/
+    setLayoutBasedOnQuestionInfo: function (setLayout) {
+      var panel1 = angular.element('#Panel1'),
+      panel2 = angular.element('#Panel2');
 
-        if (setLayout) {
-          panel1.removeClass('col-md-offset-3');
-          panel2.removeClass('col-md-offset-3');
+      if (setLayout) {
+        panel1.removeClass('col-md-offset-3');
+        panel2.removeClass('col-md-offset-3');
 
-        }
-        else {
-          panel1.addClass('col-md-offset-3');
-          panel2.addClass('col-md-offset-3');
-        }
-      },
-      removeBadImage: function () {
-        /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
-        angular.element('img').error(function () {
-
-          angular.element('img').attr('src', '');
-        });
       }
-    };
+      else {
+        panel1.addClass('col-md-offset-3');
+        panel2.addClass('col-md-offset-3');
+      }
+    },
+    removeBadImage: function () {
+      /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
+      angular.element('img').error(function () {
+
+        angular.element('img').attr('src', '');
+      });
+    },
+    setQuestionTypeMatrixGroups: function(items){
+      return _.forEach(items, function (answer, i) {answer["matrix_group"] = ((i - (i % 3)) / 3 );});
+    }
+  };
 
   return {
     getRoundSession: function (questionToRequest, gameId) {
@@ -129,7 +132,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
     },
     loadQuestion: function (questionToRequest) {
       var deferred = $q.defer(),
-        setLayoutType = false, resultObject = {};
+      setLayoutType = false, resultObject = {};
 
       practiceRequests.questions().getQuestionById(questionToRequest).then(function (result) {
 
@@ -141,7 +144,8 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
         resultObject.questionInformation = $sce.trustAsHtml(resultObject.questionResult.question_set.info);
 
         /*Find if there is a question info defined or retrieve it by the API*/
-        setLayoutType = angular.isDefined(resultObject.questionInformation) && resultObject.questionInformation != null && resultObject.questionInformation != '' ? true : false;
+        setLayoutType = angular.isDefined(resultObject.questionInformation) && resultObject.questionInformation != null
+        && resultObject.questionInformation != '' ? true : false;
 
         /*Set the layout based on the question info*/
         Practice.setLayoutBasedOnQuestionInfo(setLayoutType);
@@ -155,8 +159,8 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
         resultObject.stimulus = $sce.trustAsHtml(resultObject.questionResult.stimulus);
 
         var options = optionList.toUpperCase().split(""),
-          answers = resultObject.questionResult.answers,
-          len = answers.length, i;
+        answers = resultObject.questionResult.answers,
+        len = answers.length, i;
 
         for (i = 0; i < len; i++) {
           var value = answers[i];
@@ -164,35 +168,39 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
           value["selected"] = false;
           resultObject.items.push(value);
         }
-        Practice.removeBadImage();
-        deferred.resolve(resultObject);
+        if(resultObject.lastAnswerLoaded=== 'MultipleChoiceMatrixTwoByThree' ||
+         resultObject.lastAnswerLoaded === 'MultipleChoiceMatrixThreeByThree'){
+         resultObject.items = Practice.setQuestionTypeMatrixGroups(resultObject.items);
+     }
 
-      })
-        .catch(function errorHandler(e) {
-          deferred.reject(resultObject);
-          Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
-        });
+     Practice.removeBadImage();
+     deferred.resolve(resultObject);
+   })
+.catch(function errorHandler(e) {
+  deferred.reject(resultObject);
+  Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
+});
 
-      return deferred.promise;
+return deferred.promise;
 
-    },
-    confirmChoice: function (questionResult, roundSessionAnswer, answers) {
-      var i, answerStatus = true, len = answers.length,
-        areSelectedAnswers = _.filter(answers, {'selected': true});
-      if (areSelectedAnswers.length > 0) {
-        angular.element('.choice button').removeClass('btn-primary');
+},
+confirmChoice: function (questionResult, roundSessionAnswer, answers) {
+  var i, answerStatus = true, len = answers.length,
+  areSelectedAnswers = _.filter(answers, {'selected': true});
+  if (areSelectedAnswers.length > 0) {
+    angular.element('.choice button').removeClass('btn-primary');
 
-        for (i = 0; i < len; i++) {
-          var answer = answers[i], selectIdButton = ('#' + answer.id);
-          if (answer.correct) {
-            if (answer.selected) {
+    for (i = 0; i < len; i++) {
+      var answer = answers[i], selectIdButton = ('#' + answer.id);
+      if (answer.correct) {
+        if (answer.selected) {
               /*Send answer response to server, important this line have to be inside this if
                * since just the users answers get into this evaluation
                * */
 
-              practiceRequests.roundSessions().updateAnswer(roundSessionAnswer.id, answer.id);
-            }
-            else {
+               practiceRequests.roundSessions().updateAnswer(roundSessionAnswer.id, answer.id);
+             }
+             else {
               answerStatus = false;
             }
             angular.element(selectIdButton).addClass('btn-success');
@@ -203,21 +211,21 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
               /*Send answer response to server, important this line have to be inside this if
                * since just the users answers get into this evaluation
                * */
-              practiceRequests.roundSessions().updateAnswer(roundSessionAnswer.id, answer.id);
-              angular.element(selectIdButton).addClass('btn-danger');
-              angular.element(selectIdButton).parents('#answer').addClass('incorrectAnswer');
-              answerStatus = false;
-            }
+               practiceRequests.roundSessions().updateAnswer(roundSessionAnswer.id, answer.id);
+               angular.element(selectIdButton).addClass('btn-danger');
+               angular.element(selectIdButton).parents('#answer').addClass('incorrectAnswer');
+               answerStatus = false;
+             }
 
-          }
+           }
 
-        }
-        angular.element("#answercontent *").prop('disabled', true);
+         }
+         angular.element("#answercontent *").prop('disabled', true);
 
-        return answerStatus;
+         return answerStatus;
 
-      }
-      else {
+       }
+       else {
         Alerts.showAlert('Please select an option!', 'warning');
       }
 
@@ -230,13 +238,29 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
     },
     parseTagsAndResources: function (tags) {
-      var parsedTags = [],
-        parsedResources = [],
-        tgR = {};
-      angular.forEach(tags, function (value) {
+      var parsedTags = [],parsedResources = [],tgR = {}, tagsLen= tags.length,i,j;
+
+      for (i = 0; i < tagsLen; i++) {
+        var tagR = tags[i].tag_resources, tagRLen = tagR.length,currentTag=tags[i];
+
+        if (!Utilities.findInCollection(parsedTags, function (tag) { return tag.name === currentTag.name; }))
+        parsedTags.push(currentTag);
+
+        for (j = 0; j < tagRLen; j++) {
+          var currentTagResource= tagR[j];
+          tgR = {
+            name: currentTag.name,
+            resource_type: currentTagResource.resource_type,
+            resource: currentTagResource.resource_type == 'youtube' ? Utilities.getYoutubeVideosId(currentTagResource.resource)
+            : currentTagResource.resource
+          };
+          parsedResources.push(tgR);
+        }
+      }
+      /*angular.forEach(tags, function (value) {
         var tagR = value.tag_resources;
         if (!Utilities.findInCollection(parsedTags, function (tag) { return tag.name === value.name; }))
-          parsedTags.push(value);
+        parsedTags.push(value);
         angular.forEach(tagR, function (val) {
           tgR = {
             name: value.name,
@@ -245,7 +269,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
           };
           parsedResources.push(tgR);
         });
-      });
+      });*/
       return {tags: parsedTags, resources: parsedResources};
     },
     displayGeneralConfirmInfo: function (questionResult) {
@@ -293,7 +317,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
 
       /*Get answers from the previous request and Explain*/
       var answers = questionResult.answers,len=questionResult.answers.length,i,
-          parsedTags = this.parseTagsAndResources(questionResult.tags);
+      parsedTags = this.parseTagsAndResources(questionResult.tags);
 
       resultObject.tagsResources = parsedTags.resources;
       resultObject.tags = parsedTags.tags;
@@ -301,11 +325,11 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
       resultObject.xpTag = questionResult.experience_points;
 
       /*   Work with the styles to shown result
-       define is some answer is bad.*/
+      define is some answer is bad.*/
       angular.element('.choice button').removeClass('btn-primary');
 
       for (i = 0; i < len; i++) {
-          var answer = answers[i], selectIdButton = '#' + answer.id;
+        var answer = answers[i], selectIdButton = '#' + answer.id;
         if (answer.correct) {
           angular.element(selectIdButton).addClass('btn-success');
         }
@@ -317,9 +341,9 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
     numericEntryConfirmChoice: function (options) {
 
       var userAnswer = 0, selectedAnswer = 0,answerStatus=true, answers = '',
-        numerator = options.numerator,
-        denominator = options.denominator, lastAnswerLoaded = options.lastAnswerLoaded,
-        questionResult = options.questionResult, roundSessionAnswer = options.roundSessionAnswer;
+      numerator = options.numerator,
+      denominator = options.denominator, lastAnswerLoaded = options.lastAnswerLoaded,
+      questionResult = options.questionResult, roundSessionAnswer = options.roundSessionAnswer;
       /*Get selected answers*/
 
       if (numerator || denominator) {
@@ -341,7 +365,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
           var answer= answers[i],
 
           /*evaluate just one time the equivalence between body and numerator*/
-            answerEval = (answer.body === userAnswer || eval(answer.body).toFixed(1) === roundAnswer);
+          answerEval = (answer.body === userAnswer || eval(answer.body).toFixed(1) === roundAnswer);
 
           if (answerEval)
             selectedAnswer = answer.answer_id;
@@ -373,7 +397,7 @@ practiceGame.factory('practiceSrv', function (Utilities, $q, practiceRequests, A
     usersRunOutQuestions: function (trackTitle, activeGroupId) {
       var options = {
         message: "You've answered all of the adaptive questions we have for you in " + trackTitle + ".  " +
-          "That's a lot of practice.  Would you like to review questions you've answered or go back to the main dashboard? ",
+        "That's a lot of practice.  Would you like to review questions you've answered or go back to the main dashboard? ",
         title: "Congratulations!",
         buttons: {
           review: {
@@ -413,17 +437,17 @@ practiceGame.factory('Level', function () {
 
 practiceGame.factory('SplashMessages', function (Utilities) {
   var loadingMessages = [
-    'Spinning up the hamster...',
-    'Shovelling coal into the server...',
-    'Programming the flux capacitor',
-    'Adjusting data for your IQ...',
-    'Generating next funny line...',
-    'Entertaining you while you wait...',
-    'Improving your reading skills...',
-    'Dividing eternity by zero, please be patient...',
-    'Just stalling to simulate activity...',
-    'Adding random changes to your data...',
-    'Waiting for approval from Bill Gates...'
+  'Spinning up the hamster...',
+  'Shovelling coal into the server...',
+  'Programming the flux capacitor',
+  'Adjusting data for your IQ...',
+  'Generating next funny line...',
+  'Entertaining you while you wait...',
+  'Improving your reading skills...',
+  'Dividing eternity by zero, please be patient...',
+  'Just stalling to simulate activity...',
+  'Adding random changes to your data...',
+  'Waiting for approval from Bill Gates...'
   ];
   return {
     getLoadingMessage: function () {
