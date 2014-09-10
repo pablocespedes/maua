@@ -4,7 +4,8 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
 
     $scope.activeTracks = Utilities.getActiveTrack();
     $scope.activeGroupId = Utilities.getActiveGroup();
-    $scope.questionAnalytics = ($scope.activeGroupId === 'gmat' || $scope.activeGroupId === 'act' || $scope.activeGroupId === 'sat' || $scope.activeGroupId === 'gre');
+    $scope.questionAnalytics = ($scope.activeGroupId === 'gmat' || $scope.activeGroupId === 'act'
+      || $scope.activeGroupId === 'sat' || $scope.activeGroupId === 'gre');
     $scope.breadcrumbs = breadcrumbs;
     breadcrumbs.options = {
       'practice': $scope.activeTracks.trackTitle
@@ -143,111 +144,102 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
           customPractice.displayExplanationInfo();
         }
         else
-           $scope.isDisabled = false;
-      },
-      resetLayout: function() {
-        $scope.nextActionTitle = 'Next Question';
-        practiceSrv.resetLayout();
-      },
-      getQuestionSets: function() {
-        var getQuestionSet = practiceRequests.practiceGames().getQuestionNewSetByPractice($scope.gameId, $scope.activeTracks.tracks);
+         $scope.isDisabled = false;
+     },
+     resetLayout: function() {
+       $scope.nextActionTitle = 'Next Question';
+       practiceSrv.resetLayout();
+     },
+     getQuestionSets: function() {
+       var getQuestionSet = practiceRequests.practiceGames().getQuestionNewSetByPractice($scope.gameId, $scope.activeTracks.tracks);
+       getQuestionSet.then(function(result) {
+        if (result.data.question_sets.length > 0) {
+          $scope.questionSetList = result.data.question_sets;
 
-        getQuestionSet.then(function(result) {
+          customPractice.loadQuestionsSet();
+        } else {
+          /*if user run out of the questions show message*/
+          practiceSrv.usersRunOutQuestions($scope.activeTracks.trackTitle, $scope.activeGroupId);
 
-          if (result.data.question_sets.length > 0) {
-            $scope.questionSetList = result.data.question_sets;
+        }
+      }).catch(function errorHandler(e) { Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger'); });
+     },
+     loadQuestionsSet: function() {
+      if (angular.isDefined($scope.questionSetList) && $scope.questionSetList.length > 0) {
 
+        /*if $scope.setPosition is bigger than $scope.questionSetList.length we already finish the list of question sets */
+        if ($scope.setPosition < $scope.questionSetList.length) {
+
+          var setPosition = $scope.setPosition,
+
+          /* Iterate between all the question sets retrieved it by the API */
+          questionSetResult = $scope.questionSetList[setPosition];
+
+          var position = $scope.position;
+          /* questionsCount Give us the number of questions by questionSet*/
+          $scope.questionsCount = questionSetResult.questions.length;
+
+          /*customPractice.createQuestionSharedList(questionSetResult.questions);*/
+          $scope.questByQSetTitle = $scope.questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + ($scope.questionsCount) + ' for this set' : '';
+
+          if (position < $scope.questionsCount) {
+            var questionIdToRequest = questionSetResult.questions[position];
+            $scope.currentId = questionIdToRequest;
+
+            customPractice.presentQuestion(questionIdToRequest, $scope.gameId);
+          } else {
+            $scope.position = 0;
+            $scope.setPosition++;
             customPractice.loadQuestionsSet();
-          } else {
-            /*if user run out of the questions show message*/
-            practiceSrv.usersRunOutQuestions($scope.activeTracks.trackTitle, $scope.activeGroupId);
-
+            /* New set, delete the questions, this way they are reinitialized*/
           }
-
-
-        }).catch(function errorHandler(e) {
-
-          Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
-
-        });
-      },
-      loadQuestionsSet: function() {
-
-        if (angular.isDefined($scope.questionSetList) && $scope.questionSetList.length > 0) {
-
-          /*if $scope.setPosition is bigger than $scope.questionSetList.length we already finish the list of question sets */
-          if ($scope.setPosition < $scope.questionSetList.length) {
-
-            var setPosition = $scope.setPosition,
-
-            /* Iterate between all the question sets retrieved it by the API */
-            questionSetResult = $scope.questionSetList[setPosition];
-
-            var position = $scope.position;
-            /* questionsCount Give us the number of questions by questionSet*/
-            $scope.questionsCount = questionSetResult.questions.length;
-
-            /*customPractice.createQuestionSharedList(questionSetResult.questions);*/
-            $scope.questByQSetTitle = $scope.questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + ($scope.questionsCount) + ' for this set' : '';
-
-            if (position < $scope.questionsCount) {
-              var questionIdToRequest = questionSetResult.questions[position];
-              $scope.currentId = questionIdToRequest;
-
-              customPractice.presentQuestion(questionIdToRequest, $scope.gameId);
-            } else {
-              $scope.position = 0;
-              $scope.setPosition++;
-              customPractice.loadQuestionsSet();
-              /* New set, delete the questions, this way they are reinitialized*/
-            }
-          } else {
-            /*If we finish with the first load of questions id/question sets que create a new game*/
-            $scope.setPosition = 0;
-            customPractice.getQuestionSets();
-          }
+        } else {
+          /*If we finish with the first load of questions id/question sets que create a new game*/
+          $scope.setPosition = 0;
+          customPractice.getQuestionSets();
         }
-      },
-      doNotKnowAnswer: function() {
-        $scope.userConfirmed = false;
-         var generalResult = practiceSrv.doNotKnowAnswer($scope.questionResult);
-         customPractice.bindVideoExplanationInfo($scope.questionResult);
-        if (angular.isDefined(generalResult)) {
-           this.resetLayout();
-           customPractice.bindExplanationInfo(generalResult);
-        }
-        else
-           $scope.isDisabled = false;
-      },
-      evaluateConfirmMethod: function() {
-        $scope.userConfirmed = true;
-        switch ($scope.lastAnswerLoaded) {
-          case 'SPR':
-          case 'NumericEntry':
-          case 'NumericEntryFraction':
-            customPractice.numericConfirmAnswer();
-          break;
-          default:
-            customPractice.confirmAnswer();
-        }
-      },
-      numericConfirmAnswer: function() {
-        var options = {};
-        options.numerator = $scope.numerator;
-        options.denominator = $scope.denominator;
-        options.lastAnswerLoaded = $scope.lastAnswerLoaded;
-        options.questionResult = $scope.questionResult;
-        options.roundSessionAnswer = $scope.roundSessionAnswer;
+      }
+    },
+    doNotKnowAnswer: function() {
+      $scope.userConfirmed = false;
+      var generalResult = practiceSrv.doNotKnowAnswer($scope.questionResult);
+      customPractice.bindVideoExplanationInfo($scope.questionResult);
+      if (angular.isDefined(generalResult)) {
+       this.resetLayout();
+       customPractice.bindExplanationInfo(generalResult);
+     }
+     else
+       $scope.isDisabled = false;
+   },
+   evaluateConfirmMethod: function() {
+    $scope.userConfirmed = true;
+    switch ($scope.lastAnswerLoaded) {
+      case 'SPR':
+      case 'NumericEntry':
+      case 'NumericEntryFraction':
+      customPractice.numericConfirmAnswer();
+      break;
+      default:
+      customPractice.confirmAnswer();
+    }
+  },
+  numericConfirmAnswer: function() {
+    var options = {};
+    options.numerator = $scope.numerator;
+    options.denominator = $scope.denominator;
+    options.lastAnswerLoaded = $scope.lastAnswerLoaded;
+    options.questionResult = $scope.questionResult;
+    options.roundSessionAnswer = $scope.roundSessionAnswer;
 
-        $scope.answerStatus = practiceSrv.numericEntryConfirmChoice(options);
-        if (angular.isDefined($scope.answerStatus)) {
-          this.resetLayout();
-          /* customPractice.setAnswerStatusToSharedList($scope.answerStatus);*/
-          customPractice.displayExplanationInfo();
-        }
-      },
-      nextQuestion: function() {
-        this.loadQuestionsSet();
+    $scope.answerStatus = practiceSrv.numericEntryConfirmChoice(options);
+    if (angular.isDefined($scope.answerStatus)) {
+      this.resetLayout();
+      /* customPractice.setAnswerStatusToSharedList($scope.answerStatus);*/
+      customPractice.displayExplanationInfo();
+    }
+  },
+  nextQuestion: function() {
+    this.loadQuestionsSet();
 
         //Enable/disable answer section
         $scope.numerator = null;
@@ -284,8 +276,6 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
         Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
 
       });
-
-
     };
 
     $scope.answerHasExplanation = function(index) {
@@ -310,9 +300,6 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
       customPractice.doNotKnowAnswer();
     };
 
-    $scope.test = function(){
-      return 'http://www.w3schools.com/html/mov_bbb.mp4';
-    }
     $scope.CreateNewGame();
 
   }

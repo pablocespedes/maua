@@ -156,7 +156,6 @@ angular.module('grockitApp.services', ['webStorageModule'])
       return 'Uh oh! We\'re having difficulty retrieving your data.';
     }
   }
-
 })
 
 .factory('GrockitNewFeatures', function($http, Utilities,environmentCons) {

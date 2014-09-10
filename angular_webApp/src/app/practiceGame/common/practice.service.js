@@ -204,7 +204,6 @@ confirmChoice: function (questionResult, roundSessionAnswer, answers) {
               answerStatus = false;
             }
             angular.element(selectIdButton).addClass('btn-success');
-
           }
           else {
             if (answer.selected) {
@@ -216,9 +215,7 @@ confirmChoice: function (questionResult, roundSessionAnswer, answers) {
                angular.element(selectIdButton).parents('#answer').addClass('incorrectAnswer');
                answerStatus = false;
              }
-
            }
-
          }
          angular.element("#answercontent *").prop('disabled', true);
 
@@ -257,19 +254,6 @@ confirmChoice: function (questionResult, roundSessionAnswer, answers) {
           parsedResources.push(tgR);
         }
       }
-      /*angular.forEach(tags, function (value) {
-        var tagR = value.tag_resources;
-        if (!Utilities.findInCollection(parsedTags, function (tag) { return tag.name === value.name; }))
-        parsedTags.push(value);
-        angular.forEach(tagR, function (val) {
-          tgR = {
-            name: value.name,
-            resource_type: val.resource_type,
-            resource: val.resource_type == 'youtube' ? Utilities.getYoutubeVideosId(val.resource) : val.resource
-          };
-          parsedResources.push(tgR);
-        });
-      });*/
       return {tags: parsedTags, resources: parsedResources};
     },
     displayGeneralConfirmInfo: function (questionResult) {
