@@ -105,11 +105,11 @@
 
                     <ul id="subjectDD"  class="dropdown-menu">
                       <li ng-repeat="linked in groups.linkedGroups track by $index">
-                        <a class="" ng-click="selectGroup($index)" ng-href="#/{{linked.id}}/dashboard"><span ng-bind="linked.name"></span></a>
+                        <a class="" ng-click="selectGroup($index)" ng-href="/{{linked.id}}"><span ng-bind="linked.name"></span></a>
 
                       </li>
                       <li class="divider"></li>
-                      <li id="{{unlinked.id}}" ng-repeat="unlinked in groups.unLinkedGroups track by $index"><a class="" ng-href="https://grockit.com/{{unlinked.id}}" target="_blank"><i class="fa fa-lock"></i>&nbsp;&nbsp;<span ng-bind="unlinked.name"></span></a></li>
+                      <li id="{{unlinked.id}}" ng-repeat="unlinked in groups.unLinkedGroups track by $index"><a class="" ng-href="/{{unlinked.id}}" target="_blank"><i class="fa fa-lock"></i>&nbsp;&nbsp;<span ng-bind="unlinked.name"></span></a></li>
 
                     </ul>
                   </li>
