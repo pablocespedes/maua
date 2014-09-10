@@ -431,7 +431,9 @@ practiceGame.factory('SplashMessages', function (Utilities) {
   'Dividing eternity by zero, please be patient...',
   'Just stalling to simulate activity...',
   'Adding random changes to your data...',
-  'Waiting for approval from Bill Gates...'
+  'Waiting for approval from Bill Gates...',
+  'Adapting your practice questions...',
+  'Supercharging your study...'
   ];
   return {
     getLoadingMessage: function () {
