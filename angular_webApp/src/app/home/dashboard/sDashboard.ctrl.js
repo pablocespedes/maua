@@ -1,6 +1,6 @@
 'use strict';
-home.controller('SimpleDashController', ['$scope', 'Users', 'History', 'Tracks', 'Utilities', 'Auth', 'Alerts', 'Challenge',
-  function($scope, Users, History, Tracks, Utilities, Auth, Alerts, Challenge) {
+home.controller('SimpleDashController', ['$rootScope','$scope', 'Users', 'History', 'Tracks', 'Utilities', 'Auth', 'Alerts', 'Challenge','Groups',
+  function($rootScope,$scope, Users, History, Tracks, Utilities, Auth, Alerts, Challenge,Groups) {
     $scope.loading = true;
     $scope.isChallengeAvailable=false;
     $scope.scoreLoading = true;
@@ -88,7 +88,14 @@ home.controller('SimpleDashController', ['$scope', 'Users', 'History', 'Tracks',
     $scope.init = function() {
       Auth.getCurrentUserInfo().then(function(userInfo) {
         $scope.user_id = userInfo.userId;
+
         $scope.activeGroupId = userInfo.currentGroup;
+        Groups.getGroups().membershipGroups(false).then(function (result) {
+          var groups = result.data.groups, currenTitle = _.find(groups,{'id':$scope.activeGroupId});
+          $rootScope.groupTitle=currenTitle.name;
+        });
+
+
         $scope.enableScore = ($scope.activeGroupId === 'gmat' || $scope.activeGroupId === 'act' || $scope.activeGroupId === 'sat');
         if ($scope.enableScore)
           SimpleDashBoard.fetchScorePrediction();
@@ -124,9 +131,9 @@ home.controller('SimpleDashController', ['$scope', 'Users', 'History', 'Tracks',
     };
 
     $scope.customPractice = function(){
-       var baseUrl = Utilities.originalGrockit().url;
-      Utilities.redirect(baseUrl+'/'+$scope.activeGroupId+'/custom_games/new');
-    }
-    $scope.init();
+     var baseUrl = Utilities.originalGrockit().url;
+     Utilities.redirect(baseUrl+'/'+$scope.activeGroupId+'/custom_games/new');
+   }
+   $scope.init();
 
-  }]);
+ }]);

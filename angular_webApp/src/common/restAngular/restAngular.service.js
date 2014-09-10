@@ -90,11 +90,13 @@ request.factory('Groups', function(Restangular,Headers) {
   Headers.updateDefaultHeader();
 
   function getGroups(){
-    var groups = Restangular.service('groups').one();
+    var groups = Restangular.service('groups').one(),
+    currentGroups = null;
 
     return {
-      membershipGroups: function(){
-        return groups.customGET('',{subdomain : 'www'});
+      membershipGroups: function(shouldUpdate){
+        currentGroups = currentGroups==null || shouldUpdate ? groups.customGET('',{subdomain : 'www'}) : currentGroups;
+        return currentGroups;
       }
     }
   }

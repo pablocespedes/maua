@@ -1,5 +1,6 @@
 'use strict';
-var NavController = function ($rootScope, $scope, $location, Auth, Utilities, GrockitNewFeatures, ListenloopUtility, GaUtility, Tracks, $cookies, Groups, Alerts, $route, Headers) {
+var NavController = function ($rootScope, $scope, $location, Auth, Utilities, GrockitNewFeatures, ListenloopUtility,
+  GaUtility, Tracks, $cookies, Groups, Alerts, $route, Headers) {
   $scope.url = Utilities.originalGrockit().url;
   $scope.logOutUrl = Utilities.originalGrockit().url + '/logout';
 
@@ -31,17 +32,10 @@ var NavController = function ($rootScope, $scope, $location, Auth, Utilities, Gr
 
       if ($scope.currentUser.groupMemberships.length > 0) {
 
-        Groups.getGroups().membershipGroups().then(function (result) {
+        Groups.getGroups().membershipGroups(true).then(function (result) {
           var responseGroups = result.data.groups;
-
           if (!!responseGroups) {
 
-            var objFilter = {'id': $scope.activeGroupId},
-            studyingFor = Utilities.findInCollection(responseGroups, objFilter);
-            if(angular.isDefined(studyingFor)){
-              /*save the Group Name to rootScope*/
-              $rootScope.groupTitle = studyingFor.name;
-            }
             var linkedGroups = $scope.currentUser.groupMemberships,len = linkedGroups.length,i;
 
             for (i = 0; i < len; i++) {
@@ -90,7 +84,6 @@ var NavController = function ($rootScope, $scope, $location, Auth, Utilities, Gr
           Application.hideVideoOption($scope.activeGroupId);
           Application.hideStudyPlan($scope.activeGroupId);
           Application.loadGroupMembership();
-          //Application.fetchLeftNavTracksData();
           ListenloopUtility.base(response);
           GaUtility.classic();
           GaUtility.UA();
@@ -153,10 +146,6 @@ var NavController = function ($rootScope, $scope, $location, Auth, Utilities, Gr
     Headers.updateDefaultHeader();
     if (!!Headers.getCookie('authentication_token')) {
       Application.init();
-    }
-    else {
-      Alerts.showAlert('Permission Denied..', 'danger');
-      //send to login page
     }
   }
 
