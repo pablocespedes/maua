@@ -5,7 +5,8 @@
          "../styles/spinners.scss",
          "../app/home/dashboard/dashboard.scss",
          "../app/home/track-dashboard/dashboard.scss",
-         "../app/practiceGame/common/practice.scss";
+         "../app/practiceGame/common/practice.scss",
+         "../styles/media-queries.scss";
 
 //general css
 #main-navbar .navbar-header a {
@@ -122,31 +123,7 @@ footer {
 .text-footer-l{
    text-align: left;
 }
-/* Smartphones (portrait and landscape) ----------- */
-@media only screen
-and (min-device-width : 320px)
-and (max-device-width : 480px) {
-  #topics  {
-   .feedback-box{
-     padding-top: 12px;
-     height: 41px;
-     float: right!important;
-    }
-    .text-footer-r{
-       text-align: center;
-    }
-    .text-footer-l{
-       text-align: center;
-    }
-    .row {
-      margin-left: 10px;
-    }
-  }
-}
 
-/* #topics .row {
-margin-left: 62px;
-} */
 
 .back-to-top {
   position: fixed;

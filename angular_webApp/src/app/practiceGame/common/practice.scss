@@ -118,13 +118,6 @@
   .leftColumn { margin-bottom: .5em; text-align: justify; }
 
 
-  /* MEDIA QUERIES */
-  @media screen and (min-width: 47.5em ) {
-
-    .rightColumn { top: 0; right: 0; }
-  }
-
-
   #Panel1 img {
     max-width: 100%;
     width: auto;
@@ -357,6 +350,9 @@
   margin-bottom: 2px;
 }
 
+#splash-loader{
+  padding-top:20%;
+}
 
 .msg {
   margin-top: 50px;
@@ -389,11 +385,11 @@
   background-image: -o-linear-gradient(315deg,transparent,transparent 33%,rgba(0, 0, 0, 0.12) 33%,rgba(0, 0, 0, 0.12) 66%,transparent 66%,transparent);
   background-image: linear-gradient(315deg,transparent,transparent 33%,rgba(0, 0, 0, 0.12) 33%,rgba(0, 0, 0, 0.12) 66%,transparent 66%,transparent);
   /*animation*/
-  -webkit-animation: load 5s linear 0 infinite;
-  -moz-animation: load 5s linear 0 infinite;
-  -ms-animation: load 5s linear 0 infinite;
-  -o-animation: load 5s linear 0 infinite;
-  animation: load 5s linear 0 infinite;
+  -webkit-animation: load 7s linear 0 infinite;
+  -moz-animation: load 7s linear 0 infinite;
+  -ms-animation: load 7s linear 0 infinite;
+  -o-animation: load 7s linear 0 infinite;
+  animation: load 7s linear 0 infinite;
 }
 /* Then animate the stuff */
 @-webkit-keyframes load {
