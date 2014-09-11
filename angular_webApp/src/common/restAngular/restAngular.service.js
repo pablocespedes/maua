@@ -38,6 +38,9 @@ request.factory('practiceRequests', function(Restangular,Headers) {
       },
       createNewPracticeGame: function (groupId,trackId) {
         return  Restangular.service(groupId).one('tracks').one(trackId).post('practice');
+      },
+      createNewGameSubtrack: function (groupId,subTrackId) {
+        return  Restangular.service(groupId).one('subtracks').one(subTrackId).post('practice');
       }
     }
   }

@@ -73,10 +73,21 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
           $scope.videoText = videoInfo.videoText;
         });
       },
-      presentQuestion: function (questionId, gameId) {
-        practiceSrv.getRoundSession(questionId,gameId).then(function(result){  $scope.roundSessionAnswer = result.roundSessionAnswer; });
+      presentQuestion: function (questionId) {
+
+
 
         practiceSrv.loadQuestion(questionId).then(function (result) {
+
+          var questionSet = result.questionResult.question_set,
+              createGame = practiceRequests.practiceGames().createNewGameSubtrack($scope.activeGroupId,
+                         questionSet.subtrack_id);
+            createGame.then( function(resultGame){
+                return practiceSrv.getRoundSession(questionId,resultGame.data.practice_game.id);
+            }).then( function(roundResult){
+                $scope.roundSessionAnswer = roundResult.roundSessionAnswer;
+            })
+
           $scope.questionResult = result.questionResult;
           $scope.lastAnswerLoaded = result.lastAnswerLoaded;
           $scope.questionInformation = result.questionInformation;
@@ -96,8 +107,8 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
       },
       displayExplanationInfo: function () {
         var generalInfo= practiceSrv.displayGeneralConfirmInfo($scope.questionResult);
-        customPractice.bindExplanationInfo(generalInfo);
-        customPractice.bindVideoExplanationInfo($scope.questionResult);
+        Question.bindExplanationInfo(generalInfo);
+        Question.bindVideoExplanationInfo($scope.questionResult);
       },
       confirmAnswer: function () {
         $scope.answerStatus = practiceSrv.confirmChoice($scope.questionResult, $scope.roundSessionAnswer,$scope.items);
@@ -113,10 +124,10 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
       },
       doNotKnowAnswer: function () {
          var generalResult = practiceSrv.doNotKnowAnswer($scope.questionResult);
-         customPractice.bindVideoExplanationInfo($scope.questionResult);
+         Question.bindVideoExplanationInfo($scope.questionResult);
         if (angular.isDefined(generalResult)) {
            this.resetLayout();
-           customPractice.bindExplanationInfo(generalResult);
+           Question.bindExplanationInfo(generalResult);
         }
       },
       evaluateConfirmMethod: function () {
@@ -167,31 +178,18 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
 
     };
 
-    $scope.CreateNewGame = function () {
+    $scope.init = function () {
 
-      var createGame = practiceRequests.practiceGames().createNewPracticeGame($scope.activeGroupId);
-
-      createGame.then(function (game) {
-        $scope.gameId = game.data.practice_game.id;
          var questionId = Utilities.getCurrentParam('questionId');
 
         if (angular.isDefined(questionId)) {
-          Question.presentQuestion(questionId, $scope.gameId);
+          Question.presentQuestion(questionId);
           timer.initPracticeTimer();
           timer.initQuestionTimer();
         }
         else {
           Alerts.showAlert('Oh sorry, We have problems to load your question, please let us know on feedback@grockit.com.', 'danger');
         }
-
-
-      }).catch(function errorHandler(e) {
-
-        Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
-
-      });
-
-
     };
 
     $scope.answerHasExplanation = function (index) {
@@ -216,7 +214,7 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
       Question.doNotKnowAnswer();
     };
 
-    $scope.CreateNewGame();
+    $scope.init();
 
 
   }]);

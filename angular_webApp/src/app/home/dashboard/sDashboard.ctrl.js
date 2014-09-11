@@ -1,6 +1,6 @@
 'use strict';
-home.controller('SimpleDashController', ['$rootScope','$scope', 'Users', 'History', 'Tracks', 'Utilities', 'Auth', 'Alerts', 'Challenge','Groups',
-  function($rootScope,$scope, Users, History, Tracks, Utilities, Auth, Alerts, Challenge,Groups) {
+home.controller('SimpleDashController', ['$scope', 'Users', 'History', 'Tracks', 'Utilities', 'Auth', 'Alerts', 'Challenge','Groups',
+  function($scope, Users, History, Tracks, Utilities, Auth, Alerts, Challenge,Groups) {
     $scope.loading = true;
     $scope.isChallengeAvailable=false;
     $scope.scoreLoading = true;
@@ -92,7 +92,9 @@ home.controller('SimpleDashController', ['$rootScope','$scope', 'Users', 'Histor
         $scope.activeGroupId = userInfo.currentGroup;
         Groups.getGroups().membershipGroups(false).then(function (result) {
           var groups = result.data.groups, currenTitle = _.find(groups,{'id':$scope.activeGroupId});
-          $rootScope.groupTitle=currenTitle.name;
+          if(angular.isDefined(currenTitle)){
+             Utilities.setGroupTitle(currenTitle.name);
+          }
         });
 
 
