@@ -8,7 +8,7 @@ angular.module('grockitApp.analyticService', [])
                             '"email":"'+userData.emailAddress+'",'+
                             '"segment":"'+userData.role+'",'+
                             '"custom_properties":{'+
-                                '"full_name":"'+userData.fullName+'",'+
+                                '"first_name":"'+userData.fullName+'",'+
                                 '"user_id":"'+userData.userId+'",'+
                                 '"group":"'+userData.currentGroup+'",'+
                                 '"env":"Grockit 2.0"'+
@@ -72,7 +72,33 @@ angular.module('grockitApp.analyticService', [])
         ga('require', 'displayfeatures');
         ga('send', 'pageview');
 
+        }
       }
-    }
-
-  });
+    })
+    
+    .factory('InspectletUtility', function(){
+      
+      return {
+        base: function(){
+          $('<script type="text/javascript" id="inspectletjs">' +
+            'window.__insp = window.__insp || [];' +
+            '__insp.push(["wid", 2086641618]);' +
+            '(function() {' +
+              'function __ldinsp(){var insp = document.createElement("script");' +
+               'insp.type = "text/javascript";' +
+               'insp.async = true;' + 
+               'insp.id = "inspsync";' +
+               'insp.src = ("https:" == document.location.protocol ? "https" : "http") + "://cdn.inspectlet.com/inspectlet.js";' +
+               'var x = document.getElementsByTagName("script")[0];' +
+               'x.parentNode.insertBefore(insp, x); }' +
+             'if(window.attachEvent){' +
+                'window.attachEvent("onload", __ldinsp);' +
+              '}' +
+              'else{' +
+                'window.addEventListener("load", __ldinsp, false);' +
+              '}' +
+            '})();' +
+          '</script>').appendTo(document.body);
+        } 
+      } 
+    }); 
