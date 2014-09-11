@@ -1,6 +1,6 @@
 'use strict';
 var NavController = function ($rootScope, $scope, $location, Auth, Utilities, GrockitNewFeatures, ListenloopUtility,
-  GaUtility, Tracks, $cookies, Groups, Alerts, $route, Headers) {
+  GaUtility, InspectletUtility, Tracks, $cookies, Groups, Alerts, $route, Headers) {
   $scope.url = Utilities.originalGrockit().url;
   $scope.logOutUrl = Utilities.originalGrockit().url + '/logout';
 
@@ -87,6 +87,7 @@ var NavController = function ($rootScope, $scope, $location, Auth, Utilities, Gr
           ListenloopUtility.base(response);
           GaUtility.classic();
           GaUtility.UA();
+          InspectletUtility.base();
         }
       }).catch(function errorHandler(e) {
         Alerts.showAlert(Alerts.setErrorApiMsg(e), 'danger');
