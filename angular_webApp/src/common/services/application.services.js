@@ -1,5 +1,5 @@
 angular.module('grockitApp.services', ['webStorageModule'])
-.factory('Utilities', function($http,webStorage,$location,$route,VideoService,$q,environmentCons,$window) {
+.factory('Utilities', function($rootScope,$http,$location,$route,$q,$window,webStorage,VideoService,environmentCons) {
 
   var internalUtilities = {
     grockitHostEvaluation : function (isNewGrockit) {
@@ -10,7 +10,6 @@ angular.module('grockitApp.services', ['webStorageModule'])
         return location.host == '127.0.0.1:9000' ? environmentCons.stagingGrockit : location.host == environmentCons.ww2Grockit2 ? environmentCons.oldGrockit : location.origin
       }
     },
-
     getResourceObject: function(resourceObject) {
       var nDeferred = $q.defer();
       var videoObject = {},videoId='';
@@ -39,7 +38,6 @@ angular.module('grockitApp.services', ['webStorageModule'])
       }
       return nDeferred.promise;
     }
-
   };
 
 
@@ -69,7 +67,6 @@ angular.module('grockitApp.services', ['webStorageModule'])
    },
    findInCollection: function (collection, filter) {
     return  _.find(collection,filter);
-
   },
   random: function(min, max) {
     min = min | 0;
@@ -134,6 +131,11 @@ angular.module('grockitApp.services', ['webStorageModule'])
    }
    return id;
 
+ },
+ setGroupTitle: function(title){
+  if($rootScope.groupTitle===null || $rootScope.groupTitle ==='' || $rootScope.groupTitle !==title){
+    $rootScope.groupTitle=title;
+  }
  }
 }
 })

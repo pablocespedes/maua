@@ -1,6 +1,7 @@
 'use strict';
-var NavController = function ($rootScope, $scope, $location, Auth, Utilities, GrockitNewFeatures, ListenloopUtility,
-  GaUtility, InspectletUtility, Tracks, $cookies, Groups, Alerts, $route, Headers) {
+var NavController = function ($scope, $location, $route, Auth, Utilities, GrockitNewFeatures, ListenloopUtility,
+  GaUtility,InspectletUtility, Tracks, Groups, Alerts, Headers) {
+
   $scope.url = Utilities.originalGrockit().url;
   $scope.logOutUrl = Utilities.originalGrockit().url + '/logout';
 
@@ -35,6 +36,10 @@ var NavController = function ($rootScope, $scope, $location, Auth, Utilities, Gr
         Groups.getGroups().membershipGroups(true).then(function (result) {
           var responseGroups = result.data.groups;
           if (!!responseGroups) {
+            var studyingFor = Utilities.findInCollection(responseGroups, {'id': $scope.activeGroupId});
+            if(angular.isDefined(studyingFor)){
+               Utilities.setGroupTitle(studyingFor.name);
+            }
 
             var linkedGroups = $scope.currentUser.groupMemberships,len = linkedGroups.length,i;
 
@@ -102,7 +107,7 @@ var NavController = function ($rootScope, $scope, $location, Auth, Utilities, Gr
   $scope.selectGroup = function (index) {
 
     /*update group Name*/
-    $rootScope.groupTitle = $scope.groups.linkedGroups[index].name;
+    Utilities.setGroupTitle($scope.groups.linkedGroups[index].name);
 
     $scope.currentUser.currentGroup = $scope.groups.linkedGroups[index].id;
 

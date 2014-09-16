@@ -1,0 +1,38 @@
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  #topics  {
+   .feedback-box{
+     padding-top: 12px;
+     height: 41px;
+     float: right!important;
+   }
+   .text-footer-r{
+     text-align: center;
+   }
+   .text-footer-l{
+     text-align: center;
+   }
+   .row {
+    margin-left: 10px;
+   }
+  }
+  #splash-loader{
+    .loader_box {
+      text-align: center;
+      width: 270px;
+      border: 1px solid #999;
+      padding: 1px;
+      height: 8px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+}
+
+/* MEDIA QUERIES */
+@media screen and (min-width: 47.5em ) {
+
+  .rightColumn { top: 0; right: 0; }
+}

@@ -23,7 +23,7 @@ var practiceGame =  angular.module("grockitApp.practiceGame",['ng-breadcrumbs'])
     };
 
 
-    $routeProvider.when('/:subject/question/:questionId', {templateUrl: 'app/practiceGame/question/question.tpl.html',
+    $routeProvider.when('/:subject/questions/:questionId', {templateUrl: 'app/practiceGame/question/question.tpl.html',
       label: 'practice',
       resolve: {deps: function ($q, $rootScope) {
         var deferred = $q.defer(),
