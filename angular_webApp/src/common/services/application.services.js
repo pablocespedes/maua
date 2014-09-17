@@ -1,25 +1,25 @@
 angular.module('grockitApp.services', ['webStorageModule'])
-.factory('Utilities', function($rootScope,$http,$location,$route,$q,$window,webStorage,VideoService,environmentCons) {
+.factory('Utilities', function($rootScope, $http, $location, $route, $q, $window, webStorage, VideoService, environmentCons) {
 
   var internalUtilities = {
-    grockitHostEvaluation : function (isNewGrockit) {
+    grockitHostEvaluation: function(isNewGrockit) {
       if (isNewGrockit) {
-        return location.host == '127.0.0.1:9000' ? environmentCons.oldGrockit :environmentCons.liveGrockit;
-      }
-      else {
+        return location.host == '127.0.0.1:9000' ? environmentCons.oldGrockit : environmentCons.liveGrockit;
+      } else {
         return location.host == '127.0.0.1:9000' ? environmentCons.stagingGrockit : location.host == environmentCons.ww2Grockit2 ? environmentCons.oldGrockit : location.origin
       }
     },
     getResourceObject: function(resourceObject) {
       var nDeferred = $q.defer();
-      var videoObject = {},videoId='';
-      if (resourceObject.resource_type=="youtube") {
+      var videoObject = {},
+      videoId = '';
+      if (resourceObject.resource_type == "youtube") {
         var video = internalUtilities.getYoutubeVideosId(resourceObject.resource);
-        video.then(function(idVid){
-          videoId=idVid;
-          return  VideoService.setYouTubeTitle(idVid);
+        video.then(function(idVid) {
+          videoId = idVid;
+          return VideoService.setYouTubeTitle(idVid);
 
-        }).then(function (videoTime) {
+        }).then(function(videoTime) {
           videoObject = {
             videoTime: videoTime,
             videoId: videoId,
@@ -27,8 +27,7 @@ angular.module('grockitApp.services', ['webStorageModule'])
           };
           nDeferred.resolve(videoObject);
         });
-      }
-      else {
+      } else {
         videoObject = {
           videoTime: null,
           videoId: decodeURIComponent(resourceObject.resource).replace(/"/g, ""),
@@ -42,107 +41,106 @@ angular.module('grockitApp.services', ['webStorageModule'])
 
 
   return {
-   newGrockit: function () {
-     return {
-       url: internalUtilities.grockitHostEvaluation(true)
-     };
-   },
-   originalGrockit: function () {
-     return {
-       url: internalUtilities.grockitHostEvaluation(false)
-     };
-   },
-   getActiveGroup: function () {
-     if (!!webStorage.get('currentUser')) {
-       return webStorage.get('currentUser').currentGroup;
-     }
-   },
-   getActiveTrack: function () {
-     return webStorage.get('currentUser').trackData;
-   },
-   setActiveTrack: function (data) {
-     var currentUser = webStorage.get('currentUser');
-     currentUser.trackData = data;
-     webStorage.add('currentUser', currentUser);
-   },
-   findInCollection: function (collection, filter) {
-    return  _.find(collection,filter);
-  },
-  random: function(min, max) {
-    min = min | 0;
-    return _.random(min, max);
-  },
-  mapObject: function(collection, key,getter){
+    newGrockit: function() {
+      return {
+        url: internalUtilities.grockitHostEvaluation(true)
+      };
+    },
+    originalGrockit: function() {
+      return {
+        url: internalUtilities.grockitHostEvaluation(false)
+      };
+    },
+    getActiveGroup: function() {
+      if (!!webStorage.get('currentUser')) {
+        return webStorage.get('currentUser').currentGroup;
+      }
+    },
+    getActiveTrack: function() {
+      return webStorage.get('currentUser').trackData;
+    },
+    setActiveTrack: function(data) {
+      var currentUser = webStorage.get('currentUser');
+      currentUser.trackData = data;
+      webStorage.add('currentUser', currentUser);
+    },
+    findInCollection: function(collection, filter) {
+      return _.find(collection, filter);
+    },
+    random: function(min, max) {
+      min = min | 0;
+      return _.random(min, max);
+    },
+    mapObject: function(collection, key, getter) {
 
-   return _.map(collection, function(val) {
-     var obj = {};
-     obj[key]= getter(val);
-     return obj;
-   });
+      return _.map(collection, function(val) {
+        var obj = {};
+        obj[key] = getter(val);
+        return obj;
+      });
 
- },
- mergeCollection: function (collection1, collection2) {
-   return  _.merge(collection1,collection2);
+    },
+    mergeCollection: function(collection1, collection2) {
+      return _.merge(collection1, collection2);
 
- },
- getIndexArray: function (arr, key, val) {
-   for (var i = 0; i < arr.length; i++) {
-     if (arr[i][key] == val)
-       return i;
-   }
-   return -1;
- },
- internalRedirect: function (url) {
-   $location.path(url);
- },
- redirect: function (url) {
+    },
+    getIndexArray: function(arr, key, val) {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i][key] == val)
+          return i;
+      }
+      return -1;
+    },
+    internalRedirect: function(url) {
+      $location.path(url);
+    },
+    redirect: function(url) {
 
-   $window.location.href =  url;
- },
- setActiveTab: function (position) {
-   this.clearActiveTab();
-   var menuList = angular.element('div#main-menu-inner ul.navigation li');
-   angular.element(menuList[position]).addClass('active');
+      $window.location.href = url;
+    },
+    setActiveTab: function(position) {
+      this.clearActiveTab();
+      var menuList = angular.element('div#main-menu-inner ul.navigation li');
+      angular.element(menuList[position]).addClass('active');
 
- },
- clearActiveTab: function () {
-   angular.element('div#main-menu-inner ul.navigation li').removeClass('active');
- },
- dialogService: function (options) {
-   bootbox.dialog(options);
- },
- getCurrentParam: function (key) {
-   return angular.isDefined($route.current)? $route.current.pathParams[key] : undefined;
- },
- setCurrentParam: function (key, param) {
-   $route.current.pathParams[key] = null;
-   $route.current.pathParams[key] = param;
- },
- getYoutubeVideosId: function(url) {
+    },
+    clearActiveTab: function() {
+      angular.element('div#main-menu-inner ul.navigation li').removeClass('active');
+    },
+    dialogService: function(options) {
+      bootbox.dialog(options);
+    },
+    getCurrentParam: function(key) {
+      return angular.isDefined($route.current) ? $route.current.pathParams[key] : undefined;
+    },
+    setCurrentParam: function(key, param) {
+      $route.current.pathParams[key] = null;
+      $route.current.pathParams[key] = param;
+    },
+    getYoutubeVideosId: function(url) {
 
-   var id = '';
-   url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-   if (url[2] !== undefined) {
-     id = url[2].split(/[^0-9a-z_]/i);
-     id = id[0];
-   }
-   else {
-     id = url;
-   }
-   return id;
+      var id = '';
+      url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+      if (url[2] !== undefined) {
+        id = url[2].split(/[^0-9a-z_]/i);
+        id = id[0];
+      } else {
+        id = url;
+      }
+      return id;
 
- },
- setGroupTitle: function(title){
-  if($rootScope.groupTitle===null || $rootScope.groupTitle ==='' || $rootScope.groupTitle !==title){
-    $rootScope.groupTitle=title;
+    },
+    setGroupTitle: function(title) {
+      if ($rootScope.groupTitle === null || $rootScope.groupTitle === '' || $rootScope.groupTitle !== title) {
+        $rootScope.groupTitle = title;
+      }
+    }
   }
- }
-}
 })
 
 .factory('Alerts', function() {
   return {
-    showAlert: function (alertMsg, type) {
+    showAlert: function(alertMsg, type) {
 
       var options = {
         type: type,
@@ -150,30 +148,30 @@ angular.module('grockitApp.services', ['webStorageModule'])
         classes: 'alert-dark',
         auto_close: 30 /*seconds*/
       };
-      setTimeout(function () {
+      setTimeout(function() {
         PixelAdmin.plugins.alerts.add(alertMsg, options);
-      },250);
+      }, 250);
     },
-    setErrorApiMsg: function (e) {
+    setErrorApiMsg: function(e) {
       return 'Uh oh! We\'re having difficulty retrieving your data.';
     }
   }
 })
 
-.factory('GrockitNewFeatures', function($http, Utilities,environmentCons) {
+.factory('GrockitNewFeatures', function($http, Utilities, environmentCons) {
 
   return {
-    showDialog: function () {
+    showDialog: function() {
       var dialogOptions = {
         title: "Welcome to Grockit 2.0 Beta",
         message: ""
       },
       url = location.host == '127.0.0.1:9000' ? environmentCons.localGrockit : environmentCons.liveGrockit;
-      $http.get(url + '/common/templates/newFeatures2.0.html').success(function (data) {
+      $http.get(url + '/common/templates/newFeatures2.0.html').success(function(data) {
         dialogOptions.message = data;
         Utilities.dialogService(dialogOptions);
 
-      }).error(function (jqXHR, textStatus, errorThrown) {
+      }).error(function(jqXHR, textStatus, errorThrown) {
 
       });
     }
@@ -195,11 +193,15 @@ angular.module('grockitApp.services', ['webStorageModule'])
   };
   this.get = function(serviceId) {
     var self = this;
-    return _.find(this.items, function(item) { return self.equals(item, serviceId); });
+    return _.find(this.items, function(item) {
+      return self.equals(item, serviceId);
+    });
   };
   this.remove = function(item) {
     var self = this;
-    this.items = _.reject(this.items, function(storedItem) { return self.equals(item, storedItem.serviceId); });
+    this.items = _.reject(this.items, function(storedItem) {
+      return self.equals(item, storedItem.serviceId);
+    });
   };
 })
 
@@ -236,7 +238,8 @@ angular.module('grockitApp.services', ['webStorageModule'])
         ServiceFactory.remove(timer);
       }
     };
-  }])
+  }
+  ])
 
 .factory('DateFormatter', function() {
   var formatSeconds = function(seconds) {
@@ -256,13 +259,21 @@ angular.module('grockitApp.services', ['webStorageModule'])
     if (seconds < 10) {
       seconds = "0" + seconds;
     }
-    // var time = hours+':'+minutes+':'+seconds;
+        // var time = hours+':'+minutes+':'+seconds;
 
-    var time = (hours > 0 ? hours + ':' : '') +
-    (minutes >= 0 ? minutes + ':' : '') + (seconds >= 0 ? seconds : '');
-    return time;
-  };
-  return {
-    formatSeconds: formatSeconds
-  };
-});
+        var time = (hours > 0 ? hours + ':' : '') +
+        (minutes >= 0 ? minutes + ':' : '') + (seconds >= 0 ? seconds : '');
+        return time;
+      };
+      return {
+        formatSeconds: formatSeconds
+      };
+    })
+
+.service('SetCurrentProduct', function() {
+    this.groupId = null;
+
+    this.currentGroupId = function(groupId) {
+        this.groupId=groupId;
+    };
+})

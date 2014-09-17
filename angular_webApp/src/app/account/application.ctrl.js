@@ -1,6 +1,6 @@
 'use strict';
 var NavController = function ($scope, $location, $route, Auth, Utilities, GrockitNewFeatures, ListenloopUtility,
-  GaUtility,InspectletUtility, Tracks, Groups, Alerts, Headers) {
+  GaUtility,InspectletUtility, Tracks, Groups, Alerts, Headers,SetCurrentProduct) {
 
   $scope.url = Utilities.originalGrockit().url;
   $scope.logOutUrl = Utilities.originalGrockit().url + '/logout';
@@ -84,7 +84,8 @@ var NavController = function ($scope, $location, $route, Auth, Utilities, Grocki
         if (response != null) {
           $scope.currentUser = response;
 
-          $scope.activeGroupId = response.currentGroup;
+          $scope.activeGroupId = Utilities.getActiveGroup();
+          SetCurrentProduct.currentGroupId($scope.activeGroupId);
 
           Application.hideVideoOption($scope.activeGroupId);
           Application.hideStudyPlan($scope.activeGroupId);
@@ -99,6 +100,12 @@ var NavController = function ($scope, $location, $route, Auth, Utilities, Grocki
       });
     }
   };
+
+  $scope.$watch(function () {
+    return SetCurrentProduct.groupId; },
+    function(newVal, oldVal) {
+         $scope.activeGroupId = newVal;
+    });
 
   $scope.showDialog = function () {
     GrockitNewFeatures.showDialog();
