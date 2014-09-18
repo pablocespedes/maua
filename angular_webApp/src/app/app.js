@@ -23,7 +23,6 @@
 
      }
      else {
-       $rootScope.$destroy();
        $("body").html('The user is not logged in! <a href=\"/logout\">Click here to restart</a>.');
        event.preventDefault();
 

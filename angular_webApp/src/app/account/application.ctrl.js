@@ -128,6 +128,11 @@ var NavController = function ($scope, $location, $route, Auth, Utilities, Grocki
     Auth.logout();
   };
 
+  $scope.groupRedirect= function(id){
+     Utilities.redirect($scope.url+'/'+id);
+  }
+
+
   $scope.select = function (index) {
 
     if (angular.isDefined(index)) {
