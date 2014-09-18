@@ -22,8 +22,11 @@
 								<div ng-show="hasExplanation({index : $index})">
 										<div class="explain-margin" ng-bind-html='item.explanation'></div>
 								</div>
-								<div ng-if="item.percent_answered>0" class="answer-percent"><strong> {{item.percent_answered}}%</strong> of
-										users answered this choice
+								<div  class="answer-percent">
+								<strong>
+								<span ng-if="item.percent_answered>0" ng-bind="item.percent_answered"></span>
+								<span ng-if="item.percent_answered<0">&#60;1%</span>%
+								</strong> of users answered this choice
 								</div>
 						</div>
 				</a>

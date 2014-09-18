@@ -23,12 +23,22 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
     $scope.loadingMessage = SplashMessages.getLoadingMessage();
 
     var timer = {
-      setTimingInformation: function (questionId, correctAnswerId) {
+      setTimingInformation: function (questionId, correctAnswerId,lastAnswerLoaded) {
         practiceSrv.getTimingInformation($scope.activeTracks.tracks, $scope.activeGroupId, questionId).$promise.then(function (result) {
           $scope.showTiming=true;
           $scope.timingData = result[0];
-          Utilities.mergeCollection($scope.items, result[0].answers);
-          $scope.percentAnswered = Utilities.findInCollection(result[0].answers, { 'answer_id': correctAnswerId }).percent_answered;
+
+          if (lastAnswerLoaded === 'MultipleChoiceOneCorrect') {
+              var mergedList = _.map($scope.items, function(item) {
+                return _.extend(item, _.findWhere(result[0].answers, {
+                  'answer_id': item.id
+                }));
+              });
+
+              $scope.percentAnswered = Utilities.findInCollection(result[0].answers, {
+                'answer_id': correctAnswerId
+              }).percent_answered;
+            }
         }).catch(function (e) {
           $scope.showTiming=false;
         });
@@ -102,7 +112,7 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
           timer.resetQuestionTimer();
           Question.feedbackInfo(questionId);
           if($scope.questionAnalytics)
-          timer.setTimingInformation(questionId, correctAnswerId);
+          timer.setTimingInformation(questionId, correctAnswerId, $scope.lastAnswerLoaded);
         });
       },
       displayExplanationInfo: function () {
