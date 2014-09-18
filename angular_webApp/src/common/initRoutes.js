@@ -1,19 +1,19 @@
 // load all of the dependencies asynchronously.
 
-var paths={
-    jqueryGrockit:'common/jquery.grockit.js',
-    constants:'common/constants/application.constants.js',
-    restAngularFactory:'common/restAngular/restAngular.service.js',
-    restAngular:'common/restAngular/restAngular.module.js',
-    home:'app/home/home.module.js',
-    practiceGame:'app/practiceGame/practiceGame.module.js',
-    generalServices:'common/services/application.services.js',
-    generalFilters:'common/filters/application.filters.js',
+var paths = {
+    jqueryGrockit: 'common/jquery.grockit.js',
+    constants: 'common/constants/application.constants.js',
+    restAngularFactory: 'common/restAngular/restAngular.service.js',
+    restAngular: 'common/restAngular/restAngular.module.js',
+    home: 'app/home/home.module.js',
+    practiceGame: 'app/practiceGame/practiceGame.module.js',
+    generalServices: 'common/services/application.services.js',
+    generalFilters: 'common/filters/application.filters.js',
     analyticService: 'common/services/analytic.service.js',
-    generalDirectives:'common/directives/general.directive.js',
-    authServices:'common/services/auth.services.js',
-    accountCtrl:'app/account/application.ctrl.js',
-    app:'app/app.js'
+    generalDirectives: 'common/directives/general.directive.js',
+    authServices: 'common/services/auth.services.js',
+    accountCtrl: 'app/account/application.ctrl.js',
+    app: 'app/app.js'
 };
 
 $script([
@@ -28,13 +28,15 @@ $script([
     paths.practiceGame,
     paths.authServices,
     paths.app
-],'init')
+    ], 'init')
 
-    .ready('init', function() {
-		$script([
-				paths.restAngularFactory,
-				paths.accountCtrl
-		], function () {
-				angular.bootstrap(document, ['grockitApp']);
-		});
+.ready('init', function() {
+    $script([
+        paths.restAngularFactory,
+        paths.accountCtrl
+        ], function() {
+            angular.element(document).ready(function() {
+                angular.bootstrap(document, ['grockitApp']);
+            });
+        });
 });
