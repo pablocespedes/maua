@@ -50,5 +50,6 @@ var home =  angular.module("grockitApp.home",['ng-breadcrumbs']).config(function
       controller: 'TrackDashController'
     });
 
+    $routeProvider.otherwise({ redirectTo: '/gmat/dashboard' })
 });
 
