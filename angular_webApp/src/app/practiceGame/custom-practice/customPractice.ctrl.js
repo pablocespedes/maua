@@ -9,6 +9,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
     breadcrumbs.options = {
       'practice': $scope.activeTracks.trackTitle
     };
+    $scope.isbuttonClicked=false;
     $scope.maxOpts = [];
     $scope.tagsResources = [];
     $scope.portalC = $scope;
@@ -146,6 +147,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
                 this.resetLayout();
                 /* customPractice.setAnswerStatusToSharedList($scope.answerStatus);*/
                 customPractice.displayExplanationInfo();
+                 $scope.isbuttonClicked=true;
             } else
                 $scope.isDisabled = false;
         },
@@ -238,13 +240,13 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             $scope.answerStatus = practiceSrv.numericEntryConfirmChoice(options);
             if (angular.isDefined($scope.answerStatus)) {
                 this.resetLayout();
-                /* customPractice.setAnswerStatusToSharedList($scope.answerStatus);*/
                 customPractice.displayExplanationInfo();
+                $scope.isbuttonClicked=true;
             }
         },
         nextQuestion: function() {
             this.loadQuestionsSet();
-
+             $scope.isbuttonClicked=false;
             //Enable/disable answer section
             $scope.numerator = null;
             $scope.denominator = null;
