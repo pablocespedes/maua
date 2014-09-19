@@ -214,6 +214,7 @@ practiceGame.controller('CustomPracticeController', ['$scope', 'practiceSrv', 'U
             if (angular.isDefined(generalResult)) {
                 this.resetLayout();
                 customPractice.bindExplanationInfo(generalResult);
+                $scope.isbuttonClicked=true;
             } else
                 $scope.isDisabled = false;
         },

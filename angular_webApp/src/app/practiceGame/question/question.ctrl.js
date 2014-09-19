@@ -137,6 +137,7 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         if (angular.isDefined(generalResult)) {
            this.resetLayout();
            Question.bindExplanationInfo(generalResult);
+            $scope.isbuttonClicked=true;
         }
       },
       evaluateConfirmMethod: function () {
