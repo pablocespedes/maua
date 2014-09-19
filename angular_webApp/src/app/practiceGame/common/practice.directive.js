@@ -1,55 +1,63 @@
-practiceGame.directive('oneChoice', function () {
+practiceGame.directive('oneChoice', function() {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/oneChoice.tpl.html',
-    link: function (scope) {
-      scope.selectAnswer = function (index) {
-        _.forEach(scope.items, function (answer, i) { if (index != i) answer.selected = false; });
+    link: function(scope) {
+      scope.selectAnswer = function(index) {
+        if (!scope.isConfirmClicked) {
+          _.forEach(scope.items, function(answer, i) {
+            if (index != i) answer.selected = false;
+          });
 
-        var answer = scope.items[index],
-        nexAction = $('#nextAction'),
-        seeAnswer = $('#skipAction');
+          var answer = scope.items[index],
+          nexAction = $('#nextAction'),
+          seeAnswer = $('#skipAction');
 
-        $('.choice button').removeClass('btn-primary btn-danger');
-        if (!answer.selected) {
-          answer.selected = true;
-          nexAction.addClass('btn-primary');
-          seeAnswer.addClass('hide');
-        } else {
-          answer.selected = false;
-          nexAction.removeClass('btn-primary');
-          seeAnswer.removeClass('hide');
+          $('.choice button').removeClass('btn-primary btn-danger');
+          if (!answer.selected) {
+            answer.selected = true;
+            nexAction.addClass('btn-primary');
+            seeAnswer.addClass('hide');
+          } else {
+            answer.selected = false;
+            nexAction.removeClass('btn-primary');
+            seeAnswer.removeClass('hide');
+          }
         }
-
       };
     },
     scope: {
       items: '=items',
       showExplanation: '=',
-      hasExplanation: '&'
+      hasExplanation: '&',
+      isConfirmClicked: '='
     }
   };
 })
 
-.directive('multipleChoice', function () {
+.directive('multipleChoice', function() {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/multipleChoice.tpl.html',
-    link: function (scope) {
-      scope.selectAnswer = function (index) {
-        var answers = scope.items[index],
-        nexAction = $('#nextAction'),
-        seeAnswer = $('#skipAction');
+    link: function(scope) {
+      scope.selectAnswer = function(index) {
+        if (!scope.isConfirmClicked) {
+          var answers = scope.items[index],
+          nexAction = $('#nextAction'),
+          seeAnswer = $('#skipAction');
 
-        if (!answers.selected) {
-          answers.selected = true;
-          nexAction.addClass('btn-primary');
-          seeAnswer.addClass('hide');
-        } else {
-          answers.selected = false;
-          if (!_.find(scope.items, { 'selected': true })) {
-            nexAction.removeClass('btn-primary');
-            seeAnswer.removeClass('hide');
+          if (!answers.selected) {
+            answers.selected = true;
+            nexAction.addClass('btn-primary');
+            seeAnswer.addClass('hide');
+          } else {
+            answers.selected = false;
+            if (!_.find(scope.items, {
+              'selected': true
+            })) {
+              nexAction.removeClass('btn-primary');
+              seeAnswer.removeClass('hide');
+            }
           }
         }
       };
@@ -57,133 +65,163 @@ practiceGame.directive('oneChoice', function () {
     scope: {
       items: '=items',
       showExplanation: '=',
-      hasExplanation: '&'
+      hasExplanation: '&',
+      isConfirmClicked: '='
     }
   };
 })
 
-.directive('multipleMatrix2x3', function () {
+.directive('multipleMatrix2x3', function() {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/matrix2x3.tpl.html',
-    link: function (scope) {
+    link: function(scope) {
 
-      scope.selectAnswer = function (index, mGroup) {
-        var answer = scope.items[index],
-        answerId = answer.id,
-        nexAction = $('#nextAction'),
-        seeAnswer = $('#skipAction'),
-        currentSection = _.filter(scope.items, function (answer) { return answer.matrix_group == mGroup}),
-        trueSelected = _.filter(currentSection, { 'selected': true });
+      scope.selectAnswer = function(index, mGroup) {
+        if (!scope.isConfirmClicked) {
+          var answer = scope.items[index],
+          answerId = answer.id,
+          nexAction = $('#nextAction'),
+          seeAnswer = $('#skipAction'),
+          currentSection = _.filter(scope.items, function(answer) {
+            return answer.matrix_group == mGroup
+          }),
+          trueSelected = _.filter(currentSection, {
+            'selected': true
+          });
 
-        if (trueSelected) {
-          _.forEach(currentSection, function (answer) { if (answerId != answer.id) answer.selected = false; });
-        }
+          if (trueSelected) {
+            _.forEach(currentSection, function(answer) {
+              if (answerId != answer.id) answer.selected = false;
+            });
+          }
 
-        if (!answer.selected) {
-          answer.selected = true;
-          nexAction.addClass('btn-primary');
-          seeAnswer.addClass('hide');
-        } else {
-          answer.selected = false;
-          if (!_.find(scope.items, { 'selected': true })) {
-            nexAction.removeClass('btn-primary');
-            seeAnswer.removeClass('hide');
+          if (!answer.selected) {
+            answer.selected = true;
+            nexAction.addClass('btn-primary');
+            seeAnswer.addClass('hide');
+          } else {
+            answer.selected = false;
+            if (!_.find(scope.items, {
+              'selected': true
+            })) {
+              nexAction.removeClass('btn-primary');
+              seeAnswer.removeClass('hide');
+            }
           }
         }
-
       };
     },
     scope: {
       items: '=items',
       showExplanation: '=',
-      hasExplanation: '&'
+      hasExplanation: '&',
+      isConfirmClicked: '='
     }
   };
 })
 
-.directive('multipleMatrix3x3', function () {
+.directive('multipleMatrix3x3', function() {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/matrix3x3.tpl.html',
-    link: function (scope) {
-      scope.selectAnswer = function (index, mGroup) {
-        var answer = scope.items[index],
-        answerId = answer.id,
-        nexAction = $('#nextAction'),
-        seeAnswer = $('#skipAction'),
-        currentSection = _.filter(scope.items, function (answer) { return answer.matrix_group == mGroup}),
-        trueSelected = _.filter(currentSection, { 'selected': true });
+    link: function(scope) {
+      scope.selectAnswer = function(index, mGroup) {
+        if (!scope.isConfirmClicked) {
+          var answer = scope.items[index],
+          answerId = answer.id,
+          nexAction = $('#nextAction'),
+          seeAnswer = $('#skipAction'),
+          currentSection = _.filter(scope.items, function(answer) {
+            return answer.matrix_group == mGroup
+          }),
+          trueSelected = _.filter(currentSection, {
+            'selected': true
+          });
 
-        if (trueSelected) {
-          _.forEach(currentSection, function (answer) { if (answerId != answer.id) answer.selected = false; });
-        }
+          if (trueSelected) {
+            _.forEach(currentSection, function(answer) {
+              if (answerId != answer.id) answer.selected = false;
+            });
+          }
 
-        if (!answer.selected) {
-          answer.selected = true;
-          nexAction.addClass('btn-primary');
-          seeAnswer.addClass('hide');
-        } else {
-          answer.selected = false;
-          if (!_.find(scope.items, { 'selected': true })) {
-            nexAction.removeClass('btn-primary');
-            seeAnswer.removeClass('hide');
+          if (!answer.selected) {
+            answer.selected = true;
+            nexAction.addClass('btn-primary');
+            seeAnswer.addClass('hide');
+          } else {
+            answer.selected = false;
+            if (!_.find(scope.items, {
+              'selected': true
+            })) {
+              nexAction.removeClass('btn-primary');
+              seeAnswer.removeClass('hide');
+            }
           }
         }
-
       };
     },
     scope: {
       items: '=items',
       showExplanation: '=',
-      hasExplanation: '&'
+      hasExplanation: '&',
+      isConfirmClicked: '='
     }
   };
 })
 
-.directive('twoChoice', function () {
+.directive('twoChoice', function() {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/twoChoice.tpl.html',
-    link: function (scope) {
-      scope.maxOpt=[];
-      scope.selectAnswer = function (index) {
-
-        var answer = scope.items[index],
-        nexAction = $('#nextAction'),
-        seeAnswer = $('#skipAction');
-        if (!answer.selected) {
-          /*validation which takes care to keep just 2 options selected*/
-          if (scope.maxOpt.length >= 2) {
-            var ansR = _.find(scope.items, { 'id': scope.maxOpt[0] });
-            ansR.selected = false;
-            scope.maxOpt = _.filter(scope.maxOpt, function (num, i) { return i != 0 });
-          }
-          scope.maxOpt.push(answer.id);
-          answer.selected = true;
-          nexAction.addClass('btn-primary');
-          seeAnswer.addClass('hide');
-        } else {
-          scope.maxOpt = _.filter(scope.maxOpt, function (num) { return num != answer.id });
-          answer.selected = false;
-          if (!_.find(scope.items, { 'selected': true })) {
-            nexAction.removeClass('btn-primary');
-            seeAnswer.removeClass('hide');
+    link: function(scope) {
+      scope.maxOpt = [];
+      scope.selectAnswer = function(index) {
+        if (!scope.isConfirmClicked) {
+          var answer = scope.items[index],
+          nexAction = $('#nextAction'),
+          seeAnswer = $('#skipAction');
+          if (!answer.selected) {
+            /*validation which takes care to keep just 2 options selected*/
+            if (scope.maxOpt.length >= 2) {
+              var ansR = _.find(scope.items, {
+                'id': scope.maxOpt[0]
+              });
+              ansR.selected = false;
+              scope.maxOpt = _.filter(scope.maxOpt, function(num, i) {
+                return i != 0
+              });
+            }
+            scope.maxOpt.push(answer.id);
+            answer.selected = true;
+            nexAction.addClass('btn-primary');
+            seeAnswer.addClass('hide');
+          } else {
+            scope.maxOpt = _.filter(scope.maxOpt, function(num) {
+              return num != answer.id
+            });
+            answer.selected = false;
+            if (!_.find(scope.items, {
+              'selected': true
+            })) {
+              nexAction.removeClass('btn-primary');
+              seeAnswer.removeClass('hide');
+            }
           }
         }
-
       };
     },
     scope: {
-      maxOpt:'=',
+      maxOpt: '=',
       items: '=items',
       showExplanation: '=',
-      hasExplanation: '&'
+      hasExplanation: '&',
+      isConfirmClicked: '='
     }
   };
 })
 
-.directive('provisionalSat', function () {
+.directive('provisionalSat', function() {
 
   function validateEntry(value) {
     if (angular.isUndefined(value) || value === '' || value === null) {
@@ -199,8 +237,7 @@ practiceGame.directive('oneChoice', function () {
     if (isValid) {
       nexAction.addClass('btn-primary');
       seeAnswer.addClass('hide');
-    }
-    else {
+    } else {
       nexAction.removeClass('btn-primary');
       seeAnswer.removeClass('hide');
     }
@@ -216,9 +253,9 @@ practiceGame.directive('oneChoice', function () {
       portal: '=',
       answerStatus: '='
     },
-    link: function (scope) {
+    link: function(scope) {
 
-      scope.$watch('portal.numerator', function (newVal, oldVal) {
+      scope.$watch('portal.numerator', function(newVal, oldVal) {
         scope.isNumeratorValid = validateEntry(newVal);
         handleValidation(scope.isNumeratorValid);
       });
@@ -227,19 +264,18 @@ practiceGame.directive('oneChoice', function () {
   };
 })
 
-.directive('sat', function (questionTypesService) {
+.directive('sat', function(questionTypesService) {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/sat.tpl.html',
-    link: function () {
+    link: function() {
       questionTypesService.satFactory();
     },
-    scope: {
-    }
+    scope: {}
   };
 })
 
-.directive('numericEntry', function (questionTypesService) {
+.directive('numericEntry', function(questionTypesService) {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/numericEntry.tpl.html',
@@ -251,14 +287,14 @@ practiceGame.directive('oneChoice', function () {
       answerStatus: '='
     },
 
-    link: function (scope) {
+    link: function(scope) {
       questionTypesService.numericEntry(scope);
     }
 
   };
 })
 
-.directive('fractionEntry', function (questionTypesService) {
+.directive('fractionEntry', function(questionTypesService) {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/fractionEntry.tpl.html',
@@ -270,13 +306,13 @@ practiceGame.directive('oneChoice', function () {
       answerStatus: '='
 
     },
-    link: function (scope) {
+    link: function(scope) {
       questionTypesService.fractionEntry(scope);
     }
   };
 })
 
-.directive('ngCustomTopics', function () {
+.directive('ngCustomTopics', function() {
 
   function setSelect2Settings() {
     var elm = $('#practice-list select');
@@ -284,7 +320,7 @@ practiceGame.directive('oneChoice', function () {
       allowClear: true
     });
 
-    elm.on("change", function (e) {
+    elm.on("change", function(e) {
       if (e.added) {
 
         $(e.added.element).css("background", '#f4b04f');
@@ -300,12 +336,12 @@ practiceGame.directive('oneChoice', function () {
       off_state_content: '<span class="fa fa-times" style="font-size:11px;"></span>'
     });
 
-    $('#practice-settings-toggler').click(function () {
+    $('#practice-settings-toggler').click(function() {
       $('#practice-settings').toggleClass('open');
       return false;
     });
 
-    $('#practice-settings-list li > span').click(function () {
+    $('#practice-settings-list li > span').click(function() {
       $(this).parents('li').find('.switcher').click();
     });
 
@@ -314,7 +350,7 @@ practiceGame.directive('oneChoice', function () {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/practice/directives.tpl/custom-practice.tpl.html',
-    link: function () {
+    link: function() {
       setSelect2Settings();
       togglePanel();
     }
@@ -322,7 +358,7 @@ practiceGame.directive('oneChoice', function () {
   };
 })
 
-.directive('questionTiming', function () {
+.directive('questionTiming', function() {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/questionTiming.tpl.html',
@@ -335,7 +371,7 @@ practiceGame.directive('oneChoice', function () {
       xpTag: '=',
       lastAnswerLoaded: '='
     },
-    link: function (scope) {
+    link: function(scope) {
       scope.showPercAnswered = !(scope.lastAnswerLoaded === 'NumericEntry' || scope.lastAnswerLoaded === 'NumericEntryFraction');
 
       scope.compAvgStatus = ((scope.yourTime - scope.data.avg_time_to_answer) > 0);
@@ -349,7 +385,7 @@ practiceGame.directive('oneChoice', function () {
   };
 })
 
-.directive('questionTagsOnly', function () {
+.directive('questionTagsOnly', function() {
   return {
     restrict: 'A',
     replace: true,
@@ -360,7 +396,7 @@ practiceGame.directive('oneChoice', function () {
   };
 })
 
-.directive('questionTags', function () {
+.directive('questionTags', function() {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/questionsTags.tpl.html',
@@ -370,7 +406,7 @@ practiceGame.directive('oneChoice', function () {
   };
 })
 
-.directive('answerType', function ($compile) {
+.directive('answerType', function($compile) {
 
   var fractionTpl = '<div fraction-entry answer-status="answerStatus" ' +
   'portal="portalC" items="items" show-explanation="showExplanation" ' +
@@ -378,12 +414,12 @@ practiceGame.directive('oneChoice', function () {
   '</div>',
 
   matrix2x3Tpl = '<div multiple-matrix2x3 items="items" show-explanation="showExplanation"' +
-  'has-explanation="answerHasExplanation(index)"></div>',
+  'has-explanation="answerHasExplanation(index)" is-confirm-clicked="isbuttonClicked"></div>',
 
   matrix3x3Tpl = ' <div multiple-matrix3x3 items="items" show-explanation="showExplanation" ' +
-  'has-explanation="answerHasExplanation(index)"></div>',
+  'has-explanation="answerHasExplanation(index)" is-confirm-clicked="isbuttonClicked"></div>',
 
-  multipleChoiceTpl = '<div multiple-choice items="items" show-explanation="showExplanation" ></div>',
+  multipleChoiceTpl = '<div multiple-choice items="items" show-explanation="showExplanation" is-confirm-clicked="isbuttonClicked"></div>',
 
   numericEntryTpl = '<div numeric-entry answer-status="answerStatus" portal="portalC" items="items" ' +
   'show-explanation="showExplanation" has-explanation="answerHasExplanation(index)"></div>',
@@ -392,14 +428,14 @@ practiceGame.directive('oneChoice', function () {
   'show-explanation="showExplanation" has-explanation="answerHasExplanation(index)"></div>',
 
   oneChoiceTpl = '<div one-choice items="items" show-explanation="showExplanation" ' +
-  'has-explanation="answerHasExplanation(index)"></div>',
+  'has-explanation="answerHasExplanation(index)" is-confirm-clicked="isbuttonClicked"></div>',
 
   satTpl = ' <div sat></div>',
 
   twoChoiceTpl = '<div  two-choice items="items" max-opt="maxOpts" show-explanation="showExplanation" ' +
-  'has-explanation="answerHasExplanation(index)"></div>';
+  'has-explanation="answerHasExplanation(index)" is-confirm-clicked="isbuttonClicked"></div>';
 
-  var getAnswerTemplate = function (questionKind) {
+  var getAnswerTemplate = function(questionKind) {
     var template = '';
 
     switch (questionKind) {
@@ -419,7 +455,7 @@ practiceGame.directive('oneChoice', function () {
       template = fractionTpl;
       break;
       case 'SPR':
-      template=provisionalSatTpl;
+      template = provisionalSatTpl;
       break;
       case 'NumericEntry':
       template = numericEntryTpl;
@@ -436,11 +472,11 @@ practiceGame.directive('oneChoice', function () {
     return template;
   };
 
-  var linker = function (scope, element, attrs) {
+  var linker = function(scope, element, attrs) {
     element.html(getAnswerTemplate(attrs.content)).show();
     $compile(element.contents())(scope);
 
-    scope.$watch('lastAnswerLoaded', function (value) {
+    scope.$watch('lastAnswerLoaded', function(value) {
 
       element.html(getAnswerTemplate(value)).show();
       $compile(element.contents())(scope);
@@ -458,7 +494,7 @@ practiceGame.directive('oneChoice', function () {
   };
 })
 
-.directive('questionShareList', function (environmentCons) {
+.directive('questionShareList', function(environmentCons) {
   return {
     restrict: 'A',
     templateUrl: 'app/practiceGame/common/directives.tpl/questionShareList.tpl.html',
@@ -466,7 +502,7 @@ practiceGame.directive('oneChoice', function () {
       questCount: '=',
       currentGroup: '='
     },
-    link: function (scope) {
+    link: function(scope) {
       scope.currentDomain = environmentCons.localGrockit + '#/' + scope.currentGroup + '/question/';
     }
 
@@ -495,4 +531,3 @@ practiceGame.directive('oneChoice', function () {
 
   };
 });
-

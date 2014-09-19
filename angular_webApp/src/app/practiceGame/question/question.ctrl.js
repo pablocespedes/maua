@@ -8,6 +8,7 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
     $scope.breadcrumbs = breadcrumbs;
     breadcrumbs.options = { 'practice': $scope.activeTracks.trackTitle };
 
+    $scope.isbuttonClicked=false;
     $scope.portalC = $scope;
     $scope.loading = true;
     $scope.nextActionTitle = 'Confirm Choice';
@@ -84,9 +85,6 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         });
       },
       presentQuestion: function (questionId) {
-
-
-
         practiceSrv.loadQuestion(questionId).then(function (result) {
 
           var questionSet = result.questionResult.question_set,
@@ -125,6 +123,7 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         if (angular.isDefined($scope.answerStatus)) {
           this.resetLayout();
           Question.displayExplanationInfo();
+          $scope.isbuttonClicked=true;
 
         }
       },
@@ -138,6 +137,7 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         if (angular.isDefined(generalResult)) {
            this.resetLayout();
            Question.bindExplanationInfo(generalResult);
+            $scope.isbuttonClicked=true;
         }
       },
       evaluateConfirmMethod: function () {
@@ -163,11 +163,13 @@ practiceGame.controller('QuestionController',['$scope','practiceSrv','Utilities'
         if (angular.isDefined($scope.answerStatus)) {
           this.resetLayout();
           Question.displayExplanationInfo();
+          $scope.isbuttonClicked=true;
 
         }
 
       },
       nextQuestion: function () {
+        $scope.isbuttonClicked=false;
         $scope.numerator = null;
         $scope.denominator = null;
         angular.element('#answercontent *').removeClass('btn-primary btn-danger btn-success').removeAttr('disabled');
