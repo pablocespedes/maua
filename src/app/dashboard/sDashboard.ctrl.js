@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   angular
-  .module('grockitApp.home')
+  .module('grockitApp.dashboard')
   .controller('SimpleDashController', SimpleDashController);
 
   /*Manually injection will avoid any minification or injection problem*/

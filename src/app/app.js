@@ -44,7 +44,7 @@
   'grockitApp.practice',
   'grockitApp.practice.factories',
   'grockitApp.question',
-  'grockitApp.home'
+  'grockitApp.dashboard'
   ]))
 );
 
