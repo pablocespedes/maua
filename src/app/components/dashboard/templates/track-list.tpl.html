@@ -1,0 +1,38 @@
+<div accordion close-others="true">
+  <div accordion-group ng-repeat="track in tracks" is-custom-toggle="true">
+    <div accordion-heading>
+      <span class="text-lg" ng-click="startPractice($index)">
+        <strong>
+          <span class="text-slim" ng-bind="track.short_name"></span>
+        </strong>
+      </span>
+      <div class=" text-center pull-right" ng-if="isVisible">
+        <div class="" ng-show="hasScore(track)">
+          <h4 class="note-title"><span class="text-primary" ng-bind="getScore(track)"></span><br>
+            <span class="text-xs float-right valign-bottom">Your Score Prediction</span>
+          </h4>
+        </div>
+        <div ng-hide="hasScore(track)">
+          <button class="get-score-prediction btn-lg float-right btn btn-labeled btn-success" ng-click="getYourScorePredictionUrl(track)">Get your Score Prediction</button>
+        </div>
+      </div>
+    </div accordion-heading>
+    <div class="col-md-6 track-list-row">
+      <h4 class="text-normal">
+        <span class="text-normal" ng-bind="track.short_name"></span>
+      </h4>
+    </div>
+    <div class="col-md-4 track-list-margin">
+      <div class="progress">
+        <div class="progress-bar progress-bar-success" style="width: 35%"></div>
+        <div class="progress-bar progress-bar-warning" style="width: 20%"></div>
+        <div class="progress-bar progress-bar-danger" style="width: 10%"></div>
+      </div>
+    </div>
+    <div class="col-md-2 text-right pull-right no-padding-r track-list-margin">
+      <span class="text-semibold">21/200</span>
+      |
+      <span class="text-semibold">70% Accuracy</span>
+    </div>
+  </div accordion-group>
+</div accordion>
