@@ -10,11 +10,11 @@ angular.module("grockitApp.application")
 .factory('dateFormatter',dateFormatter)
 .service('setCurrentProduct',setCurrentProduct);
 
-utilities.$inject = ['$rootScope', '$http', '$location', '$route', '$q', '$window', 'webStorage', 'VideoService', 'environmentCons'];
+utilities.$inject = ['$rootScope', '$http', '$location', '$route', '$q', '$window', 'webStorage', 'YoutubeVideoApi', 'environmentCons'];
 grockitNewFeatures.$inject =['$http', 'utilities', 'environmentCons'];
 Timer.$inject=['$interval', 'serviceFactory'];
 
-function utilities($rootScope, $http, $location, $route, $q, $window, webStorage, VideoService, environmentCons) {
+function utilities($rootScope, $http, $location, $route, $q, $window, webStorage, YoutubeVideoApi, environmentCons) {
   var service = {
     newGrockit: newGrockit,
     originalGrockit: originalGrockit,
@@ -52,7 +52,7 @@ function utilities($rootScope, $http, $location, $route, $q, $window, webStorage
       var video = getYoutubeVideosId(resourceObject.resource);
       video.then(function(idVid) {
         videoId = idVid;
-        return VideoService.setYouTubeTitle(idVid);
+        return YoutubeVideoApi.setYouTubeTitle(idVid);
 
       }).then(function(videoTime) {
         videoObject = {
@@ -124,7 +124,7 @@ function utilities($rootScope, $http, $location, $route, $q, $window, webStorage
   }
 
   function internalRedirect(url) {
-    $location.path(url);
+    return $location.path(url);
   }
 
   function redirect(url) {

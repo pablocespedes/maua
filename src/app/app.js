@@ -3,7 +3,7 @@
  app.config(function($routeProvider) {
  })
  .run(function ($rootScope, $location, Auth,utilities,alerts) {
-   var utilities= utilities.service;
+
    $rootScope.$on("$locationChangeStart", function(event, next, current) {
 
      if (Auth.isLoggedIn()) {

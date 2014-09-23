@@ -11,7 +11,7 @@
     .factory('Level', Level)
     .factory('SplashMessages', SplashMessages);
 
-  practiceSrv.$inject = ['$q', '$sce', '$resource', 'utilities', 'practiceRequests', 'alerts', 'VideoService',
+  practiceSrv.$inject = ['$q', '$sce', '$resource', 'utilities', 'PracticeApi', 'alerts', 'YoutubeVideoApi',
   'environmentCons','practiceConstants'];
 
   function questionTypesService() {
@@ -94,7 +94,7 @@
     }
   }
 
-  function practiceSrv($q, $sce, $resource, utilities, practiceRequests, alerts, VideoService, environmentCons,practiceConstants) {
+  function practiceSrv($q, $sce, $resource, utilities, PracticeApi, alerts, YoutubeVideoApi, environmentCons,practiceConstants) {
 
     var service = {
       getRoundSession: getRoundSession,
@@ -180,7 +180,7 @@
     function getRoundSession(questionToRequest, gameId) {
       var deferred = $q.defer(),
         resultObject = {};
-      practiceRequests.roundSessions().createQuestionPresentation(gameId, questionToRequest).then(function(result) {
+      PracticeApi.createQuestionPresentation(gameId, questionToRequest).then(function(result) {
 
         resultObject.roundSessionAnswer = result.data.round_session;
         deferred.resolve(resultObject);
@@ -197,7 +197,7 @@
         setLayoutType = false,
         resultObject = {};
 
-      practiceRequests.questions().getQuestionById(questionToRequest)
+      PracticeApi.getQuestionById(questionToRequest)
         .then(function(result) {
 
           resultObject.questionResult = result.data.question;
@@ -263,7 +263,7 @@
             if (answer.selected) {
 
              if(angular.isDefined(roundSessionAnswer)){
-              practiceRequests.roundSessions().updateAnswer(roundSessionAnswer.id, answer.id);
+              PracticeApi.updateAnswer(roundSessionAnswer.id, answer.id);
              }
             } else {
               answerStatus = false;
@@ -272,7 +272,7 @@
           } else {
             if (answer.selected) {
              if(angular.isDefined(roundSessionAnswer)){
-              practiceRequests.roundSessions().updateAnswer(roundSessionAnswer.id, answer.id);
+              PracticeApi.updateAnswer(roundSessionAnswer.id, answer.id);
              }
               angular.element(selectIdButton).addClass('btn-danger');
               angular.element(selectIdButton).parents('#answer').addClass('incorrectAnswer');
@@ -353,7 +353,7 @@
       if (questionResult.youtube_video_id !== null) {
         videoObject.showVideo = true;
         videoObject.videoId = questionResult.youtube_video_id;
-        VideoService.setYouTubeTitle(videoObject.videoId).then(function(videoTime) {
+        YoutubeVideoApi.setYouTubeTitle(videoObject.videoId).then(function(videoTime) {
           videoObject.videoText = 'Video Explanation (' + videoTime + ')';
           deferred.resolve(videoObject);
         });
@@ -440,7 +440,7 @@
           answerStatus = answerEval;
         };
 
-        practiceRequests.roundSessions().updateAnswer(roundSessionAnswer.id, selectedAnswer);
+        PracticeApi.updateAnswer(roundSessionAnswer.id, selectedAnswer);
 
         angular.element("#answercontent *").prop('disabled', true);
         return answerStatus;

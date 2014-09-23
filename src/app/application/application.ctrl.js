@@ -6,11 +6,11 @@
 
   /*Manually injection will avoid any minification or injection problem*/
   ApplicationController.$inject = ['$scope', '$location', '$route', 'Auth', 'utilities', 'grockitNewFeatures', 'ListenloopUtility',
-  'GaUtility', 'InspectletUtility', 'Tracks', 'Groups', 'alerts', 'Headers', 'setCurrentProduct'
+  'GaUtility', 'InspectletUtility', 'TracksApi', 'GroupsApi', 'alerts', 'Headers', 'setCurrentProduct'
   ];
 
   function ApplicationController($scope, $location, $route, Auth, utilities, grockitNewFeatures, ListenloopUtility,
-    GaUtility, InspectletUtility, Tracks, Groups, alerts, Headers, setCurrentProduct) {
+    GaUtility, InspectletUtility, TracksApi, GroupsApi, alerts, Headers, setCurrentProduct) {
     /* jshint validthis: true */
     var vmApp = this;
     /* recommend: Using function declarations and bindable members up top.*/
@@ -100,7 +100,7 @@
 
         if (vmApp.currentUser.groupMemberships.length > 0) {
 
-          Groups.getGroups().membershipGroups(true).then(function(result) {
+          GroupsApi.membershipGroups(true).then(function(result) {
             var responseGroups = result.data.groups;
             if (!!responseGroups) {
 

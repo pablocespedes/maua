@@ -4,9 +4,9 @@
   .controller('QuestionController', QuestionController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  QuestionController.$inject = ['practiceSrv', 'utilities', 'breadcrumbs', 'alerts', 'practiceRequests', 'Timer', 'SplashMessages'];
+  QuestionController.$inject = ['practiceSrv', 'utilities', 'breadcrumbs', 'alerts', 'PracticeApi', 'Timer', 'SplashMessages'];
 
-  function QuestionController(practiceSrv, utilities, breadcrumbs, alerts, practiceRequests, Timer, SplashMessages) {
+  function QuestionController(practiceSrv, utilities, breadcrumbs, alerts, PracticeApi, Timer, SplashMessages) {
     /* jshint validthis: true */
     var vmPr = this;
     vmPr.activeTracks = utilities.getActiveTrack();
@@ -205,7 +205,7 @@
       presentQuestion: function(questionId) {
         practiceSrv.loadQuestion(questionId).then(function(result) {
           var questionSet = result.questionResult.question_set;
-          practiceRequests.practiceGames().createNewGameSubtrack(vmPr.activeGroupId, questionSet.subtrack_id)
+          PracticeApi.createNewGameSubtrack(vmPr.activeGroupId, questionSet.subtrack_id)
           .then(function(resultGame) {
             return practiceSrv.getRoundSession(questionId, resultGame.data.practice_game.id);
           })
