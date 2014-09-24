@@ -6,7 +6,7 @@
 
   function run($rootScope, $location, $window, Auth, utilities, alerts, GroupsApi, currentProduct) {
 
-    $rootScope.$on("$locationChangeStart", function(event, next, current) {
+    $rootScope.$on("$locationChangeSuccess", function(event, next, current) {
       if (Auth.isLoggedIn()) {
 
         Auth.getUpdateUserData().then(function(response) {
@@ -15,7 +15,6 @@
             GroupsApi.membershipGroups(true).then(function(result) {
               var groups = result.data.groups;
               if ($location.path() === '/' || $location.path() === '/' + response.currentGroup || $location.path() == '') {
-                currentProduct.currentGroupId(response.currentGroup);
                 utilities.internalRedirect('/' + response.currentGroup + '/dashboard');
               } else {
                 var urlGroup = utilities.getCurrentParam('subject'),
@@ -26,7 +25,9 @@
                 if (angular.isUndefined(validateGroupExists)) {
                   $window.location = '404.html';
                 } else {
+
                   currentProduct.currentGroupId(urlGroup);
+
                 }
               }
             });
@@ -41,7 +42,7 @@
         event.preventDefault();
 
       }
-    });
+   });
 }
 }
 (angular.module("grockitApp", [

@@ -10,11 +10,6 @@
     /* jshint validthis: true */
     var vmPr = this;
     vmPr.activeTracks = utilities.getActiveTrack();
-    currentProduct.observeProduct().then(null, null, function(result){
-       vmPr.activeGroupId = result;
-    });
-
-    vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
     vmPr.breadcrumbs = breadcrumbs;
     breadcrumbs.options = {
       'practice': vmPr.activeTracks.trackTitle
@@ -34,8 +29,29 @@
     vmPr.answerHasExplanation = answerHasExplanation;
     vmPr.revealExplanation = revealExplanation;
     vmPr.nextAction = nextAction;
-    vmPr.init = init;
 
+    init();
+
+    function init() {
+      currentProduct.observeProduct().then(null, null, function(groupId) {
+        if (vmPr.activeGroupId !== groupId) {
+          vmPr.activeGroupId = groupId;
+          vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
+
+          var questionId = utilities.getCurrentParam('questionId');
+          if (angular.isDefined(questionId)) {
+            Question.presentQuestion(questionId);
+            timerObject.initPracticeTimer();
+            timerObject.initQuestionTimer();
+          } else {
+            alerts.showAlert('Oh sorry, We have problems to load your question, please let us know on feedback@grockit.com.', 'danger');
+          }
+
+        }
+
+      });
+
+    };
 
     function answerHasExplanation(index) {
       var answer = vmPr.questionResult.answers[index];
@@ -56,17 +72,6 @@
       }
 
     }
-
-    function init() {
-      var questionId = utilities.getCurrentParam('questionId');
-      if (angular.isDefined(questionId)) {
-        Question.presentQuestion(questionId);
-        timerObject.initPracticeTimer();
-        timerObject.initQuestionTimer();
-      } else {
-        alerts.showAlert('Oh sorry, We have problems to load your question, please let us know on feedback@grockit.com.', 'danger');
-      }
-    };
 
 
     var timerObject = {

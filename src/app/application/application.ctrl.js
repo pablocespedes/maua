@@ -31,13 +31,11 @@
 
       /*update group Name*/
       utilities.setGroupTitle(vmApp.groups.linkedGroups[index].name);
+      var currentGroupId= vmApp.groups.linkedGroups[index].id;
+      currentProduct.currentGroupId(currentGroupId);
 
-      vmApp.currentUser.currentGroup = vmApp.groups.linkedGroups[index].id;
-
-      Auth.updateUserInfo(vmApp.currentUser);
-      vmApp.activeGroupId = utilities.getActiveGroup();
-      Application.hideVideoOption(vmApp.activeGroupId);
-      Application.hideStudyPlan(vmApp.activeGroupId);
+      Application.hideVideoOption(currentGroupId);
+      Application.hideStudyPlan(currentGroupId);
     };
 
     function logOut() {
@@ -140,22 +138,12 @@
 
         }
       },
-      fetchLeftNavTracksData: function() {
-        vmApp.tracksList = [];
-        Tracks.getTracks().allByGroup(vmApp.activeGroupId).then(function(result) {
-          var response = result.data;
-          vmApp.tracksList = response.tracks;
-
-        }).catch(function errorHandler(e) {
-          alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
-        });
-      },
       init: function() {
         Auth.getCurrentUserInfo().then(function(response) {
           if (response != null) {
             vmApp.currentUser = response;
-            currentProduct.observeProduct().then(null, null, function(result){
-                vmApp.activeGroupId = result;
+            currentProduct.observeProduct().then(null, null, function(groupId){
+                vmApp.activeGroupId = groupId;
             });
 
             Application.hideVideoOption(vmApp.activeGroupId);

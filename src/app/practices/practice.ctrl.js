@@ -12,12 +12,6 @@
     /* jshint validthis: true */
     var vmPr = this;
     vmPr.activeTracks = utilities.getActiveTrack();
-    currentProduct.observeProduct().then(null, null, function(result){
-        vmPr.activeGroupId = result;
-    });
-
-    vmPr.activeGroupId = utilities.getActiveGroup();
-    vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
     vmPr.breadcrumbs = breadcrumbs;
     breadcrumbs.options = {
       'practice': vmPr.activeTracks.trackTitle
@@ -37,26 +31,37 @@
     vmPr.lastAnswerLoaded = '';
     vmPr.loadingMessage = SplashMessages.getLoadingMessage();
     vmPr.isDisabled = false;
-    vmPr.init = init;
     vmPr.answerHasExplanation = answerHasExplanation;
     vmPr.nextAction = nextAction;
     vmPr.revealExplanation=revealExplanation;
 
+    init();
+
     function init() {
-      var createGame = PracticeApi.createNewPracticeGame(vmPr.activeGroupId, vmPr.activeTracks.tracks[0]);
 
-      createGame.then(function(game) {
-        vmPr.gameId = game.data.practice_game.id;
+      currentProduct.observeProduct().then(null, null, function(groupId) {
+        if (vmPr.activeGroupId !== groupId) {
+          vmPr.activeGroupId = groupId;
+          vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
 
-        customPractice.getQuestionSets();
-        timerObject.initPracticeTimer();
-        timerObject.initQuestionTimer();
+          var createGame = PracticeApi.createNewPracticeGame(vmPr.activeGroupId, vmPr.activeTracks.tracks[0]);
 
-      }).catch(function errorHandler(e) {
+          createGame.then(function(game) {
+            vmPr.gameId = game.data.practice_game.id;
 
-        alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
+            customPractice.getQuestionSets();
+            timerObject.initPracticeTimer();
+            timerObject.initQuestionTimer();
+
+          }).catch(function errorHandler(e) {
+
+            alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
+
+          });
+        }
 
       });
+
     };
 
     function answerHasExplanation(index) {

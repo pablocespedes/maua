@@ -54,38 +54,42 @@
 
     function init() {
       Auth.getCurrentUserInfo().then(function(userInfo) {
-        vmDash.user_id = userInfo.userId;
+        if (userInfo !== null) {
+          vmDash.user_id = userInfo.userId;
 
-        currentProduct.observeProduct().then(null, null, function(groupId) {
-          vmDash.activeGroupId = groupId;
-          GroupsApi.membershipGroups(false).then(function(result) {
-            var groups = result.data.groups,
-            currenTitle = _.find(groups, {
-              'id': vmDash.activeGroupId
+          currentProduct.observeProduct().then(null, null, function(groupId) {
+            vmDash.activeGroupId = groupId;
+
+            vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
+
+            GroupsApi.membershipGroups(false).then(function(result) {
+              var groups = result.data.groups,
+              currenTitle = _.find(groups, {
+                'id': vmDash.activeGroupId
+              });
+
+              if (angular.isDefined(currenTitle)) {
+                utilities.setGroupTitle(currenTitle.name);
+              }
             });
 
-            if (angular.isDefined(currenTitle)) {
-              utilities.setGroupTitle(currenTitle.name);
-            }
+            if (vmDash.enableScore)
+              SimpleDashBoard.fetchScorePrediction();
+
+
+            SimpleDashBoard.getHistoryInformation();
+
+            SimpleDashBoard.fetchTracksData();
+
+            SimpleDashBoard.getChallenge(vmDash.activeGroupId);
+
+            vmDash.historyVisible = false;
           });
+        }
 
-
-          vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
-          if (vmDash.enableScore)
-            SimpleDashBoard.fetchScorePrediction();
-
-
-          SimpleDashBoard.getHistoryInformation();
-
-          SimpleDashBoard.fetchTracksData();
-
-          SimpleDashBoard.getChallenge(vmDash.activeGroupId);
-
-          vmDash.historyVisible = false;
-        });
 
       });
-    };
+};
 
 
     var SimpleDashBoard = {
