@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   angular
-  .module('grockitApp.home')
+  .module('grockitApp.dashboard')
   .factory('history', history);
 
 

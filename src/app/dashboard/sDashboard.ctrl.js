@@ -1,14 +1,15 @@
 (function() {
   'use strict';
   angular
-  .module('grockitApp.home')
+  .module('grockitApp.dashboard')
   .controller('SimpleDashController', SimpleDashController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  SimpleDashController.$inject = ['Users', 'history', 'Tracks', 'utilities', 'Auth', 'alerts', 'Challenge',
-  'Groups', 'setCurrentProduct'];
+  SimpleDashController.$inject = ['UsersApi', 'history', 'TracksApi', 'utilities', 'Auth', 'alerts', 'ChallengeApi',
+  'GroupsApi', 'currentProduct'
+  ];
 
-  function SimpleDashController(Users, history, Tracks, utilities, Auth, alerts, Challenge, Groups, setCurrentProduct) {
+  function SimpleDashController(UsersApi, history, TracksApi, utilities, Auth, alerts, ChallengeApi, GroupsApi, currentProduct) {
     /* jshint validthis: true */
     var vmDash = this;
 
@@ -21,7 +22,54 @@
     vmDash.getScore = getScore;
     vmDash.customPractice = customPractice;
     vmDash.StartPractice = StartPractice;
-    vmDash.init = init;
+
+    init();
+
+    function init() {
+      Auth.getCurrentUserInfo().then(function(userInfo) {
+        if (userInfo !== null) {
+          vmDash.user_id = userInfo.userId;
+
+
+          currentProduct.notifyGroups().then(function(groupId) {
+            vmDash.activeGroupId = groupId;
+
+            vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
+
+            GroupsApi.membershipGroups(false).then(function(result) {
+              var groups = result.data.groups,
+              currenTitle = _.find(groups, {
+                'id': vmDash.activeGroupId
+              });
+
+              if (angular.isDefined(currenTitle)) {
+                utilities.setGroupTitle(currenTitle.name);
+              }
+            });
+
+            if (vmDash.enableScore)
+              SimpleDashBoard.fetchScorePrediction();
+
+
+            SimpleDashBoard.getHistoryInformation();
+
+            SimpleDashBoard.fetchTracksData();
+
+            SimpleDashBoard.getChallenge(vmDash.activeGroupId);
+
+            vmDash.historyVisible = false;
+
+
+          });
+
+        }
+
+
+      });
+};
+
+
+
 
     function getScore(track) {
       return (vmDash.score) ? vmDash.score.tracks[track.id] : null;
@@ -51,44 +99,12 @@
       }
     };
 
-    function init() {
-      Auth.getCurrentUserInfo().then(function(userInfo) {
-        vmDash.user_id = userInfo.userId;
-
-        vmDash.activeGroupId = userInfo.currentGroup;
-        setCurrentProduct.currentGroupId(vmDash.activeGroupId);
-
-        Groups.getGroups().membershipGroups(false).then(function(result) {
-          var groups = result.data.groups,
-          currenTitle = _.find(groups, {
-            'id': vmDash.activeGroupId
-          });
-          if (angular.isDefined(currenTitle)) {
-            utilities.setGroupTitle(currenTitle.name);
-          }
-        });
-
-
-        vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
-        if (vmDash.enableScore)
-          SimpleDashBoard.fetchScorePrediction();
-
-
-        SimpleDashBoard.getHistoryInformation();
-
-        SimpleDashBoard.fetchTracksData();
-
-        SimpleDashBoard.getChallenge(vmDash.activeGroupId);
-
-        vmDash.historyVisible = false;
-      });
-    };
 
 
     var SimpleDashBoard = {
       fetchTracksData: function() {
         vmDash.loading = true;
-        Tracks.getTracks().allByGroup(vmDash.activeGroupId, true).then(function(response) {
+        TracksApi.allByGroup(vmDash.activeGroupId, true).then(function(response) {
           vmDash.tracks = response.data.tracks;
           vmDash.loading = false;
 
@@ -98,7 +114,7 @@
         });
       },
       fetchScorePrediction: function() {
-        Users.getUser().scorePrediction(vmDash.user_id, vmDash.activeGroupId).then(function(scorePrediction) {
+        UsersApi.scorePrediction(vmDash.user_id, vmDash.activeGroupId).then(function(scorePrediction) {
 
           var scoreData = {};
           vmDash.score = scorePrediction.data;
@@ -122,7 +138,7 @@
       },
       getHistoryInformation: function() {
         vmDash.loading = true;
-        Users.getUser().history(vmDash.user_id, vmDash.activeGroupId).then(function(graphicResult) {
+        UsersApi.history(vmDash.user_id, vmDash.activeGroupId).then(function(graphicResult) {
           var graphicData = graphicResult.data;
           if (angular.isDefined(graphicData) && graphicData.history.length > 0) {
             vmDash.historyVisible = true;
@@ -142,7 +158,7 @@
         });
       },
       getChallenge: function(groupId) {
-        Challenge.challengeGames().getChallenge(groupId).then(function(result) {
+        ChallengeApi.getChallenge(groupId).then(function(result) {
           var response = result.data;
           if (!_.isEmpty(response.challenge_games)) {
             vmDash.isChallengeAvailable = true;

@@ -1,167 +1,204 @@
+(function() {
+  'use strict';
+  angular
+  .module('grockitApp.requests')
+  .factory('Headers', Headers)
+  .factory('UsersApi', UsersApi)
+  .factory('PracticeApi', PracticeApi)
+  .factory('GroupsApi', GroupsApi)
+  .factory('TracksApi', TracksApi)
+  .factory('YoutubeVideoApi', YoutubeVideoApi)
+  .factory('ChallengeApi', ChallengeApi)
 
-request.factory('Users', function(Restangular,Headers) {
-  Headers.updateDefaultHeader();
+  Headers.$inject = ['Restangular'];
+  UsersApi.$inject = ['Restangular', 'Headers'];
+  PracticeApi.$inject = ['Restangular', 'Headers'];
+  GroupsApi.$inject = ['Restangular', 'Headers'];
+  TracksApi.$inject = ['Restangular', 'Headers'];
+  YoutubeVideoApi.$inject = ['$q', 'environmentCons'];
+  ChallengeApi.$inject = ['Restangular', 'Headers'];
 
-  function getUser(){
-    var users = Restangular.service('users');
 
-    return {
-      self: function(){
-       return  users.one('self').get();
-     },
-     scorePrediction: function(userId,activeGroupId) {
+  function Headers(Restangular) {
 
-      return users.one().one(userId).customGET('score_prediction', {group: activeGroupId});
-    },
-    history: function(userId,activeGroupId,trackId) {
-      return  users.one().one(userId).customGET('history', {group: activeGroupId, trackId:trackId});
+    var service = {
+      setDefaultHeader:setDefaultHeader,
+      updateDefaultHeader: updateDefaultHeader,
+      getCookie: getCookie
+    };
+
+    return service;
+
+
+    function setDefaultHeader(sessionId) {
+      Restangular.setDefaultHeaders({
+        'Authorization': 'Token token=' + '"' + sessionId + '="'
+      });
     }
-  }
-}
 
-return {
-  getUser:getUser
-}
-
-});
-
-request.factory('practiceRequests', function(Restangular,Headers) {
-  Headers.updateDefaultHeader();
-
-  function practiceGames() {
-
-    var restPracticeGameObject = Restangular.service('practice_games').one();
-
-    return {
-      getQuestionNewSetByPractice: function (practiceGameId, tracks) {
-        return  restPracticeGameObject.one(practiceGameId, 'sample').customGET('', {'tracks[]': tracks});
-      },
-      createNewPracticeGame: function (groupId,trackId) {
-        return  Restangular.service(groupId).one('tracks').one(trackId).post('practice');
-      },
-      createNewGameSubtrack: function (groupId,subTrackId) {
-        return  Restangular.service(groupId).one('subtracks').one(subTrackId).post('practice');
-      }
-    }
-  }
-
-  function roundSessions(){
-    var roundSessionObject=  Restangular.service('round_sessions').one();
-
-    return{
-      createQuestionPresentation : function(gameId,questionId){
-
-        return roundSessionObject.post('', {game_id: gameId, question_id: questionId});
-      },
-      updateAnswer: function(roundSessionAnswerId,answerId){
-        roundSessionObject.one(roundSessionAnswerId).put({answer_id: answerId});
-      }
-    }
-  }
-
-  function questionSets() {
-    var questionSetObject = Restangular.service('question_sets').one();
-
-    return{
-      getQuestionSetById: function (questionSetId) {
-        return  questionSetObject.one(questionSetId).customGET('');
-      }
-    }
-  }
-
-  function questions(){
-    var questionObject = Restangular.service('questions').one();
-
-    return  {
-      getQuestionById: function(questionId){
-        return  questionObject.one(questionId).customGET('');
-      }
-    }
-  }
-
-  return  {
-    practiceGames :  practiceGames,
-    roundSessions: roundSessions,
-    questionSets: questionSets,
-    questions: questions
-
-  }
-
-});
-
-request.factory('Groups', function(Restangular,Headers) {
-  Headers.updateDefaultHeader();
-
-  function getGroups(){
-    var groups = Restangular.service('groups').one(),
-    currentGroups = null;
-
-    return {
-      membershipGroups: function(shouldUpdate){
-        currentGroups = currentGroups==null || shouldUpdate ? groups.customGET('',{subdomain : 'www'}) : currentGroups;
-        return currentGroups;
-      }
-    }
-  }
-
-  return {
-    getGroups:getGroups
-  }
-
-
-});
-
-request.factory('Tracks', function(Restangular,Headers) {
-  Headers.updateDefaultHeader();
-  function getTracks(){
-    var trackData=null;
-
-    return {
-      allByGroup: function(groupId,shouldUpdate){
-        trackData = trackData==null || shouldUpdate ? Restangular.service(groupId).one('tracks').customGET() : trackData;
-        return trackData;
-      }
-    }
-  }
-
-  return {
-    getTracks:getTracks
-  }
-
-});
-
-request.factory('Headers', function(Restangular) {
-
-
-  return  {
-    setDefaultHeader: function(sessionId) {
-      Restangular.setDefaultHeaders({'Authorization':'Token token=' + '"' + sessionId + '="'});
-    },
-
-    updateDefaultHeader: function() {
+    function updateDefaultHeader() {
       var sessionId = decodeURIComponent(this.getCookie("authentication_token"));
       this.setDefaultHeader(sessionId);
-    },
-    getCookie :function(key) {
+    }
+
+    function getCookie(key) {
       var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
       return keyValue ? keyValue[2] : null;
     }
-
   }
-});
 
-/*Custom request*/
-request.factory("VideoService", function($q,environmentCons) {
+  function UsersApi(Restangular, Headers) {
+    Headers.updateDefaultHeader();
+    var users = Restangular.service('users');
 
-  return{
-    setYouTubeTitle: function (youtubeId) {
+
+    var service = {
+      self: self,
+      scorePrediction: scorePrediction,
+      history: history
+    };
+
+    return service;
+
+
+    function self() {
+      return users.one('self').get();
+    }
+
+    function scorePrediction(userId, activeGroupId) {
+
+      return users.one().one(userId).customGET('score_prediction', {
+        group: activeGroupId
+      });
+    }
+
+    function history(userId, activeGroupId, trackId) {
+      return users.one().one(userId).customGET('history', {
+        group: activeGroupId,
+        trackId: trackId
+      });
+    }
+  }
+
+  function PracticeApi(Restangular, Headers) {
+    Headers.updateDefaultHeader();
+
+    var service = {
+      getQuestionNewSetByPractice: getQuestionNewSetByPractice,
+      createNewPracticeGame: createNewPracticeGame,
+      createNewGameSubtrack: createNewGameSubtrack,
+      createQuestionPresentation: createQuestionPresentation,
+      updateAnswer: updateAnswer,
+      getQuestionSetById: getQuestionSetById,
+      getQuestionById: getQuestionById
+
+    };
+
+    return service;
+
+    /*Practice*/
+    function getQuestionNewSetByPractice(practiceGameId, tracks) {
+      return Restangular.service('practice_games').one().one(practiceGameId, 'sample').customGET('', {
+        'tracks[]': tracks
+      });
+    }
+
+    function createNewPracticeGame(groupId, trackId) {
+      return Restangular.service(groupId).one('tracks').one(trackId).post('practice');
+    }
+
+    function createNewGameSubtrack(groupId, subTrackId) {
+      return Restangular.service(groupId).one('subtracks').one(subTrackId).post('practice');
+    }
+
+    /*Round Sessions*/
+    function createQuestionPresentation(gameId, questionId) {
+      return Restangular.service('round_sessions').one().post('', {
+        game_id: gameId,
+        question_id: questionId
+      });
+    }
+
+    function updateAnswer(roundSessionAnswerId, answerId) {
+      Restangular.service('round_sessions').one().one(roundSessionAnswerId).put({
+        answer_id: answerId
+      });
+    }
+
+    /*question sets*/
+    function getQuestionSetById(questionSetId) {
+      return Restangular.service('question_sets').one().one(questionSetId).customGET('');
+    }
+
+    /*questions*/
+    function getQuestionById(questionId) {
+      return Restangular.service('questions').one().one(questionId).customGET('');
+    }
+  }
+
+  function GroupsApi(Restangular, Headers) {
+    Headers.updateDefaultHeader();
+    var currentGroups = null;
+
+    var service = {
+      membershipGroups: membershipGroups
+    };
+
+    return service;
+    function membershipGroups(shouldUpdate) {
+
+      currentGroups = currentGroups == null || shouldUpdate ? Restangular.service('groups').one().customGET('', {
+        subdomain: 'www'
+      }) : currentGroups;
+      return currentGroups;
+    }
+  }
+
+  function TracksApi(Restangular, Headers) {
+    Headers.updateDefaultHeader();
+    var trackData = null;
+
+    var service = {
+      allByGroup: allByGroup
+    }
+    return service;
+
+    function allByGroup(groupId, shouldUpdate) {
+      trackData = trackData == null || shouldUpdate ? Restangular.service(groupId).one('tracks').customGET() : trackData;
+      return trackData;
+    }
+  }
+
+  function ChallengeApi(Restangular, Headers) {
+    Headers.updateDefaultHeader();
+    var service = {
+      getChallenge: getChallenge
+    }
+    return service;
+
+
+    function getChallenge(groupId) {
+      return Restangular.service(groupId).one('challenge_games').customGET();
+    }
+  }
+
+  /*Custom request*/
+  function YoutubeVideoApi($q,environmentCons) {
+
+    var service = {
+      setYouTubeTitle: setYouTubeTitle
+    };
+
+    return service;
+
+    function setYouTubeTitle(youtubeId) {
       var deferred = $q.defer();
-      var url = environmentCons.youtubeAPI+ youtubeId + "?v=2&alt=json";
+      var url = environmentCons.youtubeAPI + youtubeId + "?v=2&alt=json";
       $.ajax({
         url: url,
         dataType: 'jsonp',
         cache: true,
-        success: function (data) {
+        success: function(data) {
           var secs = data.entry.media$group.yt$duration.seconds,
           hours = Math.floor(secs / (60 * 60)),
           divisor_for_minutes = secs % (60 * 60),
@@ -178,31 +215,16 @@ request.factory("VideoService", function($q,environmentCons) {
           if (seconds < 10) {
             seconds = "0" + seconds;
           }
-										// var time    = hours+':'+minutes+':'+seconds;
+                    // var time    = hours+':'+minutes+':'+seconds;
 
-										var time = (hours > 0 ? hours + ':' : '') + (minutes > 0 ? minutes + ':' : '') + (seconds > 0 ? seconds + ' secs' : '');
+                    var time = (hours > 0 ? hours + ':' : '') + (minutes > 0 ? minutes + ':' : '') + (seconds > 0 ? seconds + ' secs' : '');
 
-										deferred.resolve(time);
+                    deferred.resolve(time);
 
                   }
                 });
       return deferred.promise;
     }
   }
-});
 
-request.factory('Challenge', function(Restangular,Headers) {
-  Headers.updateDefaultHeader();
-  function challengeGames(){
-    return {
-      getChallenge: function(groupId){
-        return Restangular.service(groupId).one('challenge_games').customGET();
-      }
-    }
-  }
-
-  return {
-    challengeGames:challengeGames
-  }
-
-});
+})();

@@ -5,7 +5,7 @@ var paths = {
   restAngularFactory: 'app/api-requests/restAngular.service.js',
   restAngular: 'app/api-requests/restAngular.module.js',
   components: 'app/components/components.module.js',
-  home: 'app/home/home.module.js',
+  dashboard: 'app/dashboard/dashboard.module.js',
   practice: 'app/practices/practice.module.js',
   question: 'app/questions/question.module.js',
   analyticService: 'app/shared/services/analytic.service.js',
@@ -16,9 +16,10 @@ var paths = {
   appFilters: 'app/application/application.filters.js',
   appServices: 'app/application/application.services.js',
   app: 'app/app.js',
-   practiceSrv: 'app/shared/services/practice.service.js',
+  practiceSrv: 'app/shared/services/practice.service.js',
   uiBootStrap: 'app/components/accordion/vendor/ui.bootstrap.min.js',
-  accordion : 'app/components/accordion/accordion.js'
+  accordion : 'app/components/accordion/accordion.js',
+  historyM: 'app/history/history.module.js'
 
 };
 
@@ -40,15 +41,15 @@ $script([
     paths.restAngularFactory,
     paths.uiBootStrap,
     paths.accordion,
-    paths.home,
+    paths.dashboard,
     paths.practiceSrv,
     paths.practice,
     paths.question,
+    paths.historyM,
     paths.app
     ], function() {
       angular.element(document).ready(function() {
         angular.bootstrap(document, ['grockitApp']);
       });
-        //angular.bootstrap(document, ['grockitApp']);
       });
 });

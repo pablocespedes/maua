@@ -4,14 +4,12 @@
   .controller('QuestionController', QuestionController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  QuestionController.$inject = ['practiceSrv', 'utilities', 'breadcrumbs', 'alerts', 'practiceRequests', 'Timer', 'SplashMessages'];
+  QuestionController.$inject = ['practiceSrv', 'utilities', 'breadcrumbs', 'alerts', 'PracticeApi', 'Timer', 'SplashMessages','currentProduct'];
 
-  function QuestionController(practiceSrv, utilities, breadcrumbs, alerts, practiceRequests, Timer, SplashMessages) {
+  function QuestionController(practiceSrv, utilities, breadcrumbs, alerts, PracticeApi, Timer, SplashMessages,currentProduct) {
     /* jshint validthis: true */
     var vmPr = this;
     vmPr.activeTracks = utilities.getActiveTrack();
-    vmPr.activeGroupId = utilities.getActiveGroup();
-    vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
     vmPr.breadcrumbs = breadcrumbs;
     breadcrumbs.options = {
       'practice': vmPr.activeTracks.trackTitle
@@ -31,8 +29,29 @@
     vmPr.answerHasExplanation = answerHasExplanation;
     vmPr.revealExplanation = revealExplanation;
     vmPr.nextAction = nextAction;
-    vmPr.init = init;
 
+    init();
+
+    function init() {
+      currentProduct.observeProduct().then(null, null, function(groupId) {
+        if (vmPr.activeGroupId !== groupId) {
+          vmPr.activeGroupId = groupId;
+          vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
+
+          var questionId = utilities.getCurrentParam('questionId');
+          if (angular.isDefined(questionId)) {
+            Question.presentQuestion(questionId);
+            timerObject.initPracticeTimer();
+            timerObject.initQuestionTimer();
+          } else {
+            alerts.showAlert('Oh sorry, We have problems to load your question, please let us know on feedback@grockit.com.', 'danger');
+          }
+
+        }
+
+      });
+
+    };
 
     function answerHasExplanation(index) {
       var answer = vmPr.questionResult.answers[index];
@@ -53,17 +72,6 @@
       }
 
     }
-
-    function init() {
-      var questionId = utilities.getCurrentParam('questionId');
-      if (angular.isDefined(questionId)) {
-        Question.presentQuestion(questionId);
-        timerObject.initPracticeTimer();
-        timerObject.initQuestionTimer();
-      } else {
-        alerts.showAlert('Oh sorry, We have problems to load your question, please let us know on feedback@grockit.com.', 'danger');
-      }
-    };
 
 
     var timerObject = {
@@ -148,6 +156,7 @@
         practiceSrv.resetLayout();
       },
       doNotKnowAnswer: function() {
+         vmPr.userConfirmed = false;
         var generalResult = practiceSrv.doNotKnowAnswer(vmPr.questionResult);
         Question.bindVideoExplanationInfo(vmPr.questionResult);
         if (angular.isDefined(generalResult)) {
@@ -157,6 +166,7 @@
         }
       },
       evaluateConfirmMethod: function() {
+         vmPr.userConfirmed = true;
         switch (vmPr.lastAnswerLoaded) {
           case 'SPR':
           case 'NumericEntry':
@@ -205,7 +215,7 @@
       presentQuestion: function(questionId) {
         practiceSrv.loadQuestion(questionId).then(function(result) {
           var questionSet = result.questionResult.question_set;
-          practiceRequests.practiceGames().createNewGameSubtrack(vmPr.activeGroupId, questionSet.subtrack_id)
+          PracticeApi.createNewGameSubtrack(vmPr.activeGroupId, questionSet.subtrack_id)
           .then(function(resultGame) {
             return practiceSrv.getRoundSession(questionId, resultGame.data.practice_game.id);
           })
