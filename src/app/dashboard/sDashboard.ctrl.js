@@ -22,7 +22,54 @@
     vmDash.getScore = getScore;
     vmDash.customPractice = customPractice;
     vmDash.StartPractice = StartPractice;
-    vmDash.init = init;
+
+    init();
+
+    function init() {
+      Auth.getCurrentUserInfo().then(function(userInfo) {
+        if (userInfo !== null) {
+          vmDash.user_id = userInfo.userId;
+
+
+          currentProduct.notifyGroups().then(function(groupId) {
+            vmDash.activeGroupId = groupId;
+
+            vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
+
+            GroupsApi.membershipGroups(false).then(function(result) {
+              var groups = result.data.groups,
+              currenTitle = _.find(groups, {
+                'id': vmDash.activeGroupId
+              });
+
+              if (angular.isDefined(currenTitle)) {
+                utilities.setGroupTitle(currenTitle.name);
+              }
+            });
+
+            if (vmDash.enableScore)
+              SimpleDashBoard.fetchScorePrediction();
+
+
+            SimpleDashBoard.getHistoryInformation();
+
+            SimpleDashBoard.fetchTracksData();
+
+            SimpleDashBoard.getChallenge(vmDash.activeGroupId);
+
+            vmDash.historyVisible = false;
+
+
+          });
+
+        }
+
+
+      });
+};
+
+
+
 
     function getScore(track) {
       return (vmDash.score) ? vmDash.score.tracks[track.id] : null;
@@ -52,44 +99,6 @@
       }
     };
 
-    function init() {
-      Auth.getCurrentUserInfo().then(function(userInfo) {
-        if (userInfo !== null) {
-          vmDash.user_id = userInfo.userId;
-
-          currentProduct.observeProduct().then(null, null, function(groupId) {
-            vmDash.activeGroupId = groupId;
-
-            vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
-
-            GroupsApi.membershipGroups(false).then(function(result) {
-              var groups = result.data.groups,
-              currenTitle = _.find(groups, {
-                'id': vmDash.activeGroupId
-              });
-
-              if (angular.isDefined(currenTitle)) {
-                utilities.setGroupTitle(currenTitle.name);
-              }
-            });
-
-            if (vmDash.enableScore)
-              SimpleDashBoard.fetchScorePrediction();
-
-
-            SimpleDashBoard.getHistoryInformation();
-
-            SimpleDashBoard.fetchTracksData();
-
-            SimpleDashBoard.getChallenge(vmDash.activeGroupId);
-
-            vmDash.historyVisible = false;
-          });
-        }
-
-
-      });
-};
 
 
     var SimpleDashBoard = {

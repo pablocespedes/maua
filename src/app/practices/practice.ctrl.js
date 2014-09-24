@@ -38,8 +38,7 @@
     init();
 
     function init() {
-
-      currentProduct.observeProduct().then(null, null, function(groupId) {
+       currentProduct.notifyGroups().then(function(groupId) {
         if (vmPr.activeGroupId !== groupId) {
           vmPr.activeGroupId = groupId;
           vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');

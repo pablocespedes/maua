@@ -156,6 +156,7 @@
         practiceSrv.resetLayout();
       },
       doNotKnowAnswer: function() {
+         vmPr.userConfirmed = false;
         var generalResult = practiceSrv.doNotKnowAnswer(vmPr.questionResult);
         Question.bindVideoExplanationInfo(vmPr.questionResult);
         if (angular.isDefined(generalResult)) {
@@ -165,6 +166,7 @@
         }
       },
       evaluateConfirmMethod: function() {
+         vmPr.userConfirmed = true;
         switch (vmPr.lastAnswerLoaded) {
           case 'SPR':
           case 'NumericEntry':
