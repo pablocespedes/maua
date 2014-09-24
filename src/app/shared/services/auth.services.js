@@ -4,11 +4,11 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
   member: 'member',
   guest: 'guest'
 })
-.factory('Auth', function ($cookies, UserRoles, webStorage, Users, utilities, $location, $q, Headers,imageVersion) {
+.factory('Auth', function ($cookies, UserRoles, webStorage, UsersApi, utilities, $location, $q, Headers,imageVersion) {
 
   function defaultGroup(user) {
-    return  angular.isDefined(utilities.getCurrentParam('subject')) ? utilities.getCurrentParam('subject') :
-    user != null && angular.isDefined(user.currentGroup) ? user.currentGroup : undefined;
+    //angular.isDefined(utilities.getCurrentParam('subject')) ? utilities.getCurrentParam('subject') :
+    return  user != null && angular.isDefined(user.currentGroup) ? user.currentGroup : undefined;
   }
 
   var setUserData = function (response) {
@@ -60,7 +60,7 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
           /*var auth = "dXNlcl9pZD1lNzU5ZWRlMC1lOGM1LTAxMzAtNTNlNi0xMjMxMzkwZWY5ODE";
           Headers.setDefaultHeader(auth);*/
 
-          Users.getUser().self().then(function (result) {
+          UsersApi.self().then(function (result) {
            var userData = setUserData(result.data.user);
            deferred.resolve(userData);
          }).catch(function error(e) {
@@ -76,7 +76,7 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
    getUpdateUserData: function () {
     updateUserPromise = $q.defer();
     Headers.updateDefaultHeader();
-    Users.getUser().self().then(function (result) {
+    UsersApi.self().then(function (result) {
       var userData = setUserData(result.data.user);
       updateUserPromise.resolve(userData);
     }).catch(function errorHandler(e) {

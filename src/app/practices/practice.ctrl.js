@@ -5,15 +5,13 @@
   .controller('CustomPracticeController', CustomPracticeController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  CustomPracticeController.$inject = ['$timeout', 'practiceSrv', 'utilities', 'breadcrumbs', 'practiceRequests', 'alerts', 'Timer', 'SplashMessages'];
+  CustomPracticeController.$inject = ['$timeout', 'practiceSrv', 'utilities', 'breadcrumbs', 'PracticeApi', 'alerts', 'Timer', 'SplashMessages','currentProduct'];
 
-  function CustomPracticeController($timeout, practiceSrv, utilities, breadcrumbs, practiceRequests, alerts, Timer, SplashMessages) {
+  function CustomPracticeController($timeout, practiceSrv, utilities, breadcrumbs, PracticeApi, alerts, Timer, SplashMessages,currentProduct) {
 
     /* jshint validthis: true */
     var vmPr = this;
     vmPr.activeTracks = utilities.getActiveTrack();
-    vmPr.activeGroupId = utilities.getActiveGroup();
-    vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
     vmPr.breadcrumbs = breadcrumbs;
     breadcrumbs.options = {
       'practice': vmPr.activeTracks.trackTitle
@@ -33,26 +31,37 @@
     vmPr.lastAnswerLoaded = '';
     vmPr.loadingMessage = SplashMessages.getLoadingMessage();
     vmPr.isDisabled = false;
-    vmPr.init = init;
     vmPr.answerHasExplanation = answerHasExplanation;
     vmPr.nextAction = nextAction;
     vmPr.revealExplanation=revealExplanation;
 
+    init();
+
     function init() {
-      var createGame = practiceRequests.practiceGames().createNewPracticeGame(vmPr.activeGroupId, vmPr.activeTracks.tracks[0]);
 
-      createGame.then(function(game) {
-        vmPr.gameId = game.data.practice_game.id;
+      currentProduct.observeProduct().then(null, null, function(groupId) {
+        if (vmPr.activeGroupId !== groupId) {
+          vmPr.activeGroupId = groupId;
+          vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
 
-        customPractice.getQuestionSets();
-        timerObject.initPracticeTimer();
-        timerObject.initQuestionTimer();
+          var createGame = PracticeApi.createNewPracticeGame(vmPr.activeGroupId, vmPr.activeTracks.tracks[0]);
 
-      }).catch(function errorHandler(e) {
+          createGame.then(function(game) {
+            vmPr.gameId = game.data.practice_game.id;
 
-        alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
+            customPractice.getQuestionSets();
+            timerObject.initPracticeTimer();
+            timerObject.initQuestionTimer();
+
+          }).catch(function errorHandler(e) {
+
+            alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
+
+          });
+        }
 
       });
+
     };
 
     function answerHasExplanation(index) {
@@ -212,7 +221,7 @@
         practiceSrv.resetLayout();
       },
       getQuestionSets: function() {
-        var getQuestionSet = practiceRequests.practiceGames().getQuestionNewSetByPractice(vmPr.gameId, vmPr.activeTracks.tracks);
+        var getQuestionSet = PracticeApi.getQuestionNewSetByPractice(vmPr.gameId, vmPr.activeTracks.tracks);
         getQuestionSet.then(function(result) {
           if (result.data.question_sets.length > 0) {
             vmPr.questionSetList = result.data.question_sets;

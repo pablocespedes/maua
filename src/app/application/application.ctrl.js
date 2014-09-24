@@ -6,11 +6,11 @@
 
   /*Manually injection will avoid any minification or injection problem*/
   ApplicationController.$inject = ['$scope', '$location', '$route', 'Auth', 'utilities', 'grockitNewFeatures', 'ListenloopUtility',
-  'GaUtility', 'InspectletUtility', 'Tracks', 'Groups', 'alerts', 'Headers', 'setCurrentProduct'
+  'GaUtility', 'InspectletUtility', 'TracksApi', 'GroupsApi', 'alerts', 'Headers', 'currentProduct'
   ];
 
   function ApplicationController($scope, $location, $route, Auth, utilities, grockitNewFeatures, ListenloopUtility,
-    GaUtility, InspectletUtility, Tracks, Groups, alerts, Headers, setCurrentProduct) {
+    GaUtility, InspectletUtility, TracksApi, GroupsApi, alerts, Headers, currentProduct) {
     /* jshint validthis: true */
     var vmApp = this;
     /* recommend: Using function declarations and bindable members up top.*/
@@ -31,13 +31,11 @@
 
       /*update group Name*/
       utilities.setGroupTitle(vmApp.groups.linkedGroups[index].name);
+      var currentGroupId= vmApp.groups.linkedGroups[index].id;
+      currentProduct.currentGroupId(currentGroupId);
 
-      vmApp.currentUser.currentGroup = vmApp.groups.linkedGroups[index].id;
-
-      Auth.updateUserInfo(vmApp.currentUser);
-      vmApp.activeGroupId = utilities.getActiveGroup();
-      Application.hideVideoOption(vmApp.activeGroupId);
-      Application.hideStudyPlan(vmApp.activeGroupId);
+      Application.hideVideoOption(currentGroupId);
+      Application.hideStudyPlan(currentGroupId);
     };
 
     function logOut() {
@@ -100,7 +98,7 @@
 
         if (vmApp.currentUser.groupMemberships.length > 0) {
 
-          Groups.getGroups().membershipGroups(true).then(function(result) {
+          GroupsApi.membershipGroups(false).then(function(result) {
             var responseGroups = result.data.groups;
             if (!!responseGroups) {
 
@@ -140,23 +138,13 @@
 
         }
       },
-      fetchLeftNavTracksData: function() {
-        vmApp.tracksList = [];
-        Tracks.getTracks().allByGroup(vmApp.activeGroupId).then(function(result) {
-          var response = result.data;
-          vmApp.tracksList = response.tracks;
-
-        }).catch(function errorHandler(e) {
-          alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
-        });
-      },
       init: function() {
         Auth.getCurrentUserInfo().then(function(response) {
           if (response != null) {
             vmApp.currentUser = response;
-
-            vmApp.activeGroupId = response.currentGroup;
-            setCurrentProduct.currentGroupId(vmApp.activeGroupId);
+            currentProduct.observeProduct().then(null, null, function(groupId){
+                vmApp.activeGroupId = groupId;
+            });
 
             Application.hideVideoOption(vmApp.activeGroupId);
             Application.hideStudyPlan(vmApp.activeGroupId);
@@ -172,12 +160,7 @@
       }
     };
 
-    $scope.$watch(function() {
-      return setCurrentProduct.groupId;
-    },
-    function(newVal, oldVal) {
-      vmApp.activeGroupId = newVal;
-    });
+
 
     if (angular.isDefined(Headers.getCookie('authentication_token'))) {
       Headers.updateDefaultHeader();
