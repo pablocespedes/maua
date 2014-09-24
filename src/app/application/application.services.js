@@ -8,11 +8,12 @@ angular.module("grockitApp.application")
 .service('serviceFactory',serviceFactory)
 .factory('Timer',Timer)
 .factory('dateFormatter',dateFormatter)
-.service('setCurrentProduct',setCurrentProduct);
+.service('currentProduct',currentProduct);
 
 utilities.$inject = ['$rootScope', '$http', '$location', '$route', '$q', '$window', 'webStorage', 'YoutubeVideoApi', 'environmentCons'];
 grockitNewFeatures.$inject =['$http', 'utilities', 'environmentCons'];
 Timer.$inject=['$interval', 'serviceFactory'];
+currentProduct.$inject=['$q','webStorage'];
 
 function utilities($rootScope, $http, $location, $route, $q, $window, webStorage, YoutubeVideoApi, environmentCons) {
   var service = {
@@ -323,11 +324,26 @@ function dateFormatter() {
     return service;
 }
 
-function setCurrentProduct(){
-  this.groupId = null;
+function currentProduct($q,webStorage){
+   var self = this,
+        defer = $q.defer();
+    this.groupId = null;
+
+    this.observeProduct = function() {
+        return defer.promise;
+    }
+
 
   this.currentGroupId = function(groupId) {
-    this.groupId = groupId;
+     var currentUser = webStorage.get('currentUser');
+     currentUser.currentGroup = groupId;
+     webStorage.add('currentUser', currentUser);
+     self.groupId = groupId;
+     defer.notify(self.groupId);
+
   };
 }
+
+
+
 })();

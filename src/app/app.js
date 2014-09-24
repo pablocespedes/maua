@@ -1,37 +1,50 @@
 'use strict';
 (function(app) {
- app.config(function($routeProvider) {
- })
- .run(function ($rootScope, $location, Auth,utilities,alerts) {
 
-   $rootScope.$on("$locationChangeStart", function(event, next, current) {
+  app.run(run);
+  run.$inject = ['$rootScope', '$location', '$window', 'Auth', 'utilities', 'alerts', 'GroupsApi', 'currentProduct'];
 
-     if (Auth.isLoggedIn()) {
+  function run($rootScope, $location, $window, Auth, utilities, alerts, GroupsApi, currentProduct) {
 
-       Auth.getUpdateUserData().then(function (response) {
+    $rootScope.$on("$locationChangeStart", function(event, next, current) {
+      if (Auth.isLoggedIn()) {
 
-         if (response != null) {
-           if ($location.path() === '/' || $location.path() === '/' + response.currentGroup || $location.path() == '') {
+        Auth.getUpdateUserData().then(function(response) {
 
-            utilities.internalRedirect('/' + response.currentGroup+ '/dashboard');
+          if (response != null) {
+            GroupsApi.membershipGroups(true).then(function(result) {
+              var groups = result.data.groups;
+              if ($location.path() === '/' || $location.path() === '/' + response.currentGroup || $location.path() == '') {
+                currentProduct.currentGroupId(response.currentGroup);
+                utilities.internalRedirect('/' + response.currentGroup + '/dashboard');
+              } else {
+                var urlGroup = utilities.getCurrentParam('subject'),
+                validateGroupExists = _.find(groups, {
+                  'id': urlGroup
+                });
+
+                if (angular.isUndefined(validateGroupExists)) {
+                  $window.location = '404.html';
+                } else {
+                  currentProduct.currentGroupId(urlGroup);
+                }
+              }
+            });
           }
-        }
 
-      }).catch(function errorHandler(e) {
-       alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
-     });
+        }).catch(function errorHandler(e) {
+          alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
+        });
 
-    }
-    else {
-     $("body").html('The user is not logged in! <a href=\"/logout\">Click here to restart</a>.');
-     event.preventDefault();
+      } else {
+        $("body").html('The user is not logged in! <a href=\"/logout\">Click here to restart</a>.');
+        event.preventDefault();
 
-   }
- });
-
-
- });
-}(angular.module("grockitApp", [
+      }
+    });
+}
+}
+(angular.module("grockitApp", [
   'ngResource',
   'ngRoute',
   'ngSanitize',
@@ -45,6 +58,4 @@
   'grockitApp.practice.factories',
   'grockitApp.question',
   'grockitApp.dashboard'
-  ]))
-);
-
+  ])));

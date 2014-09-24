@@ -32,7 +32,7 @@
     controllerAs: 'vmDash'
   });
 
-$routeProvider.otherwise({ redirectTo: '/gmat/dashboard' })
+//$routeProvider.otherwise({ redirectTo: '/gmat/dashboard' })
 
 });
 

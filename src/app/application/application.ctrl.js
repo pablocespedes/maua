@@ -6,11 +6,11 @@
 
   /*Manually injection will avoid any minification or injection problem*/
   ApplicationController.$inject = ['$scope', '$location', '$route', 'Auth', 'utilities', 'grockitNewFeatures', 'ListenloopUtility',
-  'GaUtility', 'InspectletUtility', 'TracksApi', 'GroupsApi', 'alerts', 'Headers', 'setCurrentProduct'
+  'GaUtility', 'InspectletUtility', 'TracksApi', 'GroupsApi', 'alerts', 'Headers', 'currentProduct'
   ];
 
   function ApplicationController($scope, $location, $route, Auth, utilities, grockitNewFeatures, ListenloopUtility,
-    GaUtility, InspectletUtility, TracksApi, GroupsApi, alerts, Headers, setCurrentProduct) {
+    GaUtility, InspectletUtility, TracksApi, GroupsApi, alerts, Headers, currentProduct) {
     /* jshint validthis: true */
     var vmApp = this;
     /* recommend: Using function declarations and bindable members up top.*/
@@ -100,7 +100,7 @@
 
         if (vmApp.currentUser.groupMemberships.length > 0) {
 
-          GroupsApi.membershipGroups(true).then(function(result) {
+          GroupsApi.membershipGroups(false).then(function(result) {
             var responseGroups = result.data.groups;
             if (!!responseGroups) {
 
@@ -154,9 +154,9 @@
         Auth.getCurrentUserInfo().then(function(response) {
           if (response != null) {
             vmApp.currentUser = response;
-
-            vmApp.activeGroupId = response.currentGroup;
-            setCurrentProduct.currentGroupId(vmApp.activeGroupId);
+            currentProduct.observeProduct().then(null, null, function(result){
+                vmApp.activeGroupId = result;
+            });
 
             Application.hideVideoOption(vmApp.activeGroupId);
             Application.hideStudyPlan(vmApp.activeGroupId);
@@ -172,12 +172,7 @@
       }
     };
 
-    $scope.$watch(function() {
-      return setCurrentProduct.groupId;
-    },
-    function(newVal, oldVal) {
-      vmApp.activeGroupId = newVal;
-    });
+
 
     if (angular.isDefined(Headers.getCookie('authentication_token'))) {
       Headers.updateDefaultHeader();

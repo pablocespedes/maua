@@ -4,13 +4,16 @@
   .controller('QuestionController', QuestionController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  QuestionController.$inject = ['practiceSrv', 'utilities', 'breadcrumbs', 'alerts', 'PracticeApi', 'Timer', 'SplashMessages'];
+  QuestionController.$inject = ['practiceSrv', 'utilities', 'breadcrumbs', 'alerts', 'PracticeApi', 'Timer', 'SplashMessages','currentProduct'];
 
-  function QuestionController(practiceSrv, utilities, breadcrumbs, alerts, PracticeApi, Timer, SplashMessages) {
+  function QuestionController(practiceSrv, utilities, breadcrumbs, alerts, PracticeApi, Timer, SplashMessages,currentProduct) {
     /* jshint validthis: true */
     var vmPr = this;
     vmPr.activeTracks = utilities.getActiveTrack();
-    vmPr.activeGroupId = utilities.getActiveGroup();
+    currentProduct.observeProduct().then(null, null, function(result){
+       vmPr.activeGroupId = result;
+    });
+
     vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
     vmPr.breadcrumbs = breadcrumbs;
     breadcrumbs.options = {

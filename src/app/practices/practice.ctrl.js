@@ -5,13 +5,17 @@
   .controller('CustomPracticeController', CustomPracticeController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  CustomPracticeController.$inject = ['$timeout', 'practiceSrv', 'utilities', 'breadcrumbs', 'PracticeApi', 'alerts', 'Timer', 'SplashMessages'];
+  CustomPracticeController.$inject = ['$timeout', 'practiceSrv', 'utilities', 'breadcrumbs', 'PracticeApi', 'alerts', 'Timer', 'SplashMessages','currentProduct'];
 
-  function CustomPracticeController($timeout, practiceSrv, utilities, breadcrumbs, PracticeApi, alerts, Timer, SplashMessages) {
+  function CustomPracticeController($timeout, practiceSrv, utilities, breadcrumbs, PracticeApi, alerts, Timer, SplashMessages,currentProduct) {
 
     /* jshint validthis: true */
     var vmPr = this;
     vmPr.activeTracks = utilities.getActiveTrack();
+    currentProduct.observeProduct().then(null, null, function(result){
+        vmPr.activeGroupId = result;
+    });
+
     vmPr.activeGroupId = utilities.getActiveGroup();
     vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
     vmPr.breadcrumbs = breadcrumbs;
