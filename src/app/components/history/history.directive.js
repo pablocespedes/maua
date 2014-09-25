@@ -8,6 +8,7 @@ angular.module('grockitApp.components')
       templateUrl: 'app/components/history/templates/history-list.tpl.html',
       scope: {
         title: '@',
+        groupId: '=',
         questions: '='
       },
       link: function(scope, elem, attrs) {

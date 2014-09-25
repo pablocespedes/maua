@@ -164,6 +164,7 @@
     return service;
 
     function allByGroup(groupId, shouldUpdate) {
+      console.log(trackData);
       trackData = trackData == null || shouldUpdate ? Restangular.service(groupId).one('tracks').customGET() : trackData;
       return trackData;
     }
