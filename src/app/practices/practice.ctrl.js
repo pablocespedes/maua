@@ -5,12 +5,14 @@
   .controller('CustomPracticeController', CustomPracticeController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  CustomPracticeController.$inject = ['$timeout', 'practiceSrv', 'utilities', 'breadcrumbs', 'PracticeApi', 'alerts', 'Timer', 'SplashMessages','currentProduct'];
+  CustomPracticeController.$inject = ['$scope','$timeout', 'practiceSrv', 'utilities', 'breadcrumbs', 'PracticeApi', 'alerts', 'Timer', 'SplashMessages','currentProduct'];
 
-  function CustomPracticeController($timeout, practiceSrv, utilities, breadcrumbs, PracticeApi, alerts, Timer, SplashMessages,currentProduct) {
+  function CustomPracticeController($scope,$timeout, practiceSrv, utilities, breadcrumbs, PracticeApi, alerts, Timer, SplashMessages,currentProduct) {
 
     /* jshint validthis: true */
-    var vmPr = this;
+    var vmPr = this,
+    practiceObserver=null;
+
     vmPr.activeTracks = utilities.getActiveTrack();
     vmPr.breadcrumbs = breadcrumbs;
     breadcrumbs.options = {
@@ -35,14 +37,16 @@
     vmPr.nextAction = nextAction;
     vmPr.revealExplanation=revealExplanation;
 
-    vmPr.$on("$destroy", function(){
-
+    /*Takes care to unregister the group once the user leaves the controller*/
+    $scope.$on("$destroy", function(){
+        currentProduct.unregisterGroup(practiceObserver);
     });
+
 
     init();
 
     function init() {
-        currentProduct.observeProduct().then(null, null, function(groupId){
+     practiceObserver = currentProduct.observeGroupId().register(function(groupId) {
         if (vmPr.activeGroupId !== groupId) {
           vmPr.activeGroupId = groupId;
           vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
@@ -335,5 +339,6 @@
       }
     };
   }
-
 })();
+
+

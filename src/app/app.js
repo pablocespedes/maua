@@ -12,6 +12,7 @@
         Auth.getUpdateUserData().then(function(response) {
 
           if (response != null) {
+
             GroupsApi.membershipGroups(true).then(function(result) {
               var groups = result.data.groups;
               if ($location.path() === '/' || $location.path() === '/' + response.currentGroup || $location.path() == '') {
@@ -25,7 +26,6 @@
                 if (angular.isUndefined(actualGroup)) {
                   $window.location = '404.html';
                 } else {
-                  //if(utilities.getActiveGroup()!==urlGroup)
                     currentProduct.currentGroupId(urlGroup,actualGroup);
 
                 }

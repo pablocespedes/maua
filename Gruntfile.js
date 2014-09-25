@@ -292,7 +292,10 @@ module.exports = function (grunt) {
                     [/(ui.bootstrap.min\.js)/, 'Replacing references to ui bootstrap'],
 
                     [/(accordion\.js)/, 'Replacing references to accordion componenent '],
+
                     [/(history.module\.js)/, 'Replacing references to history module '],
+                    [/(history.ctrl\.js)/, 'Replacing references to history ctrl '],
+                    [/(history.service\.js)/, 'Replacing references to history service '],
 
 
                     [/(app\.js)/, 'Replacing references to app']
