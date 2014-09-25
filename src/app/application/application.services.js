@@ -21,7 +21,6 @@
     var service = {
       newGrockit: newGrockit,
       originalGrockit: originalGrockit,
-      getActiveGroup: getActiveGroup,
       getActiveTrack: getActiveTrack,
       setActiveTrack: setActiveTrack,
       random: random,
@@ -88,12 +87,6 @@
       };
     }
 
-    function getActiveGroup() {
-      if (!!webStorage.get('currentUser')) {
-        return webStorage.get('currentUser').currentGroup;
-      }
-    }
-
     function getActiveTrack() {
       return webStorage.get('currentUser').trackData;
     }
@@ -132,7 +125,7 @@
 
     function redirect(url) {
 
-      $window.location.href = url;
+      $window.location = url;
     }
 
     function setActiveTab(position) {
