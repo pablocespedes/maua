@@ -144,10 +144,11 @@
             vmApp.currentUser = response;
             currentProduct.observeProduct().then(null, null, function(groupId){
                 vmApp.activeGroupId = groupId;
+                Application.hideVideoOption(vmApp.activeGroupId);
+                Application.hideStudyPlan(vmApp.activeGroupId);
             });
 
-            Application.hideVideoOption(vmApp.activeGroupId);
-            Application.hideStudyPlan(vmApp.activeGroupId);
+
             Application.loadGroupMembership();
             ListenloopUtility.base(response);
             GaUtility.classic();

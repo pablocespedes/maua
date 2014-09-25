@@ -18,15 +18,15 @@
                 utilities.internalRedirect('/' + response.currentGroup + '/dashboard');
               } else {
                 var urlGroup = utilities.getCurrentParam('subject'),
-                validateGroupExists = _.find(groups, {
+                actualGroup = _.find(groups, {
                   'id': urlGroup
                 });
 
-                if (angular.isUndefined(validateGroupExists)) {
+                if (angular.isUndefined(actualGroup)) {
                   $window.location = '404.html';
                 } else {
-
-                  currentProduct.currentGroupId(urlGroup);
+                  //if(utilities.getActiveGroup()!==urlGroup)
+                    currentProduct.currentGroupId(urlGroup,actualGroup);
 
                 }
               }

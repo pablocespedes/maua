@@ -15,7 +15,7 @@
   grockitNewFeatures.$inject = ['$http', 'utilities', 'environmentCons'];
   Observable.$inject=[];
   Timer.$inject = ['$interval', 'collectionService'];
-  currentProduct.$inject = ['$q', 'webStorage'];
+  currentProduct.$inject = ['$q', 'webStorage','utilities'];
 
   function utilities($rootScope, $http, $location, $route, $q, $window, webStorage, YoutubeVideoApi, environmentCons) {
     var service = {
@@ -359,28 +359,31 @@
     return service;
   }
 
-  function currentProduct($q, webStorage) {
-    var self = this,
-    defer = $q.defer();
+  function currentProduct($q, webStorage,utilities) {
+    var self = this,prom = $q.defer(),
+    defer = $q.defer(),currentUser = webStorage.get('currentUser');
     this.groupId = null;
 
     this.observeProduct = function() {
       return defer.promise;
     }
 
+    this.currentGroupId = function(groupId,actualGroup) {
 
-    this.currentGroupId = function(groupId) {
-      var currentUser = webStorage.get('currentUser');
       if (groupId !== currentUser.currentGroup) {
         currentUser.currentGroup = groupId;
         webStorage.add('currentUser', currentUser);
-
       }
+      utilities.setGroupTitle(actualGroup.name)
       self.groupId = groupId;
-        defer.notify(self.groupId);
-
+      defer.notify(self.groupId);
 
     };
+
+    this.getGroupId= function(){
+      return  currentUser.currentGroup;
+    }
+
   }
 
 })();
