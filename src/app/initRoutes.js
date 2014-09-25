@@ -19,7 +19,8 @@ var paths = {
   practiceSrv: 'app/shared/services/practice.service.js',
   uiBootStrap: 'app/components/accordion/vendor/ui.bootstrap.min.js',
   accordion : 'app/components/accordion/accordion.js',
-  historyM: 'app/history/history.module.js'
+  historyM: 'app/history/history.module.js',
+  historyD: 'app/components/history/history.directive.js'
 
 };
 
@@ -46,6 +47,7 @@ $script([
     paths.practice,
     paths.question,
     paths.historyM,
+    paths.historyD,
     paths.app
     ], function() {
       angular.element(document).ready(function() {

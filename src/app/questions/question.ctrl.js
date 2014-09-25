@@ -4,11 +4,12 @@
   .controller('QuestionController', QuestionController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  QuestionController.$inject = ['practiceSrv', 'utilities', 'breadcrumbs', 'alerts', 'PracticeApi', 'Timer', 'SplashMessages','currentProduct'];
+  QuestionController.$inject = ['$scope','practiceSrv', 'utilities', 'breadcrumbs', 'alerts', 'PracticeApi', 'Timer', 'SplashMessages','currentProduct'];
 
-  function QuestionController(practiceSrv, utilities, breadcrumbs, alerts, PracticeApi, Timer, SplashMessages,currentProduct) {
+  function QuestionController($scope,practiceSrv, utilities, breadcrumbs, alerts, PracticeApi, Timer, SplashMessages,currentProduct) {
     /* jshint validthis: true */
-    var vmPr = this;
+    var vmPr = this,
+    questionObserver=null;
     vmPr.activeTracks = utilities.getActiveTrack();
     vmPr.breadcrumbs = breadcrumbs;
     breadcrumbs.options = {
@@ -30,10 +31,14 @@
     vmPr.revealExplanation = revealExplanation;
     vmPr.nextAction = nextAction;
 
+    $scope.$on("$destroy", function(){
+        currentProduct.unregisterGroup(questionObserver);
+    });
+
     init();
 
     function init() {
-      currentProduct.observeProduct().then(null, null, function(groupId) {
+     questionObserver= currentProduct.observeGroupId().register(function(groupId) {
         if (vmPr.activeGroupId !== groupId) {
           vmPr.activeGroupId = groupId;
           vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');

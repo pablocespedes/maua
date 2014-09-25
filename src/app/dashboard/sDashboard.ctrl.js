@@ -5,13 +5,14 @@
   .controller('SimpleDashController', SimpleDashController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  SimpleDashController.$inject = ['UsersApi', 'history', 'TracksApi', 'utilities', 'Auth', 'alerts', 'ChallengeApi',
+  SimpleDashController.$inject = ['$scope','UsersApi', 'history', 'TracksApi', 'utilities', 'Auth', 'alerts', 'ChallengeApi',
   'GroupsApi', 'currentProduct'
   ];
 
-  function SimpleDashController(UsersApi, history, TracksApi, utilities, Auth, alerts, ChallengeApi, GroupsApi, currentProduct) {
+  function SimpleDashController($scope,UsersApi, history, TracksApi, utilities, Auth, alerts, ChallengeApi, GroupsApi, currentProduct) {
     /* jshint validthis: true */
-    var vmDash = this;
+    var vmDash = this,
+    dashObserver=null;
 
     vmDash.loading = true;
     vmDash.isChallengeAvailable = false;
@@ -23,33 +24,26 @@
     vmDash.customPractice = customPractice;
     vmDash.StartPractice = StartPractice;
 
+
     init();
 
+    $scope.$on("$destroy", function(){
+        currentProduct.unregisterGroup(dashObserver);
+    });
+
     function init() {
+
       Auth.getCurrentUserInfo().then(function(userInfo) {
         if (userInfo !== null) {
           vmDash.user_id = userInfo.userId;
 
-
-          currentProduct.notifyGroups().then(function(groupId) {
+          dashObserver = currentProduct.observeGroupId().register(function(groupId) {
             vmDash.activeGroupId = groupId;
 
             vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
 
-            GroupsApi.membershipGroups(false).then(function(result) {
-              var groups = result.data.groups,
-              currenTitle = _.find(groups, {
-                'id': vmDash.activeGroupId
-              });
-
-              if (angular.isDefined(currenTitle)) {
-                utilities.setGroupTitle(currenTitle.name);
-              }
-            });
-
             if (vmDash.enableScore)
               SimpleDashBoard.fetchScorePrediction();
-
 
             SimpleDashBoard.getHistoryInformation();
 
@@ -58,18 +52,11 @@
             SimpleDashBoard.getChallenge(vmDash.activeGroupId);
 
             vmDash.historyVisible = false;
-
-
           });
 
         }
-
-
       });
-};
-
-
-
+    };
 
     function getScore(track) {
       return (vmDash.score) ? vmDash.score.tracks[track.id] : null;
@@ -98,8 +85,6 @@
         alerts.showAlert('You must select one track at least', 'warning');
       }
     };
-
-
 
     var SimpleDashBoard = {
       fetchTracksData: function() {
@@ -169,4 +154,5 @@
       }
     };
   }
+
 })();

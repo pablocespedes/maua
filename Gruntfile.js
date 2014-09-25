@@ -235,15 +235,18 @@ module.exports = function (grunt) {
         options: {
             assetsDirs: ['<%= yeoman.dist %>',
                 '<%= yeoman.dist %>/app/components',
+                '<%= yeoman.dist %>/app/components/accordion',
+                '<%= yeoman.dist %>/app/components/accordion/vendor',
                 '<%= yeoman.dist %>/app/application',
                 '<%= yeoman.dist %>/app/components/application',
-                '<%= yeoman.dist %>/app/home',
-                '<%= yeoman.dist %>/app/home/dashboard/',
+                '<%= yeoman.dist %>/app/dashboard',
                 '<%= yeoman.dist %>/app/components/dashboard',
                 '<%= yeoman.dist %>/app/shared',
                 '<%= yeoman.dist %>/app/shared/services',
                 '<%= yeoman.dist %>/app/practices',
+                '<%= yeoman.dist %>/app/history',
                 '<%= yeoman.dist %>/app/components/practice',
+                '<%= yeoman.dist %>/app/components/history',
                 '<%= yeoman.dist %>/app/questions',
                 '<%= yeoman.dist %>/app/components/question-types',
                 '<%= yeoman.dist %>/app/api-requests',
@@ -265,7 +268,7 @@ module.exports = function (grunt) {
                     [/(sDashboard.ctrl\.js)/, 'Replacing references to home ctrl'],
                     [/(sDashboard.service\.js)/, 'Replacing references to home service'],
                     [/(dashboard.directive\.js)/, 'Replacing references to dasboard directive'],
-                    [/(home.module\.js)/, 'Replacing references to home module'],
+                    [/(dashboard.module\.js)/, 'Replacing references to home module'],
                     /*Change references for practice controllers and services*/
                     [/(practice.module\.js)/, 'Replacing references to practice module'],
                     [/(practice.ctrl\.js)/, 'Replacing references to practice ctrl'],
@@ -285,6 +288,15 @@ module.exports = function (grunt) {
                     [/(analytic.service\.js)/, 'Replacing references to Analytic services'],
 
                     [/(jquery.grockit\.js)/, 'Replacing references to practice module'],
+
+                    [/(ui.bootstrap.min\.js)/, 'Replacing references to ui bootstrap'],
+
+                    [/(accordion\.js)/, 'Replacing references to accordion componenent '],
+
+                    [/(history.module\.js)/, 'Replacing references to history module '],
+                    [/(history.ctrl\.js)/, 'Replacing references to history ctrl '],
+                    [/(history.service\.js)/, 'Replacing references to history service '],
+                    [/(history.directive\.js)/, 'Replacing references to history service '],
 
                     [/(app\.js)/, 'Replacing references to app']
                 ]

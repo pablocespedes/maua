@@ -1,0 +1,3 @@
+<h1 ng-click="vmHist.testClick('hol')">GMAT Question History</h1>
+<br>
+<div ng-repeat="questionPerDay in vmHist.questionsPerDay" history-list title="{{questionPerDay.day}}" questions="questionPerDay.questions"></div>

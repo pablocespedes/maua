@@ -4,10 +4,9 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
   member: 'member',
   guest: 'guest'
 })
-.factory('Auth', function ($cookies, UserRoles, webStorage, UsersApi, utilities, $location, $q, Headers,imageVersion) {
+.factory('Auth', function ($window,$cookies, UserRoles, webStorage, UsersApi, utilities, $location, $q, Headers,imageVersion) {
 
   function defaultGroup(user) {
-    //angular.isDefined(utilities.getCurrentParam('subject')) ? utilities.getCurrentParam('subject') :
     return  user != null && angular.isDefined(user.currentGroup) ? user.currentGroup : undefined;
   }
 
@@ -38,8 +37,11 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
       return ( !!$cookies["authentication_token"] );
     },
     logout: function () {
+      var logOut= utilities.originalGrockit().url + '/logout';
       webStorage.remove('currentUser');
-      $location.url("/logout");
+      delete $cookies["authentication_token"];
+      $window.location.href = logOut;
+
     },
     getCurrentUserInfo: function () {
       var deferred = $q.defer();
