@@ -235,10 +235,11 @@ module.exports = function (grunt) {
         options: {
             assetsDirs: ['<%= yeoman.dist %>',
                 '<%= yeoman.dist %>/app/components',
+                '<%= yeoman.dist %>/app/components/accordion',
+                '<%= yeoman.dist %>/app/components/accordion/vendor',
                 '<%= yeoman.dist %>/app/application',
                 '<%= yeoman.dist %>/app/components/application',
-                '<%= yeoman.dist %>/app/home',
-                '<%= yeoman.dist %>/app/home/dashboard/',
+                '<%= yeoman.dist %>/app/dashboard/',
                 '<%= yeoman.dist %>/app/components/dashboard',
                 '<%= yeoman.dist %>/app/shared',
                 '<%= yeoman.dist %>/app/shared/services',
@@ -285,6 +286,12 @@ module.exports = function (grunt) {
                     [/(analytic.service\.js)/, 'Replacing references to Analytic services'],
 
                     [/(jquery.grockit\.js)/, 'Replacing references to practice module'],
+
+                    [/(ui.bootstrap.min\.js)/, 'Replacing references to ui bootstrap'],
+
+                    [/(accordion\.js)/, 'Replacing references to accordion componenent '],
+                    [/(history.module\.js)/, 'Replacing references to history module '],
+
 
                     [/(app\.js)/, 'Replacing references to app']
                 ]
