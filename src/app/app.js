@@ -25,7 +25,7 @@
                 if (angular.isUndefined(actualGroup)) {
                   $window.location = '404.html';
                 } else {
-                  if(utilities.getActiveGroup()!==urlGroup)
+                  //if(utilities.getActiveGroup()!==urlGroup)
                     currentProduct.currentGroupId(urlGroup,actualGroup);
 
                 }

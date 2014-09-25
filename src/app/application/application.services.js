@@ -332,11 +332,6 @@
       return defer.promise;
     }
 
-    this.manualNotify = function(){
-        defer.notify(currentUser.currentGroup);
-        return defer.promise;
-    }
-
     this.currentGroupId = function(groupId,actualGroup) {
 
       if (groupId !== currentUser.currentGroup) {
@@ -349,29 +344,9 @@
 
     };
 
-     this.notifyGroups = function(){
-
-        var isUpdated= false;
-        this.observeProduct().then(null, null, function(groupId) {
-          if(!isUpdated){
-            isUpdated=true;
-            console.log('asdasdasd');
-            prom.resolve(groupId);
-          }
-
-        });
-
-        this.manualNotify().then(null, null, function(groupId){
-         if(!isUpdated){
-            isUpdated=true;
-            prom.resolve(groupId);
-          }
-        })
-        return prom.promise;
-
+    this.getGroupId= function(){
+      return  currentUser.currentGroup;
     }
-
-
 
   }
 
