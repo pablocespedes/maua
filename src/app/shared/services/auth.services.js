@@ -7,7 +7,6 @@ angular.module("grockitApp.authServices", ['webStorageModule'])
 .factory('Auth', function ($window,$cookies, UserRoles, webStorage, UsersApi, utilities, $location, $q, Headers,imageVersion) {
 
   function defaultGroup(user) {
-    //angular.isDefined(utilities.getCurrentParam('subject')) ? utilities.getCurrentParam('subject') :
     return  user != null && angular.isDefined(user.currentGroup) ? user.currentGroup : undefined;
   }
 
