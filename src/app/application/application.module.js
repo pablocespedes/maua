@@ -8,6 +8,7 @@ angular.module("grockitApp.application",['webStorageModule'])
     stagingGrockit: 'https://staging.grockit.com',
     ww2Grockit2:'ww2.grockit.com',
     timingData: 'https://s3.amazonaws.com/go.grockit.com/2.0/data/',
+    historyData: 'https://s3.amazonaws.com/go.grockit.com/2.0/history/',
     youtubeAPI: 'https://gdata.youtube.com/feeds/api/videos/',
     stagingAPI: 'http://api.staging.grockit.com',
     liveAPI: 'https://api.grockit.com'

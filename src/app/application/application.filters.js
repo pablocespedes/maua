@@ -2,6 +2,7 @@
 'use strict';
 angular.module("grockitApp.application")
 .filter('formatSeconds', formatSeconds)
+.filter('truncate', truncate)
 .filter('level', level);
 
 formatSeconds.$inject =['dateFormatter'];
@@ -16,6 +17,13 @@ function formatSeconds(dateFormatter){
 function level(Level) {
   return function(input) {
     return Level.getMessage(input);
+  };
+}
+
+function truncate() {
+  return function(text, chars) {
+    var ellipses = '...';
+    return text.substr(0, chars) + ellipses;
   };
 }
 })();
