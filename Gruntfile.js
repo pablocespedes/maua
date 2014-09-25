@@ -297,7 +297,6 @@ module.exports = function (grunt) {
                     [/(history.ctrl\.js)/, 'Replacing references to history ctrl '],
                     [/(history.service\.js)/, 'Replacing references to history service '],
                     [/(history.directive\.js)/, 'Replacing references to history service '],
-                    [/(socialMedia.scripts\.js)/, 'Replacing references to history service '],
 
                     [/(app\.js)/, 'Replacing references to app']
                 ]
