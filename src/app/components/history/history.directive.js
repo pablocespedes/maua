@@ -7,7 +7,11 @@ angular.module('grockitApp.components')
       restrict: 'A',
       templateUrl: 'app/components/history/templates/history-list.tpl.html',
       scope: {
-        questionsPerDate: '='
+        title: '@',
+        questions: '='
+      },
+      link: function(scope, elem, attrs) {
+        this.currentPage = 1;
       }
     };
 

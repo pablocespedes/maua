@@ -5,14 +5,16 @@
   .factory('utilities', utilities)
   .factory('grockitNewFeatures', grockitNewFeatures)
   .factory('alerts', alerts)
-  .service('serviceFactory', serviceFactory)
+  .service('collectionService', collectionService)
+  .service('Observable', Observable)
   .factory('Timer', Timer)
   .factory('dateFormatter', dateFormatter)
   .service('currentProduct', currentProduct);
 
   utilities.$inject = ['$rootScope', '$http', '$location', '$route', '$q', '$window', 'webStorage', 'YoutubeVideoApi', 'environmentCons'];
   grockitNewFeatures.$inject = ['$http', 'utilities', 'environmentCons'];
-  Timer.$inject = ['$interval', 'serviceFactory'];
+  Observable.$inject=[];
+  Timer.$inject = ['$interval', 'collectionService'];
   currentProduct.$inject = ['$q', 'webStorage'];
 
   function utilities($rootScope, $http, $location, $route, $q, $window, webStorage, YoutubeVideoApi, environmentCons) {
@@ -226,7 +228,7 @@
     }
   };
 
-  function serviceFactory() {
+  function collectionService() {
     this.items = [];
     this.lastId = 1;
     this.add = function(item) {
@@ -252,7 +254,41 @@
     };
   }
 
-  function Timer($interval, serviceFactory) {
+  function Observable() {
+
+    var observables = [];
+    return {
+      create: function(key) {
+        console.log(this.get(key));
+        if (this.get(key)) return false;
+        var observable = {
+          key: key,
+          lastId: 0,
+          observers: [],
+          notify: function(data) {
+            _.forEach(this.observers, function(observer) {
+              observer.callback(data);
+            });
+          },
+          register: function(callback) {
+            var observer = {id: this.lastId++, callback: callback};
+            this.observers.push(observer);
+            return observer;
+          },
+          unregister: function(observer) {
+            this.observers = _.reject(this.observers, {'id': observer.id});
+          }
+        };
+        observables.push(observable);
+        return observable;
+      },
+      get: function(key) {
+        return _.find(observables, {'key': key});
+      }
+    };
+  }
+
+  function Timer($interval, collectionService) {
 
     var createTimer = function() {
       var timer = {
@@ -277,13 +313,13 @@
 
     function create() {
       var timer = createTimer();
-      serviceFactory.add(timer);
+      collectionService.add(timer);
       return timer;
     }
 
     function destroy(timer) {
       $interval.cancel(timer.interval);
-      serviceFactory.remove(timer);
+      collectionService.remove(timer);
     }
 
     var service = {

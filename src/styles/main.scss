@@ -341,30 +341,27 @@ footer {
 .history-list:nth-child(2n) {
   background-color: #ededed
 }
+.history-row {
+  margin: 0 !important;
+}
 .history-list {
-  background-color: #f2f2f2;
   margin: 5px 0 !important;
-
-  .history-result {
-    min-height: 64px;
-    text-align: center;
-    margin-bottom: 0 !important;
-  }
-
-  .history-first-row {
-    font-size: 14px;
-  }
+  background-color: #f2f2f2;
 
   .history-item {
-    margin-bottom: 4px;
+
+    a {
+      line-height: 10px;
+    }
 
     i.fa {
-      font-size: 40px;
-      line-height: 55px;
+      text-align: center;
+      width: 25px;
+      height: 25px;
+      font-size: 25px;
     }
   }
 }
 
 .history-pagination {
-  margin-left: 40%;
 }
