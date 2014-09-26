@@ -1,66 +1,45 @@
 (function() {
   'use strict';
+
   angular
-  .module('grockitApp.dashboard')
-  .factory('history', history);
+  .module("grockitApp.dashboard")
+  .service('dashboard', dashboard)
 
+  dashboard.$inject = ['$q', 'DashboardApi'];
 
-  function history() {
+  function dashboard($q, DashboardApi) {
+    var dashboardData = null;
+    this.setDashboardData = function(groupId) {
+      var deferred = $q.defer();
+      DashboardApi.getDashboard(groupId).then(function(result) {
+        dashboardData = null;
+        dashboardData = result.data.dashboard
+        console.log(dashboardData.sections[0].smart_practice)
+        deferred.resolve(true);
 
-    var service = {
-      getTotalQuestionsAnswered: getTotalQuestionsAnswered,
-      getLastWeekQuestionsAnswered: getLastWeekQuestionsAnswered,
-      getTodayQuestionsAnswered: getTodayQuestionsAnswered
+      });
+
+      return deferred.promise;
+    }
+
+    this.getScorePrediction = function() {
+      return dashboardData.score_prediction;
     };
-    return service;
+    this.getProgress = function() {
+      var history = {};
 
-    function formatDate(date) {
-      var d = date.getDate();
-      var m = date.getMonth() + 1;
-      var y = date.getFullYear();
-      return '' + y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+      history.lastWeek = dashboardData.progress.last_week[0].total_questions;
+      history.today = dashboardData.progress.today[0].total_questions;
+
+      return history;
+    }
+    this.getSmartPractice = function() {
+      return dashboardData.sections[0].smart_practice;
+    }
+    this.getChallenge = function() {
+      return dashboardData.sections[1].challenge;
     }
 
-    function getLastWeekDatesRange() {
-      var datesRange = {},
-      today = new Date(),
-      lastWeek = new Date(today.getTime() - 1000 * 60 * 60 * 24 * 7);
-
-      datesRange.startDate = formatDate(lastWeek);
-      datesRange.endDate = formatDate(today);
-      return datesRange;
-    }
-
-    function getTotalQuestionsAnswered(historyData) {
-      var questArray = _.pluck(historyData.history, 'total_questions');
-
-      return _.reduce(questArray, function(sum, num) {
-        return sum + num;
-      });
-    }
-
-    function getLastWeekQuestionsAnswered(historyData) {
-      var lastWeekData = getLastWeekDatesRange(),
-      filteredData = _.filter(historyData.history, function(data) {
-        return data.day >= lastWeekData.startDate && data.day <= lastWeekData.endDate;
-      }),
-      questArray = _.pluck(filteredData, 'total_questions');
-      return _.reduce(questArray, function(sum, num) {
-        return sum + num;
-      });
-    }
-
-    function getTodayQuestionsAnswered(historyData) {
-      var today = formatDate(new Date),
-      filteredData = _.filter(historyData.history, function(data) {
-        return data.day == today;
-      }),
-      questArray = _.pluck(filteredData, 'total_questions');
-      return _.reduce(questArray, function(sum, num) {
-        return sum + num;
-      });
-    }
   }
-
 
 })();

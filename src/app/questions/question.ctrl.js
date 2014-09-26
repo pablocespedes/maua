@@ -10,11 +10,11 @@
     /* jshint validthis: true */
     var vmPr = this,
     questionObserver=null;
-    vmPr.activeTracks = utilities.getActiveTrack();
+
     vmPr.breadcrumbs = breadcrumbs;
-    breadcrumbs.options = {
-      'practice': vmPr.activeTracks.trackTitle
-    };
+    /*breadcrumbs.options = {
+      'practice': vmPr.activeTrack.subject.name
+    };*/
     vmPr.isbuttonClicked = false;
     vmPr.portalC = vmPr;
     vmPr.loading = true;
@@ -37,6 +37,7 @@
     });
 
     init();
+
 
     function init() {
      questionObserver= currentProduct.observeGroupId().register(function(groupId) {
@@ -83,7 +84,7 @@
     var timerObject = {
       setTimingInformation: function(questionId, correctAnswerId, lastAnswerLoaded) {
 
-        practiceSrv.getTimingInformation(vmPr.activeTracks.tracks, vmPr.activeGroupId, questionId)
+        practiceSrv.getTimingInformation(vmPr.activeTrack.trackId, vmPr.activeGroupId, questionId)
         .$promise.then(function(result) {
           vmPr.showTiming = true;
           vmPr.timingData = result[0];
@@ -199,7 +200,7 @@
 
       },
       feedbackInfo: function(questionId) {
-        vmPr.subjectMail = practiceSrv.setMailToInformation(questionId, vmPr.activeTracks.trackTitle);
+        vmPr.subjectMail = practiceSrv.setMailToInformation(questionId, '');
       },
       nextQuestion: function() {
         vmPr.isbuttonClicked = false;
@@ -220,6 +221,7 @@
       presentQuestion: function(questionId) {
         practiceSrv.loadQuestion(questionId).then(function(result) {
           var questionSet = result.questionResult.question_set;
+
           PracticeApi.createNewGameSubtrack(vmPr.activeGroupId, questionSet.subtrack_id)
           .then(function(resultGame) {
             return practiceSrv.getRoundSession(questionId, resultGame.data.practice_game.id);
@@ -246,7 +248,7 @@
           timerObject.resetQuestionTimer();
           Question.feedbackInfo(questionId);
           if (vmPr.questionAnalytics) {
-            timerObject.setTimingInformation(questionId, correctAnswerId, vmPr.lastAnswerLoaded);
+            //timerObject.setTimingInformation(questionId, correctAnswerId, vmPr.lastAnswerLoaded);
           }
         });
       }

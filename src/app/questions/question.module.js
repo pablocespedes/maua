@@ -23,7 +23,7 @@ angular.module("grockitApp.question", ['ng-breadcrumbs'])
 
   $routeProvider.when('/:subject/questions/:questionId', {
     templateUrl: 'app/questions/question.tpl.html',
-    label: 'practice',
+    label: 'Question View',
     resolve: {
       deps: function($q, $rootScope) {
         var deferred = $q.defer(),

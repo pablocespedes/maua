@@ -157,9 +157,9 @@
               <li>
                 <a ng-href="#/{{appCtrl.activeGroupId}}/dashboard" ng-click="appCtrl.select($index)"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Dashboard</span></a>
               </li>
-              <li ng-repeat="track in appCtrl.tracksList" ng-click="select($index)" ng-class="{active: $index == selected}">
+            <!--   <li ng-repeat="track in appCtrl.tracksList" ng-click="select($index)" ng-class="{active: $index == selected}">
                 <a id="{{track.id}}" ng-href="#/{{appCtrl.activeGroupId}}/track-dashboard"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn" ng-bind="track.short_name"></span></a>
-              </li>
+              </li> -->
               <li ng-if="!studyPlanHide">
                 <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/study_plan"><i class="menu-icon fa fa-tasks"></i><span class="mm-text">Study Plan</span></a>
               </li>

@@ -13,10 +13,11 @@
     var vmPr = this,
     practiceObserver=null;
 
-    vmPr.activeTracks = utilities.getActiveTrack();
+    vmPr.activeTrack = utilities.getActiveTrack();
+    console.log(vmPr.activeTrack);
     vmPr.breadcrumbs = breadcrumbs;
     breadcrumbs.options = {
-      'practice': vmPr.activeTracks.trackTitle
+      'practice': vmPr.activeTrack.subject.name
     };
     vmPr.isbuttonClicked = false;
     vmPr.maxOpts = [];
@@ -51,7 +52,7 @@
           vmPr.activeGroupId = groupId;
           vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
 
-          var createGame = PracticeApi.createNewPracticeGame(vmPr.activeGroupId, vmPr.activeTracks.tracks[0]);
+          var createGame = PracticeApi.createNewPracticeGame(vmPr.activeGroupId, vmPr.activeTrack.subject.url);
 
           createGame.then(function(game) {
             vmPr.gameId = game.data.practice_game.id;
@@ -95,7 +96,7 @@
     var timerObject = {
       setTimingInformation: function(questionId, correctAnswerId, lastAnswerLoaded) {
 
-        practiceSrv.getTimingInformation(vmPr.activeTracks.tracks, vmPr.activeGroupId, questionId)
+        practiceSrv.getTimingInformation(vmPr.activeTrack.trackId, vmPr.activeGroupId, questionId)
         .$promise.then(function(result) {
           if (angular.isDefined(result)) {
             var timingData= result[0];
@@ -227,7 +228,7 @@
         practiceSrv.resetLayout();
       },
       getQuestionSets: function() {
-        var getQuestionSet = PracticeApi.getQuestionNewSetByPractice(vmPr.gameId, vmPr.activeTracks.tracks);
+        var getQuestionSet = PracticeApi.getQuestionNewSetByPractice(vmPr.gameId, vmPr.activeTrack.trackId);
         getQuestionSet.then(function(result) {
           if (result.data.question_sets.length > 0) {
             vmPr.questionSetList = result.data.question_sets;
@@ -235,7 +236,7 @@
             customPractice.loadQuestionsSet();
           } else {
             /*if user run out of the questions show message*/
-            practiceSrv.usersRunOutQuestions(vmPr.activeTracks.trackTitle, vmPr.activeGroupId);
+            practiceSrv.usersRunOutQuestions(vmPr.activeTrack.subject.name, vmPr.activeGroupId);
 
           }
         }).catch(function errorHandler(e) {
@@ -317,7 +318,7 @@
         }
       },
       feedbackInfo: function(questionId) {
-        vmPr.subjectMail = practiceSrv.setMailToInformation(questionId, vmPr.activeTracks.trackTitle);
+        vmPr.subjectMail = practiceSrv.setMailToInformation(questionId, vmPr.activeTrack.subject.name);
       },
       nextQuestion: function() {
         this.loadQuestionsSet();

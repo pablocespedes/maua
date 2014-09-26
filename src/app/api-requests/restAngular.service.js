@@ -9,6 +9,7 @@
   .factory('TracksApi', TracksApi)
   .factory('YoutubeVideoApi', YoutubeVideoApi)
   .factory('ChallengeApi', ChallengeApi)
+  .factory('DashboardApi', DashboardApi);
 
   Headers.$inject = ['Restangular'];
   UsersApi.$inject = ['Restangular', 'Headers'];
@@ -17,7 +18,7 @@
   TracksApi.$inject = ['Restangular', 'Headers'];
   YoutubeVideoApi.$inject = ['$q', 'environmentCons'];
   ChallengeApi.$inject = ['Restangular', 'Headers'];
-
+  DashboardApi.$inject = ['Restangular', 'Headers'];
 
   function Headers(Restangular) {
 
@@ -103,8 +104,9 @@
       });
     }
 
-    function createNewPracticeGame(groupId, trackId) {
-      return Restangular.service(groupId).one('tracks').one(trackId).post('practice');
+    function createNewPracticeGame(groupId, url) {
+
+      return  Restangular.oneUrl('newPracticeGame', url).post('practice');
     }
 
     function createNewGameSubtrack(groupId, subTrackId) {
@@ -178,8 +180,24 @@
 
 
     function getChallenge(groupId) {
+
       return Restangular.service(groupId).one('challenge_games').customGET();
     }
+  }
+
+  function DashboardApi(Restangular, Headers){
+    Headers.updateDefaultHeader();
+
+    var service = {
+      getDashboard: getDashboard
+    }
+    return service;
+
+
+    function getDashboard(groupId) {
+      return Restangular.service(groupId).one('dashboard').get();
+    }
+
   }
 
   /*Custom request*/
@@ -226,5 +244,7 @@
       return deferred.promise;
     }
   }
+
+
 
 })();
