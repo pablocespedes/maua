@@ -31,6 +31,7 @@
     vmPr.revealExplanation = revealExplanation;
     vmPr.nextAction = nextAction;
 
+    /*Takes care to unregister the group once the user leaves the controller*/
     $scope.$on("$destroy", function(){
         currentProduct.unregisterGroup(questionObserver);
     });
@@ -93,9 +94,8 @@
               }));
             });
 
-            vmPr.percentAnswered = _.find(result[0].answers, {
-              'answer_id': correctAnswerId
-            }).percent_answered;
+            var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered)*100
+              vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
           }
 
         }).catch(function(e) {

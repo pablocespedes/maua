@@ -98,19 +98,19 @@
         practiceSrv.getTimingInformation(vmPr.activeTracks.tracks, vmPr.activeGroupId, questionId)
         .$promise.then(function(result) {
           if (angular.isDefined(result)) {
+            var timingData= result[0];
             vmPr.showTiming = true;
-            vmPr.timingData = result[0];
+            vmPr.timingData = timingData;
 
             if (lastAnswerLoaded === 'MultipleChoiceOneCorrect') {
               var mergedList = _.map(vmPr.items, function(item) {
-                return _.extend(item, _.findWhere(result[0].answers, {
+                return _.extend(item, _.findWhere(timingData.answers, {
                   'answer_id': item.id
                 }));
               });
 
-              vmPr.percentAnswered = _.find(result[0].answers, {
-                'answer_id': correctAnswerId
-              }).percent_answered;
+              var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered)*100
+              vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
             }
           }
 
