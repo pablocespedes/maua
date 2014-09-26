@@ -15,13 +15,12 @@
   grockitNewFeatures.$inject = ['$http', 'utilities', 'environmentCons'];
   Observable.$inject=[];
   Timer.$inject = ['$interval', 'collectionService'];
-  currentProduct.$inject = ['$q', 'webStorage','utilities'];
+  currentProduct.$inject = ['webStorage','Observable','utilities'];
 
   function utilities($rootScope, $http, $location, $route, $q, $window, webStorage, YoutubeVideoApi, environmentCons) {
     var service = {
       newGrockit: newGrockit,
       originalGrockit: originalGrockit,
-      getActiveGroup: getActiveGroup,
       getActiveTrack: getActiveTrack,
       setActiveTrack: setActiveTrack,
       random: random,
@@ -88,12 +87,6 @@
       };
     }
 
-    function getActiveGroup() {
-      if (!!webStorage.get('currentUser')) {
-        return webStorage.get('currentUser').currentGroup;
-      }
-    }
-
     function getActiveTrack() {
       return webStorage.get('currentUser').trackData;
     }
@@ -132,7 +125,7 @@
 
     function redirect(url) {
 
-      $window.location.href = url;
+      $window.location = url;
     }
 
     function setActiveTab(position) {
@@ -259,7 +252,6 @@
     var observables = [];
     return {
       create: function(key) {
-        console.log(this.get(key));
         if (this.get(key)) return false;
         var observable = {
           key: key,
@@ -359,29 +351,25 @@
     return service;
   }
 
-  function currentProduct($q, webStorage,utilities) {
-    var self = this,prom = $q.defer(),
-    defer = $q.defer(),currentUser = webStorage.get('currentUser');
-    this.groupId = null;
+  function currentProduct(webStorage, Observable,utilities) {
+    var currentUser = webStorage.get('currentUser'),
+    observable = Observable.create('currentProduct');
 
-    this.observeProduct = function() {
-      return defer.promise;
-    }
-
-    this.currentGroupId = function(groupId,actualGroup) {
-
+    this.currentGroupId = function(groupId, actualGroup) {
       if (groupId !== currentUser.currentGroup) {
         currentUser.currentGroup = groupId;
         webStorage.add('currentUser', currentUser);
       }
       utilities.setGroupTitle(actualGroup.name)
-      self.groupId = groupId;
-      defer.notify(self.groupId);
-
+      observable.notify(groupId);
     };
 
-    this.getGroupId= function(){
-      return  currentUser.currentGroup;
+    this.observeGroupId = function() {
+      return Observable.get('currentProduct');
+    }
+
+    this.unregisterGroup = function(groupObserver){
+      observable.unregister(groupObserver);
     }
 
   }

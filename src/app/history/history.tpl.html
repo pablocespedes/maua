@@ -1,3 +1,7 @@
-<h1>GMAT Question History</h1>
-<br>
-<div ng-repeat="questionPerDay in vmHist.questionsPerDay" history-list title="{{questionPerDay.day}}" questions="questionPerDay.questions" group-id="vmHist.groupId"></div>
+<div class="history-container">
+  <h1>GMAT Question History</h1>
+  <br>
+  <div infinite-scroll="vmHist.nextPage()">
+    <div ng-repeat="questionPerDay in vmHist.questionsPerDay" history-list title="{{questionPerDay.day}}" questions="questionPerDay.questions" group-id="vmHist.groupId"></div>
+  </div>
+</div>

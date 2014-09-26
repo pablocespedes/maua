@@ -5,12 +5,14 @@
   .controller('CustomPracticeController', CustomPracticeController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  CustomPracticeController.$inject = ['$timeout', 'practiceSrv', 'utilities', 'breadcrumbs', 'PracticeApi', 'alerts', 'Timer', 'SplashMessages','currentProduct'];
+  CustomPracticeController.$inject = ['$scope','$timeout', 'practiceSrv', 'utilities', 'breadcrumbs', 'PracticeApi', 'alerts', 'Timer', 'SplashMessages','currentProduct'];
 
-  function CustomPracticeController($timeout, practiceSrv, utilities, breadcrumbs, PracticeApi, alerts, Timer, SplashMessages,currentProduct) {
+  function CustomPracticeController($scope,$timeout, practiceSrv, utilities, breadcrumbs, PracticeApi, alerts, Timer, SplashMessages,currentProduct) {
 
     /* jshint validthis: true */
-    var vmPr = this;
+    var vmPr = this,
+    practiceObserver=null;
+
     vmPr.activeTracks = utilities.getActiveTrack();
     vmPr.breadcrumbs = breadcrumbs;
     breadcrumbs.options = {
@@ -35,14 +37,16 @@
     vmPr.nextAction = nextAction;
     vmPr.revealExplanation=revealExplanation;
 
-    vmPr.$on("$destroy", function(){
-
+    /*Takes care to unregister the group once the user leaves the controller*/
+    $scope.$on("$destroy", function(){
+        currentProduct.unregisterGroup(practiceObserver);
     });
+
 
     init();
 
     function init() {
-        currentProduct.observeProduct().then(null, null, function(groupId){
+     practiceObserver = currentProduct.observeGroupId().register(function(groupId) {
         if (vmPr.activeGroupId !== groupId) {
           vmPr.activeGroupId = groupId;
           vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
@@ -94,19 +98,19 @@
         practiceSrv.getTimingInformation(vmPr.activeTracks.tracks, vmPr.activeGroupId, questionId)
         .$promise.then(function(result) {
           if (angular.isDefined(result)) {
+            var timingData= result[0];
             vmPr.showTiming = true;
-            vmPr.timingData = result[0];
+            vmPr.timingData = timingData;
 
             if (lastAnswerLoaded === 'MultipleChoiceOneCorrect') {
               var mergedList = _.map(vmPr.items, function(item) {
-                return _.extend(item, _.findWhere(result[0].answers, {
+                return _.extend(item, _.findWhere(timingData.answers, {
                   'answer_id': item.id
                 }));
               });
 
-              vmPr.percentAnswered = _.find(result[0].answers, {
-                'answer_id': correctAnswerId
-              }).percent_answered;
+              var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered)*100
+              vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
             }
           }
 
@@ -335,5 +339,6 @@
       }
     };
   }
-
 })();
+
+

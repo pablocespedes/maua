@@ -28,11 +28,19 @@ function formatSeconds(dateFormatter){
 }
 
 function track(TracksApi) {
+  var tracks = [
+        {id: "1", short_name: "English"},
+        {id: "2", short_name: "Science"},
+        {id: "3", short_name: "Math"},
+        {id: "4", short_name: "Reading"},
+        {id: "8", short_name: "Verbal"},
+        {id: "9", short_name: "Quantitative"}
+      ];
+
   return function(trackId, groupId) {
-    var allByGroup = TracksApi.allByGroup(_.parseInt(groupId), false);
-    console.log(allByGroup);
-    return _.find(allByGroup, {trackId: trackId});
-  }
+    var track = _.find(tracks, {id: trackId});
+    return track.short_name;
+  };
 }
 
 function level(Level) {
@@ -43,6 +51,7 @@ function level(Level) {
 
 function truncate() {
   return function(text, chars) {
+    if (!text) return text;
     var ellipses = '...';
     return text.substr(0, chars) + ellipses;
   };

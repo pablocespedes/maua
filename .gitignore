@@ -1,6 +1,7 @@
 # Don’t commit the following directories created by pub.
 build/
 packages/
+dist/
 
 # Or the files created by dart2js.
 *.dart.js
@@ -13,9 +14,9 @@ packages/
 pubspec.lock
 
 .idea/
-/src/bower_components/
 *.log
 /.sass-cache/
 /node_modules/
 /src/bower_components/
 /.tmp
+

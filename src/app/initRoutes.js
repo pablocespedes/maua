@@ -42,7 +42,6 @@ $script([
     paths.restAngularFactory,
     paths.uiBootStrap,
     paths.accordion,
-    paths.list,
     paths.dashboard,
     paths.practiceSrv,
     paths.practice,

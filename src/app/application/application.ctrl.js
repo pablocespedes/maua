@@ -1,3 +1,4 @@
+/*IIFE: Wrap AngularJS components in an Immediately Invoked Function Expression (IIFE).It Avoid variable collisions*/
 (function() {
   'use strict';
   angular
@@ -142,26 +143,25 @@
         Auth.getCurrentUserInfo().then(function(response) {
           if (response != null) {
             vmApp.currentUser = response;
-            currentProduct.observeProduct().then(null, null, function(groupId){
-                vmApp.activeGroupId = groupId;
-                Application.hideVideoOption(vmApp.activeGroupId);
-                Application.hideStudyPlan(vmApp.activeGroupId);
-            });
+            currentProduct.observeGroupId().register(function(groupId) {
+             vmApp.activeGroupId = groupId;
+             Application.loadGroupMembership();
+             ListenloopUtility.base(response);
+              Application.hideVideoOption(vmApp.activeGroupId);
+              Application.hideStudyPlan(vmApp.activeGroupId);
 
+             });
 
-            Application.loadGroupMembership();
-            ListenloopUtility.base(response);
             GaUtility.classic();
             GaUtility.UA();
             InspectletUtility.base();
+
           }
         }).catch(function errorHandler(e) {
           alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
         });
       }
     };
-
-
 
     if (angular.isDefined(Headers.getCookie('authentication_token'))) {
       Headers.updateDefaultHeader();

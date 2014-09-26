@@ -4,11 +4,12 @@
   .controller('QuestionController', QuestionController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  QuestionController.$inject = ['practiceSrv', 'utilities', 'breadcrumbs', 'alerts', 'PracticeApi', 'Timer', 'SplashMessages','currentProduct'];
+  QuestionController.$inject = ['$scope','practiceSrv', 'utilities', 'breadcrumbs', 'alerts', 'PracticeApi', 'Timer', 'SplashMessages','currentProduct'];
 
-  function QuestionController(practiceSrv, utilities, breadcrumbs, alerts, PracticeApi, Timer, SplashMessages,currentProduct) {
+  function QuestionController($scope,practiceSrv, utilities, breadcrumbs, alerts, PracticeApi, Timer, SplashMessages,currentProduct) {
     /* jshint validthis: true */
-    var vmPr = this;
+    var vmPr = this,
+    questionObserver=null;
     vmPr.activeTracks = utilities.getActiveTrack();
     vmPr.breadcrumbs = breadcrumbs;
     breadcrumbs.options = {
@@ -30,10 +31,15 @@
     vmPr.revealExplanation = revealExplanation;
     vmPr.nextAction = nextAction;
 
+    /*Takes care to unregister the group once the user leaves the controller*/
+    $scope.$on("$destroy", function(){
+        currentProduct.unregisterGroup(questionObserver);
+    });
+
     init();
 
     function init() {
-      currentProduct.observeProduct().then(null, null, function(groupId) {
+     questionObserver= currentProduct.observeGroupId().register(function(groupId) {
         if (vmPr.activeGroupId !== groupId) {
           vmPr.activeGroupId = groupId;
           vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
@@ -88,9 +94,8 @@
               }));
             });
 
-            vmPr.percentAnswered = _.find(result[0].answers, {
-              'answer_id': correctAnswerId
-            }).percent_answered;
+            var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered)*100
+              vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
           }
 
         }).catch(function(e) {
