@@ -1,21 +1,19 @@
 <div class="history-container">
-  <h3 class="history-date">{{title}}</h3>
+  <h3 class="history-date">{{title}} - {{questions.length}} <span ng-pluralize count="questions.length" when="{'1': 'Question', 'other': 'Questions'}"></span> </h3>
   <div class="history-list row" ng-repeat="question in questions">
-    <div class="history-item col-sm-3 no-padding">
+    <div class="history-item col-sm-5 no-padding">
       <div class="history-row row">
-        <div class="col-sm-2">
-          <i ng-if="question.isCorrect" class="fa fa-check bg-success"></i>
-          <i ng-if="!question.isCorrect" class="fa fa-times bg-danger"></i>
+        <div class="col-sm-3">
+          <i ng-if="question.outcome === 'correct'" class="fa fa-check bg-success"></i>
+          <i ng-if="question.outcome === 'incorrect'" class="fa fa-times bg-danger"></i>
         </div>
-        <div class="col-sm-10">
-          <a href="#/gmat/questions/4152">{{question.title | truncate:15}}</a>
+        <div class="col-sm-9">
+          <a href="#/{{groupId}}/questions/{{question.id}}" ng-bind-html="question.preview | truncate:50"></a>
         </div>
       </div>
     </div>
-    <div class="history-item col-sm-1">{{question.track}}</div>
-    <div class="history-item col-sm-2">Your time to answer: {{question.time_to_answer}}</div>
-    <div class="history-item col-sm-2">Difficulty: {{question.difficulty}}</div>
-    <div class="history-item col-sm-2">Answered at: {{question.answered_at}}</div>
+    <div class="history-item col-sm-2">{{question.track_id | track:groupId}}</div>
+    <div class="history-item col-sm-3">Your time to answer: {{question.time_to_answer}}s</div>
+    <div class="history-item col-sm-2">{{question.experience_points | level}}</div>
   </div>
-  <div pagination total-items="questions" ng-model="currentPage"></div>
 </div>

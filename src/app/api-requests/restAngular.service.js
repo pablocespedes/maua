@@ -5,6 +5,7 @@
   .factory('Headers', Headers)
   .factory('UsersApi', UsersApi)
   .factory('PracticeApi', PracticeApi)
+  .factory('HistoryApi', HistoryApi)
   .factory('GroupsApi', GroupsApi)
   .factory('TracksApi', TracksApi)
   .factory('YoutubeVideoApi', YoutubeVideoApi)
@@ -14,6 +15,7 @@
   Headers.$inject = ['Restangular'];
   UsersApi.$inject = ['Restangular', 'Headers'];
   PracticeApi.$inject = ['Restangular', 'Headers'];
+  HistoryApi.$inject = ['Restangular', 'Headers'];
   GroupsApi.$inject = ['Restangular', 'Headers'];
   TracksApi.$inject = ['Restangular', 'Headers'];
   YoutubeVideoApi.$inject = ['$q', 'environmentCons'];
@@ -81,6 +83,22 @@
     }
   }
 
+  function HistoryApi(Restangular, Headers) {
+    Headers.updateDefaultHeader();
+
+    var service = {
+      getQuestions: getQuestions,
+    };
+
+    return service;
+
+    function getQuestions(groupId, page) {
+      return Restangular.service(groupId).one('round_sessions').customGET('', {
+        'page': page
+      });
+    }
+  }
+
   function PracticeApi(Restangular, Headers) {
     Headers.updateDefaultHeader();
 
@@ -99,7 +117,7 @@
 
     /*Practice*/
     function getQuestionNewSetByPractice(practiceGameId, tracks) {
-      return Restangular.service('practice_games').one().one(practiceGameId, 'sample').customGET('', {
+      return Restangular.service('practice_games').one(practiceGameId, 'sample').customGET('', {
         'tracks[]': tracks
       });
     }
