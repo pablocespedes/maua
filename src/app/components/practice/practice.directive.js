@@ -1,6 +1,24 @@
-angular.module("grockitApp.components")
+(function() {
+'use strict';
+angular
+.module("grockitApp.components")
+.directive('customTopics', customTopics)
+.directive('questionTiming', questionTiming)
+.directive('questionTagsOnly', questionTagsOnly)
+.directive('questionTags', questionTags)
+.directive('questionShareList', questionShareList)
+.directive('questionCount', questionCount)
+.directive('splashMessage', splashMessage)
 
-.directive('ngCustomTopics', function () {
+questionShareList.$inject=['environmentCons'];
+
+function customTopics() {
+  var directive = {
+    link: link,
+    templateUrl: 'app/components/practice/templates/custom-practice.tpl.html',
+    restrict: 'A'
+  };
+  return directive;
 
   function setSelect2Settings() {
     var elm = $('#practice-list select');
@@ -8,7 +26,7 @@ angular.module("grockitApp.components")
       allowClear: true
     });
 
-    elm.on("change", function (e) {
+    elm.on("change", function(e) {
       if (e.added) {
 
         $(e.added.element).css("background", '#f4b04f');
@@ -24,31 +42,26 @@ angular.module("grockitApp.components")
       off_state_content: '<span class="fa fa-times" style="font-size:11px;"></span>'
     });
 
-    $('#practice-settings-toggler').click(function () {
+    $('#practice-settings-toggler').click(function() {
       $('#practice-settings').toggleClass('open');
       return false;
     });
 
-    $('#practice-settings-list li > span').click(function () {
+    $('#practice-settings-list li > span').click(function() {
       $(this).parents('li').find('.switcher').click();
     });
 
   }
 
-  return {
-    restrict: 'A',
-    templateUrl: 'app/components/practice/templates/custom-practice.tpl.html',
-    link: function () {
-      setSelect2Settings();
-      togglePanel();
-    }
+  function link(scope, element, attrs) {
+    setSelect2Settings();
+    togglePanel();
+  }
+}
 
-  };
-})
-
-.directive('questionTiming', function () {
-  return {
-    restrict: 'A',
+function questionTiming() {
+  var directive = {
+    link: link,
     templateUrl: 'app/components/practice/templates/questionTiming.tpl.html',
     scope: {
       data: '=',
@@ -59,83 +72,88 @@ angular.module("grockitApp.components")
       xpTag: '=',
       lastAnswerLoaded: '='
     },
-    link: function (scope) {
-      scope.showPercAnswered = !(scope.lastAnswerLoaded === 'NumericEntry' || scope.lastAnswerLoaded === 'NumericEntryFraction');
-
-      scope.compAvgStatus = ((scope.yourTime - scope.data.avg_time_to_answer) > 0);
-
-      if (scope.compAvgStatus)
-        scope.compAvg = (scope.yourTime - scope.data.avg_time_to_answer);
-      else
-        scope.compAvg = -(scope.yourTime - scope.data.avg_time_to_answer);
-
-    }
+    restrict: 'A'
   };
-})
+  return directive;
 
-.directive('questionTagsOnly', function () {
-  return {
-    restrict: 'A',
+  function link(scope, element, attrs) {
+    scope.showPercAnswered = !(scope.lastAnswerLoaded === 'NumericEntry' || scope.lastAnswerLoaded === 'NumericEntryFraction');
+
+    scope.compAvgStatus = ((scope.yourTime - scope.data.avg_time_to_answer) > 0);
+
+    if (scope.compAvgStatus)
+      scope.compAvg = (scope.yourTime - scope.data.avg_time_to_answer);
+    else
+      scope.compAvg = -(scope.yourTime - scope.data.avg_time_to_answer);
+  }
+}
+
+function questionTagsOnly() {
+  var directive = {
     replace: true,
     templateUrl: 'app/components/practice/templates/questionsTagsOnly.tpl.html',
     scope: {
       tags: '='
-    }
+    },
+    restrict: 'A'
   };
-})
+  return directive;
+}
 
-.directive('questionTags', function () {
-  return {
-    restrict: 'A',
+function questionTags() {
+  var directive = {
     templateUrl: 'app/components/practice/templates/questionsTags.tpl.html',
+    restrict: 'A',
     scope: {
       tags: '='
     }
   };
-})
+  return directive;
+}
 
-.directive('questionShareList', function (environmentCons) {
-  return {
-    restrict: 'A',
+function questionShareList(environmentCons) {
+  var directive = {
+    link: link,
     templateUrl: 'app/components/practice/templates/uestionShareList.tpl.html',
     scope: {
       questCount: '=',
       currentGroup: '='
     },
-    link: function (scope) {
-      scope.currentDomain = environmentCons.localGrockit + '#/' + scope.currentGroup + '/question/';
-    }
-
+    restrict: 'A'
   };
-})
+  return directive;
 
-.directive('questionCount', function() {
-  return {
-    restrict: 'A',
+  function link(scope, element, attrs) {
+    scope.currentDomain = environmentCons.localGrockit + '#/' + scope.currentGroup + '/question/';
+  }
+}
+
+function questionCount() {
+  var directive = {
     templateUrl: 'app/components/practice/templates/questionCount.tpl.html',
     scope: {
       currentCount: '=',
       maxCount: '='
-    }
-  }
-})
+    },
+    restrict: 'A'
+  };
+  return directive;
+}
 
-.directive('splashMessage', function(utilities) {
-  return {
-    restrict: 'A',
+function splashMessage() {
+  var directive = {
+    link: link,
     templateUrl: 'app/components/practice/templates/splash-message.tpl.html',
     scope: {
       isVisible: '=',
       word: '='
     },
-    link: function(scope){
-      var loaderImages =[
-      'CloudLoadBlue350350.gif'
-      ];
-
-     scope.loader = loaderImages[utilities.random(loaderImages.length - 1)];
-    }
-
+    restrict: 'A'
   };
-});
+  return directive;
 
+  function link(scope, element, attrs) {
+    /* */
+  }
+}
+})();

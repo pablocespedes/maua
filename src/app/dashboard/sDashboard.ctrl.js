@@ -23,6 +23,7 @@
 
     init();
 
+
     $scope.$on("$destroy", function() {
       currentProduct.unregisterGroup(dashObserver);
     });

@@ -14,7 +14,7 @@
       DashboardApi.getDashboard(groupId).then(function(result) {
         dashboardData = null;
         dashboardData = result.data.dashboard
-        console.log(dashboardData.sections[0].smart_practice)
+        console.log(dashboardData)
         deferred.resolve(true);
 
       });

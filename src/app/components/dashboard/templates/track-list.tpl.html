@@ -8,7 +8,7 @@
       </span>
       <div class=" text-center pull-right" ng-if="isVisible">
         <div class="" ng-show="hasScore(track)">
-          <h4 class="note-title"><span class="text-primary" ng-bind="getScore(track)"></span><br>
+          <h4 class="note-title score-prediction-v"><span class="text-primary" ng-bind="getScore(track)"></span><br>
             <span class="text-xs float-right valign-bottom">Your Score Prediction</span>
           </h4>
         </div>
@@ -23,14 +23,14 @@
         <span class="text-normal" ng-bind="subtrack[$index].name" ng-click="startPractice(subtrack[$index],track.id)"></span>
       </h4>
     </div>
-    <div class="col-md-4 track-list-margin">
+    <!-- <div class="col-md-4 track-list-margin">
       <div class="progress">
         <div class="progress-bar progress-bar-success" style="width: 35%"></div>
         <div class="progress-bar progress-bar-warning" style="width: 20%"></div>
         <div class="progress-bar progress-bar-danger" style="width: 10%"></div>
       </div>
-    </div>
-    <div class="col-md-2 text-right pull-right no-padding-r track-list-margin">
+    </div> -->
+    <div class="col-md-4 text-right pull-right no-padding-r track-list-margin">
       <span class="text-semibold">21/200</span>
       |
       <span class="text-semibold">70% Accuracy</span>

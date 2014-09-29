@@ -32,7 +32,7 @@
 
       /*update group Name*/
       utilities.setGroupTitle(vmApp.groups.linkedGroups[index].name);
-      var currentGroupId= vmApp.groups.linkedGroups[index].id;
+      var currentGroupId = vmApp.groups.linkedGroups[index].id;
       currentProduct.currentGroupId(currentGroupId);
 
       Application.hideVideoOption(currentGroupId);
@@ -50,18 +50,6 @@
         if (index >= 0) {
 
           utilities.clearActiveTab();
-
-        /*  $scope.selected = index;
- var tracks = [];
-          tracks.push($scope.tracksList[index].id);
-
-          var trackData = {
-            'id': $scope.tracksList[index].id,
-            tracks: tracks,
-            trackTitle: $scope.tracksList[index].name
-          };
-          utilities.setActiveTrack(trackData);*/
-
           $route.reload();
 
         }
@@ -103,7 +91,9 @@
             var responseGroups = result.data.groups;
             if (!!responseGroups) {
 
-              var studyingFor = _.find(responseGroups, { 'id': vmApp.activeGroupId });
+              var studyingFor = _.find(responseGroups, {
+                'id': vmApp.activeGroupId
+              });
               if (angular.isDefined(studyingFor)) {
                 utilities.setGroupTitle(studyingFor.name);
               }
@@ -144,13 +134,13 @@
           if (response != null) {
             vmApp.currentUser = response;
             currentProduct.observeGroupId().register(function(groupId) {
-             vmApp.activeGroupId = groupId;
-             Application.loadGroupMembership();
-             ListenloopUtility.base(response);
+              vmApp.activeGroupId = groupId;
+              Application.loadGroupMembership();
+              ListenloopUtility.base(response);
               Application.hideVideoOption(vmApp.activeGroupId);
               Application.hideStudyPlan(vmApp.activeGroupId);
 
-             });
+            });
 
             GaUtility.classic();
             GaUtility.UA();

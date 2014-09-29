@@ -14,7 +14,6 @@
     practiceObserver=null;
 
     vmPr.activeTrack = utilities.getActiveTrack();
-    console.log(vmPr.activeTrack);
     vmPr.breadcrumbs = breadcrumbs;
     breadcrumbs.options = {
       'practice': vmPr.activeTrack.subject.name
