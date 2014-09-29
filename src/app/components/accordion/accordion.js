@@ -71,9 +71,11 @@
             });
 
             scope.toggleOpen = function() {
+             if(scope.hasChilds){
                 if (!scope.isDisabled) {
                     scope.isOpen = !scope.isOpen;
                 }
+             }
             };
         }
 
@@ -93,7 +95,8 @@
                 heading: '@', // Interpolate the heading attribute onto this scope
                 isOpen: '=?',
                 isDisabled: '=?',
-                isCustomToggle:'='
+                isCustomToggle:'=',
+                hasChilds:'='
             },
             controller: internalController,
             link: link

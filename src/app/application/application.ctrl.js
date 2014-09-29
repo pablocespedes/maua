@@ -50,9 +50,9 @@
         if (index >= 0) {
 
           utilities.clearActiveTab();
-          $scope.selected = index;
 
-          var tracks = [];
+        /*  $scope.selected = index;
+ var tracks = [];
           tracks.push($scope.tracksList[index].id);
 
           var trackData = {
@@ -60,7 +60,7 @@
             tracks: tracks,
             trackTitle: $scope.tracksList[index].name
           };
-          utilities.setActiveTrack(trackData);
+          utilities.setActiveTrack(trackData);*/
 
           $route.reload();
 

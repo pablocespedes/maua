@@ -1,7 +1,7 @@
 'use strict';
-(function(app) {
+(function() {
 
-  app.run(run);
+  angular.module("grockitApp").run(run);
   run.$inject = ['$rootScope', '$location', '$window', 'Auth', 'utilities', 'alerts', 'GroupsApi', 'currentProduct'];
 
   function run($rootScope, $location, $window, Auth, utilities, alerts, GroupsApi, currentProduct) {

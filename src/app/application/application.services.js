@@ -18,6 +18,7 @@
   currentProduct.$inject = ['webStorage','Observable','utilities'];
 
   function utilities($rootScope, $http, $location, $route, $q, $window, webStorage, YoutubeVideoApi, environmentCons) {
+    var currentTrack= {};
     var service = {
       newGrockit: newGrockit,
       originalGrockit: originalGrockit,
@@ -88,13 +89,12 @@
     }
 
     function getActiveTrack() {
-      return webStorage.get('currentUser').trackData;
+      return currentTrack;
     }
 
-    function setActiveTrack(data) {
-      var currentUser = webStorage.get('currentUser');
-      currentUser.trackData = data;
-      webStorage.add('currentUser', currentUser);
+    function setActiveTrack(subject,trackId) {
+      currentTrack.subject=subject ;
+      currentTrack.trackId=trackId ;
     }
 
     function random(min, max) {

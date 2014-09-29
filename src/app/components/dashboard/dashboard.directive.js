@@ -32,6 +32,11 @@ angular.module("grockitApp.components")
     },
     link: function (scope, element, attrs) {
 
+      scope.empty= function(track){
+
+         return angular.isDefined(track.items) && track.items.length >0 ? true : false;
+      }
+
       scope.hasScore = function (track) {
         return (scope.getScore(track) !== null && scope.getScore(track) > 0);
       };
@@ -64,9 +69,12 @@ angular.module("grockitApp.components")
     },
     link: function(scope){
       scope.newChallenge = function (index) {
-        var currentChallenge = scope.challenges[index];
-        scope.challengeId=currentChallenge.id;
-        var baseUrl = utilities.originalGrockit().url;
+        var currentChallenge = scope.challenges[index]
+            pieces = currentChallenge.url.split("/"),
+            id= pieces[pieces.length-1],
+           baseUrl = utilities.originalGrockit().url;
+
+        scope.challengeId=id;
         utilities.redirect(baseUrl+'/assessment/introcards/'+scope.challengeId);
 
       };
