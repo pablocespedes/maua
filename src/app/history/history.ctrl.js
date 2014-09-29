@@ -19,9 +19,10 @@
       totalQuestions: 0,
       itemsPerPage: 0,
       currentPage: 1,
-      pageChanged: function() {
-        console.log('pageChanged');
+      changePage: function(page) {
+        console.log('changePage: ', page);
         if (vmHist.groupId) {
+          vmHist.pagination.currentPage = page;
           loadQuestions(vmHist.groupId, vmHist.pagination.currentPage);
         }
       }
@@ -43,6 +44,7 @@
     }
 
     function loadQuestions(groupId, page) {
+      console.log('loadQuestions: ', page);
       HistoryApi.getQuestions(groupId, page).then(function(response) {
         var questionsWithDay = _.map(response.data.round_sessions, function(question) {
           var date = new Date(question.answered_at);

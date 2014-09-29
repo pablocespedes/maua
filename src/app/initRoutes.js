@@ -17,7 +17,7 @@ var paths = {
   appServices: 'app/application/application.services.js',
   app: 'app/app.js',
   practiceSrv: 'app/shared/services/practice.service.js',
-  //uiBootStrap: 'app/components/accordion/vendor/ui.bootstrap.min.js',
+  uiBootStrap: 'app/components/accordion/vendor/ui.bootstrap.min.js',
   accordion : 'app/components/accordion/accordion.js',
   historyM: 'app/history/history.module.js',
   historyD: 'app/components/history/history.directive.js'
@@ -40,7 +40,7 @@ $script([
     paths.appDirectives,
     paths.appController,
     paths.restAngularFactory,
-    //paths.uiBootStrap,
+    paths.uiBootStrap,
     paths.accordion,
     paths.dashboard,
     paths.practiceSrv,
