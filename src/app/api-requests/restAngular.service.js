@@ -91,7 +91,6 @@
 
     return service;
 
-    /*Practice*/
     function getQuestions(groupId, page) {
       return Restangular.service(groupId).one('round_sessions').customGET('', {
         'page': page

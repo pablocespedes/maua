@@ -4,6 +4,7 @@ angular.module("grockitApp.application")
 .filter('formatSeconds', formatSeconds)
 .filter('truncate', truncate)
 .filter('date', date)
+.filter('time', time)
 .filter('track', track)
 .filter('level', level);
 
@@ -16,6 +17,24 @@ function date() {
     if (date) {
       var parsedDate = new Date(date);
       return parsedDate.getDate() + '/' + (parsedDate.getMonth() + 1) + '/' + parsedDate.getFullYear();
+    }
+    return date;
+  };
+}
+
+function time() {
+  return function(date) {
+    if (date) {
+      var parsedDate = new Date(date);
+      console.log(date);
+      var hours = parsedDate.getHours(),
+          minutes = parsedDate.getMinutes(),
+          seconds = parsedDate.getSeconds(),
+          period = hours > 12 ? 'pm' : 'am';
+      hours = hours > 12 ? hours - 12 : hours;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      seconds = seconds < 10 ? '0' + seconds : seconds;
+      return hours + ':' + minutes + ':' + seconds + ' ' + period;
     }
     return date;
   };

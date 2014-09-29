@@ -1,7 +1,6 @@
 <div class="history-container">
-  <h1>GMAT Question History</h1>
+  <h1>Question History</h1>
   <br>
-  <div infinite-scroll="vmHist.nextPage()">
-    <div ng-repeat="questionPerDay in vmHist.questionsPerDay" history-list title="{{questionPerDay.day}}" questions="questionPerDay.questions" group-id="vmHist.groupId"></div>
-  </div>
+  <div ng-repeat="questionPerDay in vmHist.questionsPerDay" history-list title="{{questionPerDay.day}}" questions="questionPerDay.questions" group-id="vmHist.groupId"></div>
+  <div ng-if="vmHist.isLoaded" pagination total-items="vmHist.pagination.totalQuestions" ng-model="vmHist.pagination.currentPage" items-per-page="vmHist.pagination.itemsPerPage" ng-change="vmHist.pagination.pageChanged()"></div>
 </div>

@@ -13,6 +13,19 @@
     vmHist.currentPage = 1;
     vmHist.groupId = null;
     vmHist.questionsPerDay = [];
+    vmHist.isLoaded = false;
+
+    vmHist.pagination = {
+      totalQuestions: 0,
+      itemsPerPage: 0,
+      currentPage: 1,
+      pageChanged: function() {
+        console.log('pageChanged');
+        if (vmHist.groupId) {
+          loadQuestions(vmHist.groupId, vmHist.pagination.currentPage);
+        }
+      }
+    };
 
     vmHist.productObserver = currentProduct.observeGroupId().register(updateGroupId);
 
@@ -20,13 +33,6 @@
       currentProduct.unregisterGroup(vmHist.productObserver);
     });
 
-    vmHist.nextPage = function() {
-      if (vmHist.groupId) {
-        console.log('nextPage');
-        vmHist.currentPage++;
-        loadQuestions(vmHist.groupId, vmHist.currentPage);
-      }
-    };
 
     function updateGroupId(groupId) {
       if (vmHist.groupId !== groupId) {
@@ -49,8 +55,14 @@
           return {day: key, questions: grouppedByDay[key]};
         });
 
-      vmHist.questionsPerDay = _.union(vmHist.questionsPerDay, parsedQuestions);
-      console.log(vmHist.questionsPerDay);
+      vmHist.questionsPerDay = parsedQuestions;
+
+      var meta = response.data.meta;
+      vmHist.pagination.totalQuestions = meta.total_entries;
+      vmHist.pagination.itemsPerPage = meta.per_page;
+
+      vmHist.isLoaded = true;
+      console.log(vmHist.pagination);
       });
     }
     function secondsBetweenDates(date1, date2) {
