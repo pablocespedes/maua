@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module("grockitApp.history", ['ng-breadcrumbs', 'infinite-scroll'])
+angular.module("grockitApp.history", ['ng-breadcrumbs'])
 .config(function($httpProvider, $routeProvider, $controllerProvider, $compileProvider, $provide) {
   angular.module("grockitApp.history").controller = $controllerProvider.register;
   angular.module("grockitApp.history").directive = $compileProvider.directive;
