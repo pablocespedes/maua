@@ -117,7 +117,7 @@
 
     /*Practice*/
     function getQuestionNewSetByPractice(practiceGameId, tracks) {
-      return Restangular.service('practice_games').one(practiceGameId, 'sample').customGET('', {
+      return Restangular.service('practice_games').one(practiceGameId).customGET('sample', {
         'tracks[]': tracks
       });
     }

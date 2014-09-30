@@ -101,8 +101,7 @@
         if (angular.isDefined(historyResponse)) {
           vmDash.historyVisible = true;
           vmDash.historyInfo = {};
-          vmDash.historyInfo.totalQuest = 'N-A';
-          vmDash.historyInfo.totalQuestLastW = historyResponse.lastWeek;
+          vmDash.historyInfo.totalQuest = historyResponse.all;
           vmDash.historyInfo.totalQuestToday = historyResponse.today;
           vmDash.loading = false;
         } else {

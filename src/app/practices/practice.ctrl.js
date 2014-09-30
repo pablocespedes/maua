@@ -227,7 +227,10 @@
         practiceSrv.resetLayout();
       },
       getQuestionSets: function() {
-        var getQuestionSet = PracticeApi.getQuestionNewSetByPractice(vmPr.gameId, vmPr.activeTrack.trackId);
+        var tracks = [];
+        tracks.push(vmPr.activeTrack.trackId);
+
+        var getQuestionSet = PracticeApi.getQuestionNewSetByPractice(vmPr.gameId, tracks);
         getQuestionSet.then(function(result) {
           console.log(result.data.practice_games)
           if (result.data.question_sets.length > 0) {

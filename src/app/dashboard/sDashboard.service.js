@@ -26,13 +26,14 @@
       return dashboardData.score_prediction;
     };
     this.getProgress = function() {
-      var history = {};
+      var history = {},allQuestions,todayQuestions;
 
-      history.lastWeek = 234;//dashboardData.progress.last_week[0].total_questions;
+      todayQuestions= _.pluck(dashboardData.progress.today, 'total_questions');
+      history.today = todayQuestions.length>0 ? _.reduce(todayQuestions, function(num,sum){ return num+sum}) : 0;
 
-      history.today = 212;
-    /*  _.find(dashboardData.progress.today, function(tData){ return  });
-      dashboardData.progress.today[0].total_questions;*/
+      allQuestions= _.pluck(dashboardData.progress.all, 'total_questions');
+      history.all = allQuestions.length>0 ? _.reduce(allQuestions, function(num,sum){ return num+sum}) : 0;
+
 
       return history;
     }

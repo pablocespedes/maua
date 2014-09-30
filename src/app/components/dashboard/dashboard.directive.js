@@ -7,6 +7,9 @@
   .directive('historyChart', historyChart)
   .directive('challengeDashboard', challengeDashboard)
 
+  trackList.$inject=['utilities'];
+  challengeDashboard.$inject=['utilities'];
+
   function scorePrediction() {
     var directive = {
       link: link,
@@ -31,7 +34,7 @@
     }
   }
 
-  function trackList() {
+  function trackList(utilities) {
     var directive = {
       link: link,
       templateUrl: 'app/components/dashboard/templates/track-list.tpl.html',
@@ -73,7 +76,7 @@
     return directive;
   }
 
-  function challengeDashboard() {
+  function challengeDashboard(utilities) {
     var directive = {
       link: link,
       templateUrl: 'app/components/dashboard/templates/dashboard-challenge.tpl.html',
