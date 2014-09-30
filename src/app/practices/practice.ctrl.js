@@ -14,7 +14,6 @@
     practiceObserver=null;
 
     vmPr.activeTrack = utilities.getActiveTrack();
-    console.log(vmPr.activeTrack);
     vmPr.breadcrumbs = breadcrumbs;
     breadcrumbs.options = {
       'practice': vmPr.activeTrack.subject.name
@@ -228,8 +227,12 @@
         practiceSrv.resetLayout();
       },
       getQuestionSets: function() {
-        var getQuestionSet = PracticeApi.getQuestionNewSetByPractice(vmPr.gameId, vmPr.activeTrack.trackId);
+        var tracks = [];
+        tracks.push(vmPr.activeTrack.trackId);
+
+        var getQuestionSet = PracticeApi.getQuestionNewSetByPractice(vmPr.gameId, tracks);
         getQuestionSet.then(function(result) {
+          console.log(result.data.practice_games)
           if (result.data.question_sets.length > 0) {
             vmPr.questionSetList = result.data.question_sets;
 

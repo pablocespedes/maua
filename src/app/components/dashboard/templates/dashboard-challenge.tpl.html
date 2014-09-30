@@ -1,10 +1,10 @@
 <a ng-repeat="challenge in challenges" href="javascript:void(0)" class="list-group-item" ng-click="newChallenge($index)">
-		<div class="row track-list-padding-hr">
-     <h4 class="text-slim">
-            <span ng-bind="challenge.name"></span>
-            </h4>
-			<!-- 	<button class="float-left btn btn-labeled btn-primary btn-lg btn-flat" ng-click="newChallenge($index)">
-						<span class="btn-label icon fa fa-flag-checkered"></span><span	ng-bind="challenge.name"></span></button> -->
+		<div class="row track-list-padding-hr track-list-padding">
+     <span class="text-lg">
+        <strong>
+          <span class="text-slim" ng-bind="challenge.name"></span>
+        </strong>
+      </span>
 				&nbsp; &nbsp; &nbsp;
 
 		</div>

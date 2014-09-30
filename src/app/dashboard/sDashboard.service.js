@@ -14,7 +14,7 @@
       DashboardApi.getDashboard(groupId).then(function(result) {
         dashboardData = null;
         dashboardData = result.data.dashboard
-        console.log(dashboardData.sections[0].smart_practice)
+        console.log(dashboardData)
         deferred.resolve(true);
 
       });
@@ -25,19 +25,24 @@
     this.getScorePrediction = function() {
       return dashboardData.score_prediction;
     };
+
     this.getProgress = function() {
       var history = {};
 
-      history.lastWeek = dashboardData.progress.last_week[0].total_questions;
-      history.today = dashboardData.progress.today[0].total_questions;
+      history.today = angular.isDefined(dashboardData.progress.today) ? dashboardData.progress.today.total_questions_answered : 0;
+
+      history.lastWeek = angular.isDefined(dashboardData.progress.last_week) ? dashboardData.progress.last_week.total_questions_answered : 0;
+
+      history.all =  angular.isDefined(dashboardData.progress.all) ? dashboardData.progress.all.total_questions_answered : 0;
 
       return history;
     }
     this.getSmartPractice = function() {
-      return dashboardData.sections[0].smart_practice;
+
+      return dashboardData.smart_practice;
     }
     this.getChallenge = function() {
-      return dashboardData.sections[1].challenge;
+      return dashboardData.challenge;
     }
 
   }

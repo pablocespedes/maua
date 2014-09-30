@@ -117,14 +117,14 @@
 
     /*Practice*/
     function getQuestionNewSetByPractice(practiceGameId, tracks) {
-      return Restangular.service('practice_games').one(practiceGameId, 'sample').customGET('', {
+      return Restangular.service('practice_games').one(practiceGameId).customGET('sample', {
         'tracks[]': tracks
       });
     }
 
     function createNewPracticeGame(groupId, url) {
 
-      return  Restangular.oneUrl('newPracticeGame', url).post('practice');
+      return  Restangular.oneUrl('newPracticeGame', url).post();
     }
 
     function createNewGameSubtrack(groupId, subTrackId) {

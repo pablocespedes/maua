@@ -26,7 +26,6 @@ function time() {
   return function(date) {
     if (date) {
       var parsedDate = new Date(date);
-      console.log(date);
       var hours = parsedDate.getHours(),
           minutes = parsedDate.getMinutes(),
           seconds = parsedDate.getSeconds(),

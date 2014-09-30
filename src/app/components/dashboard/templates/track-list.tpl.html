@@ -1,5 +1,5 @@
 <div accordion close-others="true">
-  <div accordion-group ng-repeat="track in tracks" is-custom-toggle="true" has-childs="empty(track)" >
+  <div accordion-group ng-repeat="track in tracks" is-custom-toggle="true" has-childs="empty(track)" class="smart-practice-head">
     <div accordion-heading>
       <span class="text-lg" ng-click="startPractice(track,track.id)">
         <strong>
@@ -8,7 +8,7 @@
       </span>
       <div class=" text-center pull-right" ng-if="isVisible">
         <div class="" ng-show="hasScore(track)">
-          <h4 class="note-title"><span class="text-primary" ng-bind="getScore(track)"></span><br>
+          <h4 class="note-title score-prediction-v"><span class="text-primary" ng-bind="getScore(track)"></span><br>
             <span class="text-xs float-right valign-bottom">Your Score Prediction</span>
           </h4>
         </div>
@@ -17,23 +17,25 @@
         </div>
       </div>
     </div accordion-heading>
-    <div ng-repeat="subtrack in track.items">
-         <div class="col-md-6 track-list-row">
+    <div class="row sub-track-row" ng-repeat="subtrack in track.items">
+         <div class="col-md-6 track-list-row sub-track-item">
       <h4 class="text-normal">
-        <span class="text-normal" ng-bind="subtrack[$index].name" ng-click="startPractice(subtrack[$index],track.id)"></span>
+        <span class="text-normal" ng-bind="subtrack.name" ng-click="startPractice(subtrack,track.id)"></span>
       </h4>
     </div>
-    <div class="col-md-4 track-list-margin">
+    <!-- <div class="col-md-4 track-list-margin">
       <div class="progress">
         <div class="progress-bar progress-bar-success" style="width: 35%"></div>
         <div class="progress-bar progress-bar-warning" style="width: 20%"></div>
         <div class="progress-bar progress-bar-danger" style="width: 10%"></div>
       </div>
-    </div>
-    <div class="col-md-2 text-right pull-right no-padding-r track-list-margin">
-      <span class="text-semibold">21/200</span>
+    </div> -->
+    <div class="col-md-4 text-right pull-right no-padding-r track-list-margin sub-track-item">
+      <span class="text-semibold">
+      <span ng-bind="track.total_questions_answered | number:0"></span>&nbsp;/&nbsp;<span ng-bind="track.total_questions_available | number:0"></span>
+      </span>
       |
-      <span class="text-semibold">70% Accuracy</span>
+      <span class="text-semibold"><span ng-bind="accuracy(subtrack)"></span>% Accuracy</span>
     </div>
     </div>
 
