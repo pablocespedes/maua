@@ -124,7 +124,7 @@
 
     function createNewPracticeGame(groupId, url) {
 
-      return  Restangular.oneUrl('newPracticeGame', url).post('practice');
+      return  Restangular.oneUrl('newPracticeGame', url).post();
     }
 
     function createNewGameSubtrack(groupId, subTrackId) {

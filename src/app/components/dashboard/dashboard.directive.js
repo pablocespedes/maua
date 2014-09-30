@@ -80,13 +80,13 @@
       restrict: 'A',
       scope: {
         challenges: '='
-      },
+      }
     };
     return directive;
 
     function link(scope, element, attrs) {
       scope.newChallenge = function(index) {
-        var currentChallenge = scope.challenges[index]
+        var currentChallenge = scope.challenges[index],
         pieces = currentChallenge.url.split("/"),
         id = pieces[pieces.length - 1],
         baseUrl = utilities.originalGrockit().url;

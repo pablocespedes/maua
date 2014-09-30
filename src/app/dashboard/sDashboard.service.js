@@ -28,8 +28,11 @@
     this.getProgress = function() {
       var history = {};
 
-      history.lastWeek = dashboardData.progress.last_week[0].total_questions;
-      history.today = dashboardData.progress.today[0].total_questions;
+      history.lastWeek = 234;//dashboardData.progress.last_week[0].total_questions;
+
+      history.today = 212;
+    /*  _.find(dashboardData.progress.today, function(tData){ return  });
+      dashboardData.progress.today[0].total_questions;*/
 
       return history;
     }
