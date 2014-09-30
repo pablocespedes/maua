@@ -1,14 +1,14 @@
-(function(app) {
+(function() {
   'use strict';
   angular
   .module('grockitApp.history')
   .controller('HistoryController', HistoryController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  HistoryController.$inject = ['$scope', 'HistoryApi', 'currentProduct'];
+  HistoryController.$inject = ['$scope', 'HistoryApi', 'currentProduct','historyDates'];
 
-  function HistoryController($scope, HistoryApi, currentProduct) {
-    // dummy data for pagination
+  function HistoryController($scope, HistoryApi, currentProduct,historyDates) {
+     /* jshint validthis: true */
     var vmHist = this;
     vmHist.currentPage = 1;
     vmHist.groupId = null;
@@ -48,8 +48,8 @@
       HistoryApi.getQuestions(groupId, page).then(function(response) {
         var questionsWithDay = _.map(response.data.round_sessions, function(question) {
           var date = new Date(question.answered_at);
-          question.day = getStandardDate(date);
-          question.time_to_answer = secondsBetweenDates(question.created_at, question.answered_at);
+          question.day = historyDates.getStandardDate(date);
+          question.time_to_answer = historyDates.secondsBetweenDates(question.created_at, question.answered_at);
           return question;
         }),
             grouppedByDay = _.groupBy(questionsWithDay, 'day'),
@@ -67,21 +67,7 @@
       console.log(vmHist.pagination);
       });
     }
-    function secondsBetweenDates(date1, date2) {
-      date1 = new Date(date1);
-      date2 = new Date(date2);
-      return Math.abs(date2.getTime() - date1.getTime()) / 1000;
-    }
-    function getStandardDate(date) {
-      var day = date.getDate(),
-          month = date.getMonth();
-      return getMonthName(month) + ' ' + day;
-    }
-    function getMonthName(index) {
-      var monthNames = [ "January", "February", "March", "April", "May", "June",
-              "July", "August", "September", "October", "November", "December" ];
-      return monthNames[index];
-    }
+
 
   }
 })();

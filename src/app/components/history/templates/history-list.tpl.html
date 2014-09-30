@@ -1,5 +1,7 @@
 <div class="history-container">
-  <h3 class="history-date">{{title}} - {{questions.length}} <span ng-pluralize count="questions.length" when="{'1': 'Question', 'other': 'Questions'}"></span> </h3>
+  <h3 class="history-date">
+  <span ng-bind="title"></span> - <span ng-bind="questions.length"></span>
+  <span ng-pluralize count="questions.length" when="{'1': 'Question', 'other': 'Questions'}"></span> </h3>
   <div class="history-list row" ng-repeat="question in questions">
     <div class="history-item col-sm-5 no-padding">
       <div class="history-row row">
@@ -12,8 +14,8 @@
         </div>
       </div>
     </div>
-    <div class="history-item col-sm-2">{{question.track_id | track:groupId}}</div>
-    <div class="history-item col-sm-3">Your time to answer: {{question.time_to_answer}}s</div>
-    <div class="history-item col-sm-2">{{question.experience_points | level}}</div>
+    <div class="history-item col-sm-2" ng-bind="question.track_id | track:groupId"></div>
+    <div class="history-item col-sm-3">Your time to answer: <span ng-bind="question.time_to_answer"></span>s</div>
+    <div class="history-item col-sm-2" ng-bind="question.experience_points | level"></div>
   </div>
 </div>

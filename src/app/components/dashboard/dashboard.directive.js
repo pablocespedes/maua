@@ -49,8 +49,13 @@
     return directive;
 
     function link(scope, element, attrs) {
-      scope.empty = function(track) {
 
+      scope.accuracy = function(subtrack){
+          var accuracy = (subtrack.total_questions_answered_correctly / subtrack.total_questions_answered)*100;
+          return accuracy > 0 ? Math.round(accuracy.toFixed(2)) : 0;
+      }
+
+      scope.empty = function(track) {
         return angular.isDefined(track.items) && track.items.length > 0 ? true : false;
       }
 

@@ -25,23 +25,24 @@
     this.getScorePrediction = function() {
       return dashboardData.score_prediction;
     };
+
     this.getProgress = function() {
-      var history = {},allQuestions,todayQuestions;
+      var history = {};
 
-      todayQuestions= _.pluck(dashboardData.progress.today, 'total_questions');
-      history.today = todayQuestions.length>0 ? _.reduce(todayQuestions, function(num,sum){ return num+sum}) : 0;
+      history.today = angular.isDefined(dashboardData.progress.today) ? dashboardData.progress.today.total_questions_answered : 0;
 
-      allQuestions= _.pluck(dashboardData.progress.all, 'total_questions');
-      history.all = allQuestions.length>0 ? _.reduce(allQuestions, function(num,sum){ return num+sum}) : 0;
+      history.lastWeek = angular.isDefined(dashboardData.progress.last_week) ? dashboardData.progress.last_week.total_questions_answered : 0;
 
+      history.all =  angular.isDefined(dashboardData.progress.all) ? dashboardData.progress.all.total_questions_answered : 0;
 
       return history;
     }
     this.getSmartPractice = function() {
-      return dashboardData.sections[0].smart_practice;
+
+      return dashboardData.smart_practice;
     }
     this.getChallenge = function() {
-      return dashboardData.sections[1].challenge;
+      return dashboardData.challenge;
     }
 
   }

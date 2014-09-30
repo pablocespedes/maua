@@ -49,6 +49,21 @@
 }
 
 #simpleDash {
+    .sub-track-row{
+        margin: 10px 0px 9px 0px !important;
+        border-bottom: 1px solid #ddd;
+    }
+    .sub-track-row:last-child
+    {
+      border-bottom: 0px transparent;
+      margin-bottom:0px !important;
+    }
+    .sub-track-item{
+        margin-top: 0px;
+        margin-bottom:10px;
+        margin-left: 20px!important;
+        margin-right:24px!important;
+    }
 
     .smart-practice-head{
         border-bottom: 1px solid #ececec;
@@ -76,9 +91,9 @@
     }
 
      .panel-body {
-        background: #fff;
+        background: #fff!important;
         margin: 0;
-       padding: 10px 20px 9px 24px;
+        padding: 0px 0px 0px 0px!important;
     }
 
     .list-group-item > .badge {

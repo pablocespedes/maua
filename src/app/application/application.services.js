@@ -371,7 +371,6 @@
     this.unregisterGroup = function(groupObserver){
       observable.unregister(groupObserver);
     }
-
   }
 
 })();

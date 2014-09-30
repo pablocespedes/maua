@@ -17,10 +17,10 @@
         </div>
       </div>
     </div accordion-heading>
-    <div ng-repeat="subtrack in track.items">
-         <div class="col-md-6 track-list-row">
+    <div class="row sub-track-row" ng-repeat="subtrack in track.items">
+         <div class="col-md-6 track-list-row sub-track-item">
       <h4 class="text-normal">
-        <span class="text-normal" ng-bind="subtrack[$index].name" ng-click="startPractice(subtrack[$index],track.id)"></span>
+        <span class="text-normal" ng-bind="subtrack.name" ng-click="startPractice(subtrack,track.id)"></span>
       </h4>
     </div>
     <!-- <div class="col-md-4 track-list-margin">
@@ -30,10 +30,12 @@
         <div class="progress-bar progress-bar-danger" style="width: 10%"></div>
       </div>
     </div> -->
-    <div class="col-md-4 text-right pull-right no-padding-r track-list-margin">
-      <span class="text-semibold">21/200</span>
+    <div class="col-md-4 text-right pull-right no-padding-r track-list-margin sub-track-item">
+      <span class="text-semibold">
+      <span ng-bind="track.total_questions_answered | number:0"></span>&nbsp;/&nbsp;<span ng-bind="track.total_questions_available | number:0"></span>
+      </span>
       |
-      <span class="text-semibold">70% Accuracy</span>
+      <span class="text-semibold"><span ng-bind="accuracy(subtrack)"></span>% Accuracy</span>
     </div>
     </div>
 
