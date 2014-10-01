@@ -111,7 +111,7 @@
       },
       getChallenge: function() {
         var challenge = dashboard.getChallenge();
-        if (!_.isEmpty(challenge)) {
+        if (!_.isEmpty(challenge) && challenge.items.length>0) {
           vmDash.isChallengeAvailable = true;
           vmDash.challengesGames = challenge.items;
 

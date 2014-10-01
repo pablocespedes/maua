@@ -38,8 +38,19 @@
       return history;
     }
     this.getSmartPractice = function() {
+      var accuracy = null,
+      i = 0,
+      subtracks = null,
+      smartPractice = null;
+      smartPractice = _.forEach(dashboardData.smart_practice, function(result) {
+        return subtracks = _.forEach(result[i].items, function(subtrack) {
+          accuracy = (subtrack.total_questions_answered_correctly / subtrack.total_questions_answered) * 100;
+          subtrack['accuracy'] = accuracy > 0 ? Math.round(accuracy.toFixed(2)) : 0;
+        });
+        i++;
 
-      return dashboardData.smart_practice;
+      });
+      return smartPractice;
     }
     this.getChallenge = function() {
       return dashboardData.challenge;
