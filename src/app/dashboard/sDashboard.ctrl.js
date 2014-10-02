@@ -52,7 +52,6 @@
     function StartPractice(subject,trackId) {
            utilities.setActiveTab(0);
       if (angular.isDefined(subject)) {
-        console.log(trackId)
         utilities.setActiveTrack(subject,trackId);
         utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
       } else {

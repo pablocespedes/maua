@@ -15,7 +15,6 @@
       DashboardApi.getDashboard(groupId).then(function(result) {
         dashboardData = null;
         dashboardData = result.data.dashboard
-        console.log(dashboardData)
         deferred.resolve(true);
 
       });

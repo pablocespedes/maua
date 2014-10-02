@@ -9,7 +9,6 @@
   .factory('GroupsApi', GroupsApi)
   .factory('TracksApi', TracksApi)
   .factory('YoutubeVideoApi', YoutubeVideoApi)
-  .factory('ChallengeApi', ChallengeApi)
   .factory('DashboardApi', DashboardApi);
 
   Headers.$inject = ['Restangular'];
@@ -19,7 +18,6 @@
   GroupsApi.$inject = ['Restangular', 'Headers'];
   TracksApi.$inject = ['Restangular', 'Headers'];
   YoutubeVideoApi.$inject = ['$q', 'environmentCons'];
-  ChallengeApi.$inject = ['Restangular', 'Headers'];
   DashboardApi.$inject = ['Restangular', 'Headers'];
 
   function Headers(Restangular) {
@@ -103,10 +101,10 @@
     Headers.updateDefaultHeader();
 
     var service = {
-      getQuestionNewSetByPractice: getQuestionNewSetByPractice,
       createNewPracticeGame: createNewPracticeGame,
       createNewGameSubtrack: createNewGameSubtrack,
       createQuestionPresentation: createQuestionPresentation,
+      getQuestions:getQuestions,
       updateAnswer: updateAnswer,
       getQuestionSetById: getQuestionSetById,
       getQuestionById: getQuestionById
@@ -154,6 +152,12 @@
     function getQuestionById(questionId) {
       return Restangular.service('questions').one().one(questionId).customGET('');
     }
+    /*subject mean a possible trackId or subtrackId*/
+    function getQuestions(groupId,subjectId,type){
+      var subjectType = type==='Track' ? 'tracks' : 'subtracks';
+
+      return Restangular.service(groupId).one().one(subjectType,subjectId).customGET('suggested_questions');
+    }
   }
 
   function GroupsApi(Restangular, Headers) {
@@ -189,19 +193,6 @@
     }
   }
 
-  function ChallengeApi(Restangular, Headers) {
-    Headers.updateDefaultHeader();
-    var service = {
-      getChallenge: getChallenge
-    }
-    return service;
-
-
-    function getChallenge(groupId) {
-
-      return Restangular.service(groupId).one('challenge_games').customGET();
-    }
-  }
 
   function DashboardApi(Restangular, Headers){
     Headers.updateDefaultHeader();
@@ -215,7 +206,6 @@
     function getDashboard(groupId) {
       return Restangular.service(groupId).one('dashboard').get();
     }
-
   }
 
   /*Custom request*/
