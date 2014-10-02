@@ -247,13 +247,12 @@
       return deferred.promise;
     }
 
-    function confirmChoice(questionResult, roundSessionAnswer, answers) {
+    function confirmChoice(questionResult, roundSessionAnswer, answers,questionType) {
       var i, answerStatus = true,
         len = answers.length,
-        areSelectedAnswers = _.filter(answers, {
-          'selected': true
-        });
-      if (areSelectedAnswers.length > 0) {
+         correctAnswers= _.filter(answers, { 'correct': true }),
+         selectedAnswers = _.filter(answers, { 'selected': true });
+      if (correctAnswers.length === selectedAnswers.length) {
         angular.element('.choice button').removeClass('btn-primary');
 
         for (i = 0; i < len; i++) {
@@ -284,6 +283,9 @@
 
         return answerStatus;
       } else {
+        if(correctAnswers.length>1)
+          alerts.showAlert('Please select at least one option of each section!', 'warning');
+        else
         alerts.showAlert('Please select an option!', 'warning');
       }
     }

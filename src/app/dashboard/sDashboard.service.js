@@ -9,6 +9,7 @@
 
   function dashboard($q, DashboardApi) {
     var dashboardData = null;
+
     this.setDashboardData = function(groupId) {
       var deferred = $q.defer();
       DashboardApi.getDashboard(groupId).then(function(result) {
@@ -33,10 +34,11 @@
 
       history.lastWeek = angular.isDefined(dashboardData.progress.last_week) ? dashboardData.progress.last_week.total_questions_answered : 0;
 
-      history.all =  angular.isDefined(dashboardData.progress.all) ? dashboardData.progress.all.total_questions_answered : 0;
+      history.all = angular.isDefined(dashboardData.progress.all) ? dashboardData.progress.all.total_questions_answered : 0;
 
       return history;
     }
+
     this.getSmartPractice = function() {
       var accuracy = null,
       i = 0,
@@ -52,6 +54,7 @@
       });
       return smartPractice;
     }
+
     this.getChallenge = function() {
       return dashboardData.challenge;
     }

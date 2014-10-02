@@ -139,24 +139,6 @@
     };
 
     var customPractice = {
-      createQuestionSharedList: function(questions) {
-        if (angular.isUndefined(vmPr.questions)) {
-          vmPr.questions = utilities.mapObject(questions, 'id', function(question) {
-            return question;
-          });
-        }
-      },
-      setAnswerStatusToSharedList: function(answerStatus) {
-        var question = _.find(vmPr.questions, {
-          'id': vmPr.currentId
-        });
-
-        question.answerStatus = answerStatus;
-        question.statusClass = '';
-        if (angular.isDefined(question.answerStatus)) {
-          question.statusClass = question.answerStatus ? 'bg-success' : 'bg-danger';
-        }
-      },
       bindExplanationInfo: function(info) {
         vmPr.showExplanation = info.showExplanation;
         vmPr.questionExplanation = info.questionExplanation;
@@ -232,7 +214,7 @@
 
         var getQuestionSet = PracticeApi.getQuestionNewSetByPractice(vmPr.gameId, tracks);
         getQuestionSet.then(function(result) {
-          console.log(result.data.practice_games)
+
           if (result.data.question_sets.length > 0) {
             vmPr.questionSetList = result.data.question_sets;
 
@@ -261,7 +243,6 @@
             /* questionsCount Give us the number of questions by questionSet*/
             vmPr.questionsCount = questionSetResult.questions.length;
 
-            /*customPractice.createQuestionSharedList(questionSetResult.questions);*/
             vmPr.questByQSetTitle = vmPr.questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + (vmPr.questionsCount) + ' for this set' : '';
 
             if (position < vmPr.questionsCount) {
