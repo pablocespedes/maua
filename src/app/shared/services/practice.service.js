@@ -12,35 +12,40 @@
         .factory('SplashMessages', SplashMessages)
         .factory('practiceResource', practiceResource);
 
-
     practiceUtilities.$inject = ['$q', '$sce', 'utilities', 'PracticeApi', 'alerts', 'YoutubeVideoApi','practiceConstants'];
+    practiceResource.$inject = ['$q', 'PracticeApi','environmentCons','$resource','alerts'];
 
-    practiceResource.$inject = ['$q', 'PracticeApi','environmentCons','$resource'];
-
-    function practiceResource($q, PracticeApi,environmentCons,$resource) {
+    function practiceResource($q, PracticeApi, environmentCons, $resource,alerts) {
         var questionsData = null,
-            position = 0,gameId=null,
-            service = {
-                setQuestionsData: setQuestionsData,
-                getQuestionData: getQuestionData,
-                getRoundSession: getRoundSession,
-                getQuestionFromApi: getQuestionFromApi,
-                createNewGame: createNewGame,
-                getTimingInformation: getTimingInformation
-            };
+        position = 0,
+        gameId = null,
+        service = {
+            setQuestionsData: setQuestionsData,
+            getQuestionData: getQuestionData,
+            getRoundSession: getRoundSession,
+            getQuestionFromApi: getQuestionFromApi,
+            createNewGame: createNewGame,
+            getTimingInformation: getTimingInformation,
+            getGameSubtrackBased: getGameSubtrackBased,
+            setQuestionData:setQuestionData
+        };
         return service;
 
 
         function setQuestionsData(groupId, subjectId, type) {
             var deferred = $q.defer();
             PracticeApi.getQuestions(groupId, subjectId, type).then(function(result) {
-                questionsData = null;
-                console.log(result.data.questions)
-                questionsData = result.data.questions;
+                service.setQuestionData(result.data.questions);
                 deferred.resolve(true);
             });
 
             return deferred.promise;
+        }
+
+        function setQuestionData(questionResponse){
+
+             questionsData = null;
+             questionsData = questionResponse;
         }
 
         function getQuestionData() {
@@ -52,10 +57,11 @@
         function getRoundSession(questionToRequest) {
 
             return PracticeApi.createQuestionPresentation(gameId, questionToRequest)
-                .then(getRoundSessionsComplete)
-                .catch(getRoundSessionsFailed);
+            .then(getRoundSessionsComplete)
+            .catch(getRoundSessionsFailed);
 
             function getRoundSessionsComplete(reponse) {
+                console.log(response);
                 return reponse.data.round_session;
             }
 
@@ -66,11 +72,13 @@
 
         function getQuestionFromApi(questionId) {
             return PracticeApi.getQuestionById(questionId)
-                .then(getQuestionComplete)
-                .catch(getQuestionFailed);
+            .then(getQuestionComplete)
+            .catch(getQuestionFailed);
 
-            function getQuestionComplete() {
-                return result.data.question;
+            function getQuestionComplete(result) {
+                var questionCollection = [];
+                questionCollection.push(result.data.question);
+                return questionCollection;
             }
 
             function getQuestionFailed(e) {
@@ -81,12 +89,12 @@
         function createNewGame(activeGroupId, url) {
 
             return PracticeApi.createNewPracticeGame(activeGroupId, url)
-                .then(getNewGamecomplete)
-                .catch(getNewGameFailed);
+            .then(getNewGamecomplete)
+            .catch(getNewGameFailed);
 
             function getNewGamecomplete(game) {
-                gameId=null;
-                gameId=game.data.practice_game.id
+                gameId = null;
+                gameId = game.data.practice_game.id
                 return gameId;
             }
 
@@ -100,6 +108,21 @@
             return $resource(url).query({
                 array: true
             });
+        }
+
+        function getGameSubtrackBased(groupId, questionId, subtrackId) {
+            return PracticeApi.createNewGameSubtrack(groupId, subtrackId)
+            .then(getGameSubtrackBasedComplete)
+            .catch(getRoundSessionSubtrackBasedFailed);
+
+            function getGameSubtrackBasedComplete(gameResult) {
+                gameId = gameResult.data.practice_game.id;
+                return this.getRoundSession(questionId);
+            }
+
+            function getRoundSessionSubtrackBasedFailed(e){
+                 alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
+            }
         }
     }
 
@@ -189,22 +212,21 @@
 
             resultObject = questionResponse;
 
-            //resultObject.fixedWidth = resultObject.questionResult.question_set.fixed_info_width;
+            resultObject.fixedWidth = resultObject.question_set.fixed_info_width;
 
-            //resultObject.questionInformation = $sce.trustAsHtml(resultObject.questionResult.question_set.info);
+            resultObject.questionInformation = $sce.trustAsHtml(resultObject.question_set.info);
 
             /*Find if there is a question info defined or retrieve it by the API*/
             setLayoutType = angular.isDefined(resultObject.questionInformation) && resultObject.questionInformation != null &&
                 resultObject.questionInformation != '' ? true : false;
 
             /*Set the layout based on the question info*/
-            //setLayoutBasedOnQuestionInfo(setLayoutType);
+            setLayoutBasedOnQuestionInfo(setLayoutType);
 
             /*@Jose TODO This can be performed on a better way*/
             angular.element('.choice.active').removeClass('active');
 
-            //resultObject.items = [];
-            //resultObject.stimulus = "";
+            resultObject.items = [];
 
             resultObject.stimulus = $sce.trustAsHtml(questionResponse.stimulus);
             var optionList = practiceConstants.optionList,
@@ -260,61 +282,6 @@
 
             angular.element("#answercontent *").prop('disabled', true);
             return resultObject;
-        }
-
-        function loadQuestion(questionToRequest) {
-            var deferred = $q.defer(),
-                setLayoutType = false,
-                resultObject = {};
-
-            PracticeApi.getQuestionById(questionToRequest)
-                .then(function(result) {
-
-                    resultObject.questionResult = result.data.question;
-                    resultObject.fixedWidth = resultObject.questionResult.question_set.fixed_info_width;
-
-                    if (resultObject.lastAnswerLoaded == '' || resultObject.lastAnswerLoaded != resultObject.questionResult.kind) {
-                        resultObject.lastAnswerLoaded = resultObject.questionResult.kind;
-                    }
-                    resultObject.questionInformation = $sce.trustAsHtml(resultObject.questionResult.question_set.info);
-
-                    /*Find if there is a question info defined or retrieve it by the API*/
-                    setLayoutType = angular.isDefined(resultObject.questionInformation) && resultObject.questionInformation != null && resultObject.questionInformation != '' ? true : false;
-
-                    /*Set the layout based on the question info*/
-                    setLayoutBasedOnQuestionInfo(setLayoutType);
-
-                    /*@Jose TODO This can be performed on a better way*/
-                    angular.element('.choice.active').removeClass('active');
-
-                    resultObject.items = [];
-                    resultObject.stimulus = "";
-
-                    resultObject.stimulus = $sce.trustAsHtml(resultObject.questionResult.stimulus);
-                    var optionList = practiceConstants.optionList,
-                        options = optionList.toUpperCase().split(""),
-                        answers = resultObject.questionResult.answers,
-                        len = answers.length,
-                        i;
-
-                    for (i = 0; i < len; i++) {
-                        var value = answers[i];
-                        value["option"] = options[i];
-                        value["selected"] = false;
-                        resultObject.items.push(value);
-                    }
-                    if (resultObject.lastAnswerLoaded === 'MultipleChoiceMatrixTwoByThree' || resultObject.lastAnswerLoaded === 'MultipleChoiceMatrixThreeByThree') {
-                        resultObject.items = setQuestionTypeMatrixGroups(resultObject.items);
-                    }
-
-                    removeBadImage();
-                    deferred.resolve(resultObject);
-                }).catch(function errorHandler(e) {
-                    deferred.reject(resultObject);
-                    alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
-                });
-
-            return deferred.promise;
         }
 
         function confirmChoice(questionResult, roundSessionAnswer, answers, questionType) {

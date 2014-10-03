@@ -156,7 +156,7 @@
     function getQuestions(groupId,subjectId,type){
       var subjectType = type==='Track' ? 'tracks' : 'subtracks';
 
-      return Restangular.service(groupId).one().one(subjectType,subjectId).customGET('suggested_questions');
+      return Restangular.service(groupId).one().one(subjectType,subjectId).customGET('questions');
     }
   }
 

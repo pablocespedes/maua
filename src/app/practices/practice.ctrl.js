@@ -135,7 +135,6 @@
         practiceResource.setQuestionsData(vmPr.activeGroupId,vmPr.activeTrack.trackId,vmPr.activeTrack.subject.type)
         .then(setQuestionComplete);
           function setQuestionComplete(questionsResponse){
-              console.log(questionsResponse);
               customPractice.presentQuestion();
           }
       },

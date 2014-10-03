@@ -5,12 +5,10 @@ angular.module("grockitApp.application")
 .filter('truncate', truncate)
 .filter('date', date)
 .filter('time', time)
-.filter('track', track)
 .filter('level', level);
 
 formatSeconds.$inject =['dateFormatter'];
 level.$inject=['Level'];
-track.$inject=['TracksApi'];
 
 function date() {
   return function(date) {
@@ -42,22 +40,6 @@ function time() {
 function formatSeconds(dateFormatter){
  return function(seconds) {
     return dateFormatter.formatSeconds(seconds);
-  };
-}
-
-function track(TracksApi) {
-  var tracks = [
-        {id: "1", short_name: "English"},
-        {id: "2", short_name: "Science"},
-        {id: "3", short_name: "Math"},
-        {id: "4", short_name: "Reading"},
-        {id: "8", short_name: "Verbal"},
-        {id: "9", short_name: "Quantitative"}
-      ];
-
-  return function(trackId, groupId) {
-    var track = _.find(tracks, {id: trackId});
-    return track.short_name;
   };
 }
 
