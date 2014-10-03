@@ -140,12 +140,6 @@
         var questionData = practiceUtilities.presentQuestion(practiceResource.getQuestionData());
 
         if (angular.isDefined(questionData)) {
-          console.log(questionData);
-          practiceResource.getGameSubtrackBased(vmPr.activeGroupId,questionData.id, questionData.question_set.subtrack_id)
-          .then(function(roundResult) {
-            console.log(roundResult)
-            vmPr.roundSessionAnswer = roundResult;
-          });
 
           vmPr.questionData = questionData;
           vmPr.answerType = practiceUtilities.getAnswerType(questionData.kind);
@@ -178,7 +172,7 @@
         Question.bindVideoExplanationInfo(vmPr.questionData);
       },
       confirmAnswer: function() {
-        vmPr.answerStatus = practiceUtilities.confirmChoice(vmPr.questionData, vmPr.roundSessionAnswer, vmPr.items);
+        vmPr.answerStatus = practiceUtilities.confirmChoice(vmPr.questionData, undefined, vmPr.items,vmPr.questionData.kind,vmPr.activeGroupId);
         if (angular.isDefined(vmPr.answerStatus)) {
           this.resetLayout();
           Question.displayExplanationInfo();
@@ -217,7 +211,7 @@
         options.denominator = vmPr.denominator;
         options.lastAnswerLoaded = vmPr.kind;
         options.questionResult = vmPr.questionData;
-        options.roundSessionAnswer = vmPr.roundSessionAnswer;
+        options.roundSessionAnswer = undefined;
 
         vmPr.answerStatus = practiceUtilities.numericEntryConfirmChoice(options);
         if (angular.isDefined(vmPr.answerStatus)) {

@@ -1,21 +1,21 @@
 (function() {
     'use strict';
     angular
-        .module("grockitApp.practice.factories", [])
-        .constant('practiceConstants', {
-            'optionList': 'abcdefghijklmnopqrstuvwxyz',
-            'questionTypesUrl': 'app/components/question-types/directives/'
-        })
-        .factory('questionTypesService', questionTypesService)
-        .factory('practiceUtilities', practiceUtilities)
-        .factory('Level', Level)
-        .factory('SplashMessages', SplashMessages)
-        .factory('practiceResource', practiceResource);
+    .module("grockitApp.practice.factories", [])
+    .constant('practiceConstants', {
+        'optionList': 'abcdefghijklmnopqrstuvwxyz',
+        'questionTypesUrl': 'app/components/question-types/directives/'
+    })
+    .factory('questionTypesService', questionTypesService)
+    .factory('practiceUtilities', practiceUtilities)
+    .factory('Level', Level)
+    .factory('SplashMessages', SplashMessages)
+    .factory('practiceResource', practiceResource);
 
-    practiceUtilities.$inject = ['$q', '$sce', 'utilities', 'PracticeApi', 'alerts', 'YoutubeVideoApi','practiceConstants'];
-    practiceResource.$inject = ['$q', 'PracticeApi','environmentCons','$resource','alerts'];
+    practiceUtilities.$inject = ['$q', '$sce', 'utilities', 'practiceResource', 'alerts', 'YoutubeVideoApi', 'practiceConstants'];
+    practiceResource.$inject = ['$q', 'PracticeApi', 'environmentCons', '$resource', 'alerts'];
 
-    function practiceResource($q, PracticeApi, environmentCons, $resource,alerts) {
+    function practiceResource($q, PracticeApi, environmentCons, $resource, alerts) {
         var questionsData = null,
         position = 0,
         gameId = null,
@@ -27,7 +27,8 @@
             createNewGame: createNewGame,
             getTimingInformation: getTimingInformation,
             getGameSubtrackBased: getGameSubtrackBased,
-            setQuestionData:setQuestionData
+            setQuestionData: setQuestionData,
+            sendUserReponse: sendUserReponse
         };
         return service;
 
@@ -42,27 +43,30 @@
             return deferred.promise;
         }
 
-        function setQuestionData(questionResponse){
+        function setQuestionData(questionResponse) {
 
-             questionsData = null;
-             questionsData = questionResponse;
+            questionsData = null;
+            questionsData = questionResponse;
         }
 
         function getQuestionData() {
+
+            /*if(position<questionsData.length){}
+             */
             var questionResult = questionsData[position];
             position++;
             return questionResult;
+
         };
+        function getRoundSession(questionToRequest, groupId) {
 
-        function getRoundSession(questionToRequest) {
-
-            return PracticeApi.createQuestionPresentation(gameId, questionToRequest)
+            return PracticeApi.createQuestionPresentation(gameId, questionToRequest, groupId)
             .then(getRoundSessionsComplete)
             .catch(getRoundSessionsFailed);
 
-            function getRoundSessionsComplete(reponse) {
-                console.log(response);
-                return reponse.data.round_session;
+            function getRoundSessionsComplete(response) {
+
+                return response.data.round_session;
             }
 
             function getRoundSessionsFailed(e) {
@@ -117,16 +121,31 @@
 
             function getGameSubtrackBasedComplete(gameResult) {
                 gameId = gameResult.data.practice_game.id;
-                return this.getRoundSession(questionId);
+                console.log(gameId);
+                return service.getRoundSession(questionId, groupId);
             }
 
-            function getRoundSessionSubtrackBasedFailed(e){
-                 alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
+            function getRoundSessionSubtrackBasedFailed(e) {
+                alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
+            }
+        }
+
+        function sendUserReponse(roundSessionAnswerId, answerId,groupId) {
+            return PracticeApi.updateAnswer(roundSessionAnswerId, answerId, gameId,groupId)
+            .then(sendUserResponseComplete)
+            .catch(sendUserResponseFailed);
+
+            function sendUserResponseComplete(result) {
+                return result;
+            }
+
+            function sendUserResponseFailed(e) {
+                alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
             }
         }
     }
 
-    function practiceUtilities($q, $sce, utilities, PracticeApi, alerts, YoutubeVideoApi, practiceConstants) {
+    function practiceUtilities($q, $sce, utilities, practiceResource, alerts, YoutubeVideoApi, practiceConstants) {
 
         var service = {
             presentQuestion: presentQuestion,
@@ -148,32 +167,32 @@
 
             switch (questionKind) {
                 case 'MultipleChoiceOneCorrect':
-                    template = "_oneChoice.directive.html";
-                    break;
+                template = "_oneChoice.directive.html";
+                break;
                 case 'MultipleChoiceOneOrMoreCorrect':
-                    template = "_multipleChoice.directive.html";
-                    break;
+                template = "_multipleChoice.directive.html";
+                break;
                 case 'MultipleChoiceMatrixTwoByThree':
-                    template = "_matrix2x3.directive.html";
-                    break;
+                template = "_matrix2x3.directive.html";
+                break;
                 case 'MultipleChoiceMatrixThreeByThree':
-                    template = "_matrix3x3.directive.html";
-                    break;
+                template = "_matrix3x3.directive.html";
+                break;
                 case 'NumericEntryFraction':
-                    template = "_fraction.directive.html";
-                    break;
+                template = "_fraction.directive.html";
+                break;
                 case 'SPR':
-                    template = "_provisionalSat.directive.html";
-                    break;
+                template = "_provisionalSat.directive.html";
+                break;
                 case 'NumericEntry':
-                    template = "_numeric.directive.html";
-                    break;
+                template = "_numeric.directive.html";
+                break;
                 case 'sat':
-                    template = "_sat.directive.html";
-                    break;
+                template = "_sat.directive.html";
+                break;
                 case 'MultipleChoiceTwoCorrect':
-                    template = "_twoChoice.directive.html";
-                    break;
+                template = "_twoChoice.directive.html";
+                break;
             }
 
             return practiceConstants.questionTypesUrl + template;
@@ -181,7 +200,7 @@
         /*This methods takes care to set the practice layout based on the API response*/
         function setLayoutBasedOnQuestionInfo(setLayout) {
             var panel1 = angular.element('#Panel1'),
-                panel2 = angular.element('#Panel2');
+            panel2 = angular.element('#Panel2');
 
             if (setLayout) {
                 panel1.removeClass('col-md-offset-3');
@@ -208,7 +227,8 @@
         }
 
         function presentQuestion(questionResponse) {
-            var resultObject = {},setLayoutType=null;
+            var resultObject = {},
+            setLayoutType = null;
 
             resultObject = questionResponse;
 
@@ -218,7 +238,7 @@
 
             /*Find if there is a question info defined or retrieve it by the API*/
             setLayoutType = angular.isDefined(resultObject.questionInformation) && resultObject.questionInformation != null &&
-                resultObject.questionInformation != '' ? true : false;
+            resultObject.questionInformation != '' ? true : false;
 
             /*Set the layout based on the question info*/
             setLayoutBasedOnQuestionInfo(setLayoutType);
@@ -230,10 +250,10 @@
 
             resultObject.stimulus = $sce.trustAsHtml(questionResponse.stimulus);
             var optionList = practiceConstants.optionList,
-                options = optionList.toUpperCase().split(""),
-                answers = resultObject.answers,
-                len = angular.isDefined(answers) ? answers.length : 0,
-                i;
+            options = optionList.toUpperCase().split(""),
+            answers = resultObject.answers,
+            len = angular.isDefined(answers) ? answers.length : 0,
+            i;
 
             for (i = 0; i < len; i++) {
                 var value = answers[i];
@@ -259,9 +279,9 @@
 
             /*Get answers from the previous request and Explain*/
             var answers = questionResult.answers,
-                len = questionResult.answers.length,
-                i,
-                parsedTags = this.parseTagsAndResources(questionResult.tags);
+            len = questionResult.answers.length,
+            i,
+            parsedTags = this.parseTagsAndResources(questionResult.tags);
 
             resultObject.tagsResources = parsedTags.resources;
             resultObject.tags = parsedTags.tags;
@@ -274,7 +294,7 @@
 
             for (i = 0; i < len; i++) {
                 var answer = answers[i],
-                    selectIdButton = '#' + answer.id;
+                selectIdButton = '#' + answer.id;
                 if (answer.correct) {
                     angular.element(selectIdButton).addClass('btn-success');
                 }
@@ -284,26 +304,23 @@
             return resultObject;
         }
 
-        function confirmChoice(questionResult, roundSessionAnswer, answers, questionType) {
+        function confirmChoice(questionResult, roundSessionAnswer, answers, questionType,groupId) {
             var i, answerStatus = true,
-                len = answers.length,
-                correctAnswers = _.filter(answers, {
-                    'correct': true
-                }),
-                selectedAnswers = _.filter(answers, {
-                    'selected': true
-                });
-            if (correctAnswers.length === selectedAnswers.length) {
+            len = answers.length,
+            isValid = validateAnswer(questionType, answers);
+            console.log(isValid);
+
+            if (isValid) {
                 angular.element('.choice button').removeClass('btn-primary');
 
                 for (i = 0; i < len; i++) {
                     var answer = answers[i],
-                        selectIdButton = ('#' + answer.id);
+                    selectIdButton = ('#' + answer.id);
                     if (answer.correct) {
                         if (answer.selected) {
 
                             if (angular.isDefined(roundSessionAnswer)) {
-                                PracticeApi.updateAnswer(roundSessionAnswer.id, answer.id);
+                                practiceResource.sendUserReponse(roundSessionAnswer.id, answer.id,groupId);
                             }
                         } else {
                             answerStatus = false;
@@ -312,7 +329,7 @@
                     } else {
                         if (answer.selected) {
                             if (angular.isDefined(roundSessionAnswer)) {
-                                PracticeApi.updateAnswer(roundSessionAnswer.id, answer.id);
+                                practiceResource.sendUserReponse(roundSessionAnswer.id, answer.id,groupId);
                             }
                             angular.element(selectIdButton).addClass('btn-danger');
                             angular.element(selectIdButton).parents('#answer').addClass('incorrectAnswer');
@@ -324,7 +341,7 @@
 
                 return answerStatus;
             } else {
-                if (correctAnswers.length > 1)
+                if (isValid)
                     alerts.showAlert('Please select at least one option of each section!', 'warning');
                 else
                     alerts.showAlert('Please select an option!', 'warning');
@@ -390,7 +407,7 @@
 
         function getVideoExplanation(questionResult) {
             var deferred = $q.defer(),
-                videoObject = {};
+            videoObject = {};
 
             /* video validation*/
             if (questionResult.youtube_video_id !== null) {
@@ -411,14 +428,14 @@
         function numericEntryConfirmChoice(options) {
 
             var userAnswer = 0,
-                selectedAnswer = 0,
-                answerStatus = true,
-                answers = '',
-                numerator = options.numerator,
-                denominator = options.denominator,
-                lastAnswerLoaded = options.lastAnswerLoaded,
-                questionResult = options.questionResult,
-                roundSessionAnswer = options.roundSessionAnswer;
+            selectedAnswer = 0,
+            answerStatus = true,
+            answers = '',
+            numerator = options.numerator,
+            denominator = options.denominator,
+            lastAnswerLoaded = options.lastAnswerLoaded,
+            questionResult = options.questionResult,
+            roundSessionAnswer = options.roundSessionAnswer;
             /*Get selected answers*/
 
             if (numerator || denominator) {
@@ -433,14 +450,14 @@
 
                 answers = questionResult.answers;
                 var len = answers.length,
-                    i, roundAnswer = (eval(userAnswer).toFixed(1));
+                i, roundAnswer = (eval(userAnswer).toFixed(1));
                 selectedAnswer = 0;
 
                 for (i = 0; i < len; i++) {
                     var answer = answers[i],
 
-                        /*evaluate just one time the equivalence between body and numerator*/
-                        answerEval = (answer.body === userAnswer || eval(answer.body).toFixed(1) === roundAnswer);
+                    /*evaluate just one time the equivalence between body and numerator*/
+                    answerEval = (answer.body === userAnswer || eval(answer.body).toFixed(1) === roundAnswer);
 
                     if (answerEval)
                         selectedAnswer = answer.answer_id;
@@ -448,7 +465,7 @@
                     answerStatus = answerEval;
                 };
 
-                PracticeApi.updateAnswer(roundSessionAnswer.id, selectedAnswer);
+                practiceResource.sendUserReponse(roundSessionAnswer.id, selectedAnswer);
 
                 angular.element("#answercontent *").prop('disabled', true);
                 return answerStatus;
@@ -466,7 +483,7 @@
         function usersRunOutQuestions(trackTitle, activeGroupId) {
             var options = {
                 message: "You've answered all of the adaptive questions we have for you in " + trackTitle + ".  " +
-                    "That's a lot of practice.  Would you like to review questions you've answered or go back to the main dashboard? ",
+                "That's a lot of practice.  Would you like to review questions you've answered or go back to the main dashboard? ",
                 title: "Congratulations!",
                 buttons: {
                     review: {
@@ -487,6 +504,25 @@
             };
             utilities.dialogService(options);
         }
+
+        function validateAnswer(questionType, answers) {
+            var correctAnswers = _.filter(answers, {
+                'correct': true
+            }),
+            selectedAnswers = _.filter(answers, {
+                'selected': true
+            }),
+            isValid = false;
+
+
+            if (questionType === 'MultipleChoiceOneOrMoreCorrect')
+
+                isValid = selectedAnswers.length > 0 ? true : false;
+            else
+                isValid = correctAnswers.length === selectedAnswers.length ? true : false;
+
+            return isValid;
+        }
     }
 
     function Level() {
@@ -506,19 +542,19 @@
 
     function SplashMessages(utilities) {
         var loadingMessages = [
-            'Spinning up the hamster...',
-            'Shovelling coal into the server...',
-            'Programming the flux capacitor',
-            'Adjusting data for your IQ...',
-            'Generating next funny line...',
-            'Entertaining you while you wait...',
-            'Improving your reading skills...',
-            'Dividing eternity by zero, please be patient...',
-            'Just stalling to simulate activity...',
-            'Adding random changes to your data...',
-            'Waiting for approval from Bill Gates...',
-            'Adapting your practice questions...',
-            'Supercharging your study...'
+        'Spinning up the hamster...',
+        'Shovelling coal into the server...',
+        'Programming the flux capacitor',
+        'Adjusting data for your IQ...',
+        'Generating next funny line...',
+        'Entertaining you while you wait...',
+        'Improving your reading skills...',
+        'Dividing eternity by zero, please be patient...',
+        'Just stalling to simulate activity...',
+        'Adding random changes to your data...',
+        'Waiting for approval from Bill Gates...',
+        'Adapting your practice questions...',
+        'Supercharging your study...'
         ];
         return {
             getLoadingMessage: function() {
@@ -606,8 +642,5 @@
                 });
         }
     }
-
-
-
 
 })();

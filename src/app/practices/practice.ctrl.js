@@ -143,8 +143,8 @@
 
         if(angular.isDefined(questionData)){
 
-        practiceResource.getRoundSession(questionData.id).then(function(result) {
-          vmPr.roundSessionAnswer = result.roundSessionAnswer;
+        practiceResource.getRoundSession(questionData.id,vmPr.activeGroupId).then(function(result) {
+          vmPr.roundSessionAnswer = result;
         });
           vmPr.questionData= questionData;
           vmPr.answerType = practiceUtilities.getAnswerType(questionData.kind);
@@ -169,6 +169,7 @@
       },
       bindExplanationInfo: function(info) {
         vmPr.explanationInfo = info;
+
         vmPr.nextActionTitle = 'Next Question';
         $timeout(function() {
           vmPr.isDisabled = false;
@@ -221,7 +222,7 @@
         vmPr.subjectMail = practiceUtilities.setMailToInformation(questionId, vmPr.activeTrack.subject.name);
       },
       nextQuestion: function() {
-        this.loadQuestionsSet();
+        this.presentQuestion();
         vmPr.isbuttonClicked = false;
         vmPr.numerator = null;
         vmPr.denominator = null;
@@ -239,7 +240,7 @@
         });
       },
       confirmAnswer: function() {
-        vmPr.answerStatus = practiceUtilities.confirmChoice(vmPr.questionData, vmPr.roundSessionAnswer, vmPr.items);
+        vmPr.answerStatus = practiceUtilities.confirmChoice(vmPr.questionData, vmPr.roundSessionAnswer, vmPr.items,vmPr.questionData.kind,vmPr.activeGroupId);
         if (angular.isDefined(vmPr.answerStatus)) {
           this.resetLayout();
           customPractice.displayExplanationInfo();
@@ -250,8 +251,16 @@
       resetLayout: function() {
         vmPr.nextActionTitle = 'Next Question';
         practiceUtilities.resetLayout();
-      },
-      getQuestionSets: function() {
+      }
+
+    };
+  }
+})();
+
+
+
+/*This is going to be depreciated but still need to extract some logic from here*/
+/*      getQuestionSets: function() {
         var tracks = [];
         tracks.push(vmPr.activeTrack.trackId);
 
@@ -263,7 +272,6 @@
 
             customPractice.loadQuestionsSet();
           } else {
-            /*if user run out of the questions show message*/
             practiceUtilities.usersRunOutQuestions(vmPr.activeTrack.subject.name, vmPr.activeGroupId);
 
           }
@@ -274,16 +282,13 @@
       loadQuestionsSet: function() {
         if (angular.isDefined(vmPr.questionSetList) && vmPr.questionSetList.length > 0) {
 
-          /*if $scope.setPosition is bigger than $scope.questionSetList.length we already finish the list of question sets */
           if (vmPr.setPosition < vmPr.questionSetList.length) {
 
             var setPosition = vmPr.setPosition,
 
-            /* Iterate between all the question sets retrieved it by the API */
             questionSetResult = vmPr.questionSetList[setPosition];
 
             var position = vmPr.position;
-            /* questionsCount Give us the number of questions by questionSet*/
             vmPr.questionsCount = questionSetResult.questions.length;
 
             vmPr.questByQSetTitle = vmPr.questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + (vmPr.questionsCount) + ' for this set' : '';
@@ -297,16 +302,10 @@
               vmPr.position = 0;
               vmPr.setPosition++;
               customPractice.loadQuestionsSet();
-              /* New set, delete the questions, this way they are reinitialized*/
             }
           } else {
-            /*If we finish with the first load of questions id/question sets que create a new game*/
             vmPr.setPosition = 0;
             customPractice.getQuestionSets();
           }
         }
-      },
-
-    };
-  }
-})();
+      }*/

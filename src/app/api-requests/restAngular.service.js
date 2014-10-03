@@ -91,7 +91,7 @@
     return service;
 
     function getQuestions(groupId, page) {
-      return Restangular.service(groupId).one('round_sessions').customGET('', {
+      return Restangular.one(groupId,'round_sessions').customGET('', {
         'page': page
       });
     }
@@ -106,19 +106,11 @@
       createQuestionPresentation: createQuestionPresentation,
       getQuestions:getQuestions,
       updateAnswer: updateAnswer,
-      getQuestionSetById: getQuestionSetById,
       getQuestionById: getQuestionById
 
     };
 
     return service;
-
-    /*Practice*/
-    function getQuestionNewSetByPractice(practiceGameId, tracks) {
-      return Restangular.service('practice_games').one(practiceGameId).customGET('sample', {
-        'tracks[]': tracks
-      });
-    }
 
     function createNewPracticeGame(groupId, url) {
 
@@ -126,27 +118,24 @@
     }
 
     function createNewGameSubtrack(groupId, subTrackId) {
-      return Restangular.service(groupId).one('subtracks').one(subTrackId).post('practice');
+      return Restangular.one(groupId,'subtracks').one(subTrackId).post('practice');
     }
 
     /*Round Sessions*/
-    function createQuestionPresentation(gameId, questionId) {
-      return Restangular.service('round_sessions').one().post('', {
+    function createQuestionPresentation(gameId, questionId,groupId) {
+      return Restangular.one(groupId,'round_sessions').post('','', {
         game_id: gameId,
         question_id: questionId
       });
     }
 
-    function updateAnswer(roundSessionAnswerId, answerId) {
-      Restangular.service('round_sessions').one().one(roundSessionAnswerId).put({
+    function updateAnswer(roundSessionAnswerId, answerId,gameId,groupId) {
+     return Restangular.one(groupId,'round_sessions').one(roundSessionAnswerId).put({
+         game_id: gameId,
         answer_id: answerId
       });
     }
 
-    /*question sets*/
-    function getQuestionSetById(questionSetId) {
-      return Restangular.service('question_sets').one().one(questionSetId).customGET('');
-    }
 
     /*questions*/
     function getQuestionById(questionId) {
@@ -171,7 +160,7 @@
     return service;
     function membershipGroups(shouldUpdate) {
 
-      currentGroups = currentGroups == null || shouldUpdate ? Restangular.service('groups').one().customGET('', {
+      currentGroups = currentGroups == null || shouldUpdate ? Restangular.one('groups').customGET('', {
         subdomain: 'www'
       }) : currentGroups;
       return currentGroups;
@@ -188,7 +177,7 @@
     return service;
 
     function allByGroup(groupId, shouldUpdate) {
-      trackData = trackData == null || shouldUpdate ? Restangular.service(groupId).one('tracks').customGET() : trackData;
+      trackData = trackData == null || shouldUpdate ? Restangular.one(groupId,'tracks').customGET() : trackData;
       return trackData;
     }
   }
@@ -204,7 +193,7 @@
 
 
     function getDashboard(groupId) {
-      return Restangular.service(groupId).one('dashboard').get();
+      return Restangular.one(groupId,'dashboard').get();
     }
   }
 
