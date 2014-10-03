@@ -10,11 +10,11 @@
           <i ng-if="question.outcome === 'incorrect'" class="fa fa-times bg-danger"></i>
         </div>
         <div class="col-sm-9">
-          <a href="#/{{groupId}}/questions/{{question.id}}" ng-bind-html="question.preview | truncate:50"></a>
+          <a href="#/{{groupId}}/questions/{{question.id}}" ng-bind-html="question.question_stimulus | truncate:50"></a>
         </div>
       </div>
     </div>
-    <div class="history-item col-sm-2" ng-bind="question.track_id | track:groupId"></div>
+    <div class="history-item col-sm-2" ng-bind="question.track_name"></div>
     <div class="history-item col-sm-3">Your time to answer: <span ng-bind="question.time_to_answer"></span>s</div>
     <div class="history-item col-sm-2" ng-bind="question.experience_points | level"></div>
   </div>

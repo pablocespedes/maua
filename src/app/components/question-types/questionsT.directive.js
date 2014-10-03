@@ -1,9 +1,36 @@
-angular.module("grockitApp.components")
-.directive('oneChoice', function() {
-  return {
-    restrict: 'A',
-    templateUrl: 'app/components/question-types/templates/oneChoice.tpl.html',
-    link: function(scope) {
+(function() {
+  'use strict';
+angular
+.module('grockitApp.components')
+  .directive('oneChoice', oneChoice)
+  .directive('multipleChoice', multipleChoice)
+  .directive('multipleMatrix2x3', multipleMatrix2x3)
+  .directive('multipleMatrix3x3', multipleMatrix3x3)
+  .directive('twoChoice', twoChoice)
+  .directive('provisionalSat', provisionalSat)
+  .directive('sat', sat)
+  .directive('numericEntry', numericEntry)
+  .directive('fractionEntry', fractionEntry);
+
+  sat.$inject=['questionTypesService'];
+  numericEntry.$inject=['questionTypesService'];
+  fractionEntry.$inject=['questionTypesService'];
+
+  function oneChoice() {
+    var directive = {
+      link: link,
+      templateUrl: 'app/components/question-types/templates/oneChoice.tpl.html',
+      restrict: 'A',
+      scope: {
+        items: '=items',
+        showExplanation: '=',
+        hasExplanation: '&',
+        isConfirmClicked: '='
+      }
+    };
+    return directive;
+
+    function link(scope, element, attrs) {
       scope.selectAnswer = function(index) {
         if (!scope.isConfirmClicked) {
           _.forEach(scope.items, function(answer, i) {
@@ -26,21 +53,24 @@ angular.module("grockitApp.components")
           }
         }
       };
-    },
-    scope: {
-      items: '=items',
-      showExplanation: '=',
-      hasExplanation: '&',
-      isConfirmClicked: '='
     }
-  };
-})
+  }
 
-.directive('multipleChoice', function() {
-  return {
-    restrict: 'A',
-    templateUrl: 'app/components/question-types/templates/multipleChoice.tpl.html',
-    link: function(scope) {
+  function multipleChoice() {
+    var directive = {
+      link: link,
+      templateUrl: 'app/components/question-types/templates/multipleChoice.tpl.html',
+      restrict: 'A',
+      scope: {
+        items: '=items',
+        showExplanation: '=',
+        hasExplanation: '&',
+        isConfirmClicked: '='
+      }
+    };
+    return directive;
+
+    function link(scope, element, attrs) {
       scope.selectAnswer = function(index) {
         if (!scope.isConfirmClicked) {
           var answers = scope.items[index],
@@ -62,22 +92,75 @@ angular.module("grockitApp.components")
           }
         }
       };
-    },
-    scope: {
-      items: '=items',
-      showExplanation: '=',
-      hasExplanation: '&',
-      isConfirmClicked: '='
     }
-  };
-})
+  }
 
-.directive('multipleMatrix2x3', function() {
-  return {
-    restrict: 'A',
-    templateUrl: 'app/components/question-types/templates/matrix2x3.tpl.html',
-    link: function(scope) {
+  function multipleMatrix2x3() {
+    var directive = {
+      link: link,
+      templateUrl: 'app/components/question-types/templates/matrix2x3.tpl.html',
+      restrict: 'A',
+      scope: {
+        items: '=items',
+        showExplanation: '=',
+        hasExplanation: '&',
+        isConfirmClicked: '='
+      }
+    };
+    return directive;
 
+    function link(scope, element, attrs) {
+      scope.selectAnswer = function(index, mGroup) {
+        if (!scope.isConfirmClicked) {
+          var answer = scope.items[index],
+          nexAction = $('#nextAction'),
+          seeAnswer = $('#skipAction'),
+          currentSection = _.filter(scope.items, function(answer) {
+            return answer.matrix_group == mGroup
+          }),
+          trueSelected = _.filter(currentSection, {
+            'selected': true
+          });
+
+          if (trueSelected) {
+            _.forEach(currentSection, function(ansResult) {
+              if (answer.id != ansResult.id) ansResult.selected = false;
+            });
+          }
+
+          if (!answer.selected) {
+            answer.selected = true;
+            nexAction.addClass('btn-primary');
+            seeAnswer.addClass('hide');
+          } else {
+            answer.selected = false;
+            if (!_.find(scope.items, {
+              'selected': true
+            })) {
+              nexAction.removeClass('btn-primary');
+              seeAnswer.removeClass('hide');
+            }
+          }
+        }
+      };
+    }
+  }
+
+  function multipleMatrix3x3() {
+    var directive = {
+      link: link,
+      templateUrl: 'app/components/question-types/templates/matrix3x3.tpl.html',
+      restrict: 'A',
+      scope: {
+        items: '=items',
+        showExplanation: '=',
+        hasExplanation: '&',
+        isConfirmClicked: '='
+      }
+    };
+    return directive;
+
+    function link(scope, element, attrs) {
       scope.selectAnswer = function(index, mGroup) {
         if (!scope.isConfirmClicked) {
           var answer = scope.items[index],
@@ -112,70 +195,25 @@ angular.module("grockitApp.components")
           }
         }
       };
-    },
-    scope: {
-      items: '=items',
-      showExplanation: '=',
-      hasExplanation: '&',
-      isConfirmClicked: '='
     }
-  };
-})
+  }
 
-.directive('multipleMatrix3x3', function() {
-  return {
-    restrict: 'A',
-    templateUrl: 'app/components/question-types/templates/matrix3x3.tpl.html',
-    link: function(scope) {
-      scope.selectAnswer = function(index, mGroup) {
-        if (!scope.isConfirmClicked) {
-          var answer = scope.items[index],
-          answerId = answer.id,
-          nexAction = $('#nextAction'),
-          seeAnswer = $('#skipAction'),
-          currentSection = _.filter(scope.items, function(answer) {
-            return answer.matrix_group == mGroup
-          }),
-          trueSelected = _.filter(currentSection, {
-            'selected': true
-          });
+  function twoChoice() {
+    var directive = {
+      link: link,
+      templateUrl: 'app/components/question-types/templates/twoChoice.tpl.html',
+      restrict: 'A',
+      scope: {
+        maxOpt: '=',
+        items: '=items',
+        showExplanation: '=',
+        hasExplanation: '&',
+        isConfirmClicked: '='
+      }
+    };
+    return directive;
 
-          if (trueSelected) {
-            _.forEach(currentSection, function(answer) {
-              if (answerId != answer.id) answer.selected = false;
-            });
-          }
-
-          if (!answer.selected) {
-            answer.selected = true;
-            nexAction.addClass('btn-primary');
-            seeAnswer.addClass('hide');
-          } else {
-            answer.selected = false;
-            if (!_.find(scope.items, {
-              'selected': true
-            })) {
-              nexAction.removeClass('btn-primary');
-              seeAnswer.removeClass('hide');
-            }
-          }
-        }
-      };
-    },
-    scope: {
-      items: '=items',
-      showExplanation: '=',
-      hasExplanation: '&',
-      isConfirmClicked: '='
-    }
-  };
-})
-
-.directive('twoChoice', function() {
-  return {
-    restrict: 'A',
-    templateUrl: 'app/components/question-types/templates/twoChoice.tpl.html',
-    link: function(scope) {
+    function link(scope, element, attrs) {
       scope.maxOpt = [];
       scope.selectAnswer = function(index) {
         if (!scope.isConfirmClicked) {
@@ -211,195 +249,103 @@ angular.module("grockitApp.components")
           }
         }
       };
-    },
-    scope: {
-      maxOpt: '=',
-      items: '=items',
-      showExplanation: '=',
-      hasExplanation: '&',
-      isConfirmClicked: '='
-    }
-  };
-})
-
-.directive('provisionalSat', function() {
-
-  function validateEntry(value) {
-    if (angular.isUndefined(value) || value === '' || value === null) {
-      return null;
-    } else {
-      return (angular.isDefined(value) && value != null);
     }
   }
 
-  function handleValidation(isValid) {
-    var nexAction = $('#nextAction'),
-    seeAnswer = $('#skipAction');
-    if (isValid) {
-      nexAction.addClass('btn-primary');
-      seeAnswer.addClass('hide');
-    } else {
-      nexAction.removeClass('btn-primary');
-      seeAnswer.removeClass('hide');
-    }
-  }
+  function provisionalSat() {
+    var directive = {
+      link: link,
+      templateUrl: 'app/components/question-types/templates/numericEntry.tpl.html',
+      restrict: 'A',
+      scope: {
+        items: '=items',
+        showExplanation: '=',
+        hasExplanation: '&',
+        portal: '=',
+        answerStatus: '='
+      }
+    };
+    return directive;
 
-  return {
-    restrict: 'A',
-    templateUrl: 'app/components/question-types/templates/numericEntry.tpl.html',
-    scope: {
-      items: '=items',
-      showExplanation: '=',
-      hasExplanation: '&',
-      portal: '=',
-      answerStatus: '='
-    },
-    link: function(scope) {
-
+    function link(scope, element, attrs) {
       scope.$watch('portal.numerator', function(newVal, oldVal) {
         scope.isNumeratorValid = validateEntry(newVal);
         handleValidation(scope.isNumeratorValid);
       });
-
     }
-  };
-})
 
-.directive('sat', function(questionTypesService) {
-  return {
-    restrict: 'A',
-    templateUrl: 'app/components/question-types/templates/sat.tpl.html',
-    link: function() {
+    function validateEntry(value) {
+      if (angular.isUndefined(value) || value === '' || value === null) {
+        return null;
+      } else {
+        return (angular.isDefined(value) && value != null);
+      }
+    }
+
+    function handleValidation(isValid) {
+      var nexAction = $('#nextAction'),
+      seeAnswer = $('#skipAction');
+      if (isValid) {
+        nexAction.addClass('btn-primary');
+        seeAnswer.addClass('hide');
+      } else {
+        nexAction.removeClass('btn-primary');
+        seeAnswer.removeClass('hide');
+      }
+    }
+  }
+
+  function sat(questionTypesService) {
+    var directive = {
+      link: link,
+      templateUrl: 'app/components/question-types/templates/sat.tpl.html',
+      restrict: 'A'
+    };
+    return directive;
+
+    function link(scope, element, attrs) {
       questionTypesService.satFactory();
-    },
-    scope: {}
-  };
-})
+    }
+  }
 
-.directive('numericEntry', function(questionTypesService) {
-  return {
-    restrict: 'A',
-    templateUrl: 'app/components/question-types/templates/numericEntry.tpl.html',
-    scope: {
-      items: '=items',
-      showExplanation: '=',
-      hasExplanation: '&',
-      portal: '=',
-      answerStatus: '='
-    },
+  function numericEntry(questionTypesService) {
+    var directive = {
+      link: link,
+      templateUrl: 'app/components/question-types/templates/numericEntry.tpl.html',
+      restrict: 'A',
+      scope: {
+        items: '=items',
+        showExplanation: '=',
+        hasExplanation: '&',
+        portal: '=',
+        answerStatus: '='
+      }
+    };
+    return directive;
 
-    link: function(scope) {
+    function link(scope, element, attrs) {
       questionTypesService.numericEntry(scope);
     }
+  }
 
-  };
-})
+  function fractionEntry(questionTypesService) {
+    var directive = {
+      link: link,
+      templateUrl: 'app/components/question-types/templates/fractionEntry.tpl.html',
+      restrict: 'A',
+      scope: {
+        items: '=items',
+        showExplanation: '=',
+        hasExplanation: '&',
+        portal: '=',
+        answerStatus: '='
 
-.directive('fractionEntry', function(questionTypesService) {
-  return {
-    restrict: 'A',
-    templateUrl: 'app/components/question-types/templates/fractionEntry.tpl.html',
-    scope: {
-      items: '=items',
-      showExplanation: '=',
-      hasExplanation: '&',
-      portal: '=',
-      answerStatus: '='
+      }
+    };
+    return directive;
 
-    },
-    link: function(scope) {
+    function link(scope, element, attrs) {
       questionTypesService.fractionEntry(scope);
     }
-  };
-})
-
-
-.directive('answerType', function($compile) {
-
-  var fractionTpl = '<div fraction-entry answer-status="answerStatus" ' +
-  'portal="portalC" items="items" show-explanation="showExplanation" ' +
-  'has-explanation="answerHasExplanation(index)" >' +
-  '</div>',
-
-  matrix2x3Tpl = '<div multiple-matrix2x3 items="items" show-explanation="showExplanation"' +
-  'has-explanation="answerHasExplanation(index)" is-confirm-clicked="isbuttonClicked"></div>',
-
-  matrix3x3Tpl = ' <div multiple-matrix3x3 items="items" show-explanation="showExplanation" ' +
-  'has-explanation="answerHasExplanation(index)" is-confirm-clicked="isbuttonClicked"></div>',
-
-  multipleChoiceTpl = '<div multiple-choice items="items" show-explanation="showExplanation" '+
-  'is-confirm-clicked="isbuttonClicked"></div>',
-
-  numericEntryTpl = '<div numeric-entry answer-status="answerStatus" portal="portalC" items="items" ' +
-  'show-explanation="showExplanation" has-explanation="answerHasExplanation(index)"></div>',
-
-  provisionalSatTpl = '<div provisional-sat answer-status="answerStatus" portal="portalC" items="items" ' +
-  'show-explanation="showExplanation" has-explanation="answerHasExplanation(index)"></div>',
-
-  oneChoiceTpl = '<div one-choice items="items" show-explanation="showExplanation" ' +
-  'has-explanation="answerHasExplanation(index)" is-confirm-clicked="isbuttonClicked"></div>',
-
-  satTpl = ' <div sat></div>',
-
-  twoChoiceTpl = '<div  two-choice items="items" max-opt="maxOpts" show-explanation="showExplanation" ' +
-  'has-explanation="answerHasExplanation(index)" is-confirm-clicked="isbuttonClicked"></div>';
-
-  var getAnswerTemplate = function(questionKind) {
-    var template = '';
-
-    switch (questionKind) {
-      case 'MultipleChoiceOneCorrect':
-      template = oneChoiceTpl;
-      break;
-      case 'MultipleChoiceOneOrMoreCorrect':
-      template = multipleChoiceTpl;
-      break;
-      case 'MultipleChoiceMatrixTwoByThree':
-      template = matrix2x3Tpl;
-      break;
-      case 'MultipleChoiceMatrixThreeByThree':
-      template = matrix3x3Tpl;
-      break;
-      case 'NumericEntryFraction':
-      template = fractionTpl;
-      break;
-      case 'SPR':
-      template = provisionalSatTpl;
-      break;
-      case 'NumericEntry':
-      template = numericEntryTpl;
-      break;
-      case 'sat':
-      template = satTpl;
-      break;
-      case 'MultipleChoiceTwoCorrect':
-      template = twoChoiceTpl;
-      break;
-
-    }
-
-    return template;
-  };
-  var linker = function(scope, element, attrs) {
-
-    element.html(getAnswerTemplate(attrs.content)).show();
-    $compile(element.contents())(scope);
-
-    scope.$watch('lastAnswerLoaded', function(value) {
-
-      element.html(getAnswerTemplate(value)).show();
-      $compile(element.contents())(scope);
-
-
-    });
-
-  };
-
-
-  return {
-    restrict: "A",
-    replace: true,
-    scope: false,
-    link: linker
-  };
-});
+  }
+})();

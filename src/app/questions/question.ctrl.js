@@ -4,52 +4,51 @@
   .controller('QuestionController', QuestionController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  QuestionController.$inject = ['$scope','practiceSrv', 'utilities', 'breadcrumbs', 'alerts', 'PracticeApi', 'Timer', 'SplashMessages','currentProduct'];
+  QuestionController.$inject = ['$scope', 'practiceUtilities', 'utilities', 'breadcrumbs', 'alerts', 'Timer', 'SplashMessages', 'currentProduct', 'practiceResource'];
 
-  function QuestionController($scope,practiceSrv, utilities, breadcrumbs, alerts, PracticeApi, Timer, SplashMessages,currentProduct) {
+  function QuestionController($scope, practiceUtilities, utilities, breadcrumbs, alerts, Timer, SplashMessages, currentProduct, practiceResource) {
     /* jshint validthis: true */
     var vmPr = this,
-    questionObserver=null;
+    questionObserver = null;
 
     vmPr.breadcrumbs = breadcrumbs;
-    /*breadcrumbs.options = {
+        /*breadcrumbs.options = {
       'practice': vmPr.activeTrack.subject.name
     };*/
     vmPr.isbuttonClicked = false;
+    vmPr.maxOpts = [];
+    vmPr.explanationInfo = {};
+    vmPr.videoInfo = {};
     vmPr.portalC = vmPr;
     vmPr.loading = true;
     vmPr.nextActionTitle = 'Confirm Choice';
-    vmPr.questionItems = [];
     vmPr.answerStatus = null;
-    vmPr.showExplanation = false;
-    vmPr.showVideo = false;
+    vmPr.explanationInfo.showExplanation = false;
+    vmPr.videoInfo.showVideo = false;
     vmPr.setPosition = 0;
     vmPr.position = 0;
-    vmPr.lastAnswerLoaded = '';
     vmPr.loadingMessage = SplashMessages.getLoadingMessage();
     vmPr.answerHasExplanation = answerHasExplanation;
     vmPr.revealExplanation = revealExplanation;
     vmPr.nextAction = nextAction;
 
     /*Takes care to unregister the group once the user leaves the controller*/
-    $scope.$on("$destroy", function(){
-        currentProduct.unregisterGroup(questionObserver);
+    $scope.$on("$destroy", function() {
+      currentProduct.unregisterGroup(questionObserver);
     });
 
     init();
 
 
     function init() {
-     questionObserver= currentProduct.observeGroupId().register(function(groupId) {
+      questionObserver = currentProduct.observeGroupId().register(function(groupId) {
         if (vmPr.activeGroupId !== groupId) {
           vmPr.activeGroupId = groupId;
           vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
 
           var questionId = utilities.getCurrentParam('questionId');
           if (angular.isDefined(questionId)) {
-            Question.presentQuestion(questionId);
-            timerObject.initPracticeTimer();
-            timerObject.initQuestionTimer();
+            Question.getQuestion(questionId);
           } else {
             alerts.showAlert('Oh sorry, We have problems to load your question, please let us know on feedback@grockit.com.', 'danger');
           }
@@ -61,7 +60,7 @@
     };
 
     function answerHasExplanation(index) {
-      var answer = vmPr.questionResult.answers[index];
+      var answer = vmPr.questionData.answers[index];
       return !(answer.explanation == null || angular.isUndefined(answer.explanation) || answer.explanation == '');
     }
 
@@ -77,26 +76,25 @@
       } else {
         timerObject.destroy();
       }
-
     }
 
 
     var timerObject = {
-      setTimingInformation: function(questionId, correctAnswerId, lastAnswerLoaded) {
+      setTimingInformation: function(questionId, correctAnswerId, kind) {
 
-        practiceSrv.getTimingInformation(vmPr.activeTrack.trackId, vmPr.activeGroupId, questionId)
+        practiceUtilities.getTimingInformation(vmPr.activeTrack.trackId, vmPr.activeGroupId, questionId)
         .$promise.then(function(result) {
           vmPr.showTiming = true;
           vmPr.timingData = result[0];
-          if (lastAnswerLoaded === 'MultipleChoiceOneCorrect') {
+          if (kind === 'MultipleChoiceOneCorrect') {
             var mergedList = _.map(vmPr.items, function(item) {
               return _.extend(item, _.findWhere(result[0].answers, {
                 'answer_id': item.id
               }));
             });
 
-            var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered)*100
-              vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
+            var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered) * 100
+            vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
           }
 
         }).catch(function(e) {
@@ -129,28 +127,58 @@
     };
 
     var Question = {
+      getQuestion: function(questionId) {
+        practiceResource.getQuestionFromApi(questionId).then(function(questionResponse) {
+          practiceResource.setQuestionData(questionResponse);
+          timerObject.initPracticeTimer();
+          timerObject.initQuestionTimer();
+          Question.presentQuestion();
+
+        });
+      },
+      presentQuestion: function() {
+        var questionData = practiceUtilities.presentQuestion(practiceResource.getQuestionData());
+
+        if (angular.isDefined(questionData)) {
+          console.log(questionData);
+          practiceResource.getGameSubtrackBased(vmPr.activeGroupId,questionData.id, questionData.question_set.subtrack_id)
+          .then(function(roundResult) {
+            console.log(roundResult)
+            vmPr.roundSessionAnswer = roundResult;
+          });
+
+          vmPr.questionData = questionData;
+          vmPr.answerType = practiceUtilities.getAnswerType(questionData.kind);
+
+          vmPr.items = [];
+          vmPr.maxOpts = [];
+          vmPr.items = questionData.items;
+          vmPr.loading = false;
+          vmPr.position++;
+
+          timerObject.resetQuestionTimer();
+          Question.feedbackInfo(questionData.id);
+          if (vmPr.questionAnalytics) {
+          //  timerObject.setTimingInformation(questionData.id, questionData.kind);
+          }
+        }
+      },
       bindExplanationInfo: function(info) {
-        vmPr.showExplanation = info.showExplanation;
-        vmPr.questionExplanation = info.questionExplanation;
-        vmPr.tagsResources = info.tagsResources;
-        vmPr.tags = info.tags;
-        vmPr.xpTag = info.xpTag;
+        vmPr.explanationInfo = info;
       },
       bindVideoExplanationInfo: function() {
-        practiceSrv.getVideoExplanation(vmPr.questionResult)
+        practiceUtilities.getVideoExplanation(vmPr.questionData)
         .then(function(videoInfo) {
-          vmPr.showVideo = videoInfo.showVideo;
-          vmPr.videoId = videoInfo.videoId;
-          vmPr.videoText = videoInfo.videoText;
+          vmPr.videoInfo = videoInfo;
         });
       },
       displayExplanationInfo: function() {
-        var generalInfo = practiceSrv.displayGeneralConfirmInfo(vmPr.questionResult);
+        var generalInfo = practiceUtilities.displayGeneralConfirmInfo(vmPr.questionData);
         Question.bindExplanationInfo(generalInfo);
-        Question.bindVideoExplanationInfo(vmPr.questionResult);
+        Question.bindVideoExplanationInfo(vmPr.questionData);
       },
       confirmAnswer: function() {
-        vmPr.answerStatus = practiceSrv.confirmChoice(vmPr.questionResult, vmPr.roundSessionAnswer, vmPr.items);
+        vmPr.answerStatus = practiceUtilities.confirmChoice(vmPr.questionData, vmPr.roundSessionAnswer, vmPr.items);
         if (angular.isDefined(vmPr.answerStatus)) {
           this.resetLayout();
           Question.displayExplanationInfo();
@@ -159,12 +187,12 @@
       },
       resetLayout: function() {
         angular.element('#nextAction').addClass('hide');
-        practiceSrv.resetLayout();
+        practiceUtilities.resetLayout();
       },
       doNotKnowAnswer: function() {
-         vmPr.userConfirmed = false;
-        var generalResult = practiceSrv.doNotKnowAnswer(vmPr.questionResult);
-        Question.bindVideoExplanationInfo(vmPr.questionResult);
+        vmPr.userConfirmed = false;
+        var generalResult = practiceUtilities.doNotKnowAnswer(vmPr.questionData);
+        Question.bindVideoExplanationInfo(vmPr.questionData);
         if (angular.isDefined(generalResult)) {
           this.resetLayout();
           Question.bindExplanationInfo(generalResult);
@@ -172,8 +200,8 @@
         }
       },
       evaluateConfirmMethod: function() {
-         vmPr.userConfirmed = true;
-        switch (vmPr.lastAnswerLoaded) {
+        vmPr.userConfirmed = true;
+        switch (vmPr.kind) {
           case 'SPR':
           case 'NumericEntry':
           case 'NumericEntryFraction':
@@ -187,11 +215,11 @@
         var options = {};
         options.numerator = vmPr.numerator;
         options.denominator = vmPr.denominator;
-        options.lastAnswerLoaded = vmPr.lastAnswerLoaded;
-        options.questionResult = vmPr.questionResult;
+        options.lastAnswerLoaded = vmPr.kind;
+        options.questionResult = vmPr.questionData;
         options.roundSessionAnswer = vmPr.roundSessionAnswer;
 
-        vmPr.answerStatus = practiceSrv.numericEntryConfirmChoice(options);
+        vmPr.answerStatus = practiceUtilities.numericEntryConfirmChoice(options);
         if (angular.isDefined(vmPr.answerStatus)) {
           this.resetLayout();
           Question.displayExplanationInfo();
@@ -200,15 +228,15 @@
 
       },
       feedbackInfo: function(questionId) {
-        vmPr.subjectMail = practiceSrv.setMailToInformation(questionId, '');
+        vmPr.subjectMail = practiceUtilities.setMailToInformation(questionId, '');
       },
       nextQuestion: function() {
         vmPr.isbuttonClicked = false;
         vmPr.numerator = null;
         vmPr.denominator = null;
         angular.element('#answercontent *').removeClass('btn-primary btn-danger btn-success').removeAttr('disabled');
-        vmPr.showVideo = false;
-        vmPr.showExplanation = false;
+        vmPr.videoInfo.showVideo = false;
+        vmPr.explanationInfo.showExplanation = false;
         vmPr.answerStatus = null;
         vmPr.nextActionTitle = 'Confirm Choice';
         vmPr.messageConfirmation = '';
@@ -217,42 +245,9 @@
         angular.element('#PanelQuestion').addClass('fadeIn animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
           angular.element(this).removeClass();
         });
-      },
-      presentQuestion: function(questionId) {
-        practiceSrv.loadQuestion(questionId).then(function(result) {
-          var questionSet = result.questionResult.question_set;
-
-          PracticeApi.createNewGameSubtrack(vmPr.activeGroupId, questionSet.subtrack_id)
-          .then(function(resultGame) {
-            return practiceSrv.getRoundSession(questionId, resultGame.data.practice_game.id);
-          })
-          .then(function(roundResult) {
-            vmPr.roundSessionAnswer = roundResult.roundSessionAnswer;
-          });
-
-          vmPr.questionResult = result.questionResult;
-          vmPr.lastAnswerLoaded = result.lastAnswerLoaded;
-           vmPr.answerType = practiceSrv.getAnswerType(result.lastAnswerLoaded);
-          vmPr.questionInformation = result.questionInformation;
-          vmPr.stimulus = result.stimulus;
-          vmPr.items = [];
-          vmPr.items = result.items;
-          vmPr.loading = false;
-          vmPr.position++;
-          vmPr.fixedWidth = result.fixedWidth;
-
-          /*find correct answer to be send to timing section*/
-          var correctAnswerId = _.find(result.questionResult.answers, {
-            'correct': true
-          }).id;
-          timerObject.resetQuestionTimer();
-          Question.feedbackInfo(questionId);
-          if (vmPr.questionAnalytics) {
-            //timerObject.setTimingInformation(questionId, correctAnswerId, vmPr.lastAnswerLoaded);
-          }
-        });
       }
+
     };
-}
+  }
 
 })();

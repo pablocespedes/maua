@@ -10,79 +10,76 @@
     </div>
   </section>
 </div>
-<div ng-if="vmPr.showExplanation && vmPr.showTiming && vmPr.questionAnalytics" class="reset-layout" question-timing data="vmPr.timingData" confirmed="vmPr.userConfirmed"
-your-time="vmPr.questionTimer.seconds" answer-status="vmPr.answerStatus" xp-tag="vmPr.xpTag" percent-answered="vmPr.percentAnswered" last-answer-loaded="vmPr.lastAnswerLoaded"></div>
+<div ng-if="vmPr.explanationInfo.showExplanation && vmPr.showTiming && vmPr.questionAnalytics" class="reset-layout" question-timing data="vmPr.timingData" confirmed="vmPr.userConfirmed"
+your-time="vmPr.questionTimer.seconds" answer-status="vmPr.answerStatus" xp-tag="vmPr.explanationInfo.xpTag" percent-answered="vmPr.percentAnswered" last-answer-loaded="vmPr.questionData.kind"></div>
 <div id="practice">
   <div id="parent">
     <div splash-message word="vmPr.loadingMessage" is-visible="vmPr.loading"></div>
     <div id="PanelQuestion" class="row columnsContainer" ng-show="!vmPr.loading">
       <div id="Panel1" class="col-md-6 leftColumn">
-        <div id="question-explain" class=" explain-margin" ng-if="vmPr.showExplanation">
+        <div id="question-explain" class=" explain-margin" ng-if="vmPr.explanationInfo.showExplanation">
           <div class="panel colourable">
             <div class="panel-heading">
               <span class="panel-title"><i class="panel-title-icon fa fa-folder-open"></i>Explanation</span>
             </div>
             <div class="panel-body">
-              <span ng-bind-html='vmPr.questionExplanation'></span>
-              <div id="videoExplain" ng-if="vmPr.showVideo">
+            <span ng-bind-html='vmPr.explanationInfo.questionExplanation'></span>
+              <div id="videoExplain" ng-if="vmPr.videoInfo.showVideo">
                 <br>
                 <div class="video-container">
-                  <button youtube rel="{{vmPr.videoId}}" class="btn btn-flat btn-labeled btn-primary" id="videoExplainbtn">
-                  <span class="btn-label text-lg icon fa fa-youtube-play"></span><span ng-bind="vmPr.videoText"></span>
+                  <button youtube rel="{{vmPr.videoInfo.videoId}}" class="btn btn-flat btn-labeled btn-primary" id="videoExplainbtn">
+                    <span class="btn-label text-lg icon fa fa-youtube-play"></span><span ng-bind="vmPr.videoInfo.videoText"></span>
                   </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="sentence_correction_stimulus" ng-class="{' explain-margin':vmPr.questionInformation!=''}"
-          ng-if="vmPr.questionInformation!=''">
-          <div class="panel colourable">
-            <div class="panel-heading">
-              <span class="panel-title"><i class="panel-title-icon fa fa-file-text-o"></i>Information</span>
-            </div>
-            <div class="panel-body">
-              <div class="question-information" ng-class="{'fixed-width': vmPr.fixedWidth}" ng-bind-html='vmPr.questionInformation'></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="Panel2" class="page page-home col-md-6 rightColumn">
+        <div class="sentence_correction_stimulus" ng-class="{' explain-margin':vmPr.questionData.questionInformation!=''}"
+        ng-if="vmPr.questionData.questionInformation!=''">
         <div class="panel colourable">
           <div class="panel-heading">
-            <span class="panel-title"><i class="panel-title-icon fa fa-flask"></i>Question</span>
+            <span class="panel-title"><i class="panel-title-icon fa fa-file-text-o"></i>Information</span>
           </div>
           <div class="panel-body">
-            <div id="answercontent" class="info-box">
-              <div id="solutionarea" >
-                <span ng-bind="vmPr.questByQSetTitle"></span>
-                <div ng-bind-html='vmPr.stimulus'></div>
-                <br>
-                <!--answer-->
-                <div ng-include="vmPr.answerType"></div>
-               <!--  <div my-directive template="{{vmPr.answerType}}"></div>
-
-                <div answer-type content="{{vmPr.lastAnswerLoaded}}"></div> -->
-              </div>
-              <div ng-if="vmPr.showExplanation" class=" practice-tags" question-tags-only xp="vmPr.xpTag" tags="vmPr.tags"></div>
-            </div>
+            <div class="question-information" ng-class="{'fixed-width': vmPr.questionData.fixedWidth}" ng-bind-html='vmPr.questionData.questionInformation'></div>
           </div>
-        </div>
-        <div ng-if="vmPr.showExplanation && vmPr.tagsResources.length>0" class="col-lg-12 col-md-6 col-sm-6 timing-padding">
-          <section class="panel colourable">
-            <div class="panel-heading">
-              <span class="panel-title"><i class="panel-title-icon fa fa-folder-open"></i>Skills to Review
-              </span>
-            </div>
-            <div class="panel-body no-padding-vr">
-              <div question-tags tags="vmPr.tagsResources"></div>
-            </div>
-          </section>
-          <br><br>
         </div>
       </div>
     </div>
+    <div id="Panel2" class="page page-home col-md-6 rightColumn">
+      <div class="panel colourable">
+        <div class="panel-heading">
+          <span class="panel-title"><i class="panel-title-icon fa fa-flask"></i>Question</span>
+        </div>
+        <div class="panel-body">
+          <div id="answercontent" class="info-box">
+            <div id="solutionarea" >
+              <span ng-bind="vmPr.questByQSetTitle"></span>
+              <div ng-bind-html='vmPr.questionData.stimulus'></div>
+              <br>
+              <!--answer-->
+              <div ng-include="vmPr.answerType"></div>
+            </div>
+            <div ng-if="vmPr.explanationInfo.showExplanation" class=" practice-tags" question-tags-only xp="vmPr.explanationInfo.xpTag" tags="vmPr.explanationInfo.tags"></div>
+          </div>
+        </div>
+      </div>
+      <div ng-if="vmPr.explanationInfo.showExplanation && vmPr.explanationInfo.tagsResources.length>0" class="col-lg-12 col-md-6 col-sm-6 timing-padding">
+        <section class="panel colourable">
+          <div class="panel-heading">
+            <span class="panel-title"><i class="panel-title-icon fa fa-folder-open"></i>Skills to Review
+            </span>
+          </div>
+          <div class="panel-body no-padding-vr">
+            <div question-tags tags="vmPr.explanationInfo.tagsResources"></div>
+          </div>
+        </section>
+        <br><br>
+      </div>
+    </div>
   </div>
+</div>
 </div>
 <div class="push">
 </div>
@@ -97,23 +94,22 @@ your-time="vmPr.questionTimer.seconds" answer-status="vmPr.answerStatus" xp-tag=
           </div>
         </div>
       </div>
-      <div class="col-md-2 no-padding text-right float-right dashboard-title" ng-if="!vmPr.loading && vmPr.showExplanation">
+      <div class="col-md-2 no-padding text-right float-right dashboard-title" ng-if="!vmPr.loading && vmPr.explanationInfo.showExplanation">
         Practice Time: <span class="practice-data" ng-bind="vmPr.practiceTimer.seconds | formatSeconds"></span>
       </div>
-      <div class="col-md-2 no-padding text-right float-right dashboard-title"  ng-if="!vmPr.loading && !vmPr.showExplanation">
+      <div class="col-md-2 no-padding text-right float-right dashboard-title"  ng-if="!vmPr.loading && !vmPr.explanationInfo.showExplanation">
         This Question: <span class="practice-data" ng-bind="vmPr.questionTimer.seconds | formatSeconds"></span>
       </div>
       <div class="float-left col-sm-6 feedback-box" >
         <div class="text-footer-l">
           <span>
-          Problem with this question?
-          <a href="mailto:feedback@grockit.com?subject={{vmPr.subjectMail}}" title="">&nbsp; <i
-            class="profile-list-icon fa fa-envelope" style="color: #888"></i>&nbsp; feedback@grockit.com
-          </a>
+            Problem with this question?
+            <a href="mailto:feedback@grockit.com?subject={{vmPr.subjectMail}}" title="">&nbsp; <i
+              class="profile-list-icon fa fa-envelope" style="color: #888"></i>&nbsp; feedback@grockit.com
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </footer>
-
