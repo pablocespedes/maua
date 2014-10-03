@@ -1,9 +1,9 @@
 <div accordion close-others="true">
   <div accordion-group ng-repeat="track in tracks" is-custom-toggle="true" has-childs="empty(track)" class="smart-practice-head">
     <div accordion-heading>
-      <span class="text-lg" ng-click="startPractice(track,track.id)">
+      <span class="text-lg " ng-click="startPractice(track,track.id)">
         <strong>
-          <span class="text-slim" ng-bind="track.name"></span>
+          <span class="track-head text-slim" ng-bind="track.name"></span>
         </strong>
       </span>
       <div class=" text-center pull-right" ng-if="isVisible">
@@ -32,10 +32,10 @@
     </div> -->
     <div class="col-md-4 text-right pull-right no-padding-r track-list-margin sub-track-item">
       <span class="text-semibold">
-      <span ng-bind="track.total_questions_answered | number:0"></span>&nbsp;/&nbsp;<span ng-bind="track.total_questions_available | number:0"></span>
+      <span ng-bind="subtrack.total_questions_answered | number:0"></span>&nbsp;/&nbsp;<span ng-bind="subtrack.total_questions_available | number:0"></span>
       </span>
       |
-      <span class="text-semibold"><span ng-bind="accuracy(subtrack)"></span>% Accuracy</span>
+      <span class="text-semibold"><span ng-bind="subtrack.accuracy"></span>% Accuracy</span>
     </div>
     </div>
 

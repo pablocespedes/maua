@@ -1,38 +1,172 @@
-/* Smartphones (portrait and landscape) ----------- */
-@media only screen
-and (min-device-width : 320px)
-and (max-device-width : 480px) {
-  #topics  {
-   .feedback-box{
-     padding-top: 12px;
-     height: 41px;
-     float: right!important;
-   }
-   .text-footer-r{
-     text-align: center;
-   }
-   .text-footer-l{
-     text-align: center;
-   }
-   .row {
-    margin-left: 10px;
-   }
+/* MEDIA QUERIES */
+@media screen and (min-width: 47.5em) {
+  .rightColumn {
+    top: 0;
+    right: 0;
   }
-  #splash-loader{
-    .loader_box {
+}
+
+/*==========  Mobile First Method  ==========*/
+
+/* Custom, iPhone Retina */
+@media only screen and (min-width: 320px) {
+  .loader-margin {
+    margin-left: 33% !important;
+  }
+  #topics {
+    .feedback-box {
+      padding-top: 12px;
+      height: 41px;
+      float: right !important;
+    }
+    .text-footer-r {
       text-align: center;
-      width: 270px;
-      border: 1px solid #999;
-      padding: 1px;
-      height: 8px;
+    }
+    .text-footer-l {
+      text-align: center;
+    }
+    .row {
+      margin-left: 10px;
+    }
+  }
+  #splash-loader {
+    .loader_box {
       margin-right: auto;
       margin-left: auto;
     }
   }
 }
 
-/* MEDIA QUERIES */
-@media screen and (min-width: 47.5em ) {
+/* Extra Small Devices, Phones */
+@media only screen and (min-width: 480px) {
+  .loader-margin {
+    margin-left: 33% !important;
+  }
+  .cloudLoader {
+    width: 150px;
+    height: 100px;
+    background-image: url("../images/CloudSprite.png");
+    margin-left: 45px;
+    -webkit-animation: play 2s steps(66) infinite;
+    -ms-animation: play 2s steps(66) infinite;
+    animation: play 2s steps(66) infinite;
+  }
+  #topics {
+    .feedback-box {
+      padding-top: 12px;
+      height: 41px;
+      float: right !important;
+    }
+    .text-footer-r {
+      text-align: center;
+    }
+    .text-footer-l {
+      text-align: center;
+    }
+    .row {
+      margin-left: 10px;
+    }
+  }
+  #splash-loader {
+    .loader_box {
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+}
 
-  .rightColumn { top: 0; right: 0; }
+/* Small Devices, Tablets */
+@media only screen and (min-width: 768px) {}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width: 992px) {}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width: 1200px) {}
+
+/*==========  Non-Mobile First Method  ==========*/
+
+/* Large Devices, Wide Screens */
+@media only screen and (max-width: 1200px) {}
+
+/* Medium Devices, Desktops */
+@media only screen and (max-width: 992px) {
+  .loader-margin {
+   margin-left: 15% !important;
+  }
+  .cloudLoader {
+
+background-image: url("../images/CloudSprite.png");
+margin-left: 5%;
+
+}
+}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width: 768px) {
+  .loader-margin {
+    margin-left: 33% !important;
+  }
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width: 480px) {
+  .cloudLoader {
+
+    margin-left: 29px;
+  }
+  .loader-margin {
+    margin-left: 20% !important;
+  }
+  #topics {
+    .feedback-box {
+      padding-top: 12px;
+      height: 41px;
+      float: right !important;
+    }
+    .text-footer-r {
+      text-align: center;
+    }
+    .text-footer-l {
+      text-align: center;
+    }
+    .row {
+      margin-left: 10px;
+    }
+  }
+  #splash-loader {
+    .loader_box {
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+}
+
+/* Custom, iPhone Retina */
+@media only screen and (max-width: 320px) {
+  .loader-margin {
+    margin-left: 33% !important;
+  }
+  #topics {
+    .feedback-box {
+      padding-top: 12px;
+      height: 41px;
+      float: right !important;
+    }
+    .text-footer-r {
+      text-align: center;
+    }
+    .text-footer-l {
+      text-align: center;
+    }
+    .row {
+      margin-left: 10px;
+    }
+  }
+  #splash-loader {
+    .loader_box {
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
 }
