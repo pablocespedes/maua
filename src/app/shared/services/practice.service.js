@@ -13,9 +13,9 @@
     .factory('practiceResource', practiceResource);
 
     practiceUtilities.$inject = ['$q', '$sce', 'utilities', 'practiceResource', 'alerts', 'YoutubeVideoApi', 'practiceConstants'];
-    practiceResource.$inject = ['$q', 'PracticeApi', 'environmentCons', '$resource', 'alerts'];
+    practiceResource.$inject = ['$q', '$resource', 'PracticeApi', 'environmentCons', 'alerts','DashboardApi'];
 
-    function practiceResource($q, PracticeApi, environmentCons, $resource, alerts) {
+    function practiceResource($q,$resource, PracticeApi, environmentCons, alerts,DashboardApi) {
         var questionsData = null,
         position = 0,
         gameId = null,
@@ -26,9 +26,9 @@
             getQuestionFromApi: getQuestionFromApi,
             createNewGame: createNewGame,
             getTimingInformation: getTimingInformation,
-            getGameSubtrackBased: getGameSubtrackBased,
             setQuestionData: setQuestionData,
-            sendUserReponse: sendUserReponse
+            sendUserReponse: sendUserReponse,
+            getRandomTrack:getRandomTrack
         };
         return service;
 
@@ -36,28 +36,39 @@
         function setQuestionsData(groupId, subjectId, type) {
             var deferred = $q.defer();
             PracticeApi.getQuestions(groupId, subjectId, type).then(function(result) {
-                service.setQuestionData(result.data.questions);
-                deferred.resolve(true);
+                var questData= result.data.questions;
+                if(questData.length>0){
+                    service.setQuestionData(result.data.questions);
+                    deferred.resolve(true);
+                }
+                else{
+                  deferred.resolve(false);
+                }
             });
 
             return deferred.promise;
         }
 
         function setQuestionData(questionResponse) {
-
             questionsData = null;
             questionsData = questionResponse;
         }
 
         function getQuestionData() {
+            var questionCount=questionsData.length;
 
-            /*if(position<questionsData.length){}
-             */
-            var questionResult = questionsData[position];
-            position++;
-            return questionResult;
-
+            if (position < questionCount) {
+                var questionResult = questionsData[position];
+                questionResult['questPosition']=  questionCount > 1 ? 'Question ' + (position + 1)
+                + ' of ' + (questionCount) + ' for this set' : '';
+                position++;
+                return questionResult;
+            } else {
+                position=0;
+                return null;
+            }
         };
+
         function getRoundSession(questionToRequest, groupId) {
 
             return PracticeApi.createQuestionPresentation(gameId, questionToRequest, groupId)
@@ -114,24 +125,8 @@
             });
         }
 
-        function getGameSubtrackBased(groupId, questionId, subtrackId) {
-            return PracticeApi.createNewGameSubtrack(groupId, subtrackId)
-            .then(getGameSubtrackBasedComplete)
-            .catch(getRoundSessionSubtrackBasedFailed);
-
-            function getGameSubtrackBasedComplete(gameResult) {
-                gameId = gameResult.data.practice_game.id;
-                console.log(gameId);
-                return service.getRoundSession(questionId, groupId);
-            }
-
-            function getRoundSessionSubtrackBasedFailed(e) {
-                alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
-            }
-        }
-
-        function sendUserReponse(roundSessionAnswerId, answerId,groupId) {
-            return PracticeApi.updateAnswer(roundSessionAnswerId, answerId, gameId,groupId)
+        function sendUserReponse(roundSessionAnswerId, answerId, groupId) {
+            return PracticeApi.updateAnswer(roundSessionAnswerId, answerId, gameId, groupId)
             .then(sendUserResponseComplete)
             .catch(sendUserResponseFailed);
 
@@ -141,6 +136,22 @@
 
             function sendUserResponseFailed(e) {
                 alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
+            }
+        }
+
+        function getRandomTrack(groupId) {
+            return DashboardApi.getDashboard(groupId)
+                .then(getRandomTrackComplete)
+                .catch(getRandomTrackFailed);
+
+            function getRandomTrackComplete(result) {
+                 var tracks = result.data.dashboard.smart_practice,
+                    trackP= _.random(0, tracks.items.length)
+               return tracks.items[trackP];
+            }
+
+            function getRandomTrackFailed(e) {
+
             }
         }
     }
@@ -158,9 +169,59 @@
             numericEntryConfirmChoice: numericEntryConfirmChoice,
             setMailToInformation: setMailToInformation,
             usersRunOutQuestions: usersRunOutQuestions,
-            getAnswerType: getAnswerType
+            getAnswerType: getAnswerType,
+            setCurrentTrack:setCurrentTrack
         };
         return service;
+
+        function setCurrentTrack(groupId){
+            var deferred = $q.defer(),
+              trackData = utilities.getActiveTrack();
+            if(angular.isDefined(trackData.subject)){
+                deferred.resolve(trackData);
+            }
+            else{
+                practiceResource.getRandomTrack(groupId)
+                .then(function(response){
+                     utilities.setActiveTrack(response,response.id);
+                     deferred.resolve(utilities.getActiveTrack());
+                });
+
+            }
+
+          return deferred.promise;
+        }
+
+        function parseTagsAndResources(tags) {
+            var parsedTags = [],
+            parsedResources = [],
+            tgR = {},
+            tagsLen = tags.length,
+            i, j;
+
+            for (i = 0; i < tagsLen; i++) {
+                var tagR = tags[i].tag_resources,
+                tagRLen = tagR.length,
+                currentTag = tags[i];
+
+                if (!_.find(parsedTags, function(tag) { return tag.name === currentTag.name;}))
+                parsedTags.push(currentTag);
+
+                for (j = 0; j < tagRLen; j++) {
+                    var currentTagResource = tagR[j];
+                    tgR = {
+                        name: currentTag.name,
+                        resource_type: currentTagResource.resource_type,
+                        resource: currentTagResource.resource_type == 'youtube' ? utilities.getYoutubeVideosId(currentTagResource.resource) : currentTagResource.resource
+                    };
+                    parsedResources.push(tgR);
+                }
+            }
+            return {
+                tags: parsedTags,
+                resources: parsedResources
+            };
+        }
 
         function getAnswerType(questionKind) {
             var template = '';
@@ -288,8 +349,7 @@
 
             resultObject.xpTag = questionResult.experience_points;
 
-            /*   Work with the styles to shown result
-            define is some answer is bad.*/
+            /*   Work with the styles to shown result define is some answer is bad.*/
             angular.element('.choice button').removeClass('btn-primary');
 
             for (i = 0; i < len; i++) {
@@ -304,11 +364,10 @@
             return resultObject;
         }
 
-        function confirmChoice(questionResult, roundSessionAnswer, answers, questionType,groupId) {
+        function confirmChoice(questionResult, roundSessionAnswer, answers, questionType, groupId) {
             var i, answerStatus = true,
             len = answers.length,
             isValid = validateAnswer(questionType, answers);
-            console.log(isValid);
 
             if (isValid) {
                 angular.element('.choice button').removeClass('btn-primary');
@@ -320,7 +379,7 @@
                         if (answer.selected) {
 
                             if (angular.isDefined(roundSessionAnswer)) {
-                                practiceResource.sendUserReponse(roundSessionAnswer.id, answer.id,groupId);
+                                practiceResource.sendUserReponse(roundSessionAnswer.id, answer.id, groupId);
                             }
                         } else {
                             answerStatus = false;
@@ -329,7 +388,7 @@
                     } else {
                         if (answer.selected) {
                             if (angular.isDefined(roundSessionAnswer)) {
-                                practiceResource.sendUserReponse(roundSessionAnswer.id, answer.id,groupId);
+                                practiceResource.sendUserReponse(roundSessionAnswer.id, answer.id, groupId);
                             }
                             angular.element(selectIdButton).addClass('btn-danger');
                             angular.element(selectIdButton).parents('#answer').addClass('incorrectAnswer');
@@ -353,39 +412,6 @@
             angular.element('#skipAction').addClass('hide');
             angular.element('#nextAction').removeClass('btn-primary');
             angular.element('.list-group *').addClass('no-hover');
-        }
-
-        function parseTagsAndResources(tags) {
-            var parsedTags = [],
-                parsedResources = [],
-                tgR = {},
-                tagsLen = tags.length,
-                i, j;
-
-            for (i = 0; i < tagsLen; i++) {
-                var tagR = tags[i].tag_resources,
-                    tagRLen = tagR.length,
-                    currentTag = tags[i];
-
-                if (!_.find(parsedTags, function(tag) {
-                    return tag.name === currentTag.name;
-                }))
-                    parsedTags.push(currentTag);
-
-                for (j = 0; j < tagRLen; j++) {
-                    var currentTagResource = tagR[j];
-                    tgR = {
-                        name: currentTag.name,
-                        resource_type: currentTagResource.resource_type,
-                        resource: currentTagResource.resource_type == 'youtube' ? utilities.getYoutubeVideosId(currentTagResource.resource) : currentTagResource.resource
-                    };
-                    parsedResources.push(tgR);
-                }
-            }
-            return {
-                tags: parsedTags,
-                resources: parsedResources
-            };
         }
 
         function displayGeneralConfirmInfo(questionResult) {
@@ -601,7 +627,7 @@
 
         function handleValidation(isValid) {
             var nexAction = $('#nextAction'),
-                seeAnswer = $('#skipAction');
+            seeAnswer = $('#skipAction');
             if (isValid) {
                 nexAction.addClass('btn-primary');
                 seeAnswer.addClass('hide');
@@ -614,32 +640,32 @@
         function satFactory() {
             var content = $('#parent');
             content
-                .on('click', '#sat .column-matrix', function(e) {
-                    if (e.handled !== true) {
-                        var choice = $(e.target),
-                            choiceVal = choice.text(),
-                            selectedGroup = $(e.target).parents('td').data('group'),
-                            groups = $(e.target).parents('.choice').find('[data-group=' + selectedGroup + ']'),
-                            hasPrimary = choice.hasClass('btn-primary'),
-                            nexAction = $('#nextAction'),
-                            seeAnswer = $('#skipAction');
+            .on('click', '#sat .column-matrix', function(e) {
+                if (e.handled !== true) {
+                    var choice = $(e.target),
+                    choiceVal = choice.text(),
+                    selectedGroup = $(e.target).parents('td').data('group'),
+                    groups = $(e.target).parents('.choice').find('[data-group=' + selectedGroup + ']'),
+                    hasPrimary = choice.hasClass('btn-primary'),
+                    nexAction = $('#nextAction'),
+                    seeAnswer = $('#skipAction');
 
-                        groups.find('[type=button]').removeClass('btn-primary');
-                        groups.find('[type=button]').addClass('btn-outline');
-                        if (!hasPrimary) {
-                            choice.removeClass('btn-outline');
-                            choice.addClass('btn-primary');
-                            $('#input' + selectedGroup).text(choiceVal);
-                            nexAction.addClass('btn-primary');
-                            seeAnswer.addClass('hide');
-                        } else {
-                            $('#input' + selectedGroup).text('');
-                            choice.removeClass('btn-primary');
-                            choice.addClass('btn-outline');
-                        }
+                    groups.find('[type=button]').removeClass('btn-primary');
+                    groups.find('[type=button]').addClass('btn-outline');
+                    if (!hasPrimary) {
+                        choice.removeClass('btn-outline');
+                        choice.addClass('btn-primary');
+                        $('#input' + selectedGroup).text(choiceVal);
+                        nexAction.addClass('btn-primary');
+                        seeAnswer.addClass('hide');
+                    } else {
+                        $('#input' + selectedGroup).text('');
+                        choice.removeClass('btn-primary');
+                        choice.addClass('btn-outline');
                     }
-                    e.handled = true;
-                });
+                }
+                e.handled = true;
+            });
         }
     }
 
