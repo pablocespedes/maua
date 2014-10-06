@@ -1,33 +1,47 @@
 <div class="history-container panel panel-dark">
   <div class="panel-heading">
     <h3 class="history-date">
-      <span ng-bind="title"></span> - <span ng-bind="questions.length"></span>
-      <span ng-pluralize count="questions.length" when="{'1': 'Question', 'other': 'Questions'}"></span> 
+      <span ng-bind="title"></span>
+      <span style="float: right">{{ ( questions.length > 1 ? questions.length + " questions" : questions.length + " question" ) }}</span>
     </h3>
   </div>
   <div class="list-group">
-    <a href="#/{{groupId}}/questions/{{question.id}}" class="history-list list-group-item" ng-repeat="question in questions">
-      <div class="row">
-        <div class="history-item col-sm-5">
-          <div class="history-row row">
-            <div class="col-lg-1 col-md-2 col-sm-2 col-xs-1 no-padding">
-              <i ng-if="question.outcome === 'correct'" class="fa fa-check bg-success"></i>
-              <i ng-if="question.outcome === 'incorrect'" class="fa fa-times bg-danger"></i>
-              <i ng-if="question.outcome !== 'correct' && question.outcome !== 'incorrect'" class="fa fa-minus bg-default outcome-skipped"></i>
-            </div>
-            <div class="col-lg-11 col-md-10 col-sm-10 col-xs-11">
-              <p ng-bind-html="question.question_stimulus | htmlToPlaintext | truncate:40 "></p>
-            </div>
-          </div>
-        </div>
-        <div class="history-item col-sm-3" ng-bind="question.track_name"></div>
-        <div class="history-item col-sm-2" ng-bind="question.experience_points | level"></div>
-        <div class="history-item col-sm-2">
-          <div ng-if="question.time_to_answer">
-            <span ng-bind="question.time_to_answer"></span>s
-          </div>
-        </div>
-      </div>
-    </a>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <colgroup>
+          <col class="col-xs-1">
+          <col class="col-xs-4">
+          <col class="col-xs-1">
+          <col class="col-xs-1">
+          <col class="col-xs-1">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Question</th>
+            <th>Preview</th>
+            <th>Type</th>
+            <th>Difficulty</th>
+            <th>Timing</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="question in questions">
+            <td>
+              <a href="#/{{groupId}}/questions/{{question.id}}">
+                <i ng-if="question.outcome === 'correct'" class="fa fa-check bg-success"></i>
+                <i ng-if="question.outcome === 'incorrect'" class="fa fa-times bg-danger"></i>
+                <i ng-if="question.outcome !== 'correct' && question.outcome !== 'incorrect'" class="fa fa-minus bg-default outcome-skipped"></i>
+                &nbsp;
+                <code>{{question.id}}</code>
+              </a>
+            </td>
+            <td><p ng-bind-html="question.question_stimulus | htmlToPlaintext | truncate:50 "></p></td>
+            <td>{{question.track_name}}</td>
+            <td><div ng-bind="question.experience_points | level"></div></td>
+            <td>{{( question.time_to_answer > 0 ? question.time_to_answer + "s" : "Skipped")}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-  </div>
+</div>
