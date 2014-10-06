@@ -189,6 +189,7 @@
         customPractice.bindVideoExplanationInfo(vmPr.questionData);
         if (angular.isDefined(generalResult)) {
           this.resetLayout();
+          vmPr.questionData.setLayoutOneColumn=true;
           customPractice.bindExplanationInfo(generalResult);
           vmPr.isbuttonClicked = true;
         } else
@@ -216,6 +217,7 @@
 
         vmPr.answerStatus = practiceUtilities.numericEntryConfirmChoice(options);
         if (angular.isDefined(vmPr.answerStatus)) {
+          vmPr.questionData.setLayoutOneColumn=true;
           this.resetLayout();
           customPractice.displayExplanationInfo();
           vmPr.isbuttonClicked = true;
@@ -245,7 +247,8 @@
       confirmAnswer: function() {
         vmPr.answerStatus = practiceUtilities.confirmChoice(vmPr.questionData, vmPr.roundSessionAnswer, vmPr.items,vmPr.questionData.kind,vmPr.activeGroupId);
         if (angular.isDefined(vmPr.answerStatus)) {
-          this.resetLayout();
+           this.resetLayout();
+           vmPr.questionData.setLayoutOneColumn=true;
           customPractice.displayExplanationInfo();
           vmPr.isbuttonClicked = true;
         } else

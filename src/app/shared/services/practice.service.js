@@ -258,21 +258,6 @@
 
             return practiceConstants.questionTypesUrl + template;
         }
-        /*This methods takes care to set the practice layout based on the API response*/
-        function setLayoutBasedOnQuestionInfo(setLayout) {
-            var panel1 = angular.element('#Panel1'),
-            panel2 = angular.element('#Panel2');
-
-            if (setLayout) {
-                panel1.removeClass('col-md-offset-3');
-                panel2.removeClass('col-md-offset-3');
-
-            } else {
-                panel1.addClass('col-md-offset-3');
-                panel2.addClass('col-md-offset-3');
-            }
-        }
-
         function removeBadImage() {
             /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
             angular.element('img').error(function() {
@@ -298,11 +283,8 @@
             resultObject.questionInformation = $sce.trustAsHtml(resultObject.question_set.info);
 
             /*Find if there is a question info defined or retrieve it by the API*/
-            setLayoutType = angular.isDefined(resultObject.questionInformation) && resultObject.questionInformation != null &&
+            resultObject.setLayoutOneColumn = angular.isDefined(resultObject.questionInformation) && resultObject.questionInformation != null &&
             resultObject.questionInformation != '' ? true : false;
-
-            /*Set the layout based on the question info*/
-            setLayoutBasedOnQuestionInfo(setLayoutType);
 
             /*@Jose TODO This can be performed on a better way*/
             angular.element('.choice.active').removeClass('active');
@@ -408,7 +390,6 @@
         }
 
         function resetLayout() {
-            setLayoutBasedOnQuestionInfo(true);
             angular.element('#skipAction').addClass('hide');
             angular.element('#nextAction').removeClass('btn-primary');
             angular.element('.list-group *').addClass('no-hover');

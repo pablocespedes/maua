@@ -175,6 +175,7 @@
         vmPr.answerStatus = practiceUtilities.confirmChoice(vmPr.questionData, undefined, vmPr.items,vmPr.questionData.kind,vmPr.activeGroupId);
         if (angular.isDefined(vmPr.answerStatus)) {
           this.resetLayout();
+          vmPr.questionData.setLayoutOneColumn=true;
           Question.displayExplanationInfo();
           vmPr.isbuttonClicked = true;
         }
@@ -189,6 +190,7 @@
         Question.bindVideoExplanationInfo(vmPr.questionData);
         if (angular.isDefined(generalResult)) {
           this.resetLayout();
+          vmPr.questionData.setLayoutOneColumn=true;
           Question.bindExplanationInfo(generalResult);
           vmPr.isbuttonClicked = true;
         }
@@ -216,6 +218,7 @@
         vmPr.answerStatus = practiceUtilities.numericEntryConfirmChoice(options);
         if (angular.isDefined(vmPr.answerStatus)) {
           this.resetLayout();
+          vmPr.questionData.setLayoutOneColumn=true;
           Question.displayExplanationInfo();
           vmPr.isbuttonClicked = true;
         }
