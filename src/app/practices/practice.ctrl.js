@@ -87,6 +87,7 @@
                 }));
               });
 
+
               var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered) * 100
               vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
             }
@@ -125,7 +126,7 @@
         });
       },
       getQuestions: function(){
-        practiceResource.setQuestionsData(vmPr.activeGroupId,vmPr.activeTrack.trackId,vmPr.activeTrack.subject.type)
+        practiceResource.setQuestionsData(vmPr.activeGroupId,vmPr.activeTrack.subject.id,vmPr.activeTrack.subject.type)
         .then(setQuestionComplete);
           function setQuestionComplete(response){
               if(response)
@@ -161,6 +162,7 @@
           }
         }
         else{
+          vmPr.loading = true;
           customPractice.getQuestions();
         }
       },
@@ -187,6 +189,7 @@
         customPractice.bindVideoExplanationInfo(vmPr.questionData);
         if (angular.isDefined(generalResult)) {
           this.resetLayout();
+          vmPr.questionData.setLayoutOneColumn=true;
           customPractice.bindExplanationInfo(generalResult);
           vmPr.isbuttonClicked = true;
         } else
@@ -214,6 +217,7 @@
 
         vmPr.answerStatus = practiceUtilities.numericEntryConfirmChoice(options);
         if (angular.isDefined(vmPr.answerStatus)) {
+          vmPr.questionData.setLayoutOneColumn=true;
           this.resetLayout();
           customPractice.displayExplanationInfo();
           vmPr.isbuttonClicked = true;
@@ -243,7 +247,8 @@
       confirmAnswer: function() {
         vmPr.answerStatus = practiceUtilities.confirmChoice(vmPr.questionData, vmPr.roundSessionAnswer, vmPr.items,vmPr.questionData.kind,vmPr.activeGroupId);
         if (angular.isDefined(vmPr.answerStatus)) {
-          this.resetLayout();
+           this.resetLayout();
+           vmPr.questionData.setLayoutOneColumn=true;
           customPractice.displayExplanationInfo();
           vmPr.isbuttonClicked = true;
         } else

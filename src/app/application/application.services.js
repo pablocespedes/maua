@@ -356,7 +356,7 @@
     observable = Observable.create('currentProduct');
 
     this.currentGroupId = function(groupId, actualGroup) {
-      if (groupId !== currentUser.currentGroup) {
+      if (currentUser !==null && groupId !== currentUser.currentGroup) {
         currentUser.currentGroup = groupId;
         webStorage.add('currentUser', currentUser);
       }
