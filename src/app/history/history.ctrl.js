@@ -47,7 +47,7 @@
       console.log('loadQuestions: ', page);
       HistoryApi.getQuestions(groupId, page).then(function(response) {
         var questionsWithDay = _.map(response.data.round_sessions, function(question) {
-          var date = new Date(question.answered_at);
+          var date = new Date(question.created_at);
           question.day = historyDates.getStandardDate(date);
           if (question.created_at && question.answered_at) {
             question.time_to_answer = historyDates.secondsBetweenDates(question.created_at, question.answered_at);
