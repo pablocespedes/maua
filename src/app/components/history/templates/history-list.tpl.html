@@ -6,32 +6,28 @@
     </h3>
   </div>
   <div class="list-group">
-    <div class="history-list row list-group-item" ng-repeat="question in questions">
-      <!-- <div class="history-item col-xs-5"> -->
-      <div class="history-item col-xs-1">
-        <i ng-if="question.outcome === 'correct'" class="fa fa-check bg-success"></i>
-        <i ng-if="question.outcome === 'incorrect'" class="fa fa-times bg-danger"></i>
-        <i ng-if="question.outcome !== 'correct' && question.outcome !== 'incorrect'" class="fa fa-minus bg-default outcome-skipped"></i>
-        <!--
-      <div class="history-row row">
-        <div class="col-xs-3">
-          <i ng-if="question.outcome === 'correct'" class="fa fa-check bg-success"></i>
-          <i ng-if="question.outcome === 'incorrect'" class="fa fa-times bg-danger"></i>
-          <i ng-if="question.outcome !== 'correct' && question.outcome !== 'incorrect'" class="fa fa-minus bg-default outcome-skipped"></i>
+    <a href="#/{{groupId}}/questions/{{question.id}}" class="history-list list-group-item" ng-repeat="question in questions">
+      <div class="row">
+        <div class="history-item col-sm-5">
+          <div class="history-row row">
+            <div class="col-lg-1 col-md-2 col-sm-2 col-xs-1 no-padding">
+              <i ng-if="question.outcome === 'correct'" class="fa fa-check bg-success"></i>
+              <i ng-if="question.outcome === 'incorrect'" class="fa fa-times bg-danger"></i>
+              <i ng-if="question.outcome !== 'correct' && question.outcome !== 'incorrect'" class="fa fa-minus bg-default outcome-skipped"></i>
+            </div>
+            <div class="col-lg-11 col-md-10 col-sm-10 col-xs-11">
+              <p ng-bind-html="question.question_stimulus | htmlToPlaintext | truncate:40 "></p>
+            </div>
+          </div>
         </div>
-        <div class="col-xs-9">
-          <a href="#/{{groupId}}/questions/{{question.id}}" ng-bind-html="question.question_stimulus"></a>
-        </div>
-      </div>
-      -->
-      </div>
-      <div class="history-item col-xs-4" ng-bind="question.track_name"></div>
-      <div class="history-item col-xs-4" ng-bind="question.experience_points | level"></div>
-      <div class="history-item col-xs-3">
-        <div ng-if="question.time_to_answer">
-          <span ng-bind="question.time_to_answer"></span>s
+        <div class="history-item col-sm-3" ng-bind="question.track_name"></div>
+        <div class="history-item col-sm-2" ng-bind="question.experience_points | level"></div>
+        <div class="history-item col-sm-2">
+          <div ng-if="question.time_to_answer">
+            <span ng-bind="question.time_to_answer"></span>s
+          </div>
         </div>
       </div>
-    </div>
+    </a>
   </div>
   </div>

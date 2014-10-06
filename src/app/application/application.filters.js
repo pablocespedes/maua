@@ -5,6 +5,7 @@ angular.module("grockitApp.application")
 .filter('truncate', truncate)
 .filter('date', date)
 .filter('time', time)
+.filter('htmlToPlaintext', htmlToPlaintext)
 .filter('level', level);
 
 formatSeconds.$inject =['dateFormatter'];
@@ -34,6 +35,12 @@ function time() {
       return hours + ':' + minutes + ':' + seconds + ' ' + period;
     }
     return date;
+  };
+}
+
+function htmlToPlaintext() {
+  return function(text) {
+    return String(text).replace(/<[^>]+>/gm, '');
   };
 }
 
