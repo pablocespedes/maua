@@ -162,6 +162,7 @@
           }
         }
         else{
+          vmPr.loading = true;
           customPractice.getQuestions();
         }
       },
