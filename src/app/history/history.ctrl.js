@@ -56,7 +56,7 @@
         }),
             grouppedByDay = _.groupBy(questionsWithDay, 'day'),
         parsedQuestions = _.map(_.keys(grouppedByDay), function(key) {
-          return {day: key, questions: grouppedByDay[key]};
+          return {day: key, roundSessions: grouppedByDay[key]};
         });
 
       vmHist.questionsPerDay = parsedQuestions;
