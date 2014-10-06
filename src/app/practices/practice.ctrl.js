@@ -87,6 +87,7 @@
                 }));
               });
 
+
               var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered) * 100
               vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
             }
@@ -125,7 +126,7 @@
         });
       },
       getQuestions: function(){
-        practiceResource.setQuestionsData(vmPr.activeGroupId,vmPr.activeTrack.trackId,vmPr.activeTrack.subject.type)
+        practiceResource.setQuestionsData(vmPr.activeGroupId,vmPr.activeTrack.subject.id,vmPr.activeTrack.subject.type)
         .then(setQuestionComplete);
           function setQuestionComplete(response){
               if(response)
