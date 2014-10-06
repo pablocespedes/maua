@@ -49,7 +49,9 @@
         var questionsWithDay = _.map(response.data.round_sessions, function(question) {
           var date = new Date(question.answered_at);
           question.day = historyDates.getStandardDate(date);
-          question.time_to_answer = historyDates.secondsBetweenDates(question.created_at, question.answered_at);
+          if (question.created_at && question.answered_at) {
+            question.time_to_answer = historyDates.secondsBetweenDates(question.created_at, question.answered_at);
+          }
           return question;
         }),
             grouppedByDay = _.groupBy(questionsWithDay, 'day'),
