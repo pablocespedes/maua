@@ -129,14 +129,17 @@
     var Question = {
       getQuestion: function(questionId) {
         practiceResource.getQuestionFromApi(questionId).then(function(questionResponse) {
-          practiceResource.setQuestionData(questionResponse);
-          timerObject.initPracticeTimer();
-          timerObject.initQuestionTimer();
-          Question.presentQuestion();
+          if(angular.isDefined(questionResponse)){
+             practiceResource.setQuestionData(questionResponse);
 
+             timerObject.initPracticeTimer();
+             timerObject.initQuestionTimer();
+             Question.presentQuestion();
+          }
         });
       },
       presentQuestion: function() {
+
         var questionData = practiceUtilities.presentQuestion(practiceResource.getQuestionData());
 
         if (angular.isDefined(questionData)) {

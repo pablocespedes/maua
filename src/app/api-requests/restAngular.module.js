@@ -2,7 +2,9 @@ angular.module("grockitApp.requests",['restangular'])
 .config(function (RestangularProvider,$httpProvider,$provide,environmentCons) {
 
   var urlPattern = /http(s?)\:\/\/staging/.test(location.origin),
-  url = urlPattern ? environmentCons.stagingAPI : environmentCons.liveAPI;
+  localPattern = /http(s?)\:\/\/127.0.0.1:9000/.test(location.origin)
+
+  url = urlPattern || localPattern ? environmentCons.stagingAPI : environmentCons.liveAPI;
 
 
   angular.module("grockitApp.requests").factory = $provide.factory;
