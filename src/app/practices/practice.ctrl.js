@@ -5,21 +5,15 @@
   .controller('CustomPracticeController', CustomPracticeController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  CustomPracticeController.$inject = ['$scope', '$timeout', 'practiceUtilities', 'utilities', 'breadcrumbs', 'alerts', 'Timer',
+  CustomPracticeController.$inject = ['$scope', '$timeout', 'practiceUtilities', 'breadcrumbs', 'alerts', 'Timer',
   'SplashMessages', 'currentProduct', 'practiceResource'
   ];
 
-  function CustomPracticeController($scope, $timeout, practiceUtilities, utilities, breadcrumbs, alerts, Timer, SplashMessages, currentProduct, practiceResource) {
+  function CustomPracticeController($scope, $timeout, practiceUtilities, breadcrumbs, alerts, Timer, SplashMessages, currentProduct, practiceResource) {
 
     /* jshint validthis: true */
     var vmPr = this,
     practiceObserver = null;
-
-    vmPr.activeTrack = utilities.getActiveTrack();
-    vmPr.breadcrumbs = breadcrumbs;
-    breadcrumbs.options = {
-      'practice': vmPr.activeTrack.subject.name
-    };
     vmPr.isbuttonClicked = false;
     vmPr.maxOpts = [];
     vmPr.explanationInfo = {};
@@ -38,7 +32,6 @@
     vmPr.answerHasExplanation = answerHasExplanation;
     vmPr.nextAction = nextAction;
     vmPr.revealExplanation = revealExplanation;
-
     /*Takes care to unregister the group once the user leaves the controller*/
     $scope.$on("$destroy", function() {
       currentProduct.unregisterGroup(practiceObserver);
@@ -50,8 +43,8 @@
       practiceObserver = currentProduct.observeGroupId().register(function(groupId) {
         if (vmPr.activeGroupId !== groupId) {
           vmPr.activeGroupId = groupId;
+          customPractice.setCurrentTrack(groupId);
           vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
-          customPractice.getNewPracticeGame(vmPr.activeGroupId, vmPr.activeTrack.subject.url);
         }
       });
     };
@@ -134,32 +127,41 @@
       getQuestions: function(){
         practiceResource.setQuestionsData(vmPr.activeGroupId,vmPr.activeTrack.trackId,vmPr.activeTrack.subject.type)
         .then(setQuestionComplete);
-          function setQuestionComplete(questionsResponse){
-              customPractice.presentQuestion();
+          function setQuestionComplete(response){
+              if(response)
+                customPractice.presentQuestion();
+              else
+                practiceUtilities.usersRunOutQuestions(vmPr.activeTrack.subject.name, vmPr.activeGroupId);
           }
       },
       presentQuestion: function() {
-        var questionData =practiceUtilities.presentQuestion(practiceResource.getQuestionData());
+        var requestLocalData = practiceResource.getQuestionData();
+        if (requestLocalData !== null) {
+          var questionData = practiceUtilities.presentQuestion(requestLocalData);
 
-        if(angular.isDefined(questionData)){
+          if (angular.isDefined(questionData)) {
 
-        practiceResource.getRoundSession(questionData.id).then(function(result) {
-          vmPr.roundSessionAnswer = result.roundSessionAnswer;
-        });
-          vmPr.questionData= questionData;
-          vmPr.answerType = practiceUtilities.getAnswerType(questionData.kind);
+            practiceResource.getRoundSession(questionData.id, vmPr.activeGroupId).then(function(result) {
+              vmPr.roundSessionAnswer = result;
+            });
+            vmPr.questionData = questionData;
+            vmPr.answerType = practiceUtilities.getAnswerType(questionData.kind);
 
-          vmPr.items = [];
-          vmPr.maxOpts = [];
-          vmPr.items = questionData.items;
-          vmPr.loading = false;
-          vmPr.position++;
+            vmPr.items = [];
+            vmPr.maxOpts = [];
+            vmPr.items = questionData.items;
+            vmPr.loading = false;
+            vmPr.position++;
 
-          timerObject.resetQuestionTimer();
-          customPractice.feedbackInfo(questionData.id);
-          if (vmPr.questionAnalytics) {
-             timerObject.setTimingInformation(questionData.id, questionData.kind);
+            timerObject.resetQuestionTimer();
+            customPractice.feedbackInfo(questionData.id);
+            if (vmPr.questionAnalytics) {
+              timerObject.setTimingInformation(questionData.id, questionData.kind);
+            }
           }
+        }
+        else{
+          customPractice.getQuestions();
         }
       },
       displayExplanationInfo: function() {
@@ -221,7 +223,7 @@
         vmPr.subjectMail = practiceUtilities.setMailToInformation(questionId, vmPr.activeTrack.subject.name);
       },
       nextQuestion: function() {
-        this.loadQuestionsSet();
+        this.presentQuestion();
         vmPr.isbuttonClicked = false;
         vmPr.numerator = null;
         vmPr.denominator = null;
@@ -239,7 +241,7 @@
         });
       },
       confirmAnswer: function() {
-        vmPr.answerStatus = practiceUtilities.confirmChoice(vmPr.questionData, vmPr.roundSessionAnswer, vmPr.items);
+        vmPr.answerStatus = practiceUtilities.confirmChoice(vmPr.questionData, vmPr.roundSessionAnswer, vmPr.items,vmPr.questionData.kind,vmPr.activeGroupId);
         if (angular.isDefined(vmPr.answerStatus)) {
           this.resetLayout();
           customPractice.displayExplanationInfo();
@@ -251,61 +253,19 @@
         vmPr.nextActionTitle = 'Next Question';
         practiceUtilities.resetLayout();
       },
-      getQuestionSets: function() {
-        var tracks = [];
-        tracks.push(vmPr.activeTrack.trackId);
+      setCurrentTrack: function(groupId){
 
-        var getQuestionSet = PracticeApi.getQuestionNewSetByPractice(vmPr.gameId, tracks);
-        getQuestionSet.then(function(result) {
-
-          if (result.data.question_sets.length > 0) {
-            vmPr.questionSetList = result.data.question_sets;
-
-            customPractice.loadQuestionsSet();
-          } else {
-            /*if user run out of the questions show message*/
-            practiceUtilities.usersRunOutQuestions(vmPr.activeTrack.subject.name, vmPr.activeGroupId);
-
+        practiceUtilities.setCurrentTrack(groupId).then(function(response){
+          if(response){
+            vmPr.activeTrack=response;
+            customPractice.getNewPracticeGame(vmPr.activeGroupId, vmPr.activeTrack.subject.url);
+            vmPr.breadcrumbs = breadcrumbs;
+            breadcrumbs.options = {
+             'practice': vmPr.activeTrack.subject.name
+            };
           }
-        }).catch(function errorHandler(e) {
-          alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
         });
-      },
-      loadQuestionsSet: function() {
-        if (angular.isDefined(vmPr.questionSetList) && vmPr.questionSetList.length > 0) {
-
-          /*if $scope.setPosition is bigger than $scope.questionSetList.length we already finish the list of question sets */
-          if (vmPr.setPosition < vmPr.questionSetList.length) {
-
-            var setPosition = vmPr.setPosition,
-
-            /* Iterate between all the question sets retrieved it by the API */
-            questionSetResult = vmPr.questionSetList[setPosition];
-
-            var position = vmPr.position;
-            /* questionsCount Give us the number of questions by questionSet*/
-            vmPr.questionsCount = questionSetResult.questions.length;
-
-            vmPr.questByQSetTitle = vmPr.questionsCount > 1 ? 'Question ' + (position + 1) + ' of ' + (vmPr.questionsCount) + ' for this set' : '';
-
-            if (position < vmPr.questionsCount) {
-              var questionIdToRequest = questionSetResult.questions[position];
-              vmPr.currentId = questionIdToRequest;
-
-              customPractice.presentQuestion(questionIdToRequest, vmPr.gameId);
-            } else {
-              vmPr.position = 0;
-              vmPr.setPosition++;
-              customPractice.loadQuestionsSet();
-              /* New set, delete the questions, this way they are reinitialized*/
-            }
-          } else {
-            /*If we finish with the first load of questions id/question sets que create a new game*/
-            vmPr.setPosition = 0;
-            customPractice.getQuestionSets();
-          }
-        }
-      },
+      }
 
     };
   }
