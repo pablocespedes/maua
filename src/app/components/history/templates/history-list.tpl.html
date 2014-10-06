@@ -27,12 +27,12 @@
         <tbody>
           <tr ng-repeat="question in questions">
             <td>
-              <a href="#/{{groupId}}/questions/{{question.id}}">
+              <a href="#/{{groupId}}/questions/{{question.question_id}}">
                 <i ng-if="question.outcome === 'correct'" class="fa fa-check bg-success"></i>
                 <i ng-if="question.outcome === 'incorrect'" class="fa fa-times bg-danger"></i>
                 <i ng-if="question.outcome !== 'correct' && question.outcome !== 'incorrect'" class="fa fa-minus bg-default outcome-skipped"></i>
                 &nbsp;
-                <code>{{question.id}}</code>
+                <code>{{question.question_id}}</code>
               </a>
             </td>
             <td><p ng-bind-html="question.question_stimulus | htmlToPlaintext | truncate:50 "></p></td>
