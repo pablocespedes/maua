@@ -115,9 +115,8 @@
                 <div class="right clearfix">
                   <ul class="nav navbar-nav pull-right right-navbar-nav">
                     <li id="feature-modal" class=" dropdown">
-                      <a  ng-click="appCtrl.showDialog()">
-                        <i class="menu-icon fa fa-gift"></i>
-                        <span class="mm-text">What's new</span>
+                      <a  ng-href="#/{{appCtrl.activeGroupId}}/dashboard">
+                        <span class="mm-text">Return to Dashboard</span>
                       </a>
                     </li>
                     <li id="feature-modal" class=" dropdown">
@@ -155,7 +154,7 @@
             <div welcome data="appCtrl.currentUser" url="appCtrl.url" log-out-url="appCtrl.logOutUrl" log-out="appCtrl.logOut()"></div>
             <ul class="navigation">
               <li>
-                <a ng-href="#/{{appCtrl.activeGroupId}}/dashboard" ng-click="appCtrl.select($index)"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Dashboard</span></a>
+                <a ng-href="#/{{appCtrl.activeGroupId}}/dashboard" ng-click="appCtrl.select(0)"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Dashboard</span></a>
               </li>
             <!--   <li ng-repeat="track in appCtrl.tracksList" ng-click="select($index)" ng-class="{active: $index == selected}">
                 <a id="{{track.id}}" ng-href="#/{{appCtrl.activeGroupId}}/track-dashboard"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn" ng-bind="track.short_name"></span></a>
@@ -183,7 +182,7 @@
                 <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/skill_data"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Skill Data</span></a>
               </li>
               <li>
-              <a ng-href="#/{{appCtrl.activeGroupId}}/history"><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
+              <a ng-href="#/{{appCtrl.activeGroupId}}/history" ng-click="appCtrl.select(8)"><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
               </li>
             </ul>
             <!-- / .navigation -->

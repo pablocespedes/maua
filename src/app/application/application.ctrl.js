@@ -49,7 +49,8 @@
 
         if (index >= 0) {
 
-          utilities.clearActiveTab();
+          utilities.setActiveTab(index);
+          //utilities.clearActiveTab();
           $route.reload();
 
         }

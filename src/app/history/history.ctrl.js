@@ -18,6 +18,7 @@
     vmHist.pagination = {
       totalQuestions: 0,
       itemsPerPage: 0,
+      maxSize: 5,
       currentPage: 1,
       changePage: function(page) {
         console.log('changePage: ', page);
@@ -46,7 +47,9 @@
     function loadQuestions(groupId, page) {
       console.log('loadQuestions: ', page);
       HistoryApi.getQuestions(groupId, page).then(function(response) {
-        var questionsWithDay = _.map(response.data.round_sessions, function(question) {
+        var roundSessions = response.data.round_sessions;
+        //var uniqueQuestions = _.unique(roundSessions, 'question_id');
+        var questionsWithDay = _.map(roundSessions, function(question) {
           var date = new Date(question.created_at);
           question.day = historyDates.getStandardDate(date);
           if (question.created_at && question.answered_at) {
