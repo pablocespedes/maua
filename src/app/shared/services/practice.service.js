@@ -36,9 +36,10 @@
         function setQuestionsData(groupId, subjectId, type) {
             var deferred = $q.defer();
             PracticeApi.getQuestions(groupId, subjectId, type).then(function(result) {
+                questionsData=null;
                 var questData= result.data.questions;
                 if(questData.length>0){
-                    service.setQuestionData(result.data.questions);
+                    service.setQuestionData(questData);
                     deferred.resolve(true);
                 }
                 else{
@@ -50,6 +51,7 @@
         }
 
         function setQuestionData(questionResponse) {
+            position=0;
             questionsData = null;
             questionsData = questionResponse;
         }
@@ -58,7 +60,10 @@
             var questionCount=questionsData.length;
 
             if (position < questionCount) {
+
                 var questionResult = questionsData[position];
+
+                questionResult['questPosition']='';
                 questionResult['questPosition']=  questionCount > 1 ? 'Question ' + (position + 1)
                 + ' of ' + (questionCount) + ' for this set' : '';
                 position++;
