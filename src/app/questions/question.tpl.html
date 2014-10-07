@@ -97,7 +97,7 @@ last-answer-loaded="vmPr.questionData.kind"></div>
         Practice Time: <span class="practice-data" ng-bind="vmPr.practiceTimer.seconds | formatSeconds"></span>
       </div>
       <div class="col-md-2 no-padding text-right float-right dashboard-title" ng-if="!vmPr.loading && !vmPr.explanationInfo.showExplanation">
-        This Question: <span class="practice-data" ng-bind="vmPr.questionTimer.seconds | formatSeconds"></span>
+        <span class="practice-data" ng-bind="vmPr.questionTimer.seconds | formatSeconds"></span>
       </div>
       <div class="float-left col-sm-6 feedback-box" >
         <div class="text-footer-l">
