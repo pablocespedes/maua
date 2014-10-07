@@ -9,7 +9,7 @@ angular.module('grockitApp.components')
       scope: {
         title: '@',
         groupId: '=',
-        questions: '='
+        roundSessions: '='
       },
       link: function(scope, elem, attrs) {
         this.currentPage = 1;
