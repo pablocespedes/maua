@@ -447,6 +447,7 @@
             denominator = options.denominator,
             lastAnswerLoaded = options.lastAnswerLoaded,
             questionResult = options.questionResult,
+            groupId = options.groupId,
             roundSessionAnswer = options.roundSessionAnswer;
             /*Get selected answers*/
 
@@ -476,9 +477,9 @@
 
                     answerStatus = answerEval;
                 };
-
-                practiceResource.sendUserReponse(roundSessionAnswer.id, selectedAnswer);
-
+                if(angular.isDefined(roundSessionAnswer)){
+                    practiceResource.sendUserReponse(roundSessionAnswer.id, answer.id, groupId);
+                }
                 angular.element("#answercontent *").prop('disabled', true);
                 return answerStatus;
 

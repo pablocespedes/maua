@@ -200,7 +200,7 @@
       },
       evaluateConfirmMethod: function() {
         vmPr.userConfirmed = true;
-        switch (vmPr.kind) {
+        switch (vmPr.questionData.kind) {
           case 'SPR':
           case 'NumericEntry':
           case 'NumericEntryFraction':
@@ -214,9 +214,10 @@
         var options = {};
         options.numerator = vmPr.numerator;
         options.denominator = vmPr.denominator;
-        options.lastAnswerLoaded = vmPr.kind;
+        options.lastAnswerLoaded = vmPr.questionData.kind;
         options.questionResult = vmPr.questionData;
         options.roundSessionAnswer = undefined;
+        options.groupId = vmPr.activeGroupId;
 
         vmPr.answerStatus = practiceUtilities.numericEntryConfirmChoice(options);
         if (angular.isDefined(vmPr.answerStatus)) {

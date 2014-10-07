@@ -214,6 +214,7 @@
         options.lastAnswerLoaded = vmPr.questionData.kind;
         options.questionResult = vmPr.questionData;
         options.roundSessionAnswer = vmPr.roundSessionAnswer;
+        options.groupId = vmPr.activeGroupId;
 
         vmPr.answerStatus = practiceUtilities.numericEntryConfirmChoice(options);
         if (angular.isDefined(vmPr.answerStatus)) {
