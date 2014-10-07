@@ -23,27 +23,26 @@
         </thead>
         <tfoot>
           <tr>
-            <td colspan="5" style="text-align: right; font-weight: 600">Total: {{ questions.length }}</td>
+            <td colspan="5" style="text-align: right; font-weight: 600">Total: {{ roundSessions.length }}</td>
           </tr>
         </tfoot>
         <tbody>
-          <tr ng-repeat="question in questions">
+          <tr ng-repeat="roundSession in roundSessions">
             <td>
-              <a href="#/{{groupId}}/questions/{{question.question_id}}">
-                <i ng-if="question.outcome === 'correct'" class="fa fa-check bg-success"></i>
-                <i ng-if="question.outcome === 'incorrect'" class="fa fa-times bg-danger"></i>
-                <i ng-if="question.outcome !== 'correct' && question.outcome !== 'incorrect'" class="fa fa-minus bg-default outcome-skipped"></i>
+              <a href="#/{{groupId}}/questions/{{roundSession.question_id}}">
+                <i ng-if="roundSession.outcome === 'correct'" class="fa fa-check bg-success"></i>
+                <i ng-if="roundSession.outcome === 'incorrect'" class="fa fa-times bg-danger"></i>
+                <i ng-if="roundSession.outcome !== 'correct' && roundSession.outcome !== 'incorrect'" class="fa fa-minus bg-default outcome-skipped"></i>
                 &nbsp;
-                <code>{{question.question_id}}</code>
+                <code>{{roundSession.question_id}}</code>
               </a>
             </td>
-            <td><p ng-bind-html="question.question_stimulus | htmlToPlaintext | truncate:50 "></p></td>
-            <td>{{question.track_name}}</td>
-            <td><div ng-bind="question.experience_points | level"></div></td>
-            <td>{{( question.time_to_answer > 0 ? question.time_to_answer + "s" : "Skipped")}}</td>
+            <td><p ng-bind-html="roundSession.question_stimulus | htmlToPlaintext | truncate:50 "></p></td>
+            <td>{{roundSession.track_name}}</td>
+            <td><div ng-bind="roundSession.experience_points | level"></div></td>
+            <td>{{( roundSession.time_to_answer > 0 ? roundSession.time_to_answer + "s" : "Skipped")}}</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-
