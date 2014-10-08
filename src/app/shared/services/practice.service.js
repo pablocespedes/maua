@@ -146,18 +146,7 @@
 
         function getRandomTrack(groupId) {
             return DashboardApi.getDashboard(groupId)
-                .then(getRandomTrackComplete)
-                .catch(getRandomTrackFailed);
 
-            function getRandomTrackComplete(result) {
-                 var tracks = result.data.dashboard.smart_practice,
-                    trackP= _.random(0, tracks.items.length)
-               return tracks.items[trackP];
-            }
-
-            function getRandomTrackFailed(e) {
-
-            }
         }
     }
 
@@ -188,7 +177,10 @@
             else{
                 practiceResource.getRandomTrack(groupId)
                 .then(function(response){
-                     utilities.setActiveTrack(response,response.id);
+                 var tracks = response.data.dashboard.smart_practice.items,
+                    index = _.random(0, tracks.length),
+                    currentTrack = tracks[index];
+                     utilities.setActiveTrack(currentTrack,currentTrack.id);
                      deferred.resolve(utilities.getActiveTrack());
                 });
 

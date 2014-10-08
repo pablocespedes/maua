@@ -88,7 +88,7 @@
               });
 
 
-              var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered) * 100
+             var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered) * 100;
               vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
             }
           }
