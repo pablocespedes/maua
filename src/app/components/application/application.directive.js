@@ -5,7 +5,10 @@
   .directive('youtube', youtube)
   .directive('breadcrumb', breadcrumb)
   .directive('fadingText', fadingText)
-  .directive('welcome', welcome);
+  .directive('welcome', welcome)
+  .directive('isActiveNav',isActiveNav);
+
+  isActiveNav.$inject=['$location','Observable'];
 
   function youtube() {
     var directive = {
@@ -64,5 +67,31 @@
     };
     return directive;
   }
+
+
+  function isActiveNav($location,Observable) {
+  var observable = Observable.create('isActiveNav'),
+      directive = {
+      link:link,
+      restrict: 'A',
+    }
+    return directive;
+
+    function link(scope, element, attrs) {
+      scope.location = $location;
+
+      Observable.get('isActiveNav').register(function(currentPath) {
+
+         if (currentPath.split("/")[2] === attrs.ngHref.split("/")[2]) {
+          element.parent().addClass('active');
+        } else {
+          element.parent().removeClass('active');
+        }
+      });
+    }
+
+  }
+
+
 
 })();

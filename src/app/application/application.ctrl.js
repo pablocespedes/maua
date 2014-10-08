@@ -14,6 +14,7 @@
     GaUtility, InspectletUtility, TracksApi, GroupsApi, alerts, Headers, currentProduct) {
     /* jshint validthis: true */
     var vmApp = this;
+    console.log('1')
     /* recommend: Using function declarations and bindable members up top.*/
 
     vmApp.url = utilities.originalGrockit().url;
@@ -23,6 +24,7 @@
     vmApp.logOut = logOut;
     vmApp.select = select;
     vmApp.groupRedirect = groupRedirect;
+
 
     function showDialog() {
       grockitNewFeatures.showDialog();
@@ -44,6 +46,8 @@
     };
 
     function select(index) {
+
+
 
       if (angular.isDefined(index)) {
 

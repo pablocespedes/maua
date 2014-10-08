@@ -2,9 +2,11 @@
 (function() {
 
   angular.module("grockitApp").run(run);
-  run.$inject = ['$rootScope', '$location', '$window', 'Auth', 'utilities', 'alerts', 'GroupsApi', 'currentProduct'];
+  run.$inject = ['$rootScope', '$location', '$window', 'Auth', 'utilities', 'alerts', 'GroupsApi', 'currentProduct','Observable'];
 
-  function run($rootScope, $location, $window, Auth, utilities, alerts, GroupsApi, currentProduct) {
+  function run($rootScope, $location, $window, Auth, utilities, alerts, GroupsApi, currentProduct,Observable) {
+
+     var observable = Observable.create('isActiveNav');
 
     $rootScope.$on("$locationChangeSuccess", function(event, next, current) {
       if (Auth.isLoggedIn()) {
@@ -12,7 +14,7 @@
         Auth.getUpdateUserData().then(function(response) {
 
           if (response != null) {
-
+             observable.notify($location.path());
             GroupsApi.membershipGroups(true).then(function(result) {
               var groups = result.data.groups;
               if ($location.path() === '/' || $location.path() === '/' + response.currentGroup || $location.path() == '') {
