@@ -17,19 +17,17 @@
       restrict: 'A',
       scope: {
         groupTitle: '=',
-        totalScore: '=',
-        rangeInit: '=',
-        rangeEnd: '=',
         isVisible: '=',
-        noScoreMessage: '@'
+        noScoreMessage: '@',
+        scoreData:'='
       }
 
     };
     return directive;
 
     function link(scope, element, attrs) {
-      scope.hasScore = function() {
-        return (scope.totalScore !== null && scope.totalScore > 0);
+      scope.hasScore = function(){
+        return (scope.scoreData.incomplete === false && scope.scoreData.totalScore !== null && scope.scoreData.totalScore > 0)
       };
     }
   }

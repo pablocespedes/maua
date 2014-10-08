@@ -77,22 +77,12 @@
         vmDash.loading = false;
       },
       fetchScorePrediction: function() {
-        var scoreResponse = dashboard.getScorePrediction(),
-        scoreData = {};
-        vmDash.score = scoreResponse;
-        if (scoreResponse.total_score != null && scoreResponse.range != null) {
+        var scoreResponse = dashboard.getScorePrediction()
 
-          scoreData.totalScore = scoreResponse.total_score;
-          scoreData.rangeInit = scoreResponse.range[0];
-          scoreData.rangeEnd = scoreResponse.range[1];
-
-        } else {
-          scoreData.totalScore = 0;
-          scoreData.rangeInit = 0;
-          scoreData.rangeEnd = 0;
+        if(angular.isDefined(scoreResponse)){
+          vmDash.score = scoreResponse;
         }
         vmDash.scoreLoading = false;
-        vmDash.scoreData = scoreData;
       },
       getHistoryInformation: function() {
         vmDash.loading = true;
