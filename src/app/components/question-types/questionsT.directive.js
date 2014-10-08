@@ -1,7 +1,7 @@
 (function() {
   'use strict';
-angular
-.module('grockitApp.components')
+  angular
+  .module('grockitApp.components')
   .directive('oneChoice', oneChoice)
   .directive('multipleChoice', multipleChoice)
   .directive('multipleMatrix2x3', multipleMatrix2x3)
@@ -10,11 +10,11 @@ angular
   .directive('provisionalSat', provisionalSat)
   .directive('sat', sat)
   .directive('numericEntry', numericEntry)
-  .directive('fractionEntry', fractionEntry);
+  .directive('fractionEntry', fractionEntry)
+  .controller('EntriesController', EntriesController);
 
-  sat.$inject=['questionTypesService'];
-  numericEntry.$inject=['questionTypesService'];
-  fractionEntry.$inject=['questionTypesService'];
+  sat.$inject = ['questionTypesService'];
+  EntriesController.$inject = ['$scope'];
 
   function oneChoice() {
     var directive = {
@@ -295,7 +295,8 @@ angular
     }
   }
 
-  function sat(questionTypesService) {
+  function sat() {
+
     var directive = {
       link: link,
       templateUrl: 'app/components/question-types/templates/sat.tpl.html',
@@ -304,11 +305,36 @@ angular
     return directive;
 
     function link(scope, element, attrs) {
-      questionTypesService.satFactory();
+      var content = $('#parent');
+      content.on('click', '#sat .column-matrix', function(e) {
+        if (e.handled !== true) {
+          var choice = $(e.target),
+          choiceVal = choice.text(),
+          selectedGroup = $(e.target).parents('td').data('group'),
+          groups = $(e.target).parents('.choice').find('[data-group=' + selectedGroup + ']'),
+          hasPrimary = choice.hasClass('btn-primary'),
+          nexAction = $('#nextAction'),
+          seeAnswer = $('#skipAction');
+
+          groups.find('[type=button]').removeClass('btn-primary');
+          groups.find('[type=button]').addClass('btn-outline');
+          if (!hasPrimary) {
+            choice.removeClass('btn-outline');
+            choice.addClass('btn-primary');
+            $('#input' + selectedGroup).text(choiceVal);
+            nexAction.addClass('btn-primary');
+            seeAnswer.addClass('hide');
+          } else {
+            $('#input' + selectedGroup).text('');
+            choice.removeClass('btn-primary');
+            choice.addClass('btn-outline');
+          }
+        }
+        e.handled = true;
+      });
     }
   }
-
-  function numericEntry(questionTypesService) {
+  function numericEntry() {
     var directive = {
       link: link,
       templateUrl: 'app/components/question-types/templates/numericEntry.tpl.html',
@@ -319,16 +345,24 @@ angular
         hasExplanation: '&',
         portal: '=',
         answerStatus: '='
-      }
+      },
+      controller: EntriesController
     };
     return directive;
 
-    function link(scope, element, attrs) {
-      questionTypesService.numericEntry(scope);
+    function link(scope, element, attrs, controller) {
+
+      scope.$watch('portal.numerator', function(newVal, oldVal) {
+        scope.isNumeratorValid = controller.validateNumber(newVal);
+         scope.portal.isDisabled = scope.isNumeratorValid===null ? scope.isNumeratorValid : !scope.isNumeratorValid;
+        controller.handleValidation(scope.isNumeratorValid);
+      });
+
+
     }
   }
 
-  function fractionEntry(questionTypesService) {
+  function fractionEntry() {
     var directive = {
       link: link,
       templateUrl: 'app/components/question-types/templates/fractionEntry.tpl.html',
@@ -340,12 +374,50 @@ angular
         portal: '=',
         answerStatus: '='
 
-      }
+      },
+      controller: EntriesController
     };
     return directive;
 
-    function link(scope, element, attrs) {
-      questionTypesService.fractionEntry(scope);
+    function link(scope, element, attrs, controller) {
+
+      scope.$watch('portal.numerator', function(newVal, oldVal) {
+        scope.isNumeratorValid = controller.validateNumber(newVal);
+        scope.portal.isDisabled = scope.isNumeratorValid===null ? scope.isNumeratorValid : !scope.isNumeratorValid;
+        controller.handleValidation(scope.isNumeratorValid && scope.isDenominatorValid);
+      });
+      scope.$watch('portal.denominator', function(newVal, oldVal) {
+        scope.isDenominatorValid = controller.validateNumber(newVal);
+        scope.portal.isDisabled = scope.isNumeratorValid===null ? scope.isNumeratorValid : !scope.isNumeratorValid;
+        controller.handleValidation(scope.isNumeratorValid && scope.isDenominatorValid);
+      });
+
+
     }
   }
+
+  function EntriesController($scope) {
+
+    this.validateNumber = function(value) {
+      if (angular.isUndefined(value) || value === '' || value === null) {
+        return null;
+      } else {
+        value = value * 1;
+        return (angular.isDefined(value) && value != null && !isNaN(value) && angular.isNumber(value));
+      }
+    }
+
+    this.handleValidation = function(isValid) {
+      var nexAction = $('#nextAction'),
+      seeAnswer = $('#skipAction');
+      if (isValid) {
+        nexAction.addClass('btn-primary');
+        seeAnswer.addClass('hide');
+      } else {
+        nexAction.removeClass('btn-primary');
+        seeAnswer.removeClass('hide');
+      }
+    }
+  }
+
 })();

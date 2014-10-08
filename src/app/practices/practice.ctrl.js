@@ -60,7 +60,6 @@
         vmPr.isDisabled = true;
         customPractice.evaluateConfirmMethod();
       } else {
-
         customPractice.nextQuestion();
       }
     };
@@ -80,17 +79,15 @@
             vmPr.showTiming = true;
             vmPr.timingData = timingData;
 
-            if (kind === 'MultipleChoiceOneCorrect') {
               var mergedList = _.map(vmPr.items, function(item) {
                 return _.extend(item, _.findWhere(timingData.answers, {
                   'answer_id': item.id
                 }));
               });
 
-
              var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered) * 100;
               vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
-            }
+
           }
 
         }).catch(function(e) {
@@ -223,6 +220,8 @@
           customPractice.displayExplanationInfo();
           vmPr.isbuttonClicked = true;
         }
+        else
+        vmPr.isDisabled = false;
       },
       feedbackInfo: function(questionId) {
         vmPr.subjectMail = practiceUtilities.setMailToInformation(questionId, vmPr.activeTrack.subject.name);
