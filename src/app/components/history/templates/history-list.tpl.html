@@ -14,8 +14,7 @@
         </colgroup>
         <thead>
           <tr>
-            <th></th>
-            <th>Question Preview</th>
+            <th colspan="2">Question Preview</th>
             <th>Type</th>
             <th>Difficulty</th>
             <th>Timing</th>
@@ -35,7 +34,10 @@
                 <i ng-if="roundSession.outcome !== 'correct' && roundSession.outcome !== 'incorrect'" class="fa fa-minus bg-default outcome-skipped outcome"></i>
               </a>
             </td>
-            <td><p ng-bind-html="roundSession.question_stimulus | htmlToPlaintext | truncate:50 "></p></td>
+            <td>
+              <a href="#/{{groupId}}/questions/{{roundSession.question_id}}" target="_blank">
+                <p ng-bind-html="roundSession.question_stimulus | htmlToPlaintext | truncate:50 "></p></td>
+              </a>
             <td>{{roundSession.track_name}}</td>
             <td><div ng-bind="roundSession.experience_points | level"></div></td>
             <td>{{( roundSession.time_to_answer > 0 ? roundSession.time_to_answer + "s" : "Skipped")}}</td>
