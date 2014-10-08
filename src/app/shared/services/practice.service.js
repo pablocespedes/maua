@@ -180,7 +180,6 @@
                  var tracks = response.data.dashboard.smart_practice.items,
                     index = _.random(0, tracks.length),
                     currentTrack = tracks[index];
-                    console.log(currentTrack);
                      utilities.setActiveTrack(currentTrack,currentTrack.id);
                      deferred.resolve(utilities.getActiveTrack());
                 });
