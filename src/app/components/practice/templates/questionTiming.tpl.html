@@ -50,7 +50,8 @@
     <section class="panel">
     <div class="timing-answeredC">
       <span class="practice-data">
-        <span ng-bind="percentAnswered"></span>%
+        <span ng-if="percentAnswered < 1">&#60;1%</span>
+        <span ng-if="percentAnswered >= 1" ng-bind="percentAnswered"></span>%
       </span>
       <br>of users answered <br> this question correctly
     </div>
