@@ -84,7 +84,9 @@
 
          if (currentPath.split("/")[2] === attrs.ngHref.split("/")[2]) {
           element.parent().addClass('active');
-        } else {
+        } else if(currentPath.split("/")[2] === 'custom-practice'){
+          angular.element('#dashboardLi').addClass('active')
+        }else {
           element.parent().removeClass('active');
         }
       });
