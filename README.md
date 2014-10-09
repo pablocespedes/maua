@@ -1,25 +1,19 @@
 Maua
 ====
 
-Grockit 2.0
+Grockit 2.0 - AngularJS
 
-angular web App
+## Install 
 
-Steps to run it locally:
+    $ bundle install
+    $ npm install -g yo
+    $ bower install
+    $ grunt serve
 
--The first time 
+## Run (locally)
 
-1- Open cmd
-2- Go to /angular_webApp
-3- execute npm install, this will install the node modules.
+    $ grunt serve
 
+## Build 
 
-Once that this steps were completed you can run the site with:
-
-grunt serve
-
-Useful tips
-
-grunt dist: will create a build.
-
-grunt clean: will clean the dist file.
+    $ grunt build
