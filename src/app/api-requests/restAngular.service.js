@@ -9,7 +9,8 @@
   .factory('GroupsApi', GroupsApi)
   .factory('TracksApi', TracksApi)
   .factory('YoutubeVideoApi', YoutubeVideoApi)
-  .factory('DashboardApi', DashboardApi);
+  .factory('DashboardApi', DashboardApi)
+  .factory('ReviewAPI',ReviewAPI);
 
   Headers.$inject = ['Restangular'];
   UsersApi.$inject = ['Restangular', 'Headers'];
@@ -19,6 +20,7 @@
   TracksApi.$inject = ['Restangular', 'Headers'];
   YoutubeVideoApi.$inject = ['$q', 'environmentCons'];
   DashboardApi.$inject = ['Restangular', 'Headers'];
+  ReviewAPI.$inject = ['Restangular', 'Headers'];
 
   function Headers(Restangular) {
 
@@ -182,7 +184,6 @@
     }
   }
 
-
   function DashboardApi(Restangular, Headers){
     Headers.updateDefaultHeader();
 
@@ -196,6 +197,21 @@
       return Restangular.one(groupId,'dashboard').get();
     }
   }
+
+  function ReviewAPI(Restangular,Headers){
+    Headers.updateDefaultHeader();
+
+    var service = {
+      getRoundSession: getRoundSession,
+    };
+
+    return service;
+
+    function getRoundSession(groupId, rounSessionId) {
+      return Restangular.one(groupId,'round_sessions').customGET(rounSessionId);
+    }
+  }
+
 
   /*Custom request*/
   function YoutubeVideoApi($q,environmentCons) {

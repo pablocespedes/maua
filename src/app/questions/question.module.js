@@ -16,7 +16,8 @@ angular.module("grockitApp.question", ['ng-breadcrumbs'])
       youtube: 'assets/javascripts/youtubeModal/bootstrap.youtubepopup.js'
     },
     question: {
-      questionCtrl: 'app/questions/question.ctrl.js'
+      questionCtrl: 'app/questions/question.ctrl.js',
+      reviewCtrl: 'app/questions/review.ctrl.js'
     }
   };
 
@@ -44,6 +45,31 @@ angular.module("grockitApp.question", ['ng-breadcrumbs'])
       }
     },
     controller: 'QuestionController',
+    controllerAs: 'vmPr'
+  })
+  .when('/:subject/review/:rounSessionId', {
+    templateUrl: 'app/questions/review.tpl.html',
+    label: 'Question Review',
+    resolve: {
+      deps: function($q, $rootScope) {
+        var deferred = $q.defer(),
+        essentials = [
+        filePath.common.questTypesDct,
+        filePath.common.practiceDct,
+        filePath.question.reviewCtrl,
+        filePath.common.practiceSrv,
+        filePath.common.youtube
+        ];
+        $script(essentials, function() {
+          $rootScope.$apply(function() {
+            deferred.resolve();
+          });
+        });
+
+        return deferred.promise;
+      }
+    },
+    controller: 'ReviewController',
     controllerAs: 'vmPr'
   });
 
