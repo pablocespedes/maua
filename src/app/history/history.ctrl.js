@@ -5,9 +5,9 @@
   .controller('HistoryController', HistoryController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  HistoryController.$inject = ['$scope', 'HistoryApi', 'currentProduct','historyDates'];
+  HistoryController.$inject = ['$scope', 'HistoryApi', 'currentProduct','dateUtils'];
 
-  function HistoryController($scope, HistoryApi, currentProduct,historyDates) {
+  function HistoryController($scope, HistoryApi, currentProduct,dateUtils) {
      /* jshint validthis: true */
     var vmHist = this;
     vmHist.currentPage = 1;
@@ -21,7 +21,6 @@
       maxSize: 5,
       currentPage: 1,
       changePage: function(page) {
-        console.log('changePage: ', page);
         if (vmHist.groupId) {
           vmHist.pagination.currentPage = page;
           loadQuestions(vmHist.groupId, vmHist.pagination.currentPage);
@@ -45,15 +44,14 @@
     }
 
     function loadQuestions(groupId, page) {
-      console.log('loadQuestions: ', page);
       HistoryApi.getQuestions(groupId, page).then(function(response) {
         var roundSessions = response.data.round_sessions;
         //var uniqueQuestions = _.unique(roundSessions, 'question_id');
         var questionsWithDay = _.map(roundSessions, function(question) {
           var date = new Date(question.created_at);
-          question.day = historyDates.getStandardDate(date);
+          question.day = dateUtils.getStandardDate(date);
           if (question.created_at && question.answered_at) {
-            question.time_to_answer = historyDates.secondsBetweenDates(question.created_at, question.answered_at);
+            question.time_to_answer = dateUtils.secondsBetweenDates(question.created_at, question.answered_at);
           }
           return question;
         }),

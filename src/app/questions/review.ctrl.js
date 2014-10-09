@@ -4,15 +4,13 @@
   .controller('ReviewController', ReviewController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  ReviewController.$inject = ['$scope', 'practiceUtilities', 'currentProduct', 'practiceResource','ReviewAPI'];
+  ReviewController.$inject = ['$scope', 'practiceUtilities', 'currentProduct', 'practiceResource','ReviewAPI',
+  'utilities','practiceResource','dateUtils','breadcrumbs'];
 
-  function ReviewController($scope, practiceUtilities, currentProduct, practiceResource,ReviewAPI) {
+  function ReviewController($scope, practiceUtilities, currentProduct, practiceResource,ReviewAPI,utilities,practiceResource,dateUtils,breadcrumbs) {
     /* jshint validthis: true */
     var vmPr = this,
     reviewObserver = null;
-
-    vmPr.breadcrumbs = breadcrumbs;
-
     vmPr.explanationInfo = {};
     vmPr.videoInfo = {};
     vmPr.portalC = vmPr;
@@ -55,8 +53,16 @@
       getRounSessionData: function(grouId,roundSessionId){
           ReviewAPI.getRoundSession(grouId,roundSessionId).then(function(response){
               var roundResponse = response.data.round_session;
-              vmPr.answerStatus= roundResponse.outcome;
+              vmPr.answerStatus= roundResponse.outcome === 'correct' ? true :  false;
+              vmPr.trackId= roundResponse.track_id;
+              vmPr.userConfirmed= !(roundResponse.outcome !== 'correct' && roundResponse.outcome !== 'incorrect');
+              vmPr.timeToAnswer = dateUtils.secondsBetweenDates(roundResponse.created_at, roundResponse.answered_at);
+              vmPr.asnwerId = roundResponse.answer_id
               Review.getQuestion(roundResponse.question_id);
+          }).catch(function(e){
+              if(e.data===''){
+
+              }
           })
       },
       getQuestion: function(questionId) {
@@ -77,6 +83,11 @@
 
           vmPr.items = [];
           vmPr.items = questionData.items;
+          _.find(vmPr.items,function(result){
+            if(result.id===vmPr.asnwerId)
+               return result.selected=true
+            });
+          console.log(vmPr.items)
           vmPr.loading = false;
 
           if (vmPr.questionAnalytics) {
@@ -87,18 +98,18 @@
       },
       displayExplanationInfo: function() {
         var generalInfo = practiceUtilities.displayGeneralConfirmInfo(vmPr.questionData);
-        vmPr.explanationInfo = info;
+        vmPr.explanationInfo = generalInfo;
         practiceUtilities.getVideoExplanation(vmPr.questionData)
         .then(function(videoInfo) {
           vmPr.videoInfo = videoInfo;
         });
       },
-       setTimingInformation: function(questionId, correctAnswerId, kind) {
-        practiceUtilities.getTimingInformation(vmPr.activeTrack.trackId, vmPr.activeGroupId, questionId)
+      setTimingInformation: function(questionId, correctAnswerId, kind) {
+        practiceResource.getTimingInformation(vmPr.trackId, vmPr.activeGroupId, questionId)
         .$promise.then(function(result) {
-          vmPr.showTiming = true;
-          vmPr.timingData = result[0];
-
+            var timingData = result[0];
+            vmPr.showTiming = true;
+            vmPr.timingData = timingData;
           var mergedList = _.map(vmPr.items, function(item) {
             return _.extend(item, _.findWhere(result[0].answers, {
               'answer_id': item.id
@@ -108,10 +119,11 @@
           var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered) * 100
           vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
 
+          vmPr.isbuttonClicked=true;
         }).catch(function(e) {
           vmPr.showTiming = false;
         });
-      },
+      }
     };
   }
 

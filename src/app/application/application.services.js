@@ -9,7 +9,9 @@
   .service('Observable', Observable)
   .factory('Timer', Timer)
   .factory('dateFormatter', dateFormatter)
-  .service('currentProduct', currentProduct);
+  .service('currentProduct', currentProduct)
+  .factory('dateUtils', dateUtils);
+
 
   utilities.$inject = ['$rootScope', '$http', '$location', '$route', '$q', '$window', 'webStorage', 'YoutubeVideoApi', 'environmentCons'];
   grockitNewFeatures.$inject = ['$http', 'utilities', 'environmentCons'];
@@ -370,6 +372,35 @@
 
     this.unregisterGroup = function(groupObserver){
       observable.unregister(groupObserver);
+    }
+  }
+
+  function dateUtils() {
+    var service = {
+      secondsBetweenDates: secondsBetweenDates,
+      getStandardDate: getStandardDate,
+      getMonthName: getMonthName
+    }
+    return service;
+
+
+    function secondsBetweenDates(date1, date2) {
+      date1 = new Date(date1);
+      date2 = new Date(date2);
+      return Math.abs(date2.getTime() - date1.getTime()) / 1000;
+    }
+
+    function getStandardDate(date) {
+      var day = date.getDate(),
+      month = date.getMonth();
+      return getMonthName(month) + ' ' + day;
+    }
+
+    function getMonthName(index) {
+      var monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+      ];
+      return monthNames[index];
     }
   }
 
