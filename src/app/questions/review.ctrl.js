@@ -87,7 +87,6 @@
             if(result.id===vmPr.asnwerId)
                return result.selected=true
             });
-          console.log(vmPr.items)
           vmPr.loading = false;
 
           if (vmPr.questionAnalytics) {
