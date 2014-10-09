@@ -153,12 +153,10 @@
           <div id="main-menu-inner">
             <div welcome data="appCtrl.currentUser" url="appCtrl.url" log-out-url="appCtrl.logOutUrl" log-out="appCtrl.logOut()"></div>
             <ul class="navigation">
-              <li>
-                <a ng-href="#/{{appCtrl.activeGroupId}}/dashboard" ng-click="appCtrl.select(0)"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Dashboard</span></a>
+              <li id="dashboardLi">
+                <a is-active-nav ng-href="#/{{appCtrl.activeGroupId}}/dashboard"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Dashboard</span></a>
               </li>
-            <!--   <li ng-repeat="track in appCtrl.tracksList" ng-click="select($index)" ng-class="{active: $index == selected}">
-                <a id="{{track.id}}" ng-href="#/{{appCtrl.activeGroupId}}/track-dashboard"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn" ng-bind="track.short_name"></span></a>
-              </li> -->
+
               <li ng-if="!studyPlanHide">
                 <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/study_plan"><i class="menu-icon fa fa-tasks"></i><span class="mm-text">Study Plan</span></a>
               </li>
@@ -182,7 +180,7 @@
                 <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/skill_data"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Skill Data</span></a>
               </li>
               <li>
-              <a ng-href="#/{{appCtrl.activeGroupId}}/history" ng-click="appCtrl.select(8)"><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
+              <a is-active-nav ng-href="#/{{appCtrl.activeGroupId}}/history" ><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
               </li>
             </ul>
             <!-- / .navigation -->

@@ -42,8 +42,7 @@
       </div>
       <div class="col-lg-4" ng-if="vmDash.enableScore">
         <div class="no-padding">
-          <div score-prediction group-title="$root.groupTitle" total-score="vmDash.scoreData.totalScore"
-            range-init="vmDash.scoreData.rangeInit" range-end="vmDash.scoreData.rangeEnd" is-visible="vmDash.scoreLoading"
+          <div score-prediction group-title="$root.groupTitle"  score-data="vmDash.score" is-visible="vmDash.scoreLoading"
           no-score-message="Not enough data."></div>
         </div>
       </div>
