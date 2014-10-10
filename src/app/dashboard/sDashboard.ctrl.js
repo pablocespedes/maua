@@ -50,18 +50,16 @@
 
 
     function StartPractice(subject,trackId) {
-      var url = '/' + vmDash.activeGroupId + '/';
-      if ( vmDash.activeGroupId == 'gre') {
-        url = url + 'study_groups/new?' + 'track_id=' + trackId;
-      } else {
-        url = url + trackId + '/play';
-      }
-
       utilities.setActiveTab(0);
 
       if (angular.isDefined(subject)) {
-        utilities.setActiveTrack(subject,trackId);
-        utilities.redirect(url);
+        if ( vmDash.activeGroupId === 'gre' ) {
+          utilities.setActiveTrack(subject,trackId);
+          utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
+        } else {
+          var url = '/' + vmDash.activeGroupId + '/' + trackId + '/play';
+          utilities.redirect(url);
+        }
       } else {
         alerts.showAlert('You must select one track at least', 'warning');
       }
