@@ -1,12 +1,10 @@
 'use strict';
 
-angular.module("grockitApp.question", ['ng-breadcrumbs'])
+angular.module("grockitApp.questionReview", ['ng-breadcrumbs'])
 .config(function($httpProvider, $routeProvider, $controllerProvider, $compileProvider, $provide) {
-  angular.module("grockitApp.question").controller = $controllerProvider.register;
-  angular.module("grockitApp.question").directive = $compileProvider.directive;
-  angular.module("grockitApp.question").routeProvider = $routeProvider;
-  angular.module("grockitApp.question").factory = $provide.factory;
-  angular.module("grockitApp.question").service = $provide.service;
+  angular.module("grockitApp.questionReview").controller = $controllerProvider.register;
+  angular.module("grockitApp.questionReview").routeProvider = $routeProvider;
+  angular.module("grockitApp.questionReview").service = $provide.service;
 
   var filePath = {
     common: {
@@ -16,21 +14,21 @@ angular.module("grockitApp.question", ['ng-breadcrumbs'])
       youtube: 'assets/javascripts/youtubeModal/bootstrap.youtubepopup.js'
     },
     question: {
-      questionCtrl: 'app/questions/question.ctrl.js'
+      reviewCtrl: 'app/question-review/question-review.ctrl.js'
     }
   };
 
 
-  $routeProvider.when('/:subject/questions/:questionId', {
-    templateUrl: 'app/questions/question.tpl.html',
-    label: 'Question View',
+  $routeProvider.when('/:subject/review/:rounSessionId', {
+    templateUrl: 'app/question-review/question-review.tpl.html',
+    label: 'Question Review',
     resolve: {
       deps: function($q, $rootScope) {
         var deferred = $q.defer(),
         essentials = [
         filePath.common.questTypesDct,
         filePath.common.practiceDct,
-        filePath.question.questionCtrl,
+        filePath.question.reviewCtrl,
         filePath.common.practiceSrv,
         filePath.common.youtube
         ];
@@ -43,7 +41,7 @@ angular.module("grockitApp.question", ['ng-breadcrumbs'])
         return deferred.promise;
       }
     },
-    controller: 'QuestionController',
+    controller: 'ReviewController',
     controllerAs: 'vmPr'
   });
 

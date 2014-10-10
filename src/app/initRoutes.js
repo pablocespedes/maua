@@ -20,7 +20,8 @@ var paths = {
   uiBootStrap: 'app/components/accordion/vendor/ui.bootstrap.min.js',
   accordion : 'app/components/accordion/accordion.js',
   historyM: 'app/history/history.module.js',
-  historyD: 'app/components/history/history.directive.js'
+  historyD: 'app/components/history/history.directive.js',
+  questionReview: 'app/question-review/question-review.module.js'
 
 };
 
@@ -48,6 +49,7 @@ $script([
     paths.question,
     paths.historyM,
     paths.historyD,
+    paths.questionReview,
     paths.app
     ], function() {
       angular.element(document).ready(function() {

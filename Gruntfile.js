@@ -248,6 +248,7 @@ module.exports = function (grunt) {
                 '<%= yeoman.dist %>/app/components/practice',
                 '<%= yeoman.dist %>/app/components/history',
                 '<%= yeoman.dist %>/app/questions',
+                '<%= yeoman.dist %>/app/question-review',
                 '<%= yeoman.dist %>/app/components/question-types',
                 '<%= yeoman.dist %>/app/api-requests',
                 '<%= yeoman.dist %>/app',
@@ -297,6 +298,9 @@ module.exports = function (grunt) {
                     [/(history.ctrl\.js)/, 'Replacing references to history ctrl '],
                     [/(history.service\.js)/, 'Replacing references to history service '],
                     [/(history.directive\.js)/, 'Replacing references to history service '],
+                    [/(question-review.module\.js)/, 'Replacing references to question-review module'],
+
+                    [/(question-review.ctrl\.js)/, 'Replacing references to question-review ctrl'],
 
                     [/(app\.js)/, 'Replacing references to app']
                 ]
