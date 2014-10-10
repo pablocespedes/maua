@@ -157,13 +157,13 @@
                 <a is-active-nav ng-href="#/{{appCtrl.activeGroupId}}/dashboard"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Dashboard</span></a>
               </li>
 
-              <li ng-if="!studyPlanHide">
+              <li ng-if="!appCtrl.studyPlanHide">
                 <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/study_plan"><i class="menu-icon fa fa-tasks"></i><span class="mm-text">Study Plan</span></a>
               </li>
-              <li ng-if="!videoLibHide">
+              <li ng-if="!appCtrl.videoLibHide">
                 <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/video_courses"><i class="menu-icon fa fa-video-camera"></i><span class="mm-text">Video Library</span></a>
               </li>
-              <li ng-if="activeGroupId!='gre'">
+              <li ng-if="appCtrl.activeGroupId!='gre'">
                 <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/custom_games/new"><i class="menu-icon fa fa-book"></i><span class="mm-text">Custom Practice</span></a>
               </li>
               <li>

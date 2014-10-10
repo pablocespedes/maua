@@ -27,7 +27,6 @@
 
     init();
 
-
     function init() {
       reviewObserver = currentProduct.observeGroupId().register(function(groupId) {
         if (vmPr.activeGroupId !== groupId) {
@@ -41,7 +40,6 @@
         }
 
       });
-
     };
 
     function answerHasExplanation(index) {

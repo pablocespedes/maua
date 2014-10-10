@@ -1,30 +1,31 @@
 <div id="oneChoice">
   <a id="answer" ng-repeat="item in items" href="javascript:void(0)" class="choice list-group-item"
-    ng-click="selectAnswer($index)">
-    <strong><span class="float-right {{item.position}}"></span></strong>
-    <div class="middle">
-      <span ng-if="showExplanation && item.selected==true" class="float-right">&#10094;</span>
-      <button id="{{item.id}}" type="button" class=" btn-option  btn-rounded letter"
-        ng-class="{'btn-primary':item.selected}">{{item.option}}
-      </button>
-      <input id="{{item.id}}" type="checkbox" name="choice" value="false"/>
-      <div class="content">
-        <div ng-bind-html="item.body"></div>
-      </div>
-    </div>
-    <div id="explanationAnswerPanel" ng-if="showExplanation"
-      class="fadein "
-      ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
-      <div ng-show="hasExplanation({index : $index})">
-        <div class="explain-margin" ng-bind-html='item.explanation'></div>
-      </div>
-      <div  class="answer-percent">
-        <strong>
-          <span ng-if="item.percent_answered && item.percent_answered>0" ng-bind="item.percent_answered+'%'"></span>
-          <span ng-if="!item.percent_answered || item.percent_answered<=0">&#60;1%</span>
-        </strong> of users chose this answer
-      </div>
-    </div>
-  </a>
+  ng-click="selectAnswer($index)">
+  <strong><span class="float-right {{item.position}}"></span></strong>
+  <div class="middle">
+    <span ng-if="showExplanation && item.selected==true" class="float-right">&#10094;</span>
+    <button id="{{item.id}}" type="button" class=" btn-option  btn-rounded letter"
+    ng-class="{'btn-primary':item.selected && !showExplanation,'btn-success':showExplanation && item.correct,
+    'btn-danger':showExplanation && !item.correct && item.selected}">{{item.option}}
+  </button>
+  <input id="{{item.id}}" type="checkbox" name="choice" value="false"/>
+  <div class="content">
+    <div ng-bind-html="item.body"></div>
+  </div>
+</div>
+<div id="explanationAnswerPanel" ng-if="showExplanation"
+class="fadein "
+ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
+<div ng-show="hasExplanation({index : $index})">
+  <div class="explain-margin" ng-bind-html='item.explanation'></div>
+</div>
+<div  class="answer-percent">
+  <strong>
+    <span ng-if="item.percent_answered && item.percent_answered>0" ng-bind="item.percent_answered+'%'"></span>
+    <span ng-if="!item.percent_answered || item.percent_answered<=0">&#60;1%</span>
+  </strong> of users chose this answer
+</div>
+</div>
+</a>
 
 </div>
