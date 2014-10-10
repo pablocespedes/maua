@@ -4,10 +4,9 @@
     </span>
   </a>
   <a ng-if="isCustomToggle" class="list-group-item">
-      <i class="fa text-xlg custom-accordion-toggle cursor-a" ng-class=" {'fa-caret-right': !isOpen,'fa-caret-down':isOpen }" ng-click="toggleOpen()"></i>
-     <div class="row track-list-padding" accordion-transclude="heading">
-      <span ng-class="{'text-muted': isDisabled}">{{heading}}
-      </span>
+    <i class="fa text-xlg custom-accordion-toggle cursor-a" ng-class=" {'fa-caret-right': !isOpen,'fa-caret-down':isOpen }" ng-click="toggleOpen()"></i>
+    <div class="row track-list-padding" accordion-transclude="heading">
+      <span ng-class="{'text-muted': isDisabled}">{{heading}}</span>
     </div>
   </a>
   <div class="panel-collapse" collapse="!isOpen">
