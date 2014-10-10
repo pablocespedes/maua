@@ -9,7 +9,7 @@ angular.module("grockitApp.application",['webStorageModule'])
     ww2Grockit2:'ww2.grockit.com',
     timingData: 'https://s3.amazonaws.com/go.grockit.com/2.0/data/',
     youtubeAPI: 'https://gdata.youtube.com/feeds/api/videos/',
-    stagingAPI: '//api.staging.grockit.com',
+    stagingAPI: 'https://api.staging.grockit.com',
     liveAPI: 'https://api.grockit.com'
 })
 .constant('imageVersion',{
