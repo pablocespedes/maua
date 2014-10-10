@@ -1,5 +1,5 @@
-<div>
-  <div ng-repeat="track in tracks" is-custom-toggle="true" has-childs="empty(track)" class="smart-practice-head">
+<a ng-repeat="track in tracks" href="javascript:void(0)" class="list-group-item">
+  <div class="row track-list-padding-hr track-list-padding">
     <span class="text-lg cursor-a">
       <button class="btn-lg btn btn-labeled btn-primary" ng-click="startPractice(track,track.id)">Start</button>
       &nbsp;
@@ -17,5 +17,5 @@
         <button class="get-score-prediction btn-lg btn btn-labeled btn-success" ng-click="getYourScorePredictionUrl(track)">Get your Score Prediction</button>
       </div>
     </div>
-  </div >
-</div >
+  </div>
+</a>
