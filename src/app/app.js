@@ -61,5 +61,6 @@
   'grockitApp.practice.factories',
   'grockitApp.question',
   'grockitApp.history',
-  'grockitApp.dashboard'
+  'grockitApp.dashboard',
+  'grockitApp.questionReview'
   ])));

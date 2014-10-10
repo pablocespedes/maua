@@ -82,10 +82,11 @@
     var timerObject = {
       setTimingInformation: function(questionId, correctAnswerId, kind) {
 
-        practiceUtilities.getTimingInformation(vmPr.activeTrack.trackId, vmPr.activeGroupId, questionId)
+        practiceResource.getTimingInformation(vmPr.activeTrack.trackId, vmPr.activeGroupId, questionId)
         .$promise.then(function(result) {
-          vmPr.showTiming = true;
-          vmPr.timingData = result[0];
+           var timingData = result[0];
+            vmPr.showTiming = true;
+            vmPr.timingData = timingData;
           if (kind === 'MultipleChoiceOneCorrect') {
             var mergedList = _.map(vmPr.items, function(item) {
               return _.extend(item, _.findWhere(result[0].answers, {
