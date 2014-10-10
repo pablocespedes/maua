@@ -269,43 +269,48 @@
         }
 
         function presentQuestion(questionResponse) {
-            var resultObject = {},
-                setLayoutType = null;
+            try {
+                var resultObject = {},
+                    setLayoutType = null;
 
-            resultObject = questionResponse;
+                resultObject = questionResponse;
 
-            resultObject.fixedWidth = resultObject.question_set.fixed_info_width;
+                resultObject.fixedWidth = resultObject.question_set.fixed_info_width;
 
-            resultObject.questionInformation = $sce.trustAsHtml(resultObject.question_set.info);
+                resultObject.questionInformation = $sce.trustAsHtml(resultObject.question_set.info);
 
-            /*Find if there is a question info defined or retrieve it by the API*/
-            resultObject.setLayoutOneColumn = angular.isDefined(resultObject.questionInformation) && resultObject.questionInformation != null &&
-                resultObject.questionInformation != '' ? true : false;
+                /*Find if there is a question info defined or retrieve it by the API*/
+                resultObject.setLayoutOneColumn = angular.isDefined(resultObject.questionInformation) && resultObject.questionInformation != null &&
+                    resultObject.questionInformation != '' ? true : false;
 
-            /*@Jose TODO This can be performed on a better way*/
-            angular.element('.choice.active').removeClass('active');
+                /*@Jose TODO This can be performed on a better way*/
+                angular.element('.choice.active').removeClass('active');
 
-            resultObject.items = [];
+                resultObject.items = [];
 
-            resultObject.stimulus = $sce.trustAsHtml(questionResponse.stimulus);
-            var optionList = practiceConstants.optionList,
-                options = optionList.toUpperCase().split(""),
-                answers = resultObject.answers,
-                len = angular.isDefined(answers) ? answers.length : 0,
-                i;
+                resultObject.stimulus = $sce.trustAsHtml(questionResponse.stimulus);
+                var optionList = practiceConstants.optionList,
+                    options = optionList.toUpperCase().split(""),
+                    answers = resultObject.answers,
+                    len = angular.isDefined(answers) ? answers.length : 0,
+                    i;
 
-            for (i = 0; i < len; i++) {
-                var value = answers[i];
-                value["option"] = options[i];
-                value["selected"] = false;
-                resultObject.items.push(value);
+                for (i = 0; i < len; i++) {
+                    var value = answers[i];
+                    value["option"] = options[i];
+                    value["selected"] = false;
+                    resultObject.items.push(value);
+                }
+                if (resultObject.lastAnswerLoaded === 'MultipleChoiceMatrixTwoByThree' || resultObject.lastAnswerLoaded === 'MultipleChoiceMatrixThreeByThree') {
+                    resultObject.items = setQuestionTypeMatrixGroups(resultObject.items);
+                }
+
+                removeBadImage();
+                return resultObject;
+
+            } catch (e) {
+
             }
-            if (resultObject.lastAnswerLoaded === 'MultipleChoiceMatrixTwoByThree' || resultObject.lastAnswerLoaded === 'MultipleChoiceMatrixThreeByThree') {
-                resultObject.items = setQuestionTypeMatrixGroups(resultObject.items);
-            }
-
-            removeBadImage();
-            return resultObject;
         }
 
         function doNotKnowAnswer(questionResult) {

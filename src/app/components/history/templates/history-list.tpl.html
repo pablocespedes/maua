@@ -28,14 +28,14 @@
         <tbody>
           <tr ng-repeat="roundSession in roundSessions">
             <td>
-              <a href="#/{{groupId}}/questions/{{roundSession.question_id}}" target="_blank">
+              <a href="#/{{groupId}}/review/{{roundSession.id}}" target="_blank">
                 <i ng-if="roundSession.outcome === 'correct'" class="fa fa-check bg-success outcome"></i>
                 <i ng-if="roundSession.outcome === 'incorrect'" class="fa fa-times bg-danger outcome"></i>
                 <i ng-if="roundSession.outcome !== 'correct' && roundSession.outcome !== 'incorrect'" class="fa fa-minus bg-default outcome-skipped outcome"></i>
               </a>
             </td>
             <td>
-              <a href="#/{{groupId}}/questions/{{roundSession.question_id}}" target="_blank">
+              <a href="#/{{groupId}}/review/{{roundSession.id}}" target="_blank">
                 <p ng-bind-html="roundSession.question_stimulus | htmlToPlaintext | truncate:50 "></p></td>
               </a>
             <td>{{roundSession.track_name}}</td>
