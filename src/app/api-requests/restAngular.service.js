@@ -115,6 +115,9 @@
     return service;
 
     function createNewPracticeGame(groupId, url) {
+      if ( url.split(/^\//).length > 0 ) {
+        url = url.split(/^\//)[1];
+      }
 
       return  Restangular.one(url).post();
     }
