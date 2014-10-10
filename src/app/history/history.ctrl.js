@@ -67,7 +67,6 @@
       vmHist.pagination.itemsPerPage = meta.per_page;
 
       vmHist.isLoaded = true;
-      console.log(vmHist.pagination);
       });
     }
 
