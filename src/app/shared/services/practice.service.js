@@ -301,7 +301,7 @@
                     value["selected"] = false;
                     resultObject.items.push(value);
                 }
-                if (resultObject.lastAnswerLoaded === 'MultipleChoiceMatrixTwoByThree' || resultObject.lastAnswerLoaded === 'MultipleChoiceMatrixThreeByThree') {
+                if (resultObject.kind === 'MultipleChoiceMatrixTwoByThree' || resultObject.kind === 'MultipleChoiceMatrixThreeByThree') {
                     resultObject.items = setQuestionTypeMatrixGroups(resultObject.items);
                 }
 
