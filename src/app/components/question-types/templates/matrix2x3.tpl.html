@@ -10,7 +10,8 @@
 			<div class="middle" data-group="{{(($index-($index%3))/3 )}}">
 				<span ng-if="showExplanation && item.selected==true" class="float-right">&#10094;</span>
 				<button id="{{item.id}}" type="button" class="letter btn-option  btn-rounded letter"
-				ng-class="{'btn-primary':item.selected}">{{item.option}}
+				ng-class="{'btn-primary':item.selected && !showExplanation,'btn-success':showExplanation && item.correct,
+				'btn-danger':showExplanation && !item.correct && item.selected}">{{item.option}}
 			</button>
 			<input id="{{item.id}}" type="radio" name="choice" value="false"/>
 			<div class="content">
@@ -19,8 +20,8 @@
 			<div ng-show="hasExplanation({index : $index})" id="explanationAnswerPanel" ng-if="showExplanation" class="fadein " ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
 				<div class="explain-margin" ng-bind-html='item.explanation'></div>
 				<br>
-		  </div>
-		  </div>
+			</div>
+		</div>
 	</a>
 </div>
 </div>
