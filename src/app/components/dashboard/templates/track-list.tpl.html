@@ -1,9 +1,9 @@
 <div accordion close-others="true">
   <div accordion-group ng-repeat="track in tracks" is-custom-toggle="true" has-childs="empty(track)" class="smart-practice-head">
     <div accordion-heading>
-      <span class="text-lg " ng-click="startPractice(track,track.id)">
+      <span class="text-lg cursor-a">
         <strong>
-          <span class="track-head text-slim" ng-bind="track.name"></span>
+          <span class="track-head text-slim" ng-bind="track.name" ng-click="startPractice(track,track.id)"></span>
         </strong>
       </span>
       <div class=" text-center pull-right" ng-if="isVisible">
@@ -12,15 +12,16 @@
             <span class="text-xs float-right valign-bottom">Your Score Prediction</span>
           </h4>
         </div>
-        <div ng-hide="hasScore(track)">
-          <button class="get-score-prediction btn-lg float-right btn btn-labeled btn-success" ng-click="getYourScorePredictionUrl(track)">Get your Score Prediction</button>
+        <div class="float-right" ng-hide="hasScore(track)">
+          <button class="get-score-prediction btn-lg btn btn-labeled btn-success" ng-click="getYourScorePredictionUrl(track)">Get your Score Prediction</button>
         </div>
+
       </div>
     </div accordion-heading>
     <div class="row sub-track-row" ng-repeat="subtrack in track.items">
          <div class="col-md-6 track-list-row sub-track-item">
       <h4 class="text-normal">
-        <span class="text-normal" ng-bind="subtrack.name" ng-click="startPractice(subtrack,track.id)"></span>
+        <span class="text-normal" ng-bind="subtrack.name"></span>
       </h4>
     </div>
     <!-- <div class="col-md-4 track-list-margin">
@@ -35,7 +36,7 @@
       <span ng-bind="subtrack.total_questions_answered | number:0"></span>&nbsp;/&nbsp;<span ng-bind="subtrack.total_questions_available | number:0"></span>
       </span>
       |
-      <span class="text-semibold"><span ng-bind="subtrack.accuracy"></span>% Accuracy</span>
+      <span class="text-semibold"><span ng-bind="subtrack.accuracy | number:0"></span>% Accuracy</span>
     </div>
     </div>
 
