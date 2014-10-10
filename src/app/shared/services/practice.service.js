@@ -301,7 +301,7 @@
                     value["selected"] = false;
                     resultObject.items.push(value);
                 }
-                if (resultObject.lastAnswerLoaded === 'MultipleChoiceMatrixTwoByThree' || resultObject.lastAnswerLoaded === 'MultipleChoiceMatrixThreeByThree') {
+                if (resultObject.kind === 'MultipleChoiceMatrixTwoByThree' || resultObject.kind === 'MultipleChoiceMatrixThreeByThree') {
                     resultObject.items = setQuestionTypeMatrixGroups(resultObject.items);
                 }
 
@@ -332,17 +332,6 @@
 
             resultObject.xpTag = questionResult.experience_points;
 
-            /*   Work with the styles to shown result define is some answer is bad.*/
-            angular.element('.choice button').removeClass('btn-primary');
-
-            for (i = 0; i < len; i++) {
-                var answer = answers[i],
-                    selectIdButton = '#' + answer.id;
-                if (answer.correct) {
-                    angular.element(selectIdButton).addClass('btn-success');
-                }
-            };
-
             angular.element("#answercontent *").prop('disabled', true);
             return resultObject;
         }
@@ -353,8 +342,6 @@
                 isValid = validateAnswer(questionType, answers);
 
             if (isValid) {
-                angular.element('.choice button').removeClass('btn-primary');
-
                 for (i = 0; i < len; i++) {
                     var answer = answers[i],
                         selectIdButton = ('#' + answer.id);
@@ -367,13 +354,11 @@
                         } else {
                             answerStatus = false;
                         }
-                        angular.element(selectIdButton).addClass('btn-success');
                     } else {
                         if (answer.selected) {
                             if (angular.isDefined(roundSessionAnswer)) {
                                 practiceResource.sendUserReponse(roundSessionAnswer.id, answer.id, groupId);
                             }
-                            angular.element(selectIdButton).addClass('btn-danger');
                             angular.element(selectIdButton).parents('#answer').addClass('incorrectAnswer');
                             answerStatus = false;
                         }
