@@ -62,7 +62,7 @@
                 var questionResult = questionsData[position];
 
                 questionResult['questPosition'] = '';
-                questionResult['questPosition'] = questionCount > 1 ? 'Question ' + (position + 1) + ' of ' + (questionCount) + ' for this set' : '';
+                // questionResult['questPosition'] = questionCount > 1 ? 'Question ' + (position + 1) + ' of ' + (questionCount) + ' for this set' : '';
                 position++;
                 return questionResult;
             } else {
