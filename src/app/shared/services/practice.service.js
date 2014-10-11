@@ -435,13 +435,15 @@
 
                 answers = questionResult.answers;
                 var len = answers.length,
-                    i, roundAnswer = (eval(userAnswer).toFixed(1));
-                selectedAnswer = [];
+                    i, userAns = eval(userAnswer),
+                    selectedAnswer = [];
 
                 for (i = 0; i < len; i++) {
                     var answer = answers[i],
-                     /*evaluate just one time the equivalence between body and numerator*/
-                     answerEval = (answer.body === userAnswer || eval(answer.body).toFixed(1) === roundAnswer);
+                    correctAns= eval(answer.body);
+                    var rang1 = (correctAns - 0.3 < 0) ? 0 : (correctAns - 0.3),
+                    rang2 = (correctAns + 0.3),
+                    answerEval = (answer.body === userAnswer || (userAns >= rang1 && userAns <= rang2));
 
                     if (answerEval)
                         selectedAnswer.push(answer.answer_id);
