@@ -127,18 +127,11 @@
             });
         }
 
-        function sendUserReponse(roundSessionAnswerId, answerId, groupId) {
-            return PracticeApi.updateAnswer(roundSessionAnswerId, answerId, gameId, groupId)
-            .then(sendUserResponseComplete)
-            .catch(sendUserResponseFailed);
-
-            function sendUserResponseComplete(result) {
-                return result;
-            }
-
-            function sendUserResponseFailed(e) {
-                alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
-            }
+        function sendUserReponse(roundSessionAnswerId, answers, groupId,answerStatus) {
+            var update = PracticeApi.updateAnswer(roundSessionAnswerId, answers, gameId, groupId)
+                 update.answers=answers;
+                 update.correct =answerStatus;
+                 update.put({game_id : gameId});
         }
 
         function getRandomTrack(groupId) {
@@ -337,32 +330,32 @@
         }
 
         function confirmChoice(questionResult, roundSessionAnswer, answers, questionType, groupId) {
-            var i, answerStatus = true,
-                len = answers.length,
-                isValid = validateAnswer(questionType, answers);
+            var answerStatus = true,
+            selectAnswers = [],
+            isValid = validateAnswer(questionType, answers);
 
             if (isValid) {
-                for (i = 0; i < len; i++) {
-                    var answer = answers[i],
-                        selectIdButton = ('#' + answer.id);
-                    if (answer.correct) {
-                        if (answer.selected) {
 
-                            if (angular.isDefined(roundSessionAnswer)) {
-                                practiceResource.sendUserReponse(roundSessionAnswer.id, answer.id, groupId);
-                            }
+                _.forEach(answers, function(result) {
+                    var selectIdButton = ('#' + result.id);
+                    if (result.correct) {
+                        if (result.selected) {
+                            selectAnswers.push(result.id);
                         } else {
                             answerStatus = false;
                         }
                     } else {
-                        if (answer.selected) {
-                            if (angular.isDefined(roundSessionAnswer)) {
-                                practiceResource.sendUserReponse(roundSessionAnswer.id, answer.id, groupId);
-                            }
+                        if (result.selected) {
+                            selectAnswers.push(result.id);
                             angular.element(selectIdButton).parents('#answer').addClass('incorrectAnswer');
                             answerStatus = false;
                         }
                     }
+
+                });
+
+                if (angular.isDefined(roundSessionAnswer) && angular.isDefined(selectAnswers) && selectAnswers.length >= 1) {
+                    practiceResource.sendUserReponse(roundSessionAnswer.id, selectAnswers, groupId, answerStatus);
                 }
                 angular.element("#answercontent *").prop('disabled', true);
 
@@ -433,8 +426,6 @@
             /*Get selected answers*/
 
             if (numerator || denominator) {
-
-
                 if (numerator > 0 && denominator > 0) {
 
                     userAnswer = numerator + '/' + denominator;
@@ -445,27 +436,29 @@
                 answers = questionResult.answers;
                 var len = answers.length,
                     i, roundAnswer = (eval(userAnswer).toFixed(1));
-                selectedAnswer = 0;
+                selectedAnswer = [];
 
                 for (i = 0; i < len; i++) {
                     var answer = answers[i],
-
-                        /*evaluate just one time the equivalence between body and numerator*/
-                        answerEval = (answer.body === userAnswer || eval(answer.body).toFixed(1) === roundAnswer);
+                     /*evaluate just one time the equivalence between body and numerator*/
+                     answerEval = (answer.body === userAnswer || eval(answer.body).toFixed(1) === roundAnswer);
 
                     if (answerEval)
-                        selectedAnswer = answer.answer_id;
+                        selectedAnswer.push(answer.answer_id);
+                    else
+                        selectedAnswer.push(userAnswer);
 
                     answerStatus = answerEval;
                 };
+
                 if (angular.isDefined(roundSessionAnswer)) {
-                    practiceResource.sendUserReponse(roundSessionAnswer.id, answer.id, groupId);
+                    practiceResource.sendUserReponse(roundSessionAnswer.id, selectedAnswer, groupId,answerStatus);
                 }
                 angular.element("#answercontent *").prop('disabled', true);
                 return answerStatus;
 
             } else {
-                alerts.showAlert(alerts.setErrorApiMsg(error), 'warning');
+                alerts.showAlert('Please choose an option!', 'warning');
 
             }
         }

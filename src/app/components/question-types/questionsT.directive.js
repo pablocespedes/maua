@@ -383,16 +383,14 @@
 
       scope.$watch('portal.numerator', function(newVal, oldVal) {
         scope.isNumeratorValid = controller.validateNumber(newVal);
-        scope.portal.isDisabled = scope.isNumeratorValid===null ? scope.isNumeratorValid : !scope.isNumeratorValid;
+        scope.portal.isDisabled = !scope.isDenominatorValid || !scope.isNumeratorValid;
         controller.handleValidation(scope.isNumeratorValid && scope.isDenominatorValid);
       });
       scope.$watch('portal.denominator', function(newVal, oldVal) {
         scope.isDenominatorValid = controller.validateNumber(newVal);
-        scope.portal.isDisabled = scope.isNumeratorValid===null ? scope.isNumeratorValid : !scope.isNumeratorValid;
+        scope.portal.isDisabled = !scope.isDenominatorValid || !scope.isNumeratorValid;
         controller.handleValidation(scope.isNumeratorValid && scope.isDenominatorValid);
       });
-
-
     }
   }
 
