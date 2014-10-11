@@ -458,7 +458,7 @@
                 return answerStatus;
 
             } else {
-                alerts.showAlert(alerts.setErrorApiMsg(error), 'warning');
+                alerts.showAlert('Please choose an option!', 'warning');
 
             }
         }
