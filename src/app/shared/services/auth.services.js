@@ -1,4 +1,4 @@
-angular.module("grockitApp.authServices", ['ngCookies', 'webStorageModule'])
+angular.module("grockitApp.authServices", ['webStorageModule'])
 .constant('UserRoles', {
   admin: 'admin',
   member: 'member',
