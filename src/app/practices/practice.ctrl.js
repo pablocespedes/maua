@@ -78,7 +78,7 @@
             var timingData = result[0];
             vmPr.showTiming = true;
             vmPr.timingData = timingData;
-
+            vmPr.totalAnswered = timingData.total_answered;
               var mergedList = _.map(vmPr.items, function(item) {
                 return _.extend(item, _.findWhere(timingData.answers, {
                   'answer_id': item.id

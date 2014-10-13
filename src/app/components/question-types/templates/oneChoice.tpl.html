@@ -14,12 +14,11 @@
   </div>
 </div>
 <div id="explanationAnswerPanel" ng-if="showExplanation"
-class="fadein "
-ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
-<div ng-show="hasExplanation({index : $index})">
+class="fadein " ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
+<div ng-show="item.hasExplanation">
   <div class="explain-margin" ng-bind-html='item.explanation'></div>
 </div>
-<div  class="answer-percent">
+<div ng-if="totalAnswered > 100" class="answer-percent">
   <strong>
     <span ng-if="item.percent_answered && item.percent_answered>0" ng-bind="item.percent_answered+'%'"></span>
     <span ng-if="!item.percent_answered || item.percent_answered<=0">&#60;1%</span>
