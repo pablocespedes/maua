@@ -18,7 +18,7 @@ your-time="vmPr.questionTimer.seconds" answer-status="vmPr.answerStatus" xp-tag=
     <div splash-message word="vmPr.loadingMessage" is-visible="vmPr.loading"></div>
     <div id="PanelQuestion" class="row columnsContainer" ng-show="!vmPr.loading">
       <div id="Panel1" class="leftColumn" ng-class="{'col-md-offset-1 col-md-10':!vmPr.questionData.setLayoutOneColumn, 'col-md-6':vmPr.questionData.setLayoutOneColumn}">
-        <div id="question-explain" class=" explain-margin" ng-if="vmPr.explanationInfo.showExplanation">
+        <div id="question-explain" class=" explain-margin" ng-if="vmPr.explanationInfo.showExplanation && vmPr.questionData.explanation!==''">
           <div class="panel colourable">
             <div class="panel-heading">
               <span class="panel-title"><i class="panel-title-icon fa fa-folder-open"></i>Explanation</span>
