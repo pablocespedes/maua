@@ -79,7 +79,7 @@ function questionTiming() {
   function link(scope, element, attrs) {
     scope.showPercAnswered = !(scope.lastAnswerLoaded === 'NumericEntry' || scope.lastAnswerLoaded === 'NumericEntryFraction');
 
-    if (scope.data.avg_time_to_answer >= 1) {
+    if (scope.data.avg_time_to_answer >= 1 && scope.data.total_answered > 100) {
       scope.compAvgStatus = ((scope.yourTime - scope.data.avg_time_to_answer) > 0);
 
       if (scope.compAvgStatus)
