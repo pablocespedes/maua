@@ -3,7 +3,7 @@
        ng-class="{true:'correct-numeric-input', false:'bad-numeric-input', null:''}[answerStatus]">
 <br><br>
     <div ng-repeat="item in items">
-        <div id="explanationAnswerPanel" ng-show="hasExplanation({index : $index})" ng-if="showExplanation"  class="fadein " ng-class="{'answer-correct-panel': answerStatus, 'answer-incorrect-numEntry': !answerStatus}">
+        <div id="explanationAnswerPanel" ng-show="item.hasExplanation" ng-if="showExplanation"  class="fadein " ng-class="{'answer-correct-panel': answerStatus, 'answer-incorrect-numEntry': !answerStatus}">
             <div class="explain-margin" ng-bind-html='item.explanation'></div>
         </div>
         <div ng-if="showExplanation"  class="fadein ">

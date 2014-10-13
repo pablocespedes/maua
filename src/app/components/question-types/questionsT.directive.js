@@ -24,7 +24,7 @@
       scope: {
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
+        totalAnswered: '=',
         isConfirmClicked: '='
       }
     };
@@ -64,7 +64,6 @@
       scope: {
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
         isConfirmClicked: '='
       }
     };
@@ -103,7 +102,6 @@
       scope: {
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
         isConfirmClicked: '='
       }
     };
@@ -154,7 +152,6 @@
       scope: {
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
         isConfirmClicked: '='
       }
     };
@@ -207,7 +204,6 @@
         maxOpt: '=',
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
         isConfirmClicked: '='
       }
     };
@@ -260,7 +256,6 @@
       scope: {
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
         portal: '=',
         answerStatus: '='
       }
@@ -334,6 +329,7 @@
       });
     }
   }
+
   function numericEntry() {
     var directive = {
       link: link,
@@ -342,7 +338,6 @@
       scope: {
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
         portal: '=',
         answerStatus: '='
       },
@@ -370,7 +365,6 @@
       scope: {
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
         portal: '=',
         answerStatus: '='
 

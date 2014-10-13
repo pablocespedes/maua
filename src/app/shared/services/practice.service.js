@@ -292,6 +292,7 @@
                     var value = answers[i];
                     value["option"] = options[i];
                     value["selected"] = false;
+                    value["hasExplanation"] = !(value.explanation === null || angular.isUndefined(value.explanation) || value.explanation === '');
                     resultObject.items.push(value);
                 }
                 if (resultObject.kind === 'MultipleChoiceMatrixTwoByThree' || resultObject.kind === 'MultipleChoiceMatrixThreeByThree') {
@@ -434,24 +435,29 @@
                 }
 
                 answers = questionResult.answers;
-                var len = answers.length,
+                var len = answers.length,answerFound=false,
                     i, userAns = eval(userAnswer),
                     selectedAnswer = [];
 
                 for (i = 0; i < len; i++) {
                     var answer = answers[i],
                     correctAns= eval(answer.body);
-                    var rang1 = (correctAns - 0.3 < 0) ? 0 : (correctAns - 0.3),
-                    rang2 = (correctAns + 0.3),
+                    var rang1 = (correctAns - 0.02 < 0) ? 0 : (correctAns - 0.02),
+                    rang2 = (correctAns + 0.02),
                     answerEval = (answer.body === userAnswer || (userAns >= rang1 && userAns <= rang2));
 
-                    if (answerEval)
+                    if (answerEval && !answerFound){
+                        answerFound=true;
                         selectedAnswer.push(answer.answer_id);
-                    else
-                        selectedAnswer.push(userAnswer);
-
+                    }
                     answerStatus = answerEval;
                 };
+
+                /*if loop couldn't find a possible answer then array wont have data, then user data will be push to it*/
+                if(selectedAnswer.length<1){
+                    selectedAnswer.push(userAnswer);
+                    answerStatus=false;
+                }
 
                 if (angular.isDefined(roundSessionAnswer)) {
                     practiceResource.sendUserReponse(roundSessionAnswer.id, selectedAnswer, groupId,answerStatus);
