@@ -1,13 +1,15 @@
 (function() {
+  'use strict';
   angular
-  .module('grockitApp.question')
+  .module('grockitApp.questionReview')
   .controller('ReviewController', ReviewController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  ReviewController.$inject = ['$scope', 'practiceUtilities', 'currentProduct', 'practiceResource','ReviewAPI',
-  'utilities','practiceResource','dateUtils','breadcrumbs'];
+  ReviewController.$inject = ['$scope', 'practiceUtilities', 'currentProduct', 'practiceResource', 'ReviewAPI',
+  'utilities', 'dateUtils', 'breadcrumbs'
+  ];
 
-  function ReviewController($scope, practiceUtilities, currentProduct, practiceResource,ReviewAPI,utilities,practiceResource,dateUtils,breadcrumbs) {
+  function ReviewController($scope, practiceUtilities, currentProduct, practiceResource, ReviewAPI, utilities, dateUtils, breadcrumbs) {
     /* jshint validthis: true */
     var vmPr = this,
     reviewObserver = null;
@@ -36,7 +38,7 @@
 
           var roundSessionId = utilities.getCurrentParam('rounSessionId');
           if (angular.isDefined(roundSessionId)) {
-            Review.getRounSessionData(vmPr.activeGroupId,roundSessionId);
+            Review.getRounSessionData(vmPr.activeGroupId, roundSessionId);
           }
         }
 
@@ -50,20 +52,20 @@
     }
 
     var Review = {
-      getRounSessionData: function(grouId,roundSessionId){
-          ReviewAPI.getRoundSession(grouId,roundSessionId).then(function(response){
-              var roundResponse = response.data.round_session;
-              vmPr.answerStatus= roundResponse.outcome === 'correct' ? true :  false;
-              vmPr.trackId= roundResponse.track_id;
-              vmPr.userConfirmed= !(roundResponse.outcome !== 'correct' && roundResponse.outcome !== 'incorrect');
-              vmPr.timeToAnswer = dateUtils.secondsBetweenDates(roundResponse.created_at, roundResponse.answered_at);
-              vmPr.asnwerId = roundResponse.answer_id
-              Review.getQuestion(roundResponse.question_id);
-          }).catch(function(e){
-              if(e.data===''){
+      getRounSessionData: function(grouId, roundSessionId) {
+        ReviewAPI.getRoundSession(grouId, roundSessionId).then(function(response) {
+          var roundResponse = response.data.round_session;
+          vmPr.answerStatus = roundResponse.outcome === 'correct' ? true : false;
+          vmPr.trackId = roundResponse.track_id;
+          vmPr.userConfirmed = !(roundResponse.outcome !== 'correct' && roundResponse.outcome !== 'incorrect');
+          vmPr.timeToAnswer = dateUtils.secondsBetweenDates(roundResponse.created_at, roundResponse.answered_at);
+          vmPr.asnwerId = roundResponse.answer_id
+          Review.getQuestion(roundResponse.question_id);
+        }).catch(function(e) {
+          if (e.data === '') {
 
-              }
-          })
+          }
+        })
       },
       getQuestion: function(questionId) {
         practiceResource.getQuestionFromApi(questionId).then(function(questionResponse) {
@@ -83,10 +85,21 @@
 
           vmPr.items = [];
           vmPr.items = questionData.items;
-          _.find(vmPr.items,function(result){
-            if(result.id===vmPr.asnwerId)
-               return result.selected=true
-            });
+          var entry = _.find(vmPr.items, {
+            'id': vmPr.asnwerId
+          });
+          console.log(entry)
+          if ((questionData.kind === 'NumericEntry' || questionData.kind === 'NumericEntryFraction') && angular.isDefined(entry)) {
+            var parts = hasFraction.split("/");
+            if (parts.length > 1) {
+              vmPr.numerator = parts[0];
+              vmPr.denominator = parts[1];
+            } else
+            vmPr.numerator = entry.body;
+          } else {
+            entry.selected = true;
+          }
+
           vmPr.loading = false;
 
           if (vmPr.questionAnalytics) {
@@ -106,9 +119,10 @@
       setTimingInformation: function(questionId, correctAnswerId, kind) {
         practiceResource.getTimingInformation(vmPr.trackId, vmPr.activeGroupId, questionId)
         .$promise.then(function(result) {
-            var timingData = result[0];
-            vmPr.showTiming = true;
-            vmPr.timingData = timingData;
+          var timingData = result[0];
+          vmPr.showTiming = true;
+          vmPr.timingData = timingData;
+          vmPr.totalAnswered = timingData.total_answered;
           var mergedList = _.map(vmPr.items, function(item) {
             return _.extend(item, _.findWhere(result[0].answers, {
               'answer_id': item.id
@@ -118,7 +132,7 @@
           var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered) * 100
           vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
 
-          vmPr.isbuttonClicked=true;
+          vmPr.isbuttonClicked = true;
         }).catch(function(e) {
           vmPr.showTiming = false;
         });
