@@ -182,7 +182,7 @@
               <li ng-if="appCtrl.activeGroupId !=='gre'">
                 <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/reviews"><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
               </li>
-              <li ng-if="appCtrl.activeGroupId ==='gre'">
+              <li ng-show="appCtrl.activeGroupId ==='gre'">
                 <a is-active-nav ng-href="#/{{appCtrl.activeGroupId}}/history" ><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
               </li>
             </ul>

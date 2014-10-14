@@ -8,7 +8,7 @@
   .directive('welcome', welcome)
   .directive('isActiveNav',isActiveNav);
 
-  isActiveNav.$inject=['$location','Observable'];
+  isActiveNav.$inject=['$location','Observable','$timeout'];
 
   function youtube() {
     var directive = {
@@ -69,7 +69,7 @@
   }
 
 
-  function isActiveNav($location,Observable) {
+  function isActiveNav($location,Observable,$timeout) {
   var observable = Observable.create('isActiveNav'),
       directive = {
       link:link,
@@ -83,7 +83,9 @@
       Observable.get('isActiveNav').register(function(currentPath) {
 
          if (currentPath.split("/")[2] === attrs.ngHref.split("/")[2]) {
-          element.parent().addClass('active');
+          $timeout(function(){
+             element.parent().addClass('active');
+           },500);
         } else if(currentPath.split("/")[2] === 'custom-practice'){
           angular.element('#dashboardLi').addClass('active')
         }else {
