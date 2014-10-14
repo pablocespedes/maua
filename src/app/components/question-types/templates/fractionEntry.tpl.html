@@ -1,6 +1,7 @@
 <div class="fractionEntry"  >
-    <input id="numerator " ng-model="portal.numerator" type="text" class="form-control" ng-class="{true:'correct-numeric-input', false:'bad-numeric-input', null:''}[isNumeratorValid]">
-    <input id="denominator" ng-model="portal.denominator" type="text" class="form-control" ng-class="{true:'correct-numeric-input', false:'bad-numeric-input', null:''}[isDenominatorValid]">
+    <input id="numerator " ng-model="portal.numerator" type="text" class="form-control"
+     ng-class="{true:'correct-numeric-input', false:'bad-numeric-input', null:''}[status()]">
+    <input id="denominator" ng-model="portal.denominator" type="text" class="form-control" ng-class="{true:'correct-numeric-input', false:'bad-numeric-input', null:''}[status()]">
     <div ng-repeat="item in items">
         <br><br>
         <div id="explanationAnswerPanel" ng-show="item.hasExplanation" ng-if="showExplanation"  class="fadein " ng-class="{'answer-correct-panel': answerStatus, 'answer-incorrect-numEntry': !answerStatus}">

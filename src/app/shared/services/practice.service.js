@@ -450,7 +450,8 @@
 
                     if (answerEval && !answerFound) {
                         answerFound = true;
-                        selectedAnswer.push(answer.answer_id);
+                        var ansId= angular.isDefined(answer.answer_id) ? answer.answer_id : answer.id;
+                        selectedAnswer.push(ansId);
                     }
                     answerStatus = answerEval;
                 };

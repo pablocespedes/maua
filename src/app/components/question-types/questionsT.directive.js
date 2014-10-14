@@ -366,7 +366,8 @@
         items: '=items',
         showExplanation: '=',
         portal: '=',
-        answerStatus: '='
+        answerStatus: '=',
+        isConfirmClicked:'='
 
       },
       controller: EntriesController
@@ -374,6 +375,10 @@
     return directive;
 
     function link(scope, element, attrs, controller) {
+      scope.status = function(){
+        return (scope.isConfirmClicked && scope.answerStatus) ||
+        (!scope.isConfirmClicked && (scope.isNumeratorValid && scope.isDenominatorValid))
+      }
 
       scope.$watch('portal.numerator', function(newVal, oldVal) {
         scope.isNumeratorValid = controller.validateNumber(newVal);
