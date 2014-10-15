@@ -53,18 +53,18 @@
 
   this.getSmartPractice = function() {
     var accuracy = null,
-    i = 0,
     subtracks = null,
-    smartPractice = null;
-    smartPractice = _.forEach(dashboardData.smart_practice, function(result) {
-      return subtracks = _.forEach(result[i].items, function(subtrack) {
+    smartPracticeItems = null;
+    smartPracticeItems = _.forEach(dashboardData.smart_practice.items, function(result) {
+      return subtracks = _.forEach(result.items, function(subtrack) {
         accuracy = (subtrack.total_questions_answered_correctly / subtrack.total_questions_answered) * 100;
         subtrack['accuracy'] = accuracy > 0 ? Math.round(accuracy.toFixed(2)) : 0;
       });
-      i++;
 
     });
-    return smartPractice;
+    dashboardData.smart_practice.items = smartPracticeItems
+
+    return dashboardData.smart_practice;
   }
 
   this.getChallenge = function() {

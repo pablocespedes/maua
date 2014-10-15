@@ -49,17 +49,10 @@
     };
 
 
-    function StartPractice(subject,trackId) {
-      utilities.setActiveTab(0);
-
+   function StartPractice(subject,trackId) {
       if (angular.isDefined(subject)) {
-        if ( vmDash.activeGroupId === 'gre' ) {
-          utilities.setActiveTrack(subject,trackId);
-          utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
-        } else {
-          var url = '/' + vmDash.activeGroupId + '/' + trackId + '/play';
-          utilities.redirect(url);
-        }
+        utilities.setActiveTrack(subject,trackId);
+        utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
       } else {
         alerts.showAlert('You must select one track at least', 'warning');
       }

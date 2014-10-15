@@ -1,15 +1,16 @@
 <div class="">
-  <a ng-if="!isCustomToggle" class="list-group-item accordion-toggle" ng-click="toggleOpen()" accordion-transclude="heading">
+  <a ng-if="!isCustomToggle" class="list-group-item cursor-a accordion-toggle" ng-click="toggleOpen()" accordion-transclude="heading">
     <span ng-class="{'text-muted': isDisabled}">{{heading}}
     </span>
   </a>
-  <a ng-if="isCustomToggle" class="list-group-item">
-    <i class="fa text-xlg custom-accordion-toggle cursor-a" ng-class=" {'fa-caret-right': !isOpen,'fa-caret-down':isOpen }" ng-click="toggleOpen()"></i>
-    <div class="row track-list-padding" accordion-transclude="heading">
-      <span ng-class="{'text-muted': isDisabled}">{{heading}}</span>
+  <a ng-if="isCustomToggle" class="list-group-item cursor-a">
+      <i class="fa text-xlg custom-accordion-toggle" ng-class=" {'fa-caret-right': !isOpen,'fa-caret-down':isOpen }" ng-click="toggleOpen()"></i>
+     <div class="row track-list-padding" accordion-transclude="heading">
+      <span ng-class="{'text-muted': isDisabled}">{{heading}}
+      </span>
     </div>
   </a>
-  <div class="panel-collapse" collapse="!isOpen">
+  <div class="panel-collapse cursor-a" collapse="!isOpen">
     <div class="panel-body" ng-transclude></div>
   </div>
 </div>

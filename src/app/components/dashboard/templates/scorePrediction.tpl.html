@@ -27,7 +27,7 @@
 				<i class="fa fa-trophy bg-icon"></i>
 				 <span class="text-xlg">
               <strong ng-if="hasScore()" ng-bind="scoreData.totalScore"></strong>
-              <strong ng-if="!hasScore()" ng-bind="noScoreMessage"></strong>
+              <strong ng-if="!hasScore()" class="text-lg" ng-bind="noScoreMessage"></strong>
             </span>
 				<br>
 				<span ng-show="scoreData.rangeExist" class="text-bg">
