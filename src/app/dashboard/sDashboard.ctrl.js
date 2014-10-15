@@ -50,10 +50,16 @@
 
 
     function StartPractice(subject,trackId) {
-           utilities.setActiveTab(0);
+      utilities.setActiveTab(0);
+
       if (angular.isDefined(subject)) {
-        utilities.setActiveTrack(subject,trackId);
-        utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
+        if ( vmDash.activeGroupId === 'gre' ) {
+          utilities.setActiveTrack(subject,trackId);
+          utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
+        } else {
+          var url = '/' + vmDash.activeGroupId + '/' + trackId + '/play';
+          utilities.redirect(url);
+        }
       } else {
         alerts.showAlert('You must select one track at least', 'warning');
       }

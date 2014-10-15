@@ -61,6 +61,13 @@
     <script src="assets/javascripts/pixel-admin.min.js"></script>
   </head>
   <body class="theme-default main-menu-animated" ng-cloak>
+    <!-- Google Tag Manager -->
+    <noscript>
+      <iframe src="//www.googletagmanager.com/ns.html?id=GTM-5XTTHG" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script src="app/shared/google-tag-manager.js" type="text/javascript" charset="utf-8" async defer></script>
+    <!-- End Google Tag Manager -->
+
     <script>var init = [];</script>
     <script type="text/javascript">
     init.push(function () {
@@ -68,6 +75,9 @@
     });
     window.PixelAdmin.start(init);
     </script>
+    <!-- begin SnapEngage code -->
+    <script src="app/shared/snapChat.js" type="text/javascript" charset="utf-8" async defer></script>
+    <!-- end SnapEngage code -->
     <!-- social media scripts -->
     <script src="//platform.twitter.com/oct.js" type="text/javascript"></script>
     <script src="app/shared/socialMedia.scripts.js" type="text/javascript" charset="utf-8" async defer></script>
@@ -167,9 +177,6 @@
                 <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/custom_games/new"><i class="menu-icon fa fa-book"></i><span class="mm-text">Custom Practice</span></a>
               </li>
               <li>
-                <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/social"><i class="menu-icon fa fa-users"></i><span class="mm-text">Group Practice</span></a>
-              </li>
-              <li>
                 <a ng-if="appCtrl.activeGroupId==='gre'" href="http://grockit.tv/grepracticetest"><i class="menu-icon fa fa-lightbulb-o"></i><span class="mm-text">Take a Full Length Test</span></a>
                 <a ng-if="appCtrl.activeGroupId==='gmat'" ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/join_cat_game"><i class="menu-icon fa fa-lightbulb-o"></i><span class="mm-text">Take a Full Length Test</span></a>
               </li>
@@ -179,8 +186,11 @@
               <li>
                 <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/skill_data"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Skill Data</span></a>
               </li>
-              <li>
-              <a is-active-nav ng-href="#/{{appCtrl.activeGroupId}}/history" ><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
+              <li ng-if="appCtrl.activeGroupId !=='gre'">
+                <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/reviews"><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
+              </li>
+              <li ng-show="appCtrl.activeGroupId ==='gre'">
+                <a is-active-nav ng-href="#/{{appCtrl.activeGroupId}}/history" ><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
               </li>
             </ul>
             <!-- / .navigation -->
@@ -198,5 +208,6 @@
       </div>
     </div>
     <a href="#" class="back-to-top fa  fa-arrow-up"></a>
+
   </body>
 </html>

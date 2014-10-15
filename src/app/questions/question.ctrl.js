@@ -28,7 +28,6 @@
     vmPr.setPosition = 0;
     vmPr.position = 0;
     vmPr.loadingMessage = SplashMessages.getLoadingMessage();
-    vmPr.answerHasExplanation = answerHasExplanation;
     vmPr.revealExplanation = revealExplanation;
     vmPr.nextAction = nextAction;
 
@@ -58,11 +57,6 @@
       });
 
     };
-
-    function answerHasExplanation(index) {
-      var answer = vmPr.questionData.answers[index];
-      return !(answer.explanation == null || angular.isUndefined(answer.explanation) || answer.explanation == '');
-    }
 
     function revealExplanation() {
       timerObject.pauseTimers();

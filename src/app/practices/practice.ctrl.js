@@ -29,7 +29,6 @@
     vmPr.position = 0;
     vmPr.loadingMessage = SplashMessages.getLoadingMessage();
     vmPr.isDisabled = false;
-    vmPr.answerHasExplanation = answerHasExplanation;
     vmPr.nextAction = nextAction;
     vmPr.revealExplanation = revealExplanation;
     /*Takes care to unregister the group once the user leaves the controller*/
@@ -47,11 +46,6 @@
           vmPr.questionAnalytics = (vmPr.activeGroupId === 'gmat' || vmPr.activeGroupId === 'act' || vmPr.activeGroupId === 'sat' || vmPr.activeGroupId === 'gre');
         }
       });
-    };
-
-    function answerHasExplanation(index) {
-      var answer = vmPr.questionData.answers[index];
-      return !(answer.explanation === null || angular.isUndefined(answer.explanation) || answer.explanation === '');
     };
 
     function nextAction() {
@@ -78,7 +72,7 @@
             var timingData = result[0];
             vmPr.showTiming = true;
             vmPr.timingData = timingData;
-
+            vmPr.totalAnswered = timingData.total_answered;
               var mergedList = _.map(vmPr.items, function(item) {
                 return _.extend(item, _.findWhere(timingData.answers, {
                   'answer_id': item.id

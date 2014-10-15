@@ -46,13 +46,13 @@
             });
 
             return deferred.promise;
-        }
+        };
 
         function setQuestionData(questionResponse) {
             position = 0;
             questionsData = null;
             questionsData = questionResponse;
-        }
+        };
 
         function getQuestionData() {
             var questionCount = questionsData.length;
@@ -62,7 +62,6 @@
                 var questionResult = questionsData[position];
 
                 questionResult['questPosition'] = '';
-                questionResult['questPosition'] = questionCount > 1 ? 'Question ' + (position + 1) + ' of ' + (questionCount) + ' for this set' : '';
                 position++;
                 return questionResult;
             } else {
@@ -85,7 +84,7 @@
             function getRoundSessionsFailed(e) {
                 alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
             }
-        }
+        };
 
         function getQuestionFromApi(questionId) {
             return PracticeApi.getQuestionById(questionId)
@@ -101,7 +100,7 @@
             function getQuestionFailed(e) {
                 alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
             }
-        }
+        };
 
         function createNewGame(activeGroupId, url) {
 
@@ -118,33 +117,27 @@
             function getNewGameFailed(e) {
                 alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
             }
-        }
+        };
 
         function getTimingInformation(trackId, groupId, questionId) {
             var url = environmentCons.timingData + groupId + '/' + trackId + '/' + questionId + '.json';
             return $resource(url).query({
                 array: true
             });
-        }
+        };
 
-        function sendUserReponse(roundSessionAnswerId, answerId, groupId) {
-            return PracticeApi.updateAnswer(roundSessionAnswerId, answerId, gameId, groupId)
-            .then(sendUserResponseComplete)
-            .catch(sendUserResponseFailed);
-
-            function sendUserResponseComplete(result) {
-                return result;
-            }
-
-            function sendUserResponseFailed(e) {
-                alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
-            }
-        }
+        function sendUserReponse(roundSessionAnswerId, answers, groupId, answerStatus) {
+            var update = PracticeApi.updateAnswer(roundSessionAnswerId, answers, gameId, groupId)
+            update.answers = answers;
+            update.correct = answerStatus;
+            update.put({
+                game_id: gameId
+            });
+        };
 
         function getRandomTrack(groupId) {
             return DashboardApi.getDashboard(groupId)
-
-        }
+        };
     }
 
     function practiceUtilities($q, $sce, utilities, practiceResource, alerts, YoutubeVideoApi, practiceConstants) {
@@ -167,18 +160,18 @@
 
         function setCurrentTrack(groupId) {
             var deferred = $q.defer(),
-                trackData = utilities.getActiveTrack();
+            trackData = utilities.getActiveTrack();
             if (angular.isDefined(trackData.subject)) {
                 deferred.resolve(trackData);
             } else {
                 practiceResource.getRandomTrack(groupId)
-                    .then(function(response) {
-                        var tracks = response.data.dashboard.smart_practice.items,
-                            index = _.random(0, tracks.length),
-                            currentTrack = tracks[index];
-                        utilities.setActiveTrack(currentTrack, currentTrack.id);
-                        deferred.resolve(utilities.getActiveTrack());
-                    });
+                .then(function(response) {
+                    var tracks = response.data.dashboard.smart_practice.items,
+                    index = _.random(0, tracks.length-1),
+                    currentTrack = tracks[index];
+                    utilities.setActiveTrack(currentTrack, currentTrack.id);
+                    deferred.resolve(utilities.getActiveTrack());
+                });
 
             }
 
@@ -187,20 +180,21 @@
 
         function parseTagsAndResources(tags) {
             var parsedTags = [],
-                parsedResources = [],
-                tgR = {},
-                tagsLen = tags.length,
-                i, j;
+            parsedResources = [],
+            tgR = {},
+            tagsLen = tags.length,
+            i, j;
 
             for (i = 0; i < tagsLen; i++) {
                 var tagR = tags[i].tag_resources,
-                    tagRLen = tagR.length,
-                    currentTag = tags[i];
+                tagRLen = tagR.length,
+                currentTag = tags[i];
 
                 if (!_.find(parsedTags, function(tag) {
                     return tag.name === currentTag.name;
-                }))
+                })) {
                     parsedTags.push(currentTag);
+                }
 
                 for (j = 0; j < tagRLen; j++) {
                     var currentTagResource = tagR[j];
@@ -223,32 +217,32 @@
 
             switch (questionKind) {
                 case 'MultipleChoiceOneCorrect':
-                    template = "_oneChoice.directive.html";
-                    break;
+                template = "_oneChoice.directive.html";
+                break;
                 case 'MultipleChoiceOneOrMoreCorrect':
-                    template = "_multipleChoice.directive.html";
-                    break;
+                template = "_multipleChoice.directive.html";
+                break;
                 case 'MultipleChoiceMatrixTwoByThree':
-                    template = "_matrix2x3.directive.html";
-                    break;
+                template = "_matrix2x3.directive.html";
+                break;
                 case 'MultipleChoiceMatrixThreeByThree':
-                    template = "_matrix3x3.directive.html";
-                    break;
+                template = "_matrix3x3.directive.html";
+                break;
                 case 'NumericEntryFraction':
-                    template = "_fraction.directive.html";
-                    break;
+                template = "_fraction.directive.html";
+                break;
                 case 'SPR':
-                    template = "_provisionalSat.directive.html";
-                    break;
+                template = "_provisionalSat.directive.html";
+                break;
                 case 'NumericEntry':
-                    template = "_numeric.directive.html";
-                    break;
+                template = "_numeric.directive.html";
+                break;
                 case 'sat':
-                    template = "_sat.directive.html";
-                    break;
+                template = "_sat.directive.html";
+                break;
                 case 'MultipleChoiceTwoCorrect':
-                    template = "_twoChoice.directive.html";
-                    break;
+                template = "_twoChoice.directive.html";
+                break;
             }
 
             return practiceConstants.questionTypesUrl + template;
@@ -271,7 +265,7 @@
         function presentQuestion(questionResponse) {
             try {
                 var resultObject = {},
-                    setLayoutType = null;
+                setLayoutType = null;
 
                 resultObject = questionResponse;
 
@@ -281,7 +275,7 @@
 
                 /*Find if there is a question info defined or retrieve it by the API*/
                 resultObject.setLayoutOneColumn = angular.isDefined(resultObject.questionInformation) && resultObject.questionInformation != null &&
-                    resultObject.questionInformation != '' ? true : false;
+                resultObject.questionInformation != '' ? true : false;
 
                 /*@Jose TODO This can be performed on a better way*/
                 angular.element('.choice.active').removeClass('active');
@@ -290,15 +284,16 @@
 
                 resultObject.stimulus = $sce.trustAsHtml(questionResponse.stimulus);
                 var optionList = practiceConstants.optionList,
-                    options = optionList.toUpperCase().split(""),
-                    answers = resultObject.answers,
-                    len = angular.isDefined(answers) ? answers.length : 0,
-                    i;
+                options = optionList.toUpperCase().split(""),
+                answers = resultObject.answers,
+                len = angular.isDefined(answers) ? answers.length : 0,
+                i;
 
                 for (i = 0; i < len; i++) {
                     var value = answers[i];
                     value["option"] = options[i];
                     value["selected"] = false;
+                    value["hasExplanation"] = !(value.explanation === null || angular.isUndefined(value.explanation) || value.explanation === '');
                     resultObject.items.push(value);
                 }
                 if (resultObject.kind === 'MultipleChoiceMatrixTwoByThree' || resultObject.kind === 'MultipleChoiceMatrixThreeByThree') {
@@ -323,9 +318,9 @@
 
             /*Get answers from the previous request and Explain*/
             var answers = questionResult.answers,
-                len = questionResult.answers.length,
-                i,
-                parsedTags = this.parseTagsAndResources(questionResult.tags);
+            len = questionResult.answers.length,
+            i,
+            parsedTags = this.parseTagsAndResources(questionResult.tags);
 
             resultObject.tagsResources = parsedTags.resources;
             resultObject.tags = parsedTags.tags;
@@ -337,32 +332,32 @@
         }
 
         function confirmChoice(questionResult, roundSessionAnswer, answers, questionType, groupId) {
-            var i, answerStatus = true,
-                len = answers.length,
-                isValid = validateAnswer(questionType, answers);
+            var answerStatus = true,
+            selectAnswers = [],
+            isValid = validateAnswer(questionType, answers);
 
             if (isValid) {
-                for (i = 0; i < len; i++) {
-                    var answer = answers[i],
-                        selectIdButton = ('#' + answer.id);
-                    if (answer.correct) {
-                        if (answer.selected) {
 
-                            if (angular.isDefined(roundSessionAnswer)) {
-                                practiceResource.sendUserReponse(roundSessionAnswer.id, answer.id, groupId);
-                            }
+                _.forEach(answers, function(result) {
+                    var selectIdButton = ('#' + result.id);
+                    if (result.correct) {
+                        if (result.selected) {
+                            selectAnswers.push(result.id);
                         } else {
                             answerStatus = false;
                         }
                     } else {
-                        if (answer.selected) {
-                            if (angular.isDefined(roundSessionAnswer)) {
-                                practiceResource.sendUserReponse(roundSessionAnswer.id, answer.id, groupId);
-                            }
+                        if (result.selected) {
+                            selectAnswers.push(result.id);
                             angular.element(selectIdButton).parents('#answer').addClass('incorrectAnswer');
                             answerStatus = false;
                         }
                     }
+
+                });
+
+                if (angular.isDefined(roundSessionAnswer) && angular.isDefined(selectAnswers) && selectAnswers.length >= 1) {
+                    practiceResource.sendUserReponse(roundSessionAnswer.id, selectAnswers, groupId, answerStatus);
                 }
                 angular.element("#answercontent *").prop('disabled', true);
 
@@ -400,7 +395,7 @@
 
         function getVideoExplanation(questionResult) {
             var deferred = $q.defer(),
-                videoObject = {};
+            videoObject = {};
 
             /* video validation*/
             if (questionResult.youtube_video_id !== null) {
@@ -421,20 +416,18 @@
         function numericEntryConfirmChoice(options) {
 
             var userAnswer = 0,
-                selectedAnswer = 0,
-                answerStatus = true,
-                answers = '',
-                numerator = options.numerator,
-                denominator = options.denominator,
-                lastAnswerLoaded = options.lastAnswerLoaded,
-                questionResult = options.questionResult,
-                groupId = options.groupId,
-                roundSessionAnswer = options.roundSessionAnswer;
+            selectedAnswer = 0,
+            answerStatus = true,
+            answers = '',
+            numerator = options.numerator,
+            denominator = options.denominator,
+            lastAnswerLoaded = options.lastAnswerLoaded,
+            questionResult = options.questionResult,
+            groupId = options.groupId,
+            roundSessionAnswer = options.roundSessionAnswer;
             /*Get selected answers*/
 
             if (numerator || denominator) {
-
-
                 if (numerator > 0 && denominator > 0) {
 
                     userAnswer = numerator + '/' + denominator;
@@ -444,28 +437,39 @@
 
                 answers = questionResult.answers;
                 var len = answers.length,
-                    i, roundAnswer = (eval(userAnswer).toFixed(1));
-                selectedAnswer = 0;
+                answerFound = false,
+                i, userAns = eval(userAnswer),
+                selectedAnswer = [];
 
                 for (i = 0; i < len; i++) {
                     var answer = answers[i],
+                    correctAns = eval(answer.body);
+                    var rang1 = (correctAns - 0.02 < 0) ? 0 : (correctAns - 0.02),
+                    rang2 = (correctAns + 0.02),
+                    answerEval = (answer.body === userAnswer || (userAns >= rang1 && userAns <= rang2));
 
-                        /*evaluate just one time the equivalence between body and numerator*/
-                        answerEval = (answer.body === userAnswer || eval(answer.body).toFixed(1) === roundAnswer);
-
-                    if (answerEval)
-                        selectedAnswer = answer.answer_id;
-
+                    if (answerEval && !answerFound) {
+                        answerFound = true;
+                        var ansId= angular.isDefined(answer.answer_id) ? answer.answer_id : answer.id;
+                        selectedAnswer.push(ansId);
+                    }
                     answerStatus = answerEval;
                 };
+
+                /*if loop couldn't find a possible answer then array wont have data, then user data will be push to it*/
+                if (selectedAnswer.length < 1) {
+                    selectedAnswer.push(userAnswer);
+                    answerStatus = false;
+                }
+
                 if (angular.isDefined(roundSessionAnswer)) {
-                    practiceResource.sendUserReponse(roundSessionAnswer.id, answer.id, groupId);
+                    practiceResource.sendUserReponse(roundSessionAnswer.id, selectedAnswer, groupId, answerStatus);
                 }
                 angular.element("#answercontent *").prop('disabled', true);
                 return answerStatus;
 
             } else {
-                alerts.showAlert(alerts.setErrorApiMsg(error), 'warning');
+                alerts.showAlert('Please choose an option!', 'warning');
 
             }
         }
@@ -477,7 +481,7 @@
         function usersRunOutQuestions(trackTitle, activeGroupId) {
             var options = {
                 message: "You've answered all of the adaptive questions we have for you in " + trackTitle + ".  " +
-                    "That's a lot of practice.  Would you like to review questions you've answered or go back to the main dashboard? ",
+                "That's a lot of practice.  Would you like to review questions you've answered or go back to the main dashboard? ",
                 title: "Congratulations!",
                 buttons: {
                     review: {
@@ -501,12 +505,12 @@
 
         function validateAnswer(questionType, answers) {
             var correctAnswers = _.filter(answers, {
-                    'correct': true
-                }),
-                selectedAnswers = _.filter(answers, {
-                    'selected': true
-                }),
-                isValid = false;
+                'correct': true
+            }),
+            selectedAnswers = _.filter(answers, {
+                'selected': true
+            }),
+            isValid = false;
 
 
             if (questionType === 'MultipleChoiceOneOrMoreCorrect')
@@ -526,12 +530,12 @@
             8: 'Medium',
             16: 'High',
             32: 'Highest'
-        };
+        }
         return {
             getMessage: function(level) {
                 return messages[level];
             }
-        };
+        }
     }
 
     function SplashMessages(utilities) {
@@ -556,6 +560,4 @@
             }
         };
     }
-
-
 })();

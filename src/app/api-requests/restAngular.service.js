@@ -115,6 +115,9 @@
     return service;
 
     function createNewPracticeGame(groupId, url) {
+      if ( url.split(/^\//).length > 0 ) {
+        url = url.split(/^\//)[1];
+      }
 
       return  Restangular.one(url).post();
     }
@@ -131,11 +134,11 @@
       });
     }
 
-    function updateAnswer(roundSessionAnswerId, answerId,gameId,groupId) {
-     return Restangular.one(groupId,'round_sessions').one(roundSessionAnswerId).put({
-         game_id: gameId,
-        answer_id: answerId
-      });
+    function updateAnswer(roundSessionAnswerId, answers,gameId,groupId) {
+
+      return Restangular.one(groupId,'round_sessions').one(roundSessionAnswerId);
+
+     //return Restangular.one(groupId,'round_sessions').one(roundSessionAnswerId).put();
     }
 
 

@@ -5,9 +5,9 @@
   .controller('HistoryController', HistoryController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  HistoryController.$inject = ['$scope', 'HistoryApi', 'currentProduct','dateUtils'];
+  HistoryController.$inject = ['$scope', 'HistoryApi', 'currentProduct','dateUtils','utilities'];
 
-  function HistoryController($scope, HistoryApi, currentProduct,dateUtils) {
+  function HistoryController($scope, HistoryApi, currentProduct,dateUtils,utilities) {
      /* jshint validthis: true */
     var vmHist = this;
     vmHist.currentPage = 1;
@@ -36,6 +36,9 @@
 
 
     function updateGroupId(groupId) {
+      /*remove this once history becomes available for all the groups*/
+      if(groupId!=='gre'){ utilities.redirect('404.html');}
+
       if (vmHist.groupId !== groupId) {
         vmHist.groupId = groupId;
         vmHist.currentPage = 1;

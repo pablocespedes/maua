@@ -24,7 +24,7 @@
       scope: {
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
+        totalAnswered: '=',
         isConfirmClicked: '='
       }
     };
@@ -64,7 +64,6 @@
       scope: {
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
         isConfirmClicked: '='
       }
     };
@@ -103,7 +102,6 @@
       scope: {
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
         isConfirmClicked: '='
       }
     };
@@ -154,7 +152,6 @@
       scope: {
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
         isConfirmClicked: '='
       }
     };
@@ -207,7 +204,6 @@
         maxOpt: '=',
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
         isConfirmClicked: '='
       }
     };
@@ -260,7 +256,6 @@
       scope: {
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
         portal: '=',
         answerStatus: '='
       }
@@ -334,6 +329,7 @@
       });
     }
   }
+
   function numericEntry() {
     var directive = {
       link: link,
@@ -342,7 +338,6 @@
       scope: {
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
         portal: '=',
         answerStatus: '='
       },
@@ -370,9 +365,9 @@
       scope: {
         items: '=items',
         showExplanation: '=',
-        hasExplanation: '&',
         portal: '=',
-        answerStatus: '='
+        answerStatus: '=',
+        isConfirmClicked:'='
 
       },
       controller: EntriesController
@@ -380,19 +375,21 @@
     return directive;
 
     function link(scope, element, attrs, controller) {
+      scope.status = function(){
+        return (scope.isConfirmClicked && scope.answerStatus) ||
+        (!scope.isConfirmClicked && (scope.isNumeratorValid && scope.isDenominatorValid))
+      }
 
       scope.$watch('portal.numerator', function(newVal, oldVal) {
         scope.isNumeratorValid = controller.validateNumber(newVal);
-        scope.portal.isDisabled = scope.isNumeratorValid===null ? scope.isNumeratorValid : !scope.isNumeratorValid;
+        scope.portal.isDisabled = scope.isNumeratorValid == null && scope.isDenominatorValid == null ? false : !scope.isDenominatorValid || !scope.isNumeratorValid;
         controller.handleValidation(scope.isNumeratorValid && scope.isDenominatorValid);
       });
       scope.$watch('portal.denominator', function(newVal, oldVal) {
         scope.isDenominatorValid = controller.validateNumber(newVal);
-        scope.portal.isDisabled = scope.isNumeratorValid===null ? scope.isNumeratorValid : !scope.isNumeratorValid;
+        scope.portal.isDisabled = scope.isNumeratorValid == null && scope.isDenominatorValid == null ? false : !scope.isDenominatorValid || !scope.isNumeratorValid;
         controller.handleValidation(scope.isNumeratorValid && scope.isDenominatorValid);
       });
-
-
     }
   }
 

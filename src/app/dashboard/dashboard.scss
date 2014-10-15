@@ -77,12 +77,6 @@
         padding: 11px 20px 9px;
         position: relative;
     }
-    .track-list-row:hover{
-      color: #4083a9;
-    }
-    .track-head:hover{
-        color: #4083a9;
-    }
     .panel-heading + .list-group .list-group-item:first-child {
         border-top-width: 1px;
     }
@@ -238,11 +232,11 @@
     .track-list-row {
         margin-left: 0px;
         margin-right: -5px;
-        h4:hover {
-            color: #4083a9;
-        }
     }
     .track-list-margin {
         margin-top: 9px;
+    }
+    .track-head:hover {
+        color: #4083a9;
     }
 }
