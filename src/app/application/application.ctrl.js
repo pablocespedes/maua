@@ -45,9 +45,6 @@
     };
 
     function select(index) {
-
-
-
       if (angular.isDefined(index)) {
 
         if (index >= 0) {
