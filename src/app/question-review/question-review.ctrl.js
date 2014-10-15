@@ -1,18 +1,18 @@
 (function() {
     'use strict';
     angular
-        .module('grockitApp.questionReview')
-        .controller('ReviewController', ReviewController);
+    .module('grockitApp.questionReview')
+    .controller('ReviewController', ReviewController);
 
     /*Manually injection will avoid any minification or injection problem*/
     ReviewController.$inject = ['$scope', 'practiceUtilities', 'currentProduct', 'practiceResource', 'ReviewAPI',
-        'utilities', 'dateUtils', 'breadcrumbs'
+    'utilities', 'dateUtils', 'breadcrumbs'
     ];
 
     function ReviewController($scope, practiceUtilities, currentProduct, practiceResource, ReviewAPI, utilities, dateUtils, breadcrumbs) {
         /* jshint validthis: true */
         var vmPr = this,
-            reviewObserver = null;
+        reviewObserver = null;
         vmPr.explanationInfo = {};
         vmPr.videoInfo = {};
         vmPr.portalC = vmPr;
@@ -20,7 +20,6 @@
         vmPr.answerStatus = null;
         vmPr.explanationInfo.showExplanation = true;
         vmPr.videoInfo.showVideo = false;
-        vmPr.answerHasExplanation = answerHasExplanation;
 
         /*Takes care to unregister the group once the user leaves the controller*/
         $scope.$on("$destroy", function() {
@@ -43,14 +42,7 @@
                 }
 
             });
-
         };
-
-        function answerHasExplanation(index) {
-            var answer = vmPr.questionData.answers[index];
-            return !(answer.explanation == null || angular.isUndefined(answer.explanation) || answer.explanation == '');
-        }
-
         var Review = {
             getRounSessionData: function(grouId, roundSessionId) {
                 ReviewAPI.getRoundSession(grouId, roundSessionId).then(function(response) {
@@ -96,7 +88,7 @@
                                 vmPr.numerator = parts[0];
                                 vmPr.denominator = parts[1];
                             } else
-                                vmPr.numerator = entry.body;
+                            vmPr.numerator = entry.body;
                         } else {
                             entry.selected = true;
                         }
@@ -115,32 +107,31 @@
                 var generalInfo = practiceUtilities.displayGeneralConfirmInfo(vmPr.questionData);
                 vmPr.explanationInfo = generalInfo;
                 practiceUtilities.getVideoExplanation(vmPr.questionData)
-                    .then(function(videoInfo) {
-                        vmPr.videoInfo = videoInfo;
-                    });
+                .then(function(videoInfo) {
+                    vmPr.videoInfo = videoInfo;
+                });
             },
             setTimingInformation: function(questionId, correctAnswerId, kind) {
                 practiceResource.getTimingInformation(vmPr.trackId, vmPr.activeGroupId, questionId)
-                    .$promise.then(function(result) {
-                        var timingData = result[0];
-                        vmPr.showTiming = true;
-                        vmPr.timingData = timingData;
-                        vmPr.totalAnswered = timingData.total_answered;
-                        var mergedList = _.map(vmPr.items, function(item) {
-                            return _.extend(item, _.findWhere(result[0].answers, {
-                                'answer_id': item.id
-                            }));
-                        });
-
-                        var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered) * 100
-                        vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
-
-                        vmPr.isbuttonClicked = true;
-                    }).catch(function(e) {
-                        vmPr.showTiming = false;
+                .$promise.then(function(result) {
+                    var timingData = result[0];
+                    vmPr.showTiming = true;
+                    vmPr.timingData = timingData;
+                    vmPr.totalAnswered = timingData.total_answered;
+                    var mergedList = _.map(vmPr.items, function(item) {
+                        return _.extend(item, _.findWhere(result[0].answers, {
+                            'answer_id': item.id
+                        }));
                     });
+
+                    var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered) * 100
+                    vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
+
+                    vmPr.isbuttonClicked = true;
+                }).catch(function(e) {
+                    vmPr.showTiming = false;
+                });
             }
         };
     }
-
 })();
