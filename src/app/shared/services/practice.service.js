@@ -167,7 +167,7 @@
                 practiceResource.getRandomTrack(groupId)
                 .then(function(response) {
                     var tracks = response.data.dashboard.smart_practice.items,
-                    index = _.random(0, tracks.length),
+                    index = _.random(0, tracks.length-1),
                     currentTrack = tracks[index];
                     utilities.setActiveTrack(currentTrack, currentTrack.id);
                     deferred.resolve(utilities.getActiveTrack());
