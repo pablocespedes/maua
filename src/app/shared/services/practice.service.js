@@ -318,7 +318,7 @@
         function doNotKnowAnswer(questionResult) {
             var resultObject = {};
             /*Question Explanation*/
-            resultObject.questionExplanation = questionResult.explanation;
+            resultObject.questionExplanation = $sce.trustAsHtml(questionResult.explanation);
 
             if (resultObject.questionExplanation != null)
                 resultObject.showExplanation = true;
@@ -386,7 +386,7 @@
         function displayGeneralConfirmInfo(questionResult) {
             var generalObject = {};
             /* Question Explanation*/
-            generalObject.questionExplanation = questionResult.explanation;
+            generalObject.questionExplanation = $sce.trustAsHtml(questionResult.explanation);
 
             if (generalObject.questionExplanation != null)
                 generalObject.showExplanation = true;
