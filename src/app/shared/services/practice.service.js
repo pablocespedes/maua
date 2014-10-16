@@ -278,7 +278,6 @@
                 resultObject = questionResponse;
 
                 resultObject.fixedWidth = resultObject.question_set.fixed_info_width;
-
                 resultObject.questionInformation = $sce.trustAsHtml(resultObject.question_set.info);
 
                 /*Find if there is a question info defined or retrieve it by the API*/
@@ -289,7 +288,6 @@
                 angular.element('.choice.active').removeClass('active');
 
                 resultObject.items = [];
-
                 resultObject.stimulus = $sce.trustAsHtml(questionResponse.stimulus);
                 var optionList = practiceConstants.optionList,
                 options = optionList.toUpperCase().split(""),
@@ -299,6 +297,7 @@
 
                 for (i = 0; i < len; i++) {
                     var value = answers[i];
+                    value.body = utilities.htmlSanitizer(value.body);
                     value["option"] = options[i];
                     value["selected"] = false;
                     value["hasExplanation"] = !(value.explanation === null || angular.isUndefined(value.explanation) || value.explanation === '');

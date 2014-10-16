@@ -34,8 +34,8 @@
       dialogService: dialogService,
       getCurrentParam: getCurrentParam,
       getYoutubeVideosId: getYoutubeVideosId,
-      setGroupTitle: setGroupTitle
-
+      setGroupTitle: setGroupTitle,
+      htmlSanitizer:htmlSanitizer
     };
     return service;
 
@@ -159,6 +159,20 @@
       if ($rootScope.groupTitle === null || $rootScope.groupTitle === '' || $rootScope.groupTitle !== title) {
         $rootScope.groupTitle = title;
       }
+    }
+
+    function htmlSanitizer(input) {
+      var allowed= '<a><br><span><p><div><sub><sup><img><ul><li><h1><h2><h3><h4><input><b><u><tr><td><table>';
+      allowed = (((allowed || '') + '')
+        .toLowerCase()
+        .match(/<[a-z][a-z0-9]*>/g) || [])
+        .join(''); // making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
+      var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
+        comments = /<!--[\s\S]*?-->/gi;
+      return input.replace(comments, '')
+        .replace(tags, function($0, $1) {
+          return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
+        });
     }
   }
 
