@@ -17,7 +17,6 @@
     vmDash.scoreLoading = true;
     vmDash.loadingMessage = 'Loading...';
     vmDash.historyVisible = false;
-    utilities.setActiveTab(0);
     vmDash.getScore = getScore;
     vmDash.StartPractice = StartPractice;
 

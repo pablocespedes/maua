@@ -31,8 +31,6 @@
       getIndexArray: getIndexArray,
       internalRedirect: internalRedirect,
       redirect: redirect,
-      setActiveTab: setActiveTab,
-      clearActiveTab: clearActiveTab,
       dialogService: dialogService,
       getCurrentParam: getCurrentParam,
       getYoutubeVideosId: getYoutubeVideosId,
@@ -128,16 +126,6 @@
     function redirect(url) {
 
       $window.location = url;
-    }
-
-    function setActiveTab(position) {
-      this.clearActiveTab();
-      var menuList = angular.element('div#main-menu-inner ul.navigation li');
-      angular.element(menuList[position]).addClass('active');
-    }
-
-    function clearActiveTab() {
-      angular.element('div#main-menu-inner ul.navigation li').removeClass('active');
     }
 
     function dialogService(options) {

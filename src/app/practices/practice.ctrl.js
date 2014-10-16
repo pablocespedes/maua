@@ -23,10 +23,7 @@
     vmPr.portalC = vmPr;
     vmPr.loading = true;
     vmPr.nextActionTitle = 'Confirm Choice';
-    vmPr.questionItems = [];
     vmPr.answerStatus = null;
-    vmPr.setPosition = 0;
-    vmPr.position = 0;
     vmPr.loadingMessage = SplashMessages.getLoadingMessage();
     vmPr.isDisabled = false;
     vmPr.nextAction = nextAction;
@@ -73,14 +70,14 @@
             vmPr.showTiming = true;
             vmPr.timingData = timingData;
             vmPr.totalAnswered = timingData.total_answered;
-              var mergedList = _.map(vmPr.items, function(item) {
-                return _.extend(item, _.findWhere(timingData.answers, {
-                  'answer_id': item.id
-                }));
-              });
+            var mergedList = _.map(vmPr.items, function(item) {
+              return _.extend(item, _.findWhere(timingData.answers, {
+                'answer_id': item.id
+              }));
+            });
 
-             var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered) * 100;
-              vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
+            var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered) * 100;
+            vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
 
           }
 
@@ -109,11 +106,13 @@
     };
 
     var customPractice = {
-      getNewPracticeGame: function(groupId, apiUrl) {
-        practiceResource.createNewGame(groupId, apiUrl).then(function() {
-          customPractice.getQuestions();
-          timerObject.initPracticeTimer();
-          timerObject.initQuestionTimer();
+      getNewPracticeGame: function(apiUrl) {
+        practiceResource.createNewGame(apiUrl).then(function(game) {
+          if (angular.isDefined(game) && game !== null) {
+            customPractice.getQuestions();
+            timerObject.initPracticeTimer();
+            timerObject.initQuestionTimer();
+          }
         });
       },
       getQuestions: function(){
@@ -143,16 +142,13 @@
             vmPr.maxOpts = [];
             vmPr.items = questionData.items;
             vmPr.loading = false;
-            vmPr.position++;
-
             timerObject.resetQuestionTimer();
             customPractice.feedbackInfo(questionData.id);
             if (vmPr.questionAnalytics) {
               timerObject.setTimingInformation(questionData.id, questionData.kind);
             }
           }
-        }
-        else{
+        } else {
           vmPr.loading = true;
           customPractice.getQuestions();
         }
@@ -180,7 +176,7 @@
         customPractice.bindVideoExplanationInfo(vmPr.questionData);
         if (angular.isDefined(generalResult)) {
           this.resetLayout();
-          vmPr.questionData.setLayoutOneColumn=true;
+          vmPr.questionData.setLayoutOneColumn = true;
           customPractice.bindExplanationInfo(generalResult);
           vmPr.isbuttonClicked = true;
         } else
@@ -209,12 +205,11 @@
 
         vmPr.answerStatus = practiceUtilities.numericEntryConfirmChoice(options);
         if (angular.isDefined(vmPr.answerStatus)) {
-          vmPr.questionData.setLayoutOneColumn=true;
+          vmPr.questionData.setLayoutOneColumn = true;
           this.resetLayout();
           customPractice.displayExplanationInfo();
           vmPr.isbuttonClicked = true;
-        }
-        else
+        } else
         vmPr.isDisabled = false;
       },
       feedbackInfo: function(questionId) {
@@ -239,10 +234,10 @@
         });
       },
       confirmAnswer: function() {
-        vmPr.answerStatus = practiceUtilities.confirmChoice(vmPr.questionData, vmPr.roundSessionAnswer, vmPr.items,vmPr.questionData.kind,vmPr.activeGroupId);
+        vmPr.answerStatus = practiceUtilities.confirmChoice(vmPr.questionData, vmPr.roundSessionAnswer, vmPr.items, vmPr.questionData.kind, vmPr.activeGroupId);
         if (angular.isDefined(vmPr.answerStatus)) {
-           this.resetLayout();
-           vmPr.questionData.setLayoutOneColumn=true;
+          this.resetLayout();
+          vmPr.questionData.setLayoutOneColumn = true;
           customPractice.displayExplanationInfo();
           vmPr.isbuttonClicked = true;
         } else
@@ -252,15 +247,15 @@
         vmPr.nextActionTitle = 'Next Question';
         practiceUtilities.resetLayout();
       },
-      setCurrentTrack: function(groupId){
+      setCurrentTrack: function(groupId) {
 
-        practiceUtilities.setCurrentTrack(groupId).then(function(response){
-          if(response){
-            vmPr.activeTrack=response;
-            customPractice.getNewPracticeGame(vmPr.activeGroupId, vmPr.activeTrack.subject.url);
+        practiceUtilities.setCurrentTrack(groupId).then(function(response) {
+          if (response) {
+            vmPr.activeTrack = response;
+            customPractice.getNewPracticeGame(vmPr.activeTrack.subject.url);
             vmPr.breadcrumbs = breadcrumbs;
             breadcrumbs.options = {
-             'practice': vmPr.activeTrack.subject.name
+              'practice': vmPr.activeTrack.subject.name
             };
           }
         });

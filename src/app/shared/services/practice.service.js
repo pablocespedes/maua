@@ -34,7 +34,11 @@
 
         function setQuestionsData(groupId, subjectId, type) {
             var deferred = $q.defer();
-            PracticeApi.getQuestions(groupId, subjectId, type).then(function(result) {
+            PracticeApi.getQuestions(groupId, subjectId, type)
+            .then(getQuestionsComplete)
+            .catch(getQuestionsFailed);
+
+            function getQuestionsComplete(result){
                 questionsData = null;
                 var questData = result.data.questions;
                 if (questData.length > 0) {
@@ -43,7 +47,11 @@
                 } else {
                     deferred.resolve(false);
                 }
-            });
+            }
+
+            function getQuestionsFailed(e){
+                alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
+            }
 
             return deferred.promise;
         };
@@ -102,9 +110,9 @@
             }
         };
 
-        function createNewGame(activeGroupId, url) {
+        function createNewGame(url) {
 
-            return PracticeApi.createNewPracticeGame(activeGroupId, url)
+            return PracticeApi.createNewPracticeGame(url)
             .then(getNewGamecomplete)
             .catch(getNewGameFailed);
 
