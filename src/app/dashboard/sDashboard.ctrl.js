@@ -48,10 +48,16 @@
     };
 
 
-   function StartPractice(subject,trackId) {
+    function StartPractice(subject, trackId) {
       if (angular.isDefined(subject)) {
-        utilities.setActiveTrack(subject,trackId);
-        utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
+        if (vmDash.activeGroupId === 'gre') {
+          utilities.setActiveTrack(subject, trackId);
+          utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
+        } else {
+          var url = '/' + vmDash.activeGroupId + '/' + trackId + '/play';
+          utilities.redirect(url);
+        }
+
       } else {
         alerts.showAlert('You must select one track at least', 'warning');
       }
@@ -77,7 +83,7 @@
       fetchScorePrediction: function() {
         var scoreResponse = dashboard.getScorePrediction()
 
-        if(angular.isDefined(scoreResponse)){
+        if (angular.isDefined(scoreResponse)) {
           vmDash.score = scoreResponse;
         }
         vmDash.scoreLoading = false;
@@ -98,7 +104,7 @@
       },
       getChallenge: function() {
         var challenge = dashboard.getChallenge();
-        if (!_.isEmpty(challenge) && challenge.items.length>0) {
+        if (!_.isEmpty(challenge) && challenge.items.length > 0) {
           vmDash.isChallengeAvailable = true;
           vmDash.challengesGames = challenge.items;
 
