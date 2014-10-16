@@ -162,7 +162,7 @@
     }
 
     function htmlSanitizer(input) {
-      var allowed= '<a><br><span><p><div><sub><sup><img><ul><li><h1><h2><h3><h4><input><b><u><tr><td><table>';
+      var allowed= '<a><br><span><p><div><sub><sup><img><ul><li><h1><h2><h3><h4><input><b><u><tr><td><table><o:p>';
       allowed = (((allowed || '') + '')
         .toLowerCase()
         .match(/<[a-z][a-z0-9]*>/g) || [])
