@@ -21,7 +21,6 @@
     vmApp.showDialog = showDialog;
     vmApp.selectGroup = selectGroup;
     vmApp.logOut = logOut;
-    vmApp.select = select;
     vmApp.groupRedirect = groupRedirect;
 
 
@@ -42,20 +41,6 @@
 
     function logOut() {
       Auth.logout();
-    };
-
-    function select(index) {
-      if (angular.isDefined(index)) {
-
-        if (index >= 0) {
-
-          utilities.setActiveTab(index);
-          //utilities.clearActiveTab();
-          $route.reload();
-
-        }
-
-      }
     };
 
     function groupRedirect(id) {

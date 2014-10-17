@@ -34,7 +34,11 @@
 
         function setQuestionsData(groupId, subjectId, type) {
             var deferred = $q.defer();
-            PracticeApi.getQuestions(groupId, subjectId, type).then(function(result) {
+            PracticeApi.getQuestions(groupId, subjectId, type)
+            .then(getQuestionsComplete)
+            .catch(getQuestionsFailed);
+
+            function getQuestionsComplete(result){
                 questionsData = null;
                 var questData = result.data.questions;
                 if (questData.length > 0) {
@@ -43,7 +47,11 @@
                 } else {
                     deferred.resolve(false);
                 }
-            });
+            }
+
+            function getQuestionsFailed(e){
+                alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
+            }
 
             return deferred.promise;
         };
@@ -102,9 +110,9 @@
             }
         };
 
-        function createNewGame(activeGroupId, url) {
+        function createNewGame(url) {
 
-            return PracticeApi.createNewPracticeGame(activeGroupId, url)
+            return PracticeApi.createNewPracticeGame(url)
             .then(getNewGamecomplete)
             .catch(getNewGameFailed);
 
@@ -270,7 +278,6 @@
                 resultObject = questionResponse;
 
                 resultObject.fixedWidth = resultObject.question_set.fixed_info_width;
-
                 resultObject.questionInformation = $sce.trustAsHtml(resultObject.question_set.info);
 
                 /*Find if there is a question info defined or retrieve it by the API*/
@@ -281,7 +288,6 @@
                 angular.element('.choice.active').removeClass('active');
 
                 resultObject.items = [];
-
                 resultObject.stimulus = $sce.trustAsHtml(questionResponse.stimulus);
                 var optionList = practiceConstants.optionList,
                 options = optionList.toUpperCase().split(""),
@@ -291,6 +297,7 @@
 
                 for (i = 0; i < len; i++) {
                     var value = answers[i];
+                    value.body = utilities.htmlSanitizer(value.body);
                     value["option"] = options[i];
                     value["selected"] = false;
                     value["hasExplanation"] = !(value.explanation === null || angular.isUndefined(value.explanation) || value.explanation === '');
@@ -311,7 +318,7 @@
         function doNotKnowAnswer(questionResult) {
             var resultObject = {};
             /*Question Explanation*/
-            resultObject.questionExplanation = questionResult.explanation;
+            resultObject.questionExplanation = $sce.trustAsHtml(questionResult.explanation);
 
             if (resultObject.questionExplanation != null)
                 resultObject.showExplanation = true;
@@ -379,7 +386,7 @@
         function displayGeneralConfirmInfo(questionResult) {
             var generalObject = {};
             /* Question Explanation*/
-            generalObject.questionExplanation = questionResult.explanation;
+            generalObject.questionExplanation = $sce.trustAsHtml(questionResult.explanation);
 
             if (generalObject.questionExplanation != null)
                 generalObject.showExplanation = true;

@@ -43,7 +43,7 @@
       <div class="col-lg-4" ng-if="vmDash.enableScore">
         <div class="no-padding">
           <div score-prediction group-title="$root.groupTitle"  score-data="vmDash.score" is-visible="vmDash.scoreLoading"
-          no-score-message="Not enough data."></div>
+          no-score-message="More data needed for {{$root.groupTitle}} score."></div>
         </div>
       </div>
     </div>
@@ -51,11 +51,6 @@
   <div class="row fadeIn animated">
     <div class="col-md-12">
       <div class="panel">
-        <!-- <div class="panel-heading dashboard-title">
-          <span class="panel-title"> <h4><i class="panel-title-icon fa fa-fire"></i>Smart Practice
-          </h4>
-          </span>
-        </div> -->
         <div class=" list-group text-left">
           <div track-list tracks="vmDash.tracks" start-practice="vmDash.StartPractice" get-score="vmDash.getScore"
           is-visible="vmDash.enableScore && !vmDash.loading" collapse-panel-id="collapse-panel" collapse-panel-body-id="collapse-panel-body"></div>

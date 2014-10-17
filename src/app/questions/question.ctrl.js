@@ -25,8 +25,6 @@
     vmPr.answerStatus = null;
     vmPr.explanationInfo.showExplanation = false;
     vmPr.videoInfo.showVideo = false;
-    vmPr.setPosition = 0;
-    vmPr.position = 0;
     vmPr.loadingMessage = SplashMessages.getLoadingMessage();
     vmPr.revealExplanation = revealExplanation;
     vmPr.nextAction = nextAction;
@@ -146,7 +144,6 @@
           vmPr.maxOpts = [];
           vmPr.items = questionData.items;
           vmPr.loading = false;
-          vmPr.position++;
 
           timerObject.resetQuestionTimer();
           Question.feedbackInfo(questionData.id);
