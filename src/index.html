@@ -186,10 +186,7 @@
               <li>
                 <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/skill_data"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Skill Data</span></a>
               </li>
-              <li ng-if="appCtrl.activeGroupId !=='gre'">
-                <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/reviews"><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
-              </li>
-              <li ng-show="appCtrl.activeGroupId ==='gre'">
+              <li>
                 <a is-active-nav ng-href="#/{{appCtrl.activeGroupId}}/history" ><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
               </li>
             </ul>

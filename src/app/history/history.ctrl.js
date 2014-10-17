@@ -36,9 +36,6 @@
 
 
     function updateGroupId(groupId) {
-      /*remove this once history becomes available for all the groups*/
-      if(groupId!=='gre'){ utilities.redirect('404.html');}
-
       if (vmHist.groupId !== groupId) {
         vmHist.groupId = groupId;
         vmHist.currentPage = 1;
