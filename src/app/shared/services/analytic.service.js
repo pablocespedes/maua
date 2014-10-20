@@ -1,44 +1,65 @@
-angular.module('grockitApp.analyticService', [])
-.factory('ListenloopUtility', function(){
+(function() {
+  'use strict';
 
-  function load_script(userData){
-    $('<script>'+
-      'function fkVisitorData(){'+
-      'return {'+
-      '"email":"'+userData.emailAddress+'",'+
-      '"segment":"'+userData.role+'",'+
-      '"custom_properties":{'+
-      '"first_name":"'+userData.firstName+'",'+
-      '"user_id":"'+userData.userId+'",'+
-      '"group":"'+userData.currentGroup+'",'+
-      '"env":"Grockit 2.0"'+
-      '}'+
-      '}'+
-      '}'+
-      '</script>').appendTo(document.body)
-  }
+  angular.module('grockitApp.analyticService', [])
+  .run(function($rootScope, $window, $location, GoogleTagManager) {
+    $rootScope.$on('$viewContentLoaded', function() {
+      var path = $location.path(),
+      absUrl = $location.absUrl(),
+      virtualUrl = absUrl.substring(absUrl.indexOf(path));
+      GoogleTagManager.push({
+        event: 'virtualPageView',
+        virtualUrl: virtualUrl
+      });
+    });
+  })
+  .service('GoogleTagManager', function($window) {
+    this.push = function(data) {
+      try {
+        $window.dataLayer.push(data);
+      } catch (e) {}
+    };
+  })
+  .factory('ListenloopUtility', function() {
 
-  return {
-    base: function(userData){
-      load_script(userData);
-      var fks = document.createElement('script');
-      fks.type = 'text/javascript';
-      fks.async = true;
-      fks.setAttribute("fk-userid", "136");
-      fks.setAttribute("fk-server", "fkapp.herokuapp.com");
-      fks.src = ('https:' == document.location.protocol ? 'https://':'http://') + 'd1g3gvqfdsvkse.cloudfront.net/assets/featurekicker.js';
-      var s = document.getElementsByTagName('script')[0];
-      s.parentNode.insertBefore(fks, s);
+    function load_script(userData) {
+      $('<script>' +
+        'function fkVisitorData(){' +
+        'return {' +
+        '"email":"' + userData.emailAddress + '",' +
+        '"segment":"' + userData.role + '",' +
+        '"custom_properties":{' +
+        '"first_name":"' + userData.firstName + '",' +
+        '"user_id":"' + userData.userId + '",' +
+        '"group":"' + userData.currentGroup + '",' +
+        '"env":"Grockit 2.0"' +
+        '}' +
+        '}' +
+        '}' +
+        '</script>').appendTo(document.body)
     }
-  }
-})
+
+    return {
+      base: function(userData) {
+        load_script(userData);
+        var fks = document.createElement('script');
+        fks.type = 'text/javascript';
+        fks.async = true;
+        fks.setAttribute("fk-userid", "136");
+        fks.setAttribute("fk-server", "fkapp.herokuapp.com");
+        fks.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'd1g3gvqfdsvkse.cloudfront.net/assets/featurekicker.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(fks, s);
+      }
+    }
+  })
 
 .factory('GaUtility', function() {
-  GA_classic_id = "UA-44112604-1";
-  GA_UA_id = "UA-44112604-4";
+   var GA_classic_id = "UA-44112604-1",
+     GA_UA_id = "UA-44112604-4"
 
   return {
-    classic: function () {
+    classic: function() {
       $('<script>' +
         'var _gaq = _gaq || [];' +
         '_gaq.push(["_setAccount", "UA-44112604-1"]);' +
@@ -55,10 +76,10 @@ angular.module('grockitApp.analyticService', [])
       s.parentNode.insertBefore(ga, s);
 
     },
-    UA: function () {
-      (function (i, s, o, g, r, a, m) {
+    UA: function() {
+      (function(i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
+        i[r] = i[r] || function() {
           (i[r].q = i[r].q || []).push(arguments)
         }, i[r].l = 1 * new Date();
         a = s.createElement(o),
@@ -76,10 +97,10 @@ angular.module('grockitApp.analyticService', [])
   }
 })
 
-.factory('InspectletUtility', function(){
+.factory('InspectletUtility', function() {
 
   return {
-    base: function(){
+    base: function() {
       $('<script type="text/javascript" id="inspectletjs">' +
         'window.__insp = window.__insp || [];' +
         '__insp.push(["wid", 2086641618]);' +
@@ -102,3 +123,5 @@ angular.module('grockitApp.analyticService', [])
     }
   }
 });
+
+})();

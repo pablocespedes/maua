@@ -297,7 +297,7 @@
 
                 for (i = 0; i < len; i++) {
                     var value = answers[i];
-                    value.body = utilities.htmlSanitizer(value.body);
+                    value.body = $sce.trustAsHtml(value.body);
                     value["option"] = options[i];
                     value["selected"] = false;
                     value["hasExplanation"] = !(value.explanation === null || angular.isUndefined(value.explanation) || value.explanation === '');
@@ -385,7 +385,6 @@
 
         function displayGeneralConfirmInfo(questionResult) {
             var generalObject = {};
-            /* Question Explanation*/
             generalObject.questionExplanation = $sce.trustAsHtml(questionResult.explanation);
 
             if (generalObject.questionExplanation != null)
