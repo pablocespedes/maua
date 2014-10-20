@@ -381,7 +381,8 @@
     var service = {
       secondsBetweenDates: secondsBetweenDates,
       getStandardDate: getStandardDate,
-      getMonthName: getMonthName
+      getMonthName: getMonthName,
+      formatDate:formatDate
     }
     return service;
 
@@ -396,6 +397,12 @@
       var day = date.getDate(),
       month = date.getMonth();
       return getMonthName(month) + ' ' + day;
+    }
+
+    function formatDate(date){
+       var initialDate = this.getStandardDate(date),
+         year = date.getYear();
+      return initialDate + ' ' + year;
     }
 
     function getMonthName(index) {

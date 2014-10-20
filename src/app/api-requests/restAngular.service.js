@@ -7,7 +7,6 @@
   .factory('PracticeApi', PracticeApi)
   .factory('HistoryApi', HistoryApi)
   .factory('GroupsApi', GroupsApi)
-  .factory('TracksApi', TracksApi)
   .factory('YoutubeVideoApi', YoutubeVideoApi)
   .factory('DashboardApi', DashboardApi)
   .factory('ReviewAPI',ReviewAPI);
@@ -17,7 +16,6 @@
   PracticeApi.$inject = ['Restangular', 'Headers'];
   HistoryApi.$inject = ['Restangular', 'Headers'];
   GroupsApi.$inject = ['Restangular', 'Headers'];
-  TracksApi.$inject = ['Restangular', 'Headers'];
   YoutubeVideoApi.$inject = ['$q', 'environmentCons'];
   DashboardApi.$inject = ['Restangular', 'Headers'];
   ReviewAPI.$inject = ['Restangular', 'Headers'];
@@ -169,21 +167,6 @@
         subdomain: 'www'
       }) : currentGroups;
       return currentGroups;
-    }
-  }
-
-  function TracksApi(Restangular, Headers) {
-    Headers.updateDefaultHeader();
-    var trackData = null;
-
-    var service = {
-      allByGroup: allByGroup
-    }
-    return service;
-
-    function allByGroup(groupId, shouldUpdate) {
-      trackData = trackData == null || shouldUpdate ? Restangular.one(groupId,'tracks').customGET() : trackData;
-      return trackData;
     }
   }
 

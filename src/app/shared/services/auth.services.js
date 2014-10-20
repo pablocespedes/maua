@@ -8,10 +8,11 @@ angular
   member: 'member',
   guest: 'guest'
 })
-.factory('Auth', Auth);
+.factory('Auth', Auth)
+.service('membershipService',membershipService);
 
 Auth.$inject = ['$window', '$cookies', '$cookieStore', 'UserRoles', 'webStorage', 'UsersApi', 'utilities', '$location', '$q', 'Headers', 'imageVersion'];
-
+membershipService.$inject = ['dateUtils'];
 function Auth($window, $cookies, $cookieStore, UserRoles, webStorage, UsersApi, utilities, $location, $q, Headers, imageVersion) {
 
   function defaultGroup(user) {
@@ -20,7 +21,6 @@ function Auth($window, $cookies, $cookieStore, UserRoles, webStorage, UsersApi, 
 
   var setUserData = function(response) {
     var user = webStorage.get('currentUser'),
-    trackData = user != null && angular.isDefined(user.trackData) ? user.trackData : '',
     currentUser = {
       userId: response.id,
       role: response.guest ? UserRoles.guest : UserRoles.member,
@@ -31,7 +31,7 @@ function Auth($window, $cookies, $cookieStore, UserRoles, webStorage, UsersApi, 
       avatarUrl: angular.isDefined(response.avatar_url) || response.avatar_url !== null ?
       response.avatar_url.replace('version', imageVersion.thumbnail) : 'images/avatar.png',
       emailAddress: response.email_address,
-      trackData: trackData
+      becamePremiumAt: response.became_premium_at
     };
 
     webStorage.add('currentUser', currentUser);
@@ -97,6 +97,47 @@ function Auth($window, $cookies, $cookieStore, UserRoles, webStorage, UsersApi, 
   function updateUserInfo(currentUser) {
     webStorage.add('currentUser', currentUser);
   }
+}
+
+
+function membershipService(dateUtils){
+ var membershipInfo={};
+
+ this.setMembershipInfo = function(userResponse,groupUserInfo,groupId){
+
+    membershipInfo.upgradePrompt = groupUserInfo.upgrade_prompt;
+    membershipInfo.becamePremiumAt = userResponse.becamePremiumAt;
+    membershipInfo.expiredAt = groupUserInfo.expires_at;
+    membershipInfo.trialing = groupUserInfo.trialing;
+ }
+ this.getMembershipInfo = function(){
+  return membershipInfo;
+ }
+
+ this.isPremium = function(){
+
+   return (membershipInfo.becamePremiumAt !== null);
+ }
+
+ this.premiumHasExpired = function(){
+  var today = new Date(),
+  expired =  new Date(membershipInfo.expiredAt);
+  return (this.isPremium() && expired < today);
+ }
+
+ this.hasPrompt = function(){
+  return (membershipInfo.upgradePrompt !== null);
+ }
+
+ this.isTrialing = function(){
+  return membershipInfo.trialing;
+ }
+
+  this.expiredMessage = function(message) {
+            bootbox.alert(message);
+        }
+
+
 }
 
 })();

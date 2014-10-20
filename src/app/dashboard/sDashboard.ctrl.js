@@ -5,9 +5,9 @@
   .controller('SimpleDashController', SimpleDashController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  SimpleDashController.$inject = ['$scope', 'dashboard', 'UsersApi', 'utilities', 'Auth', 'alerts', 'currentProduct'];
+  SimpleDashController.$inject = ['$scope', 'dashboard', 'UsersApi', 'utilities', 'Auth', 'alerts', 'currentProduct', 'membershipService'];
 
-  function SimpleDashController($scope, dashboard, UsersApi, utilities, Auth, alerts, currentProduct) {
+  function SimpleDashController($scope, dashboard, UsersApi, utilities, Auth, alerts, currentProduct, membershipService) {
     /* jshint validthis: true */
     var vmDash = this,
     dashObserver = null;
@@ -35,6 +35,7 @@
 
           dashObserver = currentProduct.observeGroupId().register(function(groupId) {
             vmDash.activeGroupId = groupId;
+
             vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
             SimpleDashBoard.getDashboard(vmDash.activeGroupId);
             vmDash.historyVisible = false;
@@ -49,18 +50,26 @@
 
 
     function StartPractice(subject, trackId) {
-      if (angular.isDefined(subject)) {
-        if (vmDash.activeGroupId === 'gre') {
-          utilities.setActiveTrack(subject, trackId);
-          utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
-        } else {
-          var url = '/' + vmDash.activeGroupId + '/' + trackId + '/play';
-          utilities.redirect(url);
-        }
+      var hasPrompt = membershipService.hasPrompt(),
+      isTrialing = membershipService.isTrialing(),
+      isPremium = membershipService.isPremium();
 
-      } else {
-        alerts.showAlert('You must select one track at least', 'warning');
+      if (hasPrompt && (isTrialing || isPremium)) {
+        if (angular.isDefined(subject)) {
+          if (vmDash.activeGroupId === 'gre') {
+            utilities.setActiveTrack(subject, trackId);
+            utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
+          } else {
+            var url = '/' + vmDash.activeGroupId + '/' + trackId + '/play';
+            utilities.redirect(url);
+          }
+
+        } else {
+          alerts.showAlert('You must select one track at least', 'warning');
+        }
       }
+
+
     };
 
     var SimpleDashBoard = {

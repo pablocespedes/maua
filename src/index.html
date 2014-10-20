@@ -129,7 +129,7 @@
                         <span class="mm-text">Return to Dashboard</span>
                       </a>
                     </li> -->
-                    <li id="feature-modal" class=" dropdown">
+                    <li ng-if="appCtrl.showBuyNow" id="feature-modal" class=" dropdown">
                       <a  ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/subscriptions/new">
                         <i class="menu-icon fa  fa-money"></i>
                         <span class="mm-text">Buy now</span>
