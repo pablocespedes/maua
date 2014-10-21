@@ -176,7 +176,6 @@
     return service;
 
     function showTrialExpiration(msg,expired,groupId) {
-      console.log(groupId)
       var titleM = !expired ? 'Your free trial has expired.' : 'Your free trial will expire soon.'
       var dialogOptions = {
         title: '<i class="fa fa-clock-o"></i> '+titleM,
@@ -196,7 +195,6 @@
             className: 'btn-success',
             callback: function() {
                 var baseUrl = utilities.originalGrockit(false).url;
-                console.log(baseUrl+'/'+groupId+'/subscriptions/new');
                 utilities.redirect(baseUrl+'/'+groupId+'/subscriptions/new');
             }
           },
