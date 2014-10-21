@@ -35,6 +35,10 @@
 
           dashObserver = currentProduct.observeGroupId().register(function(groupId) {
             vmDash.activeGroupId = groupId;
+            var hasPrompt = membershipService.hasPrompt(),
+            isTrialing = membershipService.isTrialing(),
+            isPremium = membershipService.isPremium();
+            vmDash.canPractice = (isTrialing || isPremium);
 
             vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
             SimpleDashBoard.getDashboard(vmDash.activeGroupId);
@@ -50,10 +54,6 @@
 
 
     function StartPractice(subject, trackId) {
-      var hasPrompt = membershipService.hasPrompt(),
-      isTrialing = membershipService.isTrialing(),
-      isPremium = membershipService.isPremium();
-      vmDash.canPractice = (isTrialing || isPremium);
 
       if (vmDash.canPractice) {
         if (angular.isDefined(subject)) {
