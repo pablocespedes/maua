@@ -41,7 +41,8 @@
         tracks: '=',
         startPractice: '=',
         getScore: '=',
-        isVisible: '='
+        isVisible: '=',
+        canPractice: '='
       }
     };
     return directive;

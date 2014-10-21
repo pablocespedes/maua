@@ -53,8 +53,9 @@
       var hasPrompt = membershipService.hasPrompt(),
       isTrialing = membershipService.isTrialing(),
       isPremium = membershipService.isPremium();
+      vmDash.canPractice = (isTrialing || isPremium);
 
-      if (hasPrompt && (isTrialing || isPremium)) {
+      if (vmDash.canPractice) {
         if (angular.isDefined(subject)) {
           if (vmDash.activeGroupId === 'gre') {
             utilities.setActiveTrack(subject, trackId);

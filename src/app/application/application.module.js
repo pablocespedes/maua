@@ -17,5 +17,9 @@ angular.module("grockitApp.application",['webStorageModule'])
     pinkyNail:'pinkynail',
     original:'original',
     large:'large'
-});
+})
+.constant('appMessages', {
+    "freeTrialExpired":"There's \u003cstrong\u003eno more\u003c/strong\u003e time left in your trial.",
+    "noGroupsFound" : "We are getting problems to find your subjects, if the problem persist please let\'s us know."
+})
 

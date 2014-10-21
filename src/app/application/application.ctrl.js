@@ -7,11 +7,11 @@
 
   /*Manually injection will avoid any minification or injection problem*/
   ApplicationController.$inject = ['$scope', '$location', '$route', 'Auth', 'utilities', 'grockitNewFeatures', 'ListenloopUtility',
-  'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct','membershipService'
+  'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct','membershipService','appMessages'
   ];
 
   function ApplicationController($scope, $location, $route, Auth, utilities, grockitNewFeatures, ListenloopUtility,
-    GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService) {
+    GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService,appMessages) {
     /* jshint validthis: true */
     var vmApp = this;
     /* recommend: Using function declarations and bindable members up top.*/
@@ -111,7 +111,7 @@
             alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
           });
         } else {
-          alerts.showAlert('We are getting problems to find your subjects, if the problem persist please let\'s us know.', 'warning');
+          alerts.showAlert(appMessages.noGroupsFound, 'warning');
 
         }
       },
@@ -130,7 +130,7 @@
               vmApp.showBuyNow = (premiumHasExpired || !isPremium) ;
 
               if(hasPrompt || (!isTrialing && !isPremium)){
-                 var message = hasPrompt ? membershipInfo.upgradePrompt : "There's \u003cstrong\u003eno more\u003c/strong\u003e time left in your trial.";
+                 var message = hasPrompt ? membershipInfo.upgradePrompt : appMessages.freeTrialExpired;
                  membershipService.expiredMessage(message);
 
               }
