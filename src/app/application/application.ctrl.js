@@ -6,27 +6,21 @@
   .controller('ApplicationController', ApplicationController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  ApplicationController.$inject = ['$scope', '$location', '$route', 'Auth', 'utilities', 'grockitNewFeatures', 'ListenloopUtility',
-  'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct','membershipService','appMessages'
+  ApplicationController.$inject = ['$scope', 'Auth', 'utilities', 'ListenloopUtility',
+  'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct','membershipService','appMessages','grockitModal'
   ];
 
-  function ApplicationController($scope, $location, $route, Auth, utilities, grockitNewFeatures, ListenloopUtility,
-    GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService,appMessages) {
+  function ApplicationController($scope, Auth, utilities, ListenloopUtility,
+    GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService,appMessages,grockitModal) {
     /* jshint validthis: true */
     var vmApp = this;
     /* recommend: Using function declarations and bindable members up top.*/
 
     vmApp.url = utilities.originalGrockit().url;
     vmApp.logOutUrl = utilities.originalGrockit().url + '/logout';
-    vmApp.showDialog = showDialog;
     vmApp.selectGroup = selectGroup;
     vmApp.logOut = logOut;
     vmApp.groupRedirect = groupRedirect;
-
-
-    function showDialog() {
-      grockitNewFeatures.showDialog();
-    };
 
     function selectGroup(index) {
 
@@ -120,7 +114,7 @@
           if (response != null) {
             vmApp.currentUser = response;
             currentProduct.observeGroupId().register(function(groupId) {
-
+              vmApp.activeGroupId = groupId;
               var membershipInfo= membershipService.getMembershipInfo(),
               hasPrompt = membershipService.hasPrompt(),
               isTrialing = membershipService.isTrialing(),
@@ -131,10 +125,10 @@
 
               if(hasPrompt || (!isTrialing && !isPremium)){
                  var message = hasPrompt ? membershipInfo.upgradePrompt : appMessages.freeTrialExpired;
-                 membershipService.expiredMessage(message);
+                 grockitModal.showTrialExpiration(message,isTrialing,groupId);
 
               }
-              vmApp.activeGroupId = groupId;
+
               Application.loadGroupMembership();
               ListenloopUtility.base(response);
               Application.hideVideoOption(vmApp.activeGroupId);

@@ -3,7 +3,7 @@
 
   angular.module("grockitApp.application")
   .factory('utilities', utilities)
-  .factory('grockitNewFeatures', grockitNewFeatures)
+  .factory('grockitModal', grockitModal)
   .factory('alerts', alerts)
   .service('collectionService', collectionService)
   .service('Observable', Observable)
@@ -14,13 +14,13 @@
 
 
   utilities.$inject = ['$rootScope', '$http', '$location', '$route', '$q', '$window', 'webStorage', 'YoutubeVideoApi', 'environmentCons'];
-  grockitNewFeatures.$inject = ['$http', 'utilities', 'environmentCons'];
-  Observable.$inject=[];
+  grockitModal.$inject = ['$http', 'utilities', 'environmentCons'];
+  Observable.$inject = [];
   Timer.$inject = ['$interval', 'collectionService'];
-  currentProduct.$inject = ['webStorage','Observable','utilities'];
+  currentProduct.$inject = ['webStorage', 'Observable', 'utilities'];
 
   function utilities($rootScope, $http, $location, $route, $q, $window, webStorage, YoutubeVideoApi, environmentCons) {
-    var currentTrack= {};
+    var currentTrack = {};
     var service = {
       newGrockit: newGrockit,
       originalGrockit: originalGrockit,
@@ -35,7 +35,7 @@
       getCurrentParam: getCurrentParam,
       getYoutubeVideosId: getYoutubeVideosId,
       setGroupTitle: setGroupTitle,
-      htmlSanitizer:htmlSanitizer
+      getGroupTitle: getGroupTitle
     };
     return service;
 
@@ -92,9 +92,9 @@
       return currentTrack;
     }
 
-    function setActiveTrack(subject,trackId) {
-      currentTrack.subject=subject ;
-      currentTrack.trackId=trackId ;
+    function setActiveTrack(subject, trackId) {
+      currentTrack.subject = subject;
+      currentTrack.trackId = trackId;
     }
 
     function random(min, max) {
@@ -161,42 +161,53 @@
       }
     }
 
-    function htmlSanitizer(input) {
-      var allowed= '<a><br><span><p><div><sub><sup><img><ul><li><h1><h2><h3><h4><input><b><u><tr><td><table><o:p>';
-      allowed = (((allowed || '') + '')
-        .toLowerCase()
-        .match(/<[a-z][a-z0-9]*>/g) || [])
-        .join(''); // making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
-      var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
-        comments = /<!--[\s\S]*?-->/gi;
-      return input.replace(comments, '')
-        .replace(tags, function($0, $1) {
-          return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
-        });
+    function getGroupTitle()
+    {
+      return $rootScope.groupTitle;
     }
+
   }
 
-  function grockitNewFeatures($http, utilities, environmentCons) {
+  function grockitModal($http, utilities, environmentCons) {
 
     var service = {
-      showDialog: showDialog
+      showTrialExpiration: showTrialExpiration
     };
     return service;
 
-    function showDialog() {
+    function showTrialExpiration(msg,expired,groupId) {
+      console.log(groupId)
+      var titleM = !expired ? 'Your free trial has expired.' : 'Your free trial will expire soon.'
       var dialogOptions = {
-        title: "Welcome to Grockit 2.0 Beta",
-        message: ""
-      },
-      url = location.host == '127.0.0.1:9000' ? environmentCons.localGrockit : environmentCons.liveGrockit;
-      $http.get(url + 'app/shared/templates/newFeatures2.0.html').success(function(data) {
-        dialogOptions.message = data;
-        utilities.dialogService(dialogOptions);
+        title: '<i class="fa fa-clock-o"></i> '+titleM,
+        animate: true,
+        message: '<div class="text-lg trial text-center">'+msg+
+                 '<br><br>Keep Grocking the '+utilities.getGroupTitle()+'. Starting at just $9.99.<div>',
+        className: "modal-trial modal-success",
+        buttons: {
+          default: {
+            label: 'I don\'t need to prep for the '+utilities.getGroupTitle()+'!',
+            className: 'btn-default',
+            callback: function() {
+            }
+          },
+          success: {
+            label: 'Continue using Grockit!',
+            className: 'btn-success',
+            callback: function() {
+                var baseUrl = utilities.originalGrockit(false).url;
+                console.log(baseUrl+'/'+groupId+'/subscriptions/new');
+                utilities.redirect(baseUrl+'/'+groupId+'/subscriptions/new');
+            }
+          },
+        }
+      };
 
-      }).error(function(jqXHR, textStatus, errorThrown) {
+      utilities.dialogService(dialogOptions);
 
-      });
+
     }
+
   }
 
   function alerts() {
@@ -267,19 +278,26 @@
             });
           },
           register: function(callback) {
-            var observer = {id: this.lastId++, callback: callback};
+            var observer = {
+              id: this.lastId++,
+              callback: callback
+            };
             this.observers.push(observer);
             return observer;
           },
           unregister: function(observer) {
-            this.observers = _.reject(this.observers, {'id': observer.id});
+            this.observers = _.reject(this.observers, {
+              'id': observer.id
+            });
           }
         };
         observables.push(observable);
         return observable;
       },
       get: function(key) {
-        return _.find(observables, {'key': key});
+        return _.find(observables, {
+          'key': key
+        });
       }
     };
   }
@@ -355,12 +373,12 @@
     return service;
   }
 
-  function currentProduct(webStorage, Observable,utilities) {
+  function currentProduct(webStorage, Observable, utilities) {
     var currentUser = webStorage.get('currentUser'),
     observable = Observable.create('currentProduct');
 
     this.currentGroupId = function(groupId, actualGroup) {
-      if (currentUser !==null && groupId !== currentUser.currentGroup) {
+      if (currentUser !== null && groupId !== currentUser.currentGroup) {
         currentUser.currentGroup = groupId;
         webStorage.add('currentUser', currentUser);
       }
@@ -372,7 +390,7 @@
       return Observable.get('currentProduct');
     }
 
-    this.unregisterGroup = function(groupObserver){
+    this.unregisterGroup = function(groupObserver) {
       observable.unregister(groupObserver);
     }
   }
@@ -382,7 +400,7 @@
       secondsBetweenDates: secondsBetweenDates,
       getStandardDate: getStandardDate,
       getMonthName: getMonthName,
-      formatDate:formatDate
+      formatDate: formatDate
     }
     return service;
 
@@ -399,9 +417,9 @@
       return getMonthName(month) + ' ' + day;
     }
 
-    function formatDate(date){
-       var initialDate = this.getStandardDate(date),
-         year = date.getYear();
+    function formatDate(date) {
+      var initialDate = this.getStandardDate(date),
+      year = date.getYear();
       return initialDate + ' ' + year;
     }
 

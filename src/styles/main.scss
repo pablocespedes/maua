@@ -356,3 +356,20 @@ footer {
     display: inline-block;
     min-width: 6px;
 }
+
+.modal-trial.modal-success .modal-header {
+    background: #5ebd5e;
+}
+.modal-trial .modal-header .fa {
+ font-size: 20px;
+}
+.modal-trial .modal-header {
+    color: #fff;
+    margin-bottom: 20px;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+    border-top-right-radius: 2px;
+    border-top-left-radius: 2px;
+}
+.trial{
+    min-height: 100px;
+}

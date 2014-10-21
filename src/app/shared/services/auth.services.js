@@ -133,11 +133,6 @@ function membershipService(dateUtils){
   return membershipInfo.trialing;
  }
 
-  this.expiredMessage = function(message) {
-            bootbox.alert(message);
-        }
-
-
 }
 
 })();

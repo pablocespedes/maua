@@ -37,8 +37,9 @@
             vmDash.activeGroupId = groupId;
             var hasPrompt = membershipService.hasPrompt(),
             isTrialing = membershipService.isTrialing(),
-            isPremium = membershipService.isPremium();
-            vmDash.canPractice = (isTrialing || isPremium);
+            isPremium = membershipService.isPremium(),
+            premiumHasExpired = membershipService.premiumHasExpired();
+            vmDash.canPractice = (isTrialing || isPremium || !premiumHasExpired);
 
             vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
             SimpleDashBoard.getDashboard(vmDash.activeGroupId);
