@@ -166,109 +166,6 @@
         };
         return service;
 
-        function setCurrentTrack(groupId) {
-            var deferred = $q.defer(),
-            trackData = utilities.getActiveTrack();
-            if (angular.isDefined(trackData.subject)) {
-                deferred.resolve(trackData);
-            } else {
-                practiceResource.getRandomTrack(groupId)
-                .then(function(response) {
-                    var tracks = response.data.dashboard.smart_practice.items,
-                    index = _.random(0, tracks.length-1),
-                    currentTrack = tracks[index];
-                    utilities.setActiveTrack(currentTrack, currentTrack.id);
-                    deferred.resolve(utilities.getActiveTrack());
-                });
-
-            }
-
-            return deferred.promise;
-        }
-
-        function parseTagsAndResources(tags) {
-            var parsedTags = [],
-            parsedResources = [],
-            tgR = {},
-            tagsLen = tags.length,
-            i, j;
-
-            for (i = 0; i < tagsLen; i++) {
-                var tagR = tags[i].tag_resources,
-                tagRLen = tagR.length,
-                currentTag = tags[i];
-
-                if (!_.find(parsedTags, function(tag) {
-                    return tag.name === currentTag.name;
-                })) {
-                    parsedTags.push(currentTag);
-                }
-
-                for (j = 0; j < tagRLen; j++) {
-                    var currentTagResource = tagR[j];
-                    tgR = {
-                        name: currentTag.name,
-                        resource_type: currentTagResource.resource_type,
-                        resource: currentTagResource.resource_type == 'youtube' ? utilities.getYoutubeVideosId(currentTagResource.resource) : currentTagResource.resource
-                    };
-                    parsedResources.push(tgR);
-                }
-            }
-            return {
-                tags: parsedTags,
-                resources: parsedResources
-            };
-        }
-
-        function getAnswerType(questionKind) {
-            var template = '';
-
-            switch (questionKind) {
-                case 'MultipleChoiceOneCorrect':
-                template = "_oneChoice.directive.html";
-                break;
-                case 'MultipleChoiceOneOrMoreCorrect':
-                template = "_multipleChoice.directive.html";
-                break;
-                case 'MultipleChoiceMatrixTwoByThree':
-                template = "_matrix2x3.directive.html";
-                break;
-                case 'MultipleChoiceMatrixThreeByThree':
-                template = "_matrix3x3.directive.html";
-                break;
-                case 'NumericEntryFraction':
-                template = "_fraction.directive.html";
-                break;
-                case 'SPR':
-                template = "_provisionalSat.directive.html";
-                break;
-                case 'NumericEntry':
-                template = "_numeric.directive.html";
-                break;
-                case 'sat':
-                template = "_sat.directive.html";
-                break;
-                case 'MultipleChoiceTwoCorrect':
-                template = "_twoChoice.directive.html";
-                break;
-            }
-
-            return practiceConstants.questionTypesUrl + template;
-        }
-
-        function removeBadImage() {
-            /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
-            angular.element('img').error(function() {
-
-                angular.element('img').attr('src', '');
-            });
-        }
-
-        function setQuestionTypeMatrixGroups(items) {
-            return _.forEach(items, function(answer, i) {
-                answer["matrix_group"] = ((i - (i % 3)) / 3);
-            });
-        }
 
         function presentQuestion(questionResponse) {
             try {
@@ -315,33 +212,16 @@
             }
         }
 
-        function doNotKnowAnswer(questionResult) {
-            var resultObject = {};
-            /*Question Explanation*/
-            resultObject.questionExplanation = $sce.trustAsHtml(questionResult.explanation);
-
-            if (resultObject.questionExplanation != null)
-                resultObject.showExplanation = true;
-
-            /*Get answers from the previous request and Explain*/
-            var answers = questionResult.answers,
-            len = questionResult.answers.length,
-            i,
-            parsedTags = this.parseTagsAndResources(questionResult.tags);
-
-            resultObject.tagsResources = parsedTags.resources;
-            resultObject.tags = parsedTags.tags;
-
-            resultObject.xpTag = questionResult.experience_points;
-
-            angular.element("#answercontent *").prop('disabled', true);
-            return resultObject;
-        }
-
         function confirmChoice(questionResult, roundSessionAnswer, answers, questionType, groupId) {
             var answerStatus = true,
             selectAnswers = [],
-            isValid = validateAnswer(questionType, answers);
+            correctAnswers = _.filter(answers, {
+                'correct': true
+            }),
+            selectedAnswers = _.filter(answers, {
+                'selected': true
+            }),
+            isValid = internalFn.validateAnswer(questionType, correctAnswers,selectedAnswers);
 
             if (isValid) {
 
@@ -383,6 +263,40 @@
             angular.element('.list-group *').addClass('no-hover');
         }
 
+        function parseTagsAndResources(tags) {
+            var parsedTags = [],
+            parsedResources = [],
+            tgR = {},
+            tagsLen = tags.length,
+            i, j;
+
+            for (i = 0; i < tagsLen; i++) {
+                var tagR = tags[i].tag_resources,
+                tagRLen = tagR.length,
+                currentTag = tags[i];
+
+                if (!_.find(parsedTags, function(tag) {
+                    return tag.name === currentTag.name;
+                })) {
+                    parsedTags.push(currentTag);
+                }
+
+                for (j = 0; j < tagRLen; j++) {
+                    var currentTagResource = tagR[j];
+                    tgR = {
+                        name: currentTag.name,
+                        resource_type: currentTagResource.resource_type,
+                        resource: currentTagResource.resource_type == 'youtube' ? utilities.getYoutubeVideosId(currentTagResource.resource) : currentTagResource.resource
+                    };
+                    parsedResources.push(tgR);
+                }
+            }
+            return {
+                tags: parsedTags,
+                resources: parsedResources
+            };
+        }
+
         function displayGeneralConfirmInfo(questionResult) {
             var generalObject = {};
             generalObject.questionExplanation = $sce.trustAsHtml(questionResult.explanation);
@@ -417,6 +331,29 @@
 
 
             return deferred.promise;
+        }
+
+        function doNotKnowAnswer(questionResult) {
+            var resultObject = {};
+            /*Question Explanation*/
+            resultObject.questionExplanation = $sce.trustAsHtml(questionResult.explanation);
+
+            if (resultObject.questionExplanation != null)
+                resultObject.showExplanation = true;
+
+            /*Get answers from the previous request and Explain*/
+            var answers = questionResult.answers,
+            len = questionResult.answers.length,
+            i,
+            parsedTags = this.parseTagsAndResources(questionResult.tags);
+
+            resultObject.tagsResources = parsedTags.resources;
+            resultObject.tags = parsedTags.tags;
+
+            resultObject.xpTag = questionResult.experience_points;
+
+            angular.element("#answercontent *").prop('disabled', true);
+            return resultObject;
         }
 
         function numericEntryConfirmChoice(options) {
@@ -509,24 +446,114 @@
             utilities.dialogService(options);
         }
 
-        function validateAnswer(questionType, answers) {
-            var correctAnswers = _.filter(answers, {
-                'correct': true
-            }),
-            selectedAnswers = _.filter(answers, {
-                'selected': true
-            }),
-            isValid = false;
+        function getAnswerType(questionKind) {
+            var template = '';
 
+            switch (questionKind) {
+                case 'MultipleChoiceOneCorrect':
+                template = "_oneChoice.directive.html";
+                break;
+                case 'MultipleChoiceOneOrMoreCorrect':
+                template = "_multipleChoice.directive.html";
+                break;
+                case 'MultipleChoiceMatrixTwoByThree':
+                template = "_matrix2x3.directive.html";
+                break;
+                case 'MultipleChoiceMatrixThreeByThree':
+                template = "_matrix3x3.directive.html";
+                break;
+                case 'NumericEntryFraction':
+                template = "_fraction.directive.html";
+                break;
+                case 'SPR':
+                template = "_provisionalSat.directive.html";
+                break;
+                case 'NumericEntry':
+                template = "_numeric.directive.html";
+                break;
+                case 'sat':
+                template = "_sat.directive.html";
+                break;
+                case 'MultipleChoiceTwoCorrect':
+                template = "_twoChoice.directive.html";
+                break;
+            }
 
-            if (questionType === 'MultipleChoiceOneOrMoreCorrect')
-
-                isValid = selectedAnswers.length > 0 ? true : false;
-            else
-                isValid = correctAnswers.length === selectedAnswers.length ? true : false;
-
-            return isValid;
+            return practiceConstants.questionTypesUrl + template;
         }
+
+        function setCurrentTrack(groupId) {
+            var deferred = $q.defer(),
+            trackData = utilities.getActiveTrack();
+            if (angular.isDefined(trackData.subject)) {
+                deferred.resolve(trackData);
+            } else {
+                practiceResource.getRandomTrack(groupId)
+                .then(function(response) {
+                    var tracks = response.data.dashboard.smart_practice.items,
+                    index = _.random(0, tracks.length-1),
+                    currentTrack = tracks[index];
+                    utilities.setActiveTrack(currentTrack, currentTrack.id);
+                    deferred.resolve(utilities.getActiveTrack());
+                });
+
+            }
+
+            return deferred.promise;
+        }
+
+        function removeBadImage() {
+            /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
+            angular.element('img').error(function() {
+
+                angular.element('img').attr('src', '');
+            });
+        }
+
+        function setQuestionTypeMatrixGroups(items) {
+            return _.forEach(items, function(answer, i) {
+                answer["matrix_group"] = ((i - (i % 3)) / 3);
+            });
+        }
+
+        var internalFn = {
+            validateAnswer: function(questionType, correctAnswers, selectedAnswers) {
+                var isValid = false;
+
+                if (questionType === 'MultipleChoiceOneOrMoreCorrect')
+
+                    isValid = selectedAnswers.length > 0 ? true : false;
+                else
+                    isValid = correctAnswers.length === selectedAnswers.length ? true : false;
+
+                return isValid;
+            },
+            showQuestionError: function(questionKind) {
+                var message = '';
+
+                switch (questionKind) {
+                    case 'MultipleChoiceOneCorrect':
+                        message = '';
+                        break;
+                    case 'MultipleChoiceOneOrMoreCorrect':
+                        message = '';
+                        break;
+                    case 'MultipleChoiceMatrixTwoByThree':
+                        message = '';
+                        break;
+                    case 'MultipleChoiceMatrixThreeByThree':
+                        message = '';
+                        break;
+                    case 'MultipleChoiceTwoCorrect':
+                         message = '';
+                        break;
+                }
+
+                message;
+            }
+        };
+
+
     }
 
     function Level() {

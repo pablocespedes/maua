@@ -7,7 +7,7 @@
   /*Manually injection will avoid any minification or injection problem*/
   SimpleDashController.$inject = ['$scope', 'dashboard', 'UsersApi', 'utilities', 'Auth', 'alerts', 'currentProduct', 'membershipService'];
 
-  function SimpleDashController($scope, dashboard, UsersApi, utilities, Auth, alerts, currentProduct, membershipService) {
+  function SimpleDashController($scope, dashboard, UsersApi, utilities, Auth, alerts, currentProduct, membershipService,Test) {
     /* jshint validthis: true */
     var vmDash = this,
     dashObserver = null;
@@ -58,6 +58,13 @@
 
       if (vmDash.canPractice) {
         if (angular.isDefined(subject)) {
+          utilities.setActiveTrack(subject, trackId);
+          utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
+        } else {
+          alerts.showAlert('You must select one track at least', 'warning');
+        }
+
+        /*if (angular.isDefined(subject)) {
           if (vmDash.activeGroupId === 'gre') {
             utilities.setActiveTrack(subject, trackId);
             utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
@@ -68,7 +75,7 @@
 
         } else {
           alerts.showAlert('You must select one track at least', 'warning');
-        }
+        }*/
       }
 
 
