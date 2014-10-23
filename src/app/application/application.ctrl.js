@@ -117,6 +117,7 @@
               vmApp.activeGroupId = groupId;
 
               vmApp.showBuyNow = membershipService.showBuyButton();
+              vmApp.canAccess = membershipService.canPractice();
 
               Application.loadGroupMembership();
               ListenloopUtility.base(response);

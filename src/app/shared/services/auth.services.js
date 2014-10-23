@@ -12,7 +12,7 @@
   .service('membershipService', membershipService);
 
   Auth.$inject = ['$window', '$cookies', '$cookieStore', 'UserRoles', 'webStorage', 'UsersApi', 'utilities', '$location', '$q', 'Headers', 'imageVersion'];
-  membershipService.$inject = ['dateUtils','grockitModal','appMessages'];
+  membershipService.$inject = ['dateUtils', 'grockitModal', 'appMessages', '$location'];
 
   function Auth($window, $cookies, $cookieStore, UserRoles, webStorage, UsersApi, utilities, $location, $q, Headers, imageVersion) {
 
@@ -105,7 +105,7 @@
   }
 
 
-  function membershipService(dateUtils,grockitModal,appMessages) {
+  function membershipService(dateUtils, grockitModal, appMessages, $location) {
     var membershipInfo = {},
     _membershipFn = {
       isPremium: function() {
@@ -121,6 +121,9 @@
       },
       isTrialing: function() {
         return membershipInfo.trialing;
+      },
+      validateMembership: function() {
+        return (this.premiumHasExpired() && (!this.isTrialing() || !this.isPremium()));
       }
     };
 
@@ -137,15 +140,23 @@
       return (_membershipFn.premiumHasExpired() || !_membershipFn.isPremium());
     }
 
-    this.canPractice = function(){
+    this.canPractice = function() {
       return (_membershipFn.isTrialing() || _membershipFn.isPremium() || !_membershipFn.premiumHasExpired());
     }
 
-    this.membershipValidation = function(groupId,nQuestions) {
-
-      if (_membershipFn.premiumHasExpired() && (!_membershipFn.isTrialing() || !_membershipFn.isPremium())) {
+    this.membershipValidation = function(groupId, nQuestions) {
+      if (_membershipFn.validateMembership()) {
         var message = _membershipFn.hasPrompt() ? membershipInfo.upgradePrompt : appMessages.freeTrialExpired;
-        grockitModal.showTrialExpiration(message, groupId,nQuestions);
+        grockitModal.showTrialExpiration(message, groupId, nQuestions);
+      }
+
+    }
+
+    this.userCanAccesPage = function(groupId) {
+      var sections = $location.path().split('/'),
+      url = sections[sections.length - 1];
+      if (_membershipFn.validateMembership() && url!=='dashboard') {
+        $location.path(groupId+'/membership-block')
       }
     }
 

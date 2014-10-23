@@ -34,7 +34,8 @@
                   $window.location = '404.html';
                 } else {
                   membershipService.setMembershipInfo(userResponse,userGroup, urlGroup);
-                  currentProduct.currentGroupId(urlGroup, actualGroup);
+                  membershipService.userCanAccesPage(urlGroup);
+                   currentProduct.currentGroupId(urlGroup, actualGroup);
 
                 }
               }
