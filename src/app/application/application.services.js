@@ -175,8 +175,9 @@
     };
     return service;
 
-    function showTrialExpiration(msg,expired,groupId) {
-      var titleM = !expired ? 'Your free trial has expired.' : 'Your free trial will expire soon.'
+    function showTrialExpiration(titleM,groupId,nQuestions) {
+      var msg = 'Looks like you\'ve been pretty busy these past few days. You\'ve answered '+
+                +nQuestions+' questions and are well on your way to Grocking the '+utilities.getGroupTitle()+'!';
       var dialogOptions = {
         title: '<i class="fa fa-clock-o"></i> '+titleM,
         animate: true,
@@ -185,13 +186,13 @@
         className: "modal-trial modal-success",
         buttons: {
           default: {
-            label: 'I don\'t need to prep for the '+utilities.getGroupTitle()+'!',
+            label: 'I don\'t need to prep for the '+utilities.getGroupTitle()+'.',
             className: 'btn-default',
             callback: function() {
             }
           },
           success: {
-            label: 'Continue using Grockit!',
+            label: 'Continue using Grockit.',
             className: 'btn-success',
             callback: function() {
                 var baseUrl = utilities.originalGrockit(false).url;
@@ -202,8 +203,6 @@
       };
 
       utilities.dialogService(dialogOptions);
-
-
     }
 
   }

@@ -7,7 +7,7 @@
   /*Manually injection will avoid any minification or injection problem*/
   SimpleDashController.$inject = ['$scope', 'dashboard', 'UsersApi', 'utilities', 'Auth', 'alerts', 'currentProduct', 'membershipService'];
 
-  function SimpleDashController($scope, dashboard, UsersApi, utilities, Auth, alerts, currentProduct, membershipService,Test) {
+  function SimpleDashController($scope, dashboard, UsersApi, utilities, Auth, alerts, currentProduct, membershipService) {
     /* jshint validthis: true */
     var vmDash = this,
     dashObserver = null;
@@ -35,11 +35,8 @@
 
           dashObserver = currentProduct.observeGroupId().register(function(groupId) {
             vmDash.activeGroupId = groupId;
-            var hasPrompt = membershipService.hasPrompt(),
-            isTrialing = membershipService.isTrialing(),
-            isPremium = membershipService.isPremium(),
-            premiumHasExpired = membershipService.premiumHasExpired();
-            vmDash.canPractice = (isTrialing || isPremium || !premiumHasExpired);
+
+            vmDash.canPractice = membershipService.canPractice();
 
             vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
             SimpleDashBoard.getDashboard(vmDash.activeGroupId);
@@ -116,6 +113,7 @@
           vmDash.historyInfo.totalQuest = historyResponse.all;
           vmDash.historyInfo.totalQuestToday = historyResponse.today;
           vmDash.loading = false;
+          membershipService.membershipValidation(vmDash.activeGroupId ,historyResponse.all);
         } else {
           vmDash.historyVisible = false;
         }

@@ -7,11 +7,11 @@
 
   /*Manually injection will avoid any minification or injection problem*/
   ApplicationController.$inject = ['$scope', 'Auth', 'utilities', 'ListenloopUtility',
-  'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct','membershipService','appMessages','grockitModal'
+  'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct','membershipService'
   ];
 
   function ApplicationController($scope, Auth, utilities, ListenloopUtility,
-    GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService,appMessages,grockitModal) {
+    GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService) {
     /* jshint validthis: true */
     var vmApp = this;
     /* recommend: Using function declarations and bindable members up top.*/
@@ -115,19 +115,8 @@
             vmApp.currentUser = response;
             currentProduct.observeGroupId().register(function(groupId) {
               vmApp.activeGroupId = groupId;
-              var membershipInfo= membershipService.getMembershipInfo(),
-              hasPrompt = membershipService.hasPrompt(),
-              isTrialing = membershipService.isTrialing(),
-              isPremium = membershipService.isPremium(),
-              premiumHasExpired = membershipService.premiumHasExpired();
 
-              vmApp.showBuyNow = (premiumHasExpired || !isPremium) ;
-
-              if(hasPrompt || (!isTrialing && !isPremium)){
-                 var message = hasPrompt ? membershipInfo.upgradePrompt : appMessages.freeTrialExpired;
-                 grockitModal.showTrialExpiration(message,isTrialing,groupId);
-
-              }
+              vmApp.showBuyNow = membershipService.showBuyButton();
 
               Application.loadGroupMembership();
               ListenloopUtility.base(response);
