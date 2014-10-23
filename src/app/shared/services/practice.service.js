@@ -150,6 +150,51 @@
 
     function practiceUtilities($q, $sce, utilities, practiceResource, alerts, YoutubeVideoApi, practiceConstants) {
 
+        /*Internal Service Functions*/
+        var _internalFn = {
+            setQuestionTypeMatrixGroups: function(items) {
+                return _.forEach(items, function(answer, i) {
+                    answer["matrix_group"] = ((i - (i % 3)) / 3);
+                });
+            },
+            removeBadImage: function() {
+                /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
+                angular.element('img').error(function() {
+
+                    angular.element('img').attr('src', '');
+                });
+            },
+            validateAnswer: function(questionType, correctAnswers, selectedAnswers) {
+                var isValid = false;
+
+                if (questionType === 'MultipleChoiceOneOrMoreCorrect')
+
+                    isValid = selectedAnswers.length > 0 ? true : false;
+                else
+                    isValid = correctAnswers.length === selectedAnswers.length ? true : false;
+
+                return isValid;
+            },
+            showQuestionError: function(questionKind) {
+                var message = '';
+
+                switch (questionKind) {
+                    case 'MultipleChoiceOneCorrect':
+                    case 'MultipleChoiceOneOrMoreCorrect':
+                        message = 'Please select an option!';
+                        break;
+                    case 'MultipleChoiceMatrixTwoByThree':
+                    case 'MultipleChoiceMatrixThreeByThree':
+                        message = 'Please select at least one option of each section!';
+                        break;
+                    case 'MultipleChoiceTwoCorrect':
+                        message = 'Please select at least two options!';
+                        break;
+                }
+                alerts.showAlert(message, 'warning');
+            }
+        };
+
         var service = {
             presentQuestion: presentQuestion,
             confirmChoice: confirmChoice,
@@ -201,10 +246,10 @@
                     resultObject.items.push(value);
                 }
                 if (resultObject.kind === 'MultipleChoiceMatrixTwoByThree' || resultObject.kind === 'MultipleChoiceMatrixThreeByThree') {
-                    resultObject.items = setQuestionTypeMatrixGroups(resultObject.items);
+                    resultObject.items = _internalFn.setQuestionTypeMatrixGroups(resultObject.items);
                 }
 
-                removeBadImage();
+                _internalFn.removeBadImage();
                 return resultObject;
 
             } catch (e) {
@@ -221,7 +266,7 @@
             selectedAnswers = _.filter(answers, {
                 'selected': true
             }),
-            isValid = internalFn.validateAnswer(questionType, correctAnswers,selectedAnswers);
+            isValid = _internalFn.validateAnswer(questionType, correctAnswers,selectedAnswers);
 
             if (isValid) {
 
@@ -250,10 +295,7 @@
 
                 return answerStatus;
             } else {
-                if (isValid)
-                    alerts.showAlert('Please select at least one option of each section!', 'warning');
-                else
-                    alerts.showAlert('Please select an option!', 'warning');
+                _internalFn.showQuestionError(questionType);
             }
         }
 
@@ -501,58 +543,6 @@
 
             return deferred.promise;
         }
-
-        function removeBadImage() {
-            /*This function was added to solve the problem with the img on LSAT, loaded from the content editor*/
-            angular.element('img').error(function() {
-
-                angular.element('img').attr('src', '');
-            });
-        }
-
-        function setQuestionTypeMatrixGroups(items) {
-            return _.forEach(items, function(answer, i) {
-                answer["matrix_group"] = ((i - (i % 3)) / 3);
-            });
-        }
-
-        var internalFn = {
-            validateAnswer: function(questionType, correctAnswers, selectedAnswers) {
-                var isValid = false;
-
-                if (questionType === 'MultipleChoiceOneOrMoreCorrect')
-
-                    isValid = selectedAnswers.length > 0 ? true : false;
-                else
-                    isValid = correctAnswers.length === selectedAnswers.length ? true : false;
-
-                return isValid;
-            },
-            showQuestionError: function(questionKind) {
-                var message = '';
-
-                switch (questionKind) {
-                    case 'MultipleChoiceOneCorrect':
-                        message = '';
-                        break;
-                    case 'MultipleChoiceOneOrMoreCorrect':
-                        message = '';
-                        break;
-                    case 'MultipleChoiceMatrixTwoByThree':
-                        message = '';
-                        break;
-                    case 'MultipleChoiceMatrixThreeByThree':
-                        message = '';
-                        break;
-                    case 'MultipleChoiceTwoCorrect':
-                         message = '';
-                        break;
-                }
-
-                message;
-            }
-        };
-
 
     }
 
