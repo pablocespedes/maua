@@ -1,0 +1,19 @@
+<div ng-if="isReady">
+<a is-active-nav ng-if="canAccess && !isExternalLink" ng-href="#/{{groupId}}/{{url}}">
+  <i class="menu-icon fa {{iconClass}}"></i><span class="mm-text">{{text}}</span>
+</a>
+<a ng-if="canAccess && isExternalLink" ng-href="{{externalBaseUrl}}/{{url}}">
+  <i class="menu-icon fa {{iconClass}}"></i><span class="mm-text">{{text}}</span>
+</a>
+<a ng-if="!canAccess" class="disabled">
+  <i class="menu-icon fa {{iconClass}}"></i><span class="mm-text">{{text}}</span>
+  <i class="pull-right menu-icon fa fa-lock"></i>
+</a>
+</div>
+<div ng-if="!isReady">
+<a>
+  <i class="menu-icon fa {{iconClass}}"></i><span class="mm-text">{{text}}</span>
+</a>
+</div>
+
+

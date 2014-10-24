@@ -55,13 +55,6 @@
 
       if (vmDash.canPractice) {
         if (angular.isDefined(subject)) {
-          utilities.setActiveTrack(subject, trackId);
-          utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
-        } else {
-          alerts.showAlert('You must select one track at least', 'warning');
-        }
-
-        /*if (angular.isDefined(subject)) {
           if (vmDash.activeGroupId === 'gre') {
             utilities.setActiveTrack(subject, trackId);
             utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
@@ -72,7 +65,7 @@
 
         } else {
           alerts.showAlert('You must select one track at least', 'warning');
-        }*/
+        }
       }
 
 

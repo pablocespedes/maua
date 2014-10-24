@@ -15,7 +15,8 @@
     /* jshint validthis: true */
     var vmApp = this;
     /* recommend: Using function declarations and bindable members up top.*/
-
+    vmApp.isReady= false;
+    vmApp.grockitTV ='http://grockit.tv';
     vmApp.url = utilities.originalGrockit().url;
     vmApp.logOutUrl = utilities.originalGrockit().url + '/logout';
     vmApp.selectGroup = selectGroup;
@@ -118,7 +119,7 @@
 
               vmApp.showBuyNow = membershipService.showBuyButton();
               vmApp.canAccess = membershipService.canPractice();
-
+              vmApp.isReady=true;
               Application.loadGroupMembership();
               ListenloopUtility.base(response);
               Application.hideVideoOption(vmApp.activeGroupId);

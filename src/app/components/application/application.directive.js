@@ -6,7 +6,8 @@
   .directive('breadcrumb', breadcrumb)
   .directive('fadingText', fadingText)
   .directive('welcome', welcome)
-  .directive('isActiveNav',isActiveNav);
+  .directive('isActiveNav',isActiveNav)
+  .directive('grockitLink',grockitLink);
 
   isActiveNav.$inject=['$location','Observable','$timeout'];
 
@@ -70,7 +71,7 @@
 
 
   function isActiveNav($location,Observable,$timeout) {
-  var observable = Observable.create('isActiveNav'),
+    var observable = Observable.create('isActiveNav'),
       directive = {
       link:link,
       restrict: 'A',
@@ -93,6 +94,24 @@
         }
       });
     }
+  }
+
+  function grockitLink() {
+    var directive = {
+      templateUrl: 'app/components/application/templates/a.LeftMenu.tpl.html',
+      restrict: 'A',
+      scope: {
+        isExternalLink:'=',
+        externalBaseUrl: '=',
+        canAccess: '=',
+        url: '=',
+        text: '=',
+        groupId:'=',
+        isReady:'=',
+        iconClass:'='
+      }
+    };
+    return directive;
 
   }
 
