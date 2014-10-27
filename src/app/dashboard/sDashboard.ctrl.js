@@ -72,7 +72,7 @@
     var SimpleDashBoard = {
       getDashboard: function(groupId) {
         dashboard.setDashboardData(groupId).then(function(result) {
-          if(!dashboard.hasQuestionsAnswered()){
+          if(dashboard.hasQuestionsAnswered()){
              if (vmDash.enableScore)
                 SimpleDashBoard.fetchScorePrediction();
 
