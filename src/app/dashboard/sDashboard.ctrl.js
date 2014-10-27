@@ -35,11 +35,9 @@
 
           dashObserver = currentProduct.observeGroupId().register(function(groupId) {
             vmDash.activeGroupId = groupId;
-
-            vmDash.canPractice = membershipService.canPractice();
-
-            vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
             SimpleDashBoard.getDashboard(vmDash.activeGroupId);
+            vmDash.canPractice = membershipService.canPractice();
+            vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
             vmDash.historyVisible = false;
           });
         }
@@ -74,12 +72,19 @@
     var SimpleDashBoard = {
       getDashboard: function(groupId) {
         dashboard.setDashboardData(groupId).then(function(result) {
-          if (vmDash.enableScore)
-            SimpleDashBoard.fetchScorePrediction();
+          if(!dashboard.hasQuestionsAnswered()){
+             if (vmDash.enableScore)
+                SimpleDashBoard.fetchScorePrediction();
 
-          SimpleDashBoard.fetchTracks();
-          SimpleDashBoard.getHistoryInformation();
-          SimpleDashBoard.getChallenge()
+            SimpleDashBoard.fetchTracks();
+            SimpleDashBoard.getHistoryInformation();
+            SimpleDashBoard.getChallenge()
+          }
+          else{
+            utilities.internalRedirect('/' + vmDash.activeGroupId+ '/custom-practice');
+          }
+
+
         });
       },
       fetchTracks: function() {

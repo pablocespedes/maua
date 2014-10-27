@@ -10,7 +10,8 @@
   .factory('Timer', Timer)
   .factory('dateFormatter', dateFormatter)
   .service('currentProduct', currentProduct)
-  .factory('dateUtils', dateUtils);
+  .factory('dateUtils', dateUtils)
+  .factory('appService', appService);
 
 
   utilities.$inject = ['$rootScope', '$http', '$location', '$route', '$q', '$window', 'webStorage', 'YoutubeVideoApi', 'environmentCons'];
@@ -18,6 +19,7 @@
   Observable.$inject = [];
   Timer.$inject = ['$interval', 'collectionService'];
   currentProduct.$inject = ['webStorage', 'Observable', 'utilities'];
+  appService.$inject = ['$window','$q', '$location', 'Auth', 'GroupsApi', 'utilities', 'membershipService', 'currentProduct'];
 
   function utilities($rootScope, $http, $location, $route, $q, $window, webStorage, YoutubeVideoApi, environmentCons) {
     var currentTrack = {};
@@ -161,8 +163,7 @@
       }
     }
 
-    function getGroupTitle()
-    {
+    function getGroupTitle() {
       return $rootScope.groupTitle;
     }
 
@@ -175,28 +176,27 @@
     };
     return service;
 
-    function showTrialExpiration(titleM,groupId,nQuestions) {
-      var msg = 'Looks like you\'ve been pretty busy these past few days. You\'ve answered '+
-                +nQuestions+' questions and are well on your way to Grocking the '+utilities.getGroupTitle()+'!';
+    function showTrialExpiration(titleM, groupId, nQuestions) {
+      var msg = 'Looks like you\'ve been pretty busy these past few days. You\'ve answered ' +
+      +nQuestions + ' questions and are well on your way to Grocking the ' + utilities.getGroupTitle() + '!';
       var dialogOptions = {
-        title: '<i class="fa fa-clock-o"></i> '+titleM,
+        title: '<i class="fa fa-clock-o"></i> ' + titleM,
         animate: true,
-        message: '<div class="text-lg trial text-center">'+msg+
-                 '<br><br>Keep Grocking the '+utilities.getGroupTitle()+'. Starting at just $9.99.<div>',
+        message: '<div class="text-lg trial text-center">' + msg +
+        '<br><br>Keep Grocking the ' + utilities.getGroupTitle() + '. Starting at just $9.99.<div>',
         className: "modal-trial modal-success",
         buttons: {
           default: {
-            label: 'I don\'t need to prep for the '+utilities.getGroupTitle()+'.',
+            label: 'I don\'t need to prep for the ' + utilities.getGroupTitle() + '.',
             className: 'btn-default',
-            callback: function() {
-            }
+            callback: function() {}
           },
           success: {
             label: 'Continue using Grockit.',
             className: 'btn-success',
             callback: function() {
-                var baseUrl = utilities.originalGrockit(false).url;
-                utilities.redirect(baseUrl+'/'+groupId+'/subscriptions/new');
+              var baseUrl = utilities.originalGrockit(false).url;
+              utilities.redirect(baseUrl + '/' + groupId + '/subscriptions/new');
             }
           },
         }
@@ -204,7 +204,6 @@
 
       utilities.dialogService(dialogOptions);
     }
-
   }
 
   function alerts() {
@@ -428,4 +427,91 @@
     }
   }
 
-})();
+  function appService($window, $q, $location, Auth, GroupsApi, utilities, membershipService, currentProduct) {
+
+    var _appFn = {
+      actualGroup: function(groups, urlGroup) {
+        return _.find(groups, {
+          'id': urlGroup
+        })
+      },
+      userGroup: function(gMembership, urlGroup) {
+        return _.find(gMembership, {
+          'group_id': urlGroup
+        })
+      },
+      isBasePath: function(userResponse) {
+        return ($location.path() === '/' || $location.path() === '/' + userResponse.currentGroup || $location.path() == '');
+      },
+      getUserData: function() {
+        var userData = Auth.getUpdateUserData(),
+        userMembership = GroupsApi.membershipGroups(true);
+
+        return $q.all([userData, userMembership]);
+      }
+    };
+
+    var service = {
+      userPreflight: userPreflight
+    };
+
+    return service;
+
+
+    function userPreflight(observable) {
+      if (Auth.isLoggedIn()) {
+
+        _appFn.getUserData()
+        .then(getUserDataCompleted)
+        .catch(getUserDataFailed);
+
+      } else {
+        $("body").html('The user is not logged in! <a href=\"/logout\">Click here to restart</a>.');
+        event.preventDefault();
+      }
+
+
+      function getUserDataCompleted(response) {
+        var userResponse = response[0];
+
+        if (userResponse != null) {
+
+          observable.notify($location.path());
+
+          var groups = response[1].data.groups;
+
+          if (_appFn.isBasePath(userResponse)) {
+
+            utilities.internalRedirect('/' + userResponse.currentGroup + '/dashboard');
+
+          } else {
+
+            var urlGroup = utilities.getCurrentParam('subject'),
+            actualGroup = _appFn.actualGroup(groups, urlGroup),
+            userGroup = _appFn.userGroup(userResponse.groupMemberships, urlGroup);
+
+            if (angular.isUndefined(actualGroup) || angular.isUndefined(userGroup)) {
+
+              $window.location = '404.html';
+
+            } else {
+
+              membershipService.setMembershipInfo(userResponse, userGroup, urlGroup);
+              membershipService.userCanAccesPage(urlGroup);
+              currentProduct.currentGroupId(urlGroup, actualGroup);
+
+            }
+          }
+        }
+      }
+
+      function getUserDataFailed(e) {
+        alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
+      }
+
+    }
+
+
+  }
+
+    })();

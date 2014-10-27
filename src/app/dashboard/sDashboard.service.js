@@ -12,12 +12,12 @@
 
     this.setDashboardData = function(groupId) {
       var deferred = $q.defer();
-      DashboardApi.getDashboard(groupId).then(function(result) {
-        dashboardData = null;
-        dashboardData = result.data.dashboard
-        deferred.resolve(true);
+        DashboardApi.getDashboard(groupId).then(function(result) {
+          dashboardData = null;
+          dashboardData = result.data.dashboard
+          deferred.resolve(true);
 
-      });
+        });
 
       return deferred.promise;
     }
@@ -36,41 +36,46 @@
       } else {
         scoreData.rangeExist = false;
       }
-    return scoreData;
-  };
+      return scoreData;
+    };
 
-  this.getProgress = function() {
-    var history = {};
+    this.getProgress = function() {
+      var history = {};
 
-    history.today = angular.isDefined(dashboardData.progress.today) ? dashboardData.progress.today.total_questions_answered : 0;
+      history.today = angular.isDefined(dashboardData.progress.today) ? dashboardData.progress.today.total_questions_answered : 0;
 
-    history.lastWeek = angular.isDefined(dashboardData.progress.last_week) ? dashboardData.progress.last_week.total_questions_answered : 0;
+      history.lastWeek = angular.isDefined(dashboardData.progress.last_week) ? dashboardData.progress.last_week.total_questions_answered : 0;
 
-    history.all = angular.isDefined(dashboardData.progress.all) ? dashboardData.progress.all.total_questions_answered : 0;
+      history.all = angular.isDefined(dashboardData.progress.all) ? dashboardData.progress.all.total_questions_answered : 0;
 
-    return history;
-  }
+      return history;
+    }
 
-  this.getSmartPractice = function() {
-    var accuracy = null,
-    subtracks = null,
-    smartPracticeItems = null;
-    smartPracticeItems = _.forEach(dashboardData.smart_practice.items, function(result) {
-      return subtracks = _.forEach(result.items, function(subtrack) {
-        accuracy = (subtrack.total_questions_answered_correctly / subtrack.total_questions_answered) * 100;
-        subtrack['accuracy'] = accuracy > 0 ? Math.round(accuracy.toFixed(2)) : 0;
+    this.getSmartPractice = function() {
+      var accuracy = null,
+      subtracks = null,
+      smartPracticeItems = null;
+      smartPracticeItems = _.forEach(dashboardData.smart_practice.items, function(result) {
+        return subtracks = _.forEach(result.items, function(subtrack) {
+          accuracy = (subtrack.total_questions_answered_correctly / subtrack.total_questions_answered) * 100;
+          subtrack['accuracy'] = accuracy > 0 ? Math.round(accuracy.toFixed(2)) : 0;
+        });
+
       });
+      dashboardData.smart_practice.items = smartPracticeItems
 
-    });
-    dashboardData.smart_practice.items = smartPracticeItems
+      return dashboardData.smart_practice;
+    }
 
-    return dashboardData.smart_practice;
+    this.getChallenge = function() {
+      return dashboardData.challenge;
+    }
+
+
+    this.hasQuestionsAnswered = function(){
+     return  (dashboardData.progress.all.total_questions_answered >= 1);
+    }
+
   }
-
-  this.getChallenge = function() {
-    return dashboardData.challenge;
-  }
-
-}
 
 })();
