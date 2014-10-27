@@ -6,27 +6,22 @@
   .controller('ApplicationController', ApplicationController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  ApplicationController.$inject = ['$scope', '$location', '$route', 'Auth', 'utilities', 'grockitNewFeatures', 'ListenloopUtility',
-  'GaUtility', 'InspectletUtility', 'TracksApi', 'GroupsApi', 'alerts', 'Headers', 'currentProduct'
+  ApplicationController.$inject = ['$scope', 'Auth', 'utilities', 'ListenloopUtility',
+  'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct','membershipService'
   ];
 
-  function ApplicationController($scope, $location, $route, Auth, utilities, grockitNewFeatures, ListenloopUtility,
-    GaUtility, InspectletUtility, TracksApi, GroupsApi, alerts, Headers, currentProduct) {
+  function ApplicationController($scope, Auth, utilities, ListenloopUtility,
+    GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService) {
     /* jshint validthis: true */
     var vmApp = this;
     /* recommend: Using function declarations and bindable members up top.*/
-
+    vmApp.isReady= false;
+    vmApp.grockitTV ='http://grockit.tv';
     vmApp.url = utilities.originalGrockit().url;
     vmApp.logOutUrl = utilities.originalGrockit().url + '/logout';
-    vmApp.showDialog = showDialog;
     vmApp.selectGroup = selectGroup;
     vmApp.logOut = logOut;
     vmApp.groupRedirect = groupRedirect;
-
-
-    function showDialog() {
-      grockitNewFeatures.showDialog();
-    };
 
     function selectGroup(index) {
 
@@ -111,7 +106,7 @@
             alerts.showAlert(alerts.setErrorApiMsg(e), 'danger');
           });
         } else {
-          alerts.showAlert('We are getting problems to find your subjects, if the problem persist please let\'s us know.', 'warning');
+          alerts.showAlert(appMessages.noGroupsFound, 'warning');
 
         }
       },
@@ -121,6 +116,10 @@
             vmApp.currentUser = response;
             currentProduct.observeGroupId().register(function(groupId) {
               vmApp.activeGroupId = groupId;
+
+              vmApp.showBuyNow = membershipService.showBuyButton();
+              vmApp.canAccess = membershipService.canPractice();
+              vmApp.isReady=true;
               Application.loadGroupMembership();
               ListenloopUtility.base(response);
               Application.hideVideoOption(vmApp.activeGroupId);

@@ -5,9 +5,9 @@
   .controller('SimpleDashController', SimpleDashController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  SimpleDashController.$inject = ['$scope', 'dashboard', 'UsersApi', 'utilities', 'Auth', 'alerts', 'currentProduct'];
+  SimpleDashController.$inject = ['$scope', 'dashboard', 'UsersApi', 'utilities', 'Auth', 'alerts', 'currentProduct', 'membershipService'];
 
-  function SimpleDashController($scope, dashboard, UsersApi, utilities, Auth, alerts, currentProduct) {
+  function SimpleDashController($scope, dashboard, UsersApi, utilities, Auth, alerts, currentProduct, membershipService) {
     /* jshint validthis: true */
     var vmDash = this,
     dashObserver = null;
@@ -35,8 +35,9 @@
 
           dashObserver = currentProduct.observeGroupId().register(function(groupId) {
             vmDash.activeGroupId = groupId;
-            vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
             SimpleDashBoard.getDashboard(vmDash.activeGroupId);
+            vmDash.canPractice = membershipService.canPractice();
+            vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
             vmDash.historyVisible = false;
           });
         }
@@ -49,29 +50,41 @@
 
 
     function StartPractice(subject, trackId) {
-      if (angular.isDefined(subject)) {
-        if (vmDash.activeGroupId === 'gre') {
-          utilities.setActiveTrack(subject, trackId);
-          utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
-        } else {
-          var url = '/' + vmDash.activeGroupId + '/' + trackId + '/play';
-          utilities.redirect(url);
-        }
 
-      } else {
-        alerts.showAlert('You must select one track at least', 'warning');
+      if (vmDash.canPractice) {
+        if (angular.isDefined(subject)) {
+          if (vmDash.activeGroupId === 'gre') {
+            utilities.setActiveTrack(subject, trackId);
+            utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
+          } else {
+            var url = '/' + vmDash.activeGroupId + '/' + trackId + '/play';
+            utilities.redirect(url);
+          }
+
+        } else {
+          alerts.showAlert('You must select one track at least', 'warning');
+        }
       }
+
+
     };
 
     var SimpleDashBoard = {
       getDashboard: function(groupId) {
         dashboard.setDashboardData(groupId).then(function(result) {
-          if (vmDash.enableScore)
-            SimpleDashBoard.fetchScorePrediction();
+          if(dashboard.hasQuestionsAnswered()){
+             if (vmDash.enableScore)
+                SimpleDashBoard.fetchScorePrediction();
 
-          SimpleDashBoard.fetchTracks();
-          SimpleDashBoard.getHistoryInformation();
-          SimpleDashBoard.getChallenge()
+            SimpleDashBoard.fetchTracks();
+            SimpleDashBoard.getHistoryInformation();
+            SimpleDashBoard.getChallenge()
+          }
+          else{
+            utilities.internalRedirect('/' + vmDash.activeGroupId+ '/custom-practice');
+          }
+
+
         });
       },
       fetchTracks: function() {
@@ -98,6 +111,7 @@
           vmDash.historyInfo.totalQuest = historyResponse.all;
           vmDash.historyInfo.totalQuestToday = historyResponse.today;
           vmDash.loading = false;
+          membershipService.membershipValidation(vmDash.activeGroupId ,historyResponse.all);
         } else {
           vmDash.historyVisible = false;
         }
