@@ -428,10 +428,10 @@
 
                 for (i = 0; i < len; i++) {
                     var answer = answers[i],
-                    correctAns = eval(answer.body);
+                    correctAns = eval(answer.body.valueOf());
                     var rang1 = (correctAns - 0.02 < 0) ? 0 : (correctAns - 0.02),
                     rang2 = (correctAns + 0.02),
-                    answerEval = (answer.body === userAnswer || (userAns >= rang1 && userAns <= rang2));
+                    answerEval = (answer.body.valueOf() === userAnswer || (userAns >= rang1 && userAns <= rang2));
 
                     if (answerEval && !answerFound) {
                         answerFound = true;
