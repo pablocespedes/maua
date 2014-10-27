@@ -5,11 +5,12 @@
   .controller('CustomPracticeController', CustomPracticeController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  CustomPracticeController.$inject = ['$scope', '$timeout', 'practiceUtilities', 'breadcrumbs', 'alerts', 'Timer',
+  CustomPracticeController.$inject = ['$scope','$timeout', 'practiceUtilities', 'breadcrumbs', 'Timer',
   'SplashMessages', 'currentProduct', 'practiceResource'
   ];
 
-  function CustomPracticeController($scope, $timeout, practiceUtilities, breadcrumbs, alerts, Timer, SplashMessages, currentProduct, practiceResource) {
+  function CustomPracticeController($scope,$timeout, practiceUtilities, breadcrumbs, Timer, SplashMessages,
+    currentProduct, practiceResource) {
 
     /* jshint validthis: true */
     var vmPr = this,
