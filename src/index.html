@@ -166,15 +166,22 @@
                   is-external-link="false" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
                   icon-class="'fa-dashboard'">
               </li>
+
               <!-- study plan -->
               <li ng-if="!appCtrl.studyPlanHide" grockit-link url="'study_plan'" can-access="appCtrl.canAccess" text="'Study Plan'"
                   is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
                   external-base-url="appCtrl.url" icon-class="'fa-tasks'">
               </li>
+
+               <li ng-if="appCtrl.activeGroupId!='gre'" grockit-link url="'social'" can-access="appCtrl.canAccess" text="'Group Practice'"
+                  is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
+                  external-base-url="appCtrl.url" icon-class="'fa-users'">
+              </li>
               <!-- video library -->
               <li ng-if="!appCtrl.videoLibHide" grockit-link url="'video_courses'" can-access="appCtrl.canAccess" text="'Video Library'"
                   is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
                   external-base-url="appCtrl.url" icon-class="'fa-video-camera'">
+
               </li>
               <!-- Custom practice -->
               <li ng-if="appCtrl.activeGroupId!='gre'" grockit-link url="'custom_games/new'" can-access="appCtrl.canAccess" text="'Custom Practice'"
@@ -200,8 +207,13 @@
                   is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
                   external-base-url="appCtrl.url" icon-class="'fa-dashboard'">
               </li>
-              <li is-active-nav grockit-link url="'history'" can-access="appCtrl.canAccess" text="'History'"
+
+                <li ng-show="appCtrl.activeGroupId ==='gre'" is-active-nav grockit-link url="'history'" can-access="appCtrl.canAccess" text="'History'"
                   group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady" icon-class="'fa-bar-chart-o'">
+                </li>
+                <li ng-if="appCtrl.activeGroupId !=='gre'" grockit-link url="'reviews'" can-access="appCtrl.canAccess" text="'History'"
+                  is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
+                  external-base-url="appCtrl.url" icon-class="'fa-bar-chart-o'">
               </li>
             </ul>
             <!-- / .navigation -->
