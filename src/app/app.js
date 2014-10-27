@@ -2,14 +2,13 @@
 (function() {
 
   angular.module("grockitApp").run(run);
-  run.$inject = ['$rootScope', 'Observable','appService'];
+  run.$inject = ['$rootScope', '$location','Observable','appService'];
 
-  function run($rootScope, Observable,appService) {
+  function run($rootScope, $location,Observable,appService) {
 
     var observable = Observable.create('isActiveNav');
-
     $rootScope.$on("$locationChangeSuccess", function(event, next, current) {
-      appService.userPreflight(observable);
+      appService.userPreflight();
     });
   }
 }

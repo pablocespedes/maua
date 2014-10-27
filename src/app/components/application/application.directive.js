@@ -71,26 +71,26 @@
 
 
   function isActiveNav($location,Observable,$timeout) {
-    var observable = Observable.create('isActiveNav'),
-      directive = {
+
+     var directive = {
       link:link,
+      replace:true,
       restrict: 'A',
     }
     return directive;
 
     function link(scope, element, attrs) {
       scope.location = $location;
-
       Observable.get('isActiveNav').register(function(currentPath) {
 
-         if (currentPath.split("/")[2] === attrs.ngHref.split("/")[2]) {
+         if (currentPath.split("/")[2] === attrs.url.replace(/'/g,"")) {
           $timeout(function(){
-             element.parent().addClass('active');
+             element.addClass('active');
            },500);
         } else if(currentPath.split("/")[2] === 'custom-practice'){
           angular.element('#dashboardLi').addClass('active')
         }else {
-          element.parent().removeClass('active');
+          element.removeClass('active');
         }
       });
     }
