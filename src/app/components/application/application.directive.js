@@ -98,7 +98,7 @@
 
   function grockitLink() {
     var directive = {
-      templateUrl: 'app/components/application/templates/a.LeftMenu.tpl.html',
+      templateUrl: 'app/components/application/templates/a.leftMenu.tpl.html',
       restrict: 'A',
       scope: {
         isExternalLink:'=',
