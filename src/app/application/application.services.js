@@ -19,7 +19,8 @@
   Observable.$inject = [];
   Timer.$inject = ['$interval', 'collectionService'];
   currentProduct.$inject = ['webStorage', 'Observable', 'utilities'];
-  appService.$inject = ['$window','$q', '$location', 'Auth', 'GroupsApi', 'utilities', 'membershipService', 'currentProduct','Observable'];
+  appService.$inject = ['$window','$q', '$location', 'Auth', 'GroupsApi', 'utilities', 'membershipService', 'currentProduct',
+  'Observable','alerts'];
 
   function utilities($rootScope, $http, $location, $route, $q, $window, webStorage, YoutubeVideoApi, environmentCons) {
     var currentTrack = {};
@@ -427,7 +428,7 @@
     }
   }
 
-  function appService($window, $q, $location, Auth, GroupsApi, utilities, membershipService, currentProduct,Observable) {
+  function appService($window, $q, $location, Auth, GroupsApi, utilities, membershipService, currentProduct,Observable,alerts) {
 
 
     var _appFn = {
