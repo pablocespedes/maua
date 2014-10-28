@@ -63,11 +63,10 @@
   <body class="theme-default main-menu-animated" ng-cloak>
     <!-- Google Tag Manager -->
     <noscript>
-      <iframe src="//www.googletagmanager.com/ns.html?id=GTM-5XTTHG" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="//www.googletagmanager.com/ns.html?id=GTM-5XTTHG" height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
     <script src="app/shared/google-tag-manager.js" type="text/javascript" charset="utf-8" async defer></script>
     <!-- End Google Tag Manager -->
-
     <script>var init = [];</script>
     <script type="text/javascript">
     init.push(function () {
@@ -87,8 +86,7 @@
     <img height="1" width="1" style="display:none;" alt="" src="https://analytics.twitter.com/i/adsct?txn_id=l4qhr&p_id=Twitter" />
     <img height="1" width="1" style="display:none;" alt="" src="//t.co/i/adsct?txn_id=l4qhr&p_id=Twitter" />
     </noscript>
-   <!-- social media scripts -->
-
+    <!-- social media scripts -->
     <div id="main-wrapper" >
       <div ng-controller="ApplicationController as appCtrl">
         <div id="main-navbar" class="navbar navbar-inverse" role="navigation">
@@ -124,7 +122,7 @@
                 <!-- / .navbar-nav -->
                 <div class="right clearfix">
                   <ul class="nav navbar-nav pull-right right-navbar-nav">
-                   <!--  <li id="feature-modal" class=" dropdown">
+                    <!--  <li id="feature-modal" class=" dropdown">
                       <a  ng-href="#/{{appCtrl.activeGroupId}}/dashboard">
                         <span class="mm-text">Return to Dashboard</span>
                       </a>
@@ -163,37 +161,52 @@
           <div id="main-menu-inner">
             <div welcome data="appCtrl.currentUser" url="appCtrl.url" log-out-url="appCtrl.logOutUrl" log-out="appCtrl.logOut()"></div>
             <ul class="navigation">
-              <li id="dashboardLi">
-                <a is-active-nav ng-href="#/{{appCtrl.activeGroupId}}/dashboard"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text mmc-dropdown-delay animated fadeIn">Dashboard</span></a>
+              <!-- Dashboard -->
+              <li id="dashboardLi" is-active-nav  grockit-link url="'dashboard'" can-access="appCtrl.canAccess" text="'Dashboard'"
+                is-external-link="false" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
+                icon-class="'fa-dashboard'">
               </li>
-              <li ng-if="!appCtrl.studyPlanHide">
-                <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/study_plan"><i class="menu-icon fa fa-tasks"></i><span class="mm-text">Study Plan</span></a>
+              <!-- study plan -->
+              <li ng-if="!appCtrl.studyPlanHide" grockit-link url="'study_plan'" can-access="appCtrl.canAccess" text="'Study Plan'" is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
+                external-base-url="appCtrl.url" icon-class="'fa-tasks'">
               </li>
-              <li ng-if="appCtrl.activeGroupId!='gre'">
-                <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/social"><i class="menu-icon fa fa-users"></i><span class="mm-text">Group Practice</span></a>
+              <!-- Group Practice -->
+              <li ng-if="appCtrl.activeGroupId!='gre'" grockit-link url="'social'" can-access="appCtrl.canAccess" text="'Group Practice'" is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
+                external-base-url="appCtrl.url" icon-class="'fa-users'">
               </li>
-              <li ng-if="!appCtrl.videoLibHide">
-                <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/video_courses"><i class="menu-icon fa fa-video-camera"></i><span class="mm-text">Video Library</span></a>
+              <!-- video library -->
+              <li ng-if="!appCtrl.videoLibHide" grockit-link url="'video_courses'" can-access="appCtrl.canAccess" text="'Video Library'" is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
+                external-base-url="appCtrl.url" icon-class="'fa-video-camera'">
               </li>
-              <li ng-if="appCtrl.activeGroupId!='gre'">
-                <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/custom_games/new"><i class="menu-icon fa fa-book"></i><span class="mm-text">Custom Practice</span></a>
+              <!-- Custom practice -->
+              <li ng-if="appCtrl.activeGroupId!='gre'" grockit-link url="'custom_games/new'" can-access="appCtrl.canAccess" text="'Custom Practice'" is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
+              external-base-url="appCtrl.url" icon-class="'fa-book'"></li>
+              <!-- Full Length Test GRE  -->
+              <li ng-if="appCtrl.activeGroupId==='gre'" grockit-link url="'grepracticetest'" can-access="appCtrl.canAccess" text="'Take a Full Length Test'" is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady" external-base-url="appCtrl.grockitTV" icon-class="'fa-lightbulb-o'">
               </li>
-              <li>
-                <a ng-if="appCtrl.activeGroupId==='gre'" href="http://grockit.tv/grepracticetest"><i class="menu-icon fa fa-lightbulb-o"></i><span class="mm-text">Take a Full Length Test</span></a>
-                <a ng-if="appCtrl.activeGroupId==='gmat'" ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/join_cat_game"><i class="menu-icon fa fa-lightbulb-o"></i><span class="mm-text">Take a Full Length Test</span></a>
+              <!-- Full Length Test GMAT -->
+              <li ng-if="appCtrl.activeGroupId==='gmat'" grockit-link url="'join_cat_game'" can-access="appCtrl.canAccess" text="'Take a Full Length Test'" is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
+                external-base-url="appCtrl.url" icon-class="'fa-lightbulb-o'">
               </li>
-              <li>
-                <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/tutoring"><i class="menu-icon fa  fa-briefcase"></i><span class="mm-text">Tutoring</span></a>
+              <!-- Tutoring -->
+              <li grockit-link url="'tutoring'" can-access="appCtrl.canAccess" text="'Tutoring'"
+                is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
+                external-base-url="appCtrl.url" icon-class="'fa-briefcase'">
               </li>
-              <li>
-                <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/skill_data"><i class="menu-icon fa fa-dashboard"></i><span class="mm-text">Skill Data</span></a>
+              <!-- Skill Data -->
+              <li grockit-link url="'skill_data'" can-access="appCtrl.canAccess" text="'Skill Data'"
+                is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
+                external-base-url="appCtrl.url" icon-class="'fa-dashboard'">
               </li>
-              <li ng-if="appCtrl.activeGroupId !=='gre'">
-                 <a ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/reviews"><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
-               </li>
-               <li ng-show="appCtrl.activeGroupId ==='gre'">
-                 <a is-active-nav ng-href="#/{{appCtrl.activeGroupId}}/history" ><i class="menu-icon fa fa-bar-chart-o"></i><span class="mm-text">History</span></a>
-               </li>
+              <!-- history 2.0 -->
+              <li ng-show="appCtrl.activeGroupId ==='gre'" is-active-nav grockit-link url="'history'" can-access="appCtrl.canAccess" text="'History'"
+                group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady" icon-class="'fa-bar-chart-o'">
+              </li>
+              <!-- History 1.0 -->
+              <li ng-if="appCtrl.activeGroupId !=='gre'" grockit-link url="'reviews'" can-access="appCtrl.canAccess" text="'History'"
+                is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
+                external-base-url="appCtrl.url" icon-class="'fa-bar-chart-o'">
+              </li>
             </ul>
             <!-- / .navigation -->
           </div>
@@ -210,6 +223,5 @@
       </div>
     </div>
     <a href="#" class="back-to-top fa  fa-arrow-up"></a>
-
   </body>
 </html>
