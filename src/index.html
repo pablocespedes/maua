@@ -179,7 +179,7 @@
                 external-base-url="appCtrl.url" icon-class="'fa-video-camera'">
               </li>
               <!-- Custom practice -->
-              <li ng-if="appCtrl.activeGroupId!='gre'" grockit-link url="'custom_games/new'" can-access="appCtrl.canAccess" text="'Custom Practice'" is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
+              <li ng-if="appCtrl.activeGroupId!='gre'" grockit-link url="appCtrl.customPracticeLink" can-access="appCtrl.canAccess" text="'Custom Practice'" is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
               external-base-url="appCtrl.url" icon-class="'fa-book'"></li>
               <!-- Full Length Test GRE  -->
               <li ng-if="appCtrl.activeGroupId==='gre'" grockit-link url="'grepracticetest'" can-access="appCtrl.canAccess" text="'Take a Full Length Test'" is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady" external-base-url="appCtrl.grockitTV" icon-class="'fa-lightbulb-o'">

@@ -17,6 +17,7 @@
     /* recommend: Using function declarations and bindable members up top.*/
     vmApp.isReady= false;
     vmApp.grockitTV ='http://grockit.tv';
+
     vmApp.url = utilities.originalGrockit().url;
     vmApp.logOutUrl = utilities.originalGrockit().url + '/logout';
     vmApp.selectGroup = selectGroup;
@@ -116,6 +117,7 @@
             vmApp.currentUser = response;
             currentProduct.observeGroupId().register(function(groupId) {
               vmApp.activeGroupId = groupId;
+               vmApp.customPracticeLink = groupId+'/custom_games/new';
 
               vmApp.showBuyNow = membershipService.showBuyButton();
               vmApp.canAccess = membershipService.canPractice();
