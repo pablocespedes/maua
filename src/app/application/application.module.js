@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module("grockitApp.application", ['webStorageModule'])
-    .config(appConfig)
     .constant('environmentCons', {
         localGrockit: 'http://127.0.0.1:9000/',
         liveGrockit: location.origin + '/2.0',
@@ -23,11 +22,3 @@ angular.module("grockitApp.application", ['webStorageModule'])
         "freeTrialExpired": "There's \u003cstrong\u003eno more\u003c/strong\u003e time left in your trial.",
         "noGroupsFound": "We are getting problems to find your subjects, if the problem persist please let\'s us know."
     });
-
-appConfig.$inject = ['$routeProvider'];
-
-function appConfig($routeProvider) {
-    $routeProvider.when('/:subject/membership-block', {
-        templateUrl: 'app/application/membership.block.tpl.html'
-    });
-}

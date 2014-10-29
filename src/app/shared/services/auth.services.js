@@ -12,7 +12,7 @@
   .service('membershipService', membershipService);
 
   Auth.$inject = ['$window', '$cookies', '$cookieStore', 'UserRoles', 'webStorage', 'UsersApi', 'utilities', '$location', '$q', 'Headers', 'imageVersion'];
-  membershipService.$inject = ['dateUtils', 'grockitModal', 'appMessages', '$location'];
+  membershipService.$inject = ['dateUtils', 'grockitModal', 'appMessages', '$location','utilities'];
 
   function Auth($window, $cookies, $cookieStore, UserRoles, webStorage, UsersApi, utilities, $location, $q, Headers, imageVersion) {
 
@@ -105,7 +105,7 @@
   }
 
 
-  function membershipService(dateUtils, grockitModal, appMessages, $location) {
+  function membershipService(dateUtils, grockitModal, appMessages, $location,utilities) {
     var membershipInfo = {},
     _membershipFn = {
       isPremium: function() {
@@ -154,9 +154,10 @@
 
     this.userCanAccesPage = function(groupId) {
       var sections = $location.path().split('/'),
-      url = sections[sections.length - 1];
+      url = sections[sections.length - 1],
+      baseUrl = utilities.originalGrockit().url;
       if (_membershipFn.validateMembership() && url!=='dashboard') {
-        $location.path(groupId+'/membership-block')
+          utilities.redirect(baseUrl+'/'+groupId+'/subscriptions/new');
       }
     }
 

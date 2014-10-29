@@ -188,11 +188,6 @@
         '<br><br>Keep Grocking the ' + utilities.getGroupTitle() + '. Starting at just $9.99.<div>',
         className: "modal-trial modal-success",
         buttons: {
-          default: {
-            label: 'I don\'t need to prep for the ' + utilities.getGroupTitle() + '.',
-            className: 'btn-default',
-            callback: function() {}
-          },
           success: {
             label: 'Continue using Grockit.',
             className: 'btn-success',
