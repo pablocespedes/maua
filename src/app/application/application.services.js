@@ -11,7 +11,8 @@
   .factory('dateFormatter', dateFormatter)
   .service('currentProduct', currentProduct)
   .factory('dateUtils', dateUtils)
-  .factory('appService', appService);
+  .factory('appService', appService)
+  .factory('menuService',menuService);
 
 
   utilities.$inject = ['$rootScope', '$http', '$location', '$route', '$q', '$window', 'webStorage', 'YoutubeVideoApi', 'environmentCons'];
@@ -21,6 +22,7 @@
   currentProduct.$inject = ['webStorage', 'Observable', 'utilities'];
   appService.$inject = ['$window','$q', '$location', 'Auth', 'GroupsApi', 'utilities', 'membershipService', 'currentProduct',
   'Observable','alerts'];
+  menuService.$inject =['utilities'];
 
   function utilities($rootScope, $http, $location, $route, $q, $window, webStorage, YoutubeVideoApi, environmentCons) {
     var currentTrack = {};
@@ -167,7 +169,6 @@
     function getGroupTitle() {
       return $rootScope.groupTitle;
     }
-
   }
 
   function grockitModal($http, utilities, environmentCons) {
@@ -477,7 +478,6 @@
         var userResponse = response[0];
 
         if (userResponse != null) {
-
           var observable = Observable.get('isActiveNav');
           var groups = response[1].data.groups;
 
@@ -512,8 +512,115 @@
       }
 
     }
+  }
 
+  function menuService(utilities) {
+    var grockitTV = 'http://grockit.tv',
+    baseUrl = utilities.originalGrockit().url;
+
+    var service = {
+      createLeftMenu: createLeftMenu
+    };
+    return service;
+
+    function createLeftMenu(options,hideStudyPlan,hideVideoOption) {
+
+      return [{
+        id: 'dashboard',
+        url: '#/' + options.groupId + '/dashboard',
+        canAccess: options.canAccess,
+        title: 'Dashboard',
+        isReady: options.isReady,
+        iconclass: 'fa-dashboard',
+        shouldShow: true
+
+      }, {
+        id: 'study_plan',
+        url: baseUrl + '/' + options.groupId + '/study_plan',
+        canAccess: options.canAccess,
+        title: 'Study Plan',
+        isReady: options.isReady,
+        iconclass: 'fa-tasks',
+        shouldShow: (!hideStudyPlan)
+      }, {
+        id: 'social',
+        url: baseUrl + '/' + options.groupId + '/social',
+        canAccess: options.canAccess,
+        title: 'Group Practice',
+        isReady: options.isReady,
+        iconclass: 'fa-users',
+        shouldShow: (options.groupId != 'gre')
+      }, {
+        id: 'video_courses',
+        url: baseUrl + '/' + options.groupId + '/video_courses',
+        canAccess: options.canAccess,
+        title: 'Video Library',
+        isReady: options.isReady,
+        iconclass: 'fa-video-camera',
+        shouldShow: (!hideVideoOption)
+      }, {
+        id: 'custom_practice',
+        url: baseUrl + '/' + options.groupId + '/custom_games/new',
+        canAccess: options.canAccess,
+        title: 'Custom Practice',
+        isReady: options.isReady,
+        iconclass: 'fa-book',
+        shouldShow: (options.groupId != 'gre')
+      }, {
+        id: 'gre_fullLenghtTest',
+        url: grockitTV + options.groupId + '/grepracticetest',
+        canAccess: options.canAccess,
+        title: 'Take a Full Length Test',
+        isReady: options.isReady,
+        iconclass: 'fa-lightbulb-o',
+        shouldShow: (options.groupId === 'gre')
+      }, {
+        id: 'gmat_fullLenghtTest',
+        url: baseUrl + '/' + options.groupId + '/join_cat_game',
+        canAccess: options.canAccess,
+        title: 'Take a Full Length Test',
+        isReady: options.isReady,
+        iconclass: 'fa-lightbulb-o',
+        shouldShow: (options.groupId === 'gmat')
+      }, {
+        id: 'tutoring',
+        url: baseUrl + '/' + options.groupId + '/tutoring',
+        canAccess: options.canAccess,
+        title: 'Tutoring',
+        isReady: options.isReady,
+        iconclass: 'fa-briefcase',
+        shouldShow: true
+      }, {
+        id: 'skill_data',
+        url: baseUrl + '/' + options.groupId + '/skill_data',
+        canAccess: options.canAccess,
+        title: 'Skill Data',
+        isReady: options.isReady,
+        iconclass: 'fa-dashboard',
+        shouldShow: true
+      }, {
+        id: 'history',
+        url: '#/' + options.groupId + '/history',
+        canAccess: options.canAccess,
+        title: 'History',
+        isReady: options.isReady,
+        iconclass: 'fa-bar-chart-o',
+        shouldShow: (options.groupId === 'gre')
+      }, {
+        id: 'history',
+        url: baseUrl + '/' + options.groupId + '/reviews',
+        canAccess: options.canAccess,
+        title: 'History',
+        isReady: options.isReady,
+        iconclass: 'fa-bar-chart-o',
+        shouldShow: (options.groupId !== 'gre')
+      },
+
+      ];
+    }
 
   }
 
-    })();
+
+
+})();

@@ -82,15 +82,14 @@
     function link(scope, element, attrs) {
       scope.location = $location;
       Observable.get('isActiveNav').register(function(currentPath) {
-
-         if (currentPath.split("/")[2] === attrs.url.replace(/'/g,"")) {
+         if (currentPath.split("/")[2] === attrs.href.split("/")[2]) {
           $timeout(function(){
-             element.addClass('active');
+             element.parent().addClass('active');
            },500);
         } else if(currentPath.split("/")[2] === 'custom-practice'){
           angular.element('#dashboardLi').addClass('active')
         }else {
-          element.removeClass('active');
+          element.parent().removeClass('active');
         }
       });
     }
@@ -101,14 +100,13 @@
       templateUrl: 'app/components/application/templates/a.leftMenu.tpl.html',
       restrict: 'A',
       scope: {
-        isExternalLink:'=',
-        externalBaseUrl: '=',
         canAccess: '=',
         url: '=',
         text: '=',
         groupId:'=',
         isReady:'=',
-        iconClass:'='
+        iconClass:'=',
+        isExternalLink:'='
       }
     };
     return directive;

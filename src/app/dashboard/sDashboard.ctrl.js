@@ -72,16 +72,16 @@
     var SimpleDashBoard = {
       getDashboard: function(groupId) {
         dashboard.setDashboardData(groupId).then(function(result) {
-          if(dashboard.hasQuestionsAnswered()){
+          if(!dashboard.hasQuestionsAnswered() && vmDash.activeGroupId==='gre'){
+            utilities.internalRedirect('/' + vmDash.activeGroupId+ '/custom-practice');
+          }
+          else{
              if (vmDash.enableScore)
                 SimpleDashBoard.fetchScorePrediction();
 
             SimpleDashBoard.fetchTracks();
             SimpleDashBoard.getHistoryInformation();
-            SimpleDashBoard.getChallenge()
-          }
-          else{
-            utilities.internalRedirect('/' + vmDash.activeGroupId+ '/custom-practice');
+            SimpleDashBoard.getChallenge();
           }
 
 

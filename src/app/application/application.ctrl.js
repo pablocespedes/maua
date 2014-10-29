@@ -6,18 +6,19 @@
   .controller('ApplicationController', ApplicationController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  ApplicationController.$inject = ['$scope', 'Auth', 'utilities', 'ListenloopUtility',
-  'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct','membershipService'
+  ApplicationController.$inject = ['$scope','$location', 'Auth', 'utilities', 'ListenloopUtility',
+  'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct','membershipService','menuService'
   ];
 
-  function ApplicationController($scope, Auth, utilities, ListenloopUtility,
-    GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService) {
+  function ApplicationController($scope,$location, Auth, utilities, ListenloopUtility,
+    GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService,menuService) {
     /* jshint validthis: true */
     var vmApp = this;
     /* recommend: Using function declarations and bindable members up top.*/
     vmApp.isReady= false;
-    vmApp.grockitTV ='http://grockit.tv';
-
+    vmApp.isActive = function (viewLocation) {
+        return viewLocation === '/'+$location.path().split("/")[2];
+    };
     vmApp.url = utilities.originalGrockit().url;
     vmApp.logOutUrl = utilities.originalGrockit().url + '/logout';
     vmApp.selectGroup = selectGroup;
@@ -45,7 +46,7 @@
 
     var Application = {
       hideVideoOption: function(groupId) {
-        vmApp.videoLibHide = (groupId === 'ap_calculus' ||
+        vmApp.hideVideoOption= (groupId === 'ap_calculus' ||
           groupId === 'ap_psychology' ||
           groupId === 'ap_us_history' ||
           groupId === 'ap_world_history' ||
@@ -54,7 +55,7 @@
           );
       },
       hideStudyPlan: function(groupId) {
-        vmApp.studyPlanHide = (groupId === 'ap_psychology' ||
+        vmApp.hideStudyPlan= (groupId === 'ap_psychology' ||
           groupId === 'ap_world_history' ||
           groupId === 'gre' ||
           groupId === 'lsat' ||
@@ -117,15 +118,22 @@
             vmApp.currentUser = response;
             currentProduct.observeGroupId().register(function(groupId) {
               vmApp.activeGroupId = groupId;
-               vmApp.customPracticeLink = groupId+'/custom_games/new';
 
               vmApp.showBuyNow = membershipService.showBuyButton();
               vmApp.canAccess = membershipService.canPractice();
-              vmApp.isReady=true;
+               var menuParams= {
+                canAccess: vmApp.canAccess,
+                isReady: true,
+                groupId:vmApp.activeGroupId
+               };
+
+               Application.hideVideoOption(vmApp.activeGroupId);
+              Application.hideStudyPlan(vmApp.activeGroupId);
+               vmApp.menu = menuService.createLeftMenu(menuParams,vmApp.hideStudyPlan,vmApp.hideVideoOption);
+
               Application.loadGroupMembership();
               ListenloopUtility.base(response);
-              Application.hideVideoOption(vmApp.activeGroupId);
-              Application.hideStudyPlan(vmApp.activeGroupId);
+
 
             });
 

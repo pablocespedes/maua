@@ -161,52 +161,9 @@
           <div id="main-menu-inner">
             <div welcome data="appCtrl.currentUser" url="appCtrl.url" log-out-url="appCtrl.logOutUrl" log-out="appCtrl.logOut()"></div>
             <ul class="navigation">
-              <!-- Dashboard -->
-              <li id="dashboardLi" is-active-nav  grockit-link url="'dashboard'" can-access="appCtrl.canAccess" text="'Dashboard'"
-                is-external-link="false" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
-                icon-class="'fa-dashboard'">
-              </li>
-              <!-- study plan -->
-              <li ng-if="!appCtrl.studyPlanHide" grockit-link url="'study_plan'" can-access="appCtrl.canAccess" text="'Study Plan'" is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
-                external-base-url="appCtrl.url" icon-class="'fa-tasks'">
-              </li>
-              <!-- Group Practice -->
-              <li ng-if="appCtrl.activeGroupId!='gre'" grockit-link url="'social'" can-access="appCtrl.canAccess" text="'Group Practice'" is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
-                external-base-url="appCtrl.url" icon-class="'fa-users'">
-              </li>
-              <!-- video library -->
-              <li ng-if="!appCtrl.videoLibHide" grockit-link url="'video_courses'" can-access="appCtrl.canAccess" text="'Video Library'" is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
-                external-base-url="appCtrl.url" icon-class="'fa-video-camera'">
-              </li>
-              <!-- Custom practice -->
-              <li ng-if="appCtrl.activeGroupId!='gre'" grockit-link url="appCtrl.customPracticeLink" can-access="appCtrl.canAccess" text="'Custom Practice'" is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
-              external-base-url="appCtrl.url" icon-class="'fa-book'"></li>
-              <!-- Full Length Test GRE  -->
-              <li ng-if="appCtrl.activeGroupId==='gre'" grockit-link url="'grepracticetest'" can-access="appCtrl.canAccess" text="'Take a Full Length Test'" is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady" external-base-url="appCtrl.grockitTV" icon-class="'fa-lightbulb-o'">
-              </li>
-              <!-- Full Length Test GMAT -->
-              <li ng-if="appCtrl.activeGroupId==='gmat'" grockit-link url="'join_cat_game'" can-access="appCtrl.canAccess" text="'Take a Full Length Test'" is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
-                external-base-url="appCtrl.url" icon-class="'fa-lightbulb-o'">
-              </li>
-              <!-- Tutoring -->
-              <li grockit-link url="'tutoring'" can-access="appCtrl.canAccess" text="'Tutoring'"
-                is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
-                external-base-url="appCtrl.url" icon-class="'fa-briefcase'">
-              </li>
-              <!-- Skill Data -->
-              <li grockit-link url="'skill_data'" can-access="appCtrl.canAccess" text="'Skill Data'"
-                is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
-                external-base-url="appCtrl.url" icon-class="'fa-dashboard'">
-              </li>
-              <!-- history 2.0 -->
-              <li ng-show="appCtrl.activeGroupId ==='gre'" is-active-nav grockit-link url="'history'" can-access="appCtrl.canAccess" text="'History'"
-                group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady" icon-class="'fa-bar-chart-o'">
-              </li>
-              <!-- History 1.0 -->
-              <li ng-if="appCtrl.activeGroupId !=='gre'" grockit-link url="'reviews'" can-access="appCtrl.canAccess" text="'History'"
-                is-external-link="true" group-id="appCtrl.activeGroupId" is-ready="appCtrl.isReady"
-                external-base-url="appCtrl.url" icon-class="'fa-bar-chart-o'">
-              </li>
+             <li ng-repeat="item in appCtrl.menu" id="item.id" ng-class="{ active: appCtrl.isActive('/'+item.id)}" ng-if="item.shouldShow" grockit-link url="item.url" can-access="item.canAccess" text="item.title"
+                is-ready="item.isReady" is-external-link="item.isExternalLink"
+                icon-class="item.iconclass"></li>
             </ul>
             <!-- / .navigation -->
           </div>
