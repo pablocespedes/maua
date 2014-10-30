@@ -72,8 +72,9 @@
     var SimpleDashBoard = {
       getDashboard: function(groupId) {
         dashboard.setDashboardData(groupId).then(function(result) {
-          if(dashboard.hasQuestionsAnswered() && vmDash.activeGroupId==='gre'){
-            $window.location.href= '/2.0/#/gre/custom-practice/';
+          if(!dashboard.hasQuestionsAnswered() && vmDash.activeGroupId==='gre'){
+            var base = utilities.newGrockit().url;
+            $window.location.href= base + '/#/'+vmDash.activeGroupId+'/custom-practice/';
           }
           else{
              if (vmDash.enableScore)
