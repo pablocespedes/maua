@@ -5,9 +5,9 @@
   .controller('SimpleDashController', SimpleDashController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  SimpleDashController.$inject = ['$scope', 'dashboard', 'UsersApi', 'utilities', 'Auth', 'alerts', 'currentProduct', 'membershipService'];
+  SimpleDashController.$inject = ['$window','$scope', 'dashboard', 'UsersApi', 'utilities', 'Auth', 'alerts', 'currentProduct', 'membershipService'];
 
-  function SimpleDashController($scope, dashboard, UsersApi, utilities, Auth, alerts, currentProduct, membershipService) {
+  function SimpleDashController($window,$scope, dashboard, UsersApi, utilities, Auth, alerts, currentProduct, membershipService) {
     /* jshint validthis: true */
     var vmDash = this,
     dashObserver = null;
@@ -73,7 +73,7 @@
       getDashboard: function(groupId) {
         dashboard.setDashboardData(groupId).then(function(result) {
           if(!dashboard.hasQuestionsAnswered() && vmDash.activeGroupId==='gre'){
-            utilities.internalRedirect('/' + vmDash.activeGroupId+ '/custom-practice');
+            $window.location.href= '/#/gre/custom-practice/';
           }
           else{
              if (vmDash.enableScore)
