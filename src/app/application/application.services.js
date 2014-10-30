@@ -20,8 +20,7 @@
   Observable.$inject = [];
   Timer.$inject = ['$interval', 'collectionService'];
   currentProduct.$inject = ['webStorage', 'Observable', 'utilities'];
-  appService.$inject = ['$window','$q', '$location', 'Auth', 'GroupsApi', 'utilities', 'membershipService', 'currentProduct',
-  'Observable','alerts'];
+  appService.$inject = ['$window','$q', '$location', 'Auth', 'GroupsApi', 'utilities', 'membershipService', 'currentProduct','alerts'];
   menuService.$inject =['utilities'];
 
   function utilities($rootScope, $http, $location, $route, $q, $window, webStorage, YoutubeVideoApi, environmentCons) {
@@ -424,7 +423,7 @@
     }
   }
 
-  function appService($window, $q, $location, Auth, GroupsApi, utilities, membershipService, currentProduct,Observable,alerts) {
+  function appService($window, $q, $location, Auth, GroupsApi, utilities, membershipService, currentProduct,alerts) {
 
 
     var _appFn = {
@@ -473,7 +472,7 @@
         var userResponse = response[0];
 
         if (userResponse != null) {
-          var observable = Observable.get('isActiveNav');
+
           var groups = response[1].data.groups;
 
           if (_appFn.isBasePath(userResponse)) {
@@ -491,8 +490,6 @@
               $window.location = '404.html';
 
             } else {
-              observable.notify($location.path());
-
               membershipService.setMembershipInfo(userResponse, userGroup, urlGroup);
               membershipService.userCanAccesPage(urlGroup);
               currentProduct.currentGroupId(urlGroup, actualGroup);

@@ -527,11 +527,14 @@
         function setCurrentTrack(groupId) {
             var deferred = $q.defer(),
             trackData = utilities.getActiveTrack();
+            console.log('1 Service get track');
             if (angular.isDefined(trackData.subject)) {
+                console.log('2.1 Resolve  track');
                 deferred.resolve(trackData);
             } else {
                 practiceResource.getRandomTrack(groupId)
                 .then(function(response) {
+                     console.log('2.2 Resolve  track');
                     var tracks = response.data.dashboard.smart_practice.items,
                     index = _.random(0, tracks.length-1),
                     currentTrack = tracks[index];

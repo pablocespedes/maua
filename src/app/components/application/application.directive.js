@@ -6,10 +6,7 @@
   .directive('breadcrumb', breadcrumb)
   .directive('fadingText', fadingText)
   .directive('welcome', welcome)
-  .directive('isActiveNav',isActiveNav)
   .directive('grockitLink',grockitLink);
-
-  isActiveNav.$inject=['$location','Observable','$timeout'];
 
   function youtube() {
     var directive = {
@@ -69,31 +66,6 @@
     return directive;
   }
 
-
-  function isActiveNav($location,Observable,$timeout) {
-
-     var directive = {
-      link:link,
-      replace:true,
-      restrict: 'A',
-    }
-    return directive;
-
-    function link(scope, element, attrs) {
-      scope.location = $location;
-      Observable.get('isActiveNav').register(function(currentPath) {
-         if (currentPath.split("/")[2] === attrs.href.split("/")[2]) {
-          $timeout(function(){
-             element.parent().addClass('active');
-           },500);
-        } else if(currentPath.split("/")[2] === 'custom-practice'){
-          angular.element('#dashboardLi').addClass('active')
-        }else {
-          element.parent().removeClass('active');
-        }
-      });
-    }
-  }
 
   function grockitLink() {
     var directive = {
