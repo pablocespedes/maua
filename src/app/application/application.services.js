@@ -507,7 +507,7 @@
   }
 
   function menuService(utilities) {
-    var grockitTV = 'http://grockit.tv',
+    var grockitTV = 'http://grockit.tv/',
     baseUrl = utilities.originalGrockit().url;
 
     var service = {
@@ -560,7 +560,7 @@
         shouldShow: (options.groupId != 'gre')
       }, {
         id: 'gre_fullLenghtTest',
-        url: grockitTV + options.groupId + '/grepracticetest',
+        url: grockitTV +'grepracticetest',
         canAccess: canAccess,
         title: 'Take a Full Length Test',
         isReady: options.isReady,
