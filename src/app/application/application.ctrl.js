@@ -125,14 +125,13 @@
               vmApp.showBuyNow = membershipService.showBuyButton();
               vmApp.canAccess = membershipService.canPractice();
                var menuParams= {
-                canAccess: vmApp.canAccess,
                 isReady: true,
                 groupId:vmApp.activeGroupId
                };
 
                Application.hideVideoOption(vmApp.activeGroupId);
               Application.hideStudyPlan(vmApp.activeGroupId);
-               vmApp.menu = menuService.createLeftMenu(menuParams,vmApp.hideStudyPlan,vmApp.hideVideoOption);
+               vmApp.menu = menuService.createLeftMenu(menuParams,vmApp.hideStudyPlan,vmApp.hideVideoOption,vmApp.canAccess);
 
               Application.loadGroupMembership();
               ListenloopUtility.base(response);

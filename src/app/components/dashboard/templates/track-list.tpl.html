@@ -14,7 +14,7 @@
         </h4>
       </div>
       <div class="float-right" ng-hide="hasScore(track)">
-        <button class="get-score-prediction btn-lg btn btn-labeled btn-success" ng-click="getYourScorePredictionUrl(track)">Get your Score Prediction</button>
+        <button class="get-score-prediction btn-lg btn btn-labeled btn-success" ng-disabled="!canPractice" ng-click="getYourScorePredictionUrl(track)">Get your Score Prediction</button>
       </div>
     </div>
   </div>

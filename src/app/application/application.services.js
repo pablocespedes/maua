@@ -515,12 +515,12 @@
     };
     return service;
 
-    function createLeftMenu(options,hideStudyPlan,hideVideoOption) {
+    function createLeftMenu(options,hideStudyPlan,hideVideoOption,canAccess) {
 
       return [{
         id: 'dashboard',
         url: '#/' + options.groupId + '/dashboard',
-        canAccess: options.canAccess,
+        canAccess: canAccess,
         title: 'Dashboard',
         isReady: options.isReady,
         iconclass: 'fa-dashboard',
@@ -529,7 +529,7 @@
       }, {
         id: 'study_plan',
         url: baseUrl + '/' + options.groupId + '/study_plan',
-        canAccess: options.canAccess,
+        canAccess: canAccess,
         title: 'Study Plan',
         isReady: options.isReady,
         iconclass: 'fa-tasks',
@@ -537,7 +537,7 @@
       }, {
         id: 'social',
         url: baseUrl + '/' + options.groupId + '/social',
-        canAccess: options.canAccess,
+        canAccess: canAccess,
         title: 'Group Practice',
         isReady: options.isReady,
         iconclass: 'fa-users',
@@ -545,7 +545,7 @@
       }, {
         id: 'video_courses',
         url: baseUrl + '/' + options.groupId + '/video_courses',
-        canAccess: options.canAccess,
+        canAccess: canAccess,
         title: 'Video Library',
         isReady: options.isReady,
         iconclass: 'fa-video-camera',
@@ -553,7 +553,7 @@
       }, {
         id: 'custom_practice',
         url: baseUrl + '/' + options.groupId + '/custom_games/new',
-        canAccess: options.canAccess,
+        canAccess: canAccess,
         title: 'Custom Practice',
         isReady: options.isReady,
         iconclass: 'fa-book',
@@ -561,7 +561,7 @@
       }, {
         id: 'gre_fullLenghtTest',
         url: grockitTV + options.groupId + '/grepracticetest',
-        canAccess: options.canAccess,
+        canAccess: canAccess,
         title: 'Take a Full Length Test',
         isReady: options.isReady,
         iconclass: 'fa-lightbulb-o',
@@ -569,7 +569,7 @@
       }, {
         id: 'gmat_fullLenghtTest',
         url: baseUrl + '/' + options.groupId + '/join_cat_game',
-        canAccess: options.canAccess,
+        canAccess: canAccess,
         title: 'Take a Full Length Test',
         isReady: options.isReady,
         iconclass: 'fa-lightbulb-o',
@@ -577,7 +577,7 @@
       }, {
         id: 'tutoring',
         url: baseUrl + '/' + options.groupId + '/tutoring',
-        canAccess: options.canAccess,
+        canAccess: canAccess,
         title: 'Tutoring',
         isReady: options.isReady,
         iconclass: 'fa-briefcase',
@@ -585,7 +585,7 @@
       }, {
         id: 'skill_data',
         url: baseUrl + '/' + options.groupId + '/skill_data',
-        canAccess: options.canAccess,
+        canAccess: canAccess,
         title: 'Skill Data',
         isReady: options.isReady,
         iconclass: 'fa-dashboard',
@@ -593,7 +593,7 @@
       }, {
         id: 'history',
         url: '#/' + options.groupId + '/history',
-        canAccess: options.canAccess,
+        canAccess: canAccess,
         title: 'History',
         isReady: options.isReady,
         iconclass: 'fa-bar-chart-o',
@@ -601,7 +601,7 @@
       }, {
         id: 'history',
         url: baseUrl + '/' + options.groupId + '/reviews',
-        canAccess: options.canAccess,
+        canAccess: canAccess,
         title: 'History',
         isReady: options.isReady,
         iconclass: 'fa-bar-chart-o',

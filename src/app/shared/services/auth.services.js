@@ -7,12 +7,16 @@
     admin: 'admin',
     member: 'member',
     guest: 'guest'
+  }).
+  constant('lifeCycle', {
+  inactive:'inactive',
+  freeTrialExpired:'free_trial_expired'
   })
   .factory('Auth', Auth)
   .service('membershipService', membershipService);
 
   Auth.$inject = ['$window', '$cookies', '$cookieStore', 'UserRoles', 'webStorage', 'UsersApi', 'utilities', '$location', '$q', 'Headers', 'imageVersion'];
-  membershipService.$inject = ['dateUtils', 'grockitModal', 'appMessages', '$location','utilities'];
+  membershipService.$inject = ['dateUtils', 'grockitModal', 'appMessages', '$location','utilities','lifeCycle'];
 
   function Auth($window, $cookies, $cookieStore, UserRoles, webStorage, UsersApi, utilities, $location, $q, Headers, imageVersion) {
 
@@ -105,16 +109,17 @@
   }
 
 
-  function membershipService(dateUtils, grockitModal, appMessages, $location,utilities) {
+  function membershipService(dateUtils, grockitModal, appMessages, $location,utilities,lifeCycle) {
     var membershipInfo = {},
     _membershipFn = {
       isPremium: function() {
         return (membershipInfo.becamePremiumAt !== null);
       },
-      premiumHasExpired: function() {
-        var today = new Date(),
-        expired = new Date(membershipInfo.expiredAt);
-        return (this.isPremium() && expired < today);
+      premiumNotHasExpired: function() {
+       /* var today = new Date(),
+        expired = new Date(membershipInfo.expiredAt);expired < today this.isPremium()*/
+
+        return (membershipInfo.lifeCycle !==lifeCycle.inactive && membershipInfo.lifeCycle !==lifeCycle.freeTrialExpired);
       },
       hasPrompt: function() {
         return (membershipInfo.upgradePrompt !== null);
@@ -123,7 +128,7 @@
         return membershipInfo.trialing;
       },
       validateMembership: function() {
-        return (this.premiumHasExpired() && (!this.isTrialing() || !this.isPremium()));
+        return (!this.premiumNotHasExpired() && (!this.isTrialing() || !this.isPremium()));
       }
     };
 
@@ -133,15 +138,17 @@
       membershipInfo.becamePremiumAt = userResponse.becamePremiumAt;
       membershipInfo.expiredAt = groupUserInfo.expires_at;
       membershipInfo.trialing = groupUserInfo.trialing;
+      membershipInfo.lifeCycle = groupUserInfo.lifecycle;
 
     }
 
     this.showBuyButton = function() {
-      return (_membershipFn.premiumHasExpired() || !_membershipFn.isPremium());
+      return (_membershipFn.premiumNotHasExpired() || !_membershipFn.isPremium());
     }
 
     this.canPractice = function() {
-      return (_membershipFn.isTrialing() || _membershipFn.isPremium() || !_membershipFn.premiumHasExpired());
+        /*!_membershipFn.isTrialing() && _membershipFn.isPremium() &&*/
+      return (_membershipFn.premiumNotHasExpired());
     }
 
     this.membershipValidation = function(groupId, nQuestions) {
