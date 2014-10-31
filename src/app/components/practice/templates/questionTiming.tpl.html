@@ -19,14 +19,14 @@
         </div>
       </div>
       <div ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
-        <h4 class="no-data">Not enough data.</h4>
+        <h4 class="no-data">New item!</h4>
       </div>
     </section>
   </div>
   <div class="col-lg-2 col-sm-3 timing-padding">
     <section class="panel">
       <div ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
-        <h4 class="no-data">Not enough data.</h4>
+        <h4 class="no-data">New item!</h4>
       </div>
       <div class="timing-average" ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
         <span class="badge" ng-if="confirmed" ng-class="{ 'bg-success': !compAvgStatus, 'bg-danger': compAvgStatus}">
@@ -51,7 +51,7 @@
   <div ng-if="showPercAnswered" class="col-lg-2 col-sm-3 timing-padding">
     <section class="panel">
       <div ng-if="percentAnswered < 1 || data.total_answered < 100">
-        <h4 class="no-data">Not enough data.</h4>
+        <h4 class="no-data">New item!</h4>
       </div>
       <div class="timing-answeredC" ng-if="percentAnswered >= 1 && data.total_answered >= 100">
         <span class="practice-data">
