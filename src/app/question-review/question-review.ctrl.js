@@ -101,6 +101,7 @@
                         Review.setTimingInformation(questionData.id, questionData.kind);
                     }
                     Review.displayExplanationInfo();
+                    angular.element('#solutionarea').addClass('hide-input');
                 }
             },
             displayExplanationInfo: function() {

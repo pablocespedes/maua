@@ -11,6 +11,15 @@
 [ng\:cloak], [ng-cloak], .ng-cloak {
   display: none !important;
 }
+#numericEntry,#numerator,#denominator{
+        margin-bottom: 25px;
+}
+
+.hide-input{
+    #numericEntry,#numerator,#denominator{
+        display: none;
+    }
+}
 
 //general css
 #main-navbar .navbar-header a {

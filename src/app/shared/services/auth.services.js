@@ -167,8 +167,6 @@
           utilities.redirect(baseUrl+'/'+groupId+'/subscriptions/new');
       }
     }
-
-
   }
 
 })();
