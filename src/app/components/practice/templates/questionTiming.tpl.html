@@ -1,76 +1,148 @@
-<div class="row state-overview">
-  <div class="col-lg-2 col-sm-3 timing-padding">
-    <section class="panel">
-      <div class="timing-box">
-        <span class="practice-data" ng-if="confirmed"><span ng-bind="yourTime"></span>s </span>
-        <span class="practice-data" ng-if="!confirmed"> <i class="fa fa-minus"></i> </span>
-        <br>
-        Your time to answer
-      </div>
-    </section>
-  </div>
-  <div class="col-lg-2 col-sm-3 timing-padding">
-    <section class="panel">
-      <div ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
-        <div class="timing-box">
-          <span class="practice-data" ><span ng-bind="data.avg_time_to_answer"></span>s</span>
-          <br>
-          Average time to answer
+<div class="row">
+  <div class="col-lg-2 col-md-4">
+    <div class="panel">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-3">
+            <i class="fa fa-clock-o fa-4x"></i>
+          </div>
+          <div class="col-xs-9 text-right">
+            <span class="text-lg" ng-if="confirmed"><span ng-bind="yourTime"></span>s </span>
+            <span class="text-lg" ng-if="!confirmed"> <i class="fa fa-minus"></i> </span>
+          </div>
         </div>
       </div>
-      <div ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
-        <h4 class="no-data">New item!</h4>
-      </div>
-    </section>
+      <a href="#">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left">Your time to answer</span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+    </div>
   </div>
-  <div class="col-lg-2 col-sm-3 timing-padding">
-    <section class="panel">
-      <div ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
-        <h4 class="no-data">New item!</h4>
+  <div class="col-lg-2 col-md-4">
+    <div class="panel">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-3">
+            <i class="fa fa-bar-chart-o fa-4x"></i>
+          </div>
+          <div class="col-xs-9 text-right">
+            <div class="text-lg" ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
+              <span  ng-bind="data.avg_time_to_answer"></span>s
+            </div>
+
+            <div ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
+              <h4 class="no-data">New item!</h4>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="timing-average" ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
-        <span class="badge" ng-if="confirmed" ng-class="{ 'bg-success': !compAvgStatus, 'bg-danger': compAvgStatus}">
-        &nbsp;<i ng-class="{'fa fa-arrow-down':!compAvgStatus, 'fa fa-arrow-up':compAvgStatus}"></i>
-        <span class="practice-data" style="padding-right: 4px;"><span ng-bind="compAvg"></span>s</span>
-        </span>
-        <span class="practice-data" ng-if="!confirmed"> <i class="fa fa-minus"></i> </span>
-        <br>
-        <p ng-if="!compAvgStatus && confirmed">You took less time than the average</p>
-        <p ng-if="compAvgStatus && confirmed">You took more time than the average</p>
-      </div>
-    </section>
+        <a href="#" ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left">Average time to answer</span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+    </div>
   </div>
-  <div class="col-lg-2 col-sm-2 timing-padding">
-    <section class="panel">
-      <div class="timing-box">
-        <span class="practice-data" ng-bind="xpTag | level"></span><br>
-        <span>Difficulty</span>
+  <div class="col-lg-2 col-md-4">
+    <div class="panel">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-3">
+            <i class="fa fa-flag-checkered fa-4x"></i>
+          </div>
+          <div class="col-xs-9 text-right">
+            <div ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
+              <h4 class="no-data">New item!</h4>
+            </div>
+            <div ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
+              <span class="badge" ng-if="confirmed" ng-class="{ 'bg-success': !compAvgStatus, 'bg-danger': compAvgStatus}">
+              <span class="text-lg" style="padding-right: 4px;"><span ng-bind="compAvg"></span>s</span>
+              </span>
+              <span class="text-lg" ng-if="!confirmed"> <i class="fa fa-minus"></i> </span>
+            </div>
+          </div>
+        </div>
       </div>
-    </section>
+      <a href="#" ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left" ng-if="!compAvgStatus && confirmed">
+          You took less time than the average
+          </span>
+          <span class="pull-left" ng-if="compAvgStatus && confirmed">
+          You took more time than the average
+          </span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+    </div>
   </div>
-  <div ng-if="showPercAnswered" class="col-lg-2 col-sm-3 timing-padding">
-    <section class="panel">
-      <div ng-if="percentAnswered < 1 || data.total_answered < 100">
-        <h4 class="no-data">New item!</h4>
+  <div class="col-lg-2 col-md-4">
+    <div class="panel">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-3">
+            <i class="fa fa-tachometer fa-4x"></i>
+          </div>
+          <div class="col-xs-9 text-right">
+            <span class="text-lg" ng-bind="xpTag | level"></span>
+          </div>
+        </div>
       </div>
-      <div class="timing-answeredC" ng-if="percentAnswered >= 1 && data.total_answered >= 100">
-        <span class="practice-data">
-        <span ng-bind="percentAnswered"></span>%
-        </span>
-        <br>of users answered <br> this question correctly
-      </div>
-    </section>
+      <a href="#">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left">Difficulty</span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+    </div>
   </div>
-  <div class="col-lg-2 col-sm-3 timing-padding">
-    <section class="panel">
-      <div ng-class="{ 'bg-danger':!answerStatus, 'bg-success':answerStatus}" ng-if="confirmed"
-        class="timing-check text-center text-slg no-padding-vr">
-        <i ng-if="!answerStatus" class="fa fa-times"></i>
-        <i ng-if="answerStatus" class="fa fa-check"></i>
+  <div class="col-lg-2 col-md-4">
+    <div class="panel panel-red">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-3">
+            <i class="fa fa-arrow-up fa-4x"></i>
+          </div>
+          <div class="col-xs-9 text-right">
+            <div ng-if="percentAnswered < 1 || data.total_answered < 100">
+              <h4 class="no-data">New item!</h4>
+            </div>
+            <div ng-if="percentAnswered >= 1 && data.total_answered >= 100">
+              <span class="text-lg">
+              <span ng-bind="percentAnswered"></span>%
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="bg-default timing-check text-center text-slg no-padding-vr" ng-if="!confirmed">
-        <i class="fa fa-minus"></i>
+      <a href="#">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left">Users answered this question correctly</span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="col-lg-1 col-md-3">
+    <div class="panel panel-red">
+      <div class="panel-heading no-padding">
+        <div class="row">
+          <div class="col-xs-12 text-right ">
+            <div ng-class="{ 'bg-danger':!answerStatus, 'bg-success':answerStatus}" ng-if="confirmed"
+              class="timing-check text-center text-slg no-padding-vr">
+              <i ng-if="!answerStatus" class="fa fa-times"></i>
+              <i ng-if="answerStatus" class="fa fa-check"></i>
+            </div>
+            <div class="bg-default timing-check text-center text-slg no-padding-vr" ng-if="!confirmed">
+              <i class="fa fa-minus"></i>
+            </div>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
   </div>
 </div>
+

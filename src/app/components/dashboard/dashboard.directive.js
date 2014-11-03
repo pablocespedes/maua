@@ -6,9 +6,10 @@
   .directive('trackList', trackList)
   .directive('historyChart', historyChart)
   .directive('challengeDashboard', challengeDashboard)
+  .directive('doNow', doNow);
 
-  trackList.$inject=['utilities'];
-  challengeDashboard.$inject=['utilities'];
+  trackList.$inject = ['utilities'];
+  challengeDashboard.$inject = ['utilities'];
 
   function scorePrediction() {
     var directive = {
@@ -19,14 +20,14 @@
         groupTitle: '=',
         isVisible: '=',
         noScoreMessage: '@',
-        scoreData:'='
+        scoreData: '='
       }
 
     };
     return directive;
 
     function link(scope, element, attrs) {
-      scope.hasScore = function(){
+      scope.hasScore = function() {
         return (scope.scoreData.incomplete === false && scope.scoreData.totalScore !== null && scope.scoreData.totalScore > 0)
       };
     }
@@ -99,5 +100,13 @@
       };
     }
   }
-})();
 
+  function doNow() {
+    var directive = {
+      templateUrl: 'app/components/dashboard/templates/do-now.tpl.html',
+      restrict: 'A',
+      scope:false
+    };
+    return directive;
+  }
+})();

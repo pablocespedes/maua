@@ -15,6 +15,10 @@
     -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
+.gt-ie8 input.px+.lbl:after, .gt-ie8 input.px+.lbl:before {
+margin: 8px 3px -3px -20px!important;
+}
+
 
 .pie-chart-label.xlText {
     font-weight: 600;
