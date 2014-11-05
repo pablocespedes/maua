@@ -4025,7 +4025,7 @@ body:after,
     #main-navbar .navbar-nav,
     #main-navbar .navbar-form {
       position: relative;
-      z-index: 1032; }
+      /*z-index: 1032; */}
     #main-navbar .navbar-nav {
       margin: 0; }
       #main-navbar .navbar-nav > li > a {

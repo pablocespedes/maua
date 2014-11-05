@@ -12,6 +12,7 @@
   display: none !important;
 }
 
+
 #main-navbar {
 border: none;
 border-radius: 0;
@@ -23,7 +24,10 @@ position: relative;
 top: 0 !important;
 /* z-index: 1030; */
 }
-
+.chardinjs-show-element {
+z-index: 9999999 !important;
+opacity: 0.8;
+}
 
 .white{
     background-color: #ffffff!important;
