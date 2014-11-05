@@ -21,7 +21,8 @@
 .timing-box-padding {
 padding:5px 5px 5px 5px !important;
 color:#000000;
- min-height: 36px;
+ min-height: 45px;
+ max-height: 45px;
 }
 
 
@@ -48,8 +49,20 @@ color:#000000;
 }
 
 .timing-check {
-    height: 70px;
+    position: relative;
+    height: 115px;
     text-align: center;
+}
+
+.abs-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.avg-badge {
+  padding: 3px 3px 0 4px;
 }
 
 .timing-padding {
