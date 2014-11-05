@@ -12,7 +12,22 @@
   display: none !important;
 }
 
+#main-navbar {
+border: none;
+border-radius: 0;
+left: 0;
+min-height: 46px;
+right: 0;
+/* position: absolute; */
+position: relative;
+top: 0 !important;
+/* z-index: 1030; */
+}
 
+
+.white{
+    background-color: #ffffff!important;
+}
 
 #numericEntry,#numerator,#denominator{
         margin-bottom: 25px;

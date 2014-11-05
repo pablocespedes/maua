@@ -22,6 +22,11 @@
 
     init();
 
+      vmDash.startCardinTour= function(){
+         angular.element(document).ready(function() {
+                angular.element('body').chardinJs('start');
+              });
+      }
 
     $scope.$on("$destroy", function() {
       currentProduct.unregisterGroup(dashObserver);

@@ -7,11 +7,11 @@
 
   /*Manually injection will avoid any minification or injection problem*/
   ApplicationController.$inject = ['$scope','$location', 'Auth', 'utilities', 'ListenloopUtility',
-  'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct','membershipService','menuService'
+  'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct','membershipService','menuService','GoogleTagManager'
   ];
 
   function ApplicationController($scope,$location, Auth, utilities, ListenloopUtility,
-    GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService,menuService) {
+    GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService,menuService,GoogleTagManager) {
     /* jshint validthis: true */
     var vmApp = this;
     /* recommend: Using function declarations and bindable members up top.*/
@@ -22,7 +22,6 @@
     vmApp.selectGroup = selectGroup;
     vmApp.logOut = logOut;
     vmApp.groupRedirect = groupRedirect;
-
 
     function isActive(viewLocation) {
         return viewLocation === '/'+$location.path().split("/")[2];
@@ -121,6 +120,14 @@
             vmApp.currentUser = response;
             currentProduct.observeGroupId().register(function(groupId) {
               vmApp.activeGroupId = groupId;
+
+              var gtmData ={
+                  'platformVersion': '2',
+                  'studyingFor': groupId,
+                  'userId': response.userId,
+              };
+
+              GoogleTagManager.push(gtmData);
 
               vmApp.showBuyNow = membershipService.showBuyButton();
               vmApp.canAccess = membershipService.canPractice();

@@ -3,6 +3,7 @@
     <div class="row">
       <div class="col-lg-6 no-padding-r">
         <h2>Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
+        <button data-toggle="chardinjs" ng-click="vmDash.startCardinTour()">Start Tour</button>
         </h2>
       </div>
     </div>
@@ -12,6 +13,7 @@
     <div fading-text word="vmDash.loadingMessage" is-visible="!vmDash.historyVisible && vmDash.loading"></div>
     <div class="row">
     <div class="col-lg-6">
+    <div id="DoNow" chardin-tour overlay-text="Here is the Do Now Section." overlay-position="right">
     <div do-now></div>
     </div>
 
