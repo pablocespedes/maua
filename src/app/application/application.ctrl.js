@@ -15,7 +15,8 @@
     GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService,menuService,
     GoogleTagManager,setItUpUserProgress) {
     /* jshint validthis: true */
-    var vmApp = this;
+    var vmApp = this,
+    userProgressObserver=null;
     /* recommend: Using function declarations and bindable members up top.*/
     vmApp.isReady= false;
     vmApp.isActive = isActive;
@@ -117,7 +118,7 @@
         }
       },
       getUserProgress: function(){
-        setItUpUserProgress.observeUserProgress().register(function(historyResponse){
+      userProgressObserver  =  setItUpUserProgress.observeUserProgress().register(function(historyResponse){
            var  userProgess = {};
 
             if (angular.isDefined(historyResponse)) {
