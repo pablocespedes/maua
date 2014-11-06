@@ -2,9 +2,9 @@
   <div class="page-header">
     <div class="row row-fluid">
       <div class="col-lg-4 col-md-4 no-padding-r" >
-        <h2 id="welcome" chardin-tour overlay-text="Welcome to Grockit GMAT! Let's have a look around." overlay-position="right">
+       <!--  <h2 id="welcome" chardin-tour overlay-text="Welcome to Grockit GMAT! Let's have a look around." overlay-position="right">
         Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
-        </h2>  <button ng-if="vmDash.showTour" data-toggle="chardinjs" ng-click="vmDash.startCardinTour()">Start Tour</button>
+        </h2>  --> <button ng-if="vmDash.showTour" data-toggle="chardinjs" ng-click="vmDash.startCardinTour()">Start Tour</button>
       </div>
     </div>
     <br>
@@ -12,6 +12,21 @@
   <div class="profile-content">
     <div fading-text word="vmDash.loadingMessage" is-visible="!vmDash.historyVisible && vmDash.loading"></div>
     <div class="row">
+    <div ng-if="vmDash.showBuyNow" class="col-lg-12">
+    <div class="stat-panel">
+              <!-- Success background. vertically centered text -->
+              <div class="stat-cell bg-info valign-middle">
+                <!-- Stat panel bg icon -->
+                <br>
+                <i class="fa fa-clock-o bg-icon"></i>
+                <!-- Extra large text -->
+                <!-- Big text -->
+                <span class="text-lg ">You have <span class="text-bold">3</span> days left in your trial for <strong style="color:#E7DF90">Grockit GMAT</strong>. Continue to enjoy full access, starting at just <span style="color:#E7DF90">$9</span>.</span><br>
+                <!-- Small text -->
+                <span class="text-sm"><br></span>
+              </div> <!-- /.stat-cell -->
+            </div>
+    </div>
     <!-- <div class="col-lg-6" >
     <div do-now></div>
     </div> -->

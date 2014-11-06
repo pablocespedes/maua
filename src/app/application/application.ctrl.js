@@ -148,7 +148,7 @@
 
               GoogleTagManager.push(gtmData);
 
-              vmApp.showBuyNow = membershipService.showBuyButton();
+
               vmApp.canAccess = membershipService.canPractice();
                var menuParams= {
                 isReady: true,

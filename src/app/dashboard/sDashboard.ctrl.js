@@ -42,6 +42,7 @@
           dashObserver = currentProduct.observeGroupId().register(function(groupId) {
             vmDash.activeGroupId = groupId;
             SimpleDashBoard.getDashboard(vmDash.activeGroupId);
+            vmDash.showBuyNow = membershipService.showBuyButton();
             vmDash.canPractice = membershipService.canPractice();
             vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
             vmDash.historyVisible = false;
