@@ -9,40 +9,37 @@
 @import "../app/practices/practice.scss";
 
 [ng\:cloak], [ng-cloak], .ng-cloak {
-  display: none !important;
+    display: none !important;
 }
 
+// #content-wrapper {
+//     position: static;
+// }
 
 #main-navbar {
-border: none;
-border-radius: 0;
-left: 0;
-min-height: 46px;
-right: 0;
-/* position: absolute; */
-position: relative;
-top: 0 !important;
-/* z-index: 1030; */
-}
-.chardinjs-show-element {
-z-index: 9999999 !important;
-opacity: 0.8;
+
+z-index: 9999999;
 }
 
-.white{
-    background-color: #ffffff!important;
+.chardinjs-show-element {
+    z-index: 9999999 !important;
+    opacity: 0.8;
+}
+
+.white {
+    background-color: #ffffff !important;
 }
 
 .has-error {
-border: 4px solid #a94442;
+    border: 4px solid #a94442;
 }
 
-#numericEntry,#numerator,#denominator{
-        margin-bottom: 25px;
+#numericEntry, #numerator, #denominator {
+    margin-bottom: 25px;
 }
 
-.hide-input{
-    #numericEntry,#numerator,#denominator{
+.hide-input {
+    #numericEntry, #numerator, #denominator {
         display: none;
     }
 }
@@ -399,9 +396,11 @@ footer {
 .modal-trial.modal-success .modal-header {
     background: #5ebd5e;
 }
+
 .modal-trial .modal-header .fa {
- font-size: 20px;
+    font-size: 20px;
 }
+
 .modal-trial .modal-header {
     color: #fff;
     margin-bottom: 20px;
@@ -409,6 +408,7 @@ footer {
     border-top-right-radius: 2px;
     border-top-left-radius: 2px;
 }
-.trial{
+
+.trial {
     min-height: 100px;
 }
