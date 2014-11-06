@@ -74,7 +74,15 @@
     var SimpleDashBoard = {
       getDashboard: function(groupId) {
         dashboard.setDashboardData(groupId).then(function(result) {
-          if(!dashboard.hasQuestionsAnswered() && vmDash.activeGroupId==='gre'){
+          var hasQuestionsAnswered = dashboard.hasQuestionsAnswered();
+          if(!hasQuestionsAnswered){
+            vmDash.showTour =true;
+          }
+          else{
+            vmDash.showTour =false;
+          }
+
+          if(!hasQuestionsAnswered && vmDash.activeGroupId==='gre'){
             var base = utilities.newGrockit().url;
             $window.location.href= base + '/#/'+vmDash.activeGroupId+'/custom-practice/';
           }

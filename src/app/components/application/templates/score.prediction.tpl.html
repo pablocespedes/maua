@@ -1,11 +1,11 @@
 
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-    <i class="nav-icon fa fa-bullhorn"></i>
-    <span class="small-screen-text">Progress: {{progressInfo.totalQuest}} Qs</span>
+    <i class="nav-icon fa fa-trophy"></i>
+    <span class="small-screen-text">Score: {{progressInfo.totalQuest}}</span>
   </a>
   <div ng-if="progressInfo.historyVisible" class="dropdown-menu widget-notifications no-padding" style="width: 300px">
     <div class="notification">
-      <div class="text-default text-normal text-bg">Total Questions Answered</div>
+      <div class="text-normal text-bg">Total Questions Answered</div>
       <div class="notification-description ">
         <strong class="text-bg"> &nbsp;&nbsp;<span ng-bind="progressInfo.totalQuest"></span></strong>
       </div>
