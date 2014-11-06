@@ -112,8 +112,8 @@
             <div id="main-navbar-collapse" class="collapse navbar-collapse main-navbar-collapse">
               <div>
                 <ul class="nav navbar-nav">
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="selectedGroup" ng-bind="$root.groupTitle"></span>&nbsp;<i class="fa fa-caret-down"></i></a>
+                  <li class="dropdown white" id="groupDDL" chardin-tour overlay-text="Groups Section" overlay-position="right">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="selectedGroup" chardin-tour overlay-text="Groups Section." overlay-position="bottom"  ng-bind="$root.groupTitle"></span>&nbsp;<i class="fa fa-caret-down"></i></a>
                     <ul id="subjectDD"  class="dropdown-menu">
                       <li ng-repeat="linked in appCtrl.groups.linkedGroups track by $index">
                         <a class="" ng-click="appCtrl.groupRedirect(linked.id)"><span ng-bind="linked.name"></span></a>
@@ -124,15 +124,14 @@
                   </li>
                 </ul>
                 <!-- / .navbar-nav -->
-
                 <div class="right clearfix">
-                  <ul  data-intro="An awesome 18th-century painter, who found beauty in everyday, common things." data-position="left" class="nav navbar-nav pull-right right-navbar-nav">
-                  <li class="nav-icon-btn-danger dropdown" user-progress>
-                  </li>
+                  <ul class=" white nav navbar-nav pull-right right-navbar-nav" id="usermenuUl" chardin-tour overlay-text="User Utils Section." overlay-position="bottom" >
+                    <li class="nav-icon-btn-danger dropdown"  user-progress progress-info="appCtrl.historyInfo">
+                    </li>
                     <li id="feature-modal" >
                       <a  ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/subscriptions/new">
-                        <i class="menu-icon fa  fa-money"></i>
-                        <span class="mm-text" >Buy now</span>
+                        <i class="menu-icon fa fa-money"></i>
+                        <span class="mm-text">Buy now</span>
                       </a>
                     </li>
                     <li class="dropdown">
@@ -151,7 +150,6 @@
                   </ul>
                   <!-- / .navbar-nav -->
                 </div>
-
                 <!-- / .right -->
               </div>
             </div>
@@ -160,11 +158,9 @@
           <!-- / .navbar-inner -->
         </div>
         <!-- / #main-navbar -->
-
-        <div id="main-menu" role="navigation" >
-          <div id="main-menu-inner" >
+        <div id="main-menu" role="navigation" id="mainUserMenu" chardin-tour overlay-text="Amazing Features section." overlay-position="bottom">
+          <div id="main-menu-inner"  >
             <div welcome data="appCtrl.currentUser" url="appCtrl.url" log-out-url="appCtrl.logOutUrl" log-out="appCtrl.logOut()"></div>
-
             <ul class="navigation" >
               <li  ng-repeat="item in appCtrl.menu" id="item.id" ng-class="{ active: appCtrl.isActive('/'+item.id)}" ng-if="item.shouldShow" grockit-link url="item.url" can-access="item.canAccess" text="item.title"
                 is-ready="item.isReady" is-external-link="item.isExternalLink"
@@ -173,7 +169,7 @@
             <!-- / .navigation -->
           </div>
         </div>
-          <!-- / #main-menu-inner -->
+        <!-- / #main-menu-inner -->
       </div>
       <!-- / #main-menu -->
       <div id="content-wrapper">

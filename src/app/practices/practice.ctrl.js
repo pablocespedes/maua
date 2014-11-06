@@ -25,6 +25,8 @@
     vmPr.loading = true;
     vmPr.nextActionTitle = 'Confirm Choice';
     vmPr.answerStatus = null;
+    vmPr.isValid = true;
+    vmPr.invalidMessage='';
     vmPr.loadingMessage = SplashMessages.getLoadingMessage();
     vmPr.isDisabled = false;
     vmPr.nextAction = nextAction;
@@ -52,6 +54,8 @@
         vmPr.isDisabled = true;
         customPractice.evaluateConfirmMethod();
       } else {
+        vmPr.isValid = true;
+        vmPr.invalidMessage='';
         customPractice.nextQuestion();
       }
     };
@@ -180,6 +184,8 @@
           vmPr.questionData.setLayoutOneColumn = true;
           customPractice.bindExplanationInfo(generalResult);
           vmPr.isbuttonClicked = true;
+          vmPr.isValid = true;
+          vmPr.invalidMessage ='';
         } else
         vmPr.isDisabled = false;
       },
@@ -210,8 +216,13 @@
           this.resetLayout();
           customPractice.displayExplanationInfo();
           vmPr.isbuttonClicked = true;
-        } else
+           vmPr.isValid = true;
+           vmPr.invalidMessage ='';
+        } else{
         vmPr.isDisabled = false;
+        vmPr.isValid = false;
+        vmPr.invalidMessage = practiceUtilities.showQuestionError(vmPr.questionData.kind);
+        }
       },
       feedbackInfo: function(questionId) {
         vmPr.subjectMail = practiceUtilities.setMailToInformation(questionId, vmPr.activeTrack.subject.name);
@@ -241,8 +252,13 @@
           vmPr.questionData.setLayoutOneColumn = true;
           customPractice.displayExplanationInfo();
           vmPr.isbuttonClicked = true;
-        } else
-        vmPr.isDisabled = false;
+           vmPr.isValid = true;
+           vmPr.invalidMessage ='';
+        } else{
+         vmPr.isDisabled = false;
+         vmPr.isValid = false;
+         vmPr.invalidMessage = practiceUtilities.showQuestionError(vmPr.questionData.kind);
+        }
       },
       resetLayout: function() {
         vmPr.nextActionTitle = 'Next Question';

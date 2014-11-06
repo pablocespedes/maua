@@ -5,9 +5,10 @@
   .controller('SimpleDashController', SimpleDashController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  SimpleDashController.$inject = ['$window','$scope', 'dashboard', 'UsersApi', 'utilities', 'Auth', 'alerts', 'currentProduct', 'membershipService'];
+  SimpleDashController.$inject = ['$window','$scope', 'dashboard', 'UsersApi', 'utilities', 'Auth', 'currentProduct',
+   'membershipService','setItUpUserProgress'];
 
-  function SimpleDashController($window,$scope, dashboard, UsersApi, utilities, Auth, alerts, currentProduct, membershipService) {
+  function SimpleDashController($window,$scope, dashboard, UsersApi, utilities, Auth, currentProduct, membershipService,setItUpUserProgress) {
     /* jshint validthis: true */
     var vmDash = this,
     dashObserver = null;
@@ -66,12 +67,8 @@
             utilities.redirect(url);
           }
 
-        } else {
-          alerts.showAlert('You must select one track at least', 'warning');
         }
       }
-
-
     };
 
     var SimpleDashBoard = {
@@ -108,19 +105,11 @@
         vmDash.scoreLoading = false;
       },
       getHistoryInformation: function() {
-        vmDash.loading = true;
         var historyResponse = dashboard.getProgress();
-        if (angular.isDefined(historyResponse)) {
-          vmDash.historyVisible = true;
-          vmDash.historyInfo = {};
-          vmDash.historyInfo.totalQuestLastW = historyResponse.lastWeek
-          vmDash.historyInfo.totalQuest = historyResponse.all;
-          vmDash.historyInfo.totalQuestToday = historyResponse.today;
-          vmDash.loading = false;
-          membershipService.membershipValidation(vmDash.activeGroupId ,historyResponse.all);
-        } else {
-          vmDash.historyVisible = false;
-        }
+         if (angular.isDefined(historyResponse)) {
+            membershipService.membershipValidation(vmDash.activeGroupId ,historyResponse.all);
+          }
+         setItUpUserProgress.setUserProgress(historyResponse);
       },
       getChallenge: function() {
         var challenge = dashboard.getChallenge();
