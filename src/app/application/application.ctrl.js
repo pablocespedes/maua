@@ -7,11 +7,13 @@
 
   /*Manually injection will avoid any minification or injection problem*/
   ApplicationController.$inject = ['$scope','$location', 'Auth', 'utilities', 'ListenloopUtility',
-  'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct','membershipService','menuService','GoogleTagManager'
+  'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct','membershipService',
+  'menuService','GoogleTagManager','setItUpUserProgress'
   ];
 
   function ApplicationController($scope,$location, Auth, utilities, ListenloopUtility,
-    GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService,menuService,GoogleTagManager) {
+    GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService,menuService,
+    GoogleTagManager,setItUpUserProgress) {
     /* jshint validthis: true */
     var vmApp = this;
     /* recommend: Using function declarations and bindable members up top.*/
@@ -114,6 +116,22 @@
 
         }
       },
+      getUserProgress: function(){
+        setItUpUserProgress.observeUserProgress().register(function(historyResponse){
+           var  userProgess = {};
+
+            if (angular.isDefined(historyResponse)) {
+
+              userProgess.historyVisible = true;
+              userProgess.totalQuestLastW = historyResponse.lastWeek
+              userProgess.totalQuest = historyResponse.all;
+              userProgess.totalQuestToday = historyResponse.today;
+            } else {
+              userProgess.historyVisible = false;
+            }
+            vmApp.historyInfo = userProgess;
+        });
+      },
       init: function() {
         Auth.getCurrentUserInfo().then(function(response) {
           if (response != null) {
@@ -137,12 +155,12 @@
                };
 
                Application.hideVideoOption(vmApp.activeGroupId);
-              Application.hideStudyPlan(vmApp.activeGroupId);
+                Application.hideStudyPlan(vmApp.activeGroupId);
                vmApp.menu = menuService.createLeftMenu(menuParams,vmApp.hideStudyPlan,vmApp.hideVideoOption,vmApp.canAccess);
 
               Application.loadGroupMembership();
               ListenloopUtility.base(response);
-
+              Application.getUserProgress();
 
             });
 

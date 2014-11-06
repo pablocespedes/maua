@@ -14,6 +14,7 @@ var paths = {
   appDirectives: 'app/components/application/application.directive.js',
   appController: 'app/application/application.ctrl.js',
   appFilters: 'app/application/application.filters.js',
+  utilServices: 'app/application/util.services.js',
   appServices: 'app/application/application.services.js',
   app: 'app/app.js',
   practiceSrv: 'app/shared/services/practice.service.js',
@@ -36,6 +37,7 @@ $script([
 
 .ready('init', function() {
   $script([
+    paths.utilServices,
     paths.appServices,
     paths.appFilters,
     paths.appDirectives,

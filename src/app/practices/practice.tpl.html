@@ -59,7 +59,11 @@ your-time="vmPr.questionTimer.seconds" answer-status="vmPr.answerStatus" xp-tag=
               <div ng-bind-html='vmPr.questionData.stimulus'></div>
               <br>
               <!--answer-->
-              <div ng-include="vmPr.answerType"></div>
+               <div ng-class="{ 'has-error' : !vmPr.isValid }">
+               <span class="help-block" ng-if="!vmPr.isValid">{{vmPr.invalidMessage}}</span>
+               <div id="answerType" ng-include="vmPr.answerType"></div>
+              </div>
+
             </div>
             <div ng-if="vmPr.explanationInfo.showExplanation" class=" practice-tags" question-tags-only xp="vmPr.explanationInfo.xpTag" tags="vmPr.explanationInfo.tags"></div>
           </div>

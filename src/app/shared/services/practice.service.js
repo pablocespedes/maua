@@ -174,25 +174,8 @@
                     isValid = correctAnswers.length === selectedAnswers.length ? true : false;
 
                 return isValid;
-            },
-            showQuestionError: function(questionKind) {
-                var message = '';
-
-                switch (questionKind) {
-                    case 'MultipleChoiceOneCorrect':
-                    case 'MultipleChoiceOneOrMoreCorrect':
-                        message = 'Please select an option!';
-                        break;
-                    case 'MultipleChoiceMatrixTwoByThree':
-                    case 'MultipleChoiceMatrixThreeByThree':
-                        message = 'Please select at least one option of each section!';
-                        break;
-                    case 'MultipleChoiceTwoCorrect':
-                        message = 'Please select at least two options!';
-                        break;
-                }
-                alerts.showAlert(message, 'warning');
             }
+
         };
 
         var service = {
@@ -207,7 +190,8 @@
             setMailToInformation: setMailToInformation,
             usersRunOutQuestions: usersRunOutQuestions,
             getAnswerType: getAnswerType,
-            setCurrentTrack: setCurrentTrack
+            setCurrentTrack: setCurrentTrack,
+            showQuestionError:showQuestionError
         };
         return service;
 
@@ -294,8 +278,6 @@
                 angular.element("#answercontent *").prop('disabled', true);
 
                 return answerStatus;
-            } else {
-                _internalFn.showQuestionError(questionType);
             }
         }
 
@@ -453,9 +435,6 @@
                 angular.element("#answercontent *").prop('disabled', true);
                 return answerStatus;
 
-            } else {
-                alerts.showAlert('Please choose an option!', 'warning');
-
             }
         }
 
@@ -544,6 +523,27 @@
             return deferred.promise;
         }
 
+        function showQuestionError(questionKind) {
+                var message = '';
+
+                switch (questionKind) {
+                    case 'MultipleChoiceOneCorrect':
+                    case 'MultipleChoiceOneOrMoreCorrect':
+                        message = 'Please select an option!';
+                        break;
+                    case 'MultipleChoiceMatrixTwoByThree':
+                    case 'MultipleChoiceMatrixThreeByThree':
+                        message = 'Please select at least one option of each section!';
+                        break;
+                    case 'MultipleChoiceTwoCorrect':
+                        message = 'Please select at least two options!';
+                        break;
+                        default:
+                        message= 'Required';
+                        break;
+                }
+                return message;
+        }
     }
 
     function Level() {

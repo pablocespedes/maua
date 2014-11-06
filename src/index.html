@@ -124,11 +124,10 @@
                   </li>
                 </ul>
                 <!-- / .navbar-nav -->
-
                 <div class="right clearfix">
                   <ul class=" white nav navbar-nav pull-right right-navbar-nav" id="usermenuUl" chardin-tour overlay-text="User Utils Section." overlay-position="bottom" >
-                  <li class="nav-icon-btn-danger dropdown"  user-progress>
-                  </li>
+                    <li class="nav-icon-btn-danger dropdown"  user-progress user-progress-info="appCtrl.historyInfo">
+                    </li>
                     <li id="feature-modal" >
                       <a  ng-href="{{appCtrl.url}}/{{appCtrl.activeGroupId}}/subscriptions/new">
                         <i class="menu-icon fa fa-money"></i>
@@ -151,7 +150,6 @@
                   </ul>
                   <!-- / .navbar-nav -->
                 </div>
-
                 <!-- / .right -->
               </div>
             </div>
@@ -160,11 +158,9 @@
           <!-- / .navbar-inner -->
         </div>
         <!-- / #main-navbar -->
-
         <div id="main-menu" role="navigation" id="mainUserMenu" chardin-tour overlay-text="Amazing Features section." overlay-position="bottom">
           <div id="main-menu-inner"  >
             <div welcome data="appCtrl.currentUser" url="appCtrl.url" log-out-url="appCtrl.logOutUrl" log-out="appCtrl.logOut()"></div>
-
             <ul class="navigation" >
               <li  ng-repeat="item in appCtrl.menu" id="item.id" ng-class="{ active: appCtrl.isActive('/'+item.id)}" ng-if="item.shouldShow" grockit-link url="item.url" can-access="item.canAccess" text="item.title"
                 is-ready="item.isReady" is-external-link="item.isExternalLink"
@@ -173,7 +169,7 @@
             <!-- / .navigation -->
           </div>
         </div>
-          <!-- / #main-menu-inner -->
+        <!-- / #main-menu-inner -->
       </div>
       <!-- / #main-menu -->
       <div id="content-wrapper">

@@ -1,24 +1,25 @@
+
   <a href="#notifications" class="dropdown-toggle" data-toggle="dropdown">
     <i class="nav-icon fa fa-bullhorn"></i>
     <span class="small-screen-text">Progress</span>
   </a>
-  <div class="dropdown-menu widget-notifications no-padding" style="width: 300px">
+  <div ng-if="usersProgressInfo.historyVisible" class="dropdown-menu widget-notifications no-padding" style="width: 300px">
     <div class="notification">
       <div class="text-default text-normal text-bg">Total Questions Answered</div>
       <div class="notification-description ">
-        <strong class="text-bg"> &nbsp;&nbsp;34</strong>
+        <strong class="text-bg"> &nbsp;&nbsp;<span ng-bind="usersProgressInfo.totalQuest"></span></strong>
       </div>
       <div class="notification-icon fa fa-arrow-circle-o-up bg-info"></div>
       </div> <!-- / .notification -->
       <div class="notification">
         <div class="notification-title text-normal text-bg">Questions Answered in the Last 7 Days</div>
-        <div class="notification-description"> <strong class="text-bg">&nbsp;&nbsp;34</strong></div>
+        <div class="notification-description"> <strong class="text-bg">&nbsp;&nbsp;<span ng-bind="usersProgressInfo.totalQuestLastW"></span></strong></div>
         <div class="notification-icon fa fa-hdd-o bg-success"></div>
         </div> <!-- / .notification -->
         <div class="notification">
           <div class="notification-title text-normal text-bg">Questions Answered Today</div>
           <div class="notification-description">
-            <strong class="text-bg">&nbsp;&nbsp;34</strong>
+            <strong class="text-bg">&nbsp;&nbsp;<span ng-bind="usersProgressInfo.totalQuestToday"></span></strong>
           </div>
           <div class="notification-icon fa fa-hdd-o bg-warning"></div>
           </div> <!-- / .notification -->

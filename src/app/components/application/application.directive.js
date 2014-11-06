@@ -109,7 +109,7 @@
       templateUrl: 'app/components/application/templates/user-progress.tpl.html',
       restrict: 'A',
       scope: {
-        usersInfo: '='
+        usersProgressInfo: '='
       }
     };
     return directive;

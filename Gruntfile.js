@@ -264,6 +264,7 @@ module.exports = function (grunt) {
                     [/(application.module\.js)/, 'Replacing references application to module'],
                     [/(application.filters\.js)/, 'Replacing references application to filters'],
                     [/(application.services\.js)/, 'Replacing references application to services'],
+                    [/(util.services\.js)/, 'Replacing references util to services'],
                     [/(application.directive\.js)/, 'Replacing references application to directives'],
                     /*Change references for home controllers and services*/
                     [/(sDashboard.ctrl\.js)/, 'Replacing references to home ctrl'],

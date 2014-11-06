@@ -33,6 +33,10 @@ opacity: 0.8;
     background-color: #ffffff!important;
 }
 
+.has-error {
+border: 4px solid #a94442;
+}
+
 #numericEntry,#numerator,#denominator{
         margin-bottom: 25px;
 }
