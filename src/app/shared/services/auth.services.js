@@ -167,6 +167,10 @@
           utilities.redirect(baseUrl+'/'+groupId+'/subscriptions/new');
       }
     }
+
+    this.upgradePromptMessage = function(){
+       return _membershipFn.hasPrompt() ? membershipInfo.upgradePrompt : appMessages.freeTrialExpired;
+    }
   }
 
 })();

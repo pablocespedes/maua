@@ -2,28 +2,6 @@
   <div class="page-header">
     <div class="row">
       <div class="col-lg-6 no-padding-r">
-       <!--  <h2>Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
-        </h2> -->
-        <!--
-        <p>
-          <button data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-flat btn-lg btn-labeled">
-            <span class="btn-label icon fa fa-question-circle"></span>
-            <span>Start Tour</span>
-          </button>
-          <button data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-flat btn-lg btn-labeled btn-primary">
-            <span class="btn-label icon fa fa-question-circle"></span>
-            <span>Start Tour</span>
-          </button>
-          <button data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-lg btn-labeled btn-primary">
-            <span class="btn-label icon fa fa-question-circle"></span>
-            <span>Start Tour</span>
-          </button>
-          <button data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-lg btn-labeled btn-primary">
-            <span>Start Tour</span>
-          </button>
-        </p>
-
-        -->
         <div ng-if="vmDash.showTour">
           <br>
           <h4 class="no-padding">New here?</h4>
@@ -32,23 +10,6 @@
             <span>Start Tour</span>
           </button>
         </div>
-        <!--
-        <div class="stat-panel">
-          <div class="stat-row">
-            <div class="stat-cell col-sm-4 no-padding bordered valign-top">
-              <h4 class="padding-sm no-padding-t no-padding-b padding-xs-hr">New here?</h4>
-              <ul class="list-group no-margin">
-                <li class="list-group-item no-border-hr padding-xs-hr no-bg no-border-radius">
-                <button data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-lg btn-labeled btn-primary">
-                  <span class="btn-label icon fa fa-question-circle"></span>
-                  <span>Take a Tour</span>
-                </button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        -->
       </div>
     </div>
     <br>
@@ -65,7 +26,7 @@
                 <i class="fa fa-clock-o bg-icon"></i>
                 <!-- Extra large text -->
                 <!-- Big text -->
-                <span class="text-lg ">You have <span class="text-bold">3</span> days left in your trial for <strong style="color:#E7DF90">Grockit GMAT</strong>. Continue to enjoy full access, starting at just <span style="color:#E7DF90">$9</span>.</span><br>
+                <span class="text-lg "><span ng-bind-html="vmDash.upgradePromptMessage"></span> for <strong style="color:#E7DF90">Grockit <span ng-bind="$root.groupTitle"></span></strong>. Continue to enjoy full access, starting at just <span style="color:#E7DF90">$9</span>.</span><br>
                 <!-- Small text -->
                 <span class="text-sm"><br></span>
               </div> <!-- /.stat-cell -->
