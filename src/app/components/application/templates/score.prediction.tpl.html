@@ -1,11 +1,12 @@
 
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+  <a href="#" class="dropdown-toggle loadingScore" data-toggle="dropdown">
     <i class="nav-icon fa fa-trophy"></i>
     <span class="small-screen-text ">Score: <span class="text-semibold" ng-bind="scoreData.totalScore"></span></span>
   </a>
 
-  <div ng-if="progressInfo.historyVisible" class="dropdown-menu widget-notifications no-padding" style="width: 300px">
+  <div  class="dropdown-menu widget-notifications no-padding bg-success" style="width: 300px;background:#5CD2AE!important;">
     <div class="notification" ng-if="isVisible">
+    <i class="fa fa-trophy bg-icon bg-big"></i>
       <div id="circularG" class="text-lg">
             <div id="circularG_1" class="circularG">
             </div>
@@ -29,6 +30,7 @@
         <span class=" text-sm"> Your Overall <span ng-bind="groupTitle"></span> Score Prediction</span>
     </div> <!-- / .notification -->
       <div class="notification" ng-if="!isVisible">
+            <i class="fa fa-trophy bg-icon text-xlg pull-right"></i>
             <span class="text-xlg">
               <strong ng-if="hasScore()" ng-bind="scoreData.totalScore"></strong>
               <strong ng-if="!hasScore()" class="text-lg" ng-bind="noScoreMessage"></strong>
