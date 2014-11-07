@@ -175,14 +175,10 @@ margin-left: 5%;
 and (max-width: 1450px)
 and (min-width: 1200px) {
   .timing-box {
-    padding: 11px 14px 9px;
+    padding: 7px 14px;
 
     .difficulty-text {
       font-size: 20px;
-    }
-
-    i.fa.fa-4x {
-      font-size: 3em;
     }
   }
 }

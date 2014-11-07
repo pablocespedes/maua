@@ -4,7 +4,7 @@
       <div class="panel-heading timing-box">
         <div class="row">
           <div class="col-xs-3">
-            <i class="fa fa-clock-o fa-4x"></i>
+            <i class="fa fa-clock-o fa-3x"></i>
           </div>
           <div class="col-xs-9 text-right">
             <span class="text-lg" ng-if="confirmed"><span ng-bind="yourTime"></span>s </span>
@@ -25,7 +25,7 @@
       <div class="panel-heading timing-box">
         <div class="row">
           <div class="col-xs-3">
-            <i class="fa fa-bar-chart-o fa-4x"></i>
+            <i class="fa fa-bar-chart-o fa-3x"></i>
           </div>
           <div class="col-xs-9 text-right">
             <div class="text-lg" ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
@@ -33,11 +33,17 @@
             </div>
 
             <div ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
-              <h4 class="no-data">New item!</h4>
+              <i class="fa fa-minus fa-2x"></i>
             </div>
           </div>
         </div>
       </div>
+      <a href="#" ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left">New item!</span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
         <a href="#" ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
         <div class="panel-footer timing-box-padding">
           <span class="pull-left">Average time to answer</span>
@@ -51,11 +57,11 @@
       <div class="panel-heading timing-box">
         <div class="row">
           <div class="col-xs-3">
-            <i class="fa fa-flag-checkered fa-4x"></i>
+            <i class="fa fa-flag-checkered fa-3x"></i>
           </div>
           <div class="col-xs-9 text-right">
             <div ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
-              <h4 class="no-data">New item!</h4>
+              <i class="fa fa-minus fa-2x"></i>
             </div>
             <div ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
               <span class="badge avg-badge" ng-if="confirmed" ng-class="{ 'bg-success': !compAvgStatus, 'bg-danger': compAvgStatus}">
@@ -66,6 +72,12 @@
           </div>
         </div>
       </div>
+      <a href="#" ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left">New item!</span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
       <a href="#" ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
         <div class="panel-footer timing-box-padding">
           <span class="pull-left" ng-if="!compAvgStatus && confirmed">
@@ -84,7 +96,7 @@
       <div class="panel-heading timing-box">
         <div class="row">
           <div class="col-xs-3">
-            <i class="fa fa-tachometer fa-4x"></i>
+            <i class="fa fa-tachometer fa-3x"></i>
           </div>
           <div class="col-xs-9 text-right">
             <span class="text-lg difficulty-text" ng-bind="xpTag | level"></span>
@@ -104,11 +116,11 @@
       <div class="panel-heading timing-box">
         <div class="row">
           <div class="col-xs-3">
-            <i class="fa fa-arrow-up fa-4x"></i>
+            <i class="fa fa-arrow-up fa-3x"></i>
           </div>
           <div class="col-xs-9 text-right">
             <div ng-if="percentAnswered < 1 || data.total_answered < 100">
-              <h4 class="no-data">New item!</h4>
+              <i class="fa fa-minus fa-2x"></i>
             </div>
             <div ng-if="percentAnswered >= 1 && data.total_answered >= 100">
               <span class="text-lg">
@@ -118,7 +130,13 @@
           </div>
         </div>
       </div>
-      <a href="#">
+      <a href="#" ng-if="percentAnswered < 1 || data.total_answered < 100">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left">New item!</span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+      <a href="#" ng-if="percentAnswered >= 1 && data.total_answered >= 100">
         <div class="panel-footer timing-box-padding">
           <span class="pull-left">Users answered this question correctly</span>
           <div class="clearfix"></div>
