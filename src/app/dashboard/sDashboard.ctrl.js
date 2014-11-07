@@ -6,28 +6,25 @@
 
   /*Manually injection will avoid any minification or injection problem*/
   SimpleDashController.$inject = ['$window','$scope', 'dashboard', 'UsersApi', 'utilities', 'Auth', 'currentProduct',
-   'membershipService','setItUpUserProgress'];
+   'membershipService','setItUpUserProgress','setItUpScorePrediction'];
 
-  function SimpleDashController($window,$scope, dashboard, UsersApi, utilities, Auth, currentProduct, membershipService,setItUpUserProgress) {
+  function SimpleDashController($window,$scope, dashboard, UsersApi, utilities, Auth, currentProduct, membershipService,
+    setItUpUserProgress,setItUpScorePrediction) {
     /* jshint validthis: true */
     var vmDash = this,
     dashObserver = null;
 
     vmDash.loading = true;
     vmDash.isChallengeAvailable = false;
-    vmDash.scoreLoading = true;
     vmDash.loadingMessage = 'Loading...';
     vmDash.historyVisible = false;
     vmDash.getScore = getScore;
     vmDash.StartPractice = StartPractice;
+    vmDash.startCardinTour = startCardinTour;
 
     init();
 
-      vmDash.startCardinTour= function(){
-         angular.element(document).ready(function() {
-                angular.element('body').chardinJs('start');
-              });
-      }
+
 
     $scope.$on("$destroy", function() {
       currentProduct.unregisterGroup(dashObserver);
@@ -50,6 +47,12 @@
         }
       });
     };
+
+    function startCardinTour(){
+         angular.element(document).ready(function() {
+                angular.element('body').chardinJs('start');
+              });
+    }
 
     function getScore(track) {
       return (vmDash.score) ? vmDash.score.tracks[track.id] : null;
@@ -76,18 +79,16 @@
       getDashboard: function(groupId) {
         dashboard.setDashboardData(groupId).then(function(result) {
           var hasQuestionsAnswered = dashboard.hasQuestionsAnswered();
-          if(!hasQuestionsAnswered){
-            vmDash.showTour =true;
-          }
-          else{
-            vmDash.showTour =false;
-          }
+          if(!hasQuestionsAnswered && vmDash.activeGroupId==='gre') vmDash.showTour =true;
+          else vmDash.showTour =false;
+
 
           if(!hasQuestionsAnswered && vmDash.activeGroupId==='gre'){
             var base = utilities.newGrockit().url;
             $window.location.href= base + '/#/'+vmDash.activeGroupId+'/custom-practice/';
           }
           else{
+
              if (vmDash.enableScore)
                 SimpleDashBoard.fetchScorePrediction();
 
@@ -106,12 +107,11 @@
         vmDash.loading = false;
       },
       fetchScorePrediction: function() {
-        var scoreResponse = dashboard.getScorePrediction()
-
+        var scoreResponse = dashboard.getScorePrediction();
         if (angular.isDefined(scoreResponse)) {
-          vmDash.score = scoreResponse;
-        }
-        vmDash.scoreLoading = false;
+            setItUpScorePrediction.setScorePrediction(scoreResponse);
+             vmDash.score = scoreResponse;
+          }
       },
       getHistoryInformation: function() {
         var historyResponse = dashboard.getProgress();
@@ -125,7 +125,6 @@
         if (!_.isEmpty(challenge) && challenge.items.length > 0) {
           vmDash.isChallengeAvailable = true;
           vmDash.challengesGames = challenge.items;
-
         }
       }
     };

@@ -126,8 +126,8 @@
                 <!-- / .navbar-nav -->
                 <div class="right clearfix">
                   <ul class=" white nav navbar-nav pull-right right-navbar-nav"  >
-                    <li id="scoremenuUl" chardin-tour overlay-text="Check your score prediction." overlay-position="bottom" class="nav-icon-btn-danger dropdown"  >
-                    <span score-prediction></span>
+                    <li id="scoremenuUl" chardin-tour overlay-text="Check your score prediction." overlay-position="bottom" class="nav-icon-btn-danger dropdown" ng-if="appCtrl.enableScore">
+                    <span score-prediction group-title="$root.groupTitle"  score-data="appCtrl.score" is-visible="appCtrl.scoreLoading" no-score-message="More data needed for {{$root.groupTitle}} score."></span>
                     </li>
                     <li id="usermenuUl" chardin-tour overlay-text="Check how many questions you've answered here." overlay-position="bottom" class="nav-icon-btn-danger dropdown"  >
                     <span user-progress progress-info="appCtrl.historyInfo"></span>

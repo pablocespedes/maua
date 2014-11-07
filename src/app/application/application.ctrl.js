@@ -8,17 +8,19 @@
   /*Manually injection will avoid any minification or injection problem*/
   ApplicationController.$inject = ['$scope','$location', 'Auth', 'utilities', 'ListenloopUtility',
   'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct','membershipService',
-  'menuService','GoogleTagManager','setItUpUserProgress'
+  'menuService','GoogleTagManager','setItUpUserProgress','setItUpScorePrediction'
   ];
 
   function ApplicationController($scope,$location, Auth, utilities, ListenloopUtility,
     GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService,menuService,
-    GoogleTagManager,setItUpUserProgress) {
+    GoogleTagManager,setItUpUserProgress,setItUpScorePrediction) {
     /* jshint validthis: true */
     var vmApp = this,
-    userProgressObserver=null;
+    userProgressObserver=null,
+    scorePrediction= null;
     /* recommend: Using function declarations and bindable members up top.*/
     vmApp.isReady= false;
+    vmApp.scoreLoading = true;
     vmApp.isActive = isActive;
     vmApp.url = utilities.originalGrockit().url;
     vmApp.logOutUrl = utilities.originalGrockit().url + '/logout';
@@ -118,7 +120,7 @@
         }
       },
       getUserProgress: function(){
-      userProgressObserver  =  setItUpUserProgress.observeUserProgress().register(function(historyResponse){
+        userProgressObserver =  setItUpUserProgress.observeUserProgress().register(function(historyResponse){
            var  userProgess = {};
 
             if (angular.isDefined(historyResponse)) {
@@ -133,12 +135,23 @@
             vmApp.historyInfo = userProgess;
         });
       },
+      getScorePrediction: function(){
+       scorePrediction= setItUpScorePrediction.observeScorePrediction().register(function(scoreResponse){
+             vmApp.score = scoreResponse;
+             vmApp.scoreLoading=false;
+        });
+      },
       init: function() {
         Auth.getCurrentUserInfo().then(function(response) {
           if (response != null) {
             vmApp.currentUser = response;
             currentProduct.observeGroupId().register(function(groupId) {
-              vmApp.activeGroupId = groupId;
+            vmApp.activeGroupId = groupId;
+            vmApp.enableScore = (groupId === 'gmat' || groupId === 'act' || groupId === 'sat');
+
+             if (vmApp.enableScore)
+                Application.getScorePrediction();
+
 
               var gtmData ={
                   'platformVersion': '2',

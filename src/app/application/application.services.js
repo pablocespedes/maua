@@ -6,13 +6,15 @@
   .service('currentProduct', currentProduct)
   .factory('appService', appService)
   .factory('menuService',menuService)
-  .service('setItUpUserProgress',setItUpUserProgress);
+  .service('setItUpUserProgress',setItUpUserProgress)
+  .service('setItUpScorePrediction',setItUpScorePrediction);
 
   grockitModal.$inject = ['$http', 'utilities', 'environmentCons'];
   currentProduct.$inject = ['webStorage', 'Observable', 'utilities'];
   appService.$inject = ['$window','$q', '$location', 'Auth', 'GroupsApi', 'utilities', 'membershipService', 'currentProduct','alerts'];
   menuService.$inject =['utilities'];
   setItUpUserProgress.$inject =['Observable'];
+  setItUpScorePrediction.$inject =['Observable'];
 
   function grockitModal($http, utilities, environmentCons) {
 
@@ -266,9 +268,16 @@
     this.observeUserProgress = function() {
       return Observable.get('userProgress');
     }
+  }
 
-    this.unregisterUserProgress = function(userProgressObserver) {
-      observable.unregister(userProgressObserver);
+  function setItUpScorePrediction(Observable){
+    var  observableScore = Observable.create('scorePrediction');
+
+    this.setScorePrediction = function(scorePredictionData) {
+      observableScore.notify(scorePredictionData);
+    };
+    this.observeScorePrediction = function() {
+      return Observable.get('scorePrediction');
     }
   }
 

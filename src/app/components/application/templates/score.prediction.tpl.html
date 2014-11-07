@@ -1,26 +1,44 @@
 
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
     <i class="nav-icon fa fa-trophy"></i>
-    <span class="small-screen-text ">Score: <span class="text-semibold">590</span></span>
+    <span class="small-screen-text ">Score: <span class="text-semibold" ng-bind="scoreData.totalScore"></span></span>
   </a>
+
   <div ng-if="progressInfo.historyVisible" class="dropdown-menu widget-notifications no-padding" style="width: 300px">
-    <div class="notification">
-      <div class="text-normal text-bg">Total Questions Answered</div>
-      <div class="notification-description ">
-        <strong class="text-bg"> &nbsp;&nbsp;<span ng-bind="progressInfo.totalQuest"></span></strong>
-      </div>
-      <div class="notification-icon fa fa-arrow-circle-o-up bg-info"></div>
+    <div class="notification" ng-if="isVisible">
+      <div id="circularG" class="text-lg">
+            <div id="circularG_1" class="circularG">
+            </div>
+            <div id="circularG_2" class="circularG">
+            </div>
+            <div id="circularG_3" class="circularG">
+            </div>
+            <div id="circularG_4" class="circularG">
+            </div>
+            <div id="circularG_5" class="circularG">
+            </div>
+            <div id="circularG_6" class="circularG">
+            </div>
+            <div id="circularG_7" class="circularG">
+            </div>
+            <div id="circularG_8" class="circularG">
+            </div>
+        </div>
+        <br>
+        <br>
+        <span class=" text-sm"> Your Overall <span ng-bind="groupTitle"></span> Score Prediction</span>
+    </div> <!-- / .notification -->
+      <div class="notification" ng-if="!isVisible">
+            <span class="text-xlg">
+              <strong ng-if="hasScore()" ng-bind="scoreData.totalScore"></strong>
+              <strong ng-if="!hasScore()" class="text-lg" ng-bind="noScoreMessage"></strong>
+            </span>
+        <br>
+        <span ng-show="scoreData.rangeExist" class="text-bg">
+        <span ng-bind="scoreData.rangeInit"></span>-<span ng-bind="scoreData.rangeEnd"></span>
+        </span>
+        <br>
+        <span ng-show="hasScore()" class="text-sm"> Your Overall <span ng-bind="groupTitle"></span> Score Prediction</span>
       </div> <!-- / .notification -->
-      <div class="notification">
-        <div class="notification-title text-normal text-bg">Questions Answered in the Last 7 Days</div>
-        <div class="notification-description"> <strong class="text-bg">&nbsp;&nbsp;<span ng-bind="progressInfo.totalQuestLastW"></span></strong></div>
-        <div class="notification-icon fa fa-hdd-o bg-success"></div>
-        </div> <!-- / .notification -->
-        <div class="notification">
-          <div class="notification-title text-normal text-bg">Questions Answered Today</div>
-          <div class="notification-description">
-            <strong class="text-bg">&nbsp;&nbsp;<span ng-bind="progressInfo.totalQuestToday"></span></strong>
-          </div>
-          <div class="notification-icon fa fa-hdd-o bg-warning"></div>
-          </div> <!-- / .notification -->
-          </div> <!-- / .dropdown-menu -->
+
+  </div> <!-- / .dropdown-menu -->
