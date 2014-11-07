@@ -5,25 +5,25 @@
 @import "../styles/spinners.scss";
 @import "../app/dashboard/dashboard.scss";
 @import "../app/history/history.scss";
-@import "../styles/media-queries.scss";
 @import "../app/practices/practice.scss";
-
+@import "../styles/chardin-grockit.scss";
+@import "../styles/media-queries.scss";
 [ng\:cloak], [ng-cloak], .ng-cloak {
     display: none !important;
 }
 
-// #content-wrapper {
-//     position: static;
-// }
-
-#main-navbar {
-
-z-index: 9999999;
+.theme-default #main-navbar .navbar-nav>li>span {
+color: #555;
+}
+.nav>li>span {
+position: relative;
+display: block;
+padding: 0px 15px;
 }
 
-.chardinjs-show-element {
-    z-index: 9999999 !important;
-    opacity: 0.8;
+#main-navbar li a span {
+line-height: 46px;
+color: #555;
 }
 
 .white {

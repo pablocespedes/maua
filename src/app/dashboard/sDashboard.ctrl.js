@@ -42,6 +42,7 @@
           dashObserver = currentProduct.observeGroupId().register(function(groupId) {
             vmDash.activeGroupId = groupId;
             SimpleDashBoard.getDashboard(vmDash.activeGroupId);
+            vmDash.showBuyNow = membershipService.showBuyButton();
             vmDash.canPractice = membershipService.canPractice();
             vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
             vmDash.historyVisible = false;
@@ -74,7 +75,15 @@
     var SimpleDashBoard = {
       getDashboard: function(groupId) {
         dashboard.setDashboardData(groupId).then(function(result) {
-          if(!dashboard.hasQuestionsAnswered() && vmDash.activeGroupId==='gre'){
+          var hasQuestionsAnswered = dashboard.hasQuestionsAnswered();
+          if(!hasQuestionsAnswered){
+            vmDash.showTour =true;
+          }
+          else{
+            vmDash.showTour =false;
+          }
+
+          if(!hasQuestionsAnswered && vmDash.activeGroupId==='gre'){
             var base = utilities.newGrockit().url;
             $window.location.href= base + '/#/'+vmDash.activeGroupId+'/custom-practice/';
           }

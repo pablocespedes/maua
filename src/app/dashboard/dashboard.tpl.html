@@ -1,5 +1,6 @@
 <div id="simpleDash">
   <div class="page-header">
+<<<<<<< HEAD
     <div class="row">
       <div class="col-lg-6 no-padding-r">
         <h2>Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
@@ -27,7 +28,7 @@
         <br>
         <div>
           <h4 class="no-padding">New here?</h4>
-          <button data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-lg btn-labeled btn-primary">
+          <button ng-if="vmDash.showTour" data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-lg btn-labeled btn-primary">
             <span class="btn-label icon fa fa-question-circle"></span>
             <span>Start Tour</span>
           </button>
@@ -56,53 +57,36 @@
   <div class="profile-content">
     <div fading-text word="vmDash.loadingMessage" is-visible="!vmDash.historyVisible && vmDash.loading"></div>
     <div class="row">
-    <div class="col-lg-6">
-    <div id="DoNow" chardin-tour overlay-text="Here is the Do Now Section." overlay-position="right">
-    <div do-now></div>
-    </div>
-
-
-     <!--  <div class="col-lg-4">
-        <div class="no-padding">
-          <div class="stat-panel">
-            <div class="stat-row">
-              <div class="stat-cell col-sm-4 no-padding bordered valign-top dash-widget">
-                <h4 class="padding-sm no-padding-t padding-xs-hr"><i class="fa fa-info text-primary"></i>&nbsp;&nbsp;How to use grockit?</h4>
-                <ul class=" no-margin">
-                  <li class=" no-border-hr padding-xs-hr no-bg no-border-radius text-left">
-                    “<a href="http://en.wikipedia.org/wiki/Grok"><b>Grok</b>: to understand thoroughly</a>.”
-                    <b>Grockit</b>: the best way to do <span ng-bind="$root.groupTitle"></span> practice.
-                  </li>
-                  <li class=" no-border-hr padding-xs-hr no-bg no-border-radius text-left">
-                    <b>More questions</b> means <b>more points</b>. Try to answer <b>at least 20 questions</b> each day.
-                  </li>
-                  <li class=" no-border-hr padding-xs-hr no-bg no-border-radius text-left">
-                    <b>Smart Practice</b> selects questions in your personal “strike zone”.
-                  </li>
-                </ul>
-              </div>
+    <div ng-if="vmDash.showBuyNow" class="col-lg-12">
+    <div class="stat-panel">
+              <!-- Success background. vertically centered text -->
+              <div class="stat-cell bg-info valign-middle">
+                <!-- Stat panel bg icon -->
+                <br>
+                <i class="fa fa-clock-o bg-icon"></i>
+                <!-- Extra large text -->
+                <!-- Big text -->
+                <span class="text-lg ">You have <span class="text-bold">3</span> days left in your trial for <strong style="color:#E7DF90">Grockit GMAT</strong>. Continue to enjoy full access, starting at just <span style="color:#E7DF90">$9</span>.</span><br>
+                <!-- Small text -->
+                <span class="text-sm"><br></span>
+              </div> <!-- /.stat-cell -->
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="no-padding">
-          <div history-chart history-info="vmDash.historyInfo">
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4" ng-if="vmDash.enableScore">
+    </div>
+    <!-- <div class="col-lg-6" >
+    <div do-now></div>
+    </div> -->
+     <!--  <div class="col-lg-4" ng-if="vmDash.enableScore" id="sPrediction" chardin-tour overlay-text="When you've done all the section score predictions, you'll see a full score prediction here." overlay-position="left">
         <div class="no-padding">
           <div score-prediction group-title="$root.groupTitle"  score-data="vmDash.score" is-visible="vmDash.scoreLoading"
           no-score-message="More data needed for {{$root.groupTitle}} score."></div>
         </div>
       </div> -->
-    </div>
+
   </div>
-  <div class="row fadeIn animated">
+  <div class="row" >
     <div class="col-md-12">
       <div class="panel">
-        <div class=" list-group text-left">
+        <div class="list-group text-left">
           <div track-list tracks="vmDash.tracks" start-practice="vmDash.StartPractice" get-score="vmDash.getScore"
           is-visible="vmDash.enableScore && !vmDash.loading" can-practice="vmDash.canPractice"></div>
         </div>
