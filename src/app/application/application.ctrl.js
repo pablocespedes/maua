@@ -14,6 +14,7 @@
   function ApplicationController($scope,$location, Auth, utilities, ListenloopUtility,
     GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService,menuService,
     GoogleTagManager,setItUpUserProgress,setItUpScorePrediction) {
+
     /* jshint validthis: true */
     var vmApp = this,
     userProgressObserver=null,
@@ -152,15 +153,13 @@
              if (vmApp.enableScore)
                 Application.getScorePrediction();
 
-
-              var gtmData ={
+               var gtmData ={
                   'platformVersion': '2',
                   'studyingFor': groupId,
                   'userId': response.userId,
               };
 
               GoogleTagManager.push(gtmData);
-
 
               vmApp.canAccess = membershipService.canPractice();
                var menuParams= {

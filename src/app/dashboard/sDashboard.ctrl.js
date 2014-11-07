@@ -40,9 +40,11 @@
             vmDash.activeGroupId = groupId;
             SimpleDashBoard.getDashboard(vmDash.activeGroupId);
             vmDash.showBuyNow = membershipService.showBuyButton();
+            vmDash.upgradePromptMessage =membershipService.upgradePromptMessage().replace('.','');
             vmDash.canPractice = membershipService.canPractice();
             vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
             vmDash.historyVisible = false;
+
           });
         }
       });
@@ -79,7 +81,7 @@
       getDashboard: function(groupId) {
         dashboard.setDashboardData(groupId).then(function(result) {
           var hasQuestionsAnswered = dashboard.hasQuestionsAnswered();
-          if(!hasQuestionsAnswered && vmDash.activeGroupId==='gre') vmDash.showTour =true;
+          if(!hasQuestionsAnswered && vmDash.activeGroupId!=='gre') vmDash.showTour =true;
           else vmDash.showTour =false;
 
 
