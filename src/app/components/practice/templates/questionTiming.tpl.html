@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-lg-2 col-md-4">
     <div class="panel">
-      <div class="panel-heading">
+      <div class="panel-heading timing-box">
         <div class="row">
           <div class="col-xs-3">
             <i class="fa fa-clock-o fa-4x"></i>
@@ -22,7 +22,7 @@
   </div>
   <div class="col-lg-2 col-md-4">
     <div class="panel">
-      <div class="panel-heading">
+      <div class="panel-heading timing-box">
         <div class="row">
           <div class="col-xs-3">
             <i class="fa fa-bar-chart-o fa-4x"></i>
@@ -48,7 +48,7 @@
   </div>
   <div class="col-lg-2 col-md-4">
     <div class="panel">
-      <div class="panel-heading">
+      <div class="panel-heading timing-box">
         <div class="row">
           <div class="col-xs-3">
             <i class="fa fa-flag-checkered fa-4x"></i>
@@ -58,8 +58,8 @@
               <h4 class="no-data">New item!</h4>
             </div>
             <div ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
-              <span class="badge" ng-if="confirmed" ng-class="{ 'bg-success': !compAvgStatus, 'bg-danger': compAvgStatus}">
-              <span class="text-lg" style="padding-right: 4px;"><span ng-bind="compAvg"></span>s</span>
+              <span class="badge avg-badge" ng-if="confirmed" ng-class="{ 'bg-success': !compAvgStatus, 'bg-danger': compAvgStatus}">
+              <span class="text-lg"><span ng-bind="compAvg"></span>s</span>
               </span>
               <span class="text-lg" ng-if="!confirmed"> <i class="fa fa-minus"></i> </span>
             </div>
@@ -81,13 +81,13 @@
   </div>
   <div class="col-lg-2 col-md-4">
     <div class="panel">
-      <div class="panel-heading">
+      <div class="panel-heading timing-box">
         <div class="row">
           <div class="col-xs-3">
             <i class="fa fa-tachometer fa-4x"></i>
           </div>
           <div class="col-xs-9 text-right">
-            <span class="text-lg" ng-bind="xpTag | level"></span>
+            <span class="text-lg difficulty-text" ng-bind="xpTag | level"></span>
           </div>
         </div>
       </div>
@@ -101,7 +101,7 @@
   </div>
   <div class="col-lg-2 col-md-4">
     <div class="panel panel-red">
-      <div class="panel-heading">
+      <div class="panel-heading timing-box">
         <div class="row">
           <div class="col-xs-3">
             <i class="fa fa-arrow-up fa-4x"></i>
@@ -126,18 +126,18 @@
       </a>
     </div>
   </div>
-  <div class="col-lg-1 col-md-3">
+  <div class="col-lg-2 col-md-3">
     <div class="panel panel-red">
-      <div class="panel-heading no-padding">
+      <div class="panel-heading timing-box no-padding">
         <div class="row">
           <div class="col-xs-12 text-right ">
             <div ng-class="{ 'bg-danger':!answerStatus, 'bg-success':answerStatus}" ng-if="confirmed"
               class="timing-check text-center text-slg no-padding-vr">
-              <i ng-if="!answerStatus" class="fa fa-times"></i>
-              <i ng-if="answerStatus" class="fa fa-check"></i>
+              <i ng-if="!answerStatus" class="fa fa-times abs-center"></i>
+              <i ng-if="answerStatus" class="fa fa-check abs-center"></i>
             </div>
             <div class="bg-default timing-check text-center text-slg no-padding-vr" ng-if="!confirmed">
-              <i class="fa fa-minus"></i>
+              <i class="fa fa-minus abs-center"></i>
             </div>
           </div>
         </div>

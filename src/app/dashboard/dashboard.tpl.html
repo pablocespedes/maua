@@ -1,10 +1,54 @@
 <div id="simpleDash">
   <div class="page-header">
-    <div class="row row-fluid">
-      <div class="col-lg-4 col-md-4 no-padding-r" >
-       <!--  <h2 id="welcome" chardin-tour overlay-text="Welcome to Grockit GMAT! Let's have a look around." overlay-position="right">
-        Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
-        </h2>  --> <button ng-if="vmDash.showTour" data-toggle="chardinjs" ng-click="vmDash.startCardinTour()">Start Tour</button>
+    <div class="row">
+      <div class="col-lg-6 no-padding-r">
+        <h2>Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
+        </h2>
+        <!-- 
+        <p>
+          <button data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-flat btn-lg btn-labeled">
+            <span class="btn-label icon fa fa-question-circle"></span>
+            <span>Start Tour</span>
+          </button>
+          <button data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-flat btn-lg btn-labeled btn-primary">
+            <span class="btn-label icon fa fa-question-circle"></span>
+            <span>Start Tour</span>
+          </button>
+          <button data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-lg btn-labeled btn-primary">
+            <span class="btn-label icon fa fa-question-circle"></span>
+            <span>Start Tour</span>
+          </button>
+          <button data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-lg btn-labeled btn-primary">
+            <span>Start Tour</span>
+          </button>
+        </p>
+        
+        -->
+        <div ng-if="vmDash.showTour">
+          <br>
+          <h4 class="no-padding">New here?</h4>
+          <button  data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-lg btn-labeled btn-primary">
+            <span class="btn-label icon fa fa-question-circle"></span>
+            <span>Start Tour</span>
+          </button>
+        </div>
+        <!-- 
+        <div class="stat-panel">
+          <div class="stat-row">
+            <div class="stat-cell col-sm-4 no-padding bordered valign-top">
+              <h4 class="padding-sm no-padding-t no-padding-b padding-xs-hr">New here?</h4>
+              <ul class="list-group no-margin">
+                <li class="list-group-item no-border-hr padding-xs-hr no-bg no-border-radius">
+                <button data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-lg btn-labeled btn-primary">
+                  <span class="btn-label icon fa fa-question-circle"></span>
+                  <span>Take a Tour</span>
+                </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        -->
       </div>
     </div>
     <br>
