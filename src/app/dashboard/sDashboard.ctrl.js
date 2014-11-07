@@ -81,7 +81,7 @@
       getDashboard: function(groupId) {
         dashboard.setDashboardData(groupId).then(function(result) {
           var hasQuestionsAnswered = dashboard.hasQuestionsAnswered();
-          if(!hasQuestionsAnswered && vmDash.activeGroupId==='gre') vmDash.showTour =true;
+          if(!hasQuestionsAnswered && vmDash.activeGroupId!=='gre') vmDash.showTour =true;
           else vmDash.showTour =false;
 
 
