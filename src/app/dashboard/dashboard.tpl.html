@@ -1,6 +1,5 @@
 <div id="simpleDash">
   <div class="page-header">
-<<<<<<< HEAD
     <div class="row">
       <div class="col-lg-6 no-padding-r">
         <h2>Welcome to Grockit <span ng-bind="$root.groupTitle"></span>!
@@ -25,10 +24,10 @@
         </p>
         
         -->
-        <br>
-        <div>
+        <div ng-if="vmDash.showTour">
+          <br>
           <h4 class="no-padding">New here?</h4>
-          <button ng-if="vmDash.showTour" data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-lg btn-labeled btn-primary">
+          <button  data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-lg btn-labeled btn-primary">
             <span class="btn-label icon fa fa-question-circle"></span>
             <span>Start Tour</span>
           </button>
