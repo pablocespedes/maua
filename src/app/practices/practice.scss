@@ -1,3 +1,10 @@
+/* just a trick to avoid a bad css to be remoed from the CE */
+.Apple-style-span{
+    float: inherit;
+   min-height: 1px;
+   margin-left: 0px;
+}
+
 .practice-header {
     .practice-element-sm {
         width: 6.55%;
