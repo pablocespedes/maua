@@ -23,10 +23,10 @@
           <span class="text-xs float-right valign-bottom">Your Score Prediction</span>
         </h4>
       </div>
-      <div class="float-right" ng-if="scoreOverlay"  ng-hide="track.hasScore" id="geScore" data-intro="Click here to take a short set of questions and get your score prediction for each section." data-position="bottom">
+      <div class="float-right" ng-if="shouldShowOverlay(track)"  ng-hide="track.hasScore" id="geScore" data-intro="Click here to take a short set of questions and get your score prediction for each section." data-position="bottom">
         <button class="get-score-prediction btn-lg btn btn-labeled btn-success" ng-disabled="!canPractice" ng-click="getYourScorePredictionUrl(track)">Get your Score Prediction</button>
       </div>
-      <div class="float-right" ng-if="!scoreOverlay" ng-hide="track.hasScore">
+      <div class="float-right" ng-if="!shouldShowOverlay(track)" ng-hide="track.hasScore">
         <button class="get-score-prediction btn-lg btn btn-labeled btn-success" ng-disabled="!canPractice" ng-click="getYourScorePredictionUrl(track)">Get your Score Prediction</button>
       </div>
     </div>
