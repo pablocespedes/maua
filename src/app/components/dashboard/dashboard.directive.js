@@ -25,7 +25,17 @@
     return directive;
 
     function link(scope, element, attrs) {
-      scope.scoreOverlay=false;
+      var overlayTrack = null;
+      scope.shouldShowOverlay = function(track) {
+        if (track.hasScore) {
+          return false;
+        } else if (overlayTrack === null) {
+          overlayTrack = track;
+          return true;
+        } else {
+          return overlayTrack.id === track.id;
+        }
+      }
       scope.empty = function(track) {
         return angular.isDefined(track.items) && track.items.length > 0 ? true : false;
       }
