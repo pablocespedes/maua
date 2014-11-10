@@ -13,7 +13,7 @@
     /* jshint validthis: true */
     var vmDash = this,
     dashObserver = null;
-
+    vmDash.showingTour=false;
     vmDash.loading = true;
     vmDash.isChallengeAvailable = false;
     vmDash.loadingMessage = 'Loading...';
@@ -47,12 +47,21 @@
       });
     };
 
-    function startCardinTour(){
-         angular.element(document).ready(function() {
-                angular.element('body').chardinJs('start');
-              });
-    }
+    function startCardinTour() {
+      angular.element(document).ready(function() {
+        vmDash.showingTour = true;
+        angular.element('body').chardinJs('start');
 
+      });
+    }
+    angular.element(document).ready(function() {
+      angular.element('body').on('chardinJs:stop', function() {
+        $scope.$apply(function() {
+          vmDash.showingTour = false;
+        });
+
+      });
+    });
     function StartPractice(subject, trackId) {
 
       if (vmDash.canPractice) {

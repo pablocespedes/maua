@@ -70,7 +70,6 @@
         });
 
       });
-      console.log(smartPracticeItems)
       dashboardData.smart_practice.items = smartPracticeItems
 
       return dashboardData.smart_practice;
