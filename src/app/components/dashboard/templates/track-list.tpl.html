@@ -1,6 +1,6 @@
 <a ng-repeat="track in tracks" href="javascript:void(0)" class="list-group-item">
   <div class="row track-list-padding-hr track-list-padding">
-    <span class="white track-list-lg  text-lg cursor-a" ng-if="$index===0" id="tracks" chardin-tour overlay-text="Practice thousands of high quality, realistic questions by clicking Start." overlay-position="right"  >
+    <span class="white track-list-lg  text-lg cursor-a" ng-if="$index===0" id="tracks" chardin-tour overlay-text="Practice thousands of high quality, realistic questions by clicking Start." overlay-position="bottom"  >
       <button class="btn-lg btn btn-labeled btn-primary" ng-click="startPractice(track,track.id)" ng-disabled="!canPractice"
       >Start</button>
       &nbsp;
