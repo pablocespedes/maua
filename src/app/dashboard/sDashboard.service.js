@@ -8,7 +8,12 @@
   dashboard.$inject = ['$q', 'DashboardApi'];
 
   function dashboard($q, DashboardApi) {
-    var dashboardData = null;
+    var dashboardData = null,
+    _dashboarFn={
+     getScore: function(track) {
+      return (dashboardData.score_prediction) ? dashboardData.score_prediction.tracks[track.id] : null;
+     }
+    };
 
     this.setDashboardData = function(groupId) {
       var deferred = $q.defer();
@@ -56,12 +61,16 @@
       subtracks = null,
       smartPracticeItems = null;
       smartPracticeItems = _.forEach(dashboardData.smart_practice.items, function(result) {
+
+        result['getScore']= _dashboarFn.getScore(result);
+        result['hasScore'] = (_dashboarFn.getScore(result) !== null && _dashboarFn.getScore(result) > 0);
         return subtracks = _.forEach(result.items, function(subtrack) {
           accuracy = (subtrack.total_questions_answered_correctly / subtrack.total_questions_answered) * 100;
           subtrack['accuracy'] = accuracy > 0 ? Math.round(accuracy.toFixed(2)) : 0;
         });
 
       });
+      console.log(smartPracticeItems)
       dashboardData.smart_practice.items = smartPracticeItems
 
       return dashboardData.smart_practice;

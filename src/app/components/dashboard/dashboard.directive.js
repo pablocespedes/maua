@@ -18,7 +18,6 @@
       scope: {
         tracks: '=',
         startPractice: '=',
-        getScore: '=',
         isVisible: '=',
         canPractice: '='
       }
@@ -26,15 +25,10 @@
     return directive;
 
     function link(scope, element, attrs) {
-
+      scope.scoreOverlay=false;
       scope.empty = function(track) {
         return angular.isDefined(track.items) && track.items.length > 0 ? true : false;
       }
-
-      scope.hasScore = function(track) {
-        return (scope.getScore(track) !== null && scope.getScore(track) > 0);
-      };
-
       scope.getYourScorePredictionUrl = function(track) {
         var baseUrl = utilities.originalGrockit(false).url;
         utilities.redirect(baseUrl + '/assessment/for_track/' + track.id);

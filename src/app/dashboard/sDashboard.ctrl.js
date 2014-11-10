@@ -18,13 +18,10 @@
     vmDash.isChallengeAvailable = false;
     vmDash.loadingMessage = 'Loading...';
     vmDash.historyVisible = false;
-    vmDash.getScore = getScore;
     vmDash.StartPractice = StartPractice;
     vmDash.startCardinTour = startCardinTour;
 
     init();
-
-
 
     $scope.$on("$destroy", function() {
       currentProduct.unregisterGroup(dashObserver);
@@ -55,11 +52,6 @@
                 angular.element('body').chardinJs('start');
               });
     }
-
-    function getScore(track) {
-      return (vmDash.score) ? vmDash.score.tracks[track.id] : null;
-    };
-
 
     function StartPractice(subject, trackId) {
 
