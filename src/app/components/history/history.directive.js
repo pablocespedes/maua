@@ -1,6 +1,9 @@
-angular.module('grockitApp.components')
-
-  .directive('historyList', historyList);
+(function() {
+  'use strict';
+  angular
+  .module('grockitApp.components')
+  .directive('historyList', historyList)
+  .directive('whenScrolled', whenScrolled);
 
   function historyList() {
     var directive = {
@@ -18,3 +21,22 @@ angular.module('grockitApp.components')
 
     return directive;
   }
+
+
+  function whenScrolled() {
+    return function(scope, elm, attr) {
+      var raw = elm[0];
+
+      elm.bind('scroll', function() {
+        if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+          scope.$apply(attr.whenScrolled);
+        }
+      });
+    };å
+  }
+
+
+
+
+
+})();
