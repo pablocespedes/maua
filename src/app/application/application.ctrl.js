@@ -22,16 +22,15 @@
     /* recommend: Using function declarations and bindable members up top.*/
     vmApp.isReady= false;
     vmApp.scoreLoading = true;
-    vmApp.isActive = isActive;
     vmApp.url = utilities.originalGrockit().url;
     vmApp.logOutUrl = utilities.originalGrockit().url + '/logout';
     vmApp.selectGroup = selectGroup;
     vmApp.logOut = logOut;
     vmApp.groupRedirect = groupRedirect;
 
-    function isActive(viewLocation) {
-        return viewLocation === '/'+$location.path().split("/")[2];
-    };
+    // function isActive(viewLocation) {
+    //     return viewLocation === '/'+$location.path().split("/")[2];
+    // };
 
     function selectGroup(index) {
 

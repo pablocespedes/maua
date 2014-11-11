@@ -12,6 +12,8 @@
     .directive('userProgress', userProgress)
     .directive('scorePrediction', scorePrediction);
 
+    grockitLink.$inject =['$location','$timeout'];
+
 function youtube() {
     var directive = {
         link: link,
@@ -70,14 +72,16 @@ function welcome() {
     return directive;
 }
 
-function grockitLink() {
+function grockitLink($location,$timeout) {
     var directive = {
         templateUrl: 'app/components/application/templates/a.leftMenu.tpl.html',
         restrict: 'A',
+        link:link,
         scope: {
             canAccess: '=',
             url: '=',
             text: '=',
+            menuId:'=',
             groupId: '=',
             isReady: '=',
             iconClass: '=',
@@ -85,6 +89,21 @@ function grockitLink() {
         }
     };
     return directive;
+
+    function link(scope,elm,attr){
+        var path = $location.path(),
+           urlArr = path.split('/');
+        scope.view = urlArr[urlArr.length -1];
+
+        if(scope.view === scope.menuId || scope.view==='custom-practice'){
+            $timeout(function() {
+              elm.addClass('active');
+            },500);
+        }
+
+
+
+    }
 }
 
 function chardinTour() {
