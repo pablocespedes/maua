@@ -95,7 +95,7 @@ function grockitLink($location,$timeout) {
            urlArr = path.split('/');
         scope.view = urlArr[urlArr.length -1];
 
-        if(scope.view === scope.menuId || scope.view==='custom-practice'){
+        if(scope.view === scope.menuId || (scope.view==='custom-practice' && scope.menuId==='dashboard')){
             $timeout(function() {
               elm.addClass('active');
             },500);
