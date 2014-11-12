@@ -7,6 +7,7 @@
   .factory('SplashMessages', SplashMessages)
 
   practiceUtilities.$inject = ['$q', '$sce', 'utilities', 'practiceResource', 'alerts', 'YoutubeVideoApi', 'practiceConstants'];
+  SplashMessages.$inject = ['utilities'];
 
   function practiceUtilities($q, $sce, utilities, practiceResource, alerts, YoutubeVideoApi, practiceConstants) {
 
