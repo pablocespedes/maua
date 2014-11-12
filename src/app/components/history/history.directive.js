@@ -42,9 +42,11 @@
         var w = angular.element($window);
 
         scope.getHeight = function(){ return (w.height()-200) +'px'};
+        scope.setHeight = function(){ element.attr('style','height:'+scope.getHeight()); };
+        scope.setHeight();
 
         w.bind('resize', function () {
-          element.attr('style','height:'+scope.getHeight());
+          scope.setHeight();
           scope.$apply();
         });
 
