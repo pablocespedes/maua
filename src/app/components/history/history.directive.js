@@ -3,7 +3,10 @@
   angular
   .module('grockitApp.components')
   .directive('historyList', historyList)
-  .directive('whenScrolled', whenScrolled);
+  .directive('whenScrolled', whenScrolled)
+  .directive('setHeight', setHeight);
+
+  setHeight.$inject =['$window'];
 
   function historyList() {
     var directive = {
@@ -15,7 +18,7 @@
         roundSessions: '='
       },
       link: function(scope, elem, attrs) {
-        this.currentPage = 1;
+        //this.currentPage = 1;
       }
     };
 
@@ -32,7 +35,26 @@
           scope.$apply(attr.whenScrolled);
         }
       });
-    };å
+    };
+  }
+
+  function setHeight($window){
+    var directive = {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+          var w = angular.element($window);
+          scope.getHeight = (w.height()-175) +'px';
+
+          w.bind('resize', function () {
+            scope.$apply();
+          });
+
+
+        element.attr('style','height:'+scope.getHeight);
+      }
+    };
+
+    return directive;
   }
 
 
