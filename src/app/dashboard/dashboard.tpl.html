@@ -18,7 +18,8 @@
     <div fading-text word="vmDash.loadingMessage" is-visible="!vmDash.historyVisible && vmDash.loading"></div>
     <div class="row">
     <div ng-if="vmDash.showBuyNow" class="col-lg-12">
-    <div class="stat-panel">
+    <a ng-href="{{vmDash.paymentPage}}" target="_blank">
+    <div class="stat-panel cursor-a" >
               <!-- Success background. vertically centered text -->
               <div class="stat-cell bg-info valign-middle">
                 <!-- Stat panel bg icon -->
@@ -31,6 +32,7 @@
                 <span class="text-sm"><br></span>
               </div> <!-- /.stat-cell -->
             </div>
+            </a>
     </div>
     <!-- <div class="col-lg-6" >
     <div do-now></div>

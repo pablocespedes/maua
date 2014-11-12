@@ -13,14 +13,16 @@
     historyObj={};
     vmHist.productObserver = currentProduct.observeGroupId().register(updateGroupId);
     vmHist.getQuestions=getQuestions;
-
+    vmHist.loading=true;
     $scope.$on('$destroy', function() {
       currentProduct.unregisterGroup(vmHist.productObserver);
     });
 
       function getQuestions(){
+         vmHist.loading=true;
         history.loadQuestions(vmHist.groupId).then(function(parsedQuestions){
             vmHist.questionsPerDay = parsedQuestions;
+             vmHist.loading=false;
         });
       }
 

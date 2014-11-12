@@ -16,9 +16,6 @@
         title: '@',
         groupId: '=',
         roundSessions: '='
-      },
-      link: function(scope, elem, attrs) {
-        //this.currentPage = 1;
       }
     };
 
@@ -43,14 +40,20 @@
       restrict: 'A',
       link: function(scope, element, attrs) {
           var w = angular.element($window);
-          scope.getHeight = (w.height()-175) +'px';
+
+          scope.getHeight = function(){ return (w.height()-200) +'px'};
+          scope.$watch(scope.getHeight, function(newValue, oldValue) {
+              scope.windowHeight = newValue;
+              console.log(scope.windowHeight)
+             element.attr('style','height:'+scope.windowHeight);
+          });
 
           w.bind('resize', function () {
             scope.$apply();
           });
 
 
-        element.attr('style','height:'+scope.getHeight);
+
       }
     };
 

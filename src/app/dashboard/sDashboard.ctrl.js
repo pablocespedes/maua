@@ -20,7 +20,6 @@
     vmDash.historyVisible = false;
     vmDash.StartPractice = StartPractice;
     vmDash.startCardinTour = startCardinTour;
-
     init();
 
     $scope.$on("$destroy", function() {
@@ -41,6 +40,8 @@
             vmDash.canPractice = membershipService.canPractice();
             vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
             vmDash.historyVisible = false;
+            var baseUrl = utilities.originalGrockit(false).url;
+            vmDash.paymentPage = baseUrl + '/' + vmDash.activeGroupId + '/subscriptions/new';
 
           });
         }
