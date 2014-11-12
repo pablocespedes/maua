@@ -28,10 +28,6 @@
     vmApp.logOut = logOut;
     vmApp.groupRedirect = groupRedirect;
 
-    // function isActive(viewLocation) {
-    //     return viewLocation === '/'+$location.path().split("/")[2];
-    // };
-
     function selectGroup(index) {
 
       /*update group Name*/

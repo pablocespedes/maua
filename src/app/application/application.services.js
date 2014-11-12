@@ -27,7 +27,7 @@
       var msg = 'Looks like you\'ve been pretty busy these past few days. You\'ve answered ' +
       +nQuestions + ' questions and are well on your way to Grocking the ' + utilities.getGroupTitle() + '!';
       var dialogOptions = {
-        title: '<i class="fa fa-clock-o"></i> ' + titleM,
+        title: '<i class="fa fa-clock-o"></i> Time to upgrade!',
         animate: true,
         message: '<div class="text-lg trial text-center">' + msg +
         '<br><br>Keep Grocking the ' + utilities.getGroupTitle() + '. Starting at just $9.<div>',
