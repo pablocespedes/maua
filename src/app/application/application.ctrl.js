@@ -2,25 +2,25 @@
 (function() {
   'use strict';
   angular
-  .module('grockitApp.application')
-  .controller('ApplicationController', ApplicationController);
+    .module('grockitApp.application')
+    .controller('ApplicationController', ApplicationController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  ApplicationController.$inject = ['$scope','$location', 'Auth', 'utilities', 'ListenloopUtility',
-  'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct','membershipService',
-  'menuService','GoogleTagManager','setItUpUserProgress','setItUpScorePrediction'
+  ApplicationController.$inject = ['$scope', '$location', 'Auth', 'utilities', 'ListenloopUtility',
+    'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct', 'membershipService',
+    'menuService', 'GoogleTagManager', 'setItUpUserProgress', 'setItUpScorePrediction'
   ];
 
-  function ApplicationController($scope,$location, Auth, utilities, ListenloopUtility,
-    GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct,membershipService,menuService,
-    GoogleTagManager,setItUpUserProgress,setItUpScorePrediction) {
+  function ApplicationController($scope, $location, Auth, utilities, ListenloopUtility,
+    GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct, membershipService, menuService,
+    GoogleTagManager, setItUpUserProgress, setItUpScorePrediction) {
 
     /* jshint validthis: true */
     var vmApp = this,
-    userProgressObserver=null,
-    scorePrediction= null;
+      userProgressObserver = null,
+      scorePrediction = null;
     /* recommend: Using function declarations and bindable members up top.*/
-    vmApp.isReady= false;
+    vmApp.isReady = false;
     vmApp.scoreLoading = true;
     vmApp.url = utilities.originalGrockit().url;
     vmApp.logOutUrl = utilities.originalGrockit().url + '/logout';
@@ -53,21 +53,21 @@
 
     var Application = {
       hideVideoOption: function(groupId) {
-        vmApp.hideVideoOption= (groupId === 'ap_calculus' ||
+        vmApp.hideVideoOption = (groupId === 'ap_calculus' ||
           groupId === 'ap_psychology' ||
           groupId === 'ap_us_history' ||
           groupId === 'ap_world_history' ||
           groupId === 'academy' ||
           groupId === 'iim-cat'
-          );
+        );
       },
       hideStudyPlan: function(groupId) {
-        vmApp.hideStudyPlan= (groupId === 'ap_psychology' ||
+        vmApp.hideStudyPlan = (groupId === 'ap_psychology' ||
           groupId === 'ap_world_history' ||
           groupId === 'gre' ||
           groupId === 'lsat' ||
           groupId === 'iim-cat'
-          );
+        );
       },
       loadGroupMembership: function() {
         vmApp.groups = {
@@ -89,16 +89,16 @@
               }
 
               var linkedGroups = vmApp.currentUser.groupMemberships,
-              len = linkedGroups.length,
-              i;
+                len = linkedGroups.length,
+                i;
 
               for (i = 0; i < len; i++) {
                 var lG = linkedGroups[i];
                 if (!!lG) {
                   var linkGroupFilter = {
-                    'id': lG.group_id
-                  },
-                  linkGroup = _.find(responseGroups, linkGroupFilter);
+                      'id': lG.group_id
+                    },
+                    linkGroup = _.find(responseGroups, linkGroupFilter);
 
                   if (angular.isDefined(linkGroup)) {
                     vmApp.groups.linkedGroups.push(linkGroup);
@@ -119,26 +119,26 @@
 
         }
       },
-      getUserProgress: function(){
-        userProgressObserver =  setItUpUserProgress.observeUserProgress().register(function(historyResponse){
-           var  userProgess = {};
+      getUserProgress: function() {
+        userProgressObserver = setItUpUserProgress.observeUserProgress().register(function(historyResponse) {
+          var userProgess = {};
 
-            if (angular.isDefined(historyResponse)) {
+          if (angular.isDefined(historyResponse)) {
 
-              userProgess.historyVisible = true;
-              userProgess.totalQuestLastW = historyResponse.lastWeek
-              userProgess.totalQuest = historyResponse.all;
-              userProgess.totalQuestToday = historyResponse.today;
-            } else {
-              userProgess.historyVisible = false;
-            }
-            vmApp.historyInfo = userProgess;
+            userProgess.historyVisible = true;
+            userProgess.totalQuestLastW = historyResponse.lastWeek
+            userProgess.totalQuest = historyResponse.all;
+            userProgess.totalQuestToday = historyResponse.today;
+          } else {
+            userProgess.historyVisible = false;
+          }
+          vmApp.historyInfo = userProgess;
         });
       },
-      getScorePrediction: function(){
-       scorePrediction= setItUpScorePrediction.observeScorePrediction().register(function(scoreResponse){
-             vmApp.score = scoreResponse;
-             vmApp.scoreLoading=false;
+      getScorePrediction: function() {
+        scorePrediction = setItUpScorePrediction.observeScorePrediction().register(function(scoreResponse) {
+          vmApp.score = scoreResponse;
+          vmApp.scoreLoading = false;
         });
       },
       init: function() {
@@ -146,29 +146,29 @@
           if (response != null) {
             vmApp.currentUser = response;
             currentProduct.observeGroupId().register(function(groupId) {
-            vmApp.activeGroupId = groupId;
-            vmApp.enableScore = (groupId === 'gmat' || groupId === 'act' || groupId === 'sat');
+              vmApp.activeGroupId = groupId;
+              vmApp.enableScore = (groupId === 'gmat' || groupId === 'act' || groupId === 'sat');
 
-             if (vmApp.enableScore)
+              if (vmApp.enableScore)
                 Application.getScorePrediction();
 
-               var gtmData ={
-                  'platformVersion': '2',
-                  'studyingFor': groupId,
-                  'userId': response.userId,
+              var gtmData = {
+                'platformVersion': '2',
+                'studyingFor': groupId,
+                'userId': response.userId,
               };
 
               GoogleTagManager.push(gtmData);
 
               vmApp.canAccess = membershipService.canPractice();
-               var menuParams= {
+              var menuParams = {
                 isReady: true,
-                groupId:vmApp.activeGroupId
-               };
+                groupId: vmApp.activeGroupId
+              };
 
-               Application.hideVideoOption(vmApp.activeGroupId);
-                Application.hideStudyPlan(vmApp.activeGroupId);
-               vmApp.menu = menuService.createLeftMenu(menuParams,vmApp.hideStudyPlan,vmApp.hideVideoOption,vmApp.canAccess);
+              Application.hideVideoOption(vmApp.activeGroupId);
+              Application.hideStudyPlan(vmApp.activeGroupId);
+              vmApp.menu = menuService.createLeftMenu(menuParams, vmApp.hideStudyPlan, vmApp.hideVideoOption, vmApp.canAccess);
 
               Application.loadGroupMembership();
               ListenloopUtility.base(response);
