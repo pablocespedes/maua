@@ -3,15 +3,12 @@
   <div class="tl-header now bg-primary" ng-bind="title"></div>
 
   <div class="tl-entry" ng-repeat="roundSession in roundSessions">
-    <div class="tl-time">
-      9:02 pm
-    </div>
     <div ng-if="roundSession.outcome === 'correct'" class="tl-icon bg-success"><i class="fa fa-check"></i></div>
     <div ng-if="roundSession.outcome === 'incorrect'" class="tl-icon bg-danger"><i class="fa fa-times"></i></div>
     <div ng-if="roundSession.outcome !== 'correct' && roundSession.outcome !== 'incorrect'" class="tl-icon bg-default"><i class="fa fa-minus"></i></div>
 
     <div class="panel tl-body">
-      <div class="pull-right text-center answer-time"> 
+      <div class="pull-right text-center answer-time">
         <i class="fa fa-clock-o text-xlg"></i>
         <p> {{( roundSession.time_to_answer > 0 ? roundSession.time_to_answer + "s" : "Skipped")}} </p>
       </div>
