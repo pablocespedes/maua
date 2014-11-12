@@ -26,9 +26,8 @@
   function whenScrolled() {
     return function(scope, elm, attr) {
       var raw = elm[0];
-
       elm.bind('scroll', function() {
-        if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+        if (raw.scrollTop + raw.offsetHeight +2 >= raw.scrollHeight) {
           scope.$apply(attr.whenScrolled);
         }
       });
