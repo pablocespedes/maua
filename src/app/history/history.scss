@@ -6,6 +6,15 @@
   font-size: 25px;
 
 }
+
+.history-container {
+  margin: 0 -15px;
+
+  .history-title {
+    margin: 10px 15px;
+  }
+}
+
 .history-list:nth-child(2n) {
   background-color: #ededed
 }

@@ -18,21 +18,20 @@
       currentProduct.unregisterGroup(vmHist.productObserver);
     });
 
-      function getQuestions(){
-         vmHist.loading=true;
-        history.loadQuestions(vmHist.groupId).then(function(parsedQuestions){
-            vmHist.questionsPerDay = parsedQuestions;
-             vmHist.loading=false;
-        });
-      }
+    function getQuestions(){
+      vmHist.loading=true;
+      history.loadQuestions(vmHist.groupId).then(function(parsedQuestions){
+        vmHist.questionsPerDay = parsedQuestions;
+        vmHist.loading=false;
+      });
+    }
 
-      function updateGroupId(groupId) {
-        if (vmHist.groupId !== groupId) {
-          vmHist.groupId = groupId;
-           getQuestions();
-        }
+    function updateGroupId(groupId) {
+      if (vmHist.groupId !== groupId) {
+        vmHist.groupId = groupId;
+        getQuestions();
       }
-
+    }
 
   }
 })();

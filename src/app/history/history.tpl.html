@@ -1,30 +1,29 @@
-
 <div class="history-container">
-  <h1>Question History</h1>
+  <h1 class="history-title">Question History</h1>
   <br>
-  <div id="fixed" when-scrolled="vmHist.getQuestions()" set-height>
-  <div ng-repeat="questionPerDay in vmHist.questionsPerDay" history-list title="{{questionPerDay.day}}" round-sessions="questionPerDay.roundSessions" group-id="vmHist.groupId"></div>
+  <div id="fixed" when-scrolled="vmHist.getQuestions()" set-height >
+    <div ng-repeat="questionPerDay in vmHist.questionsPerDay" history-list title="{{questionPerDay.day}}" round-sessions="questionPerDay.roundSessions" group-id="vmHist.groupId"></div>
   </div>
   <div class="row" ng-if="vmHist.loading">
     <div class="col-md-offset-6 col-lg-2">
-       <div id="circularG" class="text-lg text-center">
-            <div id="circularG_1" class="circularG bg-dark-gray">
-            </div>
-            <div id="circularG_2" class="circularG bg-dark-gray">
-            </div>
-            <div id="circularG_3" class="circularG bg-dark-gray">
-            </div>
-            <div id="circularG_4" class="circularG bg-dark-gray">
-            </div>
-            <div id="circularG_5" class="circularG bg-dark-gray">
-            </div>
-            <div id="circularG_6" class="circularG bg-dark-gray">
-            </div>
-            <div id="circularG_7" class="circularG bg-dark-gray">
-            </div>
-            <div id="circularG_8" class="circularG bg-dark-gray">
-            </div>
+      <div id="circularG" class="text-lg text-center">
+        <div id="circularG_1" class="circularG bg-dark-gray">
         </div>
+        <div id="circularG_2" class="circularG bg-dark-gray">
+        </div>
+        <div id="circularG_3" class="circularG bg-dark-gray">
+        </div>
+        <div id="circularG_4" class="circularG bg-dark-gray">
+        </div>
+        <div id="circularG_5" class="circularG bg-dark-gray">
+        </div>
+        <div id="circularG_6" class="circularG bg-dark-gray">
+        </div>
+        <div id="circularG_7" class="circularG bg-dark-gray">
+        </div>
+        <div id="circularG_8" class="circularG bg-dark-gray">
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -39,18 +39,14 @@
     var directive = {
       restrict: 'A',
       link: function(scope, element, attrs) {
-          var w = angular.element($window);
+        var w = angular.element($window);
 
-          scope.getHeight = function(){ return (w.height()-200) +'px'};
-          scope.$watch(scope.getHeight, function(newValue, oldValue) {
-              scope.windowHeight = newValue;
-              console.log(scope.windowHeight)
-             element.attr('style','height:'+scope.windowHeight);
-          });
+        scope.getHeight = function(){ return (w.height()-200) +'px'};
 
-          w.bind('resize', function () {
-            scope.$apply();
-          });
+        w.bind('resize', function () {
+          element.attr('style','height:'+scope.getHeight());
+          scope.$apply();
+        });
 
 
 
