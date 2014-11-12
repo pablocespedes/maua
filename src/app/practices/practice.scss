@@ -180,6 +180,8 @@ padding-top: 2px;
         display: none;
     }
     .btn-option.btn-rounded {
+        -webkit-border-radius:9999px;
+        -moz-border-radius: 9999px;
         border-radius: 9999px;
     }
     .divisor {

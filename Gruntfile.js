@@ -276,6 +276,7 @@ module.exports = function (grunt) {
                     [/(practice.ctrl\.js)/, 'Replacing references to practice ctrl'],
                     [/(practice.directive\.js)/, 'Replacing references to practice directive'],
                     [/(practice.service\.js)/, 'Replacing references to practice service'],
+                    [/(practice.utils\.js)/, 'Replacing references to practice utils'],
 
                     [/(question.module\.js)/, 'Replacing references to question module'],
 

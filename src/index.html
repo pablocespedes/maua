@@ -20,6 +20,7 @@
     <script type="text/javascript"> window.jQuery || document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">'+"<"+"/script>"); </script>
     <![endif]-->
     <!-- Pixel Admin's stylesheets -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="assets/stylesheets/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
     <link href="assets/stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="assets/stylesheets/widgets.min.css" rel="stylesheet" type="text/css">
@@ -161,9 +162,7 @@
           <div id="main-menu-inner"  >
             <div welcome data="appCtrl.currentUser" url="appCtrl.url" log-out-url="appCtrl.logOutUrl" log-out="appCtrl.logOut()"></div>
             <ul class="navigation" >
-              <li  ng-repeat="item in appCtrl.menu" id="item.id" ng-class="{ active: appCtrl.isActive('/'+item.id)}" ng-if="item.shouldShow" grockit-link url="item.url" can-access="item.canAccess" text="item.title"
-                is-ready="item.isReady" is-external-link="item.isExternalLink"
-              icon-class="item.iconclass"></li>
+              <li  ng-repeat="item in appCtrl.menu" id="item.id" menu-id="item.id" ng-if="item.shouldShow" grockit-link url="item.url" can-access="item.canAccess" text="item.title" is-ready="item.isReady" is-external-link="item.isExternalLink" icon-class="item.iconclass"></li>
             </ul>
             <!-- / .navigation -->
           </div>

@@ -102,7 +102,7 @@
     return service;
 
 
-    function userPreflight() {
+    function userPreflight(event) {
       if (Auth.isLoggedIn()) {
 
         _appFn.getUserData()

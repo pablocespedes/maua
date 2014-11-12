@@ -6,7 +6,7 @@
 
   function run($rootScope, $location,appService) {
     $rootScope.$on("$locationChangeSuccess", function(event, next, current) {
-      appService.userPreflight();
+      appService.userPreflight(event);
     });
   }
 }
@@ -21,7 +21,7 @@
   'grockitApp.requests',
   'grockitApp.authServices',
   'grockitApp.practice',
-  'grockitApp.practice.factories',
+  'grockitApp.practice.services',
   'grockitApp.question',
   'grockitApp.history',
   'grockitApp.dashboard',
