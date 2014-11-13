@@ -143,7 +143,7 @@
     }
 
     this.showBuyButton = function() {
-      return (_membershipFn.premiumNotHasExpired() || !_membershipFn.isPremium());
+      return (!_membershipFn.premiumNotHasExpired());
     }
 
     this.canPractice = function() {
