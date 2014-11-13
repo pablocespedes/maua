@@ -19,17 +19,17 @@
         identifier: '@',
         title: '@',
         groupId: '=',
-        roundSessions: '=',
-        onCollapse: '&'
+        roundSessions: '='
       },
       controller: function($scope) {
         $scope.isCollapsed = collapseManager.isCollapsed($scope.identifier);
         collapseManager.put($scope.identifier, $scope.isCollapsed);
 
         $scope.toggle = function() {
-          $scope.isCollapsed = !$scope.isCollapsed;
-          collapseManager.put($scope.identifier, $scope.isCollapsed);
-          $scope.onCollapse();
+          if (collapseManager.collapsedCount() < collapseManager.entries.length - 1 || $scope.isCollapsed) {
+            $scope.isCollapsed = !$scope.isCollapsed;
+            collapseManager.put($scope.identifier, $scope.isCollapsed);
+          }
         }
       }
     };

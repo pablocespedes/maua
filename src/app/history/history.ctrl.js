@@ -11,21 +11,13 @@
     /* jshint validthis: true */
     var vmHist = this,
     historyObj={};
-    vmHist.count=0;
     vmHist.productObserver = currentProduct.observeGroupId().register(updateGroupId);
     vmHist.getQuestions=getQuestions;
     vmHist.loading=true;
-    vmHist.onCollapse = onCollapse;
 
     $scope.$on('$destroy', function() {
       currentProduct.unregisterGroup(vmHist.productObserver);
     });
-
-    function onCollapse() {
-      if (collapseManager.areAllCollapsed()) {
-        vmHist.getQuestions();
-      }
-    }
 
     function getQuestions(){
       vmHist.loading=true;
