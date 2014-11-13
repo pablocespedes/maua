@@ -10,7 +10,9 @@
   }).
   constant('lifeCycle', {
   inactive:'inactive',
-  freeTrialExpired:'free_trial_expired'
+  freeTrialExpired:'free_trial_expired',
+  freeTrial:'free_trial',
+  active:'active'
   })
   .factory('Auth', Auth)
   .service('membershipService', membershipService);
@@ -116,19 +118,16 @@
         return (membershipInfo.becamePremiumAt !== null);
       },
       premiumNotHasExpired: function() {
-       /* var today = new Date(),
-        expired = new Date(membershipInfo.expiredAt);expired < today this.isPremium()*/
-
         return (membershipInfo.lifeCycle !==lifeCycle.inactive && membershipInfo.lifeCycle !==lifeCycle.freeTrialExpired);
       },
       hasPrompt: function() {
         return (membershipInfo.upgradePrompt !== null);
       },
       isTrialing: function() {
-        return membershipInfo.trialing;
+        return (membershipInfo.lifeCycle ===lifeCycle.freeTrial);
       },
       validateMembership: function() {
-        return (!this.premiumNotHasExpired() && (!this.isTrialing() || !this.isPremium()));
+        return (!this.premiumNotHasExpired() && !this.isTrialing());
       }
     };
 
@@ -143,11 +142,10 @@
     }
 
     this.showBuyButton = function() {
-      return (!_membershipFn.premiumNotHasExpired());
+      return (!_membershipFn.premiumNotHasExpired() || _membershipFn.isTrialing());
     }
 
     this.canPractice = function() {
-        /*!_membershipFn.isTrialing() && _membershipFn.isPremium() &&*/
       return (_membershipFn.premiumNotHasExpired());
     }
 
