@@ -20,12 +20,11 @@ var paths = {
   practiceSrv: 'app/shared/services/practice.service.js',
   practiceUtils: 'app/shared/services/practice.utils.js',
   uiBootStrap: 'app/components/accordion/vendor/ui.bootstrap.min.js',
-  accordion : 'app/components/accordion/accordion.js',
+  accordion: 'app/components/accordion/accordion.js',
   historyM: 'app/history/history.module.js',
   questionReview: 'app/question-review/question-review.module.js'
 
 };
-
 $script([
   paths.jqueryGrockit,
   paths.authServices,
@@ -33,9 +32,7 @@ $script([
   paths.appModule,
   paths.restAngular,
   paths.analyticService
-  ], 'init')
-
-.ready('init', function() {
+], function() {
   $script([
     paths.utilServices,
     paths.appServices,
@@ -44,18 +41,23 @@ $script([
     paths.appController,
     paths.restAngularFactory,
     paths.practiceSrv,
-    paths.uiBootStrap,
-    paths.accordion,
-    paths.dashboard,
-    paths.practiceUtils,
-    paths.practice,
-    paths.question,
-    paths.historyM,
-    paths.questionReview,
-    paths.app
+    paths.uiBootStrap
+  ], 'init')
+
+  .ready('init', function() {
+    $script([
+      paths.accordion,
+      paths.dashboard,
+      paths.practiceUtils,
+      paths.practice,
+      paths.question,
+      paths.historyM,
+      paths.questionReview,
+      paths.app
     ], function() {
       angular.element(document).ready(function() {
         angular.bootstrap(document, ['grockitApp']);
       });
-      });
+    });
+  });
 });
