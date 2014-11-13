@@ -1,10 +1,8 @@
 (function() {
   'use strict';
 
-  angular
-  .module("grockitApp.history")
-  .service('history', history);
-
+  var historyModule = angular.module("grockitApp.history");
+  historyModule.service('history', history);
   history.$inject = ['$q', 'HistoryApi','dateUtils'];
 
 

@@ -5,18 +5,26 @@
   .controller('HistoryController', HistoryController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  HistoryController.$inject = ['$scope', 'history', 'currentProduct', 'utilities'];
+  HistoryController.$inject = ['$scope', 'history', 'currentProduct', 'utilities', 'collapseManager'];
 
-  function HistoryController($scope, history, currentProduct, utilities) {
+  function HistoryController($scope, history, currentProduct, utilities, collapseManager) {
     /* jshint validthis: true */
     var vmHist = this,
     historyObj={};
     vmHist.productObserver = currentProduct.observeGroupId().register(updateGroupId);
     vmHist.getQuestions=getQuestions;
     vmHist.loading=true;
+    vmHist.onCollapse = onCollapse;
+
     $scope.$on('$destroy', function() {
       currentProduct.unregisterGroup(vmHist.productObserver);
     });
+
+    function onCollapse() {
+      if (collapseManager.areAllCollapsed()) {
+        vmHist.getQuestions();
+      }
+    }
 
     function getQuestions(){
       vmHist.loading=true;

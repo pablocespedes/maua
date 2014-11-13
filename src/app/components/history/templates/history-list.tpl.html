@@ -1,8 +1,8 @@
 <div class="timeline">
   <!-- Timeline header -->
-  <div class="tl-header now bg-primary" ng-bind="title"></div>
+  <div class="tl-header history-day" ng-class="{'bg-primary': !isCollapsed, 'bg-default': isCollapsed}" ng-bind="title" ng-click="toggle()"></div>
 
-  <div class="tl-entry" ng-repeat="roundSession in roundSessions">
+  <div class="tl-entry" ng-repeat="roundSession in roundSessions" ng-hide="isCollapsed">
     <div ng-if="roundSession.outcome === 'correct'" class="tl-icon bg-success"><i class="fa fa-check"></i></div>
     <div ng-if="roundSession.outcome === 'incorrect'" class="tl-icon bg-danger"><i class="fa fa-times"></i></div>
     <div ng-if="roundSession.outcome !== 'correct' && roundSession.outcome !== 'incorrect'" class="tl-icon bg-default"><i class="fa fa-minus"></i></div>
