@@ -11,6 +11,7 @@
     /* jshint validthis: true */
     var vmHist = this,
     historyObj={};
+    vmHist.count=0;
     vmHist.productObserver = currentProduct.observeGroupId().register(updateGroupId);
     vmHist.getQuestions=getQuestions;
     vmHist.loading=true;
@@ -29,6 +30,7 @@
     function getQuestions(){
       vmHist.loading=true;
       history.loadQuestions(vmHist.groupId).then(function(parsedQuestions){
+        vmHist.count++;
         vmHist.questionsPerDay = parsedQuestions;
         vmHist.loading=false;
       });

@@ -1,37 +1,15 @@
 (function() {
   'use strict';
-  var components = angular.module('grockitApp.components');
-  components.directive('historyList', historyList);
-  components.directive('whenScrolled', whenScrolled);
-  components.directive('setHeight', setHeight);
-  components.factory('collapseManager', collapseManager);
+  angular
+   .module('grockitApp.components')
+   .directive('historyList', historyList)
+   .directive('whenScrolled', whenScrolled)
+   .directive('setHeight', setHeight)
 
   historyList.$inject =['collapseManager'];
   setHeight.$inject =['$window'];
 
-  function collapseManager() {
-    return {
-      entries: [],
-      put: function(id, isCollapsed) {
-        var entry = this.get(id);
-        if (entry) {
-          entry.isCollapsed = isCollapsed;
-        } else {
-          this.entries.push({id: id, isCollapsed: isCollapsed});
-        }
-      },
-      get: function(id) {
-        return _.find(this.entries, {'id': id});
-      },
-      isCollapsed: function(id) {
-        var entry = this.get(id);
-        return entry ? entry.isCollapsed : false;
-      },
-      areAllCollapsed: function() {
-        return _.every(this.entries, {'isCollapsed': true});
-      }
-    }
-  };
+
 
   function historyList(collapseManager) {
     var directive = {

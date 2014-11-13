@@ -1,8 +1,9 @@
 (function() {
   'use strict';
-
   var historyModule = angular.module("grockitApp.history");
   historyModule.service('history', history);
+  historyModule.factory('collapseManager', collapseManager);
+
   history.$inject = ['$q', 'HistoryApi','dateUtils'];
 
 
@@ -57,9 +58,32 @@
 
        return deferred.promise;
     }
-
-
   }
+
+  function collapseManager() {
+
+    return {
+      entries: [],
+      put: function(id, isCollapsed) {
+        var entry = this.get(id);
+        if (entry) {
+          entry.isCollapsed = isCollapsed;
+        } else {
+          this.entries.push({id: id, isCollapsed: isCollapsed});
+        }
+      },
+      get: function(id) {
+        return _.find(this.entries, {'id': id});
+      },
+      isCollapsed: function(id) {
+        var entry = this.get(id);
+        return entry ? entry.isCollapsed : false;
+      },
+      areAllCollapsed: function() {
+        return _.every(this.entries, {'isCollapsed': true});
+      }
+    }
+  };
 
 
 })();

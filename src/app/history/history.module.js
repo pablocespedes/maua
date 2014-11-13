@@ -5,6 +5,7 @@ angular.module("grockitApp.history", ['ng-breadcrumbs'])
   angular.module("grockitApp.history").controller = $controllerProvider.register;
   angular.module("grockitApp.history").directive = $compileProvider.directive;
   angular.module("grockitApp.history").routeProvider = $routeProvider;
+  angular.module("grockitApp.history").factory= $provide.factory;
   angular.module('grockitApp.history').service = $provide.service;
 
   var filePath = {
@@ -22,13 +23,19 @@ angular.module("grockitApp.history", ['ng-breadcrumbs'])
       deps: function($q, $rootScope) {
         var deferred = $q.defer(),
         essentials = [
-         filePath.history.services,
-          filePath.history.controllers,
-          filePath.history.directives
+        filePath.history.services,
+        filePath.history.controllers
+        ],
+        dependencies = [
+        filePath.history.directives
         ];
+
+
         $script(essentials, function() {
-          $rootScope.$apply(function() {
-            deferred.resolve();
+          $script(dependencies, function() {
+            $rootScope.$apply(function() {
+              deferred.resolve();
+            });
           });
         });
 
