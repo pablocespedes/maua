@@ -79,8 +79,11 @@
         var entry = this.get(id);
         return entry ? entry.isCollapsed : false;
       },
+      collapsedCount: function() {
+        return _.filter(this.entries, {'isCollapsed': true}).length;
+      },
       areAllCollapsed: function() {
-        return _.every(this.entries, {'isCollapsed': true});
+        return this.collapseCount === this.entries.length;
       }
     }
   };

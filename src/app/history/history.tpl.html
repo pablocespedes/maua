@@ -1,9 +1,8 @@
 <div class="history-container">
   <h1 class="history-title">Question History</h1>
   <br>
-  {{vmHist.count}}
   <div id="fixed" when-scrolled="vmHist.getQuestions()" set-height >
-    <div ng-repeat="questionPerDay in vmHist.questionsPerDay" history-list identifier="{{questionPerDay.day}}" title="{{questionPerDay.day}} [{{questionPerDay.roundSessions.length}} questions]" round-sessions="questionPerDay.roundSessions" group-id="vmHist.groupId" on-collapse="vmHist.onCollapse()"></div>
+    <div ng-repeat="questionPerDay in vmHist.questionsPerDay" history-list identifier="{{questionPerDay.day}}" title="{{questionPerDay.day}} [{{questionPerDay.roundSessions.length}} questions]" round-sessions="questionPerDay.roundSessions" group-id="vmHist.groupId"></div>
   </div>
   <div class="row" ng-if="vmHist.loading">
     <div class="col-md-offset-6 col-lg-2">
