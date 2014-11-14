@@ -22,7 +22,7 @@
         <i class="fa fa-clock-o text-xlg"></i>
         <p> {{( roundSession.time_to_answer > 0 ? roundSession.time_to_answer + "s" : "Skipped")}} </p>
       </div>
-      <a href="#/{{groupId}}/review/{{roundSession.id}}">
+      <a href="#/{{groupId}}/review/{{roundSession.id}}" target="_blank">
         <p ng-bind-html="roundSession.question_stimulus | htmlToPlaintext | truncate:50 "></p>
       </a>
       <div style="margin-top: 10px;" class="text-sm">
