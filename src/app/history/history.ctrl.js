@@ -36,7 +36,6 @@
     }
 
     function isLastEntryLoading(id) {
-      console.log(vmHist.loading && collapseManager.isLastEntry(id));
       return vmHist.loading && collapseManager.isLastEntry(id);
     }
 
