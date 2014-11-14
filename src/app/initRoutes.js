@@ -47,11 +47,11 @@ $script([
   .ready('init', function() {
     $script([
       paths.accordion,
+      paths.historyM,
       paths.dashboard,
       paths.practiceUtils,
       paths.practice,
       paths.question,
-      paths.historyM,
       paths.questionReview,
       paths.app
     ], function() {

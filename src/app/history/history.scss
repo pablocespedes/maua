@@ -45,6 +45,12 @@
   width: 100%;
   overflow: auto;
 }
+.center-spinner {
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  transform: translate(-50%, -50%);
+}
 
 .history-day {
   width: 200px;

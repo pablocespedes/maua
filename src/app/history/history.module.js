@@ -23,10 +23,10 @@ angular.module("grockitApp.history", ['ng-breadcrumbs'])
       deps: function($q, $rootScope) {
         var deferred = $q.defer(),
         essentials = [
-        filePath.history.services,
-        filePath.history.controllers
+        filePath.history.services
         ],
         dependencies = [
+        filePath.history.controllers,
         filePath.history.directives
         ];
 
