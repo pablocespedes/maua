@@ -52,6 +52,11 @@
   line-height: 25px;
   cursor: pointer;
   left: 10px;
+  text-align: left;
+
+  #identifier{
+    padding-left: 8px !important;
+  }
 
   .history-day-spinner {
     position: absolute;

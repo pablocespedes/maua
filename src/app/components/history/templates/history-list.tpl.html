@@ -1,9 +1,9 @@
 <div class="timeline">
   <!-- Timeline header -->
-  <div class="tl-header history-day" ng-class="{'bg-primary': !isCollapsed, 'bg-default': isCollapsed}" ng-click="toggle()">
+  <div class=" tl-header  history-day" ng-class="{'bg-primary': !isCollapsed, 'bg-default': isCollapsed}" ng-click="toggle()">
     <div class="row no-padding no-margin">
       <div class="col-md-6 no-padding">
-        <span ng-bind="identifier"></span>
+        <span id="identifier" ng-bind="identifier"></span>
       </div>
       <div class="col-md-6 no-padding">
         <span ng-if="!isLoading()">[{{ roundSessions.length }} questions]</span>
