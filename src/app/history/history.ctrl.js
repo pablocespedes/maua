@@ -30,10 +30,8 @@
     }
 
     function onCollapse() {
-      console.log('onCollapse 1');
       if (collapseManager.areAllCollapsed()) {
         vmHist.getQuestions();
-        console.log('onCollapse 2');
       }
     }
 
