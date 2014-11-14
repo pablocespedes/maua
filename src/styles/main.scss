@@ -12,6 +12,10 @@
     display: none !important;
 }
 
+.touch {
+  -webkit-overflow-scrolling: touch;
+}
+
 .theme-default #main-navbar .navbar-nav>li>span {
 color: #555;
 }
