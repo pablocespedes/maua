@@ -50,8 +50,6 @@
 
         var parsedQuestions = historyFn.parseQuestionsData(containerList);
 
-
-
         deferred.resolve(parsedQuestions);
 
        });
@@ -83,7 +81,7 @@
         return _.filter(this.entries, {'isCollapsed': true}).length;
       },
       areAllCollapsed: function() {
-        return this.collapseCount === this.entries.length;
+        return this.collapsedCount() === this.entries.length;
       }
     }
   };

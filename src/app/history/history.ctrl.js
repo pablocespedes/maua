@@ -14,6 +14,7 @@
     vmHist.productObserver = currentProduct.observeGroupId().register(updateGroupId);
     vmHist.getQuestions=getQuestions;
     vmHist.loading=true;
+    vmHist.onCollapse=onCollapse;
 
     $scope.$on('$destroy', function() {
       currentProduct.unregisterGroup(vmHist.productObserver);
@@ -26,6 +27,14 @@
         vmHist.questionsPerDay = parsedQuestions;
         vmHist.loading=false;
       });
+    }
+
+    function onCollapse() {
+      console.log('onCollapse 1');
+      if (collapseManager.areAllCollapsed()) {
+        vmHist.getQuestions();
+        console.log('onCollapse 2');
+      }
     }
 
     function updateGroupId(groupId) {
