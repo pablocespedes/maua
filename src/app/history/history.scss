@@ -52,4 +52,14 @@
   line-height: 25px;
   cursor: pointer;
   left: 10px;
+
+  .history-day-spinner {
+    position: absolute;
+    right: 8px;
+    top: -2px;
+
+    .circularG {
+      background-color: #ffffff !important;
+    }
+  }
 }

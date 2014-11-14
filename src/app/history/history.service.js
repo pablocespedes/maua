@@ -82,6 +82,13 @@
       },
       areAllCollapsed: function() {
         return this.collapsedCount() === this.entries.length;
+      },
+      lastEntry: function() {
+        return _.last(this.entries);
+      },
+      isLastEntry: function(id) {
+        var lastEntry = this.lastEntry();
+        return lastEntry ? lastEntry.id === id : false;
       }
     }
   };

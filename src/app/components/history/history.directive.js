@@ -17,20 +17,24 @@
       templateUrl: 'app/components/history/templates/history-list.tpl.html',
       scope: {
         identifier: '@',
-        title: '@',
         groupId: '=',
         roundSessions: '=',
+        isLoading: '&',
         onCollapse: '&'
       },
       controller: function($scope) {
-        $scope.isCollapsed = collapseManager.isCollapsed($scope.identifier);
-        collapseManager.put($scope.identifier, $scope.isCollapsed);
+        var updateEntry = function(isCollapsed) {
+          $scope.isCollapsed = isCollapsed;
+          collapseManager.put($scope.identifier, $scope.isCollapsed);
+        };
+
+        updateEntry(collapseManager.isCollapsed($scope.identifier));
 
         $scope.toggle = function() {
-          $scope.isCollapsed = !$scope.isCollapsed;
-          collapseManager.put($scope.identifier, $scope.isCollapsed);
+          updateEntry(!$scope.isCollapsed);
           $scope.onCollapse();
         }
+
       }
     };
 

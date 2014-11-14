@@ -1,6 +1,16 @@
 <div class="timeline">
   <!-- Timeline header -->
-  <div class="tl-header history-day" ng-class="{'bg-primary': !isCollapsed, 'bg-default': isCollapsed}" ng-bind="title" ng-click="toggle()"></div>
+  <div class="tl-header history-day" ng-class="{'bg-primary': !isCollapsed, 'bg-default': isCollapsed}" ng-click="toggle()">
+    <div class="row no-padding no-margin">
+      <div class="col-md-6 no-padding">
+        <span ng-bind="identifier"></span>
+      </div>
+      <div class="col-md-6 no-padding">
+        <span ng-if="!isLoading()">[{{ roundSessions.length }} questions]</span>
+        <span ng-if="isLoading()" class="history-day-spinner" spinner></span>
+      </div>
+    </div>
+  </div>
 
   <div class="tl-entry" ng-repeat="roundSession in roundSessions" ng-hide="isCollapsed">
     <div ng-if="roundSession.outcome === 'correct'" class="tl-icon bg-success"><i class="fa fa-check"></i></div>

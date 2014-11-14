@@ -16,6 +16,7 @@
     vmHist.loading = true;
     vmHist.isRequesting = false;
     vmHist.onCollapse = onCollapse;
+    vmHist.isLastEntryLoading = isLastEntryLoading;
 
     $scope.$on('$destroy', function() {
       currentProduct.unregisterGroup(vmHist.productObserver);
@@ -32,6 +33,11 @@
         });
       }
 
+    }
+
+    function isLastEntryLoading(id) {
+      console.log(vmHist.loading && collapseManager.isLastEntry(id));
+      return vmHist.loading && collapseManager.isLastEntry(id);
     }
 
     function onCollapse() {
