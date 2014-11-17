@@ -1,6 +1,6 @@
 <div class="menu-content top animated fadeIn" id="menu-content-demo">
   <div>
-    <div class="text-bg"><span class="text-slim"></span> <span class="text-semibold" ng-bind="data.firstName"></span></div>
+    <div class="text-bg"><span class="text-slim"></span> <span class="text-semibold" ng-bind="data.firstName | capitalize"></span></div>
     <a ng-href="{{url}}/users/{{data.userId}}/profile_photos">
      <img ng-src="{{data.avatarUrl}}" alt="avatar" class="">
     </a>
