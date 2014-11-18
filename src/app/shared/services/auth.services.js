@@ -12,7 +12,8 @@
   inactive:'inactive',
   freeTrialExpired:'free_trial_expired',
   freeTrial:'free_trial',
-  active:'active'
+  active:'active',
+  questionLimit: 'question_limited_trial'
   })
   .factory('Auth', Auth)
   .service('membershipService', membershipService);
@@ -124,7 +125,7 @@
         return (membershipInfo.upgradePrompt !== null);
       },
       isTrialing: function() {
-        return (membershipInfo.lifeCycle ===lifeCycle.freeTrial);
+        return (membershipInfo.lifeCycle ===lifeCycle.freeTrial || membershipInfo.lifeCycle === lifeCycle.questionLimit);
       },
       validateMembership: function() {
         return (!this.premiumNotHasExpired() && !this.isTrialing());
