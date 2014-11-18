@@ -105,17 +105,22 @@
     return directive;
 
     function link(scope, elm, attr) {
-      var path = $location.path(),
-        urlArr = path.split('/');
-      scope.view = urlArr[urlArr.length - 1];
 
-      if (scope.view === scope.menuId || (scope.view === 'custom-practice' && scope.menuId === 'dashboard')) {
-        $timeout(function() {
-          elm.addClass('active');
-        }, 500);
+      var leftNav = $('div#main-menu-inner ul.navigation li');
+      leftNav.removeClass('active');
+      var url = window.location.href.split('/');
+      var currentLoc = url[(url.length - 1)] || 'dashboard';
+
+      switch (currentLoc) {
+        case "dashboard":
+        case "custom-practice":
+          $(leftNav[0]).addClass('active');
+          break;
+        case "history":
+          var position = leftNav[leftNav.length - 1];
+          $(position).addClass('active');
+          break;
       }
-
-
 
     }
   }
