@@ -45,6 +45,7 @@
 
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
@@ -162,7 +163,7 @@
           <div id="main-menu-inner"  >
             <div welcome data="appCtrl.currentUser" url="appCtrl.url" log-out-url="appCtrl.logOutUrl" log-out="appCtrl.logOut()"></div>
             <ul class="navigation" >
-              <li  ng-repeat="item in appCtrl.menu" id="item.id" menu-id="item.id" ng-if="item.shouldShow" grockit-link url="item.url" can-access="item.canAccess" text="item.title" is-ready="item.isReady" is-external-link="item.isExternalLink" icon-class="item.iconclass"></li>
+              <li  ng-repeat="item in appCtrl.menu" id="item.id" menu-id="item.id" ng-if="item.shouldShow" grockit-link url="item.url" can-access="item.canAccess" text="item.title" is-ready="item.isReady" icon-class="item.iconclass"></li>
             </ul>
             <!-- / .navigation -->
           </div>
