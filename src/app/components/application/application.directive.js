@@ -107,16 +107,17 @@
     function link(scope, elm, attr) {
 
       var leftNav = $('div#main-menu-inner ul.navigation li');
-      leftNav.removeClass('active');
       var url = window.location.href.split('/');
       var currentLoc = url[(url.length - 1)] || 'dashboard';
 
       switch (currentLoc) {
         case "dashboard":
         case "custom-practice":
+         leftNav.removeClass('active');
           $(leftNav[0]).addClass('active');
           break;
         case "history":
+          leftNav.removeClass('active');
           var position = leftNav[leftNav.length - 1];
           $(position).addClass('active');
           break;
