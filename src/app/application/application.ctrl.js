@@ -174,7 +174,6 @@
                 Application.hideVideoOption(vmApp.activeGroupId);
                 Application.hideStudyPlan(vmApp.activeGroupId);
                 vmApp.menu = menuService.createLeftMenu(menuParams, vmApp.hideStudyPlan, vmApp.hideVideoOption, vmApp.canAccess);
-                console.log(vmApp.menu);
                 Application.loadGroupMembership();
                 ListenloopUtility.base(response);
                 Application.getUserProgress();
