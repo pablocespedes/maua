@@ -99,8 +99,7 @@
         menuId: '=',
         groupId: '=',
         isReady: '=',
-        iconClass: '=',
-        isExternalLink: '='
+        iconClass: '='
       }
     };
     return directive;
