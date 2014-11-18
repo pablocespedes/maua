@@ -109,14 +109,16 @@
       var leftNav = $('div#main-menu-inner ul.navigation li');
       var url = window.location.href.split('/');
       var currentLoc = url[(url.length - 1)] || 'dashboard';
-
+      console.log(leftNav,url,currentLoc);
       switch (currentLoc) {
         case "dashboard":
         case "custom-practice":
+        console.log('dashboard',leftNav,url,currentLoc);
          leftNav.removeClass('active');
           $(leftNav[0]).addClass('active');
           break;
         case "history":
+        console.log('history',leftNav,url,currentLoc);
           leftNav.removeClass('active');
           var position = leftNav[leftNav.length - 1];
           $(position).addClass('active');
