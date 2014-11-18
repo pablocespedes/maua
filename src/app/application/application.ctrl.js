@@ -20,8 +20,12 @@
       userProgressObserver = null,
       scorePrediction = null;
     /* recommend: Using function declarations and bindable members up top.*/
+
+    var url = window.location.href.split('/');
+    var currentLoc = url[(url.length - 1)];
     vmApp.isReady = false;
     vmApp.scoreLoading = true;
+    vmApp.activeItem = currentLoc;
     vmApp.url = utilities.originalGrockit().url;
     vmApp.logOutUrl = utilities.originalGrockit().url + '/logout';
     vmApp.selectGroup = selectGroup;

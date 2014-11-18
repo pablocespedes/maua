@@ -91,7 +91,6 @@
     var directive = {
       templateUrl: 'app/components/application/templates/a.leftMenu.tpl.html',
       restrict: 'A',
-      link: link,
       scope: {
         canAccess: '=',
         url: '=',
@@ -103,28 +102,6 @@
       }
     };
     return directive;
-
-    function link(scope, elm, attr) {
-      if (scope.$last) {
-        var leftNav = $('div#main-menu-inner ul.navigation li');
-        var url = window.location.href.split('/');
-        var currentLoc = url[(url.length - 1)] || 'dashboard';
-        switch (currentLoc) {
-          case "dashboard":
-          case "custom-practice":
-            console.log('dashboard', leftNav, url, currentLoc);
-            leftNav.removeClass('active');
-            $(leftNav[0]).addClass('active');
-            break;
-          case "history":
-            console.log('history', leftNav, url, currentLoc);
-            leftNav.removeClass('active');
-            var position = leftNav[leftNav.length - 1];
-            $(position).addClass('active');
-            break;
-        }
-      }
-    }
   }
 
   function chardinTour() {

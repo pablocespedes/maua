@@ -163,7 +163,7 @@
           <div id="main-menu-inner"  >
             <div welcome data="appCtrl.currentUser" url="appCtrl.url" log-out-url="appCtrl.logOutUrl" log-out="appCtrl.logOut()"></div>
             <ul class="navigation" >
-              <li  ng-repeat="item in appCtrl.menu" id="item.id" menu-id="item.id" ng-if="item.shouldShow" grockit-link url="item.url" can-access="item.canAccess" text="item.title" is-ready="item.isReady" icon-class="item.iconclass"></li>
+              <li  ng-repeat="item in appCtrl.menu" id="item.id" menu-id="item.id" ng-if="item.shouldShow" grockit-link url="item.url" can-access="item.canAccess" text="item.title" is-ready="item.isReady" icon-class="item.iconclass"  ng-class="{'active': item.id == appCtrl.activeItem}" ng-click="appCtrl.activeItem=item.id"></li>
             </ul>
             <!-- / .navigation -->
           </div>
