@@ -32,6 +32,10 @@
     vmApp.logOut = logOut;
     vmApp.groupRedirect = groupRedirect;
 
+    $scope.$on("$destroy", function() {
+      currentProduct.unregisterGroup(userProgressObserver);
+    });
+
     function selectGroup(index) {
 
       /*update group Name*/
@@ -145,35 +149,36 @@
         Auth.getCurrentUserInfo().then(function(response) {
           if (response != null) {
             vmApp.currentUser = response;
-            currentProduct.observeGroupId().register(function(groupId) {
-              vmApp.activeGroupId = groupId;
-              vmApp.enableScore = (groupId === 'gmat' || groupId === 'act' || groupId === 'sat');
+            userProgressObserver = currentProduct.observeGroupId().register(function(groupId) {
+              if (vmApp.activeGroupId !== groupId) {
+                vmApp.activeGroupId = groupId;
+                vmApp.enableScore = (groupId === 'gmat' || groupId === 'act' || groupId === 'sat');
 
-              if (vmApp.enableScore)
-                Application.getScorePrediction();
+                if (vmApp.enableScore)
+                  Application.getScorePrediction();
 
-              var gtmData = {
-                'platformVersion': '2',
-                'studyingFor': groupId,
-                'userId': response.userId,
-              };
+                var gtmData = {
+                  'platformVersion': '2',
+                  'studyingFor': groupId,
+                  'userId': response.userId,
+                };
 
-              GoogleTagManager.push(gtmData);
+                GoogleTagManager.push(gtmData);
 
-              vmApp.canAccess = membershipService.canPractice();
-              var menuParams = {
-                isReady: true,
-                groupId: vmApp.activeGroupId
-              };
+                vmApp.canAccess = membershipService.canPractice();
+                var menuParams = {
+                  isReady: true,
+                  groupId: vmApp.activeGroupId
+                };
 
-              Application.hideVideoOption(vmApp.activeGroupId);
-              Application.hideStudyPlan(vmApp.activeGroupId);
-              vmApp.menu = menuService.createLeftMenu(menuParams, vmApp.hideStudyPlan, vmApp.hideVideoOption, vmApp.canAccess);
-              console.log( vmApp.menu);
-              Application.loadGroupMembership();
-              ListenloopUtility.base(response);
-              Application.getUserProgress();
-
+                Application.hideVideoOption(vmApp.activeGroupId);
+                Application.hideStudyPlan(vmApp.activeGroupId);
+                vmApp.menu = menuService.createLeftMenu(menuParams, vmApp.hideStudyPlan, vmApp.hideVideoOption, vmApp.canAccess);
+                console.log(vmApp.menu);
+                Application.loadGroupMembership();
+                ListenloopUtility.base(response);
+                Application.getUserProgress();
+              }
             });
 
             GaUtility.classic();

@@ -166,7 +166,7 @@
 
       return [{
         id: 'dashboard',
-        url: '#/' + options.groupId + '/dashboard',
+        url: '#/' + options.groupId + '/dashboard/',
         canAccess: canAccess,
         title: 'Dashboard',
         isReady: options.isReady,
@@ -239,7 +239,7 @@
         shouldShow: true
       }, {
         id: 'history',
-        url: '#/' + options.groupId + '/history',
+        url: '#/' + options.groupId + '/history/',
         canAccess: canAccess,
         title: 'History',
         isReady: options.isReady,
