@@ -6,12 +6,12 @@
     .controller('ApplicationController', ApplicationController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  ApplicationController.$inject = ['$scope', '$location', 'Auth', 'utilities', 'ListenloopUtility',
+  ApplicationController.$inject = ['$scope', '$window', 'Auth', 'utilities', 'ListenloopUtility',
     'GaUtility', 'InspectletUtility', 'GroupsApi', 'alerts', 'Headers', 'currentProduct', 'membershipService',
     'menuService', 'GoogleTagManager', 'setItUpUserProgress', 'setItUpScorePrediction'
   ];
 
-  function ApplicationController($scope, $location, Auth, utilities, ListenloopUtility,
+  function ApplicationController($scope, $window, Auth, utilities, ListenloopUtility,
     GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct, membershipService, menuService,
     GoogleTagManager, setItUpUserProgress, setItUpScorePrediction) {
 
@@ -21,7 +21,7 @@
       scorePrediction = null;
     /* recommend: Using function declarations and bindable members up top.*/
 
-    var url = window.location.href.split('/');
+    var url = $window.location.href.split('/');
     var currentLoc = url[(url.length - 1)];
     vmApp.isReady = false;
     vmApp.scoreLoading = true;
