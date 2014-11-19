@@ -10,9 +10,9 @@ var paths = {
   question: 'app/questions/question.module.js',
   analyticService: 'app/shared/services/analytic.service.js',
   authServices: 'app/shared/services/auth.services.js',
-  appModule: 'app/application/application.module.js',
+  //appModule: 'app/application/application.module.js',
   appDirectives: 'app/components/application/application.directive.js',
-  appController: 'app/application/application.ctrl.js',
+  //appController: 'app/application/application.ctrl.js',
   appFilters: 'app/application/application.filters.js',
   utilServices: 'app/application/util.services.js',
   appServices: 'app/application/application.services.js',
@@ -29,14 +29,14 @@ $script([
   paths.jqueryGrockit,
   paths.authServices,
   paths.components,
-  paths.appModule,
+  //paths.appModule,
   paths.restAngular,
   paths.analyticService,
   paths.utilServices,
   paths.appServices,
   paths.appFilters,
   paths.appDirectives,
-  paths.appController,
+  //paths.appController,
 ], function() {
   console.log('2')
   $script([

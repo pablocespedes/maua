@@ -260,8 +260,8 @@ module.exports = function (grunt) {
                     [/(images\/.*?\.(?:gif|jpeg|jpg|png|webp|svg))/gm, 'Update the JS to reference our revved images'],
                     [/(components.module\.js)/, 'Replacing references to components module'],
                     /*Change references for account */
-                    [/(application.ctrl\.js)/, 'Replacing references to application ctrl'],
-                    [/(application.module\.js)/, 'Replacing references application to module'],
+                    //[/(application.ctrl\.js)/, 'Replacing references to application ctrl'],
+                    //[/(application.module\.js)/, 'Replacing references application to module'],
                     [/(application.filters\.js)/, 'Replacing references application to filters'],
                     [/(application.services\.js)/, 'Replacing references application to services'],
                     [/(util.services\.js)/, 'Replacing references util to services'],
