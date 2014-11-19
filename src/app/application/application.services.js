@@ -134,7 +134,7 @@
             console.log(urlGroup,actualGroup,userGroup)
             if (angular.isUndefined(actualGroup) || angular.isUndefined(userGroup)) {
 
-              $window.location = '404.html';
+              //$window.location = '404.html';
 
             } else {
               membershipService.setMembershipInfo(userResponse, userGroup, urlGroup);
