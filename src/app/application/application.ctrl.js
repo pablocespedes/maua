@@ -14,7 +14,7 @@
   function ApplicationController($scope, $window, Auth, utilities, ListenloopUtility,
     GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct, membershipService, menuService,
     GoogleTagManager, setItUpUserProgress, setItUpScorePrediction) {
-    console.log(menuService,setItUpUserProgress, setItUpScorePrediction);
+    console.log(menuService, setItUpUserProgress, setItUpScorePrediction);
     /* jshint validthis: true */
     var vmApp = this,
       userProgressObserver = null,
@@ -124,12 +124,9 @@
         }
       },
       getUserProgress: function() {
-        console.log('history before');
         userProgressObserver = setItUpUserProgress.observeUserProgress().register(function(historyResponse) {
           var userProgess = {};
-          console.log('history after');
           if (angular.isDefined(historyResponse)) {
-            console.log('history defined');
             userProgess.historyVisible = true;
             userProgess.totalQuestLastW = historyResponse.lastWeek
             userProgess.totalQuest = historyResponse.all;
@@ -146,42 +143,46 @@
           vmApp.scoreLoading = false;
         });
       },
+      setInitialData: function(response,groupId) {
+
+        if (vmApp.activeGroupId !== groupId) {
+           console.log('group notify');
+          vmApp.activeGroupId = groupId;
+          vmApp.enableScore = (groupId === 'gmat' || groupId === 'act' || groupId === 'sat');
+
+          if (vmApp.enableScore)
+            Application.getScorePrediction();
+
+          var gtmData = {
+            'platformVersion': '2',
+            'studyingFor': groupId,
+            'userId': response.userId,
+          };
+
+          GoogleTagManager.push(gtmData);
+
+          vmApp.canAccess = membershipService.canPractice();
+          var menuParams = {
+            isReady: true,
+            groupId: vmApp.activeGroupId
+          };
+
+          Application.hideVideoOption(vmApp.activeGroupId);
+          Application.hideStudyPlan(vmApp.activeGroupId);
+          vmApp.menu = menuService.createLeftMenu(menuParams, vmApp.hideStudyPlan, vmApp.hideVideoOption, vmApp.canAccess);
+          Application.loadGroupMembership();
+          ListenloopUtility.base(response);
+          Application.getUserProgress();
+        }
+      },
       init: function() {
-        console.log('init');
         Auth.getCurrentUserInfo().then(function(response) {
           console.log(response);
           if (response != null) {
             vmApp.currentUser = response;
+            Application.setInitialData(response,response.currentGroup);
             userProgressObserver = currentProduct.observeGroupId().register(function(groupId) {
-                console.log('group notify');
-              if (vmApp.activeGroupId !== groupId) {
-                vmApp.activeGroupId = groupId;
-                vmApp.enableScore = (groupId === 'gmat' || groupId === 'act' || groupId === 'sat');
-
-                if (vmApp.enableScore)
-                  Application.getScorePrediction();
-
-                var gtmData = {
-                  'platformVersion': '2',
-                  'studyingFor': groupId,
-                  'userId': response.userId,
-                };
-
-                GoogleTagManager.push(gtmData);
-
-                vmApp.canAccess = membershipService.canPractice();
-                var menuParams = {
-                  isReady: true,
-                  groupId: vmApp.activeGroupId
-                };
-
-                Application.hideVideoOption(vmApp.activeGroupId);
-                Application.hideStudyPlan(vmApp.activeGroupId);
-                vmApp.menu = menuService.createLeftMenu(menuParams, vmApp.hideStudyPlan, vmApp.hideVideoOption, vmApp.canAccess);
-                Application.loadGroupMembership();
-                ListenloopUtility.base(response);
-                Application.getUserProgress();
-              }
+              Application.setInitialData(response,groupId);
             });
 
             GaUtility.classic();

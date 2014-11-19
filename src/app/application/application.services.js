@@ -140,7 +140,6 @@
             } else {
               membershipService.setMembershipInfo(userResponse, userGroup, urlGroup);
               membershipService.userCanAccesPage(urlGroup);
-              console.log('execute notification')
               currentProduct.currentGroupId(urlGroup, actualGroup);
 
             }

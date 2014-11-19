@@ -34,11 +34,9 @@ $script([paths.jqueryGrockit,
   paths.appController,
   paths.utilServices
 ], 'init')
-console.log('start')
 
 $script
   .ready('init', function() {
-    console.log('init')
     $script([
       paths.appFilters,
       paths.appDirectives,
@@ -47,7 +45,6 @@ $script
       paths.practiceSrv,
       paths.uiBootStrap
     ], 'secondLoad').ready('secondLoad', function() {
-      console.log('second load')
       $script([
         paths.accordion,
         paths.historyM,
@@ -59,7 +56,6 @@ $script
         paths.app
       ], function() {
         angular.element(document).ready(function() {
-          console.log('last')
           angular.bootstrap(document, ['grockitApp']);
         });
       });
