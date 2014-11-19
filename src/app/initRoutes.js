@@ -38,12 +38,14 @@ $script([
   paths.appDirectives,
   paths.appController,
 ], function() {
+  console.log('2')
   $script([
     paths.restAngularFactory,
     paths.practiceSrv,
     paths.uiBootStrap
   ], 'init')
   .ready('init', function() {
+     console.log('3')
     $script([
       paths.accordion,
       paths.historyM,
@@ -55,6 +57,7 @@ $script([
       paths.app
     ], function() {
       angular.element(document).ready(function() {
+        console.log('bootstrap');
         angular.bootstrap(document, ['grockitApp']);
       });
     });
