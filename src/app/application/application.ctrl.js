@@ -149,6 +149,7 @@
       init: function() {
         console.log('init');
         Auth.getCurrentUserInfo().then(function(response) {
+          console.log(response);
           if (response != null) {
             vmApp.currentUser = response;
             userProgressObserver = currentProduct.observeGroupId().register(function(groupId) {
