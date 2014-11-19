@@ -93,14 +93,13 @@
           if (!hasQuestionsAnswered && vmDash.activeGroupId !== 'gre' && !detectUtils.isMobile()) vmDash.showTour = true;
           else vmDash.showTour = false;
 
-
           if (!hasQuestionsAnswered && vmDash.activeGroupId === 'gre') {
             var base = utilities.newGrockit().url;
             $window.location.href = base + '/#/' + vmDash.activeGroupId + '/custom-practice/';
           } else {
 
             if (vmDash.enableScore)
-              SimpleDashBoard.fetchScorePrediction();
+               SimpleDashBoard.fetchScorePrediction();
 
             SimpleDashBoard.fetchTracks();
             SimpleDashBoard.getHistoryInformation();
