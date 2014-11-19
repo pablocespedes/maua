@@ -119,7 +119,7 @@
         var userResponse = response[0];
 
         if (userResponse != null) {
-
+            console.log(response,response[0],response[1])
           var groups = response[1].data.groups;
 
           if (_appFn.isBasePath(userResponse)) {
