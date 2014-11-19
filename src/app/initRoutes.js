@@ -32,13 +32,14 @@ $script([
   paths.appModule,
   paths.restAngular,
   paths.analyticService,
-  paths.utilServices,
-  paths.appServices,
-  paths.appFilters,
-  paths.appDirectives
+  paths.appController,
+  paths.utilServices
+
 ], function() {
   $script([
-    paths.appController,
+    paths.appFilters,
+    paths.appDirectives,
+    paths.appServices,
     paths.restAngularFactory,
     paths.practiceSrv,
     paths.uiBootStrap

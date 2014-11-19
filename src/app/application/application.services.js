@@ -58,6 +58,7 @@
         webStorage.add('currentUser', currentUser);
       }
       utilities.setGroupTitle(actualGroup.name)
+      console.log('to notify');
       observable.notify(groupId);
     };
 
