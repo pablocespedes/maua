@@ -1,5 +1,4 @@
 // load all of the dependencies asynchronously.
-
 var paths = {
   jqueryGrockit: 'app/shared/jquery.grockit.js',
   restAngularFactory: 'app/api-requests/restAngular.service.js',
@@ -16,17 +15,17 @@ var paths = {
   appFilters: 'app/application/application.filters.js',
   utilServices: 'app/application/util.services.js',
   appServices: 'app/application/application.services.js',
-  app: 'app/app.js',
   practiceSrv: 'app/shared/services/practice.service.js',
   practiceUtils: 'app/shared/services/practice.utils.js',
   uiBootStrap: 'app/components/accordion/vendor/ui.bootstrap.min.js',
   accordion: 'app/components/accordion/accordion.js',
   historyM: 'app/history/history.module.js',
-  questionReview: 'app/question-review/question-review.module.js'
-
+  questionReview: 'app/question-review/question-review.module.js',
+  app: 'app/app.js'
 };
-$script([
-  paths.jqueryGrockit,
+
+
+$script([paths.jqueryGrockit,
   paths.authServices,
   paths.components,
   paths.appModule,
@@ -34,30 +33,36 @@ $script([
   paths.analyticService,
   paths.appController,
   paths.utilServices
+], 'init')
+console.log('start')
 
-], function() {
-  $script([
-    paths.appFilters,
-    paths.appDirectives,
-    paths.appServices,
-    paths.restAngularFactory,
-    paths.practiceSrv,
-    paths.uiBootStrap
-  ], 'init')
+$script
   .ready('init', function() {
+    console.log('init')
     $script([
-      paths.accordion,
-      paths.historyM,
-      paths.dashboard,
-      paths.practiceUtils,
-      paths.practice,
-      paths.question,
-      paths.questionReview,
-      paths.app
-    ], function() {
-      angular.element(document).ready(function() {
-        angular.bootstrap(document, ['grockitApp']);
+      paths.appFilters,
+      paths.appDirectives,
+      paths.appServices,
+      paths.restAngularFactory,
+      paths.practiceSrv,
+      paths.uiBootStrap
+    ], 'secondLoad').ready('secondLoad', function() {
+      console.log('second load')
+      $script([
+        paths.accordion,
+        paths.historyM,
+        paths.dashboard,
+        paths.practiceUtils,
+        paths.practice,
+        paths.question,
+        paths.questionReview,
+        paths.app
+      ], function() {
+        angular.element(document).ready(function() {
+          console.log('last')
+          angular.bootstrap(document, ['grockitApp']);
+        });
       });
-    });
-  });
-});
+    })
+
+  })
