@@ -31,13 +31,13 @@ $script([paths.jqueryGrockit,
   paths.appModule,
   paths.restAngular,
   paths.analyticService,
-  paths.appController,
   paths.utilServices
 ], 'init')
 
 $script
   .ready('init', function() {
     $script([
+      paths.appController,
       paths.appFilters,
       paths.appDirectives,
       paths.appServices,
