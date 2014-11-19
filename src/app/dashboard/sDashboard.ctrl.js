@@ -6,11 +6,11 @@
 
   /*Manually injection will avoid any minification or injection problem*/
   SimpleDashController.$inject = ['$window', '$scope', 'dashboard', 'UsersApi', 'utilities', 'Auth', 'currentProduct',
-    'membershipService', 'setItUpUserProgress', 'setItUpScorePrediction'
+    'membershipService', 'setItUpUserProgress', 'setItUpScorePrediction','detectUtils'
   ];
 
   function SimpleDashController($window, $scope, dashboard, UsersApi, utilities, Auth, currentProduct, membershipService,
-    setItUpUserProgress, setItUpScorePrediction) {
+    setItUpUserProgress, setItUpScorePrediction,detectUtils) {
     /* jshint validthis: true */
     var vmDash = this,
       dashObserver = null;
@@ -86,9 +86,11 @@
 
     var SimpleDashBoard = {
       getDashboard: function(groupId) {
+
+
         dashboard.setDashboardData(groupId).then(function(result) {
           var hasQuestionsAnswered = dashboard.hasQuestionsAnswered();
-          if (!hasQuestionsAnswered && vmDash.activeGroupId !== 'gre') vmDash.showTour = true;
+          if (!hasQuestionsAnswered && vmDash.activeGroupId !== 'gre' && !detectUtils.isMobile()) vmDash.showTour = true;
           else vmDash.showTour = false;
 
 

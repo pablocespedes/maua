@@ -15,6 +15,7 @@
   'ngRoute',
   'ngSanitize',
   'ngCookies',
+  'ng.deviceDetector',
   'grockitApp.components',
   'grockitApp.analyticService',
   'grockitApp.application',

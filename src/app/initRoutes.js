@@ -31,19 +31,18 @@ $script([
   paths.components,
   paths.appModule,
   paths.restAngular,
-  paths.analyticService
+  paths.analyticService,
+  paths.utilServices,
+  paths.appServices,
+  paths.appFilters,
+  paths.appDirectives,
+  paths.appController,
 ], function() {
   $script([
-    paths.utilServices,
-    paths.appServices,
-    paths.appFilters,
-    paths.appDirectives,
-    paths.appController,
     paths.restAngularFactory,
     paths.practiceSrv,
     paths.uiBootStrap
   ], 'init')
-
   .ready('init', function() {
     $script([
       paths.accordion,
