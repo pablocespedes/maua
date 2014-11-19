@@ -14,7 +14,7 @@
   function ApplicationController($scope, $window, Auth, utilities, ListenloopUtility,
     GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct, membershipService, menuService,
     GoogleTagManager, setItUpUserProgress, setItUpScorePrediction) {
-
+    console.log(menuService,setItUpUserProgress, setItUpScorePrediction);
     /* jshint validthis: true */
     var vmApp = this,
       userProgressObserver = null,
@@ -124,11 +124,12 @@
         }
       },
       getUserProgress: function() {
+        console.log('history before');
         userProgressObserver = setItUpUserProgress.observeUserProgress().register(function(historyResponse) {
           var userProgess = {};
-
+          console.log('history after');
           if (angular.isDefined(historyResponse)) {
-
+            console.log('history defined');
             userProgess.historyVisible = true;
             userProgess.totalQuestLastW = historyResponse.lastWeek
             userProgess.totalQuest = historyResponse.all;
@@ -146,10 +147,12 @@
         });
       },
       init: function() {
+        console.log('init');
         Auth.getCurrentUserInfo().then(function(response) {
           if (response != null) {
             vmApp.currentUser = response;
             userProgressObserver = currentProduct.observeGroupId().register(function(groupId) {
+                console.log('group notify');
               if (vmApp.activeGroupId !== groupId) {
                 vmApp.activeGroupId = groupId;
                 vmApp.enableScore = (groupId === 'gmat' || groupId === 'act' || groupId === 'sat');
