@@ -6,7 +6,6 @@
 
   function run($rootScope, $location,appService) {
     $rootScope.$on("$locationChangeSuccess", function(event, next, current) {
-      console.log('user preflight')
       appService.userPreflight(event);
     });
   }

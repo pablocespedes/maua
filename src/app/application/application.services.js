@@ -2,19 +2,19 @@
   'use strict';
 
   angular.module("grockitApp.application")
-  .factory('grockitModal', grockitModal)
-  .service('currentProduct', currentProduct)
-  .factory('appService', appService)
-  .factory('menuService',menuService)
-  .service('setItUpUserProgress',setItUpUserProgress)
-  .service('setItUpScorePrediction',setItUpScorePrediction);
+    .factory('grockitModal', grockitModal)
+    .service('currentProduct', currentProduct)
+    .factory('appService', appService)
+    .factory('menuService', menuService)
+    .service('setItUpUserProgress', setItUpUserProgress)
+    .service('setItUpScorePrediction', setItUpScorePrediction);
 
   grockitModal.$inject = ['$http', 'utilities', 'environmentCons'];
   currentProduct.$inject = ['webStorage', 'Observable', 'utilities'];
-  appService.$inject = ['$window','$q', '$location', 'Auth', 'GroupsApi', 'utilities', 'membershipService', 'currentProduct','alerts'];
-  menuService.$inject =['utilities'];
-  setItUpUserProgress.$inject =['Observable'];
-  setItUpScorePrediction.$inject =['Observable'];
+  appService.$inject = ['$window', '$q', '$location', 'Auth', 'GroupsApi', 'utilities', 'membershipService', 'currentProduct', 'alerts'];
+  menuService.$inject = ['utilities'];
+  setItUpUserProgress.$inject = ['Observable'];
+  setItUpScorePrediction.$inject = ['Observable'];
 
   function grockitModal($http, utilities, environmentCons) {
 
@@ -25,12 +25,12 @@
 
     function showTrialExpiration(titleM, groupId, nQuestions) {
       var msg = 'Looks like you\'ve been pretty busy these past few days. You\'ve answered ' +
-      +nQuestions + ' questions and are well on your way to Grocking the ' + utilities.getGroupTitle() + '!';
+        +nQuestions + ' questions and are well on your way to Grocking the ' + utilities.getGroupTitle() + '!';
       var dialogOptions = {
         title: '<i class="fa fa-clock-o"></i> Time to upgrade!',
         animate: true,
         message: '<div class="text-lg trial text-center">' + msg +
-        '<br><br>Keep Grocking the ' + utilities.getGroupTitle() + '. Starting at just $9.<div>',
+          '<br><br>Keep Grocking the ' + utilities.getGroupTitle() + '. Starting at just $9.<div>',
         className: "modal-trial modal-success",
         buttons: {
           success: {
@@ -50,7 +50,7 @@
 
   function currentProduct(webStorage, Observable, utilities) {
     var currentUser = webStorage.get('currentUser'),
-    observable = Observable.create('currentProduct');
+      observable = Observable.create('currentProduct');
 
     this.currentGroupId = function(groupId, actualGroup) {
       if (currentUser !== null && groupId !== currentUser.currentGroup) {
@@ -70,7 +70,7 @@
     }
   }
 
-  function appService($window, $q, $location, Auth, GroupsApi, utilities, membershipService, currentProduct,alerts) {
+  function appService($window, $q, $location, Auth, GroupsApi, utilities, membershipService, currentProduct, alerts) {
 
 
     var _appFn = {
@@ -89,9 +89,9 @@
       },
       getUserData: function() {
         var userData = Auth.getUpdateUserData(),
-        userMembership = GroupsApi.membershipGroups(true);
+          userMembership = GroupsApi.membershipGroups(true);
 
-        return $q.all([userData, userMembership]);
+        return $q.all([userData]);
       }
     };
 
@@ -106,8 +106,8 @@
       if (Auth.isLoggedIn()) {
 
         _appFn.getUserData()
-        .then(getUserDataCompleted)
-        .catch(getUserDataFailed);
+          .then(getUserDataCompleted)
+          .catch(getUserDataFailed);
 
       } else {
         $("body").html('The user is not logged in! <a href=\"/logout\">Click here to restart</a>.');
@@ -119,30 +119,33 @@
         var userResponse = response[0];
 
         if (userResponse != null) {
-            console.log(response,response[0],response[1])
-          var groups = response[1].data.groups;
+          console.log(response[0])
+          GroupsApi.membershipGroups(true).then(function(groupsResult) {
+            var groups = groupsResult.data.groups;
+              console.log(groups);
+            if (_appFn.isBasePath(userResponse)) {
 
-          if (_appFn.isBasePath(userResponse)) {
-
-            utilities.internalRedirect('/' + userResponse.currentGroup + '/dashboard');
-
-          } else {
-
-            var urlGroup = utilities.getCurrentParam('subject'),
-            actualGroup = _appFn.actualGroup(groups, urlGroup),
-            userGroup = _appFn.userGroup(userResponse.groupMemberships, urlGroup);
-            console.log(urlGroup,actualGroup,userGroup)
-            if (angular.isUndefined(actualGroup) || angular.isUndefined(userGroup)) {
-
-              //$window.location = '404.html';
+              utilities.internalRedirect('/' + userResponse.currentGroup + '/dashboard');
 
             } else {
-              membershipService.setMembershipInfo(userResponse, userGroup, urlGroup);
-              membershipService.userCanAccesPage(urlGroup);
-              currentProduct.currentGroupId(urlGroup, actualGroup);
 
+              var urlGroup = utilities.getCurrentParam('subject'),
+                actualGroup = _appFn.actualGroup(groups, urlGroup),
+                userGroup = _appFn.userGroup(userResponse.groupMemberships, urlGroup);
+              console.log(urlGroup, actualGroup, userGroup)
+              if (angular.isUndefined(actualGroup) || angular.isUndefined(userGroup)) {
+
+                //$window.location = '404.html';
+
+              } else {
+                membershipService.setMembershipInfo(userResponse, userGroup, urlGroup);
+                membershipService.userCanAccesPage(urlGroup);
+                currentProduct.currentGroupId(urlGroup, actualGroup);
+
+              }
             }
-          }
+          });
+
         }
       }
 
@@ -155,112 +158,112 @@
 
   function menuService(utilities) {
     var grockitTV = 'http://grockit.tv/',
-    baseUrl = utilities.originalGrockit().url;
+      baseUrl = utilities.originalGrockit().url;
 
     var service = {
       createLeftMenu: createLeftMenu
     };
     return service;
 
-    function createLeftMenu(options,hideStudyPlan,hideVideoOption,canAccess) {
+    function createLeftMenu(options, hideStudyPlan, hideVideoOption, canAccess) {
 
       return [{
-        id: 'dashboard',
-        url: '#/' + options.groupId + '/dashboard/',
-        canAccess: canAccess,
-        title: 'Dashboard',
-        isReady: options.isReady,
-        iconclass: 'fa-dashboard',
-        shouldShow: true
+          id: 'dashboard',
+          url: '#/' + options.groupId + '/dashboard/',
+          canAccess: canAccess,
+          title: 'Dashboard',
+          isReady: options.isReady,
+          iconclass: 'fa-dashboard',
+          shouldShow: true
 
-      }, {
-        id: 'study_plan',
-        url: baseUrl + '/' + options.groupId + '/study_plan',
-        canAccess: canAccess,
-        title: 'Study Plan',
-        isReady: options.isReady,
-        iconclass: 'fa-tasks',
-        shouldShow: (!hideStudyPlan)
-      }, {
-        id: 'social',
-        url: baseUrl + '/' + options.groupId + '/social',
-        canAccess: canAccess,
-        title: 'Group Practice',
-        isReady: options.isReady,
-        iconclass: 'fa-users',
-        shouldShow: (options.groupId != 'gre')
-      }, {
-        id: 'video_courses',
-        url: baseUrl + '/' + options.groupId + '/video_courses',
-        canAccess: canAccess,
-        title: 'Video Library',
-        isReady: options.isReady,
-        iconclass: 'fa-video-camera',
-        shouldShow: (!hideVideoOption)
-      }, {
-        id: 'custom_practice',
-        url: baseUrl + '/' + options.groupId + '/custom_games/new',
-        canAccess: canAccess,
-        title: 'Custom Practice',
-        isReady: options.isReady,
-        iconclass: 'fa-book',
-        shouldShow: (options.groupId != 'gre')
-      }, {
-        id: 'gre_fullLenghtTest',
-        url: grockitTV +'grepracticetest',
-        canAccess: canAccess,
-        title: 'Take a Full Length Test',
-        isReady: options.isReady,
-        iconclass: 'fa-lightbulb-o',
-        shouldShow: (options.groupId === 'gre')
-      }, {
-        id: 'gmat_fullLenghtTest',
-        url: baseUrl + '/' + options.groupId + '/join_cat_game',
-        canAccess: canAccess,
-        title: 'Take a Full Length Test',
-        isReady: options.isReady,
-        iconclass: 'fa-lightbulb-o',
-        shouldShow: (options.groupId === 'gmat')
-      }, {
-        id: 'tutoring',
-        url: baseUrl + '/' + options.groupId + '/tutoring',
-        canAccess: canAccess,
-        title: 'Tutoring',
-        isReady: options.isReady,
-        iconclass: 'fa-briefcase',
-        shouldShow: true
-      }, {
-        id: 'skill_data',
-        url: baseUrl + '/' + options.groupId + '/skill_data',
-        canAccess: canAccess,
-        title: 'Skill Data',
-        isReady: options.isReady,
-        iconclass: 'fa-dashboard',
-        shouldShow: true
-      }, {
-        id: 'history',
-        url: '#/' + options.groupId + '/history/',
-        canAccess: canAccess,
-        title: 'History',
-        isReady: options.isReady,
-        iconclass: 'fa-bar-chart-o',
-        shouldShow: (options.groupId === 'gre')
-      }, {
-        id: 'history',
-        url: baseUrl + '/' + options.groupId + '/reviews',
-        canAccess: canAccess,
-        title: 'History',
-        isReady: options.isReady,
-        iconclass: 'fa-bar-chart-o',
-        shouldShow: (options.groupId !== 'gre')
-      },
+        }, {
+          id: 'study_plan',
+          url: baseUrl + '/' + options.groupId + '/study_plan',
+          canAccess: canAccess,
+          title: 'Study Plan',
+          isReady: options.isReady,
+          iconclass: 'fa-tasks',
+          shouldShow: (!hideStudyPlan)
+        }, {
+          id: 'social',
+          url: baseUrl + '/' + options.groupId + '/social',
+          canAccess: canAccess,
+          title: 'Group Practice',
+          isReady: options.isReady,
+          iconclass: 'fa-users',
+          shouldShow: (options.groupId != 'gre')
+        }, {
+          id: 'video_courses',
+          url: baseUrl + '/' + options.groupId + '/video_courses',
+          canAccess: canAccess,
+          title: 'Video Library',
+          isReady: options.isReady,
+          iconclass: 'fa-video-camera',
+          shouldShow: (!hideVideoOption)
+        }, {
+          id: 'custom_practice',
+          url: baseUrl + '/' + options.groupId + '/custom_games/new',
+          canAccess: canAccess,
+          title: 'Custom Practice',
+          isReady: options.isReady,
+          iconclass: 'fa-book',
+          shouldShow: (options.groupId != 'gre')
+        }, {
+          id: 'gre_fullLenghtTest',
+          url: grockitTV + 'grepracticetest',
+          canAccess: canAccess,
+          title: 'Take a Full Length Test',
+          isReady: options.isReady,
+          iconclass: 'fa-lightbulb-o',
+          shouldShow: (options.groupId === 'gre')
+        }, {
+          id: 'gmat_fullLenghtTest',
+          url: baseUrl + '/' + options.groupId + '/join_cat_game',
+          canAccess: canAccess,
+          title: 'Take a Full Length Test',
+          isReady: options.isReady,
+          iconclass: 'fa-lightbulb-o',
+          shouldShow: (options.groupId === 'gmat')
+        }, {
+          id: 'tutoring',
+          url: baseUrl + '/' + options.groupId + '/tutoring',
+          canAccess: canAccess,
+          title: 'Tutoring',
+          isReady: options.isReady,
+          iconclass: 'fa-briefcase',
+          shouldShow: true
+        }, {
+          id: 'skill_data',
+          url: baseUrl + '/' + options.groupId + '/skill_data',
+          canAccess: canAccess,
+          title: 'Skill Data',
+          isReady: options.isReady,
+          iconclass: 'fa-dashboard',
+          shouldShow: true
+        }, {
+          id: 'history',
+          url: '#/' + options.groupId + '/history/',
+          canAccess: canAccess,
+          title: 'History',
+          isReady: options.isReady,
+          iconclass: 'fa-bar-chart-o',
+          shouldShow: (options.groupId === 'gre')
+        }, {
+          id: 'history',
+          url: baseUrl + '/' + options.groupId + '/reviews',
+          canAccess: canAccess,
+          title: 'History',
+          isReady: options.isReady,
+          iconclass: 'fa-bar-chart-o',
+          shouldShow: (options.groupId !== 'gre')
+        },
 
       ];
     }
   }
 
-  function setItUpUserProgress(Observable){
-    var  observable = Observable.create('userProgress');
+  function setItUpUserProgress(Observable) {
+    var observable = Observable.create('userProgress');
 
     this.setUserProgress = function(userProgressData) {
       observable.notify(userProgressData);
@@ -270,8 +273,8 @@
     }
   }
 
-  function setItUpScorePrediction(Observable){
-    var  observableScore = Observable.create('scorePrediction');
+  function setItUpScorePrediction(Observable) {
+    var observableScore = Observable.create('scorePrediction');
 
     this.setScorePrediction = function(scorePredictionData) {
       observableScore.notify(scorePredictionData);
