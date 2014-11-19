@@ -14,7 +14,6 @@
   function ApplicationController($scope, $window, Auth, utilities, ListenloopUtility,
     GaUtility, InspectletUtility, GroupsApi, alerts, Headers, currentProduct, membershipService, menuService,
     GoogleTagManager, setItUpUserProgress, setItUpScorePrediction) {
-    console.log(menuService, setItUpUserProgress, setItUpScorePrediction);
     /* jshint validthis: true */
     var vmApp = this,
       userProgressObserver = null,
@@ -146,7 +145,6 @@
       setInitialData: function(response,groupId) {
 
         if (vmApp.activeGroupId !== groupId) {
-           console.log('group notify');
           vmApp.activeGroupId = groupId;
           vmApp.enableScore = (groupId === 'gmat' || groupId === 'act' || groupId === 'sat');
 
@@ -177,7 +175,6 @@
       },
       init: function() {
         Auth.getCurrentUserInfo().then(function(response) {
-          console.log(response);
           if (response != null) {
             vmApp.currentUser = response;
             Application.setInitialData(response,response.currentGroup);

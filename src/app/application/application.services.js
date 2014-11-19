@@ -58,7 +58,6 @@
         webStorage.add('currentUser', currentUser);
       }
       utilities.setGroupTitle(actualGroup.name)
-      console.log('to notify');
       observable.notify(groupId);
     };
 
@@ -132,7 +131,7 @@
             var urlGroup = utilities.getCurrentParam('subject'),
             actualGroup = _appFn.actualGroup(groups, urlGroup),
             userGroup = _appFn.userGroup(userResponse.groupMemberships, urlGroup);
-
+            console.log(urlGroup,actualGroup,userGroup)
             if (angular.isUndefined(actualGroup) || angular.isUndefined(userGroup)) {
 
               $window.location = '404.html';
