@@ -127,20 +127,18 @@
 
             } else {
 
-              var userGroup = _appFn.userGroup(userResponse.groupMemberships, utilities.getCurrentParam('subject')),
-                urlGroup = angular.isUndefined(userGroup) ? userResponse.groupMemberships[0].group_id :
-                utilities.getCurrentParam('subject'),
-                availableGroup = _appFn.userGroup(userResponse.groupMemberships, urlGroup),
+              var  urlGroup = utilities.getCurrentParam('subject'),
+                userGroup = _appFn.userGroup(userResponse.groupMemberships, urlGroup),
                 actualGroup = _appFn.actualGroup(groups, urlGroup);
-              if (angular.isUndefined(userGroup)) {
-                utilities.internalRedirect('/' + urlGroup + '/dashboard')
-              }
+                console.log(actualGroup)
+
               if (angular.isUndefined(actualGroup)) {
-
                 $window.location = '404.html';
-
+              } else if (angular.isUndefined(userGroup)) {
+                var baseUrl = utilities.originalGrockit(false).url;
+                utilities.redirect(baseUrl + '/' + urlGroup + '/subscriptions/new');
               } else {
-                membershipService.setMembershipInfo(userResponse, availableGroup, urlGroup);
+                membershipService.setMembershipInfo(userResponse, userGroup, urlGroup);
                 membershipService.userCanAccesPage(urlGroup);
                 currentProduct.currentGroupId(urlGroup, actualGroup);
 
