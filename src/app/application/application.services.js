@@ -122,20 +122,23 @@
           console.log(response[0])
           GroupsApi.membershipGroups(true).then(function(groupsResult) {
             var groups = groupsResult.data.groups;
-              console.log(groups);
+            console.log(groups);
             if (_appFn.isBasePath(userResponse)) {
 
               utilities.internalRedirect('/' + userResponse.currentGroup + '/dashboard');
 
             } else {
 
-              var urlGroup = utilities.getCurrentParam('subject'),
-                actualGroup = _appFn.actualGroup(groups, urlGroup),
-                userGroup = _appFn.userGroup(userResponse.groupMemberships, urlGroup);
-              console.log(urlGroup, actualGroup, userGroup)
-              if (angular.isUndefined(actualGroup) || angular.isUndefined(userGroup)) {
+              var userGroup = _appFn.userGroup(userResponse.groupMemberships, utilities.getCurrentParam('subject')),
+                urlGroup = angular.isUndefined(userGroup) ? userResponse.groupMemberships[0].group_id :
+                utilities.getCurrentParam('subject'),
+                actualGroup = _appFn.actualGroup(groups, urlGroup);
 
-                //$window.location = '404.html';
+              console.log(urlGroup, actualGroup, userGroup)
+
+              if (angular.isUndefined(actualGroup)) {
+
+                $window.location = '404.html';
 
               } else {
                 membershipService.setMembershipInfo(userResponse, userGroup, urlGroup);

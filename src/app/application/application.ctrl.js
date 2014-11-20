@@ -20,11 +20,8 @@
       scorePrediction = null;
     /* recommend: Using function declarations and bindable members up top.*/
 
-    var url = $window.location.href.split('/');
-    var currentLoc = url[(url.length - 1)];
     vmApp.isReady = false;
     vmApp.scoreLoading = true;
-    vmApp.activeItem = currentLoc;
     vmApp.url = utilities.originalGrockit().url;
     vmApp.logOutUrl = utilities.originalGrockit().url + '/logout';
     vmApp.selectGroup = selectGroup;
@@ -142,7 +139,7 @@
           vmApp.scoreLoading = false;
         });
       },
-      setInitialData: function(response,groupId) {
+      setInitialData: function(response, groupId) {
 
         if (vmApp.activeGroupId !== groupId) {
           vmApp.activeGroupId = groupId;
@@ -171,15 +168,18 @@
           Application.loadGroupMembership();
           ListenloopUtility.base(response);
           Application.getUserProgress();
+          var url = $window.location.href.split('/'),
+            currentLoc = url[(url.length - 1)];
+          vmApp.activeItem = currentLoc;
         }
       },
       init: function() {
         Auth.getCurrentUserInfo().then(function(response) {
           if (response != null) {
             vmApp.currentUser = response;
-            Application.setInitialData(response,response.currentGroup);
+            Application.setInitialData(response, response.currentGroup);
             userProgressObserver = currentProduct.observeGroupId().register(function(groupId) {
-              Application.setInitialData(response,groupId);
+              Application.setInitialData(response, groupId);
             });
 
             GaUtility.classic();
