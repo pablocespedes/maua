@@ -162,7 +162,7 @@
 
     return service;
     function membershipGroups(shouldUpdate) {
-
+      console.log(currentGroups == null || shouldUpdate,shouldUpdate);
       currentGroups = currentGroups == null || shouldUpdate ? Restangular.one('groups').customGET('', {
         subdomain: 'www'
       }) : currentGroups;
