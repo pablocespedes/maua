@@ -119,10 +119,8 @@
         var userResponse = response[0];
 
         if (userResponse != null) {
-          console.log(response[0])
           GroupsApi.membershipGroups(true).then(function(groupsResult) {
             var groups = groupsResult.data.groups;
-            console.log(groups);
             if (_appFn.isBasePath(userResponse)) {
 
               utilities.internalRedirect('/' + userResponse.currentGroup + '/dashboard');
@@ -132,11 +130,11 @@
               var userGroup = _appFn.userGroup(userResponse.groupMemberships, utilities.getCurrentParam('subject')),
                 urlGroup = angular.isUndefined(userGroup) ? userResponse.groupMemberships[0].group_id :
                 utilities.getCurrentParam('subject'),
-                availableGroup= _appFn.userGroup(userResponse.groupMemberships, urlGroup),
+                availableGroup = _appFn.userGroup(userResponse.groupMemberships, urlGroup),
                 actualGroup = _appFn.actualGroup(groups, urlGroup);
-
-              console.log(urlGroup, actualGroup, availableGroup)
-
+              if (angular.isUndefined(userGroup)) {
+                utilities.internalRedirect('/' + urlGroup + '/dashboard')
+              }
               if (angular.isUndefined(actualGroup)) {
 
                 $window.location = '404.html';
