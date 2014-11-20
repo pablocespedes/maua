@@ -132,16 +132,17 @@
               var userGroup = _appFn.userGroup(userResponse.groupMemberships, utilities.getCurrentParam('subject')),
                 urlGroup = angular.isUndefined(userGroup) ? userResponse.groupMemberships[0].group_id :
                 utilities.getCurrentParam('subject'),
+                availableGroup= _appFn.userGroup(userResponse.groupMemberships, urlGroup),
                 actualGroup = _appFn.actualGroup(groups, urlGroup);
 
-              console.log(urlGroup, actualGroup, userGroup)
+              console.log(urlGroup, actualGroup, availableGroup)
 
               if (angular.isUndefined(actualGroup)) {
 
                 $window.location = '404.html';
 
               } else {
-                membershipService.setMembershipInfo(userResponse, userGroup, urlGroup);
+                membershipService.setMembershipInfo(userResponse, availableGroup, urlGroup);
                 membershipService.userCanAccesPage(urlGroup);
                 currentProduct.currentGroupId(urlGroup, actualGroup);
 
