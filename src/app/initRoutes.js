@@ -29,11 +29,11 @@ $script([paths.jqueryGrockit,
   paths.appModule,
   paths.components,
   paths.restAngular,
-  paths.analyticService,
-  paths.appFilters,
-  paths.appDirectives,
+  paths.analyticService
 ], 'init').ready('init', function() {
   $script([
+    paths.appFilters,
+    paths.appDirectives,
     paths.utilServices,
     paths.appServices,
     paths.authServices,
