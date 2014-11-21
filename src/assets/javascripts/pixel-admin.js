@@ -3,7 +3,7 @@
 
     /*
      * Determines whether a string ends with the specified suffix.
-     * 
+     *
      * @param  {String} suffix
      * @return Boolean
      */
@@ -16,7 +16,7 @@
 
     /*
      * Removes whitespace from both sides of a string.
-     * 
+     *
      * @return {String}
      */
     String.prototype.trim = function() {
@@ -28,7 +28,7 @@
 
     /*
      * The indexOf() method returns the first index at which a given element can be found in the array, or -1 if it is not present.
-     * 
+     *
      * @param  {Variant} searchElement
      * @param  {Integer} fromIndex
      * @return {Integer}
@@ -113,7 +113,7 @@
 
   /*
    * Detect screen size.
-   * 
+   *
    * @param  {jQuery Object} $ssw_point
    * @param  {jQuery Object} $tsw_point
    * @return {String}
@@ -153,7 +153,7 @@
       store_state_key: 'mmstate',
       disable_animation_on: ['small'],
       dropdown_close_delay: 300,
-      detect_active: true,
+      detect_active: false,
       detect_active_predicate: function(href, url) {
         return href === url;
       }
@@ -179,7 +179,7 @@
 
   /*
    * Start application. Method takes an array of initializers and a settings object(that overrides default settings).
-   * 
+   *
    * @param  {Array} suffix
    * @param  {Object} settings
    * @return this
@@ -221,7 +221,7 @@
 
   /*
    * Add initializer to the stack.
-   * 
+   *
    * @param  {Function} callback
    */
 
@@ -232,7 +232,7 @@
 
   /*
    * Initialize plugin and add it to the plugins list.
-   * 
+   *
    * @param  {String} plugin_name
    * @param  {Instance} plugin
    */
@@ -247,7 +247,7 @@
 
   /*
    * Save value in the localStorage/Cookies.
-   * 
+   *
    * @param  {String}  key
    * @param  {String}  value
    * @param  {Boolean} use_cookies
@@ -273,7 +273,7 @@
 
   /*
    * Save key/value pairs in the localStorage/Cookies.
-   * 
+   *
    * @param  {Object} pairs
    * @param  {Boolean} use_cookies
    */
@@ -306,7 +306,7 @@
 
   /*
    * Get value from the localStorage/Cookies.
-   * 
+   *
    * @param  {String} key
    * @param  {Boolean} use_cookies
    */
@@ -344,7 +344,7 @@
 
   /*
    * Get values from the localStorage/Cookies.
-   * 
+   *
    * @param  {Array} keys
    * @param  {Boolean} use_cookies
    */
@@ -1180,7 +1180,7 @@ FastClick.notNeeded = function(layer) {
 
 		if (FastClick.prototype.deviceIsAndroid) {
 			metaViewport = document.querySelector('meta[name=viewport]');
-			
+
 			if (metaViewport) {
 				// Chrome on Android with user-scalable="no" doesn't need FastClick (issue #89)
 				if (metaViewport.content.indexOf('user-scalable=no') !== -1) {
