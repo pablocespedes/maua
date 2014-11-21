@@ -26,39 +26,36 @@ var paths = {
 
 
 $script([paths.jqueryGrockit,
-  paths.authServices,
-  paths.components,
   paths.appModule,
+  paths.components,
   paths.restAngular,
   paths.analyticService,
-  paths.utilServices
-], 'init')
-
-$script
-  .ready('init', function() {
+  paths.utilServices,
+  paths.appServices,
+  paths.authServices,
+  paths.appFilters,
+  paths.appDirectives,
+], 'init').ready('init', function() {
+  $script([
+    paths.appController,
+    paths.restAngularFactory,
+    paths.practiceSrv,
+    paths.uiBootStrap
+  ], 'secondLoad').ready('secondLoad', function() {
     $script([
-      paths.appController,
-      paths.appFilters,
-      paths.appDirectives,
-      paths.appServices,
-      paths.restAngularFactory,
-      paths.practiceSrv,
-      paths.uiBootStrap
-    ], 'secondLoad').ready('secondLoad', function() {
-      $script([
-        paths.accordion,
-        paths.historyM,
-        paths.dashboard,
-        paths.practiceUtils,
-        paths.practice,
-        paths.question,
-        paths.questionReview,
-        paths.app
-      ], function() {
-        angular.element(document).ready(function() {
-          angular.bootstrap(document, ['grockitApp']);
-        });
+      paths.accordion,
+      paths.historyM,
+      paths.dashboard,
+      paths.practiceUtils,
+      paths.practice,
+      paths.question,
+      paths.questionReview,
+      paths.app
+    ], function() {
+      angular.element(document).ready(function() {
+        angular.bootstrap(document, ['grockitApp']);
       });
-    })
-
+    });
   })
+
+})

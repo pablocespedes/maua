@@ -130,7 +130,6 @@
               var  urlGroup = utilities.getCurrentParam('subject'),
                 userGroup = _appFn.userGroup(userResponse.groupMemberships, urlGroup),
                 actualGroup = _appFn.actualGroup(groups, urlGroup);
-                console.log(actualGroup)
 
               if (angular.isUndefined(actualGroup)) {
                 $window.location = '404.html';
