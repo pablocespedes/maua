@@ -1,5 +1,4 @@
 // load all of the dependencies asynchronously.
-
 var paths = {
   jqueryGrockit: 'app/shared/jquery.grockit.js',
   restAngularFactory: 'app/api-requests/restAngular.service.js',
@@ -16,35 +15,33 @@ var paths = {
   appFilters: 'app/application/application.filters.js',
   utilServices: 'app/application/util.services.js',
   appServices: 'app/application/application.services.js',
-  app: 'app/app.js',
   practiceSrv: 'app/shared/services/practice.service.js',
   practiceUtils: 'app/shared/services/practice.utils.js',
   uiBootStrap: 'app/components/accordion/vendor/ui.bootstrap.min.js',
   accordion: 'app/components/accordion/accordion.js',
   historyM: 'app/history/history.module.js',
-  questionReview: 'app/question-review/question-review.module.js'
-
+  questionReview: 'app/question-review/question-review.module.js',
+  app: 'app/app.js'
 };
-$script([
-  paths.jqueryGrockit,
-  paths.authServices,
-  paths.components,
+
+
+$script([paths.jqueryGrockit,
   paths.appModule,
+  paths.components,
   paths.restAngular,
   paths.analyticService
-], function() {
+], 'init').ready('init', function() {
   $script([
-    paths.utilServices,
-    paths.appServices,
     paths.appFilters,
     paths.appDirectives,
+    paths.utilServices,
+    paths.appServices,
+    paths.authServices,
     paths.appController,
     paths.restAngularFactory,
     paths.practiceSrv,
     paths.uiBootStrap
-  ], 'init')
-
-  .ready('init', function() {
+  ], 'secondLoad').ready('secondLoad', function() {
     $script([
       paths.accordion,
       paths.historyM,
@@ -59,5 +56,6 @@ $script([
         angular.bootstrap(document, ['grockitApp']);
       });
     });
-  });
-});
+  })
+
+})

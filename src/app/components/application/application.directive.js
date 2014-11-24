@@ -91,7 +91,6 @@
     var directive = {
       templateUrl: 'app/components/application/templates/a.leftMenu.tpl.html',
       restrict: 'A',
-      link: link,
       scope: {
         canAccess: '=',
         url: '=',
@@ -103,21 +102,6 @@
       }
     };
     return directive;
-
-    function link(scope, elm, attr) {
-      var path = $location.path(),
-        urlArr = path.split('/');
-      scope.view = urlArr[urlArr.length - 1];
-
-      if (scope.view === scope.menuId || (scope.view === 'custom-practice' && scope.menuId === 'dashboard')) {
-        $timeout(function() {
-          elm.addClass('active');
-        }, 500);
-      }
-
-
-
-    }
   }
 
   function chardinTour() {

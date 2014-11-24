@@ -1,19 +1,20 @@
 (function() {
   'use strict';
   angular
-  .module('grockitApp.dashboard')
-  .controller('SimpleDashController', SimpleDashController);
+    .module('grockitApp.dashboard')
+    .controller('SimpleDashController', SimpleDashController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  SimpleDashController.$inject = ['$window','$scope', 'dashboard', 'UsersApi', 'utilities', 'Auth', 'currentProduct',
-   'membershipService','setItUpUserProgress','setItUpScorePrediction'];
+  SimpleDashController.$inject = ['$window', '$scope', 'dashboard', 'UsersApi', 'utilities', 'Auth', 'currentProduct',
+    'membershipService', 'setItUpUserProgress', 'setItUpScorePrediction','detectUtils'
+  ];
 
-  function SimpleDashController($window,$scope, dashboard, UsersApi, utilities, Auth, currentProduct, membershipService,
-    setItUpUserProgress,setItUpScorePrediction) {
+  function SimpleDashController($window, $scope, dashboard, UsersApi, utilities, Auth, currentProduct, membershipService,
+    setItUpUserProgress, setItUpScorePrediction,detectUtils) {
     /* jshint validthis: true */
     var vmDash = this,
-    dashObserver = null;
-    vmDash.showingTour=false;
+      dashObserver = null;
+    vmDash.showingTour = false;
     vmDash.loading = true;
     vmDash.isChallengeAvailable = false;
     vmDash.loadingMessage = 'Loading...';
@@ -33,16 +34,17 @@
           vmDash.user_id = userInfo.userId;
 
           dashObserver = currentProduct.observeGroupId().register(function(groupId) {
-            vmDash.activeGroupId = groupId;
-            SimpleDashBoard.getDashboard(vmDash.activeGroupId);
-            vmDash.showBuyNow = membershipService.showBuyButton();
-            vmDash.upgradePromptMessage =membershipService.upgradePromptMessage().replace('.','');
-            vmDash.canPractice = membershipService.canPractice();
-            vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
-            vmDash.historyVisible = false;
-            var baseUrl = utilities.originalGrockit(false).url;
-            vmDash.paymentPage = baseUrl + '/' + vmDash.activeGroupId + '/subscriptions/new';
-
+            if (vmDash.activeGroupId !== groupId) {
+              vmDash.activeGroupId = groupId;
+              SimpleDashBoard.getDashboard(vmDash.activeGroupId);
+              vmDash.showBuyNow = membershipService.showBuyButton();
+              vmDash.upgradePromptMessage = membershipService.upgradePromptMessage().replace('.', '');
+              vmDash.canPractice = membershipService.canPractice();
+              vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
+              vmDash.historyVisible = false;
+              var baseUrl = utilities.originalGrockit(false).url;
+              vmDash.paymentPage = baseUrl + '/' + vmDash.activeGroupId + '/subscriptions/new';
+            }
           });
         }
       });
@@ -51,7 +53,7 @@
     function startCardinTour() {
       angular.element(document).ready(function() {
         vmDash.showingTour = true;
-        angular.element('#SnapABug_Button').attr('style','display:none');
+        angular.element('#SnapABug_Button').attr('style', 'display:none');
         angular.element('body').chardinJs('start');
 
       });
@@ -59,12 +61,13 @@
     angular.element(document).ready(function() {
       angular.element('body').on('chardinJs:stop', function() {
         $scope.$apply(function() {
-          angular.element('#SnapABug_Button').attr('style','display:inline-block');
+          angular.element('#SnapABug_Button').attr('style', 'display:inline-block');
           vmDash.showingTour = false;
         });
 
       });
     });
+
     function StartPractice(subject, trackId) {
 
       if (vmDash.canPractice) {
@@ -84,20 +87,20 @@
 
     var SimpleDashBoard = {
       getDashboard: function(groupId) {
+
+
         dashboard.setDashboardData(groupId).then(function(result) {
           var hasQuestionsAnswered = dashboard.hasQuestionsAnswered();
-          if(!hasQuestionsAnswered && vmDash.activeGroupId!=='gre') vmDash.showTour =true;
-          else vmDash.showTour =false;
+          if (!hasQuestionsAnswered && vmDash.activeGroupId !== 'gre' && !detectUtils.isMobile()) vmDash.showTour = true;
+          else vmDash.showTour = false;
 
-
-          if(!hasQuestionsAnswered && vmDash.activeGroupId==='gre'){
+          if (!hasQuestionsAnswered && vmDash.activeGroupId === 'gre') {
             var base = utilities.newGrockit().url;
-            $window.location.href= base + '/#/'+vmDash.activeGroupId+'/custom-practice/';
-          }
-          else{
+            $window.location.href = base + '/#/' + vmDash.activeGroupId + '/custom-practice/';
+          } else {
 
-             if (vmDash.enableScore)
-                SimpleDashBoard.fetchScorePrediction();
+            if (vmDash.enableScore)
+               SimpleDashBoard.fetchScorePrediction();
 
             SimpleDashBoard.fetchTracks();
             SimpleDashBoard.getHistoryInformation();
@@ -116,16 +119,16 @@
       fetchScorePrediction: function() {
         var scoreResponse = dashboard.getScorePrediction();
         if (angular.isDefined(scoreResponse)) {
-            setItUpScorePrediction.setScorePrediction(scoreResponse);
-             vmDash.score = scoreResponse;
-          }
+          setItUpScorePrediction.setScorePrediction(scoreResponse);
+          vmDash.score = scoreResponse;
+        }
       },
       getHistoryInformation: function() {
         var historyResponse = dashboard.getProgress();
-         if (angular.isDefined(historyResponse)) {
-            membershipService.membershipValidation(vmDash.activeGroupId ,historyResponse.all);
-          }
-         setItUpUserProgress.setUserProgress(historyResponse);
+        if (angular.isDefined(historyResponse)) {
+          membershipService.membershipValidation(vmDash.activeGroupId, historyResponse.all);
+        }
+        setItUpUserProgress.setUserProgress(historyResponse);
       },
       getChallenge: function() {
         var challenge = dashboard.getChallenge();
