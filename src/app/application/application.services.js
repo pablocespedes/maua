@@ -30,7 +30,7 @@
         title: '<i class="fa fa-clock-o"></i> Time to upgrade!',
         animate: true,
         message: '<div class="text-lg trial text-center">' + msg +
-          '<br><br>Keep Grocking the ' + utilities.getGroupTitle() + '. Starting at just $9.<div>',
+          '<br><br>Keep Grocking the ' + utilities.getGroupTitle() + '.<div>',
         className: "modal-trial modal-success",
         buttons: {
           success: {
