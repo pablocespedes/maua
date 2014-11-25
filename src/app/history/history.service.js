@@ -58,8 +58,8 @@
     };
 
     this.reset = function(){
-      this.containerList = [];
-      this.currentPage=1;
+       containerList = [];
+       currentPage=1;
     }
   }
 
