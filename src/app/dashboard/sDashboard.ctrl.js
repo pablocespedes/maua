@@ -38,7 +38,7 @@
               vmDash.activeGroupId = groupId;
               SimpleDashBoard.getDashboard(vmDash.activeGroupId);
               vmDash.showBuyNow = membershipService.showBuyButton();
-              vmDash.upgradePromptMessage = membershipService.upgradePromptMessage().replace('.', '');
+              vmDash.upgradePromptMessage = membershipService.upgradePromptMessage();
               vmDash.canPractice = membershipService.canPractice();
               vmDash.enableScore = (vmDash.activeGroupId === 'gmat' || vmDash.activeGroupId === 'act' || vmDash.activeGroupId === 'sat');
               vmDash.historyVisible = false;
