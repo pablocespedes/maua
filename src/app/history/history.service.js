@@ -55,6 +55,11 @@
        });
 
        return deferred.promise;
+    };
+
+    this.reset = function(){
+      this.containerList = [];
+      this.currentPage=1;
     }
   }
 
@@ -89,6 +94,9 @@
       isLastEntry: function(id) {
         var lastEntry = this.lastEntry();
         return lastEntry ? lastEntry.id === id : false;
+      },
+      reset: function() {
+        this.entries = [];
       }
     }
   };

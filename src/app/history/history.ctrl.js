@@ -23,6 +23,8 @@
     });
 
     function getQuestions() {
+      history.reset();
+      collapseManager.reset();
       vmHist.loading = true;
       if (!vmHist.isRequesting) {
         vmHist.isRequesting = true;
