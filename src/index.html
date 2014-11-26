@@ -153,15 +153,15 @@
                   </li>
                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle user-menu" data-toggle="dropdown">
-                      <img ng-src="{{appCtrl.currentUser.avatarUrl}}" alt="avatar">
-                      <span ng-if="appCtrl.currentUser" ng-bind="appCtrl.currentUser.firstName | capitalize"></span>
+                      <img ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="avatar">
+                      <span ng-if="appCtrl.currentUser" ng-bind="::appCtrl.currentUser.firstName | capitalize"></span>
                     </a>
                     <ul class="dropdown-menu">
-                      <li><a ng-href="{{appCtrl.url}}/users/{{appCtrl.currentUser.userId}}/account"><i class="dropdown-icon fa  fa-info-circle"></i>&nbsp;&nbsp;Account</a>
+                      <li><a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/account"><i class="dropdown-icon fa  fa-info-circle"></i>&nbsp;&nbsp;Account</a>
                       </li>
-                      <li><a ng-href="{{appCtrl.url}}/users/{{appCtrl.currentUser.userId}}"><i class="dropdown-icon fa fa-user"></i>&nbsp;&nbsp;Profile</a>
+                      <li><a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}"><i class="dropdown-icon fa fa-user"></i>&nbsp;&nbsp;Profile</a>
                       </li>
-                      <li><a ng-href="{{appCtrl.url}}/users/{{appCtrl.currentUser.userId}}/message_center/folders/Inbox"><i class="dropdown-icon fa fa-envelope"></i>&nbsp;&nbsp;Messages</a>
+                      <li><a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/message_center/folders/Inbox"><i class="dropdown-icon fa fa-envelope"></i>&nbsp;&nbsp;Messages</a>
                       </li>
                       <li class="divider"></li>
                       <li ng-click="appCtrl.logOut()"><a><i class="dropdown-icon fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a>
@@ -181,9 +181,9 @@
       <!-- / #main-navbar -->
       <div id="main-menu" role="navigation" id="mainUserMenu" chardin-tour overlay-text="Grockit offers a suite of awesome features to help you achieve your goals. You can customize practice questions, review questions you answered in History and check on your strengths and weaknesses in Skill Data." overlay-position="bottom">
         <div id="main-menu-inner">
-          <div welcome data="appCtrl.currentUser" url="appCtrl.url" log-out-url="appCtrl.logOutUrl" log-out="appCtrl.logOut()"></div>
+          <div welcome data="::appCtrl.currentUser" url="::appCtrl.url" log-out-url="::appCtrl.logOutUrl" log-out="appCtrl.logOut()"></div>
           <ul class="navigation">
-            <li ng-repeat="item in appCtrl.menu" id="item.id" menu-id="item.id" ng-if="item.shouldShow" grockit-link url="item.url" can-access="item.canAccess" text="item.title" is-ready="item.isReady" icon-class="item.iconclass" ng-class="{'active': item.id == appCtrl.activeItem}" ng-click="appCtrl.activeItem=item.id"></li>
+            <li ng-repeat="item in ::appCtrl.menu" id="item.id" menu-id="item.id" ng-if="item.shouldShow" grockit-link url="item.url" can-access="item.canAccess" text="item.title" is-ready="item.isReady" icon-class="item.iconclass" ng-class="{'active': item.id == appCtrl.activeItem}" ng-click="appCtrl.activeItem=item.id"></li>
           </ul>
           <!-- / .navigation -->
         </div>
