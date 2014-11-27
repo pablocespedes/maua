@@ -17,12 +17,15 @@
     vmHist.isRequesting = false;
     vmHist.onCollapse = onCollapse;
     vmHist.isLastEntryLoading = isLastEntryLoading;
+    history.reset();
+    collapseManager.reset();
 
     $scope.$on('$destroy', function() {
       currentProduct.unregisterGroup(vmHist.productObserver);
     });
 
     function getQuestions() {
+
       vmHist.loading = true;
       if (!vmHist.isRequesting) {
         vmHist.isRequesting = true;
