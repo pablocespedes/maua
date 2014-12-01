@@ -33,15 +33,15 @@
 
     function link(scope, element, attrs) {
 
-      scope.showforCurrentGroup = (scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat');
+      scope.showforCurrentGroup = true;//(scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat');
 
-
-      scope.crossOutChoice = function(index) {
-        if (scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat') {
+      scope.crossOutChoice = function(index,event) {
+       // if (scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat') {
           var answer = scope.items[index];
           var answerCrossOut = angular.isUndefined(answer.crossOut) || !(answer.crossOut) ? true : false;
           answer['crossOut'] = answerCrossOut;
-        }
+          event.stopPropagation()
+      //  }
       }
 
       scope.selectAnswer = function(index) {
