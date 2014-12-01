@@ -1,17 +1,17 @@
 (function() {
   'use strict';
   angular
-  .module('grockitApp.components')
-  .directive('oneChoice', oneChoice)
-  .directive('multipleChoice', multipleChoice)
-  .directive('multipleMatrix2x3', multipleMatrix2x3)
-  .directive('multipleMatrix3x3', multipleMatrix3x3)
-  .directive('twoChoice', twoChoice)
-  .directive('provisionalSat', provisionalSat)
-  .directive('sat', sat)
-  .directive('numericEntry', numericEntry)
-  .directive('fractionEntry', fractionEntry)
-  .controller('EntriesController', EntriesController);
+    .module('grockitApp.components')
+    .directive('oneChoice', oneChoice)
+    .directive('multipleChoice', multipleChoice)
+    .directive('multipleMatrix2x3', multipleMatrix2x3)
+    .directive('multipleMatrix3x3', multipleMatrix3x3)
+    .directive('twoChoice', twoChoice)
+    .directive('provisionalSat', provisionalSat)
+    .directive('sat', sat)
+    .directive('numericEntry', numericEntry)
+    .directive('fractionEntry', fractionEntry)
+    .controller('EntriesController', EntriesController);
 
   sat.$inject = ['questionTypesService'];
   EntriesController.$inject = ['$scope'];
@@ -25,12 +25,25 @@
         items: '=items',
         showExplanation: '=',
         totalAnswered: '=',
-        isConfirmClicked: '='
+        isConfirmClicked: '=',
+        groupId: '@'
       }
     };
     return directive;
 
     function link(scope, element, attrs) {
+
+      scope.showforCurrentGroup = (scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat');
+
+
+      scope.crossOutChoice = function(index) {
+        if (scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat') {
+          var answer = scope.items[index];
+          var answerCrossOut = angular.isUndefined(answer.crossOut) || !(answer.crossOut) ? true : false;
+          answer['crossOut'] = answerCrossOut;
+        }
+      }
+
       scope.selectAnswer = function(index) {
         if (!scope.isConfirmClicked) {
           _.forEach(scope.items, function(answer, i) {
@@ -38,18 +51,20 @@
           });
 
           var answer = scope.items[index],
-          nexAction = $('#nextAction'),
-          seeAnswer = $('#skipAction');
+            nexAction = $('#nextAction'),
+            seeAnswer = $('#skipAction');
 
-          $('.choice button').removeClass('btn-primary btn-danger');
-          if (!answer.selected) {
-            answer.selected = true;
-            nexAction.addClass('btn-primary');
-            seeAnswer.addClass('hide');
-          } else {
-            answer.selected = false;
-            nexAction.removeClass('btn-primary');
-            seeAnswer.removeClass('hide');
+          if (angular.isUndefined(answer.crossOut) || !(answer.crossOut)) {
+            $('.choice button').removeClass('btn-primary btn-danger');
+            if (!answer.selected) {
+              answer.selected = true;
+              nexAction.addClass('btn-primary');
+              seeAnswer.addClass('hide');
+            } else {
+              answer.selected = false;
+              nexAction.removeClass('btn-primary');
+              seeAnswer.removeClass('hide');
+            }
           }
         }
       };
@@ -73,8 +88,8 @@
       scope.selectAnswer = function(index) {
         if (!scope.isConfirmClicked) {
           var answers = scope.items[index],
-          nexAction = $('#nextAction'),
-          seeAnswer = $('#skipAction');
+            nexAction = $('#nextAction'),
+            seeAnswer = $('#skipAction');
 
           if (!answers.selected) {
             answers.selected = true;
@@ -83,8 +98,8 @@
           } else {
             answers.selected = false;
             if (!_.find(scope.items, {
-              'selected': true
-            })) {
+                'selected': true
+              })) {
               nexAction.removeClass('btn-primary');
               seeAnswer.removeClass('hide');
             }
@@ -111,14 +126,14 @@
       scope.selectAnswer = function(index, mGroup) {
         if (!scope.isConfirmClicked) {
           var answer = scope.items[index],
-          nexAction = $('#nextAction'),
-          seeAnswer = $('#skipAction'),
-          currentSection = _.filter(scope.items, function(answer) {
-            return answer.matrix_group == mGroup
-          }),
-          trueSelected = _.filter(currentSection, {
-            'selected': true
-          });
+            nexAction = $('#nextAction'),
+            seeAnswer = $('#skipAction'),
+            currentSection = _.filter(scope.items, function(answer) {
+              return answer.matrix_group == mGroup
+            }),
+            trueSelected = _.filter(currentSection, {
+              'selected': true
+            });
 
           if (trueSelected) {
             _.forEach(currentSection, function(ansResult) {
@@ -133,8 +148,8 @@
           } else {
             answer.selected = false;
             if (!_.find(scope.items, {
-              'selected': true
-            })) {
+                'selected': true
+              })) {
               nexAction.removeClass('btn-primary');
               seeAnswer.removeClass('hide');
             }
@@ -161,15 +176,15 @@
       scope.selectAnswer = function(index, mGroup) {
         if (!scope.isConfirmClicked) {
           var answer = scope.items[index],
-          answerId = answer.id,
-          nexAction = $('#nextAction'),
-          seeAnswer = $('#skipAction'),
-          currentSection = _.filter(scope.items, function(answer) {
-            return answer.matrix_group == mGroup
-          }),
-          trueSelected = _.filter(currentSection, {
-            'selected': true
-          });
+            answerId = answer.id,
+            nexAction = $('#nextAction'),
+            seeAnswer = $('#skipAction'),
+            currentSection = _.filter(scope.items, function(answer) {
+              return answer.matrix_group == mGroup
+            }),
+            trueSelected = _.filter(currentSection, {
+              'selected': true
+            });
 
           if (trueSelected) {
             _.forEach(currentSection, function(answer) {
@@ -184,8 +199,8 @@
           } else {
             answer.selected = false;
             if (!_.find(scope.items, {
-              'selected': true
-            })) {
+                'selected': true
+              })) {
               nexAction.removeClass('btn-primary');
               seeAnswer.removeClass('hide');
             }
@@ -214,8 +229,8 @@
       scope.selectAnswer = function(index) {
         if (!scope.isConfirmClicked) {
           var answer = scope.items[index],
-          nexAction = $('#nextAction'),
-          seeAnswer = $('#skipAction');
+            nexAction = $('#nextAction'),
+            seeAnswer = $('#skipAction');
           if (!answer.selected) {
             /*validation which takes care to keep just 2 options selected*/
             if (scope.maxOpt.length >= 2) {
@@ -237,8 +252,8 @@
             });
             answer.selected = false;
             if (!_.find(scope.items, {
-              'selected': true
-            })) {
+                'selected': true
+              })) {
               nexAction.removeClass('btn-primary');
               seeAnswer.removeClass('hide');
             }
@@ -279,7 +294,7 @@
 
     function handleValidation(isValid) {
       var nexAction = $('#nextAction'),
-      seeAnswer = $('#skipAction');
+        seeAnswer = $('#skipAction');
       if (isValid) {
         nexAction.addClass('btn-primary');
         seeAnswer.addClass('hide');
@@ -304,12 +319,12 @@
       content.on('click', '#sat .column-matrix', function(e) {
         if (e.handled !== true) {
           var choice = $(e.target),
-          choiceVal = choice.text(),
-          selectedGroup = $(e.target).parents('td').data('group'),
-          groups = $(e.target).parents('.choice').find('[data-group=' + selectedGroup + ']'),
-          hasPrimary = choice.hasClass('btn-primary'),
-          nexAction = $('#nextAction'),
-          seeAnswer = $('#skipAction');
+            choiceVal = choice.text(),
+            selectedGroup = $(e.target).parents('td').data('group'),
+            groups = $(e.target).parents('.choice').find('[data-group=' + selectedGroup + ']'),
+            hasPrimary = choice.hasClass('btn-primary'),
+            nexAction = $('#nextAction'),
+            seeAnswer = $('#skipAction');
 
           groups.find('[type=button]').removeClass('btn-primary');
           groups.find('[type=button]').addClass('btn-outline');
@@ -349,7 +364,7 @@
 
       scope.$watch('portal.numerator', function(newVal, oldVal) {
         scope.isNumeratorValid = controller.validateNumber(newVal);
-         scope.portal.isDisabled = scope.isNumeratorValid===null ? scope.isNumeratorValid : !scope.isNumeratorValid;
+        scope.portal.isDisabled = scope.isNumeratorValid === null ? scope.isNumeratorValid : !scope.isNumeratorValid;
         controller.handleValidation(scope.isNumeratorValid);
       });
 
@@ -367,7 +382,7 @@
         showExplanation: '=',
         portal: '=',
         answerStatus: '=',
-        isConfirmClicked:'='
+        isConfirmClicked: '='
 
       },
       controller: EntriesController
@@ -375,9 +390,9 @@
     return directive;
 
     function link(scope, element, attrs, controller) {
-      scope.status = function(){
+      scope.status = function() {
         return (scope.isConfirmClicked && scope.answerStatus) ||
-        (!scope.isConfirmClicked && (scope.isNumeratorValid && scope.isDenominatorValid))
+          (!scope.isConfirmClicked && (scope.isNumeratorValid && scope.isDenominatorValid))
       }
 
       scope.$watch('portal.numerator', function(newVal, oldVal) {
@@ -406,7 +421,7 @@
 
     this.handleValidation = function(isValid) {
       var nexAction = $('#nextAction'),
-      seeAnswer = $('#skipAction');
+        seeAnswer = $('#skipAction');
       if (isValid) {
         nexAction.addClass('btn-primary');
         seeAnswer.addClass('hide');

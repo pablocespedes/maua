@@ -38,6 +38,16 @@ padding-bottom: 8px;
 padding-top: 2px;
 }
 
+.disable-choice {
+ cursor: not-allowed;
+top: 0;
+right: 0;
+bottom: 0;
+left: 0;
+z-index: 1040;
+opacity: 0.2;
+filter: alpha(opacity=50);
+}
 
 .practice-result {
     line-height: 45px;
@@ -140,6 +150,11 @@ padding-top: 2px;
 }
 
 #practice {
+    .cross-out{
+        position: absolute;
+        right: 6px;
+        top: 11px;
+    }
     .bad-numeric-input {
         border-color: #e66454;
     }
