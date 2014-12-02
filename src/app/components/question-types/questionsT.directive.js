@@ -86,7 +86,7 @@
     };
     return directive;
 
-    function link(scope, element, attrs) {
+    function link(scope, element, attrs,controller) {
       scope.showforCurrentGroup = true; //(scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat');
 
       scope.crossOutChoice = function(index, event) {
@@ -112,7 +112,7 @@
     };
     return directive;
 
-    function link(scope, element, attrs) {
+    function link(scope, element, attrs,controller) {
       scope.showforCurrentGroup = true; //(scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat');
 
       scope.crossOutChoice = function(index, event) {
@@ -140,7 +140,7 @@
     };
     return directive;
 
-    function link(scope, element, attrs) {
+    function link(scope, element, attrs,controller) {
       scope.maxOpt = [];
       scope.showforCurrentGroup = true; //(scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat');
 
