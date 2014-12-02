@@ -1,8 +1,8 @@
 /* just a trick to avoid a bad css to be remoed from the CE */
-.Apple-style-span{
+.Apple-style-span {
     float: inherit;
-   min-height: 1px;
-   margin-left: 0px;
+    min-height: 1px;
+    margin-left: 0px;
 }
 
 .practice-header {
@@ -25,28 +25,18 @@
         text-align: center;
     }
 }
+
 .timing-box-padding {
-padding:5px 5px 5px 5px !important;
-color:#000000;
- min-height: 45px;
- max-height: 45px;
+    padding: 5px 5px 5px 5px !important;
+    color: #000000;
+    min-height: 45px;
+    max-height: 45px;
 }
 
 .track-list-lg {
-border-radius: 2px;
-padding-bottom: 8px;
-padding-top: 2px;
-}
-
-.disable-choice {
- cursor: not-allowed;
-top: 0;
-right: 0;
-bottom: 0;
-left: 0;
-z-index: 1040;
-opacity: 0.2;
-filter: alpha(opacity=50);
+    border-radius: 2px;
+    padding-bottom: 8px;
+    padding-top: 2px;
 }
 
 .practice-result {
@@ -78,14 +68,14 @@ filter: alpha(opacity=50);
 }
 
 .abs-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .avg-badge {
-  padding: 3px 3px 0 4px;
+    padding: 3px 3px 0 4px;
 }
 
 .timing-padding {
@@ -150,7 +140,17 @@ filter: alpha(opacity=50);
 }
 
 #practice {
-    .cross-out{
+    .disable-choice {
+        cursor: not-allowed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1040;
+        opacity: 0.2;
+        filter: alpha(opacity = 50);
+    }
+    .cross-out {
         position: absolute;
         right: 6px;
         top: 11px;
@@ -195,7 +195,7 @@ filter: alpha(opacity=50);
         display: none;
     }
     .btn-option.btn-rounded {
-        -webkit-border-radius:9999px;
+        -webkit-border-radius: 9999px;
         -moz-border-radius: 9999px;
         border-radius: 9999px;
     }
@@ -389,9 +389,8 @@ filter: alpha(opacity=50);
 .question-information.fixed-width {
     min-width: 480px;
 }
-.loader-margin{
 
-}
+.loader-margin {}
 
 .cloudLoader {
     width: 150px;

@@ -1,9 +1,10 @@
 <div id="twoChoice">
 	<div class="list-group text-left">
 		<a id="answer" ng-repeat="item in items" href="javascript:void(0)" class="choice list-group-item"
-		ng-click="selectAnswer($index)">
+		ng-click="selectAnswer($index)" ng-class="{'disable-choice': item.crossOut}">
 		<div class="middle">
 			<span ng-if="showExplanation && item.selected==true" class="float-right">&#10094;</span>
+			<span ng-if="!(showExplanation) && showforCurrentGroup" class="pull-right cross-out fa fa-times" data-toggle="tooltip" data-placement="left" title="CrossOut this Option" ng-click="crossOutChoice($index,$event)"></span>
 			<button id="{{item.id}}" type="button" class=" btn-option  btn-rounded letter"
 			ng-class="{'btn-primary':item.selected && !showExplanation,'btn-success':showExplanation && item.correct,
 			'btn-danger':showExplanation && !item.correct && item.selected}">{{item.option}}

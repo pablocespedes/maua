@@ -27,46 +27,20 @@
         totalAnswered: '=',
         isConfirmClicked: '=',
         groupId: '@'
-      }
+      },
+      controller: QuestionTypeController
     };
     return directive;
 
-    function link(scope, element, attrs) {
+    function link(scope, element, attrs, controller) {
+      scope.showforCurrentGroup = true; //(scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat');
 
-      scope.showforCurrentGroup = true;//(scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat');
-
-      scope.crossOutChoice = function(index,event) {
-       // if (scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat') {
-          var answer = scope.items[index];
-          var answerCrossOut = angular.isUndefined(answer.crossOut) || !(answer.crossOut) ? true : false;
-          answer['crossOut'] = answerCrossOut;
-          event.stopPropagation()
-      //  }
+      scope.crossOutChoice = function(index, event) {
+        controller.crossOutChoice(scope.items, index, event);
       }
 
       scope.selectAnswer = function(index) {
-        if (!scope.isConfirmClicked) {
-          _.forEach(scope.items, function(answer, i) {
-            if (index != i) answer.selected = false;
-          });
-
-          var answer = scope.items[index],
-            nexAction = $('#nextAction'),
-            seeAnswer = $('#skipAction');
-
-          if (angular.isUndefined(answer.crossOut) || !(answer.crossOut)) {
-            $('.choice button').removeClass('btn-primary btn-danger');
-            if (!answer.selected) {
-              answer.selected = true;
-              nexAction.addClass('btn-primary');
-              seeAnswer.addClass('hide');
-            } else {
-              answer.selected = false;
-              nexAction.removeClass('btn-primary');
-              seeAnswer.removeClass('hide');
-            }
-          }
-        }
+        controller.selectOneChoice(scope.isConfirmClicked, scope.items, index);
       };
     }
   }
@@ -80,31 +54,20 @@
         items: '=items',
         showExplanation: '=',
         isConfirmClicked: '='
-      }
+      },
+      controller: QuestionTypeController
     };
     return directive;
 
-    function link(scope, element, attrs) {
-      scope.selectAnswer = function(index) {
-        if (!scope.isConfirmClicked) {
-          var answers = scope.items[index],
-            nexAction = $('#nextAction'),
-            seeAnswer = $('#skipAction');
+    function link(scope, element, attrs, controller) {
+      scope.showforCurrentGroup = true; //(scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat');
 
-          if (!answers.selected) {
-            answers.selected = true;
-            nexAction.addClass('btn-primary');
-            seeAnswer.addClass('hide');
-          } else {
-            answers.selected = false;
-            if (!_.find(scope.items, {
-                'selected': true
-              })) {
-              nexAction.removeClass('btn-primary');
-              seeAnswer.removeClass('hide');
-            }
-          }
-        }
+      scope.crossOutChoice = function(index, event) {
+        controller.crossOutChoice(scope.items, index, event);
+      }
+
+      scope.selectAnswer = function(index) {
+        controller.selectMultipleChoice(scope.isConfirmClicked, scope.items, index);
       };
     }
   }
@@ -118,43 +81,19 @@
         items: '=items',
         showExplanation: '=',
         isConfirmClicked: '='
-      }
+      },
+      controller: QuestionTypeController
     };
     return directive;
 
     function link(scope, element, attrs) {
+      scope.showforCurrentGroup = true; //(scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat');
+
+      scope.crossOutChoice = function(index, event) {
+        controller.crossOutChoice(scope.items, index, event);
+      }
       scope.selectAnswer = function(index, mGroup) {
-        if (!scope.isConfirmClicked) {
-          var answer = scope.items[index],
-            nexAction = $('#nextAction'),
-            seeAnswer = $('#skipAction'),
-            currentSection = _.filter(scope.items, function(answer) {
-              return answer.matrix_group == mGroup
-            }),
-            trueSelected = _.filter(currentSection, {
-              'selected': true
-            });
-
-          if (trueSelected) {
-            _.forEach(currentSection, function(ansResult) {
-              if (answer.id != ansResult.id) ansResult.selected = false;
-            });
-          }
-
-          if (!answer.selected) {
-            answer.selected = true;
-            nexAction.addClass('btn-primary');
-            seeAnswer.addClass('hide');
-          } else {
-            answer.selected = false;
-            if (!_.find(scope.items, {
-                'selected': true
-              })) {
-              nexAction.removeClass('btn-primary');
-              seeAnswer.removeClass('hide');
-            }
-          }
-        }
+        controller.selectMatrix(scope.isConfirmClicked, scope.items, index, mGroup);
       };
     }
   }
@@ -168,44 +107,20 @@
         items: '=items',
         showExplanation: '=',
         isConfirmClicked: '='
-      }
+      },
+      controller: QuestionTypeController
     };
     return directive;
 
     function link(scope, element, attrs) {
+      scope.showforCurrentGroup = true; //(scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat');
+
+      scope.crossOutChoice = function(index, event) {
+        controller.crossOutChoice(scope.items, index, event);
+      }
+
       scope.selectAnswer = function(index, mGroup) {
-        if (!scope.isConfirmClicked) {
-          var answer = scope.items[index],
-            answerId = answer.id,
-            nexAction = $('#nextAction'),
-            seeAnswer = $('#skipAction'),
-            currentSection = _.filter(scope.items, function(answer) {
-              return answer.matrix_group == mGroup
-            }),
-            trueSelected = _.filter(currentSection, {
-              'selected': true
-            });
-
-          if (trueSelected) {
-            _.forEach(currentSection, function(answer) {
-              if (answerId != answer.id) answer.selected = false;
-            });
-          }
-
-          if (!answer.selected) {
-            answer.selected = true;
-            nexAction.addClass('btn-primary');
-            seeAnswer.addClass('hide');
-          } else {
-            answer.selected = false;
-            if (!_.find(scope.items, {
-                'selected': true
-              })) {
-              nexAction.removeClass('btn-primary');
-              seeAnswer.removeClass('hide');
-            }
-          }
-        }
+        controller.selectMatrix(scope.isConfirmClicked, scope.items, index, mGroup);
       };
     }
   }
@@ -220,45 +135,21 @@
         items: '=items',
         showExplanation: '=',
         isConfirmClicked: '='
-      }
+      },
+      controller: QuestionTypeController
     };
     return directive;
 
     function link(scope, element, attrs) {
       scope.maxOpt = [];
+      scope.showforCurrentGroup = true; //(scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat');
+
+      scope.crossOutChoice = function(index, event) {
+        controller.crossOutChoice(scope.items, index, event);
+      }
+
       scope.selectAnswer = function(index) {
-        if (!scope.isConfirmClicked) {
-          var answer = scope.items[index],
-            nexAction = $('#nextAction'),
-            seeAnswer = $('#skipAction');
-          if (!answer.selected) {
-            /*validation which takes care to keep just 2 options selected*/
-            if (scope.maxOpt.length >= 2) {
-              var ansR = _.find(scope.items, {
-                'id': scope.maxOpt[0]
-              });
-              ansR.selected = false;
-              scope.maxOpt = _.filter(scope.maxOpt, function(num, i) {
-                return i != 0
-              });
-            }
-            scope.maxOpt.push(answer.id);
-            answer.selected = true;
-            nexAction.addClass('btn-primary');
-            seeAnswer.addClass('hide');
-          } else {
-            scope.maxOpt = _.filter(scope.maxOpt, function(num) {
-              return num != answer.id
-            });
-            answer.selected = false;
-            if (!_.find(scope.items, {
-                'selected': true
-              })) {
-              nexAction.removeClass('btn-primary');
-              seeAnswer.removeClass('hide');
-            }
-          }
-        }
+        controller.selectTwoChoice(scope.isConfirmClicked, scope.items, index, scope.maxOpt);
       };
     }
   }
@@ -432,4 +323,138 @@
     }
   }
 
+  function QuestionTypeController() {
+
+    function resetSelection(items) {
+      return _.forEach(items, function(answer, i) {
+        answer.selected = false;
+      });
+    }
+
+    function findSelectedItems(items) {
+      return _.find(items, {
+        'selected': true
+      });
+    }
+
+    this.selectOneChoice = function(isConfirmClicked, items, index) {
+      if (!isConfirmClicked) {
+        _.forEach(items, function(answer, i) {
+          if (index != i) answer.selected = false;
+        });
+
+        var answer = items[index],
+          nexAction = $('#nextAction'),
+          seeAnswer = $('#skipAction');
+
+        if (angular.isUndefined(answer.crossOut) || !(answer.crossOut)) {
+          $('.choice button').removeClass('btn-primary btn-danger');
+          if (!answer.selected) {
+            answer.selected = true;
+            nexAction.addClass('btn-primary');
+            seeAnswer.addClass('hide');
+          } else {
+            answer.selected = false;
+            nexAction.removeClass('btn-primary');
+            seeAnswer.removeClass('hide');
+          }
+        }
+      }
+    }
+
+    this.selectMultipleChoice = function(isConfirmClicked, items, index) {
+      if (!isConfirmClicked) {
+        var answers = items[index],
+          nexAction = $('#nextAction'),
+          seeAnswer = $('#skipAction');
+
+        if (!answers.selected) {
+          answers.selected = true;
+          nexAction.addClass('btn-primary');
+          seeAnswer.addClass('hide');
+        } else {
+          answers.selected = false;
+          if (!findSelectedItems(items)) {
+            nexAction.removeClass('btn-primary');
+            seeAnswer.removeClass('hide');
+          }
+        }
+      }
+    }
+
+    this.selectMatrix = function(isConfirmClicked, items, index, mGroup) {
+      if (!isConfirmClicked) {
+        var answer = items[index],
+          nexAction = $('#nextAction'),
+          seeAnswer = $('#skipAction'),
+          currentSection = _.filter(items, function(answer) {
+            return answer.matrix_group == mGroup
+          }),
+          trueSelected = findSelectedItems(currentSection);
+
+        if (trueSelected) {
+          _.forEach(currentSection, function(ansResult) {
+            if (answer.id != ansResult.id) ansResult.selected = false;
+          });
+        }
+
+        if (!answer.selected) {
+          answer.selected = true;
+          nexAction.addClass('btn-primary');
+          seeAnswer.addClass('hide');
+        } else {
+          answer.selected = false;
+          if (!findSelectedItems(items)) {
+            nexAction.removeClass('btn-primary');
+            seeAnswer.removeClass('hide');
+          }
+        }
+      }
+    }
+
+    this.selectTwoChoice = function(isConfirmClicked, items, index, maxOpt) {
+      if (!isConfirmClicked) {
+        var answer = items[index],
+          nexAction = $('#nextAction'),
+          seeAnswer = $('#skipAction');
+        if (!answer.selected) {
+          /*validation which takes care to keep just 2 options selected*/
+          if (maxOpt.length >= 2) {
+            var ansR = _.find(items, {
+              'id': scope.maxOpt[0]
+            });
+            ansR.selected = false;
+            maxOpt = _.filter(maxOpt, function(num, i) {
+              return i != 0
+            });
+          }
+          maxOpt.push(answer.id);
+          answer.selected = true;
+          nexAction.addClass('btn-primary');
+          seeAnswer.addClass('hide');
+        } else {
+          maxOpt = _.filter(maxOpt, function(num) {
+            return num != answer.id
+          });
+          answer.selected = false;
+          if (!_.find(items, {
+              'selected': true
+            })) {
+            nexAction.removeClass('btn-primary');
+            seeAnswer.removeClass('hide');
+          }
+        }
+      }
+    }
+
+    this.crossOutChoice = function(items, index, event) {
+      // if (scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat') {
+      var answer = items[index];
+      var answerCrossOut = angular.isUndefined(answer.crossOut) || !(answer.crossOut) ? true : false;
+      answer['crossOut'] = answerCrossOut;
+      resetSelection(items);
+      event.stopPropagation()
+        //  }
+    }
+  }
 })();
