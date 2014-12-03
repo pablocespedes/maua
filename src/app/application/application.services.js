@@ -24,7 +24,7 @@
     return service;
 
     function showTrialExpiration(titleM, groupId, nQuestions) {
-      var msg = 'Looks like you\'ve been pretty busy these past few days. You\'ve answered ' +
+      var msg = 'Looks like you\'ve been pretty busy. You\'ve answered ' +
         +nQuestions + ' questions and are well on your way to Grocking the ' + utilities.getGroupTitle() + '!';
       var dialogOptions = {
         title: '<i class="fa fa-clock-o"></i> Time to upgrade!',
