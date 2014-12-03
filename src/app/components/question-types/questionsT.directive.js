@@ -325,9 +325,10 @@
 
   function QuestionTypeController() {
 
-    function resetSelection(items) {
+    function resetSelection(items, index) {
       return _.forEach(items, function(answer, i) {
-        answer.selected = false;
+        if(i===index)
+           answer.selected = false;
       });
     }
 
@@ -452,7 +453,7 @@
       var answer = items[index];
       var answerCrossOut = angular.isUndefined(answer.crossOut) || !(answer.crossOut) ? true : false;
       answer['crossOut'] = answerCrossOut;
-      resetSelection(items);
+      resetSelection(items,index);
       event.stopPropagation()
         //  }
     }
