@@ -1,0 +1,71 @@
+.navbar-inverse {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+#main-navbar .navbar-header {
+    padding-left: 0px !important;
+}
+
+#main-navbar .navbar-header {
+    width: 114px;
+}
+
+.left-icon-size{}
+
+.main-menu.narrow-menu {
+    min-height: 595px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 90px;
+    z-index: 1000;
+    background-color: #1c1c1f;
+}
+
+.main-menu-nav, .main-menu-nav ul {
+    list-style: none;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+    -webkit-padding-start: 0;
+    padding-left: 0;
+}
+
+.main-menu.narrow-menu li, .main-menu.wide-menu li {
+    position: relative;
+}
+
+#menu-content-demo a, .main-menu.narrow-menu a {
+    padding: 30px 10px 0 25px;
+    // height: 75px;
+    // width: 90px;
+    display: block;
+}
+
+.main-menu.narrow-menu a, .main-menu.wide-menu a {
+    color: #88898c;
+    text-decoration: none;
+    position: relative;
+    font-weight: 400;
+}
+
+.main-menu.narrow-menu .main-menu-nav a.standard-menu-item {
+    height: 63px;
+    padding: 36px 10px 0 10px;
+}
+
+.main-menu.narrow-menu a .nav-text {
+    text-align: center;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#logo {
+    background: url("../assets/images/header-logo-beta.png");
+    height: 23px;
+}

@@ -4434,7 +4434,7 @@ body:after,
   position: fixed; }
 
 #main-navbar .navbar-header {
-  padding-left: 56px; }
+  padding-left: 99px; }
 
 .mme #main-navbar .navbar-inner,
 .mme #content-wrapper {
@@ -4449,7 +4449,7 @@ body:after,
 
 @media (min-width: 480px) {
   #main-wrapper {
-    padding-left: 56px; }
+    padding-left: 99px; }
 
   .mme #main-navbar {
     position: absolute; }
@@ -4472,7 +4472,7 @@ body:after,
   .mme .footer,
   #main-wrapper,
   footer,.footer{
-    padding-left: 240px; }
+    padding-left: 99px; }
 
   .mme #content-wrapper,
   .mmc.mme #content-wrapper {
@@ -4484,10 +4484,10 @@ body:after,
   .mmc #main-wrapper,
   .mmc footer,
   .mmc .footer {
-    padding-left: 56px; }
+    padding-left: 99px; }
 
   #main-navbar .navbar-header {
-    padding-left: 56px !important; } }
+    padding-left:99px !important; } }
 @media (min-width: 768px) {
   #main-navbar .navbar-header {
     width: 240px; } }

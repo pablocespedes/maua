@@ -1,47 +1,71 @@
-<div accordion close-others="true">
-  <div accordion-group ng-repeat="track in tracks" is-custom-toggle="true" has-childs="empty(track)" class="smart-practice-head">
-    <div accordion-heading>
-      <span class="white text-lg" ng-click="startPractice(track,track.id) && canPractice" ng-show="$index===0" id="tracks" chardin-tour data-intro="Practice thousands of high quality, realistic questions by clicking Start." data-position="bottom">
-        <strong>
-          <span class="track-head text-slim cursor-a" ng-bind="track.name"></span>
-        </strong>
-      </span>
-      <span class="text-lg" ng-click="startPractice(track,track.id) && canPractice" ng-show="$index!==0">
-        <strong>
-          <span class="track-head text-slim cursor-a" ng-bind="track.name"></span>
-        </strong>
-      </span>
-      <div class=" text-center pull-right" ng-show="isVisible">
-        <div class="" ng-show="track.hasScore">
-          <h4 class="note-title score-prediction-v">
-            <span class="text-primary" ng-bind="track.getScore"></span>
-            <br>
-            <span class="text-xs float-right valign-bottom">Your Score Prediction</span>
-          </h4>
-        </div>
-        <div class="float-right" ng-if="shouldShowOverlay(track)" ng-hide="track.hasScore" id="geScore" data-intro="Click here to take a short set of questions and get your score prediction for each section." data-position="bottom">
-          <button class="get-score-prediction btn-lg btn btn-labeled btn-success" ng-disabled="!canPractice" ng-click="getYourScorePredictionUrl(track)">Get your Score Prediction</button>
-        </div>
-        <div class="float-right" ng-if="!shouldShowOverlay(track)" ng-hide="track.hasScore">
-          <button class="get-score-prediction btn-lg btn btn-labeled btn-success" ng-disabled="!canPractice" ng-click="getYourScorePredictionUrl(track)">Get your Score Prediction</button>
-        </div>
-      </div>
-    </div accordion-heading>
-    <div class="row sub-track-row" ng-repeat="subtrack in track.items">
-      <div class="col-md-6 track-list-row sub-track-item">
-        <h4 class="text-normal cursor-a">
-          <span class="text-normal" ng-bind="subtrack.name" ng-click="startPractice(subtrack,track.id)"></span>
-        </h4>
-      </div>
-      <div class="col-md-4 text-right pull-right no-padding-r track-list-margin sub-track-item">
-        <span class="text-semibold">
-          <span ng-bind="subtrack.total_questions_answered | number:0"></span>&nbsp;/&nbsp;
-          <span ng-bind="subtrack.total_questions_available | number:0"></span>
-        </span>
-        |
-        <span class="text-semibold">
-          <span ng-bind="subtrack.accuracy"></span>% Accuracy</span>
-      </div>
+<div id="wrapper">
+  <div id="columns">
+    <div id="box" class="pin">
+    <span id="plus">+</span>
+      <img  src="https://c3.staticflickr.com/3/2861/9718507502_b4bd6b93b3.jpg" />
     </div>
-  </div accordion-group>
-</div accordion>
+
+    <div class="pin">
+      <img src="https://c3.staticflickr.com/3/2540/4011208734_5f1e53280b.jpg" />
+    </div>
+
+    <div class="pin">
+      <img src="https://c2.staticflickr.com/4/3770/9523261588_e90f0c5a8a_n.jpg" />
+    </div>
+
+    <div class="pin">
+      <img src="https://c2.staticflickr.com/6/5044/5306566607_fd76767f50_m.jpg" />
+    </div>
+
+    <div class="pin">
+      <img src="https://c1.staticflickr.com/1/8/11093793_13eb763ddf.jpg" />
+
+    </div>
+
+    <div class="pin">
+      <img src="https://c1.staticflickr.com/1/30/55665191_0054d70f7f.jpg" />
+
+    </div>
+
+    <div class="pin">
+      <img src="https://c1.staticflickr.com/1/105/254953734_1914057bba.jpg" />
+    </div>
+
+    <div class="pin">
+      <img src="https://c2.staticflickr.com/8/7075/6879057666_283a45e1fb.jpg" />
+    </div>
+
+    <div class="pin">
+      <img src="https://c1.staticflickr.com/9/8527/8497575754_60dec971c5_n.jpg" />
+    </div>
+
+    <div class="pin">
+      <img src="https://c1.staticflickr.com/9/8467/8367255902_665987b609_m.jpg" />
+
+    </div>
+
+    <div class="pin">
+      <img src="https://c2.staticflickr.com/4/3071/2616805780_b5a6ccec1a.jpg" />
+
+    </div>
+
+    <div class="pin">
+      <img src="https://c2.staticflickr.com/4/3084/2698922985_f27c2b837e_n.jpg" />
+
+    </div>
+
+    <div class="pin">
+      <img src="https://c2.staticflickr.com/4/3666/11042043065_3efc670b2e.jpg" />
+
+    </div>
+
+    <div class="pin">
+      <img src="https://c2.staticflickr.com/8/7189/6952444575_5c565434d6.jpg" />
+
+    </div>
+
+    <div class="pin">
+      <img src="https://c2.staticflickr.com/6/5215/5420604203_a5ca5a82ca.jpg" />
+    </div>
+  </div>
+</div>

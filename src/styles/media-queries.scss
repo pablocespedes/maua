@@ -108,6 +108,10 @@ margin-left: 5%;
 
 /* Small Devices, Tablets */
 @media only screen and (max-width: 768px) {
+  .main-menu.narrow-menu .main-menu-nav a.standard-menu-item {
+height: 63px;
+padding: 36px 10px 0 10px;
+}
   .loader-margin {
     margin-left: 33% !important;
   }
@@ -175,7 +179,7 @@ margin-left: 5%;
   }
 }
 
-@media only screen 
+@media only screen
 and (max-width: 1450px)
 and (min-width: 1200px) {
   .timing-box {
