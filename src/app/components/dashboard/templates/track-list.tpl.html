@@ -1,71 +1,62 @@
-<div id="wrapper">
-  <div id="columns">
-    <div id="box" class="pin">
-    <span id="plus">+</span>
-      <img  src="https://c3.staticflickr.com/3/2861/9718507502_b4bd6b93b3.jpg" />
-    </div>
+<div accordion close-others="true">
+  <div accordion-group ng-repeat="track in tracks" is-custom-toggle="true" has-childs="empty(track)" class="smart-practice-head">
+    <div accordion-heading>
+      <span class="white text-lg" ng-click="startPractice(track,track.id) && canPractice" ng-show="$index===0" id="tracks" chardin-tour data-intro="Practice thousands of high quality, realistic questions by clicking Start." data-position="bottom">
+        <strong>
+          <span class="track-head text-slim cursor-a" ng-bind="track.name"></span>
+      </strong>
+      </span>
+      <span class="text-lg" ng-click="startPractice(track,track.id) && canPractice" ng-show="$index!==0">
+        <strong>
+          <span class="track-head text-slim cursor-a" ng-bind="track.name"></span>
+      </strong>
+      </span>
+    </div accordion-heading>
+    <div ng-repeat="subtrack in trackTags">
+      <div class="col-sm-4 col-md-4 col-lg-2" style=" margin-left:5px;">
+        <div class="clearfix">
+          <div class="grid_3">
+            <div class="fmcircle_out">
+              <a href="#web">
+                <div class="fmcircle_border">
+                  <div class="fmcircle_in {{subtrack.perctCss}}">
+                    <span ng-bind="subtrack.name"></span>
 
-    <div class="pin">
-      <img src="https://c3.staticflickr.com/3/2540/4011208734_5f1e53280b.jpg" />
-    </div>
+                    <!--  -->
+                    <div class="item-content">
+                      <div class="item-top-content" style="margin-top: -34px;">
+                        <div class="item-top-content-inner">
+                          <div class="item-product">
+                            <div class="item-top-title">
+                              <h2>Skill</h2>
+                              <p class="subdescription">
+                                {{subtrack.percent}}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="item-add-content">
+                        <div class="item-add-content-inner">
+                          <div class="section">
+                            <a href="#" class="btn buy expand">Practice</a>
+                            <a href="#" class="btn buy expand">Learn</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--  -->
+                  </div>
+                </div>
+              </a>
+            </div>
 
-    <div class="pin">
-      <img src="https://c2.staticflickr.com/4/3770/9523261588_e90f0c5a8a_n.jpg" />
-    </div>
 
-    <div class="pin">
-      <img src="https://c2.staticflickr.com/6/5044/5306566607_fd76767f50_m.jpg" />
-    </div>
-
-    <div class="pin">
-      <img src="https://c1.staticflickr.com/1/8/11093793_13eb763ddf.jpg" />
-
-    </div>
-
-    <div class="pin">
-      <img src="https://c1.staticflickr.com/1/30/55665191_0054d70f7f.jpg" />
-
-    </div>
-
-    <div class="pin">
-      <img src="https://c1.staticflickr.com/1/105/254953734_1914057bba.jpg" />
-    </div>
-
-    <div class="pin">
-      <img src="https://c2.staticflickr.com/8/7075/6879057666_283a45e1fb.jpg" />
-    </div>
-
-    <div class="pin">
-      <img src="https://c1.staticflickr.com/9/8527/8497575754_60dec971c5_n.jpg" />
-    </div>
-
-    <div class="pin">
-      <img src="https://c1.staticflickr.com/9/8467/8367255902_665987b609_m.jpg" />
-
-    </div>
-
-    <div class="pin">
-      <img src="https://c2.staticflickr.com/4/3071/2616805780_b5a6ccec1a.jpg" />
-
-    </div>
-
-    <div class="pin">
-      <img src="https://c2.staticflickr.com/4/3084/2698922985_f27c2b837e_n.jpg" />
-
-    </div>
-
-    <div class="pin">
-      <img src="https://c2.staticflickr.com/4/3666/11042043065_3efc670b2e.jpg" />
-
-    </div>
-
-    <div class="pin">
-      <img src="https://c2.staticflickr.com/8/7189/6952444575_5c565434d6.jpg" />
+          </div>
+        </div>
+      </div>
 
     </div>
 
-    <div class="pin">
-      <img src="https://c2.staticflickr.com/6/5215/5420604203_a5ca5a82ca.jpg" />
-    </div>
-  </div>
-</div>
+  </div accordion-group>
+</div accordion>
