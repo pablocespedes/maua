@@ -25,8 +25,9 @@
     return directive;
 
     function link(scope, element, attrs) {
-
-              var collection = [{name:'Absolute value', percent: '80%', perctCss:'fmcircle_green'},
+              var pagesShown = 1,
+                  pageSize = 5,
+                  collection = [{name:'Absolute value', percent: '80%', perctCss:'fmcircle_green'},
                   {name:'Algebra', percent: '0%', perctCss:'fmcircle_blue'},
                   {name:'Angles', percent: '10%', perctCss:'fmcircle_red'},
                   {name:'Area', percent: '20%', perctCss:'fmcircle_orange'},
@@ -72,6 +73,16 @@
         var baseUrl = utilities.originalGrockit(false).url;
         utilities.redirect(baseUrl + '/assessment/for_track/' + track.id);
       }
+
+      scope.itemsLimit = function() {
+        return pageSize * pagesShown;
+      };
+      scope.hasMoreItemsToShow = function() {
+        return pagesShown < (scope.trackTags.length / pageSize);
+      };
+      scope.showMoreItems = function() {
+        pagesShown = pagesShown + 1;
+      };
     }
   }
 

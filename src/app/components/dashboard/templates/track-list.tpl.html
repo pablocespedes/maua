@@ -13,17 +13,22 @@
       </span>
     </div accordion-heading>
     <div class="row">
-    <div ng-repeat="subtrack in trackTags">
+    <div ng-repeat="subtrack in trackTags | limitTo: itemsLimit()">
 
-        <div class="col-lg-2 col-md-4">
-          <div class="panel">
+        <div class="col-lg-4 col-md-4">
+          <div class="panel panel-track">
             <div class="panel-heading timing-box {{subtrack.perctCss}}" style="color:#ffffff;height: 76px;">
               <div class="row">
-                <div class="col-xs-9">
-                    <span ng-bind="subtrack.name"></span>
+                <div class="col-xs-2">
+                  45%
                 </div>
-                <div class="col-xs-3">
+                <div class="col-xs-2 col-md-offset-8">
                   67/2
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-12">
+                  <span class="text-bg"  ng-bind="subtrack.name"></span>
                 </div>
               </div>
             </div>
@@ -35,11 +40,27 @@
                 <div class="clearfix"></div>
               </div>
             </a>
+            <a class="item-hover">
+              <div class="item-info">
+                <div class="practice">
+                  <button class="btn btn-primary btn-flat">Practice</button>
+                </div>
+                <div class="line"></div>
+                <div class="learn">
+                  <button class="btn btn-primary btn-flat">Learn</button>
+                </div>
+              </div>
+              <div class="mask"></div>
+            </a>
           </div>
         </div>
 
     </div>
     </div>
-
+    <div class="row">
+      <div class="col-md-2">
+        <button ng-show="hasMoreItemsToShow()" ng-click="showMoreItems()">Show more</button>
+      </div>
+    </div>
   </div accordion-group>
 </div accordion>
