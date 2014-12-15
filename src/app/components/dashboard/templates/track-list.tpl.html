@@ -12,50 +12,33 @@
       </strong>
       </span>
     </div accordion-heading>
+    <div class="row">
     <div ng-repeat="subtrack in trackTags">
-      <div class="col-sm-4 col-md-4 col-lg-2" style=" margin-left:5px;">
-        <div class="clearfix">
-          <div class="grid_3">
-            <div class="fmcircle_out">
-              <a href="#web">
-                <div class="fmcircle_border">
-                  <div class="fmcircle_in {{subtrack.perctCss}}">
+
+        <div class="col-lg-2 col-md-4">
+          <div class="panel">
+            <div class="panel-heading timing-box {{subtrack.perctCss}}" style="color:#ffffff;height: 76px;">
+              <div class="row">
+                <div class="col-xs-9">
                     <span ng-bind="subtrack.name"></span>
-
-                    <!--  -->
-                    <div class="item-content">
-                      <div class="item-top-content" style="margin-top: -34px;">
-                        <div class="item-top-content-inner">
-                          <div class="item-product">
-                            <div class="item-top-title">
-                              <h2>Skill</h2>
-                              <p class="subdescription">
-                                {{subtrack.percent}}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="item-add-content">
-                        <div class="item-add-content-inner">
-                          <div class="section">
-                            <a href="#" class="btn buy expand">Practice</a>
-                            <a href="#" class="btn buy expand">Learn</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!--  -->
-                  </div>
                 </div>
-              </a>
+                <div class="col-xs-3">
+                  67/2
+                </div>
+              </div>
             </div>
-
-
+            <a href="javascript:void(0)">
+              <div class="panel-footer timing-box-padding">
+                <div class="progress progress-striped">
+                  <div class="progress-bar" style="width: {{subtrack.percent}};"></div>
+                  </div>
+                <div class="clearfix"></div>
+              </div>
+            </a>
           </div>
         </div>
-      </div>
 
+    </div>
     </div>
 
   </div accordion-group>
