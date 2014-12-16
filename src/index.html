@@ -30,6 +30,9 @@
     <link href="assets/stylesheets/pages.min.css" rel="stylesheet" type="text/css">
     <link href="assets/stylesheets/rtl.min.css" rel="stylesheet" type="text/css">
     <link href="assets/stylesheets/themes.min.css" rel="stylesheet" type="text/css">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.css" rel="stylesheet" type="text/css">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2-bootstrap.css" rel="stylesheet" type="text/css">
+
     <!--[if lt IE 9]>
     <script src="assets/javascripts/ie.min.js"></script>
     <![endif]-->
@@ -43,6 +46,7 @@
     <script src="bower_components/es5-shim/es5-shim.js"></script>
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
+
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -60,6 +64,8 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- Scripts -->
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.min.js"></script>
     <script src="assets/javascripts/chardin.js/chardinjs.js"></script>
     <script src="lib/scripts.js"></script>
     <script src="app/initRoutes.js"></script>
@@ -174,30 +180,6 @@
 </div>
 <!-- / .navbar-inner -->
 </div>
-<!-- / #main-navbar -->
-<div id="main-nav" class="main-menu narrow-menu">
-<a href="/" id="logo" class="logo"></a>
-<ul id="nav-items" class="main-menu-nav">
-<!-- <li class="">
-<a class="menu-content top animated fadeIn" id="menu-content-demo" ng-href="{{url}}/users/{{appCtrl.currentUser.userId}}/profile_photos">
-        <div>
-          <img ng-src="{{appCtrl.currentUser.avatarUrl}}"  alt="" class="" >
-        </div>
-      </a>
-  </li> -->
-  <li ng-repeat="item in ::appCtrl.menu" id="item.id" menu-id="item.id" ng-if="item.shouldShow" grockit-link url="item.url" can-access="item.canAccess" text="item.title" is-ready="item.isReady" icon-class="item.iconclass" ng-class="{'active': item.id == appCtrl.activeItem}" ng-click="appCtrl.activeItem=item.id"></li>
-
-</ul>
-</div>
-<!--  <div id="main-menu" role="navigation" id="mainUserMenu" chardin-tour overlay-text="Grockit offers a suite of awesome features to help you achieve your goals. You can customize practice questions, review questions you answered in History and check on your strengths and weaknesses in Skill Data." overlay-position="bottom">
-<div id="main-menu-inner">
-  <div welcome data="::appCtrl.currentUser" url="::appCtrl.url" log-out-url="::appCtrl.logOutUrl" log-out="appCtrl.logOut()"></div>
-  <ul class="navigation">
-    <li ng-repeat="item in ::appCtrl.menu" id="item.id" menu-id="item.id" ng-if="item.shouldShow" grockit-link url="item.url" can-access="item.canAccess" text="item.title" is-ready="item.isReady" icon-class="item.iconclass" ng-class="{'active': item.id == appCtrl.activeItem}" ng-click="appCtrl.activeItem=item.id"></li>
-  </ul>
-</div>
-</div> -->
-<!-- / #main-menu-inner -->
 </div>
 <!-- / #main-menu -->
 <div id="content-wrapper" class="touch">
@@ -205,8 +187,6 @@
 </div>
 </div>
 <!-- / #content-wrapper -->
-<!-- <div id="main-menu-bg">
-</div> -->
 </div>
 <a href="#" class="back-to-top fa  fa-arrow-up"></a>
 </body>

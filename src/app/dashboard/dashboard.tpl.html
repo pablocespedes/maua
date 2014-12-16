@@ -1,15 +1,20 @@
 <div id="simpleDash">
   <div class="page-header">
     <div class="row">
-      <div class="col-lg-6 no-padding-r">
-        <div ng-if="vmDash.showTour">
-          <br>
+      <br>
+      <div class="col-md-9">
+        <h4>Start Practicing with Grockit 2.0</h4>
+      </div>
+      <div class="col-lg-3 no-padding-r"  ng-if="vmDash.showTour" >
+        <!---->
+        <div >
           <h4 class="no-padding">New here?</h4>
           <button data-toggle="chardinjs" ng-click="vmDash.startCardinTour()" class="btn btn-lg btn-labeled btn-primary">
             <span class="btn-label icon fa fa-question-circle"></span>
             <span>Start Tour</span>
           </button>
         </div>
+
       </div>
     </div>
     <br>
@@ -43,7 +48,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <div class="panel">
+        <div class="panel dash-panel">
           <div class="list-group text-left">
 
             <div class="fadeIn" >
