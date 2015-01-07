@@ -1494,6 +1494,12 @@ if (typeof define !== 'undefined' && define.amd) {
   };
 
   PixelAdmin.MainMenu.prototype.onResize = function() {
+
+    var windowWidth = $(window).width();
+    if(windowWidth <= 1145 && !elHasClass(document.body, 'mmc') ){
+      this.toggle();
+    }
+
     this._screen = getScreenSize(this.$ssw_point, this.$tsw_point);
     this._animate = PixelAdmin.settings.main_menu.disable_animation_on.indexOf(screen) === -1;
     if (this._dropdown_li) {
@@ -1526,15 +1532,19 @@ if (typeof define !== 'undefined' && define.amd) {
 
   PixelAdmin.MainMenu.prototype.toggle = function() {
     var cls, collapse;
+    var windowWidth = $(window).width();
     cls = this._screen === 'small' || this._screen === 'tablet' ? 'mme' : 'mmc';
-    if (elHasClass(document.body, cls)) {
+    if (elHasClass(document.body, cls) && windowWidth > 1145) {
       elRemoveClass(document.body, cls);
     } else {
       document.body.className += ' ' + cls;
     }
     if (cls === 'mmc') {
       if (PixelAdmin.settings.main_menu.store_state) {
-        this._storeMenuState(elHasClass(document.body, 'mmc'));
+        if( windowWidth <= 1145)
+           PixelAdmin.storeValue(PixelAdmin.settings.main_menu.store_state_key,'collapsed');
+         else
+          this._storeMenuState(elHasClass(document.body, 'mmc'));
       }
       if (!$.support.transition) {
         return $(window).trigger('resize');
