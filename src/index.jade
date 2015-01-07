@@ -1,0 +1,82 @@
+doctype html
+//if lt IE 7
+  html.no-js.lt-ie9.lt-ie8.lt-ie7  
+//if IE 7
+  html.no-js.lt-ie9.lt-ie8  
+//if IE 8
+  html.no-js.lt-ie9  
+// [if gt IE 8] <!
+//if IE 8
+  html.ie8  
+//if IE 9
+  html.ie9.gt-ie8  
+html.gt-ie8.gt-ie9.not-ie.no-js(ng-app='grockitApp')
+
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        title Grockit
+        //styles
+    body.theme-default.main-menu-animated(ng-cloak="")
+     #main-wrapper
+      div(ng-controller="AppController as appCtrl")
+        #main-navbar.navbar.navbar-inverse(role="navigation")
+          .navbar-inner
+            // Main navbar header
+            .navbar-header
+              // Logo
+              a.navbar-brand(href="#/{{appCtrl.activeGroupId}}/dashboard")
+                div(style="background: transparent;")
+                  img(alt="Grockit", style="height: 26px;", src="assets/images/header-logo-beta.png")
+              // Main navbar toggle
+              button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#main-navbar-collapse")
+                i.navbar-icon.fa.fa-bars
+            // / .navbar-header
+            #main-navbar-collapse.collapse.navbar-collapse.main-navbar-collapse
+              div
+                ul.nav.navbar-nav
+                  li#groupDDL.dropdown.white(chardin-tour="", overlay-text="Groups Section", overlay-position="right")
+                    a.dropdown-toggle(href="#", data-toggle="dropdown")
+                      span#selectedGroup(ng-bind="$root.groupTitle")
+                      i.fa.fa-caret-down
+                    ul#subjectDD.dropdown-menu
+                      li(ng-repeat="linked in appCtrl.groups.linkedGroups track by $index")
+                        a(ng-click="appCtrl.groupRedirect(linked.id)")
+                          span(ng-bind="linked.name")
+                      li.divider
+                      lidiv(ng-repeat="unlinked in appCtrl.groups.unLinkedGroups track by $index") (id="{{unlinked.id}}")
+                        a(ng-click="appCtrl.groupRedirect(unlinked.id)")
+                          i.fa.fa-lock
+                          span(ng-bind="unlinked.name")
+                .right.clearfix
+                  ul.white.nav.navbar-nav.pull-right.right-navbar-nav
+                    li#scoremenuUl.nav-icon-btn-danger.dropdown(chardin-tour="", overlay-text="Check your score prediction.", overlay-position="bottom", ng-if="appCtrl.enableScore")
+                      span(score-prediction="", group-title="$root.groupTitle", score-data="appCtrl.score", is-visible="appCtrl.scoreLoading", no-score-message="More data needed for {{$root.groupTitle}} score.")
+                    li#usermenuUl.nav-icon-btn-danger.dropdown(chardin-tour="", overlay-text="Check how many questions you've answered here.", overlay-position="bottom")
+                      span(user-progress="", progress-info="appCtrl.historyInfo")
+                    li.dropdown
+                      a.dropdown-toggle.user-menu(href="#", data-toggle="dropdown")
+                        img(ng-src="{{::appCtrl.currentUser.avatarUrl}}", alt="avatar")
+                        span(ng-if="appCtrl.currentUser", ng-bind="::appCtrl.currentUser.firstName | capitalize")
+                      ul.dropdown-menu
+                        li
+                          a(ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/account")
+                            i.dropdown-icon.fa.fa-info-circle
+                            | Account
+                        li
+                          a(ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}")
+                            i.dropdown-icon.fa.fa-user
+                            | Profile
+                        li
+                          a(ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/message_center/folders/Inbox")
+                            i.dropdown-icon.fa.fa-envelope
+                            | Messages
+                        li.divider
+                        li(ng-click="appCtrl.logOut()")
+                          a
+                            i.dropdown-icon.fa.fa-power-off
+                            | Log Out
+      #content-wrapper.touch
+        div(ui-view='')
+        //scripts
+    a.back-to-top.fa.fa-arrow-up(href="#")

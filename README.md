@@ -1,19 +1,21 @@
 Maua
 ====
 
-Grockit 2.0 - AngularJS
+Grockit 2.1 - AngularJS-CoffeScript-Jade-Browserify
 
 ## Install 
 
     $ bundle install
-    $ npm install -g yo
+    $ npm install
+    $ npm install gulp-header
     $ bower install
-    $ grunt serve
 
 ## Run (locally)
 
-    $ grunt serve
+    $ gulp -w
+    $ Go to http://localhost:8080
 
 ## Build 
 
-    $ grunt build
+    $ gulp for building to the build directory
+    $ gulp --release for building to the release directory

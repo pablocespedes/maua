@@ -1,0 +1,1 @@
+module.exports = angular.module("templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("app/dashboard/dashboard.html","\n<div class=\"welcome\"><a href=\"https://github.com/jgoux/generator-angulpify\" title=\"Yeoman Angulpify Generator\"></a>\n  <h1>{{welcome}}</h1>\n</div>");}]);
