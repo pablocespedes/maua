@@ -5,7 +5,6 @@ Grockit 2.1 - AngularJS-CoffeScript-Jade-Browserify
 
 ## Install 
 
-    $ bundle install
     $ npm install
     $ npm install gulp-header
     $ bower install
