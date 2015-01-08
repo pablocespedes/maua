@@ -1,0 +1,11 @@
+form.form-signin(name='register', novalidate='', ng-submit='submit()')
+      h1.form-signin-heading.text-muted Register
+      input.form-control(name='email', ng-model='email', type='email', placeholder='Email address', required='')
+      .help-block(ng-messages='register.email.$error', ng-if='register.email.$dirty', ng-messages-include='form-messages')
+      input.form-control(name='password', ng-model='password', type='password', placeholder='Password', required='')
+      .help-block(ng-if='register.confirm.$dirty', ng-messages='register.password.$error', ng-messages-include='form-messages')
+      input.form-control(name='password_confirm', ng-model='password_confirm', type='password', placeholder='Confirm Password', match-validator='password', required='')
+      .help-block(ng-if='register.password_confirm.$dirty', ng-messages='register.password_confirm.$error', ng-messages-include='form-messages')
+        div(ng-message='match') This password does not match the password entered before
+      button.btn.btn-lg.btn-primary.btn-block(ng-disabled='register.$invalid', type='submit')
+        | Submit

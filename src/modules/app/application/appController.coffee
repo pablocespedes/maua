@@ -3,9 +3,9 @@
 ### @ngInject ###
 
 class AppController
-  @inject: ['$scope']
+  @inject: ['$scope','alert']
   
-  constructor: ($scope)->
+  constructor: ($scope,@alert)->
   
   list: [
     text: "learn coffescript"
