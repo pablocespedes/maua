@@ -15,4 +15,4 @@ alert = ($rootScope, $timeout) ->
       $rootScope.alert.show = false
       return
     , timeout or 2000)
-module.exports = Alerta
+module.exports = alert

@@ -3,10 +3,12 @@
 ###
 browserify-shim dependencies (can be edited in package.json)
 ###
+
 require 'angular'
+global._ = require "lodash"
 require 'angular-ui-router'
-require 'angular-messages'
 require 'restangular'
+require 'angular-messages'
 require 'select2'
 require 'pixel-admin'
 require 'youtube-modal'

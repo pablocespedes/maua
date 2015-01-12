@@ -1,9 +1,9 @@
 config = ($httpProvider, $stateProvider, $urlRouterProvider,RestangularProvider,
-          httpProvider,environmentCons)->
+          environment)->
   
   urlPattern = /http(s?)\:\/\/staging/.test(location.origin)
   localPattern = /http(s?)\:\/\/127.0.0.1:9000/.test(location.origin)
-  url = (if urlPattern or localPattern then environmentCons.stagingAPI else environmentCons.liveAPI)
+  url = (if urlPattern or localPattern then environment.stagingAPI else environment.liveAPI)
   delete $httpProvider.defaults.headers.common["X-Requested-With"]
 
   $httpProvider.defaults.headers.common["Content-Type"] = "application/json"
@@ -20,5 +20,5 @@ config = ($httpProvider, $stateProvider, $urlRouterProvider,RestangularProvider,
   
 config
     .$inject = ['$httpProvider', '$stateProvider', '$urlRouterProvider',
-                'RestangularProvider','httpProvider','environmentCons']
+                'RestangularProvider','environment']
 module.exports = config

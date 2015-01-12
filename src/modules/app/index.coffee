@@ -2,15 +2,15 @@
 
 module.exports = angular.module('grockitApp', [
   'ui.router'
-  'restangular',
   'ngMessages'
+  'restangular'
   require('../../../tmp/templates').name
   require('./account/register/index').name
   require('./account/login/index').name
   require('./application/index').name
   require('./dashboard/index').name
 ])
-.constant("environmentCons",
+.constant("environment",
   localGrockit: "http://127.0.0.1:9000/"
   liveGrockit: location.origin + "/2.0"
   oldGrockit: "https://grockit.com"

@@ -33,20 +33,19 @@
     "yargs": "^1.2.2"
   },
   "browser": {
-  "pixel-admin": "./src/assets/javascripts/pixel-admin.min.js",
-  "youtube-modal":"./src/assets/javascripts/youtubeModal/bootstrap.youtubepopup.js",
-  "masonry-package":"./src/assets/javascripts/angular-masonry/masonry.pkgd.min.js",
-  "image-loaded" : "./src/assets/javascripts/imagesloaded/imagesloaded.js",
-  "masonry":"./src/assets/javascripts/angular-masonry/angular-masonry.js",
-  "chardinjs":"./src/assets/javascripts/chardin.js/chardinjs.js"
+    "pixel-admin": "./src/assets/javascripts/pixel-admin.min.js",
+    "youtube-modal": "./src/assets/javascripts/youtubeModal/bootstrap.youtubepopup.js",
+    "masonry-package": "./src/assets/javascripts/angular-masonry/masonry.pkgd.min.js",
+    "image-loaded": "./src/assets/javascripts/imagesloaded/imagesloaded.js",
+    "masonry": "./src/assets/javascripts/angular-masonry/angular-masonry.js",
+    "chardinjs": "./src/assets/javascripts/chardin.js/chardinjs.js"
   },
   "browserify-shim": {
-     "pixel-admin": {
+    "pixel-admin": {
       "depends": [
         "jquery:jQuery"
       ]
     }
-    
   },
   "dependencies": {
     "angular": "^1.3.8",
