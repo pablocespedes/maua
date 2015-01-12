@@ -8,6 +8,12 @@ require 'angular-ui-router'
 require 'angular-messages'
 require 'restangular'
 require 'select2'
+require 'pixel-admin'
+require 'youtube-modal'
+##require 'masonry-package'
+##require 'image-loaded'
+require 'masonry'
+require 'chardinjs'
 ###
 app entry point
 ###

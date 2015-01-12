@@ -1,0 +1,31 @@
+#signup-demo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, .6);
+  padding: 6px;
+  border-radius: 3px;
+}
+#signup-demo img {
+  cursor: pointer;
+  height: 40px;
+}
+#signup-demo img:hover {
+  opacity: .5;
+}
+#signup-demo div {
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  padding-bottom: 6px;
+}
+.page-signup {
+  .form-group.w-icon input[type=email] {
+    font-size: 15px;
+    padding-left: 56px!important;
+  }
+  .signup-header img{
+    width: auto!important;
+  }
+}

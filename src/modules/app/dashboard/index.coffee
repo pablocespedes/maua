@@ -3,10 +3,10 @@
 module.exports = angular.module('grockitApp.dashboard', [])
     .config(($stateProvider) ->
       $stateProvider.state 'dashboard',
-      url: ''
-      parent: 'common',
+      url: '/dashboard'
+      parent: 'common'
       templateUrl: 'app/dashboard/dashboard.html'
-      controller: 'DashboardController',
+      controller: 'DashboardController'
       controllerAs: 'vmDash'
       return
 ).controller('DashboardController', require('./dashboardController'))

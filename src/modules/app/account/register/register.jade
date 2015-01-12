@@ -1,0 +1,88 @@
+script.
+    var init = [];
+      init.push(function () {
+      var $div = $('<div id="signup-demo" class="hidden-xs"><div>PAGE BACKGROUND</div></div>'),
+      bgs = ['assets/images/signin-bg-1.jpg', 'assets/images/signin-bg-2.jpg', 'assets/images/signin-bg-3.jpg',
+      'assets/images/signin-bg-4.jpg', 'assets/images/signin-bg-5.jpg', 'assets/images/signin-bg-6.jpg',
+      'assets/images/signin-bg-7.jpg', 'assets/images/signin-bg-8.jpg', 'assets/images/signin-bg-9.jpg'];
+      for (var i = 0, l = bgs.length; i < l; i++) $div.append($('<img src="' + bgs[i] + '">'));
+      $div.find('img').click(function () {
+      var img = new Image();
+      img.onload = function () {
+      $('#page-signup-bg > img').attr('src', img.src);
+      $(window).resize();
+      }
+      img.src = $(this).attr('src');
+      });
+      $('body').append($div);
+      });
+
+#page-signup-bg
+    .overlay
+      |   
+      img(src='assets/images/signin-bg-1.jpg', alt='')
+    .signup-container
+      .signup-header
+        a.logo(href='index.html')
+          img(src='assets/images/header-logo-beta.png', alt='', style='margin-top: -5px;')
+        .slogan
+          | Sign up for Grockit and start studying.
+      .signup-form
+        form#signup-form_id(name='register', novalidate='', ng-submit='submit()')
+          .signup-text
+            span Create an account
+          .form-group.w-icon
+            input.form-control.input-lg(type='text', name='firstName',ng-model='firstName', placeholder='First Name', required='')
+            .help-block(ng-messages='register.firstName.$error', ng-if='register.firstName.$dirty', ng-messages-include='form-messages')
+            span.fa.fa-info.signup-form-icon
+          .form-group.w-icon
+            input.form-control.input-lg(type='text', name='lastName', ng-model="lastName", placeholder='Last Name', required='')
+            .help-block(ng-messages='register.lastName.$error', ng-if='register.lastName.$dirty', ng-messages-include='form-messages')
+            span.fa.fa-info.signup-form-icon
+          .form-group.w-icon
+            input.form-control.input-lg(name='email', ng-model='email', type='email', placeholder='E-mail', required='')
+            span.fa.fa-envelope.signup-form-icon
+            .help-block(ng-messages='register.email.$error', ng-if='register.email.$dirty', ng-messages-include='form-messages')
+          .form-group.w-icon
+            input.form-control.input-lg(name='password', ng-model='password', type='password', placeholder='Password', required='')
+            span.fa.fa-lock.signup-form-icon
+            .help-block(ng-if='register.password.$dirty', ng-messages='register.password.$error', ng-messages-include='form-messages')
+          .form-group.w-icon
+            input.form-control.input-lg(name='password_confirm', ng-model='password_confirm', type='password', placeholder='Confirm Password', match-validator='password',required='')
+            span.fa.fa-lock.signup-form-icon
+            .help-block(ng-if='register.password_confirm.$dirty', ng-messages='register.password_confirm.$error', ng-messages-include='form-messages')
+              div(ng-message='match') This password does not match the password entered before
+          .form-actions
+            button.signup-btn.bg-primary(ng-disabled='register.$invalid', type='submit')
+              | Submit
+        .signup-with
+          a.signup-with-btn(href='index.html', style='background:#4f6faa;background:rgba(79, 111, 170, .8);')
+            | Sign Up with 
+            span Facebook
+    .have-account
+      | Already have an account? 
+      a(ui-sref='signin') Sign In
+      
+script(type='text/javascript').
+      init.push(function () {
+      var $ph = $('#page-signup-bg'),
+      $img = $ph.find('> img');
+      $(window).on('resize', function () {
+      $img.attr('style', '');
+      if ($img.height() < $ph.height()) {
+      $img.css({
+      height: '100%',
+      width: 'auto'
+      });
+      }
+      });
+      window.PixelAdmin.start(init);
+  
+      
+script#form-messages(type='text/ng-template').
+    <div ng-message = "required"> This field cannot be blank </div>
+      <div ng-message="email">You have entered an incorrect email value</div>
+      <div ng-message = "password-characters">
+      Your password must consist of alphabetical or numeric characters.
+      It must also contain at least one special character, a number as well as an uppercase letter. </div>
+

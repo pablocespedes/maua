@@ -4,11 +4,10 @@
 class RegisterController
 
   # Services injected into the controller constructor
-  @inject: ['$scope']
+  @inject: ['$rootScope','$scope','alert']
  
-  constructor: ($scope) ->
-    # Set up scope with a property and method
-    
+  constructor: ($rootScope,$scope) ->
+    $rootScope.bodylayout = 'page-signup';
 
  
 module.exports = RegisterController

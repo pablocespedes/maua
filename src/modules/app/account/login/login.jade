@@ -1,0 +1,56 @@
+#page-signin-bg
+    .overlay
+      img(src='assets/images/signin-bg-1.jpg', alt='')
+    .signin-container
+      .signin-info
+        a.logo(href='index.html')
+          img(src='assets/images/header-logo-beta.png', alt='', style='margin-top: -5px;')
+        .slogan
+          | Sign in to Grockit to start studying..
+        ul
+          li
+            i.fa.fa-sitemap.signin-icon
+            | Track Your Skill Data
+          li
+            i.fa.fa-file-text-o.signin-icon
+            |  Target Your Weaknesses
+          li
+            i.fa.fa-outdent.signin-icon
+            |  Study with Friends
+          li
+            i.fa.fa-heart.signin-icon
+            |  Shorter Study Time
+      .signin-form
+        form#signin-form_id(action='index.html')
+          .signin-text
+            span Sign In to your account
+          .form-group.w-icon
+            input#username_id.form-control.input-lg(type='text', name='email', placeholder='Username or email')
+            |         
+            span.fa.fa-user.signin-form-icon
+          .form-group.w-icon
+            input#password_id.form-control.input-lg(type='password', name='password', placeholder='Password')
+            span.fa.fa-lock.signin-form-icon
+          .form-actions
+            input.signin-btn.bg-primary(type='submit', value='SIGN IN')
+            |         
+            a#forgot-password-link.forgot-password(href='#') Forgot your password?
+        .signin-with
+          a.signin-with-btn(href='index.html', style='background:#4f6faa;background:rgba(79, 111, 170, .8);')
+            | Sign In with 
+            span Facebook
+        #password-reset-form.password-reset-form
+          .header
+            .signin-text
+              span Password reset
+              |           
+              .close &times;
+          form#password-reset-form_id(action='index.html')
+            .form-group.w-icon
+              input#p_email_id.form-control.input-lg(type='text', name='password_reset_email', placeholder='Enter your email')
+              span.fa.fa-envelope.signin-form-icon
+            .form-actions
+              input.signin-btn.bg-primary(type='submit', value='SEND PASSWORD RESET LINK')
+    .not-a-member
+      | Not a member? 
+      a(href='login') Sign up now

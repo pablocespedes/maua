@@ -2,9 +2,12 @@
 
 module.exports = angular.module('grockitApp', [
   'ui.router'
+  'restangular',
   'ngMessages'
   require('../../../tmp/templates').name
-  require('../common/index').name
+  require('./components/index').name
+  require('./account/register/index').name
+  require('./account/login/index').name
   require('./application/index').name
   require('./dashboard/index').name
 ])

@@ -17,7 +17,6 @@ html.gt-ie8.gt-ie9.not-ie.no-js(ng-app='grockitApp')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     title Grockit
     //styles
-  body.theme-default.main-menu-animated(ng-cloak="")
+  body.theme-default.main-menu-animated(ng-cloak="", class='{{$root.bodylayout}}')
     div(ui-view='')
     //scripts
-    a.back-to-top.fa.fa-arrow-up(href="#")
