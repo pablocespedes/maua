@@ -1,5 +1,7 @@
 {
   "name": "grockitApp",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "angular-messages": "~1.3.9"
+  }
 }

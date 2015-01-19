@@ -7,7 +7,7 @@ var livereloadServer = livereload(config.ports.livereloadServer);
 
 module.exports = gulp.task('watch', function () {
   gulp.watch(config.paths.src.livereload).on('change', function (file) {
-    livereloadServer.changed(file.path);
+    livereload.changed(file.path);
   });
 
   watch({ glob: [config.paths.src.scripts]}, ['lint']);

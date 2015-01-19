@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = angular.module('grockitApp.register', [])
+module.exports = angular.module('grockitApp.register', ['restangular'])
     .config(($stateProvider) ->
       $stateProvider.state 'register',
       url: '/register'
@@ -9,6 +9,7 @@ module.exports = angular.module('grockitApp.register', [])
       controllerAs: 'vmreg'
       return
 )
+
 .factory('registerFactory',require('./services/api.register'))
 .directive('matchValidator',require('./directives/matchValidator'))
 .directive('passwordCharactersValidator',require('./directives/pswChrctersVal'))

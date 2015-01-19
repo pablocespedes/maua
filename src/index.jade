@@ -19,7 +19,6 @@ html.gt-ie8.gt-ie9.not-ie.no-js()
     //styles
   body.theme-default.main-menu-animated(ng-cloak="", class='{{$root.bodylayout}}')
     div(ui-view='')
-    .alert.animated.main-alert(class='alert-{{alert.type}}', ng-class="{'flipInY': alert.show, 'flipOutY': !alert.show, 'alert-hidden': !alert.hasBeenShown}")
-      strong(ng-bind='alert.title')
-      | {{alert.message}}
+
+
     //scripts

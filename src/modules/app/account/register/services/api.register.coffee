@@ -1,16 +1,15 @@
+module.exports = ['Restangular','authToken',(Restangular,authToken) ->
+  new class RegisterService
 
-class RegisterFactory
-    
-    ##cached token allow us to have the token in memory, just as
-    ##little optimization to not access the token that is save on local storage.
-  constructor: (Restangular,authToken)->
-
-  registerUser: (email,password) ->
-    request = Restangular("register").post "",
-      email: email password: password
-      request.then (res) =>
-        authToken.setToken(res.token)
-        @userData = res
-
-module.exports = (Restangular,authToken)->
-  new RegisterFactory(Restangular,authToken)
+    constructor: () ->
+            
+    registerUser: (email,password) ->
+      console.log(Restangular)
+      request = Restangular.one("register").post "",
+        email: email
+        password: password
+      request.then (res) ->
+        console.log(res)
+        ##authToken.setToken(res.token)
+        ##@userData = res
+]

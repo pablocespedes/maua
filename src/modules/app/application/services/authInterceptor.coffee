@@ -3,7 +3,6 @@ class AuthInterceptor
     
   constructor: (authToken)->
     @authToken=authToken
-    console.log('hey: '+@authToken)
   request: (config) ->
     if typeof config.data isnt 'undefined'
       token = @authToken.getToken()
