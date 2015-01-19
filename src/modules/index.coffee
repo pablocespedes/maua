@@ -20,3 +20,8 @@ require 'chardinjs'
 app entry point
 ###
 require './app'
+
+angular.element(document).ready ->
+  angular.bootstrap document, ["grockitApp"]
+  return
+#ng-app='grockitApp'

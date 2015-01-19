@@ -20,12 +20,21 @@
   font-weight: 600;
   padding-bottom: 6px;
 }
+#page-signup-bg {
+  height: 100%;
+  left: 0;
+  overflow: auto!important;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 20;
+}
 .page-signup {
   .form-group.w-icon input[type=email] {
     font-size: 15px;
     padding-left: 56px!important;
   }
-  .signup-header img{
+  .signup-header img {
     width: auto!important;
   }
 }

@@ -1,22 +1,36 @@
 @import "variables";
 @import "imports";
 @import "../modules/app/account/register/register.scss";
-body {
-  text-align: center;
-  color: #222;
+ .ui-view-container {
+  position: relative;
 }
-
-.welcome {
-  width: 300px;
-  height: 510px;
+[ui-view].ng-enter,
+[ui-view].ng-leave {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-left: -150px;
-  margin-top: -255px;
+  left: 0;
+  right: 0;
+  -webkit-transition: all .25s ease-in-out;
+  -moz-transition: all .25s ease-in-out;
+  -o-transition: all .25s ease-in-out;
 }
-
-a, a:visited {
-  text-decoration: none;
+[ui-view].ng-enter {
+  opacity: 0;
+  -webkit-transform: scale3d(0.960.961, 0.96);
+  -moz-transform: scale3d(0.96, 0.96, 0.96);
+  transform: scale3d(0.96, 0.96, 0.96);
 }
-
+[ui-view].ng-enter-active {
+  opacity: 1;
+  -webkit-transform: scale3d(1, 1, 1);
+  -moz-transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
+}
+[ui-view].ng-leave {
+  opacity: 1;
+  -webkit-transform: scale3d(0, 0, 0);
+  -moz-transform: scale3d(0, 0, 0);
+  transform: scale3d(0, 0, 0);
+}
+[ui-view].ng-leave-actve {
+  opacity: 0;
+}

@@ -10,7 +10,7 @@ doctype html
   html.ie8  
 //if IE 9
   html.ie9.gt-ie8  
-html.gt-ie8.gt-ie9.not-ie.no-js(ng-app='grockitApp')
+html.gt-ie8.gt-ie9.not-ie.no-js()
 
   head
     meta(charset='utf-8')
@@ -19,4 +19,7 @@ html.gt-ie8.gt-ie9.not-ie.no-js(ng-app='grockitApp')
     //styles
   body.theme-default.main-menu-animated(ng-cloak="", class='{{$root.bodylayout}}')
     div(ui-view='')
+    .alert.animated.main-alert(class='alert-{{alert.type}}', ng-class="{'flipInY': alert.show, 'flipOutY': !alert.show, 'alert-hidden': !alert.hasBeenShown}")
+      strong(ng-bind='alert.title')
+      | {{alert.message}}
     //scripts

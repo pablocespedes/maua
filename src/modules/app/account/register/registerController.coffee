@@ -1,13 +1,32 @@
-'use strict'
+#'use strict'
+#### @ngInject ###
+#class RegisterController
+#
+#  # Services injected into the controller constructor
+#
+#  constructor: ($rootScope,alert,registerFactory) ->
+#    $rootScope.bodylayout = 'page-signup'
+#    @alert = alert
+#    @alert "success", "Account Created!", "Welcome  !"
+#  submit:() ->
+#    registerFactory.registerUser(@email,@password)
+#    .then(res) ->
+#      @alert "success", "Account Created!", "Welcome " + res.user.email + " !"
+#RegisterController.$inject = ['$rootScope','alert','registerFactory']
+#module.exports = RegisterController
 
-### @ngInject ###
-class RegisterController
-
-  # Services injected into the controller constructor
-  @inject: ['$rootScope','$scope','alert']
+module.exports = ['$rootScope','alert','registerFactory',
+($rootScope,alert,registerFactory) ->
+  class RegisterController
+    constructor: ($rootScope,alert,registerFactory) ->
+    $rootScope.bodylayout = 'page-signup'
+    @alert = alert
+    @alert "success", "Account Created!", "Welcome  !"
  
-  constructor: ($rootScope,$scope) ->
-    $rootScope.bodylayout = 'page-signup';
-
- 
-module.exports = RegisterController
+    submit:() ->
+      console.log('test')
+      registerFactory.registerUser(@email,@password)
+      .then(res) ->
+        @alert "success", "Account Created!", "Welcome " + res.user.email + " !"
+      
+]
