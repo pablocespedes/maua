@@ -21,22 +21,24 @@
             i.fa.fa-heart.signin-icon
             |  Shorter Study Time
       .signin-form
-        form#signin-form_id(action='index.html')
+        form#signin-form_id(name='login', novalidate='', ng-submit='vmlog.submit()')
           .signin-text
             span Sign In to your account
           .form-group.w-icon
-            input#username_id.form-control.input-lg(type='text', name='email', placeholder='Username or email')
+            input#username_id.form-control.input-lg(type='text', name='email', ng-model="vmlog.email", placeholder='Username or email', required)
             |         
             span.fa.fa-user.signin-form-icon
+            .help-block(ng-messages='login.email.$error', ng-if='login.email.$dirty', ng-messages-include='form-messages')
           .form-group.w-icon
-            input#password_id.form-control.input-lg(type='password', name='password', placeholder='Password')
+            input#password_id.form-control.input-lg(type='password',ng-model="vmlog.password", name='password', placeholder='Password', required)
             span.fa.fa-lock.signin-form-icon
+            .help-block(ng-if='login.password.$dirty', ng-messages='login.password.$error', ng-messages-include='form-messages')
           .form-actions
-            input.signin-btn.bg-primary(type='submit', value='SIGN IN')
+            input.signin-btn.bg-primary(type='submit', value='SIGN IN', ng-disabled="login.$invalid")
             |         
             a#forgot-password-link.forgot-password(href='#') Forgot your password?
         .signin-with
-          a.signin-with-btn(href='index.html', style='background:#4f6faa;background:rgba(79, 111, 170, .8);')
+          a.signin-with-btn(href='index.html', style='background:#4f6faa;background:rgba(79, 111, 170, .8);', ng-disabled="login.$invalid")
             | Sign In with 
             span Facebook
         #password-reset-form.password-reset-form
@@ -53,4 +55,9 @@
               input.signin-btn.bg-primary(type='submit', value='SEND PASSWORD RESET LINK')
     .not-a-member
       | Not a member? 
-      a(href='login') Sign up now
+      a(ui-sref="register") Sign up now
+      
+      
+script#form-messages(type='text/ng-template').
+      <div ng-message = "required"> This field cannot be blank </div>
+      <div ng-message="email">You have entered an incorrect email value</div>

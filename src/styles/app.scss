@@ -1,6 +1,7 @@
 @import "variables";
 @import "imports";
 @import "../modules/app/account/register/register.scss";
+@import "../modules/app/account/login/login.scss";
  .ui-view-container {
   position: relative;
 }
@@ -33,4 +34,16 @@
 }
 [ui-view].ng-leave-actve {
   opacity: 0;
+}
+.main-alert {
+  z-index: 40;
+  position: absolute;
+  top: 70px;
+  left:5px;
+  right: 5px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.alert-hidden {
+  visibility: hidden;
 }

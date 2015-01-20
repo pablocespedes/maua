@@ -13,28 +13,28 @@
           .signup-text
             span Create an account
           .form-group.w-icon
-            input.form-control.input-lg(type='text', name='firstName',ng-model='firstName', placeholder='First Name', required='')
+            input.form-control.input-lg(type='text', name='firstName',ng-model='vmreg.firstName', placeholder='First Name', required='')
             .help-block(ng-messages='register.firstName.$error', ng-if='register.firstName.$dirty', ng-messages-include='form-messages')
             span.fa.fa-info.signup-form-icon
           .form-group.w-icon
-            input.form-control.input-lg(type='text', name='lastName', ng-model="lastName", placeholder='Last Name', required='')
+            input.form-control.input-lg(type='text', name='lastName', ng-model="vmreg.lastName", placeholder='Last Name', required='')
             .help-block(ng-messages='register.lastName.$error', ng-if='register.lastName.$dirty', ng-messages-include='form-messages')
             span.fa.fa-info.signup-form-icon
           .form-group.w-icon
-            input.form-control.input-lg(name='email', ng-model='email', type='email', placeholder='E-mail', required='')
+            input.form-control.input-lg(name='email', ng-model='vmreg.email', type='email', placeholder='E-mail', required='')
             span.fa.fa-envelope.signup-form-icon
             .help-block(ng-messages='register.email.$error', ng-if='register.email.$dirty', ng-messages-include='form-messages')
           .form-group.w-icon
-            input.form-control.input-lg(name='password', ng-model='password', type='password', placeholder='Password', required='')
+            input.form-control.input-lg(name='password', ng-model='vmreg.password', type='password', placeholder='Password', required='')
             span.fa.fa-lock.signup-form-icon
             .help-block(ng-if='register.password.$dirty', ng-messages='register.password.$error', ng-messages-include='form-messages')
           .form-group.w-icon
-            input.form-control.input-lg(name='password_confirm', ng-model='password_confirm', type='password', placeholder='Confirm Password', match-validator='password',required='')
+            input.form-control.input-lg(name='password_confirm', ng-model='vmreg.password_confirm', type='password', placeholder='Confirm Password', match-validator='vmreg.password',required='')
             span.fa.fa-lock.signup-form-icon
             .help-block(ng-if='register.password_confirm.$dirty', ng-messages='register.password_confirm.$error', ng-messages-include='form-messages')
               div(ng-message='match') This password does not match the password entered before
           .form-actions
-            button.signup-btn.bg-primary(ng-click='vmreg.submit()', type='submit')
+            button.signup-btn.bg-primary(type='submit')
               | Submit
         .signup-with
           a.signup-with-btn(href='index.html',ng-if='register.password.$dirty' style='background:#4f6faa;background:rgba(79, 111, 170, .8);')

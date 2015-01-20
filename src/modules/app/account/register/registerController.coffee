@@ -5,10 +5,10 @@ class RegisterController
   constructor: ($rootScope,@alert,@registerFactory) ->
     $rootScope.bodylayout = 'page-signup'
     
-  submit:() =>
+  submit:() ->
     @registerFactory.registerUser(@email,@password)
-    .then(res) ->
-      @alert "success", "Account Created!", "Welcome " + res.user.email + " !"
+    .then (res) =>
+      @alert.show "success", "Account Created!", res.user.email + "!"
       
       
 RegisterController.$inject = ['$rootScope','alert','registerFactory']

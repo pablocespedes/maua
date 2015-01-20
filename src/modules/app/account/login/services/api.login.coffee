@@ -1,10 +1,13 @@
-module.exports = class LoginFactory
- 
-  constructor: (@Restangular,@authToken)->
+module.exports = ['Restangular','authToken',(Restangular,authToken) ->
+  new class LoginService
 
-  loginUser: (email,password) ->
-    request = @Restangular("login").post "", email: email password: password
-    request.then (res) =>
-      @authToken.setToken(res.token)
-      @userData = res
-      
+    constructor: () ->
+            
+    signUser: (email,password) ->
+      request = Restangular.one("login").post "",
+        email: email
+        password: password
+      request.then (res) ->
+        authToken.setToken(res.token)
+        @userData = res
+]

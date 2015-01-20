@@ -20,3 +20,12 @@
   font-weight: 600;
   padding-bottom: 6px;
 }
+#page-signin-bg {
+  height: 100%;
+  left: 0;
+  overflow: auto!important;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 20;
+}

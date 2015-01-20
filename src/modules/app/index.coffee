@@ -7,7 +7,7 @@ module.exports = angular.module('grockitApp', [
   require('../../../tmp/templates').name
   require('./application/index').name
   require('./account/register/index').name
-  #require('./account/login/index').name
+  require('./account/login/index').name
   require('./dashboard/index').name
 ])
 .config(require('./index.config'))
