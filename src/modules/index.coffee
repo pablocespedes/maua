@@ -8,6 +8,7 @@ require 'angular'
 global._ = require "lodash"
 require 'angular-ui-router'
 require 'angular-messages'
+require 'satellizer'
 require 'restangular'
 require 'select2'
 require 'pixel-admin'

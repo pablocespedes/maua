@@ -9,8 +9,7 @@ module.exports = angular.module('grockitApp.login', [])
       controllerAs: 'vmlog'
       return
 )
-.factory('loginService',require('./services/api.login'))
-.controller('LoginController', require('./loginController'))
-
-
+.config(require('./config/index.config'))
+.constant "grockitAuth", require('./auth.constants')
+.controller 'LoginController', require('./loginController')
 

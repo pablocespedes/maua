@@ -2,15 +2,17 @@
 ### @ngInject ###
 class RegisterController
   # Services injected into the controller constructor
-  constructor: ($rootScope,@alert,@registerFactory) ->
+  constructor: ($rootScope,$auth,$state,@alert) ->
+    @auth=$auth
+    @state=$state
     $rootScope.bodylayout = 'page-signup'
-    
+
   submit:() ->
-    @registerFactory.registerUser(@email,@password)
+    @auth.signup(@email,@password)
     .then (res) =>
-      @alert.show "success", "Account Created!", res.user.email + "!"
-      
-      
-RegisterController.$inject = ['$rootScope','alert','registerFactory']
+      @alert.show "success", "Account Created!", res.data.user.email + "!"
+      @state.go 'dashboard'
+
+RegisterController.$inject = ['$rootScope','$auth','$state','alert']
 
 module.exports = RegisterController

@@ -9,8 +9,7 @@ module.exports = angular.module('grockitApp.register', ['restangular'])
       controllerAs: 'vmreg'
       return
 )
-
-.factory('registerFactory',require('./services/api.register'))
+.config(require('./config/index.config'))
 .directive('matchValidator',require('./directives/matchValidator'))
 .directive('passwordCharactersValidator',require('./directives/pswChrctersVal'))
 .controller('RegisterController', require('./registerController'))

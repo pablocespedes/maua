@@ -1,19 +1,19 @@
 config = ($httpProvider, $stateProvider, $urlRouterProvider,
-          RestangularProvider)->
-  
+          RestangularProvider,apiUrl)->
+
   delete $httpProvider.defaults.headers.common["X-Requested-With"]
 
-  RestangularProvider.setBaseUrl 'http://localhost:3000/'
+  RestangularProvider.setBaseUrl apiUrl
   RestangularProvider.setDefaultRequestParams timeStamp: new Date().getTime()
-  
+
   $stateProvider.state 'common',
-  templateUrl: 'app/main.html'
+  templateUrl: 'app/main/main.html'
   abstract: true
-  
-  $urlRouterProvider.otherwise('/register')
+
+  $urlRouterProvider.otherwise('/login')
   $httpProvider.interceptors.push 'authInterceptor'
 
 config
     .$inject = ['$httpProvider', '$stateProvider', '$urlRouterProvider',
-                'RestangularProvider']
+                'RestangularProvider','apiUrl']
 module.exports = config

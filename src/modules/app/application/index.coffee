@@ -7,4 +7,3 @@ module.exports = angular.module('grockitApp.app', [])
 .service('logger', require('./services/logger'))
 .service('alert', require('./services/alert'))
 .controller('AppController', require('./appController'))
-
