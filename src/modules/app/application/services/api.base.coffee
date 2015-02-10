@@ -1,22 +1,23 @@
-# class Resource
-#   constructor: (@Restangular,@url) ->
+class Resource
+  constructor: (@Restangular,@url) ->
 
-#   restBase: () ->
-#     @Restangular.all(@url)
+  restBase: () ->
+    @Restangular.all(@url)
 
-#   singleBase: (id) ->
-#     @Restangular.one(@url, id)
+  singleBase: (id) ->
+    @Restangular.one(@url, id)
 
-#   index: () ->
-#     @restBase(@url).getList()
+  index: () ->
+    @restBase(@url).getList()
 
-#   show: () ->
+  show: (id) ->
+    @singleBase(@url,id).get()
 
-#   save: (data,subElm)->
-#     @singleBase(@url).post subElm, data
+  save: (data,subElm)->
+    @singleBase(@url).post subElm, data
 
-#   update: ()->
-#     @singleBase(@url)
+  update: ()->
+    @singleBase(@url)
 
-#   destroy: (id) ->
-#     @singleBase(@url,id).remove()
+  destroy: (id) ->
+    @singleBase(@url,id).remove()

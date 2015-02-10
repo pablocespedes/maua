@@ -1,14 +1,11 @@
-'use strict'
 
+'use strict'
 ### @ngInject ###
 class DashboardController
-
   # Services injected into the controller constructor
-  @inject: ['$scope']
+  constructor: (@alert) ->
 
-  constructor: ($scope) ->
-    # Set up scope with a property and method
-    $scope.prop = 'foo'
 
+DashboardController.$inject = ['alert']
 
 module.exports = DashboardController

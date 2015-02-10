@@ -10,6 +10,5 @@ module.exports = angular.module('grockitApp.login', [])
       return
 )
 .config(require('./config/index.config'))
-.constant "grockitAuth", require('./auth.constants')
-.controller 'LoginController', require('./loginController')
+.controller 'LoginController', require('./login.controller')
 

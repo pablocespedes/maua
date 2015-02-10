@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = angular.module('grockitApp.register', ['restangular'])
+module.exports = angular.module('grockitApp.register', [])
     .config(($stateProvider) ->
       $stateProvider.state 'register',
       url: '/register'

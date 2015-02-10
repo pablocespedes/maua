@@ -1,6 +1,6 @@
-config = ($authProvider,apiUrl)->
+config = ($authProvider)->
 
-$authProvider.signupUrl =apiUrl+'register'
+  $authProvider.loginUrl = 'register'
 
-config.$inject = ['$authProvider','apiUrl']
+config.$inject = ['$authProvider']
 module.exports = config

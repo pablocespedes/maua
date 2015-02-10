@@ -1,9 +1,13 @@
-config = ($authProvider,apiUrl)->
+config = ($authProvider,loginUrl,apiUrl)->
 
-  $authProvider.loginUrl = apiUrl+'login'
+  $authProvider.loginUrl = loginUrl
 
-  $authProvider.google(require('./google.auth'))
-  $authProvider.facebook(require('./facebook.auth'))
+  google = require('./google.auth')()
+  facebook = require('./facebook.auth')()
+  
+  $authProvider.google(google)
+  $authProvider.facebook(facebook)
 
-config.$inject = ['$authProvider','apiUrl']
+config.$inject = ['$authProvider','loginUrl','apiUrl']
+
 module.exports = config
