@@ -1,27 +1,25 @@
 'use strict'
 
-module.exports = () ->
-  new class Config
-    constructor: () ->
-      
-    baseUrl : 'http://localhost:3000/'
-    initConfig: ($httpProvider, $stateProvider,
-      $urlRouterProvider, RestangularProvider,apiUrl)->
+initConfig =  ($httpProvider, $stateProvider,
+  $urlRouterProvider, RestangularProvider, ApiUrlsProvider) ->
 
-      delete $httpProvider.defaults.headers.common["X-Requested-With"]
+  ApiUrlsProvider.host = "localhost"
+  ApiUrlsProvider.port = 3000
 
-      RestangularProvider.setBaseUrl apiUrl
-      RestangularProvider.setDefaultRequestParams
-      timeStamp: new Date().getTime()
+  delete $httpProvider.defaults.headers.common["X-Requested-With"]
 
-      $stateProvider.state 'common',
-      templateUrl: 'app/main/main.html'
-      abstract: true
+  RestangularProvider.setBaseUrl ApiUrlsProvider.baseUrl()
+  RestangularProvider.setDefaultRequestParams
+  timeStamp: new Date().getTime()
 
-      $urlRouterProvider.otherwise('/login')
-      $httpProvider.interceptors.push 'authInterceptor'
-    loginUrl : ->
-      @baseUrl+'login'
-    registerUrl: ->
-      @baseUrl + 'register'
+  $stateProvider.state 'common',
+  templateUrl: 'app/main/main.html'
+  abstract: true
 
+  $urlRouterProvider.otherwise('/login')
+  $httpProvider.interceptors.push 'authInterceptor'
+
+initConfig.$inject = ['$httpProvider','$stateProvider',
+  '$urlRouterProvider','RestangularProvider','ApiUrlsProvider']
+
+module.exports = initConfig

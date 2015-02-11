@@ -1,13 +1,13 @@
-config = ($authProvider,loginUrl,apiUrl)->
+config = ($authProvider,ApiUrlsProvider)->
+  apiUrls = ApiUrlsProvider.$get()  #because can't access service instance here
+  $authProvider.loginUrl = apiUrls.getUrl("login")
 
-  $authProvider.loginUrl = loginUrl
+  google = require('./google.auth')(apiUrls.getUrl("google"))
+  facebook = require('./facebook.auth')(apiUrls.getUrl("facebook"))
 
-  google = require('./google.auth')()
-  facebook = require('./facebook.auth')()
-  
   $authProvider.google(google)
   $authProvider.facebook(facebook)
 
-config.$inject = ['$authProvider','loginUrl','apiUrl']
+config.$inject = ['$authProvider','ApiUrlsProvider']
 
 module.exports = config

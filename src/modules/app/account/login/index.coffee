@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = angular.module('grockitApp.login', [])
+module.exports = angular.module('grockitApp.login', ['grockitApp.config'])
     .config(($stateProvider) ->
       $stateProvider.state 'login',
       url: '/login'
@@ -9,6 +9,7 @@ module.exports = angular.module('grockitApp.login', [])
       controllerAs: 'vmlog'
       return
 )
+.config(require('./config/urls'))
 .config(require('./config/index.config'))
 .controller 'LoginController', require('./login.controller')
 
