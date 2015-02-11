@@ -47,7 +47,6 @@ apiUrls = () ->
   addUrls = (obj) ->
     _.forEach(obj, addUrl);
 
-
   @addUrl = addUrl
   @addUrls = addUrls
   @$get = get
