@@ -1,16 +1,19 @@
-module.exports = ['Resource',(@Resource) ->
+Resource=require('../../application/services/_api.base')
+
+dashboardService = ($q)->
   new class DashboardService extends Resource
 
     _dashboarFn = getScore: (track) ->
       if dashboardData.score_prediction
       then dashboardData.score_prediction.tracks[track.id] else null
 
-    constructor: () ->
+    constructor: ->
+      super()
       @dashboardData = null
 
     setDashboardData = (groupId) ->
       deferred = $q.defer()
-      @Resource.show(groupId,'dashboard').then (result) ->
+      @show(groupId,'dashboard').then (result) ->
         @dashboardData = null
         @dashboardData = result.data.dashboard
         deferred.resolve true
@@ -57,5 +60,5 @@ module.exports = ['Resource',(@Resource) ->
 
     hasQuestionsAnswered = ->
       @dashboardData.progress.all.total_questions_answered >= 1
-
-]
+dashboardService.$inject = ['$q']
+module.exports = dashboardService

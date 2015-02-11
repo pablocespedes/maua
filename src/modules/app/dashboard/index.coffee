@@ -4,8 +4,8 @@
 DashboardService = require('./services/dashboard.service')
 ##DashboardService.$inject= []
 DashboardController = require('./dashboard.controller')
-TrackList = require('./directives/track-list/track-list')
-Challenge = require('./directives/challenge/challenge')
+TrackList =  require('./directives/track-list/track-list')
+Challenge =  require('./directives/challenge/challenge')
 
 module.exports = angular.module('grockitApp.dashboard', [])
     .config(($stateProvider) ->

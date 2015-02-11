@@ -1,0 +1,13 @@
+<div class="fractionEntry">
+    <input id="numerator" ng-model="portal.numerator" type="text" class="form-control" ng-class="{true:'correct-numeric-input', false:'bad-numeric-input', null:''}[status()]">
+    <input id="denominator" ng-model="portal.denominator" type="text" class="form-control" ng-class="{true:'correct-numeric-input', false:'bad-numeric-input', null:''}[status()]">
+    <div ng-repeat="item in items">
+        <div id="explanationAnswerPanel" ng-show="item.hasExplanation" ng-if="showExplanation" class="fadein " ng-class="{'answer-correct-panel': answerStatus, 'answer-incorrect-numEntry': !answerStatus}">
+            <div class="explain-margin" ng-bind-html='item.explanation'></div>
+        </div>
+        <div ng-if="showExplanation" class="fadein ">
+            Correct answer:
+            <div class="explain-margin answer-correct-panel" ng-bind-html='item.body'></div>
+        </div>
+    </div>
+</div>

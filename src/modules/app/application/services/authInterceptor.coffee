@@ -1,13 +1,13 @@
-module.exports = ['authToken',(authToken) ->
+authInterceptor = (authorization) ->
   new class AuthInterceptor
+    constructor: ->
 
-    constructor: () ->
-            
     request: (config) ->
       if typeof config.data isnt 'undefined'
-        token = authToken.getToken()
+        token = authorization.getToken()
         config.headers.Authorization = "Bearer " + token  if token
       config
     response: (response)->
       response
-]
+authInterceptor.$inject = ['authorization']
+module.exports = authInterceptor

@@ -1,9 +1,21 @@
 'use strict'
+Utilities =require('./services/utilities')
+Authorization = require('./services/authorization')
+AuthInterceptor=require('./services/authInterceptor')
+Logger=require('./services/logger')
+Alert=require('./services/alert')
+Collection =require('./services/collection')
+Observer = require('./services/observer')
+Product = require('./services/product')
+AppController= require('./app.controller')
 
 module.exports = angular.module('grockitApp.app', [])
-.factory('resource',require('./services/api.base'))
-.factory('authToken',require('./services/authToken'))
-.factory('authInterceptor',require('./services/authInterceptor'))
-.service('logger', require('./services/logger'))
-.factory('alert', require('./services/alert'))
-.controller('AppController', require('./appController'))
+.factory 'utilities', Utilities
+.factory 'authorization', Authorization
+.factory 'authInterceptor', AuthInterceptor
+.service 'logger', Logger
+.factory 'alert', Alert
+.factory 'collection', Collection
+.factory 'Observer', Observer
+.factory 'product', Product
+.controller 'AppController', AppController

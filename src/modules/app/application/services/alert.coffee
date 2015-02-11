@@ -1,6 +1,6 @@
 'use strict'
 ### @ngInject ###
-module.exports = ['$rootScope','$timeout',($rootScope, $timeout) ->
+alert = ($rootScope, $timeout) ->
   new class Alert
     alertTimeout = 'undefined'
     constructor: () ->
@@ -16,4 +16,6 @@ module.exports = ['$rootScope','$timeout',($rootScope, $timeout) ->
         $rootScope.alert.show = false
         return
       , timeout or 2000)
-]
+
+alert.$inject = ['$rootScope','$timeout']
+module.exports = alert

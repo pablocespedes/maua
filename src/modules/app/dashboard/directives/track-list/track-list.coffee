@@ -5,7 +5,7 @@ class TrackList
     ## Constructor stuff
   restrict: 'AE'
   replace: true
-  templateUrl: '/track-list.tpl.html'
+  templateUrl: 'app/dashboard/directives/track-list/track-list.html'
   scope:
     tracks: '='
     startPractice: '='
@@ -32,5 +32,4 @@ class TrackList
       utilities.redirect baseUrl + '/assessment/for_track/' + track.id
       return
 
-
-
+module.exports = TrackList

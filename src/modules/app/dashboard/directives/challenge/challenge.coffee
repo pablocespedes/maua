@@ -4,6 +4,7 @@ class Challenge
   ## Constructor stuff
   restrict: 'AE'
   replace: true
+  templateUrl: 'app/dashboard/directives/challenge/challenge.html'
   scope:
     challenges: '='
   link: (scope, element, attr) ->
@@ -14,4 +15,5 @@ class Challenge
       baseUrl = utilities.originalGrockit().url
       scope.challengeId = id
       utilities.redirect baseUrl + '/assessment/introcards/' + scope.challengeId
-      return
+
+module.exports = Challenge

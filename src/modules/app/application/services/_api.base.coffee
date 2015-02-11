@@ -21,3 +21,5 @@ class Resource
 
   destroy: (id) ->
     @singleBase(@url,id).remove()
+
+module.exports = Resource
