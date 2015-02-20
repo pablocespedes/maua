@@ -141,6 +141,7 @@
               vmPr.roundSessionAnswer = result;
             });
             vmPr.questionData = questionData;
+            practiceUtilities.setOneColumnLayout(vmPr.questionData);
             vmPr.answerType = practiceUtilities.getAnswerType(questionData.kind);
 
             vmPr.items = [];

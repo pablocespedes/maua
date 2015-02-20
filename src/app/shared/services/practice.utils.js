@@ -1,15 +1,15 @@
 (function() {
   'use strict';
   angular
-  .module("grockitApp.practice.services")
-  .factory('practiceUtilities', practiceUtilities)
-  .factory('Level', Level)
-  .factory('SplashMessages', SplashMessages)
+    .module("grockitApp.practice.services")
+    .factory('practiceUtilities', practiceUtilities)
+    .factory('Level', Level)
+    .factory('SplashMessages', SplashMessages)
 
-  practiceUtilities.$inject = ['$q', '$sce', 'utilities', 'practiceResource', 'alerts', 'YoutubeVideoApi', 'practiceConstants'];
+  practiceUtilities.$inject = ['$window', '$q', '$sce', 'utilities', 'practiceResource', 'alerts', 'YoutubeVideoApi', 'practiceConstants'];
   SplashMessages.$inject = ['utilities'];
 
-  function practiceUtilities($q, $sce, utilities, practiceResource, alerts, YoutubeVideoApi, practiceConstants) {
+  function practiceUtilities($window, $q, $sce, utilities, practiceResource, alerts, YoutubeVideoApi, practiceConstants) {
 
     /*Internal Service Functions*/
     var _internalFn = {
@@ -35,6 +35,10 @@
           isValid = correctAnswers.length === selectedAnswers.length ? true : false;
 
         return isValid;
+      },
+      validateLayout: function(questionObj){
+        return angular.isDefined(questionObj.questionInformation) && questionObj.questionInformation != null &&
+          questionObj.questionInformation != '' ? true : false;
       }
 
     };
@@ -52,15 +56,34 @@
       usersRunOutQuestions: usersRunOutQuestions,
       getAnswerType: getAnswerType,
       setCurrentTrack: setCurrentTrack,
-      showQuestionError: showQuestionError
+      showQuestionError: showQuestionError,
+      setOneColumnLayout:setOneColumnLayout
     };
     return service;
 
+    function setOneColumnLayout(questionData) {
+      var w = angular.element($window),
+        getWidth = function() {
+          return w.width()
+        },
+        setWidth = function() {
+          if (getWidth() <= 1360) {
+            return questionData.setLayoutOneColumn = false;
+          } else {
+           return questionData.setLayoutOneColumn = _internalFn.validateLayout(questionData);
+          }
+        };
+        setWidth();
+        w.bind('resize', function() {
+          setWidth();
+        });
+
+    }
 
     function presentQuestion(questionResponse) {
       try {
         var resultObject = {},
-        setLayoutType = null;
+          setLayoutType = null;
 
         resultObject = questionResponse;
 
@@ -68,8 +91,7 @@
         resultObject.questionInformation = $sce.trustAsHtml(resultObject.question_set.info);
 
         /*Find if there is a question info defined or retrieve it by the API*/
-        resultObject.setLayoutOneColumn = angular.isDefined(resultObject.questionInformation) && resultObject.questionInformation != null &&
-        resultObject.questionInformation != '' ? true : false;
+        resultObject.setLayoutOneColumn = _internalFn.validateLayout(resultObject);
 
         /*@Jose TODO This can be performed on a better way*/
         angular.element('.choice.active').removeClass('active');
@@ -77,10 +99,10 @@
         resultObject.items = [];
         resultObject.stimulus = $sce.trustAsHtml(questionResponse.stimulus);
         var optionList = practiceConstants.optionList,
-        options = optionList.toUpperCase().split(""),
-        answers = resultObject.answers,
-        len = angular.isDefined(answers) ? answers.length : 0,
-        i;
+          options = optionList.toUpperCase().split(""),
+          answers = resultObject.answers,
+          len = angular.isDefined(answers) ? answers.length : 0,
+          i;
 
         for (i = 0; i < len; i++) {
           var value = answers[i];
@@ -104,14 +126,14 @@
 
     function confirmChoice(questionResult, roundSessionAnswer, answers, questionType, groupId) {
       var answerStatus = true,
-      selectAnswers = [],
-      correctAnswers = _.filter(answers, {
-        'correct': true
-      }),
-      selectedAnswers = _.filter(answers, {
-        'selected': true
-      }),
-      isValid = _internalFn.validateAnswer(questionType, correctAnswers, selectedAnswers);
+        selectAnswers = [],
+        correctAnswers = _.filter(answers, {
+          'correct': true
+        }),
+        selectedAnswers = _.filter(answers, {
+          'selected': true
+        }),
+        isValid = _internalFn.validateAnswer(questionType, correctAnswers, selectedAnswers);
 
       if (isValid) {
 
@@ -150,19 +172,19 @@
 
     function parseTagsAndResources(tags) {
       var parsedTags = [],
-      parsedResources = [],
-      tgR = {},
-      tagsLen = tags.length,
-      i, j;
+        parsedResources = [],
+        tgR = {},
+        tagsLen = tags.length,
+        i, j;
 
       for (i = 0; i < tagsLen; i++) {
         var tagR = tags[i].tag_resources,
-        tagRLen = tagR.length,
-        currentTag = tags[i];
+          tagRLen = tagR.length,
+          currentTag = tags[i];
 
         if (!_.find(parsedTags, function(tag) {
-          return tag.name === currentTag.name;
-        })) {
+            return tag.name === currentTag.name;
+          })) {
           parsedTags.push(currentTag);
         }
 
@@ -200,7 +222,7 @@
 
     function getVideoExplanation(questionResult) {
       var deferred = $q.defer(),
-      videoObject = {};
+        videoObject = {};
 
       /* video validation*/
       if (questionResult.youtube_video_id !== null) {
@@ -228,9 +250,9 @@
 
       /*Get answers from the previous request and Explain*/
       var answers = questionResult.answers,
-      len = questionResult.answers.length,
-      i,
-      parsedTags = this.parseTagsAndResources(questionResult.tags);
+        len = questionResult.answers.length,
+        i,
+        parsedTags = this.parseTagsAndResources(questionResult.tags);
 
       resultObject.tagsResources = parsedTags.resources;
       resultObject.tags = parsedTags.tags;
@@ -244,15 +266,15 @@
     function numericEntryConfirmChoice(options) {
 
       var userAnswer = 0,
-      selectedAnswer = 0,
-      answerStatus = true,
-      answers = '',
-      numerator = options.numerator,
-      denominator = options.denominator,
-      lastAnswerLoaded = options.lastAnswerLoaded,
-      questionResult = options.questionResult,
-      groupId = options.groupId,
-      roundSessionAnswer = options.roundSessionAnswer;
+        selectedAnswer = 0,
+        answerStatus = true,
+        answers = '',
+        numerator = options.numerator,
+        denominator = options.denominator,
+        lastAnswerLoaded = options.lastAnswerLoaded,
+        questionResult = options.questionResult,
+        groupId = options.groupId,
+        roundSessionAnswer = options.roundSessionAnswer;
       /*Get selected answers*/
 
       if (numerator || denominator) {
@@ -265,16 +287,16 @@
 
         answers = questionResult.answers;
         var len = answers.length,
-        answerFound = false,
-        i, userAns = eval(userAnswer),
-        selectedAnswer = [];
+          answerFound = false,
+          i, userAns = eval(userAnswer),
+          selectedAnswer = [];
 
         for (i = 0; i < len; i++) {
           var answer = answers[i],
-          correctAns = eval(answer.body.valueOf());
+            correctAns = eval(answer.body.valueOf());
           var rang1 = (correctAns - 0.02 < 0) ? 0 : (correctAns - 0.02),
-          rang2 = (correctAns + 0.02),
-          answerEval = (answer.body.valueOf() === userAnswer || (userAns >= rang1 && userAns <= rang2));
+            rang2 = (correctAns + 0.02),
+            answerEval = (answer.body.valueOf() === userAnswer || (userAns >= rang1 && userAns <= rang2));
 
           if (answerEval && !answerFound) {
             answerFound = true;
@@ -306,7 +328,7 @@
     function usersRunOutQuestions(trackTitle, activeGroupId) {
       var options = {
         message: "You've answered all of the adaptive questions we have for you in " + trackTitle + ".  " +
-        "That's a lot of practice.  Would you like to review questions you've answered or go back to the main dashboard? ",
+          "That's a lot of practice.  Would you like to review questions you've answered or go back to the main dashboard? ",
         title: "Congratulations!",
         buttons: {
           review: {
@@ -333,32 +355,32 @@
 
       switch (questionKind) {
         case 'MultipleChoiceOneCorrect':
-        template = "_oneChoice.directive.html";
-        break;
+          template = "_oneChoice.directive.html";
+          break;
         case 'MultipleChoiceOneOrMoreCorrect':
-        template = "_multipleChoice.directive.html";
-        break;
+          template = "_multipleChoice.directive.html";
+          break;
         case 'MultipleChoiceMatrixTwoByThree':
-        template = "_matrix2x3.directive.html";
-        break;
+          template = "_matrix2x3.directive.html";
+          break;
         case 'MultipleChoiceMatrixThreeByThree':
-        template = "_matrix3x3.directive.html";
-        break;
+          template = "_matrix3x3.directive.html";
+          break;
         case 'NumericEntryFraction':
-        template = "_fraction.directive.html";
-        break;
+          template = "_fraction.directive.html";
+          break;
         case 'SPR':
-        template = "_provisionalSat.directive.html";
-        break;
+          template = "_provisionalSat.directive.html";
+          break;
         case 'NumericEntry':
-        template = "_numeric.directive.html";
-        break;
+          template = "_numeric.directive.html";
+          break;
         case 'sat':
-        template = "_sat.directive.html";
-        break;
+          template = "_sat.directive.html";
+          break;
         case 'MultipleChoiceTwoCorrect':
-        template = "_twoChoice.directive.html";
-        break;
+          template = "_twoChoice.directive.html";
+          break;
       }
 
       return practiceConstants.questionTypesUrl + template;
@@ -366,18 +388,18 @@
 
     function setCurrentTrack(groupId) {
       var deferred = $q.defer(),
-      trackData = utilities.getActiveTrack();
+        trackData = utilities.getActiveTrack();
       if (angular.isDefined(trackData.subject)) {
         deferred.resolve(trackData);
       } else {
         practiceResource.getRandomTrack(groupId)
-        .then(function(response) {
-          var tracks = response.data.dashboard.smart_practice.items,
-          index = _.random(0, tracks.length - 1),
-          currentTrack = tracks[index];
-          utilities.setActiveTrack(currentTrack, currentTrack.id);
-          deferred.resolve(utilities.getActiveTrack());
-        });
+          .then(function(response) {
+            var tracks = response.data.dashboard.smart_practice.items,
+              index = _.random(0, tracks.length - 1),
+              currentTrack = tracks[index];
+            utilities.setActiveTrack(currentTrack, currentTrack.id);
+            deferred.resolve(utilities.getActiveTrack());
+          });
 
       }
 
@@ -390,59 +412,59 @@
       switch (questionKind) {
         case 'MultipleChoiceOneCorrect':
         case 'MultipleChoiceOneOrMoreCorrect':
-        message = 'Please select an option!';
-        break;
+          message = 'Please select an option!';
+          break;
         case 'MultipleChoiceMatrixTwoByThree':
         case 'MultipleChoiceMatrixThreeByThree':
-        message = 'Please select at least one option of each section!';
-        break;
+          message = 'Please select at least one option of each section!';
+          break;
         case 'MultipleChoiceTwoCorrect':
-        message = 'Please select at least two options!';
-        break;
+          message = 'Please select at least two options!';
+          break;
         default:
-        message = 'Required';
-        break;
+          message = 'Required';
+          break;
       }
       return message;
     }
   }
 
   function Level() {
-        var messages = {
-            2: 'Lowest',
-            4: 'Low',
-            8: 'Medium',
-            16: 'High',
-            32: 'Highest'
-        }
-        return {
-            getMessage: function(level) {
-                return messages[level];
-            }
-        }
+    var messages = {
+      2: 'Lowest',
+      4: 'Low',
+      8: 'Medium',
+      16: 'High',
+      32: 'Highest'
+    }
+    return {
+      getMessage: function(level) {
+        return messages[level];
+      }
+    }
   }
 
   function SplashMessages(utilities) {
-        var loadingMessages = [
-        'Spinning up the hamster...',
-        'Shovelling coal into the server...',
-        'Programming the flux capacitor',
-        'Adjusting data for your IQ...',
-        'Generating next funny line...',
-        'Entertaining you while you wait...',
-        'Improving your reading skills...',
-        'Dividing eternity by zero, please be patient...',
-        'Just stalling to simulate activity...',
-        'Adding random changes to your data...',
-        'Waiting for approval from Bill Gates...',
-        'Adapting your practice questions...',
-        'Supercharging your study...'
-        ];
-        return {
-            getLoadingMessage: function() {
-                return loadingMessages[utilities.random(loadingMessages.length - 1)];
-            }
-        };
+    var loadingMessages = [
+      'Spinning up the hamster...',
+      'Shovelling coal into the server...',
+      'Programming the flux capacitor',
+      'Adjusting data for your IQ...',
+      'Generating next funny line...',
+      'Entertaining you while you wait...',
+      'Improving your reading skills...',
+      'Dividing eternity by zero, please be patient...',
+      'Just stalling to simulate activity...',
+      'Adding random changes to your data...',
+      'Waiting for approval from Bill Gates...',
+      'Adapting your practice questions...',
+      'Supercharging your study...'
+    ];
+    return {
+      getLoadingMessage: function() {
+        return loadingMessages[utilities.random(loadingMessages.length - 1)];
+      }
+    };
   }
 
 })();

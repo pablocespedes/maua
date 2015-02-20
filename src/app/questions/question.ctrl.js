@@ -15,6 +15,7 @@
         /*breadcrumbs.options = {
       'practice': vmPr.activeTrack.subject.name
     };*/
+    vmPr.questionData= {};
     vmPr.isbuttonClicked = false;
     vmPr.maxOpts = [];
     vmPr.explanationInfo = {};
@@ -35,6 +36,7 @@
     });
 
     init();
+
 
 
     function init() {
@@ -138,6 +140,9 @@
         if (angular.isDefined(questionData)) {
 
           vmPr.questionData = questionData;
+
+          practiceUtilities.setOneColumnLayout(vmPr.questionData);
+
           vmPr.answerType = practiceUtilities.getAnswerType(questionData.kind);
 
           vmPr.items = [];
