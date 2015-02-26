@@ -224,14 +224,6 @@
           iconclass: 'fa-lightbulb-o',
           shouldShow: (options.groupId === 'gmat')
         }, {
-          id: 'tutoring',
-          url: baseUrl + '/' + options.groupId + '/tutoring',
-          canAccess: canAccess,
-          title: 'Tutoring',
-          isReady: options.isReady,
-          iconclass: 'fa-briefcase',
-          shouldShow: true
-        }, {
           id: 'skill_data',
           url: baseUrl + '/' + options.groupId + '/skill_data',
           canAccess: canAccess,
