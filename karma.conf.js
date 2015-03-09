@@ -11,6 +11,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'src/lib/scripts.js',
       'src/bower_components/jquery/dist/jquery.min.js',
       'src/bower_components/angular/angular.js',
       'src/bower_components/angular-mocks/angular-mocks.js',
@@ -20,22 +21,33 @@ module.exports = function(config) {
       'src/bower_components/ng-breadcrumbs/dist/ng-breadcrumbs.min.js',
       'src/bower_components/webStorageModule/angular-webstorage.js',
       'src/bower_components/angular-route/angular-route.js',
+      'src/bower_components/ng-device-detector/ng-device-detector.js',
       'src/bower_components/lodash/dist/lodash.min.js',
       'src/bower_components/restangular/dist/restangular.min.js',
 
-      'src/common/restAngular/*.js',
-      'src/common/directives/*.js',
-      'src/common/filters/*.js',
-      'src/common/services/*.js',
-      'src/app/home/*.js',
-      'src/app/practiceGame/*.js',
+
+      'src/app/initRoutes.js',
+      'src/app/api-requests/restAngular.module.js',
+      'src/app/application/application.module.js',
+      'src/app/components/components.module.js',
+      'src/app/shared/services/practice.service.js',
+      'src/app/dashboard/dashboard.module.js',
+      'src/app/dashboard/sDashboard.ctrl.js',
+      'src/app/history/history.module.js',
+      'src/app/questions/question.module.js',
+      'src/app/question-review/question-review.module.js',
+      'src/app/practices/practice.module.js',
       'src/app/**/*.js',
       'src/app/*.js',
       'test/spec/**/*.js'
     ],
 
     // list of files / patterns to exclude
-    exclude: [],
+    exclude: [
+    'src/app/shared/socialMedia.scripts.js',
+    'src/app/shared/jquery.grockit.js',
+    'test/spec/spec.js'
+    ],
 
     // web server port
     port: 8080,

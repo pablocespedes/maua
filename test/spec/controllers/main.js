@@ -1,22 +1,18 @@
 'use strict';
-
-describe('Controller: SimpleDashController', function () {
-
-  // load the controller's module
+describe('Unit: SimpleDashController', function() {
+  // Load the module with MainController
   beforeEach(module('grockitApp'));
 
-  var SimpleDashController,
-    scope;
-
-  // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope) {
+  var ctrl, scope;
+  // inject the $controller and $rootScope services
+  // in the beforeEach block
+  beforeEach(inject(function($controller, $rootScope) {
+    // Create a new scope that's a child of the $rootScope
     scope = $rootScope.$new();
-    SimpleDashController = $controller('SimpleDashController', {
+    // Create the controller
+    ctrl = $controller('SimpleDashController', {
       $scope: scope
     });
   }));
 
-  it('should attach a loading var  to the scope', function () {
-    expect(scope.loading).toBe(true);
-  });
-});
+})
