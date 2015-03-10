@@ -109,7 +109,8 @@
           value.body = $sce.trustAsHtml(value.body);
           value["option"] = options[i];
           value["selected"] = false;
-          value['crossOutMsg']= 'CrossOut this Option';
+          //Default message for crossOut
+          value['crossOutMsg']= 'Remove this option';
           value["hasExplanation"] = !(value.explanation === null || angular.isUndefined(value.explanation) || value.explanation === '');
           resultObject.items.push(value);
         }

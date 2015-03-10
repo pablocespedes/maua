@@ -12,7 +12,7 @@ dist/
 
 # Include when developing application packages.
 pubspec.lock
-
+.DS_Store
 .idea/
 *.log
 /.sass-cache/
