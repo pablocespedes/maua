@@ -141,19 +141,27 @@
 
 #practice {
     .disable-choice {
+        img{
+            opacity:0.2;
+        }
         cursor: not-allowed;
         top: 0;
         right: 0;
         bottom: 0;
         left: 0;
-        z-index: 1040;
-        opacity: 0.2;
-        filter: alpha(opacity = 50);
+        color: rgba(219, 219, 219, 0.5);
+        background-color: rgba(219, 219, 219, 0.5);
     }
     .cross-out {
+        color: #555;
         position: absolute;
         right: 6px;
         top: 11px;
+    }
+    .cross-out:hover{
+
+        cursor: pointer;
+
     }
     .bad-numeric-input {
         border-color: #e66454;

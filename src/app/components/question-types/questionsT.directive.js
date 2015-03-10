@@ -453,6 +453,7 @@
       var answer = items[index];
       var answerCrossOut = angular.isUndefined(answer.crossOut) || !(answer.crossOut) ? true : false;
       answer['crossOut'] = answerCrossOut;
+      answer['crossOutMsg'] = answerCrossOut ? 'Include this option' : 'CrossOut this Option';
       resetSelection(items,index);
       event.stopPropagation()
         //  }

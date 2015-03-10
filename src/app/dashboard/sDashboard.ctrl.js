@@ -72,14 +72,13 @@
 
       if (vmDash.canPractice) {
         if (angular.isDefined(subject)) {
-
+          if (vmDash.activeGroupId === 'gre') {
             utilities.setActiveTrack(subject, trackId);
             utilities.internalRedirect('/' + vmDash.activeGroupId + '/custom-practice/');
-
-       /*  if (vmDash.activeGroupId === 'gre') { } else {
+          } else {
             var url = '/' + vmDash.activeGroupId + '/' + trackId + '/play';
             utilities.redirect(url);
-          }*/
+          }
 
         }
       }

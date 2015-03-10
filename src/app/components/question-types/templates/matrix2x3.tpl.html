@@ -9,7 +9,7 @@
 			ng-click="selectAnswer($index,(($index-($index%3))/3 ))">
 			<div class="middle" data-group="{{(($index-($index%3))/3 )}}">
 				<span ng-if="showExplanation && item.selected==true" class="float-right">&#10094;</span>
-				<span ng-if="!(showExplanation) && showforCurrentGroup" class="pull-right cross-out fa fa-times" data-toggle="tooltip" data-placement="left" title="CrossOut this Option" ng-click="crossOutChoice($index,$event)"></span>
+				<span ng-if="!(showExplanation) && showforCurrentGroup" class="pull-right cross-out fa fa-times" data-toggle="tooltip" data-placement="left" title="{{item.crossOutMsg}}" ng-click="crossOutChoice($index,$event)" data-original-title="{{item.crossOutMsg}}"></span>
 				<button id="{{item.id}}" type="button" class="letter btn-option  btn-rounded letter"
 				ng-class="{'btn-primary':item.selected && !showExplanation,'btn-success':showExplanation && item.correct,
 				'btn-danger':showExplanation && !item.correct && item.selected}">{{item.option}}
