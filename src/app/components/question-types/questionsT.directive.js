@@ -86,7 +86,7 @@
     };
     return directive;
 
-    function link(scope, element, attrs,controller) {
+    function link(scope, element, attrs, controller) {
       scope.showforCurrentGroup = true; //(scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat');
 
       scope.crossOutChoice = function(index, event) {
@@ -112,7 +112,7 @@
     };
     return directive;
 
-    function link(scope, element, attrs,controller) {
+    function link(scope, element, attrs, controller) {
       scope.showforCurrentGroup = true; //(scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat');
 
       scope.crossOutChoice = function(index, event) {
@@ -140,7 +140,7 @@
     };
     return directive;
 
-    function link(scope, element, attrs,controller) {
+    function link(scope, element, attrs, controller) {
       scope.maxOpt = [];
       scope.showforCurrentGroup = true; //(scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat');
 
@@ -327,8 +327,8 @@
 
     function resetSelection(items, index) {
       return _.forEach(items, function(answer, i) {
-        if(i===index)
-           answer.selected = false;
+        if (i === index)
+          answer.selected = false;
       });
     }
 
@@ -368,16 +368,17 @@
         var answers = items[index],
           nexAction = $('#nextAction'),
           seeAnswer = $('#skipAction');
-
-        if (!answers.selected) {
-          answers.selected = true;
-          nexAction.addClass('btn-primary');
-          seeAnswer.addClass('hide');
-        } else {
-          answers.selected = false;
-          if (!findSelectedItems(items)) {
-            nexAction.removeClass('btn-primary');
-            seeAnswer.removeClass('hide');
+        if (angular.isUndefined(answers.crossOut) || !(answers.crossOut)) {
+          if (!answers.selected) {
+            answers.selected = true;
+            nexAction.addClass('btn-primary');
+            seeAnswer.addClass('hide');
+          } else {
+            answers.selected = false;
+            if (!findSelectedItems(items)) {
+              nexAction.removeClass('btn-primary');
+              seeAnswer.removeClass('hide');
+            }
           }
         }
       }
@@ -398,16 +399,17 @@
             if (answer.id != ansResult.id) ansResult.selected = false;
           });
         }
-
-        if (!answer.selected) {
-          answer.selected = true;
-          nexAction.addClass('btn-primary');
-          seeAnswer.addClass('hide');
-        } else {
-          answer.selected = false;
-          if (!findSelectedItems(items)) {
-            nexAction.removeClass('btn-primary');
-            seeAnswer.removeClass('hide');
+        if (angular.isUndefined(answer.crossOut) || !(answer.crossOut)) {
+          if (!answer.selected) {
+            answer.selected = true;
+            nexAction.addClass('btn-primary');
+            seeAnswer.addClass('hide');
+          } else {
+            answer.selected = false;
+            if (!findSelectedItems(items)) {
+              nexAction.removeClass('btn-primary');
+              seeAnswer.removeClass('hide');
+            }
           }
         }
       }
@@ -418,31 +420,33 @@
         var answer = items[index],
           nexAction = $('#nextAction'),
           seeAnswer = $('#skipAction');
-        if (!answer.selected) {
-          /*validation which takes care to keep just 2 options selected*/
-          if (maxOpt.length >= 2) {
-            var ansR = _.find(items, {
-              'id': scope.maxOpt[0]
+        if (angular.isUndefined(answer.crossOut) || !(answer.crossOut)) {
+          if (!answer.selected) {
+            /*validation which takes care to keep just 2 options selected*/
+            if (maxOpt.length >= 2) {
+              var ansR = _.find(items, {
+                'id': maxOpt[0]
+              });
+              ansR.selected = false;
+              maxOpt = _.filter(maxOpt, function(num, i) {
+                return i != 0
+              });
+            }
+            maxOpt.push(answer.id);
+            answer.selected = true;
+            nexAction.addClass('btn-primary');
+            seeAnswer.addClass('hide');
+          } else {
+            maxOpt = _.filter(maxOpt, function(num) {
+              return num != answer.id
             });
-            ansR.selected = false;
-            maxOpt = _.filter(maxOpt, function(num, i) {
-              return i != 0
-            });
-          }
-          maxOpt.push(answer.id);
-          answer.selected = true;
-          nexAction.addClass('btn-primary');
-          seeAnswer.addClass('hide');
-        } else {
-          maxOpt = _.filter(maxOpt, function(num) {
-            return num != answer.id
-          });
-          answer.selected = false;
-          if (!_.find(items, {
-              'selected': true
-            })) {
-            nexAction.removeClass('btn-primary');
-            seeAnswer.removeClass('hide');
+            answer.selected = false;
+            if (!_.find(items, {
+                'selected': true
+              })) {
+              nexAction.removeClass('btn-primary');
+              seeAnswer.removeClass('hide');
+            }
           }
         }
       }
@@ -454,7 +458,7 @@
       var answerCrossOut = angular.isUndefined(answer.crossOut) || !(answer.crossOut) ? true : false;
       answer['crossOut'] = answerCrossOut;
       answer['crossOutMsg'] = answerCrossOut ? 'Include this option' : 'Remove this option';
-      resetSelection(items,index);
+      resetSelection(items, index);
       event.stopPropagation()
         //  }
     }
