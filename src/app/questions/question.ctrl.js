@@ -3,7 +3,7 @@
   .module('grockitApp.question')
   .controller('QuestionController', QuestionController);
 
-  /*Manually injection will avoid any minification or injection problem*/
+  /*Manual injection will avoid minification or injection problems*/
   QuestionController.$inject = ['$scope', 'practiceUtilities', 'utilities', 'breadcrumbs', 'alerts', 'Timer', 'SplashMessages', 'currentProduct', 'practiceResource'];
 
   function QuestionController($scope, practiceUtilities, utilities, breadcrumbs, alerts, Timer, SplashMessages, currentProduct, practiceResource) {
