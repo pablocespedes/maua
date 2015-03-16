@@ -459,8 +459,6 @@
       answer['crossOutMsg'] = answerCrossOut ? 'Include this option' : 'Remove this option';
       resetSelection(items, index);
       event.stopPropagation()
-      // if (scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat') {
-        //  }
     }
   }
 })();
