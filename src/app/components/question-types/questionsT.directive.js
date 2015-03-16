@@ -453,13 +453,13 @@
     }
 
     this.crossOutChoice = function(items, index, event) {
-      // if (scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat') {
       var answer = items[index];
       var answerCrossOut = angular.isUndefined(answer.crossOut) || !(answer.crossOut) ? true : false;
       answer['crossOut'] = answerCrossOut;
       answer['crossOutMsg'] = answerCrossOut ? 'Include this option' : 'Remove this option';
       resetSelection(items, index);
       event.stopPropagation()
+      // if (scope.groupId === 'act' || scope.groupId === 'sat' || scope.groupId === 'lsat') {
         //  }
     }
   }
