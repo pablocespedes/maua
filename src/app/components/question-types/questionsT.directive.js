@@ -1,5 +1,6 @@
 (function() {
   'use strict';
+  //question types components
   angular
     .module('grockitApp.components')
     .directive('oneChoice', oneChoice)
