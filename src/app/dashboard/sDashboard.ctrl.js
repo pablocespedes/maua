@@ -20,7 +20,7 @@
     vmDash.loadingMessage = 'Loading...';
     vmDash.historyVisible = false;
     vmDash.StartPractice = StartPractice;
-    vmDash.startCardinTour = startCardinTour;
+    //vmDash.startCardinTour = startCardinTour;
     init();
 
     $scope.$on("$destroy", function() {
@@ -50,23 +50,23 @@
       });
     };
 
-    function startCardinTour() {
-      angular.element(document).ready(function() {
-        vmDash.showingTour = true;
-        angular.element('#SnapABug_Button').attr('style', 'display:none');
-        angular.element('body').chardinJs('start');
+    // function startCardinTour() {
+    //   angular.element(document).ready(function() {
+    //     vmDash.showingTour = true;
+    //     angular.element('#SnapABug_Button').attr('style', 'display:none');
+    //     angular.element('body').chardinJs('start');
 
-      });
-    }
-    angular.element(document).ready(function() {
-      angular.element('body').on('chardinJs:stop', function() {
-        $scope.$apply(function() {
-          angular.element('#SnapABug_Button').attr('style', 'display:inline-block');
-          vmDash.showingTour = false;
-        });
+    //   });
+    // }
+    // angular.element(document).ready(function() {
+    //   angular.element('body').on('chardinJs:stop', function() {
+    //     $scope.$apply(function() {
+    //       angular.element('#SnapABug_Button').attr('style', 'display:inline-block');
+    //       vmDash.showingTour = false;
+    //     });
 
-      });
-    });
+    //   });
+    // });
 
     function StartPractice(subject, trackId) {
 
