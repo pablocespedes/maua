@@ -55,8 +55,6 @@
       hideVideoOption: function(groupId) {
         vmApp.hideVideoOption = (groupId === 'ap_calculus' ||
           groupId === 'ap_psychology' ||
-          // groupId === 'ap_us_history' ||
-          // groupId === 'ap_world_history' ||
           groupId === 'academy' ||
           groupId === 'iim-cat'
         );
