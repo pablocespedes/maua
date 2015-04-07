@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  angular.module("grockitApp.dashboard", ['ng-breadcrumbs', 'ui.bootstrap', 'ui.accordion'])
+  angular.module("grockitApp.dashboard", ['ng-breadcrumbs'])
   .config(config);
   config.$inject = ['$routeProvider','$controllerProvider','$compileProvider','$provide'];
 

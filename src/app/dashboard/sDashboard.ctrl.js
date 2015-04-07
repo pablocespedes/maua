@@ -6,11 +6,11 @@
 
   /*Manually injection will avoid any minification or injection problem*/
   SimpleDashController.$inject = ['$window', '$scope', 'dashboard', 'UsersApi', 'utilities', 'Auth', 'currentProduct',
-    'membershipService', 'setItUpUserProgress', 'setItUpScorePrediction','detectUtils'
+    'membershipService', 'setItUpUserProgress', 'setItUpScorePrediction', 'detectUtils', 'questionTimingService'
   ];
 
   function SimpleDashController($window, $scope, dashboard, UsersApi, utilities, Auth, currentProduct, membershipService,
-    setItUpUserProgress, setItUpScorePrediction,detectUtils) {
+    setItUpUserProgress, setItUpScorePrediction, detectUtils, questionTimingService) {
     /* jshint validthis: true */
     var vmDash = this,
       dashObserver = null;
@@ -50,24 +50,6 @@
       });
     };
 
-    // function startCardinTour() {
-    //   angular.element(document).ready(function() {
-    //     vmDash.showingTour = true;
-    //     angular.element('#SnapABug_Button').attr('style', 'display:none');
-    //     angular.element('body').chardinJs('start');
-
-    //   });
-    // }
-    // angular.element(document).ready(function() {
-    //   angular.element('body').on('chardinJs:stop', function() {
-    //     $scope.$apply(function() {
-    //       angular.element('#SnapABug_Button').attr('style', 'display:inline-block');
-    //       vmDash.showingTour = false;
-    //     });
-
-    //   });
-    // });
-
     function StartPractice(subject, trackId) {
 
       if (vmDash.canPractice) {
@@ -84,9 +66,10 @@
       }
     };
 
+
+
     var SimpleDashBoard = {
       getDashboard: function(groupId) {
-
 
         dashboard.setDashboardData(groupId).then(function(result) {
           var hasQuestionsAnswered = dashboard.hasQuestionsAnswered();
@@ -99,7 +82,7 @@
           } else {
 
             if (vmDash.enableScore)
-               SimpleDashBoard.fetchScorePrediction();
+              SimpleDashBoard.fetchScorePrediction();
 
             SimpleDashBoard.fetchTracks();
             SimpleDashBoard.getHistoryInformation();

@@ -1,20 +1,20 @@
 (function() {
   'use strict';
   angular
-  .module('grockitApp.practice')
-  .controller('CustomPracticeController', CustomPracticeController);
+    .module('grockitApp.practice')
+    .controller('CustomPracticeController', CustomPracticeController);
 
   /*Manually injection will avoid any minification or injection problem*/
-  CustomPracticeController.$inject = ['$scope','$timeout', 'practiceUtilities', 'breadcrumbs', 'Timer',
-  'SplashMessages', 'currentProduct', 'practiceResource'
+  CustomPracticeController.$inject = ['$scope', '$timeout', 'practiceUtilities', 'breadcrumbs', 'Timer',
+    'SplashMessages', 'currentProduct', 'practiceResource', 'questionTimingService'
   ];
 
-  function CustomPracticeController($scope,$timeout, practiceUtilities, breadcrumbs, Timer, SplashMessages,
-    currentProduct, practiceResource) {
+  function CustomPracticeController($scope, $timeout, practiceUtilities, breadcrumbs, Timer, SplashMessages,
+    currentProduct, practiceResource, questionTimingService) {
 
     /* jshint validthis: true */
     var vmPr = this,
-    practiceObserver = null;
+      practiceObserver = null;
     vmPr.isbuttonClicked = false;
     vmPr.maxOpts = [];
     vmPr.explanationInfo = {};
@@ -26,7 +26,7 @@
     vmPr.nextActionTitle = 'Confirm Choice';
     vmPr.answerStatus = null;
     vmPr.isValid = true;
-    vmPr.invalidMessage='';
+    vmPr.invalidMessage = '';
     vmPr.loadingMessage = SplashMessages.getLoadingMessage();
     vmPr.isDisabled = false;
     vmPr.nextAction = nextAction;
@@ -55,7 +55,7 @@
         customPractice.evaluateConfirmMethod();
       } else {
         vmPr.isValid = true;
-        vmPr.invalidMessage='';
+        vmPr.invalidMessage = '';
         customPractice.nextQuestion();
       }
     };
@@ -69,36 +69,45 @@
       setTimingInformation: function(questionId, kind) {
 
         practiceResource.getTimingInformation(vmPr.activeTrack.trackId, vmPr.activeGroupId, questionId)
-        .$promise.then(function(result) {
-          if (angular.isDefined(result)) {
-            var timingData = result[0];
-            vmPr.showTiming = true;
-            vmPr.timingData = timingData;
-            vmPr.totalAnswered = timingData.total_answered;
-            var mergedList = _.map(vmPr.items, function(item) {
-              return _.extend(item, _.findWhere(timingData.answers, {
-                'answer_id': item.id
-              }));
-            });
+          .$promise.then(function(result) {
+            if (angular.isDefined(result)) {
+              var timingData = result[0];
+              vmPr.showTiming = true;
+              vmPr.timingData = timingData;
+              vmPr.totalAnswered = timingData.total_answered;
+              var mergedList = _.map(vmPr.items, function(item) {
+                return _.extend(item, _.findWhere(timingData.answers, {
+                  'answer_id': item.id
+                }));
+              });
 
-            var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered) * 100;
-            vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
+              var percentAnswered = (timingData.total_answered_correctly / timingData.total_answered) * 100;
+              vmPr.percentAnswered = percentAnswered > 0 ? Math.round(percentAnswered.toFixed(2)) : 0;
 
-          }
+            }
 
-        }).catch(function(e) {
-          vmPr.showTiming = false;
-        });
+          }).catch(function(e) {
+            vmPr.showTiming = false;
+          });
       },
       initPracticeTimer: function() {
         vmPr.practiceTimer = Timer.create();
+
       },
       initQuestionTimer: function() {
         vmPr.questionTimer = Timer.create();
       },
       resetQuestionTimer: function() {
+        var time = (questionTimingService.getTime().minutes) * 60;
         vmPr.questionTimer.reset();
-        vmPr.questionTimer.start();
+        vmPr.questionTimer.start(time);
+
+        vmPr.questionTimer.interval.then(null,null, function(val) {
+          if(time===val+1){
+            revealExplanation();
+          }
+        });
+
         timerObject.restartPracticeTimer();
       },
       restartPracticeTimer: function() {
@@ -120,15 +129,16 @@
           }
         });
       },
-      getQuestions: function(){
-        practiceResource.setQuestionsData(vmPr.activeGroupId,vmPr.activeTrack.subject.id,vmPr.activeTrack.subject.type)
-        .then(setQuestionComplete);
-          function setQuestionComplete(response){
-              if(response)
-                customPractice.presentQuestion();
-              else
-                practiceUtilities.usersRunOutQuestions(vmPr.activeTrack.subject.name, vmPr.activeGroupId);
-          }
+      getQuestions: function() {
+        practiceResource.setQuestionsData(vmPr.activeGroupId, vmPr.activeTrack.subject.id, vmPr.activeTrack.subject.type)
+          .then(setQuestionComplete);
+
+        function setQuestionComplete(response) {
+          if (response)
+            customPractice.presentQuestion();
+          else
+            practiceUtilities.usersRunOutQuestions(vmPr.activeTrack.subject.name, vmPr.activeGroupId);
+        }
       },
       presentQuestion: function() {
         var requestLocalData = practiceResource.getQuestionData();
@@ -186,9 +196,9 @@
           customPractice.bindExplanationInfo(generalResult);
           vmPr.isbuttonClicked = true;
           vmPr.isValid = true;
-          vmPr.invalidMessage ='';
+          vmPr.invalidMessage = '';
         } else
-        vmPr.isDisabled = false;
+          vmPr.isDisabled = false;
       },
       evaluateConfirmMethod: function() {
         vmPr.userConfirmed = true;
@@ -196,10 +206,10 @@
           case 'SPR':
           case 'NumericEntry':
           case 'NumericEntryFraction':
-          customPractice.numericConfirmAnswer();
-          break;
+            customPractice.numericConfirmAnswer();
+            break;
           default:
-          customPractice.confirmAnswer();
+            customPractice.confirmAnswer();
         }
       },
       numericConfirmAnswer: function() {
@@ -217,12 +227,12 @@
           this.resetLayout();
           customPractice.displayExplanationInfo();
           vmPr.isbuttonClicked = true;
-           vmPr.isValid = true;
-           vmPr.invalidMessage ='';
-        } else{
-        vmPr.isDisabled = false;
-        vmPr.isValid = false;
-        vmPr.invalidMessage = practiceUtilities.showQuestionError(vmPr.questionData.kind);
+          vmPr.isValid = true;
+          vmPr.invalidMessage = '';
+        } else {
+          vmPr.isDisabled = false;
+          vmPr.isValid = false;
+          vmPr.invalidMessage = practiceUtilities.showQuestionError(vmPr.questionData.kind);
         }
       },
       feedbackInfo: function(questionId) {
@@ -242,9 +252,9 @@
         angular.element('#skipAction').removeClass('hide');
         angular.element('#nextAction').removeClass('btn-primary');
         angular.element('#PanelQuestion').addClass('fadeIn animated')
-        .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-          angular.element(this).removeClass();
-        });
+          .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+            angular.element(this).removeClass();
+          });
       },
       confirmAnswer: function() {
         vmPr.answerStatus = practiceUtilities.confirmChoice(vmPr.questionData, vmPr.roundSessionAnswer, vmPr.items, vmPr.questionData.kind, vmPr.activeGroupId);
@@ -253,12 +263,12 @@
           vmPr.questionData.setLayoutOneColumn = true;
           customPractice.displayExplanationInfo();
           vmPr.isbuttonClicked = true;
-           vmPr.isValid = true;
-           vmPr.invalidMessage ='';
-        } else{
-         vmPr.isDisabled = false;
-         vmPr.isValid = false;
-         vmPr.invalidMessage = practiceUtilities.showQuestionError(vmPr.questionData.kind);
+          vmPr.isValid = true;
+          vmPr.invalidMessage = '';
+        } else {
+          vmPr.isDisabled = false;
+          vmPr.isValid = false;
+          vmPr.invalidMessage = practiceUtilities.showQuestionError(vmPr.questionData.kind);
         }
       },
       resetLayout: function() {

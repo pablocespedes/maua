@@ -2,20 +2,20 @@
   'use strict';
 
   angular.module("grockitApp.application")
-  .factory('utilities', utilities)
-  .factory('alerts', alerts)
-  .service('collectionService', collectionService)
-  .service('Observable', Observable)
-  .factory('Timer', Timer)
-  .factory('dateFormatter', dateFormatter)
-  .factory('dateUtils', dateUtils);
+    .factory('utilities', utilities)
+    .factory('alerts', alerts)
+    .service('collectionService', collectionService)
+    .service('Observable', Observable)
+    .factory('Timer', Timer)
+    .factory('dateFormatter', dateFormatter)
+    .factory('dateUtils', dateUtils);
 
- utilities.$inject = ['$rootScope', '$http', '$location', '$route', '$q', '$window', 'webStorage', 'YoutubeVideoApi', 'environmentCons'];
- Observable.$inject = [];
- Timer.$inject = ['$interval', 'collectionService'];
+  utilities.$inject = ['$rootScope', '$http', '$location', '$route', '$q', '$window', 'webStorage', 'YoutubeVideoApi', 'environmentCons'];
+  Observable.$inject = [];
+  Timer.$inject = ['$interval', 'collectionService'];
 
 
- function utilities($rootScope, $http, $location, $route, $q, $window, webStorage, YoutubeVideoApi, environmentCons) {
+  function utilities($rootScope, $http, $location, $route, $q, $window, webStorage, YoutubeVideoApi, environmentCons) {
     var currentTrack = {};
     var service = {
       newGrockit: newGrockit,
@@ -46,7 +46,7 @@
     function getResourceObject(resourceObject) {
       var nDeferred = $q.defer();
       var videoObject = {},
-      videoId = '';
+        videoId = '';
       if (resourceObject.resource_type == "youtube") {
         var video = getYoutubeVideosId(resourceObject.resource);
         video.then(function(idVid) {
@@ -172,7 +172,9 @@
 
     function showAlert(alertMsg, type) {
 
-            angular.element.growl.error({ message: alertMsg });
+      angular.element.growl.error({
+        message: alertMsg
+      });
     }
 
     function setErrorApiMsg(e) {
@@ -252,11 +254,12 @@
       var timer = {
         seconds: 0,
         interval: null,
-        start: function() {
+        start: function(count) {
+          if (typeof count === 'undefined') { count = 0; }
           var timer = this;
           this.interval = $interval(function() {
             timer.seconds++;
-          }, 1000);
+          }, 1000, count);
         },
         pause: function() {
           $interval.cancel(this.interval);
@@ -264,6 +267,9 @@
         reset: function() {
           this.seconds = 0;
           this.pause();
+        },
+        getInterval: function(){
+          return timer.interval;
         }
       };
       return timer;
@@ -291,11 +297,11 @@
 
     var formatSeconds = function(seconds) {
       var secs = seconds,
-      hours = Math.floor(secs / (60 * 60)),
-      divisor_for_minutes = secs % (60 * 60),
-      minutes = Math.floor(divisor_for_minutes / 60),
-      divisor_for_seconds = divisor_for_minutes % 60,
-      seconds = Math.ceil(divisor_for_seconds);
+        hours = Math.floor(secs / (60 * 60)),
+        divisor_for_minutes = secs % (60 * 60),
+        minutes = Math.floor(divisor_for_minutes / 60),
+        divisor_for_seconds = divisor_for_minutes % 60,
+        seconds = Math.ceil(divisor_for_seconds);
 
       if (hours < 10) {
         hours = "0" + hours;
@@ -335,19 +341,19 @@
 
     function getStandardDate(date) {
       var day = date.getDate(),
-      month = date.getMonth();
+        month = date.getMonth();
       return getMonthName(month) + ' ' + day;
     }
 
     function formatDate(date) {
       var initialDate = this.getStandardDate(date),
-      year = date.getYear();
+        year = date.getYear();
       return initialDate + ' ' + year;
     }
 
     function getMonthName(index) {
       var monthNames = ["January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+        "July", "August", "September", "October", "November", "December"
       ];
       return monthNames[index];
     }

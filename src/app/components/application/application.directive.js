@@ -10,9 +10,12 @@
     .directive('chardinTour', chardinTour)
     .directive('userProgress', userProgress)
     .directive('scorePrediction', scorePrediction)
-    .directive('spinner', spinner);
+    .directive('spinner', spinner)
+    .directive('timerSlider', timerSlider)
+    .directive('userSettings', userSettings);
 
   grockitLink.$inject = ['$location', '$timeout'];
+  timerSlider.$inject = ['questionTimingService'];
 
   function youtube() {
     var directive = {
@@ -71,21 +74,6 @@
     };
     return directive;
   }
-
-  function welcome() {
-    var directive = {
-      templateUrl: 'app/components/application/templates/welcome.tpl.html',
-      restrict: 'A',
-      scope: {
-        data: '=data',
-        url: '=',
-        logOutUrl: '=',
-        logOut: '&'
-      }
-    };
-    return directive;
-  }
-
 
   function grockitLink($location, $timeout) {
     var directive = {
@@ -162,5 +150,87 @@
     };
     return directive;
   }
+
+  function timerSlider(questionTimingService) {
+
+    var directive = {
+      templateUrl: 'app/components/application/templates/timer.slider.html',
+      restrict: 'AE',
+      link: link,
+      scope: {
+        options: '='
+      }
+    }
+
+    return directive;
+
+    function link(scope, element, attrs) {
+
+      angular.element(document).ready(function() {
+        scope.timerSetting = {
+          minutes: 0
+        };
+
+        var time = questionTimingService.getTime();
+        if (angular.isDefined(time)) {
+          scope.timerSetting.minutes = time.minutes;
+        }
+
+
+        var slider = new Slider("#ex13", {
+          ticks: scope.options.sliderTicks,
+          ticks_labels: scope.options.tickLabels,
+        });
+
+        slider.setValue(scope.options.value)
+
+        slider.on('slideStop', function(newValue) {
+          scope.timerSetting.minutes = newValue;
+          questionTimingService.saveTime(scope.timerSetting);
+        });
+
+        scope.$on('$destroy', function() {
+
+          console.log("destroy");
+          //slider.destroy();
+          //slider = null;
+        });
+      });
+
+    }
+
+  }
+
+  function userSettings() {
+    var directive = {
+      templateUrl: 'app/components/application/templates/user-settings.html',
+      restrict: 'AE',
+      link: link
+    }
+
+    function link(scope, element, attr) {
+
+      scope.questionCheck = true;
+
+      scope.options = {
+        id: 'userTiming',
+        value: 3,
+        snapBounds: 1,
+        sliderTicks: [0, 5, 10, 15],
+        tickLabels: ['0', '5', '10', '15']
+      };
+
+      $('#practice-settings-toggler').click(function() {
+        $('#practice-settings').toggleClass('open');
+        return false;
+      });
+
+
+    }
+
+    return directive;
+
+  }
+
 
 })();

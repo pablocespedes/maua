@@ -17,10 +17,9 @@ var paths = {
   appServices: 'app/application/application.services.js',
   practiceSrv: 'app/shared/services/practice.service.js',
   practiceUtils: 'app/shared/services/practice.utils.js',
-  uiBootStrap: 'app/components/accordion/vendor/ui.bootstrap.min.js',
-  accordion: 'app/components/accordion/accordion.js',
   historyM: 'app/history/history.module.js',
   questionReview: 'app/question-review/question-review.module.js',
+  questionTimerCtrl: 'app/components/application/question-timer.ctrl.js',
   app: 'app/app.js'
 };
 
@@ -32,6 +31,7 @@ $script([paths.jqueryGrockit,
   paths.analyticService
 ], 'init').ready('init', function() {
   $script([
+    paths.questionTimerCtrl,
     paths.appFilters,
     paths.appDirectives,
     paths.utilServices,
@@ -40,10 +40,8 @@ $script([paths.jqueryGrockit,
     paths.appController,
     paths.restAngularFactory,
     paths.practiceSrv,
-    paths.uiBootStrap
   ], 'secondLoad').ready('secondLoad', function() {
     $script([
-      paths.accordion,
       paths.historyM,
       paths.dashboard,
       paths.practiceUtils,

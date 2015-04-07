@@ -1,0 +1,28 @@
+<div id="practice-settings">
+  <a href="#" id="practice-settings-toggler" class="fa fa-cogs"></a>
+  <h5 class="header">SETTINGS</h5>
+  <div>
+    <ul id="practice-settings-list">
+      <li class="clearfix">
+        <span>Question Timer</span>
+        <div class="practice-checkbox">
+          <div class="switcher switcher-theme-square switcher-primary" ng-class="{'checked':questionCheck}"  ng-click="questionCheck=!questionCheck">
+            <input type="checkbox" data-class="switcher-primary" checked="checked">
+            <div class="switcher-toggler"></div>
+            <div class="switcher-inner">
+              <div class="switcher-state-on">ON</div>
+              <div class="switcher-state-off">OFF</div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <h5 class="header" ng-if="questionCheck">Question Time</h5>
+  <div id="setting-config" ng-if="questionCheck">
+    <div class="modal-body ">
+      <br>
+      <div timer-slider options="options"></div>
+    </div>
+  </div>
+</div>

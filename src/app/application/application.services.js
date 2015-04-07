@@ -7,7 +7,8 @@
     .factory('appService', appService)
     .factory('menuService', menuService)
     .service('setItUpUserProgress', setItUpUserProgress)
-    .service('setItUpScorePrediction', setItUpScorePrediction);
+    .service('setItUpScorePrediction', setItUpScorePrediction)
+    .factory('questionTimingService', questionTimingService);
 
   grockitModal.$inject = ['$http', 'utilities', 'environmentCons'];
   currentProduct.$inject = ['webStorage', 'Observable', 'utilities'];
@@ -15,6 +16,8 @@
   menuService.$inject = ['utilities'];
   setItUpUserProgress.$inject = ['Observable'];
   setItUpScorePrediction.$inject = ['Observable'];
+  questionTimingService.$inject = ['webStorage'];
+
 
   function grockitModal($http, utilities, environmentCons) {
 
@@ -127,7 +130,7 @@
 
             } else {
 
-              var  urlGroup = utilities.getCurrentParam('subject'),
+              var urlGroup = utilities.getCurrentParam('subject'),
                 userGroup = _appFn.userGroup(userResponse.groupMemberships, urlGroup),
                 actualGroup = _appFn.actualGroup(groups, urlGroup);
 
@@ -273,6 +276,24 @@
     this.observeScorePrediction = function() {
       return Observable.get('scorePrediction');
     }
+  }
+
+
+  function questionTimingService(webStorage) {
+    var service = {
+      saveTime: _saveTime,
+      getTime: _getTime
+    };
+    return service;
+
+    function _saveTime(questionTime) {
+      webStorage.add('questionTiming', questionTime);
+    }
+
+    function _getTime() {
+      return webStorage.get('questionTiming');
+    }
+
   }
 
 
