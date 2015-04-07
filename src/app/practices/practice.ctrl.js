@@ -15,6 +15,7 @@
     /* jshint validthis: true */
     var vmPr = this,
       practiceObserver = null;
+    vmPr.time = (questionTimingService.getTime().minutes) * 60;
     vmPr.isbuttonClicked = false;
     vmPr.maxOpts = [];
     vmPr.explanationInfo = {};
@@ -98,13 +99,16 @@
         vmPr.questionTimer = Timer.create();
       },
       resetQuestionTimer: function() {
-        var time = (questionTimingService.getTime().minutes) * 60;
-        vmPr.questionTimer.reset();
-        vmPr.questionTimer.start(time);
 
-        vmPr.questionTimer.interval.then(null,null, function(val) {
-          if(time===val+1){
-            revealExplanation();
+        vmPr.questionTimer.reset();
+        vmPr.questionTimer.start(vmPr.time);
+
+        vmPr.questionTimer.interval.then(null, null, function(val) {
+          if (time === val + 1) {
+            bootbox.alert("Time's Up, review question solution!", function() {
+              revealExplanation();
+            });
+
           }
         });
 
@@ -124,8 +128,10 @@
         practiceResource.createNewGame(apiUrl).then(function(game) {
           if (angular.isDefined(game) && game !== null) {
             customPractice.getQuestions();
-            timerObject.initPracticeTimer();
-            timerObject.initQuestionTimer();
+            if (vmPr.time > 0) {
+              timerObject.initPracticeTimer();
+              timerObject.initQuestionTimer();
+            }
           }
         });
       },

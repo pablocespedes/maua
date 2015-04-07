@@ -19,7 +19,6 @@ var paths = {
   practiceUtils: 'app/shared/services/practice.utils.js',
   historyM: 'app/history/history.module.js',
   questionReview: 'app/question-review/question-review.module.js',
-  questionTimerCtrl: 'app/components/application/question-timer.ctrl.js',
   app: 'app/app.js'
 };
 
@@ -31,7 +30,6 @@ $script([paths.jqueryGrockit,
   paths.analyticService
 ], 'init').ready('init', function() {
   $script([
-    paths.questionTimerCtrl,
     paths.appFilters,
     paths.appDirectives,
     paths.utilServices,

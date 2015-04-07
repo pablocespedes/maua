@@ -16,6 +16,7 @@
 
   grockitLink.$inject = ['$location', '$timeout'];
   timerSlider.$inject = ['questionTimingService'];
+  userSettings.$inject = ['questionTimingService'];
 
   function youtube() {
     var directive = {
@@ -166,42 +167,41 @@
 
     function link(scope, element, attrs) {
 
-      angular.element(document).ready(function() {
-        scope.timerSetting = {
-          minutes: 0
-        };
+
+      scope.timerSetting = {
+        minutes: 0
+      };
+      var slider = new Slider("#ex13", {
+        ticks: scope.options.sliderTicks,
+        ticks_labels: scope.options.tickLabels,
+      });
+
+      slider.setValue(scope.options.value)
+
+      slider.on('slideStop', function(newValue) {
 
         var time = questionTimingService.getTime();
         if (angular.isDefined(time)) {
           scope.timerSetting.minutes = time.minutes;
         }
-
-
-        var slider = new Slider("#ex13", {
-          ticks: scope.options.sliderTicks,
-          ticks_labels: scope.options.tickLabels,
-        });
-
-        slider.setValue(scope.options.value)
-
-        slider.on('slideStop', function(newValue) {
-          scope.timerSetting.minutes = newValue;
-          questionTimingService.saveTime(scope.timerSetting);
-        });
-
-        scope.$on('$destroy', function() {
-
-          console.log("destroy");
-          //slider.destroy();
-          //slider = null;
-        });
+        scope.timerSetting.minutes = newValue;
+        questionTimingService.saveTime(scope.timerSetting);
+        slider.setValue(scope.timerSetting.minutes)
       });
+
+      scope.$on('$destroy', function() {
+
+        console.log("destroy");
+        slider.destroy();
+        slider = null;
+      });
+
 
     }
 
   }
 
-  function userSettings() {
+  function userSettings(questionTimingService) {
     var directive = {
       templateUrl: 'app/components/application/templates/user-settings.html',
       restrict: 'AE',
@@ -209,12 +209,27 @@
     }
 
     function link(scope, element, attr) {
+      scope.timerSetting = {
+        minutes: 0
+      };
 
-      scope.questionCheck = true;
+      var time = questionTimingService.getTime();
+      if (angular.isDefined(time)) {
+        scope.timerSetting.minutes = time.minutes;
+      }
+      scope.questionCheck = scope.timerSetting.minutes !== 0 ? true : false;
+
+      scope.enableTime = function() {
+        scope.questionCheck = !scope.questionCheck;
+        if (!scope.questionCheck) {
+          scope.timerSetting.minutes = 0;
+          questionTimingService.saveTime(scope.timerSetting);
+        }
+      }
 
       scope.options = {
         id: 'userTiming',
-        value: 3,
+        value: scope.timerSetting.minutes,
         snapBounds: 1,
         sliderTicks: [0, 5, 10, 15],
         tickLabels: ['0', '5', '10', '15']
