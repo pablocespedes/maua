@@ -1,21 +1,21 @@
 /* MEDIA QUERIES */
+
 @media screen and (min-width: 47.5em) {
   .rightColumn {
     top: 0;
     right: 0;
   }
 }
-
 /*==========  Mobile First Method  ==========*/
-
 /* Custom, iPhone Retina */
+
 @media only screen and (min-width: 320px) {
   .loader-margin {
     margin-left: 33% !important;
   }
   #topics {
     .feedback-box {
-      padding-top: 12px;
+      padding-top: 9px;
       height: 41px;
       float: right !important;
     }
@@ -36,8 +36,8 @@
     }
   }
 }
-
 /* Extra Small Devices, Phones */
+
 @media only screen and (min-width: 480px) {
   .loader-margin {
     margin-left: 33% !important;
@@ -53,7 +53,7 @@
   }
   #topics {
     .feedback-box {
-      padding-top: 12px;
+      padding-top: 9px;
       height: 41px;
       float: right !important;
     }
@@ -74,49 +74,45 @@
     }
   }
 }
-
 /* Small Devices, Tablets */
+
 @media only screen and (min-width: 768px) {
   .history-day {
     left: 80px;
   }
 }
-
 /* Medium Devices, Desktops */
+
 @media only screen and (min-width: 992px) {}
-
 /* Large Devices, Wide Screens */
+
 @media only screen and (min-width: 1200px) {}
-
 /*==========  Non-Mobile First Method  ==========*/
-
 /* Large Devices, Wide Screens */
-@media only screen and (max-width: 1200px) {}
 
+@media only screen and (max-width: 1200px) {}
 /* Medium Devices, Desktops */
+
 @media only screen and (max-width: 992px) {
   .loader-margin {
-   margin-left: 15% !important;
+    margin-left: 15% !important;
   }
   .cloudLoader {
-
-background-image: url("../images/CloudSprite.png");
-margin-left: 5%;
-
+    background-image: url("../images/CloudSprite.png");
+    margin-left: 5%;
+  }
 }
-}
-
 /* Small Devices, Tablets */
+
 @media only screen and (max-width: 768px) {
   .loader-margin {
     margin-left: 33% !important;
   }
 }
-
 /* Extra Small Devices, Phones */
+
 @media only screen and (max-width: 480px) {
   .cloudLoader {
-
     margin-left: 29px;
   }
   .loader-margin {
@@ -124,9 +120,10 @@ margin-left: 5%;
   }
   #topics {
     .feedback-box {
-      padding-top: 12px;
+      padding-top: 9px;
       height: 41px;
       float: right !important;
+      clear: both;
     }
     .text-footer-r {
       text-align: center;
@@ -137,6 +134,7 @@ margin-left: 5%;
     .row {
       margin-left: 10px;
     }
+
   }
   #splash-loader {
     .loader_box {
@@ -145,17 +143,18 @@ margin-left: 5%;
     }
   }
 }
-
 /* Custom, iPhone Retina */
+
 @media only screen and (max-width: 320px) {
   .loader-margin {
     margin-left: 33% !important;
   }
   #topics {
     .feedback-box {
-      padding-top: 12px;
+      padding-top: 9px;
       height: 41px;
       float: right !important;
+      clear: both;
     }
     .text-footer-r {
       text-align: center;
@@ -175,12 +174,9 @@ margin-left: 5%;
   }
 }
 
-@media only screen 
-and (max-width: 1450px)
-and (min-width: 1200px) {
+@media only screen and (max-width: 1450px) and (min-width: 1200px) {
   .timing-box {
     padding: 7px 14px;
-
     .difficulty-text {
       font-size: 20px;
     }

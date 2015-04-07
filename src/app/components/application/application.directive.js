@@ -7,7 +7,6 @@
     .directive('fadingText', fadingText)
     .directive('welcome', welcome)
     .directive('grockitLink', grockitLink)
-    .directive('chardinTour', chardinTour)
     .directive('userProgress', userProgress)
     .directive('scorePrediction', scorePrediction)
     .directive('spinner', spinner)
@@ -91,24 +90,6 @@
       }
     };
     return directive;
-  }
-
-  function chardinTour() {
-    var directive = {
-      link: link,
-      scope: {
-        text: '@overlayText',
-        position: '@overlayPosition'
-      }
-
-    };
-    return directive;
-
-    function link(scope, elem, attrs) {
-      angular.element('#' + attrs.id).attr('data-intro', scope.text);
-      angular.element('#' + attrs.id).attr('data-position', scope.position);
-
-    }
   }
 
   function userProgress() {
