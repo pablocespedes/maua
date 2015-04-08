@@ -15,7 +15,7 @@
     /* jshint validthis: true */
     var vmPr = this,
       practiceObserver = null;
-    vmPr.time =0;
+    vmPr.time = 0;
     vmPr.isbuttonClicked = false;
     vmPr.maxOpts = [];
     vmPr.explanationInfo = {};
@@ -33,10 +33,9 @@
     vmPr.nextAction = nextAction;
     vmPr.revealExplanation = revealExplanation;
 
-     vmPr.timeObj = questionTimingService.getTime();
-     if (angular.isDefined(vmPr.timeObj) && vmPr.timeObj !== null) {
-       vmPr.time = (vmPr.timeObj.minutes) * 60;
-     }
+    if (isUserSettingAvailable()) {
+      vmPr.time = (vmPr.timeObj.minutes) * 60;
+    }
     /*Takes care to unregister the group once the user leaves the controller*/
     $scope.$on("$destroy", function() {
       currentProduct.unregisterGroup(practiceObserver);
@@ -53,6 +52,14 @@
         }
       });
     };
+
+    function isUserSettingAvailable() {
+      vmPr.timeObj = questionTimingService.getTime();
+      if (angular.isDefined(vmPr.timeObj) && vmPr.timeObj !== null) {
+        return true;
+      }
+      return false;
+    }
 
     function nextAction() {
       timerObject.pauseTimers();
@@ -101,29 +108,28 @@
 
       },
       initQuestionTimer: function() {
-        if (timerObject.shouldEnableQuestionTime())
-          vmPr.questionTimer = Timer.create();
+        vmPr.questionTimer = Timer.create();
       },
       resetQuestionTimer: function() {
-       if (timerObject.shouldEnableQuestionTime()) {
-          vmPr.questionTimer.reset();
-          vmPr.timeObj = questionTimingService.getTime();
-          vmPr.time = (vmPr.timeObj.minutes) * 60;
-          vmPr.questionTimer.start(vmPr.time);
 
+        vmPr.questionTimer.reset();
+        if (isUserSettingAvailable()) {
+          vmPr.time = (vmPr.timeObj.minutes) * 60;
+        }
+        vmPr.questionTimer.start(vmPr.time);
+        if (timerObject.shouldEnableQuestionTime()) {
           vmPr.questionTimer.interval.then(null, null, function(val) {
             if (vmPr.time === val + 1) {
-
               bootbox.alert({
                 message: "Time's Up, review question solution!",
                 callback: function() {
-                    revealExplanation();
+                  revealExplanation();
                 },
                 className: "bootbox-sm"
               });
             }
           });
-       }
+        }
 
         timerObject.restartPracticeTimer();
       },
@@ -132,8 +138,7 @@
       },
       pauseTimers: function() {
         vmPr.practiceTimer.pause();
-       if (timerObject.shouldEnableQuestionTime())
-          vmPr.questionTimer.pause();
+        vmPr.questionTimer.pause();
       },
       shouldEnableQuestionTime: function() {
         return (vmPr.time > 0);
