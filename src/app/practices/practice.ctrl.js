@@ -15,7 +15,7 @@
     /* jshint validthis: true */
     var vmPr = this,
       practiceObserver = null;
-    vmPr.time = (questionTimingService.getTime().minutes) * 60;
+    vmPr.time =0;
     vmPr.isbuttonClicked = false;
     vmPr.maxOpts = [];
     vmPr.explanationInfo = {};
@@ -32,6 +32,11 @@
     vmPr.isDisabled = false;
     vmPr.nextAction = nextAction;
     vmPr.revealExplanation = revealExplanation;
+
+     vmPr.timeObj = questionTimingService.getTime();
+     if (angular.isDefined(vmPr.timeObj) && vmPr.timeObj !== null) {
+       vmPr.time = (vmPr.timeObj.minutes) * 60;
+     }
     /*Takes care to unregister the group once the user leaves the controller*/
     $scope.$on("$destroy", function() {
       currentProduct.unregisterGroup(practiceObserver);
@@ -96,13 +101,14 @@
 
       },
       initQuestionTimer: function() {
-        if (timerObject.shouldEnableQuestionTime)
+        if (timerObject.shouldEnableQuestionTime())
           vmPr.questionTimer = Timer.create();
       },
       resetQuestionTimer: function() {
-       if (timerObject.shouldEnableQuestionTime) {
+       if (timerObject.shouldEnableQuestionTime()) {
           vmPr.questionTimer.reset();
-          vmPr.time = (questionTimingService.getTime().minutes) * 60;
+          vmPr.timeObj = questionTimingService.getTime();
+          vmPr.time = (vmPr.timeObj.minutes) * 60;
           vmPr.questionTimer.start(vmPr.time);
 
           vmPr.questionTimer.interval.then(null, null, function(val) {
@@ -126,7 +132,7 @@
       },
       pauseTimers: function() {
         vmPr.practiceTimer.pause();
-       if (timerObject.shouldEnableQuestionTime)
+       if (timerObject.shouldEnableQuestionTime())
           vmPr.questionTimer.pause();
       },
       shouldEnableQuestionTime: function() {

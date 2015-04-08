@@ -162,7 +162,7 @@
       slider.on('slideStop', function(newValue) {
 
         var time = questionTimingService.getTime();
-        if (angular.isDefined(time)) {
+        if (angular.isDefined(time) && time !== null) {
           scope.timerSetting.minutes = time.minutes;
         }
         scope.timerSetting.minutes = newValue;
