@@ -39,6 +39,8 @@
     /*Takes care to unregister the group once the user leaves the controller*/
     $scope.$on("$destroy", function() {
       currentProduct.unregisterGroup(practiceObserver);
+      Timer.destroy(vmPr.practiceTimer);
+      Timer.destroy(vmPr.questionTimer);
     });
 
     init();
