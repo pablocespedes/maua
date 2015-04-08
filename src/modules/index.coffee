@@ -3,30 +3,23 @@
 ###
 browserify-shim dependencies (can be edited in package.json)
 ###
-
-global.jQuery = require('jquery')
-global.$ = require('jquery')## client-side code dependency
+global.$ = global.jQuery = require("jquery")
 
 require 'angular'
-global._ = require "lodash"
+require 'angular-animate'
+require 'angular-aria'
+require 'angular-material'
 require 'angular-ui-router'
+require 'angular-sanitize'
 require 'angular-messages'
+global._ = require "lodash"
 require 'satellizer'
 require 'restangular'
-require 'bootstrap-sass'
-require 'select2'
-require 'pixel-admin'
-require 'youtube-modal'
-##require 'masonry-package'
-##require 'image-loaded'
-#require 'masonry'
-#require 'chardinjs'
+require 'angular-resource'
 ###
 app entry point
 ###
 require './app'
-
 angular.element(document).ready ->
   angular.bootstrap document, ["grockitApp"]
   return
-#ng-app='grockitApp'

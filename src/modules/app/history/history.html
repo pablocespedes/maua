@@ -1,0 +1,10 @@
+<div class="history-container">
+  <h1 class="history-title">Question History</h1>
+  <br>
+  <div id="fixed" when-scrolled="vmHist.getQuestions()" set-height>
+    <div ng-repeat="questionPerDay in ::vmHist.questionsPerDay" history-list identifier="{{questionPerDay.day}}" round-sessions="questionPerDay.roundSessions" group-id="vmHist.groupId" on-collapse="vmHist.onCollapse()" is-loading="vmHist.isLastEntryLoading(questionPerDay.day)"></div>
+  </div>
+  <div class="row" ng-if="vmHist.loading">
+      <div  class="center-spinner" spinner ></div>
+    </div>
+</div>

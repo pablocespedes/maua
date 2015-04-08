@@ -3,11 +3,11 @@
 var gulp = require('gulp');
 var gulpif = require('gulp-if');
 var replace = require('gulp-replace');
-var jade = require('gulp-jade');
+var minifyHTML = require('gulp-minify-html');
 
 module.exports = gulp.task('index', function () {
   return gulp.src(config.paths.src.index)
-    .pipe(gulpif(release, jade(), jade({pretty: true})))
+    .pipe(gulpif(release, minifyHTML({comments: true, empty: true, spare: true, quotes: true})))
     .pipe(gulpif(release,
       replace('<!--styles-->', '<link href="' + config.filenames.release.styles + '" rel="stylesheet">'),
       replace('<!--styles-->', '<link href="' + config.filenames.build.styles + '" rel="stylesheet">')

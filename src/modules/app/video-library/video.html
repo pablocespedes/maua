@@ -1,0 +1,132 @@
+<md-toolbar layout margin>
+  <div class="container_ui__heading md-toolbar-tools">
+    <div layout="row" flex="" class="fill-height">
+      <div class="md-toolbar-item">
+        <span> <i class="md md-menu md-2x menu_icon" ng-click="vmVideo.close()" hide-gt-md></i></span>
+      </div>
+      <div class="md-toolbar-item  menu">
+        <md-select style="color:black;" placeholder="Filter By" ng-model="someVal">
+          <md-option value="1">One</md-option>
+          <md-option value="2">Two</md-option>
+        </md-select>
+      </div>
+      <div class="md-toolbar-item">
+        <md-select placeholder="Order By" ng-model="someVal">
+          <md-option value="1">One</md-option>
+          <md-option value="2">Two</md-option>
+        </md-select>
+      </div>
+    </div>
+  </div>
+</md-toolbar>
+
+<div layout="column"  >
+  <section layout="row" flex>
+    <md-content flex class="ui-view-container">
+      <div layout="column" layout-fill layout-align="top center">
+        <div class="title">
+          <div class="title_inner">
+            <h1>
+               Start to Learn
+          </h1>
+            <h2>
+            You can select any video from the list!
+           </h2>
+          </div>
+        </div>
+        <div>
+          <md-button ng-click="vmVideo.toggleLeft()" class="md-primary float-right" hide-gt-md>
+            Toggle Video List
+          </md-button>
+        </div>
+      </div>
+      <div flex></div>
+    </md-content>
+    <md-sidenav id="video-toolbar" class="md-sidenav-right md-whiteframe-z2" md-component-id="right" md-is-locked-open="$mdMedia('gt-md')">
+      <md-content>
+        <md-list>
+          <md-item ng-repeat="video in vmVideo.videos">
+            <md-item-content>
+              <div class="">
+                <md-button aria-label="Play" class="md-accent md-fab">
+                  <md-icon class="md md-play-circle-outline"></md-icon></md-button>
+              </div>
+              <div class="md-tile-content">
+                <h3>{{video.name}}</h3>
+                <h4>{{video.description}}</h4>
+              </div>
+            </md-item-content>
+          </md-item>
+        </md-list>
+      </md-content>
+    </md-sidenav>
+  </section>
+</div>
+<!-- <div class="title">
+  <div class="title_inner">
+    <h1>
+      Start to Learn
+    </h1>
+    <h2>
+      You can select any video from the list!
+    </h2>
+  </div>
+</div> -->
+<!-- <div class="container">
+  <div class="container_ui">
+    <md-toolbar layout="row">
+      <div class="md-toolbar-tools container_ui__heading">
+        <i class="fa fa-bars pointer" ng-click="vmVideo.close()" hide-gt-lg></i> GRE Video Library (58 videos)
+      </div>
+    </md-toolbar>
+
+    <md-content>
+    <div ng-repeat="video in vmVideo.videos">
+      <input id="{{$index}}" type="checkbox"></input>
+    <label for="{{$index}}" href="#move">
+      <div class="container_ui__item">
+        <div class="face">
+        <md-button class="md-accent md-fab"> <i class="fa fa-play"></i></md-button>
+
+          <div class="color_bar {{video.css}}">
+            <p>Now playing</p>
+            <span> Play </span>
+          </div>
+        </div>
+        <h2 ng-bind="video.name">
+        </h2>
+        <h4 ng-bind="video.description"> </h4>
+      </div>
+      <div class="container_ui__expand" id="close">
+        <div class="heading">
+          <div class="heading_head"></div>
+          <label for="{{$index}}">
+            x
+          </label>
+        </div>
+        <div class="body">
+          <div class="user">
+            <div class="face">
+            <i class="fa fa-play"></i>
+            </div>
+            <div class="details">
+              <h2>aspca</h2>
+              <h3>subj: thanks you are amazing</h3>
+            </div>
+          </div>
+          <div class="content">
+            <p><b>Email text</b></br>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et commodo ipsum, ut rhoncus velit. Nullam placerat, ipsum sed pretium varius, magna metus ullamcorper magna, at porta quam libero ut est. Mauris cursus in magna in fermentum. Integer mollis convallis quam, vel dignissim ligula rutrum in.
+              <br/>
+              <br/>Pellentesque ut purus porta, gravida tellus et, consectetur massa. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Pellentesque egestas convallis urna. Aenean commodo leo eget felis rhoncus blandit. Nam sed odio sed augue lobortis rutrum non vel est..</p>
+            <span>Reply:</span>
+            <textarea></textarea>
+          </div>
+        </div>
+      </div>
+    </label>
+    </div>
+    </md-content>
+
+
+  </div>
+</div> -->

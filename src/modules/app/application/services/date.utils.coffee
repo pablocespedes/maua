@@ -1,22 +1,22 @@
-module.exports = ->
+dateUtils = () ->
   new class DateUtils
     constructor: () ->
-    secondsBetweenDates = (date1, date2) ->
+    secondsBetweenDates : (date1, date2) ->
       date1 = new Date(date1)
       date2 = new Date(date2)
       Math.abs(date2.getTime() - date1.getTime()) / 1000
 
-    getStandardDate = (date) ->
+    getStandardDate : (date) ->
       day = date.getDate()
       month = date.getMonth()
-      getMonthName(month) + ' ' + day
+      @getMonthName(month) + ' ' + day
 
-    formatDate = (date) ->
+    formatDate : (date) ->
       initialDate = @getStandardDate(date)
       year = date.getYear()
       initialDate + ' ' + year
 
-    getMonthName = (index) ->
+    getMonthName : (index) ->
       monthNames = [
         'January'
         'February'
@@ -32,4 +32,5 @@ module.exports = ->
         'December'
       ]
       monthNames[index]
-            
+
+module.exports = dateUtils

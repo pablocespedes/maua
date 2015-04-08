@@ -1,25 +1,37 @@
-class Resource
-  constructor: (@Restangular,@url) ->
+resource = (Restangular)->
+  class Resource
+    constructor: () ->
 
-  restBase: () ->
-    @Restangular.all(@url)
+    restBase: (url) ->
+      Restangular.all(url)
 
-  singleBase: (id) ->
-    @Restangular.one(@url, id)
+    singleBase: (url) ->
+      Restangular.one(url)
 
-  index: () ->
-    @restBase(@url).getList()
+    singleBaseId: (url,id) ->
+      Restangular.one(url,id)
 
-  show: (id) ->
-    @singleBase(@url,id).get()
+    index: (url) ->
+      @restBase(url).getList()
 
-  save: (data,subElm)->
-    @singleBase(@url).post subElm, data
+    show: (url,id) ->
+      if (id isnt null)
+        @singleBaseId(url,id).get()
+      else
+        @singleBase(url).get()
 
-  update: ()->
-    @singleBase(@url)
+    create: (url,data,subElm)->
+      @singleBase(url).post subElm, data
 
-  destroy: (id) ->
-    @singleBase(@url,id).remove()
+    update: (url)->
+      @singleBase(url)
 
-module.exports = Resource
+    destroy: (id) ->
+      @singleBase(url,id).remove()
+
+    customGet:(url,id,optionals)->
+      console.log url,id,optionals
+      @singleBaseId(url,id).customGET '', optionals
+
+resource.$inject = ['Restangular']
+module.exports = resource

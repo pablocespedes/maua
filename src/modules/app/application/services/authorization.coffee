@@ -15,9 +15,13 @@ authorization = ($window)->
     setToken: (token) ->
       @cachedToken = token
       @save @userToken, token
+    getCookie: (key) ->
+      keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)')
+      if keyValue then keyValue[2] else null
 
     getToken: ->
-      @cachedToken = @get(@userToken) unless @cachedToken
+      @cachedToken = decodeURIComponent @getCookie('authentication_token')
+      #@get(@userToken) unless @cachedToken
       @cachedToken
     removeToken: ->
       @cachedToken = null

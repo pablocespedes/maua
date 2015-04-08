@@ -1,0 +1,47 @@
+<div id="page-signup-bg">
+  <div class="overlay"><img src="assets/images/signin-bg-1.jpg" alt=""/></div>
+  <div class="signup-container">
+    <div class="signup-header"><a href="index.html" class="logo"><img src="assets/images/header-logo-beta.png" alt="" style="margin-top: -5px;"/></a>
+      <div class="slogan">Sign up for Grockit and start studying.</div>
+    </div>
+    <div class="signup-form">
+      <form id="signup-form_id" name="register" novalidate="" ng-submit="vmreg.submit()">
+        <div class="signup-text"><span>Create an account</span></div>
+        <div class="form-group w-icon">
+          <input type="text" name="firstName" ng-model="vmreg.firstName" placeholder="First Name" required="" class="form-control input-lg"/>
+          <div ng-messages="register.firstName.$error" ng-if="register.firstName.$dirty" ng-messages-include="form-messages" class="help-block"></div><span class="fa fa-info signup-form-icon"></span>
+        </div>
+        <div class="form-group w-icon">
+          <input type="text" name="lastName" ng-model="vmreg.lastName" placeholder="Last Name" required="" class="form-control input-lg"/>
+          <div ng-messages="register.lastName.$error" ng-if="register.lastName.$dirty" ng-messages-include="form-messages" class="help-block"></div><span class="fa fa-info signup-form-icon"></span>
+        </div>
+        <div class="form-group w-icon">
+          <input name="email" ng-model="vmreg.email" type="email" placeholder="E-mail" required="" class="form-control input-lg"/><span class="fa fa-envelope signup-form-icon"></span>
+          <div ng-messages="register.email.$error" ng-if="register.email.$dirty" ng-messages-include="form-messages" class="help-block"></div>
+        </div>
+        <div class="form-group w-icon">
+          <input name="password" ng-model="vmreg.password" type="password" placeholder="Password" required="" class="form-control input-lg"/><span class="fa fa-lock signup-form-icon"></span>
+          <div ng-if="register.password.$dirty" ng-messages="register.password.$error" ng-messages-include="form-messages" class="help-block"></div>
+        </div>
+        <div class="form-group w-icon">
+          <input name="password_confirm" ng-model="vmreg.password_confirm" type="password" placeholder="Confirm Password" match-validator="vmreg.password" required="" class="form-control input-lg"/><span class="fa fa-lock signup-form-icon"></span>
+          <div ng-if="register.password_confirm.$dirty" ng-messages="register.password_confirm.$error" ng-messages-include="form-messages" class="help-block">
+            <div ng-message="match">This password does not match the password entered before</div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="signup-btn bg-primary">Submit</button>
+        </div>
+      </form>
+      <div class="signup-with"><a href="index.html" ng-if="register.password.$dirty" style="background:#4f6faa;background:rgba(79, 111, 170, .8);" class="signup-with-btn">Sign Up with<span>Facebook</span></a></div>
+    </div>
+  </div>
+  <div class="have-account">Already have an account?<a ui-sref="signin">Sign In</a></div>
+</div>
+<script id="form-messages" type="text/ng-template">
+  <div ng-message = "required"> This field cannot be blank </div>
+    <div ng-message="email">You have entered an incorrect email value</div>
+    <div ng-message = "password-characters">
+    Your password must consist of alphabetical or numeric characters.
+    It must also contain at least one special character, a number as well as an uppercase letter. </div>
+</script>

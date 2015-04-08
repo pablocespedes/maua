@@ -1,8 +1,19 @@
 
-utilities = ($rootScope, $http, $location, $stateParams, $q, $window) ->
+utilities = ($state,$rootScope, $http, $location, $q, $window, urlsCons) ->
   new class Utilities
     constructor: () ->
       @currentTrack = {}
+
+    _grockitHostEvaluation = (isNewGrockit) ->
+      if isNewGrockit
+        if location.host is 'localhost:8080'
+        then urlsCons.oldGrockit else urlsCons.liveGrockit
+      else
+        if location.host is 'localhost:8080'
+        then urlsCons.stagingGrockit
+        else if location.host is urlsCons.ww2Grockit2
+        then urlsCons.oldGrockit else location.origin
+
     getResourceObject : (resourceObject) ->
       deferred = $q.defer()
       videoObject = {}
@@ -45,12 +56,13 @@ utilities = ($rootScope, $http, $location, $stateParams, $q, $window) ->
       $window.location = url
 
     getCurrentParam : (key) ->
-      if angular.isDefined($stateParams.current)
-      then $stateParams.current.pathParams[key] else undefined
+      console.log $state
+      if angular.isDefined($state.params)
+      then $state.params[key] else undefined
 
     setCurrentParam : (key, param) ->
-      $stateParams.current.pathParams[key] = null
-      $stateParams.current.pathParams[key] = param
+      $state.params[key] = null
+      $state.params[key] = param
       return
 
     getYoutubeVideosId: (url) ->
@@ -65,6 +77,7 @@ utilities = ($rootScope, $http, $location, $stateParams, $q, $window) ->
       id
 
     setGroupTitle : (title) ->
+      console.log title
       if $rootScope.groupTitle == null or
           $rootScope.groupTitle == '' or $rootScope.groupTitle != title
         $rootScope.groupTitle = title
@@ -73,6 +86,22 @@ utilities = ($rootScope, $http, $location, $stateParams, $q, $window) ->
     getGroupTitle: ->
       $rootScope.groupTitle
 
-utilities.$inject=['$rootScope', '$http', '$location',
- '$stateParams', '$q', '$window']
+    getIndexArray : (arr, key, val) ->
+      i = 0
+      while i < arr.length
+        if arr[i][key] == val
+          return i
+        i++
+      -1
+    newGrockit : ->
+      _grockitHostEvaluation(true)
+
+    originalGrockit : ->
+      _grockitHostEvaluation(false)
+
+    htmlToPlaintext :(text) ->
+      String(text).replace /<[^>]+>/gm, ''
+
+utilities.$inject=['$state','$rootScope', '$http', '$location','$q',
+'$window','urlsCons']
 module.exports =utilities

@@ -1,29 +1,26 @@
 'use strict'
-class MultipleChoice
-  constructor: () ->
-  ## Constructor stuff
-  restrict: 'AE'
-  replace: true
-  templateUrl: 'templates/multipleChoice.tpl.html',
-  scope:
-    items: '=items'
-    showExplanation: '='
-    isConfirmClicked: '='
-  link: (scope, element, attr) ->
-    
-    scope.selectAnswer = (index) ->
-      if !scope.isConfirmClicked
-        answers = scope.items[index]
-        nexAction = $('#nextAction')
+multipleChoice = (questionTypeService)->
+  new class MultipleChoice
+    constructor: () ->
+    ## Constructor stuff
+    restrict: 'AE'
+    replace: true
+    templateUrl: 'app/questions/directives/templates/multipleChoice.tpl.html',
+    scope:
+      items: '=items'
+      showExplanation: '='
+      isConfirmClicked: '='
+    link: (scope, element, attrs) ->
+      scope.showforCurrentGroup = true
 
-        seeAnswer = $('#skipAction')
-        if !answers.selected
-          answers.selected = true
-          nexAction.addClass 'btn-primary'
-          seeAnswer.addClass 'hide'
-        else
-          answers.selected = false
-          if !_.find(scope.items, 'selected': true)
-            nexAction.removeClass 'btn-primary'
-            seeAnswer.removeClass 'hide'
-      return
+      scope.crossOutChoice = (index, event) ->
+        questionTypeService.crossOutChoice scope.items, index, event
+        return
+
+      scope.selectAnswer = (index) ->
+        questionTypeService.selectMultipleChoice scope.isConfirmClicked,
+        scope.items, index
+        return
+
+multipleChoice.$inject = ['questionTypeService']
+module.exports = multipleChoice

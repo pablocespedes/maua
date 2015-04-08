@@ -1,9 +1,11 @@
 'use strict'
-### @ngInject ###
+
 class DashboardController
   # Services injected into the controller constructor
-  constructor: ($window,$scope,$state,$auth,@product,@authorization) ->
+  constructor: ($window,$scope,$state,$auth,@product,@authorization,
+    @dashboardService, @utilities,@membership) ->
     @scope = $scope
+    @state=$state
     dashObserver = null
     showingTour = false
     showTour = false
@@ -11,96 +13,86 @@ class DashboardController
     isChallengeAvailable = false
     loadingMessage = 'Loading...'
     historyVisible = false
-    $state.go('login') unless $auth.isAuthenticated
-
+    #$state.go('login') unless $auth.isAuthenticated
+    @init()
     @scope.$on '$destroy', ->
-      @product.unregisterGroup dashObserver
+      #@product.unregisterGroup @dashObserver
 
   init : ->
     if @authorization.userExist()
+      userInfo = @authorization.getUser()
       user_id = userInfo.userId
-      dashObserver = @product.observeGroupId().register((groupId) ->
-        if activeGroupId isnt groupId
-          activeGroupId = groupId
-          @_getDashboard activeGroupId
-          showBuyNow = membershipService.showBuyButton()
-          upgradePromptMessage = membershipService.upgradePromptMessage()
-          canPractice = membershipService.canPractice()
-          enableScore = activeGroupId is 'gmat' or activeGroupId is 'act' or
-            activeGroupId is 'sat'
+      dashObserver = @product.observeGroupId().register((groupId) =>
+        if @activeGroupId isnt groupId
+          @activeGroupId = groupId
+          @_getDashboard @activeGroupId
+          @showBuyNow = @membership.showBuyButton()
+          @upgradePromptMessage = @membership.upgradePromptMessage()
+          @canPractice = @membership.canPractice()
+          @enableScore = @activeGroupId is 'gmat' or @activeGroupId is 'act' or
+            @activeGroupId is 'sat'
           historyVisible = false
-          baseUrl = utilities.originalGrockit(false).url
-          paymentPage = baseUrl + '/' + activeGroupId + '/subscriptions/new'
+          baseUrl = @utilities.originalGrockit(false)
+          @paymentPage = baseUrl + '/' + @activeGroupId + '/subscriptions/new'
       )
 
-  startCardinTour : ->
-    angular.element(document).ready ->
-      showingTour = true
-      angular.element('#SnapABug_Button').attr 'style', 'display:none'
-      angular.element('body').chardinJs 'start'
-
-  startPractice : (subject, trackId) ->
-    if vmDash.canPractice
+  startPractice : (subject, trackId) =>
+    if @canPractice
       if angular.isDefined(subject)
-        if activeGroupId is 'gre'
-          utilities.setActiveTrack subject, trackId
-          utilities.internalRedirect '/' + activeGroupId + '/custom-practice/'
+        if @activeGroupId is 'gre'
+          @utilities.setActiveTrack subject, trackId
+          @state.go 'custom-practice',
+            subject: @activeGroupId
+        #@utilities.internalRedirect '/' + @activeGroupId + '/custom-practice/'
         else
-          url = '/' + activeGroupId + '/' + trackId + '/play'
-          utilities.redirect url
-
-  angular.element(document).ready ->
-    angular.element('body').on 'chardinJs:stop', ->
-      $scope.$apply ->
-        angular.element('#SnapABug_Button').attr 'style', 'display:inline-block'
-        showingTour = false
+          url = '/' + @activeGroupId + '/' + trackId + '/play'
+          @utilities.redirect url
 
   _getDashboard : (groupId) ->
-    dashboard.setDashboardData(groupId).then (result) ->
-      hasQuestionsAnswered = dashboard.hasQuestionsAnswered()
+    @dashboardService.setDashboardData(groupId).then (result) =>
+      hasQuestionsAnswered = @dashboardService.hasQuestionsAnswered()
       if not hasQuestionsAnswered and activeGroupId isnt
        'gre' and not detectUtils.isMobile()
         showTour = true
 
       if not hasQuestionsAnswered and
        activeGroupId is 'gre'
-        base = utilities.newGrockit().url
-        $window.location.href = base + '/#/' + activeGroupId +
+        base = @utilities.newGrockit().url
+        $window.location.href = base + '/#/' + @activeGroupId +
          '/custom-practice/'
       else
-        if enableScore
-          @_fetchScorePrediction()
-          @_fetchTracks()
-          @_getHistoryInformation()
-          @_getChallenge()
-      return
-    return
+        #if @enableScore
+         # @_fetchScorePrediction()
+        @_fetchTracks()
+        # @_getHistoryInformation()
+        @_getChallenge()
 
   _fetchTracks : ->
-    smartPractice = dashboard.getSmartPractice()
-    tracks = smartPractice.items
-    loading = false
+    smartPractice = @dashboardService.getSmartPractice()
+    console.log smartPractice, 'test'
+    @tracks = smartPractice.items
+    @loading = false
 
   _fetchScorePrediction : ->
-    scoreResponse = dashboard.getScorePrediction()
+    scoreResponse = @dashboardService.getScorePrediction()
     if angular.isDefined(scoreResponse)
       setItUpScorePrediction.setScorePrediction scoreResponse
-      score = scoreResponse
+      @score = scoreResponse
 
   _getHistoryInformation : ->
-    historyResponse = dashboard.getProgress()
+    historyResponse = @dashboardService.getProgress()
     if angular.isDefined(historyResponse)
-      membershipService.membershipValidation activeGroupId, historyResponse.all
+      membership.membershipValidation activeGroupId, historyResponse.all
     setItUpUserProgress.setUserProgress historyResponse
 
   _getChallenge : ->
-    challenge = dashboard.getChallenge()
+    challenge = @dashboardService.getChallenge()
     if not _.isEmpty(challenge) and
      challenge.items.length > 0
       isChallengeAvailable = true
       challengesGames = challenge.items
 
 DashboardController.$inject = ['$window','$scope','$state','$auth','product',
-'authorization']
+'authorization','dashboardService','utilities','membership']
 
 module.exports = DashboardController

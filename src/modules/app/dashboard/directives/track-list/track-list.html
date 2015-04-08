@@ -1,34 +1,23 @@
-<a ng-repeat="track in tracks" href="javascript:void(0)" class="list-group-item">
-  <div class="row track-list-padding-hr track-list-padding">
-    <span class="white track-list-lg  text-lg cursor-a" ng-if="$index===0" id="tracks" chardin-tour overlay-text="Practice thousands of high quality, realistic questions by clicking Start." overlay-position="bottom"  >
-      <button class="btn-lg btn btn-labeled btn-primary" ng-click="startPractice(track,track.id)" ng-disabled="!canPractice"
-      >Start</button>
-      &nbsp;
-      <strong>
-        <span class="track-head text-slim" ng-bind="track.name" ng-click="startPractice(track,track.id)" ></span>&nbsp;
-      </strong>
-    </span>
-    <span class="text-lg cursor-a" ng-if="$index!==0">
-      <!-- -->
-      <button class="btn-lg btn btn-labeled btn-primary" ng-click="startPractice(track,track.id)" ng-disabled="!canPractice"
-      >Start</button>
-      &nbsp;
-      <strong>
-        <span class="track-head text-slim" ng-bind="track.name" ng-click="startPractice(track,track.id)" ></span>
-      </strong>
-    </span>
-    <div class=" text-center pull-right" ng-if="isVisible">
-      <div class="" ng-show="track.hasScore">
-        <h4 class="note-title score-prediction-v"><span class="text-primary" ng-bind="track.getScore"></span><br>
-          <span class="text-xs float-right valign-bottom">Your Score Prediction</span>
-        </h4>
+<div layout-sm="column" layout="row" layout-margin layout-fill layout-padding layout-wrap>
+  <div flex-lg="33" flex-md="50" flex-sm="100" flex-gt-md="33" flex-gt-lg="25" ng-repeat="track in tracks">
+    <md-card class="card">
+      <div class="card-img-top">
+        <img src="{{imgs[$index]}}">
       </div>
-      <div class="float-right" ng-if="shouldShowOverlay(track)"  ng-hide="track.hasScore" id="geScore" data-intro="Click here to take a short set of questions and get your score prediction for each section." data-position="bottom">
-        <button class="get-score-prediction btn-lg btn btn-labeled btn-success" ng-disabled="!canPractice" ng-click="getYourScorePredictionUrl(track)">Get your Score Prediction</button>
+      <md-card-content>
+        <h3 ng-bind="track.name"></h3>
+        <p>
+          Time management is crucial for great scores on the GRE Test,…
+        </p>
+        <div layout="row" flex="" class="fill-height card-actions" >
+        <md-button class="md-hue-2 md-primary" ng-click="startPractice(track,track.id)" >Practice</md-button>
+        <md-button class="md-hue-2 md-primary">Learn</md-button>
+        <span flex="4"></span>
+        <button class="md-button md-hue-2 md-default-theme" ng-click="showAdvanced($event)">
+        <md-icon class=" md-primary md-hue-2" md-svg-src="./assets/icons/action/svg/design/ic_settings_24px.svg"></md-icon>
+        </button>
       </div>
-      <div class="float-right" ng-if="!shouldShowOverlay(track)" ng-hide="track.hasScore">
-        <button class="get-score-prediction btn-lg btn btn-labeled btn-success" ng-disabled="!canPractice" ng-click="getYourScorePredictionUrl(track)">Get your Score Prediction</button>
-      </div>
-    </div>
+      </md-card-content>
+    </md-card>
   </div>
-</a>
+</div>

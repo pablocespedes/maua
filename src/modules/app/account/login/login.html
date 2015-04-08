@@ -1,0 +1,51 @@
+<div id="page-signin-bg">
+  <div class="overlay"><img src="assets/images/signin-bg-1.jpg" alt=""/></div>
+  <div class="signin-container">
+    <div class="signin-info"><a href="index.html" class="logo"><img src="assets/images/header-logo-beta.png" alt="" style="margin-top: -5px;"/></a>
+      <div class="slogan">Sign in to Grockit to start studying..</div>
+      <ul>
+        <li><i class="fa fa-sitemap signin-icon"></i>Track Your Skill Data</li>
+        <li><i class="fa fa-file-text-o signin-icon"></i> Target Your Weaknesses</li>
+        <li><i class="fa fa-outdent signin-icon"></i> Study with Friends</li>
+        <li><i class="fa fa-heart signin-icon"></i> Shorter Study Time</li>
+      </ul>
+    </div>
+    <div class="signin-form">
+      <form id="signin-form_id" name="login" novalidate="" ng-submit="vmlog.submit()">
+        <div class="signin-text"><span>Sign In to your account</span></div>
+        <div class="form-group w-icon">
+          <input id="username_id" type="text" name="email" ng-model="vmlog.email" placeholder="Username or email" required="required" class="form-control input-lg"/><span class="fa fa-user signin-form-icon"></span>
+          <div ng-messages="login.email.$error" ng-if="login.email.$dirty" ng-messages-include="form-messages" class="help-block"></div>
+        </div>
+        <div class="form-group w-icon">
+          <input id="password_id" type="password" ng-model="vmlog.password" name="password" placeholder="Password" required="required" class="form-control input-lg"/><span class="fa fa-lock signin-form-icon"></span>
+          <div ng-if="login.password.$dirty" ng-messages="login.password.$error" ng-messages-include="form-messages" class="help-block"></div>
+        </div>
+        <div class="form-actions">
+          <input type="submit" value="SIGN IN" ng-disabled="login.$invalid" class="signin-btn bg-primary"/><a id="forgot-password-link" href="#" class="forgot-password">Forgot your password?</a>
+        </div>
+      </form>
+      <div class="signin-with"><a ng-click="vmlog.authenticate('facebook')" style="background:#4f6faa;background:rgba(79, 111, 170, .8);" class="signin-with-btn">Sign In with<span>Facebook</span></a><a ng-click="vmlog.authenticate('google')" class="btn bg-dark-gray signin-with-btn">Sign In with<span>Google</span></a></div>
+      <div id="password-reset-form" class="password-reset-form">
+        <div class="header">
+          <div class="signin-text"><span>Password reset</span>
+            <div class="close">&times;</div>
+          </div>
+        </div>
+        <form id="password-reset-form_id" action="index.html">
+          <div class="form-group w-icon">
+            <input id="p_email_id" type="text" name="password_reset_email" placeholder="Enter your email" class="form-control input-lg"/><span class="fa fa-envelope signin-form-icon"></span>
+          </div>
+          <div class="form-actions">
+            <input type="submit" value="SEND PASSWORD RESET LINK" class="signin-btn bg-primary"/>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="not-a-member">Not a member?<a ui-sref="register">Sign up now</a></div>
+</div>
+<script id="form-messages" type="text/ng-template">
+  <div ng-message = "required"> This field cannot be blank </div>
+  <div ng-message="email">You have entered an incorrect email value</div>
+</script>

@@ -1,5 +1,5 @@
 'use strict'
-### @ngInject ###
+
 class LoginController
   # Services injected into the controller constructor
   constructor: ($rootScope,$state,$auth,@alert) ->

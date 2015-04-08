@@ -1,0 +1,116 @@
+.select-control-custom {
+  display: block;
+  width: 100%;
+  height: 53px;
+  padding: 6px 12px;
+  font-size: 16px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #d6d6d6;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.gt-ie8 input.px+.lbl:after,
+.gt-ie8 input.px+.lbl:before {
+  margin: 8px 3px -3px -20px!important;
+}
+
+.buy-banner-word {
+  color: #E7DF90;
+}
+
+.pie-chart-label.xlText {
+  font-weight: 600;
+  font-size: 46px;
+  margin-top: -38px;
+}
+
+.search-input {
+  margin-top: 20px;
+}
+
+.chart-range-text {
+  display: block;
+  color: gray;
+}
+
+.get-score-prediction {
+  margin-top: 4px;
+}
+
+.dashboard-title {
+  padding-top: 5px !important;
+}
+
+.btn-customize-practice {
+  margin-right: -11px;
+  margin-top: -4px;
+}
+
+.dash-widget {
+  height: 172px;
+}
+
+.grockit-welcome {
+  bottom: 4%;
+  left: 27%;
+  z-index: 9999999;
+  position: absolute;
+  text-align: center;
+}
+
+#dashboard {
+  .b-huge {
+    bottom: 78px;
+  }
+  .card {
+    background-color: #FFFFFF;
+    overflow: hidden;
+
+    & h3, p{
+      margin:5px;
+    }
+  }
+  .card-img-top {
+    position: relative;
+    opacity: 0.7;
+    height: 120px;
+    overflow: hidden;
+  }
+  .card-img-top img {
+    width: 100%;
+  }
+  .card:hover .card-img-top {
+    opacity: 1;
+  }
+  .card-actions {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    padding-right: 5px;
+  }
+  .btn-float {
+    z-index: 9999;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+}
+
+#tagsDialog {
+  .md-tall {
+    height: 150px;
+    position: relative;
+    min-height: 150px;
+    max-height: 150px;
+  }
+  .md-toolbar-item img {
+    height: 6em;
+    margin-top: 67px;
+    margin-left: -15px;
+  }
+}

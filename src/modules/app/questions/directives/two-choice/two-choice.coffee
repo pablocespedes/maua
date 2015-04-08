@@ -1,42 +1,28 @@
 'use strict'
-class TwoChoice
-  constructor: () ->
-  ## Constructor stuff
-  restrict: 'AE'
-  replace: true
-  templateUrl: 'templates/twoChoice.tpl.html',
-  scope:
-    maxOpt: '=',
-    items: '=items',
-    showExplanation: '=',
-    isConfirmClicked: '='
-  link: (scope, element, attr) ->
-    scope.maxOpt = []
-    scope.selectAnswer = (index) ->
-      if !scope.isConfirmClicked
-        answer = scope.items[index]
-        nexAction = $('#nextAction')
-        seeAnswer = $('#skipAction')
-        if !answer.selected
+twoChoice = (questionTypeService)->
+  new class TwoChoice
+    constructor: () ->
+    ## Constructor stuff
+    restrict: 'AE'
+    replace: true
+    templateUrl: 'app/questions/directives/templates/twoChoice.tpl.html',
+    scope:
+      maxOpt: '='
+      items: '=items'
+      showExplanation: '='
+      isConfirmClicked: '='
+    link: (scope, element, attrs) ->
+      scope.maxOpt = []
+      scope.showforCurrentGroup = true
 
-          ###validation which takes care to keep just 2 options selected###
+      scope.crossOutChoice = (index, event) ->
+        questionTypeService.crossOutChoice scope.items, index, event
+        return
 
-          if scope.maxOpt.length >= 2
-            ansR = _.find(scope.items, 'id': scope.maxOpt[0])
-            ansR.selected = false
-            scope.maxOpt = _.filter(scope.maxOpt, (num, i) ->
-              i != 0
-            )
-          scope.maxOpt.push answer.id
-          answer.selected = true
-          nexAction.addClass 'btn-primary'
-          seeAnswer.addClass 'hide'
-        else
-          scope.maxOpt = _.filter(scope.maxOpt, (num) ->
-            num != answer.id
-          )
-          answer.selected = false
-          if !_.find(scope.items, 'selected': true)
-            nexAction.removeClass 'btn-primary'
-            seeAnswer.removeClass 'hide'
-      return
+      scope.selectAnswer = (index) ->
+        questionTypeService.selectTwoChoice scope.isConfirmClicked,
+        scope.items, index, scope.maxOpt
+        return
+
+twoChoice.$inject = ['questionTypeService']
+module.exports = twoChoice

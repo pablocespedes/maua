@@ -1,26 +1,28 @@
-Resource=require('../../application/services/_api.base')
 
-dashboardService = ($q)->
-  new class DashboardService extends Resource
+dashboardService = ($q,resource)->
+  new class DashboardService extends resource
 
-    _dashboarFn = getScore: (track) ->
-      if dashboardData.score_prediction
-      then dashboardData.score_prediction.tracks[track.id] else null
+    _getScore: (track) ->
+      if @dashboardData.score_prediction
+      then @dashboardData.score_prediction.tracks[track.id] else null
 
     constructor: ->
       super()
       @dashboardData = null
 
-    setDashboardData = (groupId) ->
+    getDashboard :(groupId) ->
+      @show(groupId,'dashboard')
+
+    setDashboardData : (groupId) ->
       deferred = $q.defer()
-      @show(groupId,'dashboard').then (result) ->
+      @getDashboard(groupId).then (result) =>
         @dashboardData = null
         @dashboardData = result.data.dashboard
+        console.log @dashboardData
         deferred.resolve true
-        return
       deferred.promise
 
-    getScorePrediction = ->
+    getScorePrediction : ->
       scoreData = {}
       scoreResponse = @dashboardData.score_prediction
 
@@ -34,31 +36,31 @@ dashboardService = ($q)->
 
       history
 
-    getSmartPractice = ->
+    getSmartPractice : ->
       accuracy = null
       subtracks = null
       smartPracticeItems = null
       smartPracticeItems =
-      _.forEach(@dashboardData.smart_practice.items, (result) ->
-        result['getScore'] = _dashboarFn.getScore(result)
-        result['hasScore'] = _dashboarFn.getScore(result) != null and
-         _dashboarFn.getScore(result) > 0
+      _.forEach(@dashboardData.smart_practice.items, (result) =>
+        result['getScore'] = @_getScore(result)
+        result['hasScore'] = @_getScore(result) != null and
+         @_getScore(result) > 0
 
         subtracks = _.forEach(result.items, (subtrack) ->
           accuracy = (subtrack.total_questions_answered_correctly /
             (subtrack.total_questions_answered * 100))
           subtrack['accuracy'] = if accuracy > 0
           then Math.round(accuracy.toFixed(2)) else 0
-          return
         )
       )
       @dashboardData.smart_practice.items = smartPracticeItems
       @dashboardData.smart_practice
 
-    getChallenge = ->
+    getChallenge : ->
       @dashboardData.challenge
 
-    hasQuestionsAnswered = ->
+    hasQuestionsAnswered : ->
       @dashboardData.progress.all.total_questions_answered >= 1
-dashboardService.$inject = ['$q']
+
+dashboardService.$inject = ['$q','resource']
 module.exports = dashboardService

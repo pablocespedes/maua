@@ -7,7 +7,7 @@ apiUrls = () ->
   @secure = false
 
   urlConstruct = (url) ->
-    (if that.secure then 'https://' else 'http://') +
+    (if that.secure then 'https://' else 'https://') +
       that.host +
       ':' + that.port +
       url
@@ -45,7 +45,7 @@ apiUrls = () ->
 
 
   addUrls = (obj) ->
-    _.forEach(obj, addUrl);
+    _.forEach(obj, addUrl)
 
   @addUrl = addUrl
   @addUrls = addUrls

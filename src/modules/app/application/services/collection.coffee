@@ -3,24 +3,22 @@ class CollectionService
     @items = []
     @lastId = 1
 
-  @add = (item) ->
+  add : (item) ->
     item.serviceId = @lastId++
     if !@get(item.serviceId)
       @items.push item
     return
 
-  @equals = (item, serviceId) ->
+  equals : (item, serviceId) ->
     item.serviceId == serviceId
 
-  @get = (serviceId) ->
-    self = @
-    _.find @items, (item) ->
-      self.equals item, serviceId
+  get : (serviceId) ->
+    _.find @items, (item) =>
+      @equals item, serviceId
 
-  @remove = (item) ->
-    self = @
-    @items = _.reject(@items, (storedItem) ->
-      self.equals item, storedItem.serviceId
+  remove : (item) ->
+    @items = _.reject(@items, (storedItem) =>
+      @equals item, storedItem.serviceId
     )
 
  module.exports = CollectionService
