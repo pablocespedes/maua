@@ -22,10 +22,10 @@
   <!--[if lte IE 9]>
     <script type="text/javascript"> window.jQuery || document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">'+"<"+"/script>"); </script>
     <![endif]-->
-
   <!--[if lt IE 9]>
     <script src="assets/javascripts/ie.min.js"></script>
     <![endif]-->
+  <!-- build:css({src,app}) styles/vendor.css -->
   <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
   <link rel="stylesheet" href="bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css" />
@@ -38,8 +38,6 @@
   <link href="assets/stylesheets/pages.min.css" rel="stylesheet" type="text/css">
   <link href="assets/stylesheets/rtl.min.css" rel="stylesheet" type="text/css">
   <link href="assets/stylesheets/themes.min.css" rel="stylesheet" type="text/css">
-
-
   <!-- build:css({.tmp,app}) styles/main.css -->
   <link rel="stylesheet" href="styles/main.css">
   <!-- endbuild -->
@@ -47,7 +45,6 @@
     <script src="bower_components/es5-shim/es5-shim.js"></script>
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
-
   <!-- build:js scripts/vendor.js -->
   <!-- bower:js -->
   <script src="bower_components/modernizr/modernizr.js"></script>
@@ -73,7 +70,6 @@
   <!-- Scripts -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.min.js"></script>
-
   <script src="lib/scripts.js"></script>
   <script src="app/initRoutes.js"></script>
   <!-- Pixel Admin's javascripts -->
@@ -135,7 +131,7 @@
           <div id="main-navbar-collapse" class="collapse navbar-collapse main-navbar-collapse">
             <div>
               <ul class="nav navbar-nav">
-                <li class="dropdown white" id="groupDDL" >
+                <li class="dropdown white" id="groupDDL">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <span id="selectedGroup" ng-bind="$root.groupTitle"></span>&nbsp;<i class="fa fa-caret-down"></i>
                   </a>
@@ -170,7 +166,7 @@
                       </li>
                       <li><a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}"><i class="dropdown-icon fa fa-user"></i>&nbsp;&nbsp;Profile</a>
                       </li>
-                     <!--  <li><a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/message_center/folders/Inbox"><i class="dropdown-icon fa fa-envelope"></i>&nbsp;&nbsp;Messages</a>
+                      <!--  <li><a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/message_center/folders/Inbox"><i class="dropdown-icon fa fa-envelope"></i>&nbsp;&nbsp;Messages</a>
                       </li> -->
                       <li class="divider"></li>
                       <li ng-click="appCtrl.logOut()"><a><i class="dropdown-icon fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a>
@@ -208,8 +204,8 @@
     <div id="main-menu-bg">
     </div>
   </div>
-<div user-settings>
-</div>
+  <div user-settings>
+  </div>
   <a href="#" class="back-to-top fa  fa-arrow-up"></a>
 </body>
 
