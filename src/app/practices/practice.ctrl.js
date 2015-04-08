@@ -107,8 +107,13 @@
 
           vmPr.questionTimer.interval.then(null, null, function(val) {
             if (vmPr.time === val + 1) {
-              bootbox.alert("Time's Up, review question solution!", function() {
-                revealExplanation();
+
+              bootbox.alert({
+                message: "Time's Up, review question solution!",
+                callback: function() {
+                    revealExplanation();
+                },
+                className: "bootbox-sm"
               });
             }
           });
