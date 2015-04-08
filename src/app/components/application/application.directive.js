@@ -195,7 +195,7 @@
       };
 
       var time = questionTimingService.getTime();
-      if (angular.isDefined(time)) {
+      if (angular.isDefined(time) && time !== null) {
         scope.timerSetting.minutes = time.minutes;
       }
       scope.questionCheck = scope.timerSetting.minutes !== 0 ? true : false;
