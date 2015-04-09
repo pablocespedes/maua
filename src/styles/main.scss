@@ -6,24 +6,27 @@
 @import "../app/history/history.scss";
 @import "../app/practices/practice.scss";
 @import "../styles/media-queries.scss";
-
 [ng\:cloak],
 [ng-cloak],
 .ng-cloak {
   display: none !important;
 }
 
-  #setting-config {
-   display: table;
-   table-layout: fixed;
-   width: 100%;
-   border-bottom-left-radius: 5px;
-   overflow: hidden;
-  }
+#intercom-container .intercom-launcher {
+  bottom: 75px!important;
+}
 
-  .slider-tick-label-container  .slider-tick-label{
-    color:#ffffff;
-  }
+#setting-config {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  border-bottom-left-radius: 5px;
+  overflow: hidden;
+}
+
+.slider-tick-label-container .slider-tick-label {
+  color: #ffffff;
+}
 
 #user-timing {
   margin: 0 auto;
@@ -32,70 +35,86 @@
 #user-time .modal-body {
   padding: 0px;
 }
+
 #user-time .slider {
   margin-left: 33px;
 }
 
-
 .touch {
   -webkit-overflow-scrolling: touch;
 }
+
 .theme-default #main-navbar .navbar-nav>li>span {
   color: #555;
 }
+
 .nav>li>span {
   position: relative;
   display: block;
   padding: 0px 15px;
   margin-bottom: -1px;
 }
+
 #main-navbar li a span {
   line-height: 46px;
   color: #555;
 }
+
 .white {
   background-color: #ffffff !important;
 }
+
 .has-error {
   border: 4px solid #a94442;
 }
+
 #numericEntry,
 #numerator,
 #denominator {
   margin-bottom: 25px;
 }
+
 .hide-input {
   #numericEntry, #numerator, #denominator {
     display: none;
   }
 }
+
 //general css
 #main-navbar .navbar-header a {
   font-size: 21px !important;
 }
+
 .no-data {
   margin-top: 15px;
 }
+
 #feature-modal {
   cursor: pointer;
 }
+
 .no-padding-l {
   padding-left: 0px !important;
 }
+
 .no-padding-r {
   padding-right: 0px !important;
 }
+
 .track-list-padding-hr {
   padding-left: 5px !important;
   padding-right: 5px !important;
 }
+
 .old-grockit {
   background-color: #054E7D;
   color: $white;
 }
+
 .cursor-a {
   cursor: pointer;
 }
+
 .panel-no-bg {
   margin-bottom: 18px;
   border: 1px solid transparent;
@@ -103,13 +122,16 @@
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
+
 .panel-body-no-bg {
   margin: 0;
   padding: 20px;
 }
+
 .float-right {
   float: right;
 }
+
 .bottom-action-bar {
   position: absolute;
   line-height: 62px;
@@ -117,11 +139,13 @@
   z-index: 10101;
   padding: 0 23px;
 }
+
 .panel-footer-no-bg {
   border-top: 1px solid #ececec;
   padding-left: 20px;
   padding-right: 20px;
 }
+
 #topics {
   padding-right: 20px;
   padding-top: 10px;
@@ -129,23 +153,29 @@
   padding-bottom: 5px;
   //  box-shadow: 0 3px 1px #555, 0 -2px 4px #555;
 }
+
 #topics .row {
   margin-left: 10px;
 }
+
 footer {
   position: fixed;
   z-index: 20;
 }
+
 .theme-default footer {
   -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(0, 0, 0, 0.05);
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(0, 0, 0, 0.05);
 }
+
 .push {
   height: 190px;
 }
+
 .hide-footer {
   display: none;
 }
+
 .footer {
   position: fixed;
   right: 0;
@@ -160,19 +190,24 @@ footer {
   border: 1px solid #ccc;
   border-bottom: 1px solid #aaa;
 }
+
 .f-content {
   margin-bottom: 10px;
 }
+
 .feedback-box {
   padding-top: 9px;
   height: 41px;
 }
+
 .text-footer-r {
   text-align: right;
 }
+
 .text-footer-l {
   text-align: left;
 }
+
 .back-to-top {
   position: fixed;
   bottom: 5em;
@@ -197,6 +232,7 @@ footer {
   border: 0;
   vertical-align: middle;
 }
+
 #practice-settings {
   position: fixed;
   right: -270px;
@@ -218,9 +254,11 @@ footer {
   user-select: none;
   z-index: 999998;
 }
+
 #practice-settings.open {
   right: -10px;
 }
+
 #practice-settings > .header {
   position: relative;
   z-index: 100000;
@@ -232,6 +270,7 @@ footer {
   padding: 10px 20px;
   margin: 0;
 }
+
 #practice-settings > div {
   position: relative;
   z-index: 100000;
@@ -239,6 +278,7 @@ footer {
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
 }
+
 #practice-settings-toggler {
   font-size: 21px;
   width: 50px;
@@ -260,23 +300,28 @@ footer {
   -o-transition: color .3s;
   transition: color .3s;
 }
+
 #practice-settings.open #practice-settings-toggler {
   font-size: 16px;
   color: #888;
 }
+
 #practice-settings.open #practice-settings-toggler:hover {
   color: #fff;
 }
+
 #practice-settings-list {
   padding: 0;
   margin: 0;
 }
+
 #practice-settings-list li {
   padding: 0;
   margin: 0;
   list-style: none;
   position: relative;
 }
+
 #practice-settings-list li > span {
   line-height: 20px;
   color: #fff;
@@ -284,34 +329,41 @@ footer {
   padding: 12px 20px;
   cursor: pointer;
 }
+
 #practice-settings-list li + li {
   border-top: 1px solid #333;
 }
+
 #practice-settings .practice-checkbox {
   position: absolute;
   right: 20px;
   top: 12px;
 }
+
 .right-to-left #practice-settings {
   left: -270px;
   right: auto;
   padding-right: 0;
   padding-left: 10px;
 }
+
 .right-to-left #practice-settings.open {
   left: -10px;
   right: auto;
 }
+
 .right-to-left #practice-settings-toggler {
   padding-left: 10px;
   padding-right: 0;
   left: auto;
   right: -40px;
 }
+
 .right-to-left #practice-settings .practice-checkbox {
   right: auto;
   left: 20px;
 }
+
 #solutionarea {
   min-height: 35px;
   padding: 10px;
@@ -320,6 +372,7 @@ footer {
   overflow: visible;
   line-height: 20px;
 }
+
 .info-box {
   color: #333;
   overflow-x: hidden;
@@ -333,6 +386,7 @@ footer {
   border: 1px solid #e3e3de;
   border-radius: 5px;
 }
+
 .info-box:before {
   content: " ";
   display: block;
@@ -344,11 +398,13 @@ footer {
   right: -1px;
   top: -24px;
 }
+
 .reset-layout {
   margin: 0 !important;
   padding: 0 !important;
   border: none !important;
 }
+
 .not-sure {
   padding: 2px;
   height: 14px;
@@ -360,21 +416,26 @@ footer {
   line-height: 10px;
   margin-bottom: 2px;
 }
+
 .tooltip-container {
   .tooltip-inner {
     text-align: left;
   }
 }
+
 .fading-letter {
   display: inline-block;
   min-width: 6px;
 }
+
 .modal-trial.modal-success .modal-header {
   background: #5ebd5e;
 }
+
 .modal-trial .modal-header .fa {
   font-size: 20px;
 }
+
 .modal-trial .modal-header {
   color: #fff;
   margin-bottom: 20px;
@@ -382,6 +443,7 @@ footer {
   border-top-right-radius: 2px;
   border-top-left-radius: 2px;
 }
+
 .trial {
   min-height: 100px;
 }

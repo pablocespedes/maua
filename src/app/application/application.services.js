@@ -12,7 +12,7 @@
 
   grockitModal.$inject = ['$http', 'utilities', 'environmentCons'];
   currentProduct.$inject = ['webStorage', 'Observable', 'utilities'];
-  appService.$inject = ['$window', '$q', '$location', 'Auth', 'GroupsApi', 'utilities', 'membershipService', 'currentProduct', 'alerts'];
+  appService.$inject = ['$window', '$q', '$location', '$intercom', 'Auth', 'GroupsApi', 'utilities', 'membershipService', 'currentProduct', 'alerts'];
   menuService.$inject = ['utilities'];
   setItUpUserProgress.$inject = ['Observable'];
   setItUpScorePrediction.$inject = ['Observable'];
@@ -73,8 +73,7 @@
     }
   }
 
-  function appService($window, $q, $location, Auth, GroupsApi, utilities, membershipService, currentProduct, alerts) {
-
+  function appService($window, $q, $location, $intercom, Auth, GroupsApi, utilities, membershipService, currentProduct, alerts) {
 
     var _appFn = {
       actualGroup: function(groups, urlGroup) {
@@ -95,6 +94,17 @@
           userMembership = GroupsApi.membershipGroups(true);
 
         return $q.all([userData]);
+      },
+      userIntercom: function(userResponse) {
+        var intercomSettings = {
+          name: userResponse.fullName,
+          email: userResponse.emailAddress,
+          updated_at: Math.floor(Date.now() / 1000),
+          "widget": {
+            "activator": "#Intercom"
+          }
+        }
+        $intercom.update(intercomSettings);
       }
     };
 
@@ -120,7 +130,7 @@
 
       function getUserDataCompleted(response) {
         var userResponse = response[0];
-
+        _appFn.userIntercom(userResponse);
         if (userResponse != null) {
           GroupsApi.membershipGroups(true).then(function(groupsResult) {
             var groups = groupsResult.data.groups;

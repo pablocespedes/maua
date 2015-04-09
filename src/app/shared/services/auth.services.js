@@ -18,10 +18,10 @@
   .factory('Auth', Auth)
   .service('membershipService', membershipService);
 
-  Auth.$inject = ['$window', '$cookies', '$cookieStore', 'UserRoles', 'webStorage', 'UsersApi', 'utilities', '$location', '$q', 'Headers', 'imageVersion'];
+  Auth.$inject = ['$window', '$cookies', '$cookieStore', '$intercom','UserRoles', 'webStorage', 'UsersApi', 'utilities', '$location', '$q', 'Headers', 'imageVersion'];
   membershipService.$inject = ['dateUtils', 'grockitModal', 'appMessages', '$location','utilities','lifeCycle'];
 
-  function Auth($window, $cookies, $cookieStore, UserRoles, webStorage, UsersApi, utilities, $location, $q, Headers, imageVersion) {
+  function Auth($window, $cookies, $cookieStore,$intercom, UserRoles, webStorage, UsersApi, utilities, $location, $q, Headers, imageVersion) {
 
     function defaultGroup(user) {
       return user != null && angular.isDefined(user.currentGroup) ? user.currentGroup : undefined;
@@ -61,6 +61,7 @@
     };
 
     function logout() {
+      $intercom('shutdown');
       var logOut = utilities.originalGrockit().url + '/logout';
       webStorage.remove('currentUser');
       $cookieStore.remove('authentication_token');
