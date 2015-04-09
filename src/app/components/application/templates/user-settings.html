@@ -20,11 +20,11 @@
       </li>
     </ul>
   </div>
-  <h5 class="header" ng-if="questionCheck">Question Time: {{options.value}} min</h5>
+  <h5 class="header" ng-if="questionCheck">Question Time: <span ng-bind="options.value"></span> min</h5>
   <div id="setting-config" ng-if="questionCheck">
     <div class="modal-body ">
       <br>
-      <div timer-slider options="options"></div>
+      <div timer-slider options="options" timer-setting="timerSetting"></div>
     </div>
   </div>
 </div>

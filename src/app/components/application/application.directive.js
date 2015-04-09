@@ -139,15 +139,17 @@
       template: '<div><input class="slider-input" type="text" /></div>',
       restrict: 'AE',
       link: link,
-      controller: sliderTimerCtrl
+      controller: sliderTimerCtrl,
+      scope: {
+        options: '=',
+        timerSetting: '='
+      }
     }
 
     return directive;
 
     function link(scope, element, attrs, sliderTimerCtrl) {
-      scope.timerSetting = {
-        minutes: 0
-      }
+
       var slider = new Slider("input.slider-input", {
         id: scope.options.id,
         ticks: scope.options.sliderTicks,
@@ -157,11 +159,14 @@
       slider.setValue(scope.options.value)
 
       slider.on('slideStop', function(newValue) {
+
         var time = questionTimingService.getTime();
         sliderTimerCtrl.updateTime(time, scope.options);
-        scope.$parent.options.value = newValue;
-        scope.options.value = newValue;
-        scope.timerSetting.minutes = newValue;
+
+        scope.$apply(function() {
+          scope.options.value = newValue;
+          scope.timerSetting.minutes = newValue;
+        });
         questionTimingService.saveTime(scope.timerSetting);
         slider.setValue(scope.timerSetting.minutes)
       });
@@ -192,7 +197,7 @@
 
       var time = questionTimingService.getTime();
       sliderTimerCtrl.updateTime(time, scope.options);
-      scope.questionCheck = scope.timerSetting.minutes !== 0 ? true : false;
+      scope.questionCheck = scope.options.value !== 0 ? true : false;
 
       scope.enableTime = function() {
         scope.questionCheck = !scope.questionCheck;
@@ -208,6 +213,7 @@
         $('#practice-settings').toggleClass('open');
         return false;
       });
+
 
     }
 
