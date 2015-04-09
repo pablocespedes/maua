@@ -136,23 +136,21 @@
   function timerSlider(questionTimingService) {
 
     var directive = {
-      templateUrl: 'app/components/application/templates/timer.slider.html',
+      template: '<div><input class="slider-input" type="text" /></div>',
       restrict: 'AE',
       link: link,
       scope: {
         options: '='
-      }
+      },
+      controller: sliderTimerCtrl
     }
 
     return directive;
 
-    function link(scope, element, attrs) {
+    function link(scope, element, attrs, sliderTimerCtrl) {
 
-
-      scope.timerSetting = {
-        minutes: 0
-      };
-      var slider = new Slider("#ex13", {
+      var slider = new Slider("input.slider-input", {
+        id: scope.options.id,
         ticks: scope.options.sliderTicks,
         ticks_labels: scope.options.tickLabels,
       });
@@ -160,23 +158,12 @@
       slider.setValue(scope.options.value)
 
       slider.on('slideStop', function(newValue) {
-
         var time = questionTimingService.getTime();
-        if (angular.isDefined(time) && time !== null) {
-          scope.timerSetting.minutes = time.minutes;
-        }
-        scope.timerSetting.minutes = newValue;
-        questionTimingService.saveTime(scope.timerSetting);
-        slider.setValue(scope.timerSetting.minutes)
+        sliderTimerCtrl.updateTime(time);
+        sliderTimerCtrl.timerSetting.minutes = newValue;
+        questionTimingService.saveTime(sliderTimerCtrl.timerSetting);
+        slider.setValue(sliderTimerCtrl.timerSetting.minutes)
       });
-
-      scope.$on('$destroy', function() {
-
-        console.log("destroy");
-        slider.destroy();
-        slider = null;
-      });
-
 
     }
 
@@ -186,45 +173,54 @@
     var directive = {
       templateUrl: 'app/components/application/templates/user-settings.html',
       restrict: 'AE',
-      link: link
+      link: link,
+      controller: sliderTimerCtrl
     }
 
-    function link(scope, element, attr) {
-      scope.timerSetting = {
-        minutes: 0
-      };
+    function link(scope, element, attr, sliderTimerCtrl) {
 
+      scope.options = sliderTimerCtrl.options;
       var time = questionTimingService.getTime();
-      if (angular.isDefined(time) && time !== null) {
-        scope.timerSetting.minutes = time.minutes;
-      }
-      scope.questionCheck = scope.timerSetting.minutes !== 0 ? true : false;
+      sliderTimerCtrl.updateTime(time);
+      scope.questionCheck = sliderTimerCtrl.timerSetting.minutes !== 0 ? true : false;
 
       scope.enableTime = function() {
         scope.questionCheck = !scope.questionCheck;
         if (!scope.questionCheck) {
-          scope.timerSetting.minutes = 0;
-          questionTimingService.saveTime(scope.timerSetting);
+          sliderTimerCtrl.timerSetting.minutes = 0;
+          questionTimingService.saveTime(sliderTimerCtrl.timerSetting);
         }
       }
-
-      scope.options = {
-        id: 'userTiming',
-        value: scope.timerSetting.minutes,
-        snapBounds: 1,
-        sliderTicks: [0, 5, 10, 15],
-        tickLabels: ['0', '5', '10', '15']
-      };
 
       $('#practice-settings-toggler').click(function() {
         $('#practice-settings').toggleClass('open');
         return false;
       });
 
-
     }
 
     return directive;
+
+  }
+
+  function sliderTimerCtrl() {
+    this.timerSetting = {
+      minutes: 0
+    }
+
+    this.options = {
+      id: 'userTiming',
+      value: this.timerSetting.minutes,
+      snapBounds: 1,
+      sliderTicks: [0, 5, 10, 15],
+      tickLabels: ['0', '5', '10', '15']
+    };
+
+    this.updateTime = function(time) {
+      if (angular.isDefined(time) && time !== null) {
+        this.timerSetting.minutes = time.minutes;
+      }
+    }
 
   }
 
