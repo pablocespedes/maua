@@ -139,9 +139,6 @@
       template: '<div><input class="slider-input" type="text" /></div>',
       restrict: 'AE',
       link: link,
-      scope: {
-        options: '='
-      },
       controller: sliderTimerCtrl
     }
 
@@ -160,6 +157,7 @@
       slider.on('slideStop', function(newValue) {
         var time = questionTimingService.getTime();
         sliderTimerCtrl.updateTime(time);
+        scope.$parent.options.value = newValue;
         sliderTimerCtrl.timerSetting.minutes = newValue;
         questionTimingService.saveTime(sliderTimerCtrl.timerSetting);
         slider.setValue(sliderTimerCtrl.timerSetting.minutes)
@@ -188,7 +186,9 @@
         scope.questionCheck = !scope.questionCheck;
         if (!scope.questionCheck) {
           sliderTimerCtrl.timerSetting.minutes = 0;
+           scope.options.value = 0;
           questionTimingService.saveTime(sliderTimerCtrl.timerSetting);
+
         }
       }
 
