@@ -145,7 +145,9 @@
     return directive;
 
     function link(scope, element, attrs, sliderTimerCtrl) {
-
+      scope.timerSetting = {
+        minutes: 0
+      }
       var slider = new Slider("input.slider-input", {
         id: scope.options.id,
         ticks: scope.options.sliderTicks,
@@ -156,11 +158,12 @@
 
       slider.on('slideStop', function(newValue) {
         var time = questionTimingService.getTime();
-        sliderTimerCtrl.updateTime(time);
+        sliderTimerCtrl.updateTime(time, scope.options);
         scope.$parent.options.value = newValue;
-        sliderTimerCtrl.timerSetting.minutes = newValue;
-        questionTimingService.saveTime(sliderTimerCtrl.timerSetting);
-        slider.setValue(sliderTimerCtrl.timerSetting.minutes)
+        scope.options.value = newValue;
+        scope.timerSetting.minutes = newValue;
+        questionTimingService.saveTime(scope.timerSetting);
+        slider.setValue(scope.timerSetting.minutes)
       });
 
     }
@@ -176,18 +179,27 @@
     }
 
     function link(scope, element, attr, sliderTimerCtrl) {
+      scope.timerSetting = {
+        minutes: 0
+      }
+      scope.options = {
+        id: 'userTiming',
+        value: scope.timerSetting.minutes,
+        snapBounds: 1,
+        sliderTicks: [0, 5, 10, 15],
+        tickLabels: ['0', '5', '10', '15']
+      };
 
-      scope.options = sliderTimerCtrl.options;
       var time = questionTimingService.getTime();
-      sliderTimerCtrl.updateTime(time);
-      scope.questionCheck = sliderTimerCtrl.timerSetting.minutes !== 0 ? true : false;
+      sliderTimerCtrl.updateTime(time, scope.options);
+      scope.questionCheck = scope.timerSetting.minutes !== 0 ? true : false;
 
       scope.enableTime = function() {
         scope.questionCheck = !scope.questionCheck;
         if (!scope.questionCheck) {
-          sliderTimerCtrl.timerSetting.minutes = 0;
-           scope.options.value = 0;
-          questionTimingService.saveTime(sliderTimerCtrl.timerSetting);
+          scope.timerSetting.minutes = 0;
+          scope.options.value = 0;
+          questionTimingService.saveTime(scope.timerSetting);
 
         }
       }
@@ -204,21 +216,10 @@
   }
 
   function sliderTimerCtrl() {
-    this.timerSetting = {
-      minutes: 0
-    }
-
-    this.options = {
-      id: 'userTiming',
-      value: this.timerSetting.minutes,
-      snapBounds: 1,
-      sliderTicks: [0, 5, 10, 15],
-      tickLabels: ['0', '5', '10', '15']
-    };
-
-    this.updateTime = function(time) {
+    this.updateTime = function(time, options) {
       if (angular.isDefined(time) && time !== null) {
-        this.timerSetting.minutes = time.minutes;
+        options.value = time.minutes;
+
       }
     }
 
