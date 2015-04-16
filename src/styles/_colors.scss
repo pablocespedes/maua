@@ -1,0 +1,304 @@
+.bg-primary {
+  background-color: #3F51B5!important;
+  color: #fff;
+  &:hover {
+    background-color: #3F51B5;
+    color: #fff;
+  }
+}
+
+.bg-success {
+  background-color: #4CAF50!important;
+  color: #fff;
+  &:hover {
+    background-color: #4CAF50;
+    color: #fff;
+  }
+}
+
+.bg-info {
+  background-color: #00BCD4!important;
+  color: #fff;
+  &:hover {
+    background-color: #00BCD4;
+    color: #fff;
+  }
+}
+
+.bg-warning {
+  background-color: #FFC107!important;
+  color: #fff;
+  &:hover {
+    background-color: #FFC107;
+    color: #fff;
+  }
+}
+
+.bg-danger {
+  background-color: #F44336!important;
+  color: #fff;
+  &:hover {
+    background-color: #F44336;
+    color: #fff;
+  }
+}
+
+.bg-default {
+  background-color: #98a3a4!important;
+  color: #fff;
+  &:hover {
+    background-color: #98a3a4;
+    color: #fff;
+  }
+}
+
+.bg-body {
+  color: #767676!important;
+  a {
+    color: #767676;
+    &:hover {
+      color: #767676;
+    }
+  }
+  background-color: #f3f3f3;
+}
+
+.bg-black,
+.bg-danger,
+.bg-dark,
+.bg-dark-light,
+.bg-info,
+.bg-info-alt,
+.bg-primary,
+.bg-primary-light {
+  color: #fff;
+  a {
+    color: #fff;
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+.bg-warning {
+  color: #fff;
+  a {
+    color: #fff;
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+.bg-dark-light {
+  background-color: #3D4051;
+}
+
+.bg-black {
+  background-color: #000;
+}
+
+.bg-primary {
+  background-color: #3F51B5;
+}
+
+.bg-primary-light {
+  background-color: #5C6BC0;
+}
+
+.bg-default {
+  background: #98a3a4 !important;
+}
+
+.bg-info {
+  background-color: #00BCD4;
+}
+
+.bg-info-alt {
+  background-color: #673AB7;
+}
+
+.bg-warning {
+  background-color: #FFC107;
+}
+
+.bg-danger {
+  background-color: #F44336;
+}
+
+.bg-dark {
+  background-color: #252833;
+}
+
+.bg-success {
+  background-color: #4CAF50;
+  a {
+    color: #fff;
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+.bg-bright {
+  background-color: #fafafa;
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+.bg-bright,
+.bg-white {
+  color: #767676;
+  a {
+    color: #767676;
+    &:hover {
+      color: #767676;
+    }
+  }
+}
+
+.bg-facebook {
+  color: #fff;
+  a {
+    color: #fff;
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+.bg-google-plus a {
+  color: #fff;
+  &:hover {
+    color: #fff;
+  }
+}
+
+.bg-twitter {
+  color: #fff;
+  a {
+    color: #fff;
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+.bg-facebook {
+  background-color: #335397;
+}
+
+.bg-twitter {
+  background-color: #00c7f7;
+}
+
+.bg-google-plus {
+  background-color: #df4a32;
+  color: #fff;
+}
+
+// .color-primary,
+// a.color-primary {
+//   color: #3F51B5;
+//   &:hover {
+//     color: #3F51B5;
+//   }
+// }
+
+// .color-success,
+// a.color-success {
+//   color: #4CAF50;
+//   &:hover {
+//     color: #4CAF50;
+//   }
+// }
+
+// .color-info,
+// a.color-info {
+//   color: #00BCD4;
+//   &:hover {
+//     color: #00BCD4;
+//   }
+// }
+
+// .color-info-alt,
+// a.color-info-alt {
+//   color: #673AB7;
+//   &:hover {
+//     color: #673AB7;
+//   }
+// }
+
+// .color-warning,
+// a.color-warning {
+//   color: #FFC107;
+//   &:hover {
+//     color: #FFC107;
+//   }
+// }
+
+// .color-danger,
+// a.color-danger {
+//   color: #F44336;
+//   &:hover {
+//     color: #F44336;
+//   }
+// }
+
+// .color-dark,
+// a.color-dark {
+//   color: #252833;
+//   &:hover {
+//     color: #252833;
+//   }
+// }
+
+// .color-reverse,
+// a.color-dark {
+//   color: #fff;
+//   &:hover {
+//     color: #fff;
+//   }
+// }
+
+// .color-gray-darker,
+// a.color-gray-darker {
+//   color: #222;
+//   &:hover {
+//     color: #222;
+//   }
+// }
+
+// .color-gray-dark,
+// a.color-gray-dark {
+//   color: #333;
+//   &:hover {
+//     color: #333;
+//   }
+// }
+
+// .color-gray,
+// a.color-gray {
+//   color: #555;
+//   &:hover {
+//     color: #555;
+//   }
+// }
+
+// .color-gray-light,
+// a.color-gray-light {
+//   color: #777;
+//   &:hover {
+//     color: #777;
+//   }
+// }
+
+// .color-gray-lighter,
+// a.color-gray-lighter {
+//   color: #eee;
+//   &:hover {
+//     color: #eee;
+//   }
+// }

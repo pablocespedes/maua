@@ -1,0 +1,31 @@
+<div id="multipleChoice">
+  <div class="list-group text-left">
+    <a id="answer" ng-repeat="item in items" href="javascript:void(0)" class="choice list-group-item"
+    ng-click="selectAnswer($index)" ng-class="{'disable-choice': item.crossOut && !(showExplanation)}">
+    <div class="middle">
+      <span ng-if="showExplanation && item.selected==true" class="float-right">&#10094;</span>
+
+      <span ng-if="!(showExplanation) && showforCurrentGroup" class="pull-right cross-out fa fa-times" data-original-title="{{item.crossOutMsg}}" ng-click="crossOutChoice($index,$event)">
+         <md-tooltip md-direction="left">
+            {{item.crossOutMsg}}
+          </md-tooltip>
+      </span>
+
+      <md-button id="{{item.id}}" type="button" class="btn-option md-fab md-mini letter" ng-class="{'md-primary':item.selected && !showExplanation,'bg-success':showExplanation && item.correct,'md-warn':showExplanation && !item.correct && item.selected}">
+        {{item.option}}
+      </md-button>
+      <input id="{{item.id}}" type="checkbox" name="choice" value="{{item.position}}"/>
+      <div class="content">
+        <div ng-bind-html="item.body"></div>
+      </div>
+    </div>
+    <div ng-show="item.hasExplanation" id="explanationAnswerPanel" ng-if="showExplanation" class="fadein "
+    ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
+    <div >
+      <div class="explain-margin" ng-bind-html='item.explanation'></div>
+      <br>
+    </div>
+  </div>
+</a>
+</div>
+</div>

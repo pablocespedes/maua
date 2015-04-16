@@ -1,0 +1,134 @@
+#video-content {
+  .md-list-item-text > p {
+    line-height: 1.0!important;
+  }
+}
+
+.play-button-icon {
+  margin: -3px 12px 0px -7px !important;
+}
+
+.play-button {
+  margin-left: 5px;
+}
+
+#video-content {
+  height: 600px;
+}
+
+.video-subheader {
+  top: 0px!important;
+  z-index: 21!important;
+}
+
+md-sidenav.md-locked-open,
+md-sidenav.md-locked-open.md-closed,
+md-sidenav.md-locked-open.md-closed.md-sidenav-left,
+md-sidenav.md-locked-open.md-closed,
+md-sidenav.md-locked-open.md-closed.md-sidenav-right,
+md-sidenav.md-locked-open-remove.md-closed {
+  position: static;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 63.25%;
+  padding-top: 10px;
+  height: 0;
+  overflow: hidden;
+}
+
+.video-container iframe,
+.video-container object,
+.video-container embed,
+.video-container img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#video-toolbar {
+  z-index: 55;
+  width: 304px;
+  min-width: 304px;
+  max-width: 304px;
+}
+
+.scroll {
+  height: 100%;
+  max-height: 400px;
+  bottom: 45px;
+  padding: 5px 10px;
+  overflow-y: auto;
+}
+
+.title {
+  width: 750px;
+  text-align: center;
+  height: 500px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  &_inner {
+    left: 38%;
+    width: 260px;
+    text-align: center;
+    position: relative;
+    margin-top: 17%;
+    h1 {
+      margin: 0;
+      text-transform: uppercase
+    }
+    h2 {
+      margin: 0;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 24px;
+      margin-top: 15px;
+    }
+  }
+}
+
+.container {
+  width: 68%;
+  text-align: center;
+  height: 84%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  &_ui {
+    height: 98%;
+    &__heading {
+      width: 100%;
+      background: #f6f6f6;
+      color: #767676;
+    }
+    &__expand {
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      .content {
+        text-align: left;
+        position: relative;
+      }
+      .heading {
+        height: 10px;
+        width: 100%;
+        background: #56b699;
+      }
+    }
+  }
+}

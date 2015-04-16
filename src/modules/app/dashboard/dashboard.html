@@ -1,0 +1,39 @@
+<div layout="row" layout-sm="column" layout-align="space-around" ng-if="vmDash.loading">
+  <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+</div>
+<div id="dashboard">
+
+  <div ng-if="vmDash.showBuyNow" layout="row" layout-margin layout-fill>
+    <div flex class="panel bg-info ">
+      <a ng-href="{{vmDash.paymentPage}}" target="_blank">
+        <div class="panel-body">
+          <br>
+          <i class="fa fa-clock-o bg-icon"></i>
+          <h1 ng-bind-html="vmDash.upgradePromptMessage"></h1>
+          <br>
+          <span class="text-sm"><br></span>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div track-list tracks="vmDash.tracks " start-practice="vmDash.startPractice " is-visible="vmDash.enableScore && !vmDash.loading " can-practice="vmDash.canPractice "></div>
+  <div>
+    <div class=" fadeIn animated " ng-if="vmDash.isChallengeAvailable ">
+      <div class="col-md-12 ">
+        <div class="panel topic-content panel-dark widget-profile ">
+          <div class="panel-heading dashboard-title ">
+            <span class="panel-title "> <h4><i class="panel-title-icon fa fa-fire "></i>Challenge</h4>
+          </span>
+          </div>
+          <div class="list-group text-left ">
+            <div challenge-dashboard challenges="vmDash.challengesGames "></div>
+          </div>
+        </div>
+      </div>
+      <div class="push "></div>
+    </div>
+  </div>
+  <div ng-show="vmDash.showingTour " class="grockit-welcome " style="color:white; ">
+    <h1>Welcome to Grockit <span ng-bind="$root.groupTitle "></span>!</h1>
+  </div>
+</div>
