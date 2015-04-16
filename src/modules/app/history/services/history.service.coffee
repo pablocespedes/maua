@@ -1,4 +1,4 @@
-history = ($q,$sce,dateUtils,resource,utilities)->
+history = ($q,$sanitize,dateUtils,resource,utilities)->
   new class HistoryService extends resource
     constructor: () ->
       super()
@@ -8,10 +8,6 @@ history = ($q,$sce,dateUtils,resource,utilities)->
     parseQuestionsData : (roundSessions) ->
       questionsWithDay = _.map(roundSessions, (question) ->
         date = new Date(question.created_at)
-
-        question.question_stimulus=
-          utilities.htmlToPlaintext(question.question_stimulus)
-
         question.day = dateUtils.getStandardDate(date)
         if question.created_at and question.answered_at
           question.time_to_answer =
@@ -43,5 +39,5 @@ history = ($q,$sce,dateUtils,resource,utilities)->
       @currentPage = 1
       return
 
-history.$inject = ['$q','$sce','dateUtils','resource','utilities']
+history.$inject = ['$q','$sanitize','dateUtils','resource','utilities']
 module.exports = history

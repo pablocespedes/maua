@@ -4,12 +4,12 @@ product = (Observer, utilities)->
   new class Product extends Storage
     constructor: ->
       super()
-      @currentUser = @get('currentUser')
+      @currentUser = @get('userInfo')
       @observable = Observer.create('currentProduct')
     currentGroupId : (groupId, actualGroup) ->
       if @currentUser isnt null and groupId isnt @currentUser.currentGroup
         @currentUser.currentGroup = groupId
-        @save 'currentUser', @currentUser
+        @save 'userInfo', @currentUser
       utilities.setGroupTitle actualGroup.name
       @observable.notify groupId
 

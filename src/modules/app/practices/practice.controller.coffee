@@ -1,5 +1,4 @@
 'use strict'
-### @ngInject ###
 class PracticeController
   # Services injected into the controller constructor
   constructor: ($scope,$timeout,@product, @practiceService,@utilities,
@@ -23,20 +22,18 @@ class PracticeController
     @isDisabled = false
     @init()
     #Takes care to unregister the group once the user leaves the controller
-    # @scope.$on '$destroy', =>
-    #   @product.unregisterGroup practiceObserver
+    $scope.$on '$destroy', ->
+      console.log $scope
+      $scope.vmPr.product.unregisterGroup $scope.vmPr.practiceObserver
 
   init : ->
-    @practiceObserver = @product.observeGroupId().register((groupId) =>
-      console.log @activeGroupId isnt groupId
+    @practiceObserver = @product.observeGroupId().register (groupId) =>
       if @activeGroupId isnt groupId
-        console.log 'entro'
         @activeGroupId = groupId
         @setCurrentTrack groupId
         @questionAnalytics = @activeGroupId is 'gmat' or
          @activeGroupId is 'act' or @activeGroupId is 'sat' or
           @activeGroupId is 'gre'
-    )
 
   nextAction : ->
     @pauseTimers()

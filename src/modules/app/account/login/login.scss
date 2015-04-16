@@ -1,31 +1,58 @@
-#signin-demo {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  z-index: 10000;
-  background: rgba(0, 0, 0, .6);
-  padding: 6px;
-  border-radius: 3px;
+.body-auth #content {
+    background: url(../images/background/1.png)center center no-repeat fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover
 }
-#signin-demo img {
-  cursor: pointer;
-  height: 40px;
+
+.page-forgot h1,.page-signin h1,.page-signup h1 {
+    font-weight: 300;
+    color: #fafafa;
+    font-size: 54px;
+    margin-bottom: 60px
 }
-#signin-demo img:hover {
-  opacity: .5;
+
+.page-forgot h1 a,.page-signin h1 a,.page-signup h1 a {
+    color: #fafafa
 }
-#signin-demo div {
-  color: #fff;
-  font-size: 10px;
-  font-weight: 600;
-  padding-bottom: 6px;
+
+.page-forgot .card .card-content,.page-signin .card .card-content,.page-signup .card .card-content {
+    padding: 30px 20px
 }
-#page-signin-bg {
-  height: 100%;
-  left: 0;
-  overflow: auto!important;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 20;
+
+.page-forgot .ui-input-group .form-control,.page-signin .ui-input-group .form-control,.page-signup .ui-input-group .form-control {
+    color: #555
+}
+
+.page-forgot .form-group,.page-signin .form-group,.page-signup .form-group {
+    position: relative;
+    margin: 0
+}
+
+.page-forgot .signin-header,.page-signin .signin-header,.page-signup .signin-header {
+    margin-top: 50px
+}
+
+@media (min-width: 768px) {
+    .page-forgot .signin-header,.page-signin .signin-header,.page-signup .signin-header {
+        margin-top:150px
+    }
+}
+
+.page-forgot .logo,.page-signin .logo,.page-signup .logo {
+    font-size: 26px;
+    font-weight: 400
+}
+
+.page-forgot .logo a:hover,.page-signin .logo a:hover,.page-signup .logo a:hover {
+    text-decoration: none
+}
+
+.page-forgot .wrapper,.page-signin .wrapper,.page-signup .wrapper {
+    padding: 0 10px
+}
+
+.page-forgot .main-body,.page-signin .main-body,.page-signup .main-body {
+    max-width: 420px;
+    margin: 10px auto
 }

@@ -17,6 +17,7 @@ module.exports = angular.module('grockitApp.history', [])
       templateUrl: 'app/history/history.html'
       controller: 'HistoryController'
       controllerAs: 'vmHist'
+      return
 )
 
 .factory 'history', HistoryService

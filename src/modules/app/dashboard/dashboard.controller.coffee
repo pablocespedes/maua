@@ -3,26 +3,31 @@
 class DashboardController
   # Services injected into the controller constructor
   constructor: ($window,$scope,$state,$auth,@product,@authorization,
-    @dashboardService, @utilities,@membership) ->
-    @scope = $scope
+    @dashboardService, @utilities,@membership,@userNotify) ->
     @state=$state
+    userObserver = null
     dashObserver = null
     showingTour = false
     showTour = false
     loading = true
     isChallengeAvailable = false
-    loadingMessage = 'Loading...'
     historyVisible = false
     #$state.go('login') unless $auth.isAuthenticated
-    @init()
-    @scope.$on '$destroy', ->
-      #@product.unregisterGroup @dashObserver
+    $scope.$on '$destroy', () ->
+      console.log 'destroy dashboard observers'
+      $scope.vmDash.product.unregisterGroup $scope.vmDash.dashObserver
+      $scope.vmDash.userNotify.unregisterUserData $scope.vmDash.userObserver
+
+    @userObserver = @userNotify.observeUserData().register (userExist) =>
+      @init()
 
   init : ->
+    console.log 'Start init method from Dashboard'
     if @authorization.userExist()
+      console.log 'dastboar after validate user', @authorization.userExist()
       userInfo = @authorization.getUser()
       user_id = userInfo.userId
-      dashObserver = @product.observeGroupId().register((groupId) =>
+      @dashObserver = @product.observeGroupId().register (groupId) =>
         if @activeGroupId isnt groupId
           @activeGroupId = groupId
           @_getDashboard @activeGroupId
@@ -34,7 +39,6 @@ class DashboardController
           historyVisible = false
           baseUrl = @utilities.originalGrockit(false)
           @paymentPage = baseUrl + '/' + @activeGroupId + '/subscriptions/new'
-      )
 
   startPractice : (subject, trackId) =>
     if @canPractice
@@ -93,6 +97,6 @@ class DashboardController
       challengesGames = challenge.items
 
 DashboardController.$inject = ['$window','$scope','$state','$auth','product',
-'authorization','dashboardService','utilities','membership']
+'authorization','dashboardService','utilities','membership','userNotify']
 
 module.exports = DashboardController

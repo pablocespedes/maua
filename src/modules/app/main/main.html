@@ -1,64 +1,63 @@
 <div layout="column" tabindex="-1" role="main" layout-align="center" flex="" aria-hidden="false">
-<div id="main-toolbar" layout="row">
-    <md-toolbar  >
-    <div class="md-toolbar-tools">
-      <div flex="" class="fill-height">
-        <div class="md-toolbar-item">
-          <md-button class="menu-icon" ng-click="appCtrl.toggleList()" aria-label="Show menu List">
-            <md-icon class="md md-menu md-lg"></md-icon>
-          </md-button>
-        </div>
-        <div class="md-toolbar-item" ui-sref="#">
-          <span><img alt="Grockit" style="height: 44px;" src="http://grockit.com/blog/wp-content/uploads/2015/01/GrockitGetIN2.png" /></span>
-        </div>
-        <div class="md-toolbar-item  menu">
-          <md-select placeholder="{{$root.groupTitle}}" ng-model="appCtrl.activeGroupId">
-            <md-option ng-repeat="linked in appCtrl.ugroups.linkedGroups track by $index" value="{{linked.id}}" ng-bind="linked.name" ng-click="appCtrl.groupRedirect(linked.id)">
-            </md-option>
-            <md-option ng-repeat="unlinked in appCtrl.ugroups.unLinkedGroups track by $index" value="{{unlinked.id}}" ng-click="appCtrl.groupRedirect(unlinked.id)" ng-bind="unlinked.name"> </md-option>
-          </md-select>
-        </div>
-        <span flex=""></span>
-        <div class="md-toolbar-item">
-          <img class="md-fab md-primary round-img" ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="avatar" />
-        </div>
-        <div class="md-toolbar-item md-tools menu">
-          <md-select placeholder="{{::appCtrl.currentUser.firstName}}" ng-model="test">
-            <md-option value="0">
-              <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/account" class="dropdown-link">Account</a>
-            </md-option>
-            <md-option value="1">
-              <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}" class="dropdown-link">Profile</a>
-            </md-option>
-            <md-option value="3">
-              <a ng-click="appCtrl.logOut()" class="dropdown-link">Log Out</a>
-            </md-option>
-          </md-select>
+  <div id="main-toolbar" layout="row">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <div flex="" class="fill-height">
+          <div class="md-toolbar-item">
+            <md-button class="menu-icon" ng-click="appCtrl.toggleList()" aria-label="Show menu List">
+              <md-icon class="md md-menu md-lg"></md-icon>
+            </md-button>
+          </div>
+          <div class="md-toolbar-item" ui-sref="#">
+            <span><img alt="Grockit" style="height: 44px;" src="http://grockit.com/blog/wp-content/uploads/2015/01/GrockitGetIN2.png" /></span>
+          </div>
+          <div class="md-toolbar-item  menu">
+            <md-select ng-model="appCtrl.activeGroupId">
+              <md-select-label>{{$root.groupTitle}}</md-select-label>
+              <md-option ng-repeat="linked in appCtrl.ugroups.linkedGroups track by $index" value="{{linked.id}}" ng-bind="linked.name" ng-click="appCtrl.groupRedirect(linked.id)">
+              </md-option>
+              <md-option ng-repeat="unlinked in appCtrl.ugroups.unLinkedGroups track by $index" value="{{unlinked.id}}" ng-click="appCtrl.groupRedirect(unlinked.id)" ng-bind="unlinked.name"> </md-option>
+            </md-select>
+          </div>
+          <span flex=""></span>
+          <div class="md-toolbar-item">
+            <img class="md-fab md-primary round-img" ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="avatar" />
+          </div>
+          <div class="md-toolbar-item md-tools menu">
+            <md-select ng-model="appCtrl.currentUser.firstName">
+              <md-select-label>{{appCtrl.currentUser.firstName}}</md-select-label>
+              <md-option value="0">
+                <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/account" class="dropdown-link">Account</a>
+              </md-option>
+              <md-option value="1">
+                <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}" class="dropdown-link">Profile</a>
+              </md-option>
+              <md-option value="3">
+                <a ng-click="appCtrl.logOut()" class="dropdown-link">Log Out</a>
+              </md-option>
+            </md-select>
+          </div>
         </div>
       </div>
-    </div>
-  </md-toolbar>
-</div>
-
+    </md-toolbar>
+  </div>
   <div layout="row">
-    <md-sidenav class="mm-menu" md-component-id="left">
-      <md-list>
-        <div class="menu-header">
-         <md-icon class="menu-toggle md md-arrow-back md-2x"></md-icon>
-          <h2 class="menu-title">Dashboard</h2>
-        </div>
-        <md-item ng-repeat="item in appCtrl.menu">
-          <md-button ng-if="item.isReady && item.canAccess && item.shouldShow" ng-href="{{item.url}}">
-            <i class="fa {{item.iconclass}}"></i>
-            <span class="mm-text">{{item.title}}</span>
-          </md-button>
-          <md-button ng-if="item.isReady && !item.canAccess && item.shouldShow" class="disabled">
-            <i class="fa {{item.iconclass}}"></i>
-            <span class="mm-text">{{item.title}}</span>
-            <i class="pull-right menu-icon fa fa-lock"></i>
-          </md-button>
-        </md-item>
-      </md-list>
+    <md-sidenav id="main-menu" md-component-id="left">
+      <md-toolbar class="md-tall  menu-header">
+        <md-icon class="menu-toggle md md-arrow-back md-2x"></md-icon>
+        <h2 class="md-toolbar-tools md-toolbar-tools-bottom menu-title">Dashboard</h2>
+      </md-toolbar>
+      <md-list-item ng-repeat="item in appCtrl.menu">
+        <md-button ng-if="item.isReady && item.canAccess && item.shouldShow" ng-href="{{item.url}}" class="item ">
+          <i class="fa {{item.iconclass}}"></i>
+          <span class="mm-text">{{item.title}}</span>
+        </md-button>
+        <md-button ng-if="item.isReady && !item.canAccess && item.shouldShow" class="item disabled">
+          <i class="fa {{item.iconclass}}"></i>
+          <span class="mm-text">{{item.title}}</span>
+          <i class="pull-right menu-icon fa fa-lock"></i>
+        </md-button>
+      </md-list-item>
     </md-sidenav>
     <md-content flex class="ui-view-container">
       <div data-ui-view=""></div>

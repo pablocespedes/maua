@@ -11,7 +11,7 @@ initConfig =  ($httpProvider, $stateProvider,
   'hue-3': 'A700')
   .accentPalette 'blue-grey', 'default': '100'
 
-  ApiUrlsProvider.host = "api.grockit.com"
+  ApiUrlsProvider.host = "api.staging.grockit.com"
   ApiUrlsProvider.port = ''#3000
 
   delete $httpProvider.defaults.headers.common["X-Requested-With"]

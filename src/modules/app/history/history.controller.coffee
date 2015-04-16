@@ -2,23 +2,18 @@
 class HistoryController
   # Services injected into the controller constructor
   constructor: ($scope, $state, $auth, @history, @product, @collapseManager) ->
-    @scope = $scope
-    #$state.go('login') unless $auth.isAuthenticated
-    console.log  'history asd'
-    @productObserver = @product.observeGroupId().register((groupId) =>
-      console.log 'test history'
-      @updateGroupId(groupId)
-      return
-    )
     @loading = true
     @isRequesting = false
     @history.reset()
     @collapseManager.reset()
-
-    # @scope.$on '$destroy', =>
-    #   @product.unregisterGroup @productObserver
+    @productObserver = @product.observeGroupId().register (groupId) =>
+      @updateGroupId(groupId)
+    $scope.$on '$destroy', ->
+      console.log 'destroy history observers'
+      $scope.vmHist.product.unregisterGroup $scope.vmHist.productObserver
 
   getQuestions : ->
+    #here history
     @loading = true
     if not @isRequesting
       @isRequesting = true

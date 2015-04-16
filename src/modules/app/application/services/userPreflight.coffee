@@ -11,12 +11,15 @@ userPreflight = ($window,$location,authorization,user,groups,
       userResponse.currentGroup or $location.path() == ''
 
     checkUser: (event) ->
-      if authorization.userExist()
+      console.log 'try to authenticated'
+      if authorization.tokenExists()
+        console.log ('authenticated')
         user.self(true).then (userResponse) ->
-          console.log 'esto es depues del self'
+          console.log 'obtiene el user', userResponse, userResponse isnt null
           if userResponse isnt null
+
             groups.membershipGroups(true).then (groupsResult) ->
-              console.log 'esto despues del response de groups'
+              console.log 'after groups response'
               uGroups = groupsResult.data.groups
               if _isBasePath(userResponse)
                 utilities.internalRedirect '/' +
@@ -24,6 +27,7 @@ userPreflight = ($window,$location,authorization,user,groups,
                 return
               else
                 urlGroup = utilities.getCurrentParam('subject')
+                console.log 'THIS IS THE CURRENT GROUP FROM URL', urlGroup
                 userGroup = _userGroup(userResponse.groupMemberships, urlGroup)
                 console.log urlGroup, userGroup
                 actualGroup = _actualGroup(uGroups, urlGroup)
@@ -37,6 +41,7 @@ userPreflight = ($window,$location,authorization,user,groups,
                 else
                   membership.setMembershipInfo userResponse, userGroup
                   membership.userCanAccesPage urlGroup
+                  console.log 'HERE ITs going tto save the group in localStorage'
                   product.currentGroupId urlGroup, actualGroup
                   return
             #.catch getUserDataFailed

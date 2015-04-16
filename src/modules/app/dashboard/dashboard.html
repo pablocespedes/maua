@@ -1,26 +1,21 @@
+<div layout="row" layout-sm="column" layout-align="space-around" ng-if="vmDash.loading">
+  <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+</div>
 <div id="dashboard">
-  <br>
-  <div layout="row">
-   <md-progress-circular class="md-hue-2" md-mode="indeterminate" ng-if="vmDash.loading">
-   </md-progress-circular>
 
-  </div>
-    <div ng-if="vmDash.showBuyNow" layout="row" layout-margin layout-fill>
-      <div flex class="panel bg-info ">
-        <a ng-href="{{vmDash.paymentPage}}" target="_blank">
-          <div class="panel-body">
-            <br>
-            <i class="fa fa-clock-o bg-icon"></i>
-            <span class="text-lg ">
-            <span ng-bind-html="vmDash.upgradePromptMessage"></span>
-            </span>
-            <br>
-            <span class="text-sm"><br></span>
-          </div>
-        </a>
-      </div>
+  <div ng-if="vmDash.showBuyNow" layout="row" layout-margin layout-fill>
+    <div flex class="panel bg-info ">
+      <a ng-href="{{vmDash.paymentPage}}" target="_blank">
+        <div class="panel-body">
+          <br>
+          <i class="fa fa-clock-o bg-icon"></i>
+          <h1 ng-bind-html="vmDash.upgradePromptMessage"></h1>
+          <br>
+          <span class="text-sm"><br></span>
+        </div>
+      </a>
     </div>
-
+  </div>
   <div track-list tracks="vmDash.tracks " start-practice="vmDash.startPractice " is-visible="vmDash.enableScore && !vmDash.loading " can-practice="vmDash.canPractice "></div>
   <div>
     <div class=" fadeIn animated " ng-if="vmDash.isChallengeAvailable ">

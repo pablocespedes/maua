@@ -82,7 +82,7 @@ menu = ($window,utilities)->
         }
         {
           id: 'history'
-          url: '#/' + options.groupId + '/history/'
+          url: '#/' + options.groupId + '/history'
           canAccess: canAccess
           title: 'History'
           isReady: options.isReady

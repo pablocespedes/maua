@@ -16,10 +16,10 @@ trackList = ($mdDialog)->
 
       scope.showAdvanced = (ev) ->
         console.log 'test'
-        $mdDialog.show
-          #controller: DialogController
-          templateUrl: 'app/dashboard/directives/track-list/dashboard.tags.html'
-          targetEvent: ev
+        # $mdDialog.show
+        #   #controller: DialogController
+        #   templateUrl: 'app/dashboard/directives/track-list/dashboard.tags.html'
+        #   targetEvent: ev
 
       scope.opendDialog = (dialogId) ->
 

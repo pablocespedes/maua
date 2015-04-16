@@ -1,7 +1,7 @@
 'use strict'
 
 #Requering files
-DashboardService = require('./services/dashboard.service')
+DashboardService = require('./services/dashboard.utils')
 DashboardController = require('./dashboard.controller')
 TrackList =  require('./directives/track-list/track-list')
 Challenge =  require('./directives/challenge/challenge')

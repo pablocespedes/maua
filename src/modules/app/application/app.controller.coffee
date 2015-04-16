@@ -1,13 +1,8 @@
 'use strict'
-
-### @ngInject ###
-
 class AppController
-
   constructor: ($scope, $window, @utilities, @user,@product, @groups,
     @authorization,$mdSidenav,@menuService,@membership)->
     @mdSidenav = $mdSidenav
-    @scope = $scope
     @window = $window
     @userProgressObserver = null
     @scorePrediction = null
@@ -16,28 +11,25 @@ class AppController
     if(@authorization.userExist())
       @_init()
 
-    @scope.$on '$destroy', =>
+    $scope.$on '$destroy', =>
       @product.unregisterGroup @userProgressObserver
 
-  hideVideoOption : (groupId) ->
+  hidVideoOption : (groupId) ->
     @hideVideoOption = groupId is 'ap_calculus' or
      groupId is 'ap_psychology' or groupId is 'ap_us_history' or
       groupId is 'ap_world_history' or groupId is 'academy' or
        groupId is 'iim-cat'
-    return
 
-  hideStudyPlan : (groupId) ->
+  hidStudyPlan : (groupId) ->
     @hideStudyPlan = groupId is 'ap_psychology' or
      groupId is 'ap_world_history' or groupId is 'gre' or
       groupId is 'lsat' or groupId is 'iim-cat'
-    return
 
   toggleList:() ->
     @mdSidenav('left').toggle()
 
   groupRedirect:(id) ->
     @activeGroupId=id
-
     @utilities.redirect '#/'+ id + '/dashboard'
 
   selectGroup : (index) ->
@@ -52,7 +44,7 @@ class AppController
       linkedGroups: []
       unLinkedGroups: []
     if @currentUser.groupMemberships.length > 0
-      @groups.membershipGroups(true).then((result) =>
+      @groups.membershipGroups(true).then (result) =>
         responseGroups = result.data.groups
         if (!!responseGroups)
 
@@ -75,8 +67,6 @@ class AppController
             i++
           @ugroups.unLinkedGroups = responseGroups
           @activeGroupId = groupId
-      ).catch (e) ->
-        alerts.showAlert alerts.setErrorApiMsg(e), 'danger'
     else
       alerts.showAlert appMessages.noGroupsFound, 'warning'
 
@@ -102,6 +92,7 @@ class AppController
     )
 
   _setInitialData: (response, groupId) ->
+    console.log 'set initial data'
     if @activeGroupId isnt groupId
       @enableScore = groupId is 'gmat' or groupId is 'act' or
       groupId is 'sat'
@@ -112,18 +103,6 @@ class AppController
         'studyingFor': groupId
         'userId': response.userId
       #GoogleTagManager.push gtmData
-
-      menuParams =
-        isReady: true
-        groupId: groupId
-
-      @canAccess = @membership.canPractice()
-
-      @hideVideoOption(groupId)
-      @hideStudyPlan(groupId)
-      @menu = @menuService.createLeftMenu(menuParams, @hideStudyPlan,
-        @hideVideoOption, @canAccess)
-
       @_loadGroupMembership(groupId)
       #ListenloopUtility.base response
       #Application.getUserProgress()
@@ -131,23 +110,28 @@ class AppController
       currentLoc = url[url.length - 1]
       @activeItem = currentLoc
 
+  setMenu:(groupId) ->
+      menuParams =
+        isReady: true
+        groupId: groupId
+
+      @canAccess = @membership.canPractice()
+
+      @hidVideoOption(groupId)
+      @hidStudyPlan(groupId)
+      @menu = @menuService.createLeftMenu(menuParams, @hideStudyPlan,
+        @hideVideoOption, @canAccess)
+
   _init: ->
-    @user.self(true).then((response) =>
-      if response != null
+    @user.self(true).then (response) =>
+      if response isnt null
         @currentUser = response
-        #@_setInitialData @currentUser, @currentUser.currentGroup
-        @userProgressObserver = @product.observeGroupId()
-        .register((groupId) =>
-          @_setInitialData response, groupId
-          return
-        )
         #GaUtility.classic()
         #GaUtility.UA()
         #InspectletUtility.base()
-    ).catch (e) ->
-      console.log e
-      #alerts.showAlert alerts.setErrorApiMsg(e), 'danger'
-
+        @setMenu(@currentUser.currentGroup)
+        @userProgressObserver = @product.observeGroupId().register (groupId) =>
+          @_setInitialData response, groupId
 
  AppController.$inject = ['$scope', '$window', 'utilities', 'user','product',
 'groups','authorization','$mdSidenav','menuService','membership']

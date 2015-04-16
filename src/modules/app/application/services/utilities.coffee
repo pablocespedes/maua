@@ -100,7 +100,7 @@ utilities = ($state,$rootScope, $http, $location, $q, $window, urlsCons) ->
       _grockitHostEvaluation(false)
 
     htmlToPlaintext :(text) ->
-      String(text).replace /<[^>]+>/gm, ''
+      return String(text).replace(/<[^>]+>/gm, '')
 
 utilities.$inject=['$state','$rootScope', '$http', '$location','$q',
 '$window','urlsCons']

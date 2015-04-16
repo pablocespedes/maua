@@ -1,4 +1,4 @@
-<div layout-sm="column" layout="row" layout-margin layout-fill layout-padding layout-wrap>
+<div layout-sm="column" layout="row" layout-fill layout-padding layout-wrap>
   <div flex-lg="33" flex-md="50" flex-sm="100" flex-gt-md="33" flex-gt-lg="25" ng-repeat="track in tracks">
     <md-card class="card">
       <div class="card-img-top">
@@ -11,10 +11,10 @@
         </p>
         <div layout="row" flex="" class="fill-height card-actions" >
         <md-button class="md-hue-2 md-primary" ng-click="startPractice(track,track.id)" >Practice</md-button>
-        <md-button class="md-hue-2 md-primary">Learn</md-button>
+        <md-button class="md-hue-2 md-primary learn-button" ng-href="http://grockit.com/blog/gre-math-articles-resources/" target="_blank">Learn</md-button>
         <span flex="4"></span>
-        <button class="md-button md-hue-2 md-default-theme" ng-click="showAdvanced($event)">
-        <md-icon class=" md-primary md-hue-2" md-svg-src="./assets/icons/action/svg/design/ic_settings_24px.svg"></md-icon>
+        <button class="md-button md-hue-2" ng-click="showAdvanced($event)">
+        <md-icon class=" md-primary md-hue-2 md md-settings md-2x"></md-icon>
         </button>
       </div>
       </md-card-content>

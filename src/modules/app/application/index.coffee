@@ -25,8 +25,10 @@ UserPreflight = require('./services/userPreflight')
 Membership = require('./services/membership')
 Timer = require('./services/timer')
 Youtube = require('./services/youtube')
+UserNotify = require('./services/user.notify')
 
 module.exports = angular.module('grockitApp.app', [])
+.factory 'userNotify', UserNotify
 .factory 'menuService', Menu
 .factory 'levels', Levels
 .filter 'formatSeconds', formatSeconds

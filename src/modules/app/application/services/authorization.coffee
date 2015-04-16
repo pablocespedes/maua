@@ -15,14 +15,19 @@ authorization = ($window)->
     setToken: (token) ->
       @cachedToken = token
       @save @userToken, token
+
     getCookie: (key) ->
+      cookie = null
       keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)')
-      if keyValue then keyValue[2] else null
+      if angular.isDefined(keyValue) and keyValue != null
+        cookie = keyValue[2]
+      cookie
 
     getToken: ->
       @cachedToken = decodeURIComponent @getCookie('authentication_token')
       #@get(@userToken) unless @cachedToken
       @cachedToken
+
     removeToken: ->
       @cachedToken = null
       @remove @userToken
@@ -37,6 +42,9 @@ authorization = ($window)->
 
     userExist: ->
       !!(@getUser())
+
+    tokenExists: ->
+      !!(@getToken())
 
     removeUser: ->
       @cachedUser = null

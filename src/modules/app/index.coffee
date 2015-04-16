@@ -4,12 +4,14 @@ run = ($rootScope, $location, userPreflight) ->
   $rootScope.$on '$locationChangeSuccess', (event, next, current) ->
     console.log 'paso por aqui'
     userPreflight.checkUser event
-    return
+  return
+
 
 module.exports = angular.module('grockitApp', [
   'ngMaterial'
   'ui.router'
   'ngMessages'
+  'ngSanitize'
   'satellizer'
   'restangular'
   'ngResource'
