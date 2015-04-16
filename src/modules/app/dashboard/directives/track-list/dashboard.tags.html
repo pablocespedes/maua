@@ -1,0 +1,41 @@
+<md-dialog id="tagsDialog" aria-label="GRE">
+  <md-toolbar class="md-tall">
+    <div class="md-toolbar-tools">
+      <div layout="row" flex="" class="fill-height">
+        <div class="md-toolbar-item">
+          <img src="https://grockit.com/images/thumbs/gre.png">
+        </div>
+        <div class="md-toolbar-item">
+          <h2 class="md-toolbar-tools">
+            <span>Arithmetic and Number Properties</span>
+          </h2>
+        </div>
+        <div class="md-toolbar-item md-tools">
+          <md-buttton></md-buttton>
+        </div>
+      </div>
+    </div>
+  </md-toolbar>
+  <md-content class="sticky-container" style="min-width: 1024px;">
+    <div class="dialog-content">
+      <md-list>
+        <md-item ng-repeat="t in [1,2,3,4,5,6,7,8,9]">
+          <md-item-content>
+            <div class="md-tile-left">
+              <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+              </md-checkbox>
+            </div>
+            <div class="md-tile-content">
+              Properties of sets
+              <h3>Skill Data : 45%</h3>
+              <h4>Complete Questions: 45/70</h4>
+            </div>
+            <div class="md-tile-right">
+               <md-icon class=" md-primary" md md-play-circle-fill ></md-icon>
+            </div>
+          </md-item-content>
+        </md-item>
+      </md-list>
+    </div>
+  </md-content>
+</md-dialog>

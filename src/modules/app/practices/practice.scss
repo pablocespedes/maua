@@ -1,0 +1,469 @@
+/* just a trick to avoid a bad css to be remoed from the CE */
+
+.Apple-style-span {
+  float: inherit;
+  min-height: 1px;
+  margin-left: 0px;
+}
+
+.confirm-panel{
+  text-align: right;
+}
+
+.feedback-box{
+  label{
+    margin-top: 10px;
+  }
+}
+
+
+
+.practice-header {
+  .practice-element-sm {
+    width: 6.55%;
+  }
+  .practice-element {
+    font-size: 13px;
+  }
+  .practice-xl {
+    height: 42px;
+  }
+  .practice-sm {
+    height: 25px;
+    padding-top: 2px;
+  }
+  .practice-align {
+    text-align: center;
+  }
+}
+
+.timing-box-padding {
+  padding: 5px 5px 5px 5px !important;
+  color: #000000;
+  min-height: 45px;
+  max-height: 45px;
+}
+
+.track-list-lg {
+  border-radius: 2px;
+  padding-bottom: 8px;
+  padding-top: 2px;
+}
+
+.practice-result {
+  line-height: 45px;
+}
+
+.practice-result .fa {
+  font-size: 20px;
+}
+
+.practice-offset {
+  width: 44%;
+}
+
+.practice-data {
+  font-weight: bold;
+  font-size: 18px;
+  color: #555;
+}
+
+.practice-tags {
+  margin-top: 10px;
+}
+
+.timing-check {
+  position: relative;
+  height: 100px;
+  text-align: center;
+}
+
+.abs-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.avg-badge {
+  padding: 3px 3px 0 4px;
+}
+
+.timing-padding {
+  margin-bottom: -17px;
+  padding-left: 3px !important;
+  padding-right: 3px !important;
+}
+
+.tags-only {
+  text-align: left;
+  display: inline;
+  padding-left: 5px;
+}
+
+#skipAction {
+  cursor: pointer;
+}
+
+.timing-skills {
+  height: 100%;
+  text-align: left;
+  margin-top: -10px;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.timing-box {
+  height: 55px;
+  text-align: center;
+  padding-top: 8px;
+}
+
+.timing-average {
+  height: 70px;
+  text-align: center;
+  padding-top: 12px;
+}
+
+.timing-answeredC {
+  height: 70px;
+  text-align: center;
+  padding-top: 4px;
+}
+
+.state-overview {
+  margin-left: -1px;
+  margin-right: -1px;
+}
+
+.row-fluid.icon-btn {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.row-fluid.check {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.no-hover:hover {
+  background: white !important;
+}
+
+#practice {
+  .md-button {
+    padding: 0px;
+  }
+  .disable-choice {
+    img {
+      opacity: 0.2;
+    }
+    cursor: not-allowed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    color: rgba(219, 219, 219, 0.5);
+    background-color: rgba(219, 219, 219, 0.5);
+  }
+  .cross-out {
+    color: #555;
+    position: absolute;
+    right: 6px;
+    top: 11px;
+  }
+  .cross-out:hover {
+    cursor: pointer;
+  }
+  .bad-numeric-input {
+    border-color: #e66454;
+  }
+  .correct-numeric-input {
+    border-color: #4cae4c;
+  }
+  .columnsContainer {
+    position: relative;
+  }
+  .leftColumn {
+    margin-bottom: .5em;
+    text-align: justify;
+  }
+  #Panel1 img {
+    max-width: 100%;
+    width: auto;
+    height: auto;
+  }
+  .video-container {
+    position: relative;
+    padding-bottom: 8.25%;
+    padding-top: 35px;
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .choice {
+    margin-bottom: -1px;
+  }
+  .choice input {
+    cursor: default;
+    display: none;
+  }
+  .btn-option.btn-rounded {
+    -webkit-border-radius: 9999px;
+    -moz-border-radius: 9999px;
+    border-radius: 9999px;
+  }
+  .divisor {
+    color: $divisor;
+    font-weight: bold;
+  }
+  #numericEntry {
+    max-width: 30%;
+  }
+  div.content {
+    margin-left: 47px;
+    padding-bottom: 16px;
+  }
+  div.middle {
+    margin-top: 8px;
+    padding-top: 5px;
+  }
+  .hide {
+    display: none;
+  }
+  //matrix question
+  #sat {
+    width: 200px;
+  }
+  .first-set {
+    margin-left: 15px;
+    margin-right: 13px;
+  }
+  .second-set {
+    margin-left: 13px;
+    margin-right: 13px;
+    background-color: $letterCircle;
+  }
+  button.matrix {
+    display: block;
+    font-size: 14px;
+    padding: 0px 9px !important;
+    border: 2px solid $letterCircle;
+    font-weight: 700;
+    height: 31px;
+    width: 31px;
+  }
+  button.matrixTop {
+    display: block;
+    font-size: 14px;
+    padding: 0px 9px !important;
+    border: 2px solid $letterCircle;
+    font-weight: 700;
+    height: 31px;
+    width: 31px;
+  }
+  .empty-space-matrix {
+    padding-left: 30px;
+  }
+  table#spr_input tr#slash td.empty {
+    cursor: default;
+    background: #bebebe;
+  }
+  table#spr_input td.empty {
+    cursor: default;
+    background: #bebebe;
+  }
+  table#spr_input td {
+    padding: 6px 12px;
+    border-right: 1px solid #000;
+    cursor: pointer;
+  }
+  table#spr_input tbody {
+    border-bottom: 1px solid #000;
+    border-left: 1px solid #000;
+  }
+  button.letter {
+    display: block;
+    position: absolute;
+    font-weight: 600;
+    margin: -13px -3px;
+  }
+  .expandable-section {
+    padding: 10px 10px;
+    background-color: #eee;
+    display: none;
+  }
+  .score-prediction-graph {
+    max-width: 400px;
+  }
+  .question-explain {
+    background: $questionExplainBg;
+    border-color: #bcbcbc;
+    border: 1px solid $letterCircle;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  .explain-margin {
+    color: black;
+    margin: 2px 4px 2px 2px;
+  }
+  .answer-correct-panel {
+    background: $answerCorrectPanelBg;
+    color: $answerCorrectPanelCol;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  .answer-incorrect-panel {
+    background: $lightInvalidGray;
+    color: $invalidRed;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  .incorrectAnswer.choice #explanationAnswerPanel {
+    background: $lightInvalidRed;
+    color: $invalidRed;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  .answer-incorrect-numEntry {
+    background: $lightInvalidRed;
+    color: $invalidRed;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  .fractionEntry {
+    max-width: 30%;
+    margin-left: 35%;
+  }
+  .answer-status div {
+    margin-top: -14px;
+    margin-right: 6px;
+    color: white;
+  }
+  .answer-percent {
+    color: black;
+    font-size: 14px;
+  }
+  /*Class from old Grockit*/
+
+  div.sentence_correction_underline {
+    display: inline;
+    position: relative;
+    white-space: nowrap;
+    border-bottom: 1px solid #000;
+    line-height: 36px;
+  }
+  div.sentence_correction_letter {
+    position: absolute;
+    top: 6px;
+    left: 0;
+    text-align: center;
+    width: 100%;
+    line-height: 34px;
+  }
+  div.sentence_correction_stimulus {
+    margin-bottom: 5px;
+  }
+  /*End classes from old Grockit*/
+}
+
+.question-status {
+  width: 24px;
+  margin-left: 2px;
+  margin-bottom: 2px;
+}
+
+#splash-loader {
+  padding-top: 20%;
+  margin-bottom: 4px;
+}
+
+.msg {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 2px;
+  padding-top: 11px;
+}
+
+.loader_box {
+  text-align: center;
+  height: 8px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.question-information.fixed-width {
+  //min-width: 480px;
+  width: 520px;
+  margin: 0px auto;
+}
+
+.loader-margin {}
+
+.cloudLoader {
+  width: 150px;
+  height: 100px;
+  background-image: url("../images/CloudSprite.png");
+  left: 55px;
+  margin-left: 0px;
+  -webkit-animation: play 2s steps(66) infinite;
+  -moz-animation: play 2s steps(66) infinite;
+  -ms-animation: play 2s steps(66) infinite;
+  -o-animation: play 2s steps(66) infinite;
+  animation: play 2s steps(66) infinite;
+}
+
+@-webkit-keyframes play {
+  from {
+    background-position: 0px;
+  }
+  to {
+    background-position: -9504px;
+  }
+}
+
+@-moz-keyframes play {
+  from {
+    background-position: 0px;
+  }
+  to {
+    background-position: -9504px;
+  }
+}
+
+@-ms-keyframes play {
+  from {
+    background-position: 0px;
+  }
+  to {
+    background-position: -9504px;
+  }
+}
+
+@-o-keyframes play {
+  from {
+    background-position: 0px;
+  }
+  to {
+    background-position: -9504px;
+  }
+}
+
+@keyframes play {
+  from {
+    background-position: 0px;
+  }
+  to {
+    background-position: -9504px;
+  }
+}
