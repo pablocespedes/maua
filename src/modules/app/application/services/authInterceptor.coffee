@@ -9,7 +9,8 @@ authInterceptor = (authorization) ->
           @indexOf(str) == 0
 
     request: (config) ->
-      shouldAddToken = config.url.startsWith 'https://api' or config.url.startsWith 'https://staging'
+      shouldAddToken = config.url.startsWith 'https://api' or
+       config.url.startsWith 'https://staging'
 
       if shouldAddToken
         accestoken = authorization.getToken()

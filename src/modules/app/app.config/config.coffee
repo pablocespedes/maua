@@ -5,7 +5,7 @@ initConfig =  ($httpProvider, $stateProvider,
   $mdThemingProvider
   .theme('default')
   .primaryPalette('cyan',
-  'default': '700'
+  'default': '500'
   'hue-1': '400'
   'hue-2': '800'
   'hue-3': 'A700')

@@ -1,58 +1,90 @@
 .body-auth #content {
-    background: url(../images/background/1.png)center center no-repeat fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    background-size: cover
+  background: url(../../assets/images/blue-grey-pentagonal-background.jpg)center center no-repeat fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover
 }
 
-.page-forgot h1,.page-signin h1,.page-signup h1 {
-    font-weight: 300;
-    color: #fafafa;
-    font-size: 54px;
-    margin-bottom: 60px
+.body-wide #content {
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding-bottom: 0;
 }
 
-.page-forgot h1 a,.page-signin h1 a,.page-signup h1 a {
-    color: #fafafa
+.page-forgot h1,
+.page-signin h1,
+.page-signup h1 {
+  font-weight: 300;
+  color: #fafafa;
+  font-size: 54px;
+  margin-bottom: 60px
 }
 
-.page-forgot .card .card-content,.page-signin .card .card-content,.page-signup .card .card-content {
-    padding: 30px 20px
+.page-forgot h1 a,
+.page-signin h1 a,
+.page-signup h1 a {
+  color: #fafafa
 }
 
-.page-forgot .ui-input-group .form-control,.page-signin .ui-input-group .form-control,.page-signup .ui-input-group .form-control {
-    color: #555
+.page-forgot .card .card-content,
+.page-signin .card .card-content,
+.page-signup .card .card-content {
+  padding: 30px 20px
 }
 
-.page-forgot .form-group,.page-signin .form-group,.page-signup .form-group {
-    position: relative;
-    margin: 0
+.page-forgot .ui-input-group .form-control,
+.page-signin .ui-input-group .form-control,
+.page-signup .ui-input-group .form-control {
+  color: #555
 }
 
-.page-forgot .signin-header,.page-signin .signin-header,.page-signup .signin-header {
-    margin-top: 50px
+.page-forgot .form-group,
+.page-signin .form-group,
+.page-signup .form-group {
+  position: relative;
+  margin: 0
+}
+
+.page-forgot .signin-header,
+.page-signin .signin-header,
+.page-signup .signin-header {
+  margin-top: 50px
 }
 
 @media (min-width: 768px) {
-    .page-forgot .signin-header,.page-signin .signin-header,.page-signup .signin-header {
-        margin-top:150px
-    }
+  .page-forgot .signin-header,
+  .page-signin .signin-header,
+  .page-signup .signin-header {
+    margin-top: 150px
+  }
 }
 
-.page-forgot .logo,.page-signin .logo,.page-signup .logo {
-    font-size: 26px;
-    font-weight: 400
+.page-forgot .logo,
+.page-signin .logo,
+.page-signup .logo {
+  font-size: 26px;
+  font-weight: 400
 }
 
-.page-forgot .logo a:hover,.page-signin .logo a:hover,.page-signup .logo a:hover {
-    text-decoration: none
+.page-forgot .logo a:hover,
+.page-signin .logo a:hover,
+.page-signup .logo a:hover {
+  text-decoration: none
 }
 
-.page-forgot .wrapper,.page-signin .wrapper,.page-signup .wrapper {
-    padding: 0 10px
+.page-forgot .wrapper,
+.page-signin .wrapper,
+.page-signup .wrapper {
+  padding: 0 10px
 }
 
-.page-forgot .main-body,.page-signin .main-body,.page-signup .main-body {
-    max-width: 420px;
-    margin: 10px auto
+.page-forgot .main-body,
+.page-signin .main-body,
+.page-signup .main-body {
+  max-width: 600px;
+  margin: 0 auto
 }

@@ -5,7 +5,7 @@ class LoginController
   constructor: ($rootScope,$state,$auth,@alert) ->
     @auth=$auth
     @state=$state
-    $rootScope.bodylayout = 'page-signin';
+    $rootScope.bodylayout = 'body-auth body-wide';
 
   submit:() ->
     @auth.login(@email,@password)

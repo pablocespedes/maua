@@ -41,10 +41,8 @@ userPreflight = ($window,$location,authorization,user,groups,
                 else
                   membership.setMembershipInfo userResponse, userGroup
                   membership.userCanAccesPage urlGroup
-                  console.log 'HERE ITs going tto save the group in localStorage'
                   product.currentGroupId urlGroup, actualGroup
                   return
-            #.catch getUserDataFailed
       else
         $('body').html
         'The user is not logged in!<a href="/logout">Click here to restart</a>.'

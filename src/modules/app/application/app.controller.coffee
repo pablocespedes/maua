@@ -111,16 +111,16 @@ class AppController
       @activeItem = currentLoc
 
   setMenu:(groupId) ->
-      menuParams =
-        isReady: true
-        groupId: groupId
+    menuParams =
+      isReady: true
+      groupId: groupId
 
-      @canAccess = @membership.canPractice()
+    @canAccess = @membership.canPractice()
 
-      @hidVideoOption(groupId)
-      @hidStudyPlan(groupId)
-      @menu = @menuService.createLeftMenu(menuParams, @hideStudyPlan,
-        @hideVideoOption, @canAccess)
+    @hidVideoOption(groupId)
+    @hidStudyPlan(groupId)
+    @menu = @menuService.createLeftMenu(menuParams, @hideStudyPlan,
+      @hideVideoOption, @canAccess)
 
   _init: ->
     @user.self(true).then (response) =>
@@ -131,6 +131,7 @@ class AppController
         #InspectletUtility.base()
         @setMenu(@currentUser.currentGroup)
         @userProgressObserver = @product.observeGroupId().register (groupId) =>
+          @setMenu(groupId)
           @_setInitialData response, groupId
 
  AppController.$inject = ['$scope', '$window', 'utilities', 'user','product',

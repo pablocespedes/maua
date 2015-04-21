@@ -19,12 +19,6 @@ var sassOptions = { // The options to be passed to sass()
 }
 
 module.exports = gulp.task('styles', function() {
-  // gulp.task('default', function() {
-  //   console.log('test')
-  //   gulp.src('../bower_components/angular-material/*.css')
-  //     .pipe(importcss())
-  //     .pipe(gulp.dest('build/assets/'));
-  // });
 
   return gulp.src(config.paths.src.styles)
     .pipe(gulpif(release, sass(sassOptions).on('error', handleError),

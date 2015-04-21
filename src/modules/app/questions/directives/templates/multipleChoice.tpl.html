@@ -11,7 +11,7 @@
           </md-tooltip>
       </span>
 
-      <md-button id="{{item.id}}" type="button" class="btn-option md-fab md-mini letter" ng-class="{'md-primary':item.selected && !showExplanation,'bg-success':showExplanation && item.correct,'md-warn':showExplanation && !item.correct && item.selected}">
+      <md-button id="{{item.id}}" type="button" class="btn-option md-fab md-mini letter square-btn" ng-class="{'md-primary':item.selected && !showExplanation,'bg-success':showExplanation && item.correct,'md-warn':showExplanation && !item.correct && item.selected}">
         {{item.option}}
       </md-button>
       <input id="{{item.id}}" type="checkbox" name="choice" value="{{item.position}}"/>

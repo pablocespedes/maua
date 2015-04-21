@@ -16,7 +16,15 @@
   }
 }
 
+.skill-label {
+  margin-left: 5px;
+  padding: .2em .6em .3em;
+  color: $white;
+}
 
+.square-btn{
+  border-radius: 0!important;
+}
 
 .practice-header {
   .practice-element-sm {
@@ -151,9 +159,9 @@
 }
 
 #practice {
-  .md-button {
-    padding: 0px;
-  }
+  // .md-button {
+  //   padding: 0px;
+  // }
   .disable-choice {
     img {
       opacity: 0.2;

@@ -3,31 +3,34 @@
 class VideoController
   # Services injected into the controller constructor
   constructor: ($mdSidenav,$sce,@videoService) ->
+    console.log @videoService, 'Fuck This'
+    @that = this
     @sce = $sce
     @displayVideo= false
-    @videoTitle = 'GRE Video Library (58 videos)'
+    @category = 0
     @mdSidenav = $mdSidenav
-    @getVideoList()
+    @videos = @videoService
     @isClicked = true
 
-  getVideoList:->
-    @videoService.getVideoData('gre').then (result) =>
-      @videos = result
-
-  toggleRight : ->
-    @mdSidenav('right').toggle().then ->
-      return
-  close : ->
-    @mdSidenav('right').close().then ->
-      return
+  checkNavStatus : ->
+    @isVideoListOpen = @mdSidenav('video-right').isOpen()
+    if not @isVideoListOpen
+      @mdSidenav('video-right').toggle()
+    else
+      @mdSidenav('video-right').close()
 
   activeVideo : (currentVideo)->
     @displayVideo= true
     url= currentVideo.stream_url.replace('https:','')
-    console.log url
-    @currentVideoUrl = @sce.trustAsResourceUrl(url);
+    @currentVideoUrl = @sce.trustAsResourceUrl(url)
 
-
+  activeTitle:(videoItem)->
+    console.log @that
+    if angular.isDefined(@)
+      if(videoItem.id is @videos.id or videoItem.id is 0)
+        true
+      else
+        false
 
 VideoController.$inject = ['$mdSidenav','$sce','videoService']
 

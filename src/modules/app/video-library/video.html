@@ -1,20 +1,21 @@
-<md-toolbar layout margin>
-  <div class="container_ui__heading md-toolbar-tools">
-    <div layout="row" flex="" class="fill-height">
-      <div class="md-toolbar-item">
-        <span> <i class="md md-menu md-2x menu_icon" ng-click="vmVideo.close()" hide-gt-md></i></span>
-      </div>
+<md-toolbar margin id="video-library" class="container_ui__heading">
+  <div class="md-toolbar-tools">
+    <div layout="row" flex="" class="fill-height float-right">
       <div class="md-toolbar-item  menu">
-        <md-select style="color:black;" placeholder="Filter By" ng-model="video.id">
-          <md-option value="0">All</md-option>
+        <md-select style="color:black;" placeholder="Filter By" ng-model="vmVideo.category">
+          <md-option value="">All</md-option>
           <md-option ng-repeat="video in vmVideo.videos" value="{{video.id}}">{{video.title}}</md-option>
         </md-select>
       </div>
+      <div class="md-toolbar-item menu">
+        <md-input-container md-no-float>
+          <input ng-model="vmVideo.searchText" type="text" placeholder="Search by Title">
+        </md-input-container>
+      </div>
       <div class="md-toolbar-item">
-        <md-select placeholder="Order By" ng-model="someVal">
-          <md-option value="1">One</md-option>
-          <md-option value="2">Two</md-option>
-        </md-select>
+        <md-button class="md-fab md-mini md-primary" aria-label="Open" ng-click="vmVideo.checkNavStatus()" hide-gt-md>
+          <md-icon class="md md-menu md-2x menu_icon" style="color: greenyellow;"></md-icon>
+        </md-button>
       </div>
     </div>
   </div>
@@ -24,7 +25,7 @@
     <md-content flex class="ui-view-container">
       <div layout="column" layout-fill layout-align="top center">
         <div class="title">
-          <div class="title_inner">
+          <div class="title_inner" ng-if="!vmVideo.displayVideo">
             <h1>
                Start to Learn
           </h1>
@@ -48,25 +49,20 @@
           </div>
         </div>
         <!--  -->
-        <div>
-          <md-button ng-click="vmVideo.toggleLeft()" class="md-primary float-right" hide-gt-md>
-            Toggle Video List
-          </md-button>
-        </div>
       </div>
       <div flex></div>
     </md-content>
-    <md-sidenav id="video-toolbar" class="md-sidenav-right md-whiteframe-z2" md-component-id="right" md-is-locked-open="$mdMedia('gt-md')">
+    <md-sidenav id="video-toolbar" class="md-sidenav-right md-whiteframe-z2" md-component-id="video-right" md-is-locked-open="$mdMedia('gt-md')">
       <md-content id="video-content">
         <div ng-repeat="video in vmVideo.videos">
-          <md-subheader class="md-primary video-subheader" ng-bind="video.title"></md-subheader>
+          <md-subheader class="md-primary video-subheader" value="{{video.id}}" ng-bind="video.title"></md-subheader>
           <md-list>
-            <md-list-item class="md-2-line md-no-proxy" ng-repeat="videoItem in video.videos">
+            <md-list-item class="md-2-line md-no-proxy animate-repeat" ng-repeat="videoItem in video.videos | filter: vmVideo.searchText | orderBy: 'title' ">
               <div class="md-list-item-text">
+                <!-- <md-button class="md-fab md-accent play-button" aria-label="Play"> -->
+                <md-icon class="md md-play-circle-outline md-2x md-play" ng-click="vmVideo.activeVideo(videoItem)"></md-icon>
+                <!-- </md-button> -->
                 <h3>
-                    <!-- <md-button class="md-fab md-accent play-button" aria-label="Play"> -->
-                    <md-icon class="md md-play-circle-outline md-2x play-button-icon" ng-click="vmVideo.activeVideo(videoItem)"></md-icon>
-                  <!-- </md-button> -->
                   <span class="sub-title-video" ng-bind="videoItem.title"></span>
                   </h3>
                 <p>{{videoItem.description}}</p>

@@ -1,0 +1,166 @@
+<div layout="row" layout-md="column"  layout-sm="column" layout-margin>
+  <div flex>
+    <div class="panel">
+      <div class="panel-heading timing-box">
+        <div layout="row">
+          <div flex="33">
+            <i class="md md-access-time md-3x"></i>
+          </div>
+          <div flex="66" class="text-right">
+            <span class="text-lg" ng-if="confirmed"><span ng-bind="yourTime"></span>s </span>
+            <span class="text-lg" ng-if="!confirmed"> <i class="md md-remove md-2x"></i> </span>
+          </div>
+        </div>
+      </div>
+      <a href="javascript:void(0)">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left">Your time to answer</span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div flex>
+    <div class="panel">
+      <div class="panel-heading timing-box">
+        <div layout="row">
+          <div flex="33">
+            <i class="fa fa-bar-chart-o fa-3x"></i>
+          </div>
+          <div flex="66" class="text-right">
+            <div class="text-lg" ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
+              <span  ng-bind="data.avg_time_to_answer"></span>s
+            </div>
+
+            <div ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
+              <i class="md md-remove md-2x"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="javascript:void(0)" ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left">New item!</span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+        <a href="javascript:void(0)" ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left">Average time to answer</span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div flex>
+    <div class="panel">
+      <div class="panel-heading timing-box">
+        <div layout="row">
+          <div flex="33">
+            <i class="fa fa-flag-checkered md-3x"></i>
+          </div>
+          <div flex="66" class="text-right">
+            <div ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
+              <i class="md md-remove md-2x"></i>
+            </div>
+            <div ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
+              <span class="badge avg-badge" ng-if="confirmed" ng-class="{ 'bg-success': !compAvgStatus, 'bg-danger': compAvgStatus}">
+              <span class="text-lg"><span ng-bind="compAvg"></span>s</span>
+              </span>
+              <span class="text-lg" ng-if="!confirmed"> <i class="md md-remove"></i> </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="javascript:void(0)" ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left">New item!</span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+      <a href="javascript:void(0)" ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left" ng-if="!compAvgStatus && confirmed">
+          You took less time than the average
+          </span>
+          <span class="pull-left" ng-if="compAvgStatus && confirmed">
+          You took more time than the average
+          </span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div flex>
+    <div class="panel">
+      <div class="panel-heading timing-box">
+        <div layout="row">
+          <div flex="33">
+            <i class="md md-dashboard md-3x"></i>
+          </div>
+          <div flex="66" class="text-right">
+            <span class="text-lg difficulty-text" ng-bind="xpTag | level"></span>
+          </div>
+        </div>
+      </div>
+      <a href="javascript:void(0)">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left">Difficulty</span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div flex>
+    <div class="panel panel-red">
+      <div class="panel-heading timing-box">
+        <div layout="row">
+          <div flex="33">
+            <i class="md md-arrow-forward md-rotate-270 md-3x"></i>
+          </div>
+          <div flex="66" class="text-right">
+            <div ng-if="percentAnswered < 1 || data.total_answered < 100">
+              <i class="md md-remove md-2x"></i>
+            </div>
+            <div ng-if="percentAnswered >= 1 && data.total_answered >= 100">
+              <span class="text-lg">
+              <span ng-bind="percentAnswered"></span>%
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="javascript:void(0)" ng-if="percentAnswered < 1 || data.total_answered < 100">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left">New item!</span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+      <a href="javascript:void(0)" ng-if="percentAnswered >= 1 && data.total_answered >= 100">
+        <div class="panel-footer timing-box-padding">
+          <span class="pull-left">Users answered this question correctly</span>
+          <div class="clearfix"></div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div flex>
+    <div class="panel panel-red">
+      <div class="panel-heading timing-box no-padding">
+        <div layout="row">
+          <div flex class=" text-right ">
+            <div ng-class="{ 'bg-danger':!answerStatus, 'bg-success':answerStatus}" ng-if="confirmed"
+              class="timing-check text-center text-slg no-padding-vr">
+              <i ng-if="!answerStatus" class="md md-close md-3x abs-center"></i>
+              <i ng-if="answerStatus" class="md md-check md-3x abs-center"></i>
+            </div>
+            <div class="bg-default timing-check text-center text-slg no-padding-vr" ng-if="!confirmed">
+              <i class="md md-remove md-2x abs-center"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

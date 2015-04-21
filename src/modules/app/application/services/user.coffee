@@ -55,5 +55,6 @@ user = ($q,resource,authorization,userRoles,imgVersion,userNotify)->
         trackId: trackId
 
 
-user.$inject = ['$q','resource','authorization','userRoles','imgVersion','userNotify']
+user.$inject = ['$q','resource','authorization','userRoles','imgVersion',
+'userNotify']
 module.exports = user
