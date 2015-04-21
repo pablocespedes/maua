@@ -1,15 +1,7 @@
-var gulpfile = require('./gulp/index.js'),
-  gulp = require('gulp'),
-  fs = require('fs'),
-  argv = require('yargs').argv,
-  tasks = fs.readdirSync('./gulp/tasks/'),
+var gulp = require('gulp'),
   prettyTime = require('pretty-hrtime'),
-  task_arr = [];
+  tasks = require('./gulp/deploy');
 
-tasks.forEach(function(task,i) {
-  require('./gulp/tasks/'+task.replace('.js',''));
-  task_arr.push(task.replace('.js',''));
-});
 
 gulp.on('task_start', function(e) {
   log('Running \'' + e.task + '\'....');
@@ -32,7 +24,7 @@ gulp.on('task_not_found', function(e) {
   process.exit(1);
 });
 
-gulp.start.apply(gulp, task_arr);
+gulp.start.apply(gulp, tasks);
 
 
 function log(s) {
