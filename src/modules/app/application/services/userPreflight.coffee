@@ -19,7 +19,6 @@ userPreflight = ($window,$location,authorization,user,groups,
           if userResponse isnt null
 
             groups.membershipGroups(true).then (groupsResult) ->
-              console.log 'after groups response'
               uGroups = groupsResult.data.groups
               if _isBasePath(userResponse)
                 utilities.internalRedirect '/' +
@@ -27,7 +26,6 @@ userPreflight = ($window,$location,authorization,user,groups,
                 return
               else
                 urlGroup = utilities.getCurrentParam('subject')
-                console.log 'THIS IS THE CURRENT GROUP FROM URL', urlGroup
                 userGroup = _userGroup(userResponse.groupMemberships, urlGroup)
                 console.log urlGroup, userGroup
                 actualGroup = _actualGroup(uGroups, urlGroup)

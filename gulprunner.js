@@ -1,11 +1,15 @@
-var gulpfile = require('./gulpfile.js'),
+var gulpfile = require('./gulp/index.js'),
   gulp = require('gulp'),
+  fs = require('fs'),
+  argv = require('yargs').argv,
+  tasks = fs.readdirSync('./gulp/tasks/'),
   prettyTime = require('pretty-hrtime'),
-  tasks = ['all'];
+  task_arr = [];
 
-if (process.argv.length > 2) {
-  tasks = [process.argv[2]];
-};
+tasks.forEach(function(task,i) {
+  require('./gulp/tasks/'+task.replace('.js',''));
+  task_arr.push(task.replace('.js',''));
+});
 
 gulp.on('task_start', function(e) {
   log('Running \'' + e.task + '\'....');
@@ -19,7 +23,7 @@ gulp.on('task_stop', function(e) {
 gulp.on('task_err', function(e) {
   var msg = formatError(e);
   var time = prettyTime(e.hrDuration);
-  log('Errored\'' + e.task + '\' in ' + time + '  ' + msg);
+  log('Errored \'' + e.task + '\' in ' + time + '  ' + msg);
 });
 
 gulp.on('task_not_found', function(e) {
@@ -28,8 +32,7 @@ gulp.on('task_not_found', function(e) {
   process.exit(1);
 });
 
-
-gulp.start.apply(gulp, tasks);
+gulp.start.apply(gulp, task_arr);
 
 
 function log(s) {
