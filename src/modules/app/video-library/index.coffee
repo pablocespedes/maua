@@ -19,6 +19,7 @@ module.exports = angular.module('grockitApp.videolibrary', [])
       resolve: videoService: videoService
 
 )
+.filter 'categoryFilter', require('./filters/category')
 .factory 'videoService', VideoService
 .directive 'videoList', VideoList
 .controller 'VideoController', VideoController

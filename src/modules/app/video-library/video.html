@@ -54,7 +54,7 @@
     </md-content>
     <md-sidenav id="video-toolbar" class="md-sidenav-right md-whiteframe-z2" md-component-id="video-right" md-is-locked-open="$mdMedia('gt-md')">
       <md-content id="video-content">
-        <div ng-repeat="video in vmVideo.videos | filter: vmVideo.searchText">
+        <div ng-repeat="video in filtered = (vmVideo.videos | categoryFilter:vmVideo.category) | filter:vmVideo.searchText">
           <md-subheader class="md-primary video-subheader" value="{{video.id}}" ng-bind="video.title"></md-subheader>
           <md-list>
             <md-list-item class="md-2-line md-no-proxy animate-repeat" ng-repeat="videoItem in video.videos | filter: vmVideo.searchText | orderBy: 'title' ">
