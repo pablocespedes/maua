@@ -32,8 +32,8 @@
               <md-option value="1">
                 <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}" class="dropdown-link">Profile</a>
               </md-option>
-              <md-option value="3">
-                <a ng-click="appCtrl.logOut()" class="dropdown-link">Log Out</a>
+              <md-option value="3" ng-controller="LogoutController as vmlogout">
+                <a ng-click="vmlogout.logout()" class="dropdown-link">Log Out</a>
               </md-option>
             </md-select>
           </div>

@@ -42,7 +42,8 @@
     "angular-aria": "./bower_components/angular-aria/angular-aria.min.js",
     "angular-material": "./bower_components/angular-material/angular-material.min.js",
     "angular-resource": "./bower_components/angular-resource/angular-resource.min.js",
-    "angular-sanitize": "./bower_components/angular-sanitize/angular-sanitize.min.js"
+    "angular-sanitize": "./bower_components/angular-sanitize/angular-sanitize.min.js",
+    "angular-cookies": "./bower_components/angular-cookies/angular-cookies.min.js"
   },
   "browserify-shim": {},
   "dependencies": {

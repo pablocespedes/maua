@@ -1,6 +1,6 @@
 Storage =require('./_storage')
 
-authorization = ($window)->
+authorization = ($window,$cookies)->
   new class Authorization extends Storage
 
     ##cached token allow us to have the token in memory, just as
@@ -28,6 +28,9 @@ authorization = ($window)->
       #@get(@userToken) unless @cachedToken
       @cachedToken
 
+    removeCookie :->
+     delete $cookies['authentication_token']
+
     removeToken: ->
       @cachedToken = null
       @remove @userToken
@@ -50,5 +53,5 @@ authorization = ($window)->
       @cachedUser = null
       @remove @userInfo
 
-authorization.$inject = ['$window']
+authorization.$inject = ['$window','$cookies']
 module.exports = authorization

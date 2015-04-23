@@ -12,6 +12,7 @@ require 'angular-material'
 require 'angular-ui-router'
 require 'angular-sanitize'
 require 'angular-messages'
+require 'angular-cookies'
 global._ = require "lodash"
 require 'satellizer'
 require 'restangular'

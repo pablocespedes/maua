@@ -13,7 +13,8 @@ module.exports = angular.module('grockitApp', [
   'ngSanitize'
   'satellizer'
   'restangular'
-  'ngResource'
+  'ngResource',
+  'ngCookies'
   require('../../../tmp/templates').name
   require('./app.config/index').name
   require('./application/index').name
