@@ -28,6 +28,9 @@ class AppController
   toggleList:() ->
     @mdSidenav('left').toggle()
 
+  closeMainMenu:->
+    @mdSidenav('left').close()
+
   groupRedirect:(id) ->
     @activeGroupId=id
     @utilities.redirect '#/'+ id + '/dashboard'
