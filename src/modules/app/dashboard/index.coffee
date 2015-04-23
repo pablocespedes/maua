@@ -17,6 +17,6 @@ module.exports = angular.module('grockitApp.dashboard', [])
       return
 )
 .directive 'trackList', TrackList
-.directive 'challenge', -> new Challenge()
+.directive 'challenge', Challenge
 .factory 'dashboardService', DashboardService
 .controller 'DashboardController', DashboardController
