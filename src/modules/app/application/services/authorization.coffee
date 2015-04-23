@@ -29,7 +29,7 @@ authorization = ($window,$cookies)->
       @cachedToken
 
     removeCookie :->
-     delete $cookies['authentication_token']
+      delete $cookies['authentication_token']
 
     removeToken: ->
       @cachedToken = null

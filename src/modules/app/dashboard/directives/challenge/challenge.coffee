@@ -15,6 +15,7 @@ challenge = ->
         id = pieces[pieces.length - 1]
         baseUrl = utilities.originalGrockit().url
         scope.challengeId = id
-        utilities.redirect baseUrl + '/assessment/introcards/' + scope.challengeId
+        utilities.redirect baseUrl + '/assessment/introcards/' +
+        scope.challengeId
 
 module.exports = challenge
