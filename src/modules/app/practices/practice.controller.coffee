@@ -23,7 +23,6 @@ class PracticeController
     @init()
     #Takes care to unregister the group once the user leaves the controller
     $scope.$on '$destroy', ->
-      console.log $scope
       $scope.vmPr.product.unregisterGroup $scope.vmPr.practiceObserver
 
   init : ->
@@ -50,8 +49,6 @@ class PracticeController
     @doNotKnowAnswer()
 
   setTimingInformation : (questionId, kind) ->
-    console.log 'params ' + @activeTrack.trackId, @activeGroupId,
-     questionId
     @practiceService.getTimingInformation(@activeTrack.trackId,
       @activeGroupId,questionId).$promise.then (result) =>
       if angular.isDefined(result)
@@ -90,8 +87,6 @@ class PracticeController
 
   getNewPracticeGame : (apiUrl) ->
     @practiceService.createNewGame(apiUrl).then (game) =>
-
-      console.log  'testq'
       if angular.isDefined(game) and game != null
         @getQuestions()
         @initPracticeTimer()
@@ -100,7 +95,6 @@ class PracticeController
   getQuestions : ->
     @practiceService.setQuestionsData(@activeGroupId,
       @activeTrack.subject.id, @activeTrack.subject.type).then (response) =>
-      console.log 'hizo el resolve'
       if response
         @presentQuestion()
       else
@@ -109,10 +103,8 @@ class PracticeController
 
   presentQuestion : ->
     requestLocalData = @practiceService.getQuestionData()
-    console.log requestLocalData + 'este es el requestLocalData'
     if requestLocalData != null
       questionData = @practiceUtilities.presentQuestion(requestLocalData)
-      console.log questionData+' este es el questionData despues del parse'
       if angular.isDefined(questionData)
         @practiceService.getRoundSession(questionData.id, @activeGroupId)
         .then (result) =>
@@ -127,7 +119,6 @@ class PracticeController
         @resetQuestionTimer()
         @feedbackInfo questionData.id
         if @questionAnalytics
-          console.log  questionData.id
           @setTimingInformation questionData.id, questionData.kind
     else
       @loading = true
@@ -238,7 +229,6 @@ class PracticeController
   setCurrentTrack : (groupId) ->
     @practiceUtilities.setCurrentTrack(groupId).then (response) =>
       if response
-        console.log response ,' este es el active track'
         @activeTrack = response
         @getNewPracticeGame @activeTrack.subject.url
        # @breadcrumbs = breadcrumbs

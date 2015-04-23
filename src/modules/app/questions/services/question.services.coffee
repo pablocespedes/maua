@@ -74,7 +74,6 @@ questionTypeService = ()->
               seeAnswer.removeClass 'hide'
 
     selectTwoChoice : (isConfirmClicked, items, index, maxOpt) ->
-      console.log maxOpt
       if !isConfirmClicked
         answer = items[index]
         nexAction = $('#nextAction')

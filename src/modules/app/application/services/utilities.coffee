@@ -77,7 +77,6 @@ utilities = ($state,$rootScope, $http, $location, $q, $window, urlsCons) ->
       id
 
     setGroupTitle : (title) ->
-      console.log title
       if $rootScope.groupTitle == null or
           $rootScope.groupTitle == '' or $rootScope.groupTitle != title
         $rootScope.groupTitle = title

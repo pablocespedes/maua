@@ -306,7 +306,6 @@ practiceUtilities = ($window, $q, $sce, utilities,
       if angular.isDefined(trackData.subject)
         deferred.resolve trackData
       else
-        console.log practiceService
         practiceService.getRandomTrack(groupId).then (response) ->
           tracks = response.data.dashboard.smart_practice.items
           index = _.random(0, tracks.length - 1)

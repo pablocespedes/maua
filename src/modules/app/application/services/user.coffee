@@ -28,20 +28,15 @@ user = ($q,resource,authorization,userRoles,imgVersion,userNotify)->
       currentUser
     self :(wantUpdate) ->
       deferred = $q.defer()
-      console.log 'start user self'
       user = authorization.getUser()
       if not user or wantUpdate
-        console.log 'send request for user info also it should ask user token'
         @show('users','self').then (result) ->
-          console.log result, 'get user data from server'
           user= _setUserData(result.data.user,user)
-          console.log 'GET PARSED DATA', user
           authorization.setUser(user)
           userNotify.notifyUserExists(true)
           deferred.resolve(user)
           return
       else
-        console.log 'resolving user info from local else case'
         userNotify.notifyUserExists(true)
         deferred.resolve(user)
       deferred.promise

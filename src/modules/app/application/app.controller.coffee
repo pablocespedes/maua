@@ -95,7 +95,6 @@ class AppController
     )
 
   _setInitialData: (response, groupId) ->
-    console.log 'set initial data'
     if @activeGroupId isnt groupId
       @enableScore = groupId is 'gmat' or groupId is 'act' or
       groupId is 'sat'

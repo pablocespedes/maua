@@ -9,7 +9,6 @@ class HistoryController
     @productObserver = @product.observeGroupId().register (groupId) =>
       @updateGroupId(groupId)
     $scope.$on '$destroy', ->
-      console.log 'destroy history observers'
       $scope.vmHist.product.unregisterGroup $scope.vmHist.productObserver
 
   getQuestions : ->
@@ -30,7 +29,6 @@ class HistoryController
       @getQuestions()
 
   updateGroupId : (groupId) ->
-    console.log 'hist'
     if @groupId isnt groupId
       @groupId = groupId
       @getQuestions()

@@ -3,7 +3,6 @@
 class VideoController
   # Services injected into the controller constructor
   constructor: ($mdSidenav,$sce,@videoService) ->
-    @that = this
     @sce = $sce
     @displayVideo= false
     @category = 0
@@ -24,7 +23,6 @@ class VideoController
     @currentVideoUrl = @sce.trustAsResourceUrl(url)
 
   activeTitle:(videoItem)->
-    console.log @that
     if angular.isDefined(@)
       if(videoItem.id is @videos.id or videoItem.id is 0)
         true

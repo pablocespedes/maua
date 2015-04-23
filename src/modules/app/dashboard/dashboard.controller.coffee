@@ -14,7 +14,6 @@ class DashboardController
     historyVisible = false
     #$state.go('login') unless $auth.isAuthenticated
     $scope.$on '$destroy', () ->
-      console.log 'destroy dashboard observers'
       $scope.vmDash.product.unregisterGroup $scope.vmDash.dashObserver
       $scope.vmDash.userNotify.unregisterUserData $scope.vmDash.userObserver
 
@@ -22,9 +21,7 @@ class DashboardController
       @init()
 
   init : ->
-    console.log 'Start init method from Dashboard'
     if @authorization.userExist()
-      console.log 'dastboar after validate user', @authorization.userExist()
       userInfo = @authorization.getUser()
       user_id = userInfo.userId
       @dashObserver = @product.observeGroupId().register (groupId) =>
@@ -73,7 +70,6 @@ class DashboardController
 
   _fetchTracks : ->
     smartPractice = @dashboardService.getSmartPractice()
-    console.log smartPractice, 'test'
     @tracks = smartPractice.items
     @loading = false
 

@@ -37,10 +37,8 @@ practiceService = ($q,$resource,resource,urlsCons,dashboardService)->
     setQuestionsData : (groupId, subjectId, type) ->
       deferred = $q.defer()
       @getQuestions(groupId, subjectId, type).then (result) =>
-        console.log 'respuest desde el api', deferred
         @questionsData = null
         questData = result.data.questions
-        console.log questData
         if questData.length > 0
           @setQuestionData questData
           deferred.resolve true

@@ -30,7 +30,6 @@ resource = (Restangular)->
       @singleBase(url,id).remove()
 
     customGet:(url,id,optionals)->
-      console.log url,id,optionals
       @singleBaseId(url,id).customGET '', optionals
 
 resource.$inject = ['Restangular']

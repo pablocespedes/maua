@@ -9,7 +9,6 @@ videoService = ($q,resource)->
       deferred = $q.defer()
 
       @show(groupId,'video_courses').then (result) =>
-        console.log result
         @videoData = result.data.video_courses
         deferred.resolve @videoData
       deferred.promise

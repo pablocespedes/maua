@@ -11,9 +11,7 @@ userPreflight = ($window,$location,authorization,user,groups,
       userResponse.currentGroup or $location.path() == ''
 
     checkUser: (event) ->
-      console.log 'try to authenticated'
       if authorization.tokenExists()
-        console.log ('authenticated')
         user.self(true).then (userResponse) ->
           console.log 'obtiene el user', userResponse, userResponse isnt null
           if userResponse isnt null
@@ -27,7 +25,6 @@ userPreflight = ($window,$location,authorization,user,groups,
               else
                 urlGroup = utilities.getCurrentParam('subject')
                 userGroup = _userGroup(userResponse.groupMemberships, urlGroup)
-                console.log urlGroup, userGroup
                 actualGroup = _actualGroup(uGroups, urlGroup)
                 if angular.isUndefined(actualGroup)
                   #$window.location = '404.html'
