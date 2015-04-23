@@ -3,7 +3,6 @@
 class VideoController
   # Services injected into the controller constructor
   constructor: ($mdSidenav,$sce,@videoService) ->
-    console.log @videoService, 'Fuck This'
     @that = this
     @sce = $sce
     @displayVideo= false
