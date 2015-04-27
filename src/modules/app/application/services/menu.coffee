@@ -7,14 +7,14 @@ menu = ($window,utilities)->
       @baseUrl = utilities.originalGrockit()
 
     createLeftMenu : (options, hideStudyPlan, hideVideoOption, canAccess) ->
-      [
+      return [
         {
           id: 'dashboard'
           url: '#/' + options.groupId + '/dashboard'
           canAccess: canAccess
           title: 'Dashboard'
           isReady: options.isReady
-          iconclass: 'fa-dashboard'
+          icon: 'md-dashboard'
           shouldShow: true
         }
         {
@@ -23,7 +23,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Study Plan'
           isReady: options.isReady
-          iconclass: 'fa-tasks'
+          icon: 'md-bookmark-outline'
           shouldShow: !hideStudyPlan
         }
         {
@@ -32,7 +32,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Group Practice'
           isReady: options.isReady
-          iconclass: 'fa-users'
+          icon: 'md-account-child'
           shouldShow: options.groupId != 'gre'
         }
         {
@@ -41,8 +41,17 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Video Library'
           isReady: options.isReady
-          iconclass: 'fa-video-camera'
-          shouldShow: !hideVideoOption
+          icon: 'md-video-collection'
+          shouldShow: !hideVideoOption and options.groupId == 'gre'
+        }
+        {
+          id: 'video_courses'
+          url: @baseUrl + '/' + options.groupId + '/video_courses'
+          canAccess: canAccess
+          title: 'Video Library'
+          isReady: options.isReady
+          icon: 'md-video-collection'
+          shouldShow: !hideVideoOption and options.groupId != 'gre'
         }
         {
           id: 'custom_practice'
@@ -50,7 +59,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Custom Practice'
           isReady: options.isReady
-          iconclass: 'fa-book'
+          icon: 'md-my-library-books'
           shouldShow: options.groupId != 'gre'
         }
         {
@@ -59,7 +68,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Take a Full Length Test'
           isReady: options.isReady
-          iconclass: 'fa-lightbulb-o'
+          icon: 'fa-lightbulb-o'
           shouldShow: options.groupId == 'gre'
         }
         {
@@ -68,7 +77,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Take a Full Length Test'
           isReady: options.isReady
-          iconclass: 'fa-lightbulb-o'
+          icon: 'fa-lightbulb-o'
           shouldShow: options.groupId == 'gmat'
         }
         {
@@ -77,7 +86,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Skill Data'
           isReady: options.isReady
-          iconclass: 'fa-dashboard'
+          icon: 'fa-dashboard'
           shouldShow: true
         }
         {
@@ -86,7 +95,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'History'
           isReady: options.isReady
-          iconclass: 'fa-bar-chart-o'
+          icon: ' md-insert-chart'
           shouldShow: options.groupId == 'gre'
         }
         {
@@ -95,7 +104,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'History'
           isReady: options.isReady
-          iconclass: 'fa-bar-chart-o'
+          icon: ' md-insert-chart'
           shouldShow: options.groupId != 'gre'
         }
       ]

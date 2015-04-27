@@ -56,7 +56,6 @@ utilities = ($state,$rootScope, $http, $location, $q, $window, urlsCons) ->
       $window.location = url
 
     getCurrentParam : (key) ->
-      console.log $state
       if angular.isDefined($state.params)
       then $state.params[key] else undefined
 
@@ -100,6 +99,8 @@ utilities = ($state,$rootScope, $http, $location, $q, $window, urlsCons) ->
 
     htmlToPlaintext :(text) ->
       return String(text).replace(/<[^>]+>/gm, '')
+    currentPage :(page)->
+      $rootScope.currentPage = page
 
 utilities.$inject=['$state','$rootScope', '$http', '$location','$q',
 '$window','urlsCons']

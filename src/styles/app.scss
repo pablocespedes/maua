@@ -8,7 +8,6 @@
 @import "../modules/app/practices/practice.scss";
 @import "../modules/app/history/history.scss";
 @import "../modules/app/video-library/video-library.scss";
-
 body {
   background: #f6f6f6;
   text-rendering: optimizeLegibility!important;
@@ -36,20 +35,22 @@ a:focus {
   text-decoration: none
 }
 
-
-.app, .app>.main-container, html {
+.app,
+.app>.main-container,
+html {
   min-height: 100%;
 }
-.app, html {
 
+.app,
+html {
   height: 100%;
 }
+
 .app>.main-container>.content-container {
   overflow: hidden;
   min-height: 100%;
   margin-left: 0;
 }
-
 /* Sidenav area */
 
 md-list-item.md-2-line .md-list-item-text,
@@ -96,10 +97,12 @@ md-list-item.md-3-line > .md-no-style {
   -ms-flex-align: start;
   align-items: flex-start;
 }
-
-.menu-header {
-  background-color: #607D8B!important;
+a{
+  color: inherit;
 }
+// .menu-header {
+//   background-color: #607D8B!important;
+// }
 
 .menu-title {
   position: absolute;
@@ -109,6 +112,9 @@ md-list-item.md-3-line > .md-no-style {
   padding: 0;
   color: #fff;
   font-size: 22px;
+}
+.inset {
+  display: inline-block!important;
 }
 
 //menu icon
@@ -139,24 +145,35 @@ md-list-item.md-3-line > .md-no-style {
   }
 }
 
-#main-toolbar > md-toolbar {
-  .menu-icon {
-    min-width: 1.8rem!important;
-    background-color: transparent;
-    margin: 15px 5px auto auto;
-  }
-  .menu > md-select {
-    display: inline-block;
-    margin-top: 1px;
-    margin-left: 16px;
-  }
-  .round-img {
-    border-radius: 30px;
-    width: 34px;
-    margin: 11px 2px 4px;
-  }
-  md-select-label {
-    color: #ffffff !important;
+#main-toolbar {
+  .md-toolbar-tools {
+    margin-top: -8px;
+    // .menu-icon {
+    //   min-width: 1.8rem!important;
+    //   background-color: transparent;
+    //   margin: 15px 5px auto auto;
+    // }
+    md-select,h2 {
+      margin-left: 16px;
+    }
+    md-icon {
+      cursor: pointer;
+      -webkit-transition: all 200ms ease;
+      transition: all 200ms ease
+    }
+    md-icon:hover {
+      -webkit-transform: rotate(360deg);
+      -ms-transform: rotate(360deg);
+      transform: rotate(360deg)
+    }
+    .round-img {
+      border-radius: 30px;
+      width: 34px;
+      margin: 11px 2px -2px;
+    }
+    md-select-label {
+      color: #ffffff !important;
+    }
   }
 }
 
@@ -430,5 +447,3 @@ a.label:hover {
 .non-display {
   display: none
 }
-
-

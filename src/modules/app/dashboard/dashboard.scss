@@ -1,8 +1,9 @@
-.learn-button{
-  margin-top: 5px;
+.learn-button {
+  line-height: 36px;
 }
-#payment-panel{
-  h1{
+
+#payment-panel {
+  h1 {
     word-spacing: -1vh;
   }
 }
@@ -81,16 +82,12 @@
   .card {
     background-color: #FFFFFF;
     overflow: hidden;
-
-    & h3, p{
-      margin:5px;
-    }
   }
   .card-img-top {
     position: relative;
-    opacity: 0.7;
-    height: 120px;
-    overflow: hidden;
+    // opacity: 0.7;
+    // height: 120px;
+    //overflow: hidden;
   }
   .card-img-top img {
     width: 100%;
@@ -99,7 +96,11 @@
     opacity: 1;
   }
   .card-actions {
+    margin-right: 8px;
     border-top: 1px solid rgba(0, 0, 0, 0.12);
+    md-button, button {
+      padding: 0!important;
+    }
   }
   .btn-float {
     z-index: 9999;
@@ -121,4 +122,88 @@
     margin-top: 67px;
     margin-left: -15px;
   }
+}
+
+.itemhead {
+  overflow: hidden;
+  position: relative;
+  .questions {
+    cursor: default;
+    position: absolute;
+    margin: 8px;
+    width: 4.6rem;
+    height: 4.6rem;
+    background: #d7d7d7;
+    color: white;
+    text-align: center;
+    line-height: 4.6rem;
+    z-index: 2;
+    right: 2px;
+    top: 23px;
+    font-size: 12px;
+    span {
+      color: #5a5a5a;
+    }
+  }
+  .questions:hover {
+    background: #00ACC1!important;
+    span {
+      color: #ffffff;
+    }
+  }
+  .main-img {
+    height: 140px!important;
+    margin-top: 6px;
+    opacity: 1;
+  }
+  h2 {
+    margin: 8px;
+    font-weight: 500;
+    font-size: 17px;
+    margin-bottom: 2px;
+  }
+  .subtracks {
+    margin-left: 8px;
+    max-width: 80%;
+    float: left;
+    min-height: 25px;
+    span {
+      font-size: 12px;
+      font-weight: 400;
+      opacity: 0.8;
+    }
+  }
+}
+
+.itemhead:hover .main-img {
+  opacity: 0.8;
+}
+
+.heart {
+  cursor: pointer;
+  /* width: 26px; */
+  /* margin-right: 8px; */
+  /* top: 18px; */
+
+  padding-top: 11px;
+  border-radius: 2px;
+}
+
+.card p {
+  padding: 0 .6rem 0 .8rem;
+  line-height: 20px;
+  font-size: 13px;
+  min-height: 60px;
+}
+
+.heart md-icon:hover {
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.1)
+}
+
+.heart #favorite {
+  fill: #636363
+}
+
+.heart.active #favorite {
+  fill: #DA4336;
 }

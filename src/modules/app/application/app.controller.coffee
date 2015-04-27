@@ -96,6 +96,7 @@ class AppController
 
   _setInitialData: (response, groupId) ->
     if @activeGroupId isnt groupId
+      @setMenu(groupId)
       @enableScore = groupId is 'gmat' or groupId is 'act' or
       groupId is 'sat'
       #if @enableScore
@@ -113,19 +114,21 @@ class AppController
       @activeItem = currentLoc
 
   setMenu:(groupId) ->
+    console.log 'SET MENU'
     menuParams =
       isReady: true
       groupId: groupId
 
     @canAccess = @membership.canPractice()
-
     @hidVideoOption(groupId)
     @hidStudyPlan(groupId)
     @menu = @menuService.createLeftMenu(menuParams, @hideStudyPlan,
       @hideVideoOption, @canAccess)
+    console.log @menu
 
   _init: ->
     @user.self(true).then (response) =>
+      console.log 'This is he init method on appctr with response',response
       if response isnt null
         @currentUser = response
         #GaUtility.classic()
@@ -133,7 +136,7 @@ class AppController
         #InspectletUtility.base()
         @setMenu(@currentUser.currentGroup)
         @userProgressObserver = @product.observeGroupId().register (groupId) =>
-          @setMenu(groupId)
+          console.log 'notify dentro de observer'
           @_setInitialData response, groupId
 
  AppController.$inject = ['$scope', '$window', 'utilities', 'user','product',

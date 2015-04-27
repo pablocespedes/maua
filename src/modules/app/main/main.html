@@ -1,31 +1,72 @@
 <div layout="column" tabindex="-1" role="main" layout-align="center" flex="" aria-hidden="false">
+  <div layout="row" style="background: #0097a7; height:15px;">
+  </div>
   <div id="main-toolbar" layout="row">
     <md-toolbar>
       <div class="md-toolbar-tools">
         <div flex="" class="fill-height">
-          <div class="md-toolbar-item">
-            <md-button class="menu-icon" ng-click="appCtrl.toggleList()" aria-label="Show menu List">
-              <md-icon class="md md-menu md-lg"></md-icon>
-            </md-button>
-          </div>
-          <div class="md-toolbar-item" ui-sref="#">
-            <span><img alt="Grockit" style="height: 44px;" src="assets/images/header-logo-beta.png" /></span>
-          </div>
-          <div class="md-toolbar-item  menu">
-            <md-select ng-model="appCtrl.activeGroupId">
-              <md-select-label>{{$root.groupTitle}}</md-select-label>
-              <md-option ng-repeat="linked in appCtrl.ugroups.linkedGroups track by $index" value="{{linked.id}}" ng-bind="linked.name" ng-click="appCtrl.groupRedirect(linked.id)">
-              </md-option>
-              <md-option ng-repeat="unlinked in appCtrl.ugroups.unLinkedGroups track by $index" value="{{unlinked.id}}" ng-click="appCtrl.groupRedirect(unlinked.id)" ng-bind="unlinked.name"> </md-option>
-            </md-select>
-          </div>
+          <md-icon class="md md-menu md-2x white" ng-click="appCtrl.toggleList()"></md-icon>
+          <h2><span><img alt="Grockit" style="height: 44px;" src="assets/images/header-logo-beta.png" /></span></h2>
+          <md-select ng-model="appCtrl.activeGroupId">
+            <md-select-label>{{$root.groupTitle}}</md-select-label>
+            <md-option ng-repeat="linked in appCtrl.ugroups.linkedGroups track by $index" value="{{linked.id}}" ng-bind="linked.name" ng-click="appCtrl.groupRedirect(linked.id)">
+            </md-option>
+            <md-option ng-repeat="unlinked in appCtrl.ugroups.unLinkedGroups track by $index" value="{{unlinked.id}}" ng-click="appCtrl.groupRedirect(unlinked.id)" ng-bind="unlinked.name"> </md-option>
+          </md-select>
           <span flex=""></span>
-          <div class="md-toolbar-item">
-            <img class="md-fab md-primary round-img" ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="avatar" />
-          </div>
-          <div class="md-toolbar-item md-tools menu">
-            <md-select ng-model="appCtrl.currentUser.firstName">
-              <md-select-label>{{appCtrl.currentUser.firstName}}</md-select-label>
+          <img class="md-fab md-primary round-img" ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="User Picture" />
+          <label>{{appCtrl.currentUser.firstName}}</label>
+          <md-icon class="md md-more-vert md-2x white" ng-click="showGridBottomSheet($event)"></md-icon>
+        </div>
+      </div>
+    </md-toolbar>
+  </div>
+  <div layout="row">
+    <md-sidenav id="main-menu" md-component-id="left">
+      <md-toolbar class="md-tall md-hue-2  menu-header">
+        <span flex></span>
+        <div layout="column" class="md-toolbar-tools-bottom inset">
+
+           <md-icon class="menu-toggle md md-arrow-back md-2x white" ng-click="appCtrl.closeMainMenu()"></md-icon>
+           <h2 class="md-toolbar-tools md-toolbar-tools-bottom menu-title">{{$root.groupTitle}} {{$root.currentPage}}</h2>
+          <span></span>
+        </div>
+      </md-toolbar>
+      <md-list>
+        <md-item ng-repeat="item in appCtrl.menu">
+          <a ng-href="{{item.url}}" ng-if="item.isReady && item.canAccess && item.shouldShow">
+            <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                <div class="inset">
+                  <md-icon class="md md-2x {{item.icon}}"></md-icon>
+                </div>
+                <div class="inset">
+                  {{item.title}}
+                </div>
+              </a>
+            </md-item-content>
+          </a>
+           <a ng-if="item.isReady && !item.canAccess && item.shouldShow" >
+            <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                <div class="inset">
+                  <md-icon class="md md-2x {{item.icon}}"></md-icon>
+                </div>
+                <div class="inset">
+                  {{item.title}}
+                   <i class="pull-right menu-icon fa fa-lock"></i>
+                </div>
+              </a>
+            </md-item-content>
+          </a>
+        </md-item>
+      </md-list>
+    </md-sidenav>
+    <md-content flex class="ui-view-container">
+      <div data-ui-view=""></div>
+    </md-content>
+  </div>
+</div>
+<!--     <md-select ng-model="appCtrl.currentUser.firstName">
+              <md-select-label class="md md-more-vert md-2x"> </md-select-label>
               <md-option value="0">
                 <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/account" class="dropdown-link">Account</a>
               </md-option>
@@ -35,32 +76,4 @@
               <md-option value="3" ng-controller="LogoutController as vmlogout">
                 <a ng-click="vmlogout.logout()" class="dropdown-link">Log Out</a>
               </md-option>
-            </md-select>
-          </div>
-        </div>
-      </div>
-    </md-toolbar>
-  </div>
-  <div layout="row">
-    <md-sidenav id="main-menu" md-component-id="left">
-      <md-toolbar class="md-tall  menu-header">
-        <md-icon class="menu-toggle md md-arrow-back md-2x" ng-click="appCtrl.closeMainMenu()"></md-icon>
-        <h2 class="md-toolbar-tools md-toolbar-tools-bottom menu-title">Dashboard</h2>
-      </md-toolbar>
-      <md-list-item ng-repeat="item in appCtrl.menu">
-        <md-button ng-if="item.isReady && item.canAccess && item.shouldShow" ng-href="{{item.url}}" class="item ">
-          <i class="fa {{item.iconclass}}"></i>
-          <span class="mm-text">{{item.title}}</span>
-        </md-button>
-        <md-button ng-if="item.isReady && !item.canAccess && item.shouldShow" class="item disabled">
-          <i class="fa {{item.iconclass}}"></i>
-          <span class="mm-text">{{item.title}}</span>
-          <i class="pull-right menu-icon fa fa-lock"></i>
-        </md-button>
-      </md-list-item>
-    </md-sidenav>
-    <md-content flex class="ui-view-container">
-      <div data-ui-view=""></div>
-    </md-content>
-  </div>
-</div>
+            </md-select> -->

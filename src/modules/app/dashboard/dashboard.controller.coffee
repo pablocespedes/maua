@@ -4,6 +4,7 @@ class DashboardController
   # Services injected into the controller constructor
   constructor: ($window,$scope,$state,$auth,@product,@authorization,
     @dashboardService, @utilities,@membership,@userNotify) ->
+    @utilities.currentPage 'Dashboard'
     @state=$state
     userObserver = null
     dashObserver = null
