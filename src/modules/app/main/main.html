@@ -26,9 +26,8 @@
       <md-toolbar class="md-tall md-hue-2  menu-header">
         <span flex></span>
         <div layout="column" class="md-toolbar-tools-bottom inset">
-
-           <md-icon class="menu-toggle md md-arrow-back md-2x white" ng-click="appCtrl.closeMainMenu()"></md-icon>
-           <h2 class="md-toolbar-tools md-toolbar-tools-bottom menu-title">{{$root.groupTitle}} {{$root.currentPage}}</h2>
+          <md-icon class="menu-toggle md md-arrow-back md-2x white" ng-click="appCtrl.closeMainMenu()"></md-icon>
+          <h2 class="md-toolbar-tools md-toolbar-tools-bottom menu-title">{{$root.groupTitle}} {{$root.currentPage}}</h2>
           <span></span>
         </div>
       </md-toolbar>
@@ -36,26 +35,26 @@
         <md-item ng-repeat="item in appCtrl.menu">
           <a ng-href="{{item.url}}" ng-if="item.isReady && item.canAccess && item.shouldShow">
             <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                <div class="inset">
-                  <md-icon class="md md-2x {{item.icon}}"></md-icon>
-                </div>
-                <div class="inset">
-                  {{item.title}}
-                </div>
-              </a>
-            </md-item-content>
+              <div class="inset">
+                <md-icon class="md md-2x {{item.icon}}"></md-icon>
+              </div>
+              <div class="inset">
+                {{item.title}}
+              </div>
           </a>
-           <a ng-if="item.isReady && !item.canAccess && item.shouldShow" >
+          </md-item-content>
+          </a>
+          <a ng-if="item.isReady && !item.canAccess && item.shouldShow">
             <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                <div class="inset">
-                  <md-icon class="md md-2x {{item.icon}}"></md-icon>
-                </div>
-                <div class="inset">
-                  {{item.title}}
-                   <i class="pull-right menu-icon fa fa-lock"></i>
-                </div>
-              </a>
-            </md-item-content>
+              <div class="inset">
+                <md-icon class="md md-2x {{item.icon}}"></md-icon>
+              </div>
+              <div class="inset">
+                {{item.title}}
+                <i class="pull-right menu-icon fa fa-lock"></i>
+              </div>
+          </a>
+          </md-item-content>
           </a>
         </md-item>
       </md-list>

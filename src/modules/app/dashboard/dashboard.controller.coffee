@@ -10,7 +10,7 @@ class DashboardController
     dashObserver = null
     showingTour = false
     showTour = false
-    loading = true
+    @loading = true
     isChallengeAvailable = false
     historyVisible = false
     #$state.go('login') unless $auth.isAuthenticated

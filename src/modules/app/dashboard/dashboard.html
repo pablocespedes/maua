@@ -1,6 +1,4 @@
-<div layout="row" layout-sm="column" layout-align="space-around" ng-if="vmDash.loading">
-  <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-</div>
+
 <div id="dashboard">
   <div id="payment-panel" ng-if="vmDash.showBuyNow" layout="row" layout-margin layout-fill>
     <div flex class="panel bg-info ">
@@ -35,4 +33,7 @@
   <div ng-show="vmDash.showingTour " class="grockit-welcome " style="color:white; ">
     <h1>Welcome to Grockit <span ng-bind="$root.groupTitle "></span>!</h1>
   </div>
+</div>
+<div layout="row" layout-sm="column" layout-align="space-around" ng-if="vmDash.loading">
+  <md-progress-circular md-mode="indeterminate"></md-progress-circular>
 </div>

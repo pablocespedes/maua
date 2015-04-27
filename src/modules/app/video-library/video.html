@@ -59,9 +59,7 @@
           <md-list>
             <md-list-item class="md-2-line md-no-proxy animate-repeat" ng-repeat="videoItem in video.videos | filter: vmVideo.searchText | orderBy: 'title' ">
               <div class="md-list-item-text">
-                <!-- <md-button class="md-fab md-accent play-button" aria-label="Play"> -->
                 <md-icon class="md md-play-circle-outline md-2x md-play" ng-click="vmVideo.activeVideo(videoItem)"></md-icon>
-                <!-- </md-button> -->
                 <h3>
                   <span class="sub-title-video" ng-bind="videoItem.title"></span>
                   </h3>

@@ -22,13 +22,6 @@ class VideoController
     url= currentVideo.stream_url.replace('https:','')
     @currentVideoUrl = @sce.trustAsResourceUrl(url)
 
-  activeTitle:(videoItem)->
-    if angular.isDefined(@)
-      if(videoItem.id is @videos.id or videoItem.id is 0)
-        true
-      else
-        false
-
 VideoController.$inject = ['$mdSidenav','$sce','videoService']
 
 module.exports = VideoController
