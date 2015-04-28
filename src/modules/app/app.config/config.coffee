@@ -28,8 +28,6 @@ initConfig =  ($httpProvider, $stateProvider,
   $stateProvider.state 'common',
   templateUrl: 'app/main/main.html'
   abstract: true
-  controller: 'AppController'
-  controllerAs: 'appCtrl'
 
   $urlRouterProvider.otherwise('/login')
   $httpProvider.interceptors.push 'authInterceptor'

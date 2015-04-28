@@ -1,4 +1,5 @@
-<div layout="column" tabindex="-1" role="main" layout-align="center" flex="" aria-hidden="false">
+<div layout="column" tabindex="-1" role="main" layout-align="center" flex="" aria-hidden="false"
+  ng-controller="AppController as appCtrl">
   <div layout="row" style="background: #0097a7; height:15px;">
   </div>
   <div id="main-toolbar" layout="row">
@@ -57,6 +58,41 @@
           </md-item-content>
           </a>
         </md-item>
+      <md-divider></md-divider>
+      <md-subheader class="management">Management {{appCtrl.currentUser.firstName}}</md-subheader>
+      <md-item >
+        <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/account">
+          <md-item-content md-ink-ripple layout="row" layout-align="start center">
+            <div class="inset">
+              <md-icon class="md md-2x md-account-child "></md-icon>
+            </div>
+            <div class="inset">Account
+            </div>
+          </md-item-content>
+        </a>
+      </md-item>
+       <md-item >
+        <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}">
+          <md-item-content md-ink-ripple layout="row" layout-align="start center">
+            <div class="inset">
+              <md-icon class="md md-2x md-perm-identity"></md-icon>
+            </div>
+            <div class="inset">Profile
+            </div>
+          </md-item-content>
+        </a>
+      </md-item>
+       <md-item ng-controller="LogoutController as vmlogout">
+        <a ng-click="vmlogout.logout()">
+          <md-item-content md-ink-ripple layout="row" layout-align="start center">
+            <div class="inset">
+              <md-icon class="md md-2x md-settings-power"></md-icon>
+            </div>
+            <div class="inset">Log Out
+            </div>
+          </md-item-content>
+        </a>
+      </md-item>
       </md-list>
     </md-sidenav>
     <md-content flex class="ui-view-container">

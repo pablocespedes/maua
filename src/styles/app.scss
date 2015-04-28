@@ -97,13 +97,14 @@ md-list-item.md-3-line > .md-no-style {
   -ms-flex-align: start;
   align-items: flex-start;
 }
-a{
+
+a {
   color: inherit;
 }
+
 // .menu-header {
 //   background-color: #607D8B!important;
 // }
-
 .menu-title {
   position: absolute;
   bottom: 12px;
@@ -113,6 +114,7 @@ a{
   color: #fff;
   font-size: 22px;
 }
+
 .inset {
   display: inline-block!important;
 }
@@ -132,13 +134,17 @@ a{
   right: 42px;
 }
 
+.management {
+  margin-top: 15px;
+  margin-left: 10px;
+  .md-subheader-content span {
+    font-weight: bold;
+  }
+}
+
 #main-menu {
-  .item {
-    position: relative;
-    display: block;
-    padding: 15px;
-    text-align: left;
-    width: 100%;
+  md-item a {
+    cursor: pointer;
   }
   md-sidenav {
     z-index: 62;
@@ -153,7 +159,7 @@ a{
     //   background-color: transparent;
     //   margin: 15px 5px auto auto;
     // }
-    md-select,h2 {
+    md-select, h2 {
       margin-left: 16px;
     }
     md-icon {
