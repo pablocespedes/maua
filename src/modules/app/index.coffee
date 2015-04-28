@@ -2,6 +2,7 @@
 
 run = ($rootScope, $location, userPreflight) ->
   $rootScope.$on '$locationChangeSuccess', (event, next, current) ->
+    console.log 'step before check user auth'
     userPreflight.checkUser event
   return
 

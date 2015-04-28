@@ -21,11 +21,13 @@ observer = () ->
           @observers.push observer
           observer
         unregister: (observer) ->
+          console.log @observers, observer
           @observers = _.reject(@observers, 'id': observer.id)
+          console.log @observers
           return
       @observables.push observable
       observable
     get: (key) ->
       _.find @observables, 'key': key
-    
+
 module.exports = observer

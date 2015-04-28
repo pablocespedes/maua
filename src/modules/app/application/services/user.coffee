@@ -5,6 +5,7 @@ user = ($q,resource,authorization,userRoles,imgVersion,userNotify)->
     constructor: ()->
       super()
     _defaultGroup = (user) ->
+      console.log user,'set the group on local storage'
       if user != null and angular.isDefined(user.currentGroup)
       then user.currentGroup else undefined
 
@@ -33,11 +34,11 @@ user = ($q,resource,authorization,userRoles,imgVersion,userNotify)->
         @show('users','self').then (result) ->
           user= _setUserData(result.data.user,user)
           authorization.setUser(user)
-          userNotify.notifyUserExists(true)
+          userNotify.notifyUserExists(user)
           deferred.resolve(user)
           return
       else
-        userNotify.notifyUserExists(true)
+        userNotify.notifyUserExists(user)
         deferred.resolve(user)
       deferred.promise
 

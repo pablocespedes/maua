@@ -9,6 +9,7 @@ product = (Observer, utilities)->
     currentGroupId : (groupId, actualGroup) ->
       if @currentUser isnt null and groupId isnt @currentUser.currentGroup
         @currentUser.currentGroup = groupId
+        console.log 'set new group', groupId
         @save 'userInfo', @currentUser
       utilities.setGroupTitle actualGroup.name
       @observable.notify groupId

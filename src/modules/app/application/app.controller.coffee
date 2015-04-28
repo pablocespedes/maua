@@ -1,18 +1,29 @@
 'use strict'
 class AppController
   constructor: ($scope, $window, @utilities, @user,@product, @groups,
-    @authorization,$mdSidenav,@menuService,@membership)->
+    @authorization,$mdSidenav,@menuService,@membership,@userNotify)->
     @mdSidenav = $mdSidenav
     @window = $window
     @userProgressObserver = null
     @scorePrediction = null
     @activeGroupId=null
     @currentUser = null
-    if(@authorization.userExist())
-      @_init()
+    # if(@authorization.userExist())
+    #   @_init()
+    @userObserver = @userNotify.observeUserData().register (userData) =>
+      console.log 'try to notify app controller'
+      if(@authorization.userExist())
+        @_init(userData)
+
+    @userProgressObserver = @product.observeGroupId().register (groupId) =>
+      console.log 'notify dentro de observer app controller'
+      userInfo = @authorization.getUser()
+      @currentUser = userInfo
+      @_setInitialData @currentUser, groupId
+      return
 
     $scope.$on '$destroy', =>
-      @product.unregisterGroup @userProgressObserver
+      #@product.unregisterGroup @userProgressObserver
 
   hidVideoOption : (groupId) ->
     @hideVideoOption = groupId is 'ap_calculus' or
@@ -126,20 +137,19 @@ class AppController
       @hideVideoOption, @canAccess)
     console.log @menu
 
-  _init: ->
-    @user.self(true).then (response) =>
-      console.log 'This is he init method on appctr with response',response
-      if response isnt null
-        @currentUser = response
-        #GaUtility.classic()
-        #GaUtility.UA()
-        #InspectletUtility.base()
-        @setMenu(@currentUser.currentGroup)
-        @userProgressObserver = @product.observeGroupId().register (groupId) =>
-          console.log 'notify dentro de observer'
-          @_setInitialData response, groupId
+  _init: (response)->
+    #@user.self(true).then (response) =>
+    console.log 'This is he init method on appctr with response',response
+    if response isnt null
+      @currentUser = response
+      #GaUtility.classic()
+      #GaUtility.UA()
+      #InspectletUtility.base()
+      @setMenu(@currentUser.currentGroup)
+
+
 
  AppController.$inject = ['$scope', '$window', 'utilities', 'user','product',
-'groups','authorization','$mdSidenav','menuService','membership']
+'groups','authorization','$mdSidenav','menuService','membership','userNotify']
 
 module.exports = AppController

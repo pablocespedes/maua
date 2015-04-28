@@ -24,6 +24,7 @@ userPreflight = ($window,$location,authorization,user,groups,
                 return
               else
                 urlGroup = utilities.getCurrentParam('subject')
+                console.log 'this is the current group ', urlGroup
                 userGroup = _userGroup(userResponse.groupMemberships, urlGroup)
                 actualGroup = _actualGroup(uGroups, urlGroup)
                 if angular.isUndefined(actualGroup)
@@ -39,8 +40,8 @@ userPreflight = ($window,$location,authorization,user,groups,
                   product.currentGroupId urlGroup, actualGroup
                   return
       else
-        $('body').html
-        'The user is not logged in!<a href="/logout">Click here to restart</a>.'
+        $('body').html 'The user is not logged in!<a href="/logout">'+
+          'Click here to restart</a>.'
       event.preventDefault()
 
 userPreflight.$inject = ['$window','$location','authorization','user','groups',

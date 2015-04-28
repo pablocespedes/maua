@@ -6,8 +6,8 @@ class DashboardController
     @dashboardService, @utilities,@membership,@userNotify) ->
     @utilities.currentPage 'Dashboard'
     @state=$state
-    userObserver = null
-    dashObserver = null
+    @userObserver = null
+    @dashObserver = null
     showingTour = false
     showTour = false
     @loading = true
@@ -15,13 +15,19 @@ class DashboardController
     historyVisible = false
     #$state.go('login') unless $auth.isAuthenticated
     $scope.$on '$destroy', () ->
+      console.log $scope, 'destroying dashboard'
       $scope.vmDash.product.unregisterGroup $scope.vmDash.dashObserver
+      $scope.vmDash.dashObserver = null
       $scope.vmDash.userNotify.unregisterUserData $scope.vmDash.userObserver
+      $scope.vmDash.userObserver = null
+      return
 
     @userObserver = @userNotify.observeUserData().register (userExist) =>
+      console.log 'I notify app dashboard that we are authenticated'
       @init()
 
   init : ->
+    console.log 'get into the init method dashboard'
     if @authorization.userExist()
       userInfo = @authorization.getUser()
       user_id = userInfo.userId

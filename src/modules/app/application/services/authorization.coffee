@@ -12,6 +12,9 @@ authorization = ($window,$cookies)->
       @userInfo = "userInfo"
       @userToken = "userToken"
 
+    existy:(x)->
+      return x != null and x != 'null' and x != 'null' and x != 'undefined'
+
     setToken: (token) ->
       @cachedToken = token
       @save @userToken, token
@@ -44,10 +47,10 @@ authorization = ($window,$cookies)->
       @cachedUser
 
     userExist: ->
-      !!(@getUser())
+      @existy(@getUser())
 
     tokenExists: ->
-      !!(@getToken())
+      @existy(@getToken())
 
     removeUser: ->
       @cachedUser = null

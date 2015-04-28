@@ -29,7 +29,7 @@ initConfig =  ($httpProvider, $stateProvider,
   templateUrl: 'app/main/main.html'
   abstract: true
 
-  $urlRouterProvider.otherwise('/login')
+  #$urlRouterProvider.otherwise('/login')
   $httpProvider.interceptors.push 'authInterceptor'
 
 initConfig.$inject = ['$httpProvider','$stateProvider',
