@@ -145,7 +145,7 @@ class AppController
       #GaUtility.classic()
       #GaUtility.UA()
       #InspectletUtility.base()
-      @setMenu(@currentUser.currentGroup)
+      #@setMenu(@currentUser.currentGroup)
 
 
 
