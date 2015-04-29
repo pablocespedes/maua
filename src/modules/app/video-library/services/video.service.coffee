@@ -5,11 +5,25 @@ videoService = ($q,resource)->
     constructor: () ->
       super()
 
+    appendParams:(videos, index)->
+      console.log videos.length-1, index
+      _.forEach videos[index].videos, (video)->
+          video.stream_url = video.stream_url +
+          '?byline=0&portrait=0&title=0&fullscreen=1'
+      if (videos.length-1) > index
+        index++
+        console.log videos
+        @appendParams(videos, index)
+      console.log videos
+      return videos
+
     getVideoData : (groupId) ->
       deferred = $q.defer()
-
+      index = 0
       @show(groupId,'video_courses').then (result) =>
-        @videoData = result.data.video_courses
+
+        @videoData = @appendParams(result.data.video_courses, index)
+
         deferred.resolve @videoData
       deferred.promise
 

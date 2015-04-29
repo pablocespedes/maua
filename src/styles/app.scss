@@ -51,6 +51,13 @@ html {
   min-height: 100%;
   margin-left: 0;
 }
+
+md-list.md-default-theme md-list-item.md-2-line .md-list-item-text h3,
+md-list.md-default-theme md-list-item.md-2-line .md-list-item-text h4,
+md-list.md-default-theme md-list-item.md-3-line .md-list-item-text h3,
+md-list.md-default-theme md-list-item.md-3-line .md-list-item-text h4 {
+  color:#767676!important;
+}
 /* Sidenav area */
 
 md-list-item.md-2-line .md-list-item-text,
@@ -150,13 +157,13 @@ a {
     z-index: 62;
   }
 }
- md-option > .md-text > .product-icon {
-    height: inherit!important;
-    width: inherit!important;
-  }
+
+md-option > .md-text > .product-icon {
+  height: inherit!important;
+  width: inherit!important;
+}
 
 #main-toolbar {
-
   .md-toolbar-tools {
     margin-top: -8px;
     // .menu-icon {

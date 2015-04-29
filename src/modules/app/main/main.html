@@ -1,6 +1,5 @@
-<div layout="column" tabindex="-1" role="main" layout-align="center" flex="" aria-hidden="false"
-  ng-controller="AppController as appCtrl">
- <!--  <div layout="row" style="background: #0097a7; height:15px;">
+<div ng-controller="AppController as appCtrl">
+  <!--  <div layout="row" style="background: #0097a7; height:15px;">
   </div> -->
   <div id="main-toolbar" layout="row">
     <md-toolbar>
@@ -8,14 +7,14 @@
         <div flex="" class="fill-height">
           <md-icon class="md md-menu md-2x white" ng-click="appCtrl.toggleList()"></md-icon>
           <h2><span><img alt="Grockit" style="height: 44px;" src="assets/images/header-logo-beta.png" /></span></h2>
-          <md-select ng-model="appCtrl.activeGroupId"  >
+          <md-select ng-model="appCtrl.activeGroupId">
             <md-select-label>{{$root.groupTitle}}</md-select-label>
             <md-option ng-repeat="linked in appCtrl.ugroups.linkedGroups track by $index" value="{{linked.id}}" ng-bind="linked.name" ng-click="appCtrl.groupRedirect(linked.id)">
             </md-option>
             <md-option ng-repeat="unlinked in appCtrl.ugroups.unLinkedGroups track by $index" value="{{unlinked.id}}" ng-click="appCtrl.groupRedirect(unlinked.id)" disable>
-            <span ng-bind="unlinked.name"></span>
-            <md-icon class="md md-1x md-lock-outline product-icon"></md-icon>
-             </md-option>
+              <span ng-bind="unlinked.name"></span>
+              <md-icon class="md md-1x md-lock-outline product-icon"></md-icon>
+            </md-option>
           </md-select>
           <span flex=""></span>
           <img class="md-fab md-primary round-img" ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="User Picture" />
@@ -24,7 +23,7 @@
       </div>
     </md-toolbar>
   </div>
-  <div layout="row">
+  <div flex layout="row">
     <md-sidenav id="main-menu" md-component-id="left">
       <md-toolbar class="md-tall md-hue-2  menu-header">
         <span flex></span>
@@ -44,8 +43,7 @@
               <div class="inset">
                 {{item.title}}
               </div>
-          </a>
-          </md-item-content>
+            </md-item-content>
           </a>
           <a ng-if="item.isReady && !item.canAccess && item.shouldShow">
             <md-item-content md-ink-ripple layout="row" layout-align="start center">
@@ -56,61 +54,49 @@
                 {{item.title}}
                 <i class="pull-right menu-icon fa fa-lock"></i>
               </div>
-          </a>
-          </md-item-content>
+            </md-item-content>
           </a>
         </md-item>
-      <md-divider></md-divider>
-      <md-subheader class="management">Settings {{appCtrl.currentUser.firstName}}</md-subheader>
-      <md-item >
-        <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/account">
-          <md-item-content md-ink-ripple layout="row" layout-align="start center">
-            <div class="inset">
-              <md-icon class="md md-2x md-account-child "></md-icon>
-            </div>
-            <div class="inset">Account
-            </div>
-          </md-item-content>
-        </a>
-      </md-item>
-       <md-item >
-        <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}">
-          <md-item-content md-ink-ripple layout="row" layout-align="start center">
-            <div class="inset">
-              <md-icon class="md md-2x md-perm-identity"></md-icon>
-            </div>
-            <div class="inset">Profile
-            </div>
-          </md-item-content>
-        </a>
-      </md-item>
-       <md-item ng-controller="LogoutController as vmlogout">
-        <a ng-click="vmlogout.logout()">
-          <md-item-content md-ink-ripple layout="row" layout-align="start center">
-            <div class="inset">
-              <md-icon class="md md-2x md-settings-power"></md-icon>
-            </div>
-            <div class="inset">Log Out
-            </div>
-          </md-item-content>
-        </a>
-      </md-item>
+        <md-divider></md-divider>
+        <md-subheader class="management">Settings {{appCtrl.currentUser.firstName}}</md-subheader>
+        <md-item>
+          <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/account">
+            <md-item-content md-ink-ripple layout="row" layout-align="start center">
+              <div class="inset">
+                <md-icon class="md md-2x md-account-child "></md-icon>
+              </div>
+              <div class="inset">Account
+              </div>
+            </md-item-content>
+          </a>
+        </md-item>
+        <md-item>
+          <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}">
+            <md-item-content md-ink-ripple layout="row" layout-align="start center">
+              <div class="inset">
+                <md-icon class="md md-2x md-perm-identity"></md-icon>
+              </div>
+              <div class="inset">Profile
+              </div>
+            </md-item-content>
+          </a>
+        </md-item>
+        <md-item ng-controller="LogoutController as vmlogout">
+          <a ng-click="vmlogout.logout()">
+            <md-item-content md-ink-ripple layout="row" layout-align="start center">
+              <div class="inset">
+                <md-icon class="md md-2x md-settings-power"></md-icon>
+              </div>
+              <div class="inset">Log Out
+              </div>
+            </md-item-content>
+          </a>
+        </md-item>
       </md-list>
     </md-sidenav>
     <md-content flex class="ui-view-container">
-      <div data-ui-view=""></div>
+      <div data-ui-view="">
+      </div>
     </md-content>
   </div>
 </div>
-<!--     <md-select ng-model="appCtrl.currentUser.firstName">
-              <md-select-label class="md md-more-vert md-2x"> </md-select-label>
-              <md-option value="0">
-                <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/account" class="dropdown-link">Account</a>
-              </md-option>
-              <md-option value="1">
-                <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}" class="dropdown-link">Profile</a>
-              </md-option>
-              <md-option value="3" ng-controller="LogoutController as vmlogout">
-                <a ng-click="vmlogout.logout()" class="dropdown-link">Log Out</a>
-              </md-option>
-            </md-select> -->
