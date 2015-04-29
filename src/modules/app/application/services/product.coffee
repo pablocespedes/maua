@@ -12,6 +12,7 @@ product = (Observer, utilities)->
         @currentUser.currentGroup = groupId
         console.log 'set new group', groupId
         @save 'userInfo', @currentUser
+        console.log 'ChECK GROUP NAME', actualGroup
       utilities.setGroupTitle actualGroup.name
       @observable.notify groupId
 

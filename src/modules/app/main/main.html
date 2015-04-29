@@ -8,11 +8,14 @@
         <div flex="" class="fill-height">
           <md-icon class="md md-menu md-2x white" ng-click="appCtrl.toggleList()"></md-icon>
           <h2><span><img alt="Grockit" style="height: 44px;" src="assets/images/header-logo-beta.png" /></span></h2>
-          <md-select ng-model="appCtrl.activeGroupId">
+          <md-select ng-model="appCtrl.activeGroupId"  >
             <md-select-label>{{$root.groupTitle}}</md-select-label>
             <md-option ng-repeat="linked in appCtrl.ugroups.linkedGroups track by $index" value="{{linked.id}}" ng-bind="linked.name" ng-click="appCtrl.groupRedirect(linked.id)">
             </md-option>
-            <md-option ng-repeat="unlinked in appCtrl.ugroups.unLinkedGroups track by $index" value="{{unlinked.id}}" ng-click="appCtrl.groupRedirect(unlinked.id)" ng-bind="unlinked.name"> </md-option>
+            <md-option ng-repeat="unlinked in appCtrl.ugroups.unLinkedGroups track by $index" value="{{unlinked.id}}" ng-click="appCtrl.groupRedirect(unlinked.id)" disable>
+            <span ng-bind="unlinked.name"></span>
+            <md-icon class="md md-1x md-lock-outline"></md-icon>
+             </md-option>
           </md-select>
           <span flex=""></span>
           <img class="md-fab md-primary round-img" ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="User Picture" />

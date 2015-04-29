@@ -45,19 +45,18 @@ class AppController
 
   groupRedirect:(id) ->
     actualGroup = _.find @ugroups.linkedGroups, 'id': id
-    console.log 'this is actual group', actualGroup, @ugroups.linkedGroups
-    @product.currentGroupId id, actualGroup
-    @state.go 'dashboard', { subject: id },
-      location: 'replace'
-      inherit: false
-      notify: false
+    console.log 'THIS IS THE ACTUAL GROUP', angular.isDefined(actualGroup), id
 
-  selectGroup : (index) ->
-
-    ###update group Name###
-    @utilities.setGroupTitle @ugroups.linkedGroups[index].name
-    currentGroupId = @ugroups.linkedGroups[index].id
-    @product.currentGroupId currentGroupId
+    if angular.isDefined(actualGroup)
+      console.log 'entro'
+      @product.currentGroupId id, actualGroup
+      @state.go 'dashboard', { subject: id },
+        location: 'replace'
+        inherit: false
+        notify: false
+    else
+      console.log @utilities.originalGrockit(), 'URL to REDIRECT'
+      @utilities.redirect(@utilities.originalGrockit() + '/' + id)
 
   _loadGroupMembership:(groupId) ->
     @ugroups =

@@ -162,6 +162,10 @@ a {
     md-select, h2 {
       margin-left: 16px;
     }
+    md-option ~ md-icon{
+        height: inherit!important;
+        width: inherit!important;
+    }
     md-icon {
       cursor: pointer;
       -webkit-transition: all 200ms ease;

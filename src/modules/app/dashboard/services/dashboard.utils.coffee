@@ -53,12 +53,9 @@ dashboardService = ($q,resource)->
             (subtrack.total_questions_answered * 100))
           subtrack['accuracy'] = if accuracy > 0
           then Math.round(accuracy.toFixed(2)) else 0
-          console.log  index
 
           subtracksStr += if subCount <= 1 or subCount is (index+1)
           then subtrack.name else subtrack.name.concat(', ')
-
-
         )
         result['subtracksStr'] = subtracksStr.substring(0, 85).concat('...')
       )
