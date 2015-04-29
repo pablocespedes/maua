@@ -150,8 +150,13 @@ a {
     z-index: 62;
   }
 }
+ md-option > .md-text > .product-icon {
+    height: inherit!important;
+    width: inherit!important;
+  }
 
 #main-toolbar {
+
   .md-toolbar-tools {
     margin-top: -8px;
     // .menu-icon {
@@ -161,10 +166,6 @@ a {
     // }
     md-select, h2 {
       margin-left: 16px;
-    }
-    md-option ~ md-icon{
-        height: inherit!important;
-        width: inherit!important;
     }
     md-icon {
       cursor: pointer;
