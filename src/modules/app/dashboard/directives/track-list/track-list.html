@@ -4,14 +4,8 @@
       <div class="itemhead">
         <h2 ng-bind="track.name"></h2>
         <span class="subtracks" flex="75">
-        <span ng-repeat="subtrack in track.items">
-           <span ng-if="$last || track.items.length <=1" >
-            {{subtrack.name}}
+          <span ng-bind="track.subtracksStr">
           </span>
-          <span ng-if="!$last">
-            {{subtrack.name}},
-          </span>
-        </span>
         </span>
         <div flex="25">
           <md-button class="questions md-fab" aria-label="User Progress" ng-if="track.total_questions_answered > 0 && track.total_questions_available > 0">

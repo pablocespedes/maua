@@ -1,7 +1,7 @@
 <div layout="column" tabindex="-1" role="main" layout-align="center" flex="" aria-hidden="false"
   ng-controller="AppController as appCtrl">
-  <div layout="row" style="background: #0097a7; height:15px;">
-  </div>
+ <!--  <div layout="row" style="background: #0097a7; height:15px;">
+  </div> -->
   <div id="main-toolbar" layout="row">
     <md-toolbar>
       <div class="md-toolbar-tools">
@@ -17,7 +17,6 @@
           <span flex=""></span>
           <img class="md-fab md-primary round-img" ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="User Picture" />
           <label>{{appCtrl.currentUser.firstName}}</label>
-          <md-icon class="md md-more-vert md-2x white" ng-click="showGridBottomSheet($event)"></md-icon>
         </div>
       </div>
     </md-toolbar>
@@ -59,7 +58,7 @@
           </a>
         </md-item>
       <md-divider></md-divider>
-      <md-subheader class="management">Management {{appCtrl.currentUser.firstName}}</md-subheader>
+      <md-subheader class="management">Settings {{appCtrl.currentUser.firstName}}</md-subheader>
       <md-item >
         <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/account">
           <md-item-content md-ink-ripple layout="row" layout-align="start center">

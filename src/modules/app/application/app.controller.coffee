@@ -1,7 +1,8 @@
 'use strict'
 class AppController
   constructor: ($scope, $window, @utilities, @user,@product, @groups,
-    @authorization,$mdSidenav,@menuService,@membership,@userNotify)->
+    @authorization,$mdSidenav,@menuService,@membership,@userNotify,$state)->
+    @state = $state
     @mdSidenav = $mdSidenav
     @window = $window
     @userProgressObserver = null
@@ -22,7 +23,7 @@ class AppController
       @_setInitialData @currentUser, groupId
       return
 
-    $scope.$on '$destroy', =>
+    #$scope.$on '$destroy', =>
       #@product.unregisterGroup @userProgressObserver
 
   hidVideoOption : (groupId) ->
@@ -43,8 +44,13 @@ class AppController
     @mdSidenav('left').close()
 
   groupRedirect:(id) ->
-    @activeGroupId=id
-    @utilities.redirect '#/'+ id + '/dashboard'
+    actualGroup = _.find @ugroups.linkedGroups, 'id': id
+    console.log 'this is actual group', actualGroup, @ugroups.linkedGroups
+    @product.currentGroupId id, actualGroup
+    @state.go 'dashboard', { subject: id },
+      location: 'replace'
+      inherit: false
+      notify: false
 
   selectGroup : (index) ->
 
@@ -106,7 +112,9 @@ class AppController
     )
 
   _setInitialData: (response, groupId) ->
+    console.log 'check group',@activeGroupId,groupId
     if @activeGroupId isnt groupId
+      @activeGroupId=groupId
       @setMenu(groupId)
       @enableScore = groupId is 'gmat' or groupId is 'act' or
       groupId is 'sat'
@@ -150,6 +158,7 @@ class AppController
 
 
  AppController.$inject = ['$scope', '$window', 'utilities', 'user','product',
-'groups','authorization','$mdSidenav','menuService','membership','userNotify']
+'groups','authorization','$mdSidenav','menuService','membership','userNotify',
+'$state']
 
 module.exports = AppController

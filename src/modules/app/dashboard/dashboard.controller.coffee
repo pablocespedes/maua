@@ -24,6 +24,7 @@ class DashboardController
 
     @userObserver = @userNotify.observeUserData().register (userExist) =>
       console.log 'I notify app dashboard that we are authenticated'
+      @loading = true
       @init()
 
   init : ->
@@ -43,6 +44,7 @@ class DashboardController
           historyVisible = false
           baseUrl = @utilities.originalGrockit(false)
           @paymentPage = baseUrl + '/' + @activeGroupId + '/subscriptions/new'
+    @loading = false
 
   startPractice : (subject, trackId) =>
     if @canPractice
@@ -59,12 +61,9 @@ class DashboardController
   _getDashboard : (groupId) ->
     @dashboardService.setDashboardData(groupId).then (result) =>
       hasQuestionsAnswered = @dashboardService.hasQuestionsAnswered()
-      if not hasQuestionsAnswered and activeGroupId isnt
-       'gre' and not detectUtils.isMobile()
-        showTour = true
 
       if not hasQuestionsAnswered and
-       activeGroupId is 'gre'
+       @activeGroupId is 'gre'
         base = @utilities.newGrockit().url
         $window.location.href = base + '/#/' + @activeGroupId +
          '/custom-practice/'
