@@ -3,7 +3,7 @@
     margin-top: 16px;
     margin-left: 16px;
   }
-  md-toolbar{
+  md-toolbar {
     z-index: 60;
   }
   md-select {
@@ -62,6 +62,9 @@
         // margin-top: 11px;
       }
     }
+  }
+  md-list-item:hover {
+    background: #E0E0E0;
   }
 }
 
@@ -162,7 +165,7 @@ md-sidenav.md-locked-open-remove.md-closed {
   &_ui {
     height: 98%;
     &__heading {
-        z-index: 60;
+      z-index: 60;
       width: 100%;
       background: #f6f6f6!important;
       color: #767676!important;

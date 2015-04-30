@@ -16,7 +16,7 @@ body {
 }
 
 ::selection {
-  background: #3F51B5;
+  background: #E0F7FA;
   color: $white;
 }
 
@@ -40,15 +40,6 @@ a:focus {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  // -webkit-border-radius: 5px 5px 0px 0px;
-  // -moz-border-radius: 5px 5px 0px 0px;
-  // -ms-border-radius: 5px 5px 0px 0px;
-  // -o-border-radius: 5px 5px 0px 0px;
-  // border-radius: 5px 5px 0px 0px;
-  // -webkit-transition: all 0.2s ease;
-  // -moz-transition: all 0.2s ease;
-  // -o-transition: all 0.2s ease;
-  // transition: all 0.2s ease;
   cursor: pointer;
   border: none;
   background: blue;
@@ -58,11 +49,6 @@ a:focus {
  color: white;
   padding: 1px;
   margin-left: -15px;
-  // -webkit-filter: drop-shadow(0 1px 10px rgba(0, 0, 0, 0.5));
-  // -moz-filter: drop-shadow(0 1px 10px rgba(0, 0, 0, 0.5));
-  // -ms-filter: drop-shadow(0 1px 10px rgba(0, 0, 0, 0.5));
-  // -o-filter: drop-shadow(0 1px 10px rgba(0, 0, 0, 0.5));
-  // filter: drop-shadow(0 1px 10px rgba(0, 0, 0, 0.5));
 }
 
 .ribbon span {
