@@ -23,7 +23,7 @@ class VideoController
     @currentVideoUrl = @sce.trustAsResourceUrl(url)
 
   opensideNav : ->
-     @mdSidenav('video-right').open()
+    @mdSidenav('video-right').open()
 
   closesideNav: ->
     @mdSidenav('video-right').close()

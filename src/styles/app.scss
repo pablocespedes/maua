@@ -18,6 +18,9 @@ md-backdrop{
   top:0;
 }
 
+.pointer{
+ cursor: pointer;
+}
 ::selection {
   background: #E0F7FA;
   color: $white;

@@ -38,10 +38,19 @@ class AppController
       groupId is 'lsat' or groupId is 'iim-cat'
 
   toggleList:() ->
-    @mdSidenav('left').toggle()
+    @mdSidenav('left').open()
 
   closeMainMenu:->
     @mdSidenav('left').close()
+
+  displayMenu: ->
+    mainMenu = @mdSidenav('left')
+    alreadyOpen = mainMenu.isOpen()
+
+    if not alreadyOpen
+      @toggleList()
+    else
+      @closeMainMenu()
 
   groupRedirect:(id) ->
     actualGroup = _.find @ugroups.linkedGroups, 'id': id
