@@ -3,12 +3,14 @@
     margin-top: 16px;
     margin-left: 16px;
   }
+  md-toolbar{
+    z-index: 60;
+  }
   md-select {
     margin-top: 12px;
   }
-  .md-button.md-fab md-icon {
-    margin-top: -6px;
-    margin-left: -8px;
+  .md-button.md-fab.md-mini {
+    line-height: 3rem!important;
   }
   md-backdrop.md-sidenav-backdrop {
     z-index: 0!important;
@@ -19,7 +21,7 @@
 }
 
 #video-toolbar {
-  z-index: 0;
+  z-index: 59;
   .animate-repeat {
     line-height: 40px;
     list-style: none;
@@ -160,6 +162,7 @@ md-sidenav.md-locked-open-remove.md-closed {
   &_ui {
     height: 98%;
     &__heading {
+        z-index: 60;
       width: 100%;
       background: #f6f6f6!important;
       color: #767676!important;

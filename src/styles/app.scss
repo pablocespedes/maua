@@ -35,6 +35,76 @@ a:focus {
   text-decoration: none
 }
 
+.ribbon {
+  float: left;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  // -webkit-border-radius: 5px 5px 0px 0px;
+  // -moz-border-radius: 5px 5px 0px 0px;
+  // -ms-border-radius: 5px 5px 0px 0px;
+  // -o-border-radius: 5px 5px 0px 0px;
+  // border-radius: 5px 5px 0px 0px;
+  // -webkit-transition: all 0.2s ease;
+  // -moz-transition: all 0.2s ease;
+  // -o-transition: all 0.2s ease;
+  // transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  background: blue;
+  width: 40px;
+  height:30px;
+  position: relative;
+ color: white;
+  padding: 1px;
+  margin-left: -15px;
+  // -webkit-filter: drop-shadow(0 1px 10px rgba(0, 0, 0, 0.5));
+  // -moz-filter: drop-shadow(0 1px 10px rgba(0, 0, 0, 0.5));
+  // -ms-filter: drop-shadow(0 1px 10px rgba(0, 0, 0, 0.5));
+  // -o-filter: drop-shadow(0 1px 10px rgba(0, 0, 0, 0.5));
+  // filter: drop-shadow(0 1px 10px rgba(0, 0, 0, 0.5));
+}
+
+.ribbon span {
+  line-height: 10px;
+  font-size: 5em;
+}
+
+.ribbon::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-top: 20px solid blue;
+  border-right: 30px solid transparent;
+}
+
+.ribbon::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-top: 20px solid blue;
+  border-left: 30px solid transparent;
+}
+
+.twitter {
+  margin-top: -25px;
+  background: #00a0d1;
+}
+
+.twitter::after {
+  border-top-color: #00a0d1;
+}
+
+.twitter::before {
+  border-top-color: #00a0d1;
+}
+
 .app,
 .app>.main-container,
 html {
@@ -56,7 +126,7 @@ md-list.md-default-theme md-list-item.md-2-line .md-list-item-text h3,
 md-list.md-default-theme md-list-item.md-2-line .md-list-item-text h4,
 md-list.md-default-theme md-list-item.md-3-line .md-list-item-text h3,
 md-list.md-default-theme md-list-item.md-3-line .md-list-item-text h4 {
-  color:#767676!important;
+  color: #767676!important;
 }
 /* Sidenav area */
 
@@ -150,11 +220,12 @@ a {
 }
 
 #main-menu {
+  z-index: 61;
   md-item a {
     cursor: pointer;
   }
   md-sidenav {
-    z-index: 62;
+    z-index: 61;
   }
 }
 

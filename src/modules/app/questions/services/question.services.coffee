@@ -11,25 +11,31 @@ questionTypeService = ()->
     findSelectedItems : (items) ->
       _.find items, 'selected': true
 
-    selectOneChoice : (isConfirmClicked, items, index) ->
+    selectOneChoice : (isConfirmClicked, items, index, selectedChoice) ->
       if !isConfirmClicked
         _.forEach items, (answer, i) ->
           if index isnt i
             answer.selected = false
           return
+
         answer = items[index]
-        nexAction = $('#nextAction')
-        seeAnswer = $('#skipAction')
         if angular.isUndefined(answer.crossOut) or !answer.crossOut
           $('.choice button').removeClass 'md-primary md-warn'
-          if !answer.selected
-            answer.selected = true
-            nexAction.addClass 'md-primary'
-            seeAnswer.addClass 'hide'
-          else
-            answer.selected = false
-            nexAction.removeClass 'md-primary'
-            seeAnswer.removeClass 'hide'
+          selectedChoice = answer.id
+          nexAction = $('#nextAction')
+          seeAnswer = $('#skipAction')
+          nexAction.addClass 'md-primary'
+          seeAnswer.addClass 'hide'
+          # if answer.id is selectedChoice
+          #   console.log 'SET IT TO TRUE'
+          #   answer.selected = true
+          #   nexAction.addClass 'md-primary'
+          #   seeAnswer.addClass 'hide'
+          # else
+          #   answer.selected = false
+          #   nexAction.removeClass 'md-primary'
+          #   seeAnswer.removeClass 'hide'
+      console.log items
 
     selectMultipleChoice : (isConfirmClicked, items, index) ->
       if !isConfirmClicked

@@ -1,17 +1,26 @@
 /* just a trick to avoid a bad css to be remoed from the CE */
 
+#Panel2 {
+  md-radio-group {
+    width: 100%;
+  }
+  .md-label:before {
+    content: "";
+  }
+}
+
 .Apple-style-span {
   float: inherit;
   min-height: 1px;
   margin-left: 0px;
 }
 
-.confirm-panel{
+.confirm-panel {
   text-align: right;
 }
 
-.feedback-box{
-  label{
+.feedback-box {
+  label {
     margin-top: 10px;
   }
 }
@@ -22,7 +31,7 @@
   color: $white;
 }
 
-.square-btn{
+.square-btn {
   border-radius: 0!important;
 }
 
@@ -82,7 +91,7 @@
 
 .timing-check {
   position: relative;
-  height: 100px;
+  height: 133px;
   text-align: center;
 }
 
@@ -195,6 +204,12 @@
   .leftColumn {
     margin-bottom: .5em;
     text-align: justify;
+  }
+  #Panel1 {
+    margin-left: 1rem;
+  }
+  #Panel2 {
+    margin-right: 1rem;
   }
   #Panel1 img {
     max-width: 100%;
@@ -411,8 +426,8 @@
 }
 
 .question-information.fixed-width {
-  //min-width: 480px;
-  width: 520px;
+  min-width: 520px;
+  //width: 520px;
   margin: 0px auto;
 }
 

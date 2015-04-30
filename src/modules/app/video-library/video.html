@@ -2,19 +2,19 @@
   <div class="md-toolbar-tools">
     <div layout="row" flex="" class="fill-height float-right">
       <div class="md-toolbar-item  menu">
-        <md-select style="color:black;" placeholder="Filter By" ng-model="vmVideo.category">
+        <md-select style="color:black;" placeholder="Filter By" ng-model="vmVideo.category" md-on-open="vmVideo.opensideNav()">
           <md-option value="">All</md-option>
           <md-option ng-repeat="video in vmVideo.videos" value="{{video.id}}">{{video.title}}</md-option>
         </md-select>
       </div>
       <div class="md-toolbar-item menu">
         <md-input-container md-no-float>
-          <input ng-model="vmVideo.searchText" type="text" placeholder="Search by Title">
+          <input ng-model="vmVideo.searchText" type="text" placeholder="Search by Title" ng-focus="vmVideo.opensideNav()" ng-blur="vmVideo.closesideNav()">
         </md-input-container>
       </div>
       <div class="md-toolbar-item">
         <md-button class="md-fab md-mini md-primary" aria-label="Open" ng-click="vmVideo.checkNavStatus()" hide-gt-md>
-          <md-icon class="md md-menu md-2x menu_icon" style="color: greenyellow;"></md-icon>
+          <md-icon class="md md-menu md-2x menu_icon"></md-icon>
         </md-button>
       </div>
     </div>

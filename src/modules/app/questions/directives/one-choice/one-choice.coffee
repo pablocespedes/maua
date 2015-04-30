@@ -14,6 +14,7 @@ oneChoice = (questionTypeService)->
       isConfirmClicked: '='
       groupId: '@'
     link: (scope, element, attrs) ->
+      scope.selectedChoice = false
       scope.showforCurrentGroup = true
 
       scope.crossOutChoice = (index, event) ->
@@ -22,7 +23,7 @@ oneChoice = (questionTypeService)->
 
       scope.selectAnswer = (index) ->
         questionTypeService.selectOneChoice scope.isConfirmClicked,
-         scope.items, index
+         scope.items, index, scope.selectedChoice
         return
 oneChoice.$inject = ['questionTypeService']
 module.exports = oneChoice

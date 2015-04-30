@@ -13,7 +13,7 @@ class VideoController
   checkNavStatus : ->
     @isVideoListOpen = @mdSidenav('video-right').isOpen()
     if not @isVideoListOpen
-      @mdSidenav('video-right').toggle()
+      @mdSidenav('video-right').open()
     else
       @mdSidenav('video-right').close()
 
@@ -21,6 +21,12 @@ class VideoController
     @displayVideo= true
     url= currentVideo.stream_url.replace('https:','')
     @currentVideoUrl = @sce.trustAsResourceUrl(url)
+
+  opensideNav : ->
+     @mdSidenav('video-right').open()
+
+  closesideNav: ->
+    @mdSidenav('video-right').close()
 
 VideoController.$inject = ['$mdSidenav','$sce','videoService']
 

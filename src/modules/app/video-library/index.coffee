@@ -1,6 +1,5 @@
 
 VideoController = require('./video.controller')
-VideoList =  require('./directives/video-list/video-list')
 VideoService=  require('./services/video.service')
 
 videoService = (videoService)->
@@ -21,6 +20,5 @@ module.exports = angular.module('grockitApp.videolibrary', [])
 )
 .filter 'categoryFilter', require('./filters/category')
 .factory 'videoService', VideoService
-.directive 'videoList', VideoList
 .controller 'VideoController', VideoController
 
