@@ -57,7 +57,7 @@ dashboardService = ($q,resource)->
           subtracksStr += if subCount <= 1 or subCount is (index+1)
           then subtrack.name else subtrack.name.concat(', ')
         )
-        result['subtracksStr'] = subtracksStr.substring(0, 85).concat('...')
+        result['subtracksStr'] = subtracksStr.substring(0, 75).concat('...')
       )
       @dashboardData.smart_practice.items = smartPracticeItems
       console.log @dashboardData.smart_practice.items

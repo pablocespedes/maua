@@ -1,6 +1,13 @@
 module.exports = angular.module('grockitApp.config', [])
+.value('IntercomSettings', {})
+.provider 'intercom', require('./providers/intercom.utilities')
 .provider('ApiUrls', require('./apiurls'))
-.config(require('./config'))
+.value('fakeUserIntercom',
+  email: 'john.doe@example.com'
+  name: 'John Doe'
+  created_at: 1234567890
+  user_id: '9876')
+.constant 'IntercomAppId', 'lfqlzjgt'
 .constant 'userRoles',
   admin: 'admin'
   member: 'member'
@@ -34,3 +41,6 @@ module.exports = angular.module('grockitApp.config', [])
   'freeTrialExp': 'There\'s <strong>no more</strong> time left in your trial.'
   'noGroups': 'We are getting problems to find your subjects,'+
   'if the problem persist please let\'s us know.'
+
+.config(require('./config'))
+.run(require('./run'))

@@ -1,4 +1,4 @@
-userPreflight = ($window,$location,authorization,user,groups,
+userPreflight = ($window,$location,intercom ,authorization,user,groups,
   utilities,product,membership)->
   new class UserPreflight
     constructor: ->
@@ -9,11 +9,19 @@ userPreflight = ($window,$location,authorization,user,groups,
     _isBasePath = (userResponse) ->
       $location.path() == '/' or $location.path() == '/' +
       userResponse.currentGroup or $location.path() == ''
-
+    _userIntercom = (userResponse) ->
+      intercomSettings =
+        user_id: userResponse.userId
+        name: userResponse.fullName
+        email: userResponse.emailAddress
+        updated_at: Math.floor(Date.now() / 1000)
+        'widget': 'activator': '#Intercom'
+      intercom.update intercomSettings
+      return
     checkUser: (event) ->
       if authorization.tokenExists()
         user.self(true).then (userResponse) ->
-          console.log 'obtiene el user', userResponse, userResponse isnt null
+          _userIntercom(userResponse);
           if userResponse isnt null
 
             groups.membershipGroups(true).then (groupsResult) ->
@@ -44,6 +52,6 @@ userPreflight = ($window,$location,authorization,user,groups,
           'Click here to restart</a>.'
       event.preventDefault()
 
-userPreflight.$inject = ['$window','$location','authorization','user','groups',
-'utilities','product','membership']
+userPreflight.$inject = ['$window','$location','intercom', 'authorization',
+'user','groups','utilities','product','membership']
 module.exports = userPreflight

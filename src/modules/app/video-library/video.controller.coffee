@@ -2,13 +2,20 @@
 
 class VideoController
   # Services injected into the controller constructor
-  constructor: ($mdSidenav,$sce,@videoService) ->
+  constructor: ($mdSidenav,$sce,@videoService,@product) ->
     @sce = $sce
     @displayVideo= false
     @category = 0
     @mdSidenav = $mdSidenav
-    @videos = @videoService
     @isClicked = true
+    @getVideoData()
+    @videoObserver = @product.observeGroupId().register (groupId) =>
+      if groupId isnt 'gre'
+        @videoService.redirectVideoLib(groupId)
+
+  getVideoData: ->
+    @videoService.getVideoData('gre').then (videos)=>
+      @videos = videos
 
   checkNavStatus : ->
     @isVideoListOpen = @mdSidenav('video-right').isOpen()
@@ -28,6 +35,6 @@ class VideoController
   closesideNav: ->
     @mdSidenav('video-right').close()
 
-VideoController.$inject = ['$mdSidenav','$sce','videoService']
+VideoController.$inject = ['$mdSidenav','$sce','videoService','product']
 
 module.exports = VideoController

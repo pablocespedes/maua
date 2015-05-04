@@ -2,10 +2,10 @@
 VideoController = require('./video.controller')
 VideoService=  require('./services/video.service')
 
-videoService = (videoService)->
-  videoService.getVideoData('gre')
+# videoService = (videoService)->
+#   videoService.getVideoData('gre')
 
-videoService.$inject = ['videoService']
+# videoService.$inject = ['videoService']
 
 module.exports = angular.module('grockitApp.videolibrary', [])
     .config(($stateProvider) ->
@@ -15,7 +15,7 @@ module.exports = angular.module('grockitApp.videolibrary', [])
       templateUrl: 'app/video-library/video.html'
       controller: 'VideoController'
       controllerAs: 'vmVideo'
-      resolve: videoService: videoService
+      #resolve: videoService: videoService
 
 )
 .filter 'categoryFilter', require('./filters/category')

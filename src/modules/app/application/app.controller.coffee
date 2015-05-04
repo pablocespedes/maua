@@ -64,7 +64,6 @@ class AppController
         inherit: false
         notify: false
     else
-      console.log @utilities.originalGrockit(), 'URL to REDIRECT'
       @utilities.redirect(@utilities.originalGrockit() + '/' + id)
 
   _loadGroupMembership:(groupId) ->

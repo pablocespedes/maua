@@ -1,7 +1,12 @@
 'use strict'
 
 initConfig =  ($httpProvider, $stateProvider,
-  $urlRouterProvider,RestangularProvider, ApiUrlsProvider,$mdThemingProvider) ->
+  $urlRouterProvider,RestangularProvider, ApiUrlsProvider,$mdThemingProvider,
+  intercomProvider, IntercomAppId) ->
+  console.log intercomProvider, 'config.coffee'
+  intercomProvider.appID(IntercomAppId)
+  intercomProvider.asyncLoading(true)
+
   $mdThemingProvider
   .theme('default')
   .primaryPalette('cyan',
@@ -34,7 +39,7 @@ initConfig =  ($httpProvider, $stateProvider,
 
 initConfig.$inject = ['$httpProvider','$stateProvider',
 '$urlRouterProvider', 'RestangularProvider','ApiUrlsProvider',
-'$mdThemingProvider']
+'$mdThemingProvider','intercomProvider', 'IntercomAppId']
 
 
 module.exports = initConfig

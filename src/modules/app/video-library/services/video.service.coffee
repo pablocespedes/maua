@@ -1,9 +1,10 @@
 Resource=require('../../application/services/_api.base')
 
-videoService = ($q,resource)->
+videoService = ($q,resource,utilities)->
   new class VideoService extends resource
     constructor: () ->
       super()
+      @baseUrl = utilities.originalGrockit()
 
     appendParams:(videos, index)->
       console.log videos.length-1, index
@@ -25,7 +26,10 @@ videoService = ($q,resource)->
         deferred.resolve @videoData
       deferred.promise
 
+    redirectVideoLib:(groupId)->
+      utilities.redirect(@baseUrl + '/' + groupId + '/video_courses')
 
 
-videoService.$inject = ['$q','resource']
+
+videoService.$inject = ['$q','resource','utilities']
 module.exports = videoService
