@@ -1,12 +1,13 @@
-dashboardService = ($q,resource)->
-  new class DashboardService extends resource
+Storage =require('../../application/services/_storage')
 
+dashboardService = ($q,resource)->
+  new class DashboardService
+    _.extend @::, resource::, Storage::
     _getScore: (track) ->
       if @dashboardData.score_prediction
       then @dashboardData.score_prediction.tracks[track.id] else null
 
     constructor: ->
-      super()
       @dashboardData = null
 
     getDashboard :(groupId) ->
@@ -41,10 +42,10 @@ dashboardService = ($q,resource)->
       trackArray = @dashboardData.smart_practice.items
       smartPracticeItems = null
       smartPracticeItems =
-      _.forEach(trackArray, (result) =>
+      _.forEach(trackArray, (result,index) =>
         subtracksStr = ''
         subCount = result.items.length
-        result['position'] = 0
+        result['position'] = index
         result['getScore'] = @_getScore(result)
         result['hasScore'] = @_getScore(result) != null and
          @_getScore(result) > 0
@@ -106,6 +107,10 @@ dashboardService = ($q,resource)->
     hidPaymentBanner:->
 
     showPaymentBanner:->
+
+    saveCardPosition:->
+
+
 
 
 dashboardService.$inject = ['$q','resource']

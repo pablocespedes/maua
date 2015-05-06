@@ -3,8 +3,6 @@ _capitalize_ = (string) ->
    string.substring(1).toLowerCase()
 
 createScript = (url, appID) ->
-  console.log 'TRY TO CREATE SCRIPT'
-
   if !document
     return
   script = document.createElement('script')
@@ -59,7 +57,6 @@ $IntercomProvider = ->
       provider
 
     return
-  console.log provider
   provider.$get = [
     '$rootScope'
     'IntercomSettings'
@@ -86,14 +83,12 @@ $IntercomProvider = ->
       instance = true
       _options = {}
       # ensure appID is added to _options
-      console.log config,_options,$intercom
       if config.appID
         _options.app_id = _options.app_id or config.appID
       angular.extend _options, IntercomSettings
       if intercom_exist
         global.Intercom 'reattach_activator'
         global.Intercom 'update', _options
-        console.log config
       if config.asyncLoading
         createScript config.scriptUrl, config.appID
 

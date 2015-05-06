@@ -90,11 +90,16 @@ questionTypeService = ()->
         console.log items
 
     selectTwoChoice : (isConfirmClicked, items, index, maxOpt) ->
-      console.log items, index, maxOpt
+
       if !isConfirmClicked
         answer = items[index]
+        console.log answer
         nexAction = $('#nextAction')
         seeAnswer = $('#skipAction')
+        newValue = if answer.selected == false then true else false
+        console.log newValue
+        answer.selected = newValue
+        console.log answer
         #if angular.isUndefined(answer.crossOut) or !answer.crossOut
           # if !answer.selected
           #   ###validation which takes care to keep just 2 options selected###

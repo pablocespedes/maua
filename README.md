@@ -9,10 +9,13 @@
 This app relies on :
 - [Angularjs](https://angularjs.org/)
 - [CoffeScript](http://coffeescript.org/)
+- [Angular Material](https://material.angularjs.org/#/)
 - [Node.js](http://nodejs.org)
 - [Bower](http://bower.io/#install-bower)
 - [Gulp](http://gulpjs.com)
 - [Sass](http://sass-lang.com/)
+- [Material Design Iconic Font](http://zavoloklom.github.io/)
+
 
 
 ## Getting Started

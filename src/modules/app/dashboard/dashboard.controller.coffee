@@ -102,6 +102,7 @@ class DashboardController
   hidPayment:->
     @showBuyNow = false
 
+
 DashboardController.$inject = ['$window','$scope','$state','$auth','product',
 'authorization','dashboardService','utilities','membership','userNotify']
 

@@ -32,7 +32,15 @@ trackList = ($mdDialog)->
         utilities.redirect baseUrl + '/assessment/for_track/' + track.id
 
       scope.setFavorite = (track)->
-        track.favorite = !track.favorite
+        trackCopy = track
+        trackCopy.favorite = !trackCopy.favorite
+        trackCopy.position = 0
+        _.pull @tracks, track
+        _.forEach @tracks, (item,index)->
+          item.position = index+1
+
+        @tracks.unshift(trackCopy)
+        console.log track,trackCopy,@tracks
 
 
 trackList.$inject = ['$mdDialog']
