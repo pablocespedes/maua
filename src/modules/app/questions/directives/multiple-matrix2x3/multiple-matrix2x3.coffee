@@ -13,12 +13,12 @@ multipleMatrix2x3 = (questionTypeService)->
     link: (scope, element, attrs, controller) ->
       scope.showforCurrentGroup = true
 
-      scope.crossOutChoice = (index, event) ->
-        questionTypeService.crossOutChoice scope.items, index, event
+      scope.crossOutChoice = (index, event,subitem) ->
+        questionTypeService.crossOutChoice subitem, index, event
         return
 
-      scope.selectAnswer = (index, mGroup) ->
-        questionTypeService.selectMatrix scope.isConfirmClicked, scope.items,
+      scope.selectAnswer = (index, mGroup, subitem) ->
+        questionTypeService.selectMatrix scope.isConfirmClicked, subitem,
         index, mGroup
         return
 

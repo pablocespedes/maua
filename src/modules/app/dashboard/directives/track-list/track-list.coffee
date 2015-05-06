@@ -31,5 +31,9 @@ trackList = ($mdDialog)->
         baseUrl = utilities.originalGrockit(false).url
         utilities.redirect baseUrl + '/assessment/for_track/' + track.id
 
+      scope.setFavorite = (track)->
+        track.favorite = !track.favorite
+
+
 trackList.$inject = ['$mdDialog']
 module.exports = trackList

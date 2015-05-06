@@ -27,6 +27,7 @@ class DashboardController
       @loading = true
       @init()
 
+
   init : ->
     console.log 'get into the init method dashboard'
     if @authorization.userExist()
@@ -97,6 +98,9 @@ class DashboardController
      challenge.items.length > 0
       isChallengeAvailable = true
       challengesGames = challenge.items
+
+  hidPayment:->
+    @showBuyNow = false
 
 DashboardController.$inject = ['$window','$scope','$state','$auth','product',
 'authorization','dashboardService','utilities','membership','userNotify']

@@ -1,5 +1,28 @@
 /* just a trick to avoid a bad css to be remoed from the CE */
 
+#answerType {
+  md-radio-button, md-checkbox {
+    width: 100%;
+    min-height: 81px;
+    margin: 0px!important;
+    .md-container, .md-switch-thumb .md-container {
+      top: 41px;
+      left: 10px;
+    }
+    .md-label {
+      top: 34px;
+      left: 10px;
+    }
+  }
+  md-checkbox .md-label {
+    left: 20px;
+    top: 31px;
+  }
+  .arrow-selected {
+    margin-top: -75px;
+  }
+}
+
 #Panel2 {
   md-radio-group {
     width: 100%;

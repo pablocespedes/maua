@@ -14,13 +14,17 @@ body {
   -webkit-font-smoothing: antialiased!important;
   -moz-osx-font-smoothing: grayscale!important
 }
-md-backdrop{
-  top:0;
+#intercom-container .intercom-launcher{
+  bottom: 70px!important;
+}
+md-backdrop {
+  top: 0;
 }
 
-.pointer{
- cursor: pointer;
+.pointer {
+  cursor: pointer;
 }
+
 ::selection {
   background: #E0F7FA;
   color: $white;
@@ -50,9 +54,9 @@ a:focus {
   border: none;
   background: blue;
   width: 40px;
-  height:30px;
+  height: 30px;
   position: relative;
- color: white;
+  color: white;
   padding: 1px;
   margin-left: -15px;
 }
@@ -133,7 +137,7 @@ md-list-item.md-3-line > .md-no-style .md-list-item-text {
 }
 
 md-list {
-  display: block;
+  display: block!important;
 }
 
 md-list-item,
@@ -196,13 +200,6 @@ a {
   color: #ffffff;
 }
 
-.bg-icon {
-  margin-top: -16px;
-  font-size: 100px;
-  float: right;
-  right: 42px;
-}
-
 .management {
   margin-top: 15px;
   margin-left: 10px;
@@ -218,6 +215,19 @@ a {
   }
   md-sidenav {
     z-index: 61;
+  }
+  md-list-item {
+    width: 100%;
+    .md-list-item-text {
+      width: 100%;
+      background: #ffffff;
+    }
+    a{
+      background: #ffffff;
+    }
+  }
+  md-list-item:hover {
+    background: #E0E0E0;
   }
 }
 

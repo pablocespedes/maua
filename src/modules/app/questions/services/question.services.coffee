@@ -8,6 +8,7 @@ questionTypeService = ()->
       _.forEach items, (answer, i) ->
         if i is index
           answer.selected = false
+
     findSelectedItems : (items) ->
       _.find items, 'selected': true
 
@@ -26,15 +27,15 @@ questionTypeService = ()->
           seeAnswer = $('#skipAction')
           nexAction.addClass 'md-primary'
           seeAnswer.addClass 'hide'
-          # if answer.id is selectedChoice
-          #   console.log 'SET IT TO TRUE'
-          #   answer.selected = true
-          #   nexAction.addClass 'md-primary'
-          #   seeAnswer.addClass 'hide'
-          # else
-          #   answer.selected = false
-          #   nexAction.removeClass 'md-primary'
-          #   seeAnswer.removeClass 'hide'
+          if answer.id is selectedChoice
+            console.log 'SET IT TO TRUE'
+            answer.selected = true
+            nexAction.addClass 'md-primary'
+            seeAnswer.addClass 'hide'
+          else
+            answer.selected = false
+            nexAction.removeClass 'md-primary'
+            seeAnswer.removeClass 'hide'
       console.log items
 
     selectMultipleChoice : (isConfirmClicked, items, index) ->
@@ -54,20 +55,28 @@ questionTypeService = ()->
               seeAnswer.removeClass 'hide'
 
     selectMatrix : (isConfirmClicked, items, index, mGroup) ->
-
+      console.log items, 'items from directive'
       if !isConfirmClicked
         answer = items[index]
         nexAction = $('#nextAction')
         seeAnswer = $('#skipAction')
-        currentSection = _.filter(items, (answer) ->
-          answer.matrix_group is mGroup
-        )
-        trueSelected = @findSelectedItems(currentSection)
-        if trueSelected
-          _.forEach currentSection, (ansResult) ->
-            if answer.id isnt ansResult.id
-              ansResult.selected = false
-            return
+
+        _.forEach items, (answer, i) ->
+          if index isnt i
+            answer.selected = false
+          return
+
+        # currentSection = _.filter(items, (answer) ->
+        #   answer.matrix_group is mGroup
+        # )
+        # trueSelected = @findSelectedItems(currentSection)
+        # if trueSelected
+        #   _.forEach currentSection, (ansResult) ->
+        #     if answer.id isnt ansResult.id
+        #       ansResult.selected = false
+        #     return
+
+
         if angular.isUndefined(answer.crossOut) or !answer.crossOut
           if !answer.selected
             answer.selected = true
@@ -78,30 +87,32 @@ questionTypeService = ()->
             if !@findSelectedItems(items)
               nexAction.removeClass 'md-primary'
               seeAnswer.removeClass 'hide'
+        console.log items
 
     selectTwoChoice : (isConfirmClicked, items, index, maxOpt) ->
+      console.log items, index, maxOpt
       if !isConfirmClicked
         answer = items[index]
         nexAction = $('#nextAction')
         seeAnswer = $('#skipAction')
-        if angular.isUndefined(answer.crossOut) or !answer.crossOut
-          if !answer.selected
-            ###validation which takes care to keep just 2 options selected###
-            if maxOpt.length >= 2
-              ansR = _.find(items, 'id': maxOpt[0])
-              ansR.selected = false
-              maxOpt = _.filter(maxOpt, (num, i) -> i isnt 0)
+        #if angular.isUndefined(answer.crossOut) or !answer.crossOut
+          # if !answer.selected
+          #   ###validation which takes care to keep just 2 options selected###
+          #   if maxOpt.length >= 2
+          #     ansR = _.find(items, 'id': maxOpt[0])
+          #     ansR.selected = false
+          #     maxOpt = _.filter(maxOpt, (num, i) -> i isnt 0)
 
-            maxOpt.push answer.id
-            answer.selected = true
-            nexAction.addClass 'md-primary'
-            seeAnswer.addClass 'hide'
-          else
-            maxOpt = _.filter(maxOpt, (num) -> num isnt answer.id)
-            answer.selected = false
-            if !_.find(items, 'selected': true)
-              nexAction.removeClass 'md-primary'
-              seeAnswer.removeClass 'hide'
+          #   maxOpt.push answer.id
+          #   answer.selected = true
+          #   nexAction.addClass 'md-primary'
+          #   seeAnswer.addClass 'hide'
+          # else
+          #   maxOpt = _.filter(maxOpt, (num) -> num isnt answer.id)
+          #   answer.selected = false
+          #   if !_.find(items, 'selected': true)
+          #     nexAction.removeClass 'md-primary'
+          #     seeAnswer.removeClass 'hide'
 
     crossOutChoice : (items, index, event) ->
       answer = items[index]

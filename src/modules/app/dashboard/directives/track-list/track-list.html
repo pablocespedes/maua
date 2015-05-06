@@ -1,35 +1,25 @@
 <div layout-sm="column" layout="row" layout-fill layout-wrap>
-  <div flex-lg="33" flex-md="50" flex-sm="100" flex-gt-md="33" flex-gt-lg="25" ng-repeat="track in tracks">
-    <md-card class="card">
-      <div class="itemhead">
-        <h2 ng-bind="track.name"></h2>
-        <span class="subtracks" flex="75">
-          <span ng-bind="track.subtracksStr">
-          </span>
-        </span>
-        <div flex="25">
-          <md-button class="questions md-fab" aria-label="User Progress" ng-if="track.total_questions_answered > 0 && track.total_questions_available > 0">
-            <span>{{track.total_questions_answered}}/<b>{{track.total_questions_available}}</b></span>
-          </md-button>
+  <div flex-lg="33" flex-md="50" flex-sm="100" flex-gt-md="33" flex-gt-lg="20" ng-repeat="track in tracks | orderBy:track.position">
+    <md-card>
+      <md-card-content class="{{track.cardCss}}">
+        <div class="card-bg-icon">
+          <md-icon class=" md md-assessment" aria-hidden="true">
+          </md-icon>
         </div>
-        <img class="main-img" ng-src="{{track.img}}" />
-      </div>
-      <!--  <p >
-      {{track.textInf}}
-      <a ng-href="{{track.link}}">...Learn More</a>
-      </p> -->
+        <!-- <md-icon class="md md-assessment" aria-hidden="true">
+ -->
+        </md-icon>
+        <h3 ng-bind="track.name"></h3>
+        <p ng-bind="track.subtracksStr">
+        </p>
+      </md-card-content>
       <div layout="row" flex="" class="fill-height card-actions ">
         <md-button class="md-hue-2 md-primary" ng-click="startPractice(track,track.id)">Practice</md-button>
         <md-button class="md-hue-2 md-primary learn-button" ng-href="{{track.link}}" target="_blank">Learn</md-button>
         <span flex="4"></span>
         <div class="heart">
-          <!-- <md-icon class="md md-visibility md-2x"></md-icon>67 -->
-          <md-icon class="md md-star-outline md-2x"></md-icon>
-          <!-- <md-icon class="md md-settings md-2x"></md-icon> -->
+          <md-icon class="md md-favorite-outline md-2x" ng-class="{'md-favorite active':track.favorite, 'md-favorite-outline':!track.favorite}" ng-click="setFavorite(track)"></md-icon>
         </div>
-        <!--  <button class="md-button md-hue-2" ng-click="showAdvanced($event)">
-        <md-icon class=" md-primary md-hue-2 md md-settings md-2x"></md-icon>
-        </button> -->
       </div>
     </md-card>
   </div>

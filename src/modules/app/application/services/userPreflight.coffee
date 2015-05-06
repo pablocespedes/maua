@@ -15,13 +15,16 @@ userPreflight = ($window,$location,intercom ,authorization,user,groups,
         name: userResponse.fullName
         email: userResponse.emailAddress
         updated_at: Math.floor(Date.now() / 1000)
+        group:userResponse.currentGroup
+        member: if userResponse.becamePremiumAt == null
+        then 'Free Trial' else 'Premium'
         'widget': 'activator': '#Intercom'
       intercom.update intercomSettings
       return
     checkUser: (event) ->
       if authorization.tokenExists()
         user.self(true).then (userResponse) ->
-          _userIntercom(userResponse);
+          _userIntercom(userResponse)
           if userResponse isnt null
 
             groups.membershipGroups(true).then (groupsResult) ->

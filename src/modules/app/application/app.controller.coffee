@@ -1,7 +1,8 @@
 'use strict'
 class AppController
   constructor: ($scope, $window, @utilities, @user,@product, @groups,
-    @authorization,$mdSidenav,@menuService,@membership,@userNotify,$state)->
+    @authorization,$mdSidenav,@menuService,@membership,@userNotify,$state,
+    @ListenloopUtil,@GaUtil,@InspectletUtil,@GoogleTagManager)->
     @state = $state
     @mdSidenav = $mdSidenav
     @window = $window
@@ -131,9 +132,8 @@ class AppController
         'platformVersion': '2'
         'studyingFor': groupId
         'userId': response.userId
-      #GoogleTagManager.push gtmData
+      @GoogleTagManager.push gtmData
       @_loadGroupMembership(groupId)
-      #ListenloopUtility.base response
       #Application.getUserProgress()
       url = @window.location.href.split('/')
       currentLoc = url[url.length - 1]
@@ -157,15 +157,15 @@ class AppController
     console.log 'This is he init method on appctr with response',response
     if response isnt null
       @currentUser = response
-      #GaUtility.classic()
-      #GaUtility.UA()
-      #InspectletUtility.base()
-      #@setMenu(@currentUser.currentGroup)
+      @ListenloopUtil.initialize response
+      @GaUtil.classic()
+      @GaUtil.UA()
+      @InspectletUtil.initialize()
 
 
 
  AppController.$inject = ['$scope', '$window', 'utilities', 'user','product',
 'groups','authorization','$mdSidenav','menuService','membership','userNotify',
-'$state']
+'$state','ListenloopUtil','GaUtil','InspectletUtil','GoogleTagManager']
 
 module.exports = AppController

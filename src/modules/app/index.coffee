@@ -19,6 +19,7 @@ module.exports = angular.module('grockitApp', [
   require('../../../tmp/templates').name
   require('./app.config/index').name
   require('./application/index').name
+  require('./analytics/index').name
   require('./account/register/index').name
   require('./account/logout/index').name
   require('./account/login/index').name

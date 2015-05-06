@@ -6,6 +6,33 @@
   h1 {
     word-spacing: -1vh;
   }
+  .panel {
+    max-height: 90px;
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+    .panel-body {
+      padding: 10px;
+      padding-top: 0px;
+    }
+  }
+  .bg-icon {
+    margin-top: -10px;
+    font-size: 79px;
+    float: right;
+    right: 55px;
+  }
+  [class*='close-'] {
+    color: #777;
+    font: 22px/100% arial, sans-serif;
+    position: absolute;
+    right: 10px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #fff;
+    top: 10px;
+  }
+  .close-thik:after {
+    content: '✖';
+    /* UTF-8 symbol */
+  }
 }
 
 .select-control-custom {
@@ -96,6 +123,7 @@
     opacity: 1;
   }
   .card-actions {
+    z-index: 10;
     margin-right: 8px;
     border-top: 1px solid rgba(0, 0, 0, 0.12);
     md-button, button {
@@ -107,6 +135,79 @@
     position: absolute;
     top: 10px;
     right: 10px;
+  }
+  md-card {
+    md-card-content {
+      min-height: 110px;
+    }
+    overflow: hidden;
+    box-sizing: border-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    margin: 8px;
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+    color: #fff;
+    .card-bg-icon {
+      position: relative;
+      margin-left: 148px;
+      font-size: 195px;
+      opacity: 0.2;
+      md-icon {
+        height: 50%;
+        width: auto;
+        display: block;
+        color: white;
+        position: absolute;
+      }
+    }
+    .card-pink {
+      background-color: #FF5252;
+    }
+    .card-teal {
+      background-color: #009688;
+    }
+    .card-amber {
+      background-color: #FFC107;
+    }
+    .card-green {
+      background: #4CAF50;
+    }
+    .card-light-green {
+      background: #8BC34A;
+    }
+    .card-indigo {
+      background-color: #3F51B5;
+    }
+    .card-lime {
+      background: #C0CA33;
+    }
+    .card-grey {
+      background: #BDBDBD;
+    }
+    .card-red {
+      background: #EF5350;
+    }
+    .card-light-cyan {
+      background: #00B8D4;
+    }
+    .card-blue {
+      background: #2196F3;
+    }
+    .card-blue-grey {
+      background-color: #607D8B;
+    }
+    .card-yellow {
+      background-color: #FFC107;
+    }
+    .card-purple {
+      background: #7E57C2;
+    }
   }
 }
 
@@ -198,10 +299,6 @@
   box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.1)
 }
 
-.heart #favorite {
-  fill: #636363
-}
-
-.heart.active #favorite {
-  fill: #DA4336;
+.heart .active {
+  color: #D50000!important;
 }

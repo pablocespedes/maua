@@ -1,38 +1,29 @@
 <div id="matrix3x3">
-  <div class="list-group text-left">
-    <div ng-repeat="item in items" class="choice" >
-      <div class="divisor" ng-if="($index % 3) ==0">
+  <div class="list-group text-left" layout="row" layout-sm="column" layout-padding layout-fill>
+    <div ng-repeat="main in items.subItems" class="choice" flex>
+      <div class="divisor">
         <br>
-        <div>Blank {{($index / 3) +1}}</div>
+        <div>Blank {{$index +1}}</div>
       </div>
-      <a id="answer" href="javascript:void(0)" class="list-group-item" ng-class="{'disable-choice': item.crossOut && !(showExplanation)}"
-      ng-click="selectAnswer($index,(($index-($index%3))/3 ))">
-      <div class="middle" data-group="{{(($index-($index%3))/3 )}}">
-        <span ng-if="showExplanation && item.selected==true" class="float-right">&#10094;</span>
-
-        <span ng-if="!(showExplanation) && showforCurrentGroup" class="pull-right cross-out fa fa-times" data-original-title="{{item.crossOutMsg}}" ng-click="crossOutChoice($index,$event)">
+      <md-radio-group ng-model="item.matrix_group">
+        <a id="answer" ng-repeat="item in main" href="javascript:void(0)" class="list-group-item" ng-class="{'disable-choice': item.crossOut && !(showExplanation)}" ng-click="selectAnswer($index,(($index-($index%3))/3 ),main)">
+          <md-radio-button ng-value="item.id" aria-label="false" class="md-primary">
+            <div ng-bind-html="item.body"></div>
+          </md-radio-button>
+          <span ng-if="showExplanation && item.selected==true" class="float-right arrow-selected">&#10094;</span>
+          <span ng-if="!(showExplanation) && showforCurrentGroup" class="pull-right cross-out fa fa-times" data-original-title="{{item.crossOutMsg}}" ng-click="crossOutChoice($index,$event,main)">
            <md-tooltip md-direction="left">
             {{item.crossOutMsg}}
           </md-tooltip>
         </span>
-
-        <md-button id="{{item.id}}" type="button" class="letter md-mini btn-option md-fab letter"
-        ng-class="{'md-primary':item.selected && !showExplanation,'bg-success':showExplanation && item.correct,
-        'md-warn':showExplanation && !item.correct && item.selected}">{{item.option}}
-      </md-button>
-      <input id="{{item.id}}" type="radio" name="choice" value="false"/>
-      <div class="content">
-        <div ng-bind-html="item.body"></div>
-      </div>
-    </div>
-    <div ng-show="item.hasExplanation" id="explanationAnswerPanel" ng-if="showExplanation" class="fadein "
-    ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
-    <div >
-      <div class="explain-margin" ng-bind-html='item.explanation'></div>
-      <br>
+          <div ng-show="item.hasExplanation" id="explanationAnswerPanel" ng-if="showExplanation" class="fadein " ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
+            <div>
+              <div class="explain-margin" ng-bind-html='item.explanation'></div>
+              <br>
+            </div>
+          </div>
+        </a>
+      </md-radio-group>
     </div>
   </div>
-</a>
-</div>
-</div>
 </div>

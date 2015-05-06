@@ -1,4 +1,3 @@
-
 dashboardService = ($q,resource)->
   new class DashboardService extends resource
 
@@ -17,7 +16,8 @@ dashboardService = ($q,resource)->
       deferred = $q.defer()
       @getDashboard(groupId).then (result) =>
         @dashboardData = null
-        @dashboardData = @appendBlogInfo(result.data.dashboard)
+        # @appendAttrs result.data.dashboard
+        @dashboardData = @appendAttrs(result.data.dashboard)
         deferred.resolve true
       deferred.promise
 
@@ -44,6 +44,7 @@ dashboardService = ($q,resource)->
       _.forEach(trackArray, (result) =>
         subtracksStr = ''
         subCount = result.items.length
+        result['position'] = 0
         result['getScore'] = @_getScore(result)
         result['hasScore'] = @_getScore(result) != null and
          @_getScore(result) > 0
@@ -57,7 +58,7 @@ dashboardService = ($q,resource)->
           subtracksStr += if subCount <= 1 or subCount is (index+1)
           then subtrack.name else subtrack.name.concat(', ')
         )
-        result['subtracksStr'] = subtracksStr.substring(0, 75).concat('...')
+        result['subtracksStr'] = subtracksStr.substring(0, 100).concat('...')
       )
       @dashboardData.smart_practice.items = smartPracticeItems
       console.log @dashboardData.smart_practice.items
@@ -69,74 +70,42 @@ dashboardService = ($q,resource)->
     hasQuestionsAnswered : ->
       @dashboardData.progress.all.total_questions_answered >= 1
 
-    appendBlogInfo :(data)->
-      info = [
-        {
-          'img': 'http://grockit.com/blog/wp-content/uploads/2014/10/canstockphoto8251999-800x321.jpg',
-          'link': 'http://grockit.com/blog/gre-study-guide-arithmetic/'
-        },
-        {
-          'img': 'http://grockit.com/blog/wp-content/uploads/2015/01/canstockphoto159045311-495x400.jpg',
-          'link': 'http://grockit.com/blog/gre-study-guide-algebra/',
-        },
-        {
-          'img': 'http://grockit.com/blog/wp-content/uploads/2011/09/canstockphoto9473671-495x400.jpg',
-          'link': 'http://grockit.com/blog/gre-study-guide-geometry/'
-        },
-        {
-          'img': 'http://grockit.com/blog/wp-content/uploads/2012/03/canstockphoto9440015-800x321.jpg'
-          'link': 'http://grockit.com/blog/gre-study-guide-data-analysis-interpretation/'
-        },
-        {
-          'img': 'http://grockit.com/blog/wp-content/uploads/2014/03/canstockphoto8742483-800x321.jpg'
-          'link': 'http://grockit.com/blog/gre-study-guide-formulas-inequalities-absolute-value/'
-        },
-        {
-          'img': 'http://grockit.com/blog/wp-content/uploads/2012/04/canstockphoto4871175-800x321.jpg'
-          'link': 'http://grockit.com/blog/gre-study-guide-reading-comprehension'
-        },
-        {
-            'img': 'http://grockit.com/blog/wp-content/uploads/2012/05/canstockphoto3339507-800x321.jpg'
-            'link': 'http://grockit.com/blog/gre-study-guide-text-completion/'
-        },
-        {
-          'img': 'http://grockit.com/blog/wp-content/uploads/2014/10/canstockphoto8251999-800x321.jpg',
-          'link': 'http://grockit.com/blog/gre-study-guide-arithmetic/'
-        },
-        {
-          'img': 'http://grockit.com/blog/wp-content/uploads/2015/01/canstockphoto159045311-495x400.jpg',
-          'link': 'http://grockit.com/blog/gre-study-guide-algebra/',
-        },
-        {
-          'img': 'http://grockit.com/blog/wp-content/uploads/2011/09/canstockphoto9473671-495x400.jpg',
-          'link': 'http://grockit.com/blog/gre-study-guide-geometry/'
-        },
-        {
-          'img': 'http://grockit.com/blog/wp-content/uploads/2012/03/canstockphoto9440015-800x321.jpg'
-          'link': 'http://grockit.com/blog/gre-study-guide-data-analysis-interpretation/'
-        },
-        {
-          'img': 'http://grockit.com/blog/wp-content/uploads/2014/03/canstockphoto8742483-800x321.jpg'
-          'link': 'http://grockit.com/blog/gre-study-guide-formulas-inequalities-absolute-value/'
-        },
-        {
-          'img': 'http://grockit.com/blog/wp-content/uploads/2012/04/canstockphoto4871175-800x321.jpg'
-          'link': 'http://grockit.com/blog/gre-study-guide-reading-comprehension'
-        },
-        {
-            'img': 'http://grockit.com/blog/wp-content/uploads/2012/05/canstockphoto3339507-800x321.jpg'
-            'link': 'http://grockit.com/blog/gre-study-guide-text-completion/'
-        },
-        {
-            'img': 'http://grockit.com/blog/wp-content/uploads/2012/02/canstockphoto0422182-800x321.jpg'
-            'link': 'http://grockit.com/blog/gre-study-guide-sentence-equivalence/'
-          }]
-      _.forEach data.smart_practice.items, (item,index)->
-          console.log item
-          item['img'] = info[index].img
-          item['link'] = info[index].link
+    getAvailableCss:()->
+      clasess = ['card-pink',
+                 'card-teal',
+                 'card-amber',
+                 'card-green',
+                 'card-indigo',
+                 'card-grey',
+                 'card-red',
+                 'card-light-cyan',
+                 'card-blue',
+                 'card-blue-grey',
+                 'card-light-green'
+                 'card-yellow',
+                 'card-lime',
+                 'card-purple']
+      clasess.slice()
 
+    randomizeTracks:(item, clasessCopy)->
+      clsLenght = clasessCopy.length-1
+      if clsLenght isnt 0
+        randN = _.random clsLenght
+        currentCss = clasessCopy[randN]
+        item.cardCss = currentCss
+        _.pull clasessCopy, currentCss
+      else
+        @randomizeTracks(item,@getAvailableCss())
+
+    appendAttrs:(data)->
+      clasessCopy = @getAvailableCss()
+      _.forEach data.smart_practice.items, (item,index)=>
+        @randomizeTracks(item,clasessCopy)
       return data
+
+    hidPaymentBanner:->
+
+    showPaymentBanner:->
 
 
 dashboardService.$inject = ['$q','resource']

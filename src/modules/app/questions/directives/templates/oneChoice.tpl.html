@@ -1,28 +1,16 @@
 <div id="oneChoice">
   <md-radio-group ng-model="selectedChoice">
     <a id="answer" ng-repeat="item in items" href="javascript:void(0)" class="choice list-group-item" ng-click="selectAnswer($index)" ng-class="{'disable-choice': item.crossOut && !(showExplanation)}">
-      <strong><span class="float-right {{item.position}}"></span></strong>
-      <div class="middle">
-        <span ng-if="showExplanation && item.selected==true" class="float-right">&#10094;</span>
-        <span ng-if="!(showExplanation) && showforCurrentGroup" class="pull-right cross-out fa fa-times" data-original-title="{{item.crossOutMsg}}" ng-click="crossOutChoice($index,$event)">
+      <md-radio-button id="{{item.id}}" ng-value="item.id" class="md-primary" aria-label="false" aria-label="{{item.body}}" ng-disabled="item.crossOut">
+        <strong><span class="float-right {{item.position}}"></span></strong>
+        <div ng-bind-html="item.body"></div>
+      </md-radio-button>
+      <span ng-if="showExplanation && item.selected==true" class="float-right arrow-selected">&#10094;</span>
+      <span ng-if="!(showExplanation) && showforCurrentGroup" class="pull-right cross-out fa fa-times" data-original-title="{{item.crossOutMsg}}" ng-click="crossOutChoice($index,$event)">
          <md-tooltip md-direction="left">
             {{item.crossOutMsg}}
           </md-tooltip>
       </span>
-        <!--  <md-button id="{{item.id}}" type="button" style="margin-bottom:10px;" class="ribbon twitter" ng-class="{'md-primary':item.selected && !showExplanation,'bg-success':showExplanation && item.correct,
-    'md-warn':showExplanation && !item.correct && item.selected}">{{item.option}}
-      </md-button> -->
-        <button class="ribbon twitter">
-          {{item.option}}
-        </button>
-        <md-radio-button id="{{item.id}}" ng-value="item.id" class="md-primary" aria-label="false" aria-label="{{item.body}}">
-          <div ng-bind-html="item.body"></div>
-        </md-radio-button>
-        <!-- <input id="{{item.id}}" type="checkbox" name="choice" value="false" /> -->
-        <!-- div class="content">
-        <div ng-bind-html="item.body"></div>
-      </div> -->
-      </div>
       <div id="explanationAnswerPanel" ng-if="showExplanation && (totalAnswered > 100 || item.hasExplanation)" class="fadein " ng-class="{'answer-correct-panel': item.correct, 'answer-incorrect-panel': !item.correct}">
         <div ng-show="item.hasExplanation">
           <div class="explain-margin" ng-bind-html='item.explanation'></div>

@@ -2,6 +2,7 @@
 <div id="dashboard">
   <div id="payment-panel" ng-if="vmDash.showBuyNow" layout="row" layout-margin layout-fill>
     <div flex class="panel bg-info ">
+     <a href="javascript:void(0)" class="close-thik" ng-click="vmDash.hidPayment()"></a>
       <a ng-href="{{vmDash.paymentPage}}" target="_blank">
         <div class="panel-body">
           <br>
@@ -29,9 +30,6 @@
       </div>
       <div class="push "></div>
     </div>
-  </div>
-  <div ng-show="vmDash.showingTour " class="grockit-welcome " style="color:white; ">
-    <h1>Welcome to Grockit <span ng-bind="$root.groupTitle "></span>!</h1>
   </div>
 </div>
 <div layout="row" layout-sm="column" layout-align="space-around" ng-if="vmDash.loading">

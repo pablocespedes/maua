@@ -3,8 +3,12 @@ practiceUtilities = ($window, $q, $sce, utilities,
   new class PracticeUtilities
     constructor: ->
     setQuestionTypeMatrixGroups : (items) ->
+      console.log items
       _.forEach items, (answer, i) ->
         answer['matrix_group'] = (i - i % 3) / 3
+
+      items = {subItems: _.chunk items, 3}
+
 
     removeBadImage : ->
       ###This function was added to solve the problem with the img on LSAT,
@@ -82,6 +86,7 @@ practiceUtilities = ($window, $q, $sce, utilities,
           resultObject.items =
             @setQuestionTypeMatrixGroups(resultObject.items)
         @removeBadImage()
+        console.log resultObject.items, 'item to return'
         return resultObject
       catch e
 
