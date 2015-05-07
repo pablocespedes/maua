@@ -3,7 +3,7 @@
 module.exports = angular.module('grockitApp.question', [])
     .config ($stateProvider) ->
       $stateProvider.state 'question',
-      url: '/{subject}/question/{questionId}'
+      url: '/question/{questionId}'
       parent: 'common'
       templateUrl: 'app/question-view/question.html'
       controller: 'QuestionController'

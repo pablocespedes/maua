@@ -69,4 +69,17 @@
   </div>
 </div>
 </div>
-
+<div class="push">
+</div>
+<div flex>
+  <footer class="" role="navigation">
+    <div id="topics" class="footer">
+      <div layout="row" layout-sm="column" layout-padding layout-align="space-between center">
+        <div flex ng-if="!vmPr.loading" class="confirm-panel">
+          <md-button id="nextAction" class="md-primary" ng-disabled="vmPr.isDisabled" ng-click="vmPr.nextAction()" ng-bind="vmPr.nextActionTitle" aria-label="{{vmPr.nextActionTitle}}">
+          </md-button>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

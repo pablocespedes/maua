@@ -56,6 +56,7 @@ utilities = ($state,$rootScope, $http, $location, $q, $window, urlsCons) ->
       $window.location = url
 
     getCurrentParam : (key) ->
+      console.log $state.params, $state
       if angular.isDefined($state.params)
       then $state.params[key] else undefined
 

@@ -5,7 +5,7 @@
         <br>
         <div>Blank {{$index +1}}</div>
       </div>
-      <md-radio-group ng-model="test">
+      <md-radio-group ng-model="item.matrix_group">
         <a id="answer" ng-repeat="item in main" href="javascript:void(0)" class=" list-group-item" ng-class="{'disable-choice': item.crossOut && !(showExplanation)}" ng-click="selectAnswer($index,(($index-($index%3))/3 ),main)">
           <md-radio-button ng-value="item.id" aria-label="false" class="md-primary">
             <div ng-bind-html="item.body"></div>

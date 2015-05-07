@@ -3,12 +3,12 @@ class QuestionController
   # Services injected into the controller constructor
   constructor: ($scope,@product,@practiceService,
     @utilities,@splashMessages,@practiceUtilities)->
-    questionObserver = null
     @questionData = {}
     @isbuttonClicked = false
     @maxOpts = []
     @explanationInfo = {}
     @videoInfo = {}
+    @isValid = true
     @portalC = @
     @loading = true
     @nextActionTitle = 'Confirm Choice'
@@ -17,22 +17,11 @@ class QuestionController
     @videoInfo.showVideo = false
     @loadingMessage = @splashMessages.getLoadingMessage()
     @init()
-    $scope.$on '$destroy', ->
-      $scope.vmPr.product.unregisterGroup $scope.vmPr.questionObserver
-
 
   init : ->
-    questionObserver = currentProduct.observeGroupId().register((groupId) ->
-      if @activeGroupId != groupId
-        @activeGroupId = groupId
-
-        questionId = utilities.getCurrentParam('questionId')
-        if angular.isDefined(questionId)
-          @getQuestion questionId
-
-      return
-    )
-    return
+    questionId = @utilities.getCurrentParam('questionId')
+    if angular.isDefined(questionId)
+      @getQuestion questionId
 
   getQuestion: (questionId) ->
     @practiceService.getQuestionFromApi(questionId).then (questionResponse) =>
@@ -53,11 +42,12 @@ class QuestionController
       @loading = false
 
     return
+
   bindExplanationInfo: (info) ->
     @explanationInfo = info
 
   bindVideoExplanationInfo: ->
-    @practiceUtilities.getVideoExplanation(@questionData).then (videoInfo) ->
+    @practiceUtilities.getVideoExplanation(@questionData).then (videoInfo) =>
       @videoInfo = videoInfo
 
   displayExplanationInfo: ->
@@ -65,14 +55,20 @@ class QuestionController
     @bindExplanationInfo generalInfo
     @bindVideoExplanationInfo @questionData
 
-  confirmAnswer: ->
+  confirmAnswer : ->
     @answerStatus = @practiceUtilities.confirmChoice(@questionData,
-      undefined, @items, @questionData.kind, @activeGroupId)
+     undefined, @items, @questionData.kind, @activeGroupId)
     if angular.isDefined(@answerStatus)
       @resetLayout()
       @questionData.setLayoutOneColumn = true
       @displayExplanationInfo()
       @isbuttonClicked = true
+      @isValid = true
+      @invalidMessage = ''
+    else
+      @isDisabled = false
+      @isValid = false
+      @invalidMessage = @practiceUtilities.showQuestionError(@questionData.kind)
 
   resetLayout: ->
     angular.element('#nextAction').addClass 'hide'
@@ -86,21 +82,33 @@ class QuestionController
       else
         @confirmAnswer()
     return
-  numericConfirmAnswer: ->
+
+  numericConfirmAnswer : ->
     options = {}
     options.numerator = @numerator
     options.denominator = @denominator
     options.lastAnswerLoaded = @questionData.kind
     options.questionResult = @questionData
-    options.roundSessionAnswer = undefined
+    options.roundSessionAnswer = @roundSessionAnswer
     options.groupId = @activeGroupId
     @answerStatus = @practiceUtilities.numericEntryConfirmChoice(options)
     if angular.isDefined(@answerStatus)
-      @resetLayout()
       @questionData.setLayoutOneColumn = true
+      @resetLayout()
       @displayExplanationInfo()
       @isbuttonClicked = true
-    return
+      @isValid = true
+      @invalidMessage = ''
+    else
+      @isDisabled = false
+      @isValid = false
+      @invalidMessage = @practiceUtilities.showQuestionError(@questionData.kind)
+
+  nextAction:->
+    if @nextActionTitle == 'Confirm Choice'
+      @evaluateConfirmMethod()
+
+
 
 QuestionController.$inject = ['$scope','product','practiceService',
 'utilities','splashMessages','practiceUtilities']

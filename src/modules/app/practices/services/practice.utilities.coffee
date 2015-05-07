@@ -7,7 +7,7 @@ practiceUtilities = ($window, $q, $sce, utilities,
       _.forEach items, (answer, i) ->
         answer['matrix_group'] = (i - i % 3) / 3
 
-      items = {subItems: _.chunk items, 3}
+      items = _.chunk items, 3
 
 
     removeBadImage : ->
@@ -94,8 +94,15 @@ practiceUtilities = ($window, $q, $sce, utilities,
       groupId) ->
       answerStatus = true
       selectAnswers = []
+      if questionType is 'MultipleChoiceMatrixThreeByThree' or
+      questionType is 'MultipleChoiceMatrixTwoByThree'
+        console.log answers
+        answers = [].concat.apply([], answers)
+
+
       correctAnswers = _.filter(answers, 'correct': true)
       selectedAnswers = _.filter(answers, 'selected': true)
+      console.log correctAnswers, selectedAnswers,answers, 'answers'
       isValid = @validateAnswer(questionType,
         correctAnswers, selectedAnswers)
       if isValid

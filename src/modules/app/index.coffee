@@ -28,6 +28,7 @@ module.exports = angular.module('grockitApp', [
   require('./questions/index').name
   require('./question-review/index').name
   require('./practices/index').name
+  require('./question-view/index').name
   require('./video-library/index').name
 ]).run run
 
