@@ -96,11 +96,15 @@
         return $q.all([userData]);
       },
       userIntercom: function(userResponse) {
+        console.log(userResponse)
+
         var intercomSettings = {
           user_id: userResponse.userId,
           name: userResponse.fullName,
           email: userResponse.emailAddress,
           updated_at: Math.floor(Date.now() / 1000),
+          group:userResponse.currentGroup,
+          member: userResponse.becamePremiumAt == null ?  'Free Trial' : 'Premium',
           "widget": {
             "activator": "#Intercom"
           }
