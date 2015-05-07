@@ -33,13 +33,18 @@ trackList = ($mdDialog)->
 
       scope.setFavorite = (track)->
         trackCopy = track
+
         trackCopy.favorite = !trackCopy.favorite
         trackCopy.position = 0
+
         _.pull @tracks, track
+
         _.forEach @tracks, (item,index)->
           item.position = index+1
-
-        @tracks.unshift(trackCopy)
+        if trackCopy.favorite is true
+          @tracks.unshift(trackCopy)
+        else
+          @tracks.push(trackCopy)
         console.log track,trackCopy,@tracks
 
 

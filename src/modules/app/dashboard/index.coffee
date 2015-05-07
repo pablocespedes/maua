@@ -1,13 +1,6 @@
 'use strict'
-
-#Requering files
-DashboardService = require('./services/dashboard.utils')
-DashboardController = require('./dashboard.controller')
-TrackList =  require('./directives/track-list/track-list')
-Challenge =  require('./directives/challenge/challenge')
-
 module.exports = angular.module('grockitApp.dashboard', [])
-    .config(($stateProvider) ->
+    .config ($stateProvider) ->
       $stateProvider.state 'dashboard',
       url: '/{subject}/dashboard'
       parent: 'common'
@@ -15,8 +8,7 @@ module.exports = angular.module('grockitApp.dashboard', [])
       controller: 'DashboardController'
       controllerAs: 'vmDash'
       return
-)
-.directive 'trackList', TrackList
-.directive 'challenge', Challenge
-.factory 'dashboardService', DashboardService
-.controller 'DashboardController', DashboardController
+.directive 'trackList', require('./directives/track-list/track-list')
+.directive 'challenge', require('./directives/challenge/challenge')
+.factory 'dashboardService', require('./services/dashboard.utils')
+.controller 'DashboardController', require('./dashboard.controller')

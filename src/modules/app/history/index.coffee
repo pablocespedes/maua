@@ -1,16 +1,6 @@
 'use strict'
-
-#Requering files
-HistoryService = require('./services/history.service')
-CollapseManager = require('./services/collapseManager.service')
-HistoryController = require('./history.controller')
-HistoryList =  require('./directives/history-list/history-list')
-SetHeight =  require('./directives/set-height/set-height')
-WhenScrolled =  require('./directives/when-scrolled/when-scrolled')
-
-
 module.exports = angular.module('grockitApp.history', [])
-    .config(($stateProvider) ->
+    .config ($stateProvider) ->
       $stateProvider.state 'history',
       url: '/{subject}/history'
       parent: 'common'
@@ -18,11 +8,9 @@ module.exports = angular.module('grockitApp.history', [])
       controller: 'HistoryController'
       controllerAs: 'vmHist'
       return
-)
-
-.factory 'history', HistoryService
-.factory 'collapseManager', CollapseManager
-.directive 'historyList', HistoryList
-.directive 'setHeight', SetHeight
-.directive 'whenScrolled', WhenScrolled
-.controller 'HistoryController', HistoryController
+.factory 'history', require('./services/history.service')
+.factory 'collapseManager', require('./services/collapseManager.service')
+.directive 'historyList', require('./directives/history-list/history-list')
+.directive 'setHeight', require('./directives/set-height/set-height')
+.directive 'whenScrolled', require('./directives/when-scrolled/when-scrolled')
+.controller 'HistoryController', require('./history.controller')
