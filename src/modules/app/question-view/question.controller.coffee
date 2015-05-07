@@ -41,7 +41,8 @@ class QuestionController
         @presentQuestion()
 
   presentQuestion: ->
-    questionData = @practiceUtilities.presentQuestion(@practiceService.getQuestionData())
+    questionData =
+      @practiceUtilities.presentQuestion(@practiceService.getQuestionData())
     if angular.isDefined(questionData)
       @questionData = questionData
       @practiceUtilities.setOneColumnLayout @questionData
