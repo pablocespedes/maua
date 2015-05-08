@@ -54,18 +54,22 @@ class AppController
       @closeMainMenu()
 
   groupRedirect:(id) ->
-    actualGroup = _.find @ugroups.linkedGroups, 'id': id
-    console.log 'THIS IS THE ACTUAL GROUP', angular.isDefined(actualGroup), id
+    #Right Solution
+    # actualGroup = _.find @ugroups.linkedGroups, 'id': id
+    # console.log 'THIS IS THE ACTUAL GROUP', angular.isDefined(actualGroup), id
 
-    if angular.isDefined(actualGroup)
-      console.log 'entro'
-      @product.currentGroupId id, actualGroup
-      @state.go 'dashboard', { subject: id },
-        location: 'replace'
-        inherit: false
-        notify: false
-    else
-      @utilities.redirect(@utilities.originalGrockit() + '/' + id)
+    # if angular.isDefined(actualGroup)
+    #   @product.currentGroupId id, actualGroup
+    #   @state.go 'dashboard', { subject: id },
+    #     location: 'replace'
+    #     inherit: false
+    #     notify: false
+    # else
+    #   @utilities.redirect(@utilities.originalGrockit() + '/' + id)
+
+    # Added temp while we create a way to communicate to grockit 1.0
+    # that we have changed the group from grockit 2.0
+    @utilities.redirect(@utilities.originalGrockit() + '/' + id)
 
   _loadGroupMembership:(groupId) ->
     @ugroups =
