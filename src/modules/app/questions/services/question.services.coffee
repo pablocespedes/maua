@@ -93,31 +93,28 @@ questionTypeService = ()->
 
       if !isConfirmClicked
         answer = items[index]
-        console.log answer
         nexAction = $('#nextAction')
         seeAnswer = $('#skipAction')
-        newValue = if answer.selected == false then true else false
-        console.log newValue
-        answer.selected = newValue
-        console.log answer
-        #if angular.isUndefined(answer.crossOut) or !answer.crossOut
-          # if !answer.selected
-          #   ###validation which takes care to keep just 2 options selected###
-          #   if maxOpt.length >= 2
-          #     ansR = _.find(items, 'id': maxOpt[0])
-          #     ansR.selected = false
-          #     maxOpt = _.filter(maxOpt, (num, i) -> i isnt 0)
+        if angular.isUndefined(answer.crossOut) or !answer.crossOut
+          if answer.selected is true
+            ###validation which takes care to keep just 2 options selected###
+            if maxOpt.length >= 2
+              ansR = _.find(items, 'id': maxOpt[0])
+              ansR.selected = false
+              _.pull maxOpt, maxOpt[0]
 
-          #   maxOpt.push answer.id
-          #   answer.selected = true
-          #   nexAction.addClass 'md-primary'
-          #   seeAnswer.addClass 'hide'
-          # else
-          #   maxOpt = _.filter(maxOpt, (num) -> num isnt answer.id)
-          #   answer.selected = false
-          #   if !_.find(items, 'selected': true)
-          #     nexAction.removeClass 'md-primary'
-          #     seeAnswer.removeClass 'hide'
+            maxOpt.push answer.id
+            console.log maxOpt, 'maxopt push'
+            #answer.selected = true
+            nexAction.addClass 'md-primary'
+            seeAnswer.addClass 'hide'
+            console.log answer
+          else
+            maxOpt = _.filter(maxOpt, (num) -> num isnt answer.id)
+            answer.selected = false
+            if !_.find(items, 'selected': true)
+              nexAction.removeClass 'md-primary'
+              seeAnswer.removeClass 'hide'
 
     crossOutChoice : (items, index, event) ->
       answer = items[index]
