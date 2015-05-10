@@ -14,9 +14,11 @@ body {
   -webkit-font-smoothing: antialiased!important;
   -moz-osx-font-smoothing: grayscale!important
 }
-#intercom-container .intercom-launcher{
+
+#intercom-container .intercom-launcher {
   bottom: 70px!important;
 }
+
 md-backdrop {
   top: 0;
 }
@@ -45,62 +47,6 @@ a:focus {
   text-decoration: none
 }
 
-.ribbon {
-  float: left;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  cursor: pointer;
-  border: none;
-  background: blue;
-  width: 40px;
-  height: 30px;
-  position: relative;
-  color: white;
-  padding: 1px;
-  margin-left: -15px;
-}
-
-.ribbon span {
-  line-height: 10px;
-  font-size: 5em;
-}
-
-.ribbon::before {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-top: 20px solid blue;
-  border-right: 30px solid transparent;
-}
-
-.ribbon::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  right: 0;
-  width: 0;
-  height: 0;
-  border-top: 20px solid blue;
-  border-left: 30px solid transparent;
-}
-
-.twitter {
-  margin-top: -25px;
-  background: #00a0d1;
-}
-
-.twitter::after {
-  border-top-color: #00a0d1;
-}
-
-.twitter::before {
-  border-top-color: #00a0d1;
-}
-
 .app,
 .app>.main-container,
 html {
@@ -117,6 +63,17 @@ html {
   min-height: 100%;
   margin-left: 0;
 }
+
+md-radio-group[disabled] .md-container .md-off,
+md-radio-button[disabled] .md-container .md-off {
+  border-color: rgba(0, 0, 0, 0.26)!important;
+}
+md-radio-group[disabled] .md-container .md-on,
+md-radio-button[disabled] .md-container .md-on {
+   background-color: transparent!important;
+}
+
+
 
 md-list.md-default-theme md-list-item.md-2-line .md-list-item-text h3,
 md-list.md-default-theme md-list-item.md-2-line .md-list-item-text h4,
@@ -222,7 +179,7 @@ a {
       width: 100%;
       background: #ffffff;
     }
-    a{
+    a {
       background: #ffffff;
     }
   }

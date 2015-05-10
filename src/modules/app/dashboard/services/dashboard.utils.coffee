@@ -2,7 +2,10 @@ Storage =require('../../application/services/_storage')
 
 dashboardService = ($q,resource)->
   new class DashboardService
+
+    #allows multiple classes to be extend
     _.extend @::, resource::, Storage::
+
     _getScore: (track) ->
       if @dashboardData.score_prediction
       then @dashboardData.score_prediction.tracks[track.id] else null
@@ -17,8 +20,7 @@ dashboardService = ($q,resource)->
       deferred = $q.defer()
       @getDashboard(groupId).then (result) =>
         @dashboardData = null
-        # @appendAttrs result.data.dashboard
-        @dashboardData = @appendAttrs(result.data.dashboard)
+        @dashboardData = result.data.dashboard
         deferred.resolve true
       deferred.promise
 
@@ -41,16 +43,18 @@ dashboardService = ($q,resource)->
       subtracks = null
       trackArray = @dashboardData.smart_practice.items
       smartPracticeItems = null
+      cardCssCopy = @getAvailableCss()
+
       smartPracticeItems =
-      _.forEach(trackArray, (result,index) =>
+      _.forEach trackArray, (result,index) =>
         subtracksStr = ''
         subCount = result.items.length
-        result['position'] = index
-        result['getScore'] = @_getScore(result)
-        result['hasScore'] = @_getScore(result) != null and
+        result.position = index
+        result.getScore = @_getScore(result)
+        result.hasScore = @_getScore(result) != null and
          @_getScore(result) > 0
 
-        subtracks = _.forEach(result.items, (subtrack,index) ->
+        subtracks = _.forEach result.items, (subtrack,index) ->
           accuracy = (subtrack.total_questions_answered_correctly /
             (subtrack.total_questions_answered * 100))
           subtrack['accuracy'] = if accuracy > 0
@@ -58,11 +62,12 @@ dashboardService = ($q,resource)->
 
           subtracksStr += if subCount <= 1 or subCount is (index+1)
           then subtrack.name else subtrack.name.concat(', ')
-        )
-        result['subtracksStr'] = subtracksStr.substring(0, 100).concat('...')
-      )
+        result.subtracksStr = subtracksStr.substring(0, 100).concat('...')
+
+        #set random card color
+        @getRandCss(result,cardCssCopy)
+
       @dashboardData.smart_practice.items = smartPracticeItems
-      console.log @dashboardData.smart_practice.items
       @dashboardData.smart_practice
 
     getChallenge : ->
@@ -88,7 +93,7 @@ dashboardService = ($q,resource)->
                  'card-purple']
       clasess.slice()
 
-    randomizeTracks:(item, clasessCopy)->
+    getRandCss:(item, clasessCopy)->
       clsLenght = clasessCopy.length-1
       if clsLenght isnt 0
         randN = _.random clsLenght
@@ -96,13 +101,13 @@ dashboardService = ($q,resource)->
         item.cardCss = currentCss
         _.pull clasessCopy, currentCss
       else
-        @randomizeTracks(item,@getAvailableCss())
+        @getRandCss(item,@getAvailableCss())
 
-    appendAttrs:(data)->
-      clasessCopy = @getAvailableCss()
-      _.forEach data.smart_practice.items, (item,index)=>
-        @randomizeTracks(item,clasessCopy)
-      return data
+    # appendAttrs:(data)->
+    #   clasessCopy = @getAvailableCss()
+    #   _.forEach data.smart_practice.items, (item,index)=>
+    #     @randomizeTracks(item,clasessCopy)
+    #   return data
 
     hidPaymentBanner:->
 

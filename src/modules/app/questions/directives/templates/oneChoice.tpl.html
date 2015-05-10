@@ -1,7 +1,7 @@
 <div id="oneChoice">
   <md-radio-group ng-model="selectedChoice">
     <a id="answer" ng-repeat="item in items" href="javascript:void(0)" class="choice list-group-item" ng-click="selectAnswer($index)" ng-class="{'disable-choice': item.crossOut && !(showExplanation)}">
-      <md-radio-button id="{{item.id}}" ng-value="item.id" class="md-primary" aria-label="false" aria-label="{{item.body}}" ng-disabled="item.crossOut">
+      <md-radio-button id="{{item.id}}" ng-value="item.id" class="md-primary" aria-label="false" aria-label="{{item.body}}" ng-disabled=" item.crossOut " >
         <strong><span class="float-right {{item.position}}"></span></strong>
         <div ng-bind-html="item.body"></div>
       </md-radio-button>

@@ -6,8 +6,6 @@ var rename = require('gulp-rename');
 var csso = require('gulp-csso');
 var autoprefixer = require('gulp-autoprefixer');
 var sass = require('gulp-ruby-sass');
-var importcss = require('gulp-import-css');
-
 
 function handleError(err) {
   console.log(err.toString());

@@ -32,8 +32,12 @@ trackList = ($mdDialog)->
         utilities.redirect baseUrl + '/assessment/for_track/' + track.id
 
       scope.setFavorite = (track)->
-        trackCopy = track
+        animEv='webkitAnimationEnd mozAnimationEnd '+
+        'MSAnimationEnd oanimationend animationend'
+        selector = angular.element('#' + track.id )
+        console.log track
 
+        trackCopy = track
         trackCopy.favorite = !trackCopy.favorite
         trackCopy.position = 0
 
@@ -45,7 +49,14 @@ trackList = ($mdDialog)->
           @tracks.unshift(trackCopy)
         else
           @tracks.push(trackCopy)
-        console.log track,trackCopy,@tracks
+
+        selector
+        .addClass('fadeIn')
+        .one animEv, ()->
+          selector.removeClass('fadeIn')
+          return
+
+        return
 
 
 trackList.$inject = ['$mdDialog']
