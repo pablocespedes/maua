@@ -22,7 +22,7 @@ paymentBanner = (Observer,utilities)->
       utilities.existy(@get('paymentBanner'))
 
     getBannerStatus:->
-      @get('paymentBanner').status
+        @get('paymentBanner').status
 
 
 paymentBanner.$inject = ['Observer','utilities']

@@ -163,7 +163,10 @@ class AppController
       @GaUtil.classic()
       @GaUtil.UA()
       @InspectletUtil.initialize()
-      @showBuyNow = !@payBanner.getBannerStatus()
+      @showBuyNow =
+      if @payBanner.bannerExists() then !@payBanner.getBannerStatus()
+      else false
+
 
 
  AppController.$inject = ['$scope', '$window', 'utilities', 'user','product',
