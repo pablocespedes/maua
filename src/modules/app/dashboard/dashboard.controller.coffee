@@ -3,33 +3,37 @@
 class DashboardController
   # Services injected into the controller constructor
   constructor: ($window,$scope,$state,$auth,@product,@authorization,
-    @dashboardService, @utilities,@membership,@userNotify) ->
+    @dashboardService, @utilities,@membership,@userNotify,@payBanner) ->
     @utilities.currentPage 'Dashboard'
     @state=$state
     @userObserver = null
     @dashObserver = null
+    @paymentMsgObs = null
     showingTour = false
     showTour = false
     @loading = true
     isChallengeAvailable = false
     historyVisible = false
-    #$state.go('login') unless $auth.isAuthenticated
+
     $scope.$on '$destroy', () ->
-      console.log $scope, 'destroying dashboard'
       $scope.vmDash.product.unregisterGroup $scope.vmDash.dashObserver
       $scope.vmDash.dashObserver = null
       $scope.vmDash.userNotify.unregisterUserData $scope.vmDash.userObserver
       $scope.vmDash.userObserver = null
+      $scope.vmDash.paymentMsgObs.unregisterPayBanner
+      $scope.vmDash.paymentMsgObs
+      $scope.vmDash.paymentMsgObs = null
       return
 
     @userObserver = @userNotify.observeUserData().register (userExist) =>
-      console.log 'I notify app dashboard that we are authenticated'
       @loading = true
       @init()
 
+    @paymentMsgObs = @payBanner.observePayBanner().register (status) =>
+      @showBuyNow = status
+
 
   init : ->
-    console.log 'get into the init method dashboard'
     if @authorization.userExist()
       userInfo = @authorization.getUser()
       user_id = userInfo.userId
@@ -37,7 +41,7 @@ class DashboardController
         if @activeGroupId isnt groupId
           @activeGroupId = groupId
           @_getDashboard @activeGroupId
-          @showBuyNow = @membership.showBuyButton()
+          @showBuyNow = @showPayBanner()
           @upgradePromptMessage = @membership.upgradePromptMessage()
           @canPractice = @membership.canPractice()
           @enableScore = @activeGroupId is 'gmat' or @activeGroupId is 'act' or
@@ -58,6 +62,15 @@ class DashboardController
         else
           url = '/' + @activeGroupId + '/' + trackId + '/play'
           @utilities.redirect url
+
+  hidPayment:->
+    @showBuyNow = false
+    @payBanner.updateBannerStat(@showBuyNow)
+
+  showPayBanner: ->
+    if @payBanner.bannerExists() then @payBanner.getBannerStatus()
+    else @membership.showBuyButton()
+
 
   _getDashboard : (groupId) ->
     @dashboardService.setDashboardData(groupId).then (result) =>
@@ -99,11 +112,10 @@ class DashboardController
       isChallengeAvailable = true
       challengesGames = challenge.items
 
-  hidPayment:->
-    @showBuyNow = false
 
 
 DashboardController.$inject = ['$window','$scope','$state','$auth','product',
-'authorization','dashboardService','utilities','membership','userNotify']
+'authorization','dashboardService','utilities','membership','userNotify',
+'payBanner']
 
 module.exports = DashboardController

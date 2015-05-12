@@ -1,7 +1,7 @@
 Storage =require('../../application/services/_storage')
 
-dashboardService = ($q,resource)->
-  new class DashboardService
+dashboardService = ($q,resource,utilities)->
+  new class DashboardService extends Storage
 
     #allows multiple classes to be extend
     _.extend @::, resource::, Storage::
@@ -11,13 +11,16 @@ dashboardService = ($q,resource)->
       then @dashboardData.score_prediction.tracks[track.id] else null
 
     constructor: ->
+      super()
       @dashboardData = null
+      @groupId = null
 
     getDashboard :(groupId) ->
       @show(groupId,'dashboard')
 
     setDashboardData : (groupId) ->
       deferred = $q.defer()
+      @groupId = groupId
       @getDashboard(groupId).then (result) =>
         @dashboardData = null
         @dashboardData = result.data.dashboard
@@ -41,15 +44,25 @@ dashboardService = ($q,resource)->
     getSmartPractice : ->
       accuracy = null
       subtracks = null
+      currentCard = {}
+      cardsOrder = @get('cards_'+@groupId)
       trackArray = @dashboardData.smart_practice.items
       smartPracticeItems = null
       cardCssCopy = @getAvailableCss()
+      #cardsList =
 
       smartPracticeItems =
       _.forEach trackArray, (result,index) =>
         subtracksStr = ''
         subCount = result.items.length
-        result.position = index
+        if utilities.existy cardsOrder
+          currentCard = @getStoredCard(cardsOrder,result.id)
+        else
+          currentCard.position = index
+          currentCard.favorite = false
+
+        result.position = currentCard.position
+        result.favorite = currentCard.favorite
         result.getScore = @_getScore(result)
         result.hasScore = @_getScore(result) != null and
          @_getScore(result) > 0
@@ -103,20 +116,18 @@ dashboardService = ($q,resource)->
       else
         @getRandCss(item,@getAvailableCss())
 
-    # appendAttrs:(data)->
-    #   clasessCopy = @getAvailableCss()
-    #   _.forEach data.smart_practice.items, (item,index)=>
-    #     @randomizeTracks(item,clasessCopy)
-    #   return data
+    getStoredCard:(cardsOrder,trackId)->
+      search = _.find cardsOrder, (item) ->
+        item.id is trackId
+      search
 
-    hidPaymentBanner:->
-
-    showPaymentBanner:->
-
-    saveCardPosition:->
+    saveCardPosition:(tracks)->
+      cards = _.map tracks, (item)->
+        {'position': item.position, 'id':item.id, 'favorite': item.favorite }
+      @save('cards_'+@groupId,cards)
 
 
 
 
-dashboardService.$inject = ['$q','resource']
+dashboardService.$inject = ['$q','resource','utilities']
 module.exports = dashboardService

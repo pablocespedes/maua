@@ -1,8 +1,7 @@
-'use strict'
-trackList = ($mdDialog)->
+
+trackList = ($mdDialog,dashboardService)->
   new class TrackList
     constructor: () ->
-      ## Constructor stuff
     restrict: 'AE'
     replace: false
     templateUrl: 'app/dashboard/directives/track-list/track-list.html'
@@ -35,11 +34,10 @@ trackList = ($mdDialog)->
         animEv='webkitAnimationEnd mozAnimationEnd '+
         'MSAnimationEnd oanimationend animationend'
         selector = angular.element('#' + track.id )
-        console.log track
 
         trackCopy = track
         trackCopy.favorite = !trackCopy.favorite
-        trackCopy.position = 0
+        trackCopy.position = if trackCopy.favorite then 0 else @tracks.length-1
 
         _.pull @tracks, track
 
@@ -49,6 +47,7 @@ trackList = ($mdDialog)->
           @tracks.unshift(trackCopy)
         else
           @tracks.push(trackCopy)
+        dashboardService.saveCardPosition(@tracks)
 
         selector
         .addClass('fadeIn')
@@ -59,5 +58,5 @@ trackList = ($mdDialog)->
         return
 
 
-trackList.$inject = ['$mdDialog']
+trackList.$inject = ['$mdDialog','dashboardService']
 module.exports = trackList

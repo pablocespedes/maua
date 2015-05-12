@@ -3,7 +3,6 @@
 initConfig =  ($httpProvider, $stateProvider,
   $urlRouterProvider,RestangularProvider, ApiUrlsProvider,$mdThemingProvider,
   intercomProvider, IntercomAppId) ->
-  console.log intercomProvider, 'config.coffee'
   intercomProvider.appID(IntercomAppId)
   intercomProvider.asyncLoading(true)
 

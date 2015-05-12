@@ -5,7 +5,6 @@ user = ($q,resource,authorization,userRoles,imgVersion,userNotify)->
     constructor: ()->
       super()
     _defaultGroup = (user) ->
-      console.log user,'set the group on local storage'
       if user != null and angular.isDefined(user.currentGroup)
       then user.currentGroup else undefined
 

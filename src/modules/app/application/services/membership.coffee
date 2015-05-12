@@ -27,7 +27,6 @@ membership = ($location,$sce,lifeCycle, utilities,appMessages)->
       @memberInfo.expiredAt = groupUserInfo.expires_at
       @memberInfo.trialing = groupUserInfo.trialing
       @memberInfo.lifeCycle = groupUserInfo.lifecycle
-      console.log @memberInfo
     showBuyButton : ->
       !@_premiumNotHasExpired() or @_isTrialing()
 

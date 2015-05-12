@@ -35,7 +35,6 @@ userPreflight = ($window,$location,intercom ,authorization,user,groups,
                 return
               else
                 urlGroup = utilities.getCurrentParam('subject')
-                console.log 'this is the current group ', urlGroup
                 userGroup = _userGroup(userResponse.groupMemberships, urlGroup)
                 actualGroup = _actualGroup(uGroups, urlGroup)
                 if angular.isUndefined(actualGroup)

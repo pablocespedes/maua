@@ -13,7 +13,7 @@ authorization = ($window,$cookies)->
       @userToken = "userToken"
 
     existy:(x)->
-      return x != null and x != 'null' and x != 'null' and x != 'undefined'
+      return x != null and x != 'null' and x != undefined and x != 'undefined'
 
     setToken: (token) ->
       @cachedToken = token

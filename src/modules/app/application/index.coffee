@@ -26,6 +26,7 @@ module.exports = angular.module('grockitApp.app', [])
 .factory 'user', require('./services/user')
 .factory 'groups', require('./services/groups')
 .factory 'membership', require('./services/membership')
+.factory 'payBanner', require('./services/banner.payments')
 .controller 'AppController', require('./app.controller')
 .directive 'questionTagsOnly',
  require('./directives/question-tagsO/question-tagsO')

@@ -2,30 +2,29 @@
 class AppController
   constructor: ($scope, $window, @utilities, @user,@product, @groups,
     @authorization,$mdSidenav,@menuService,@membership,@userNotify,$state,
-    @ListenloopUtil,@GaUtil,@InspectletUtil,@GoogleTagManager)->
+    @ListenloopUtil,@GaUtil,@InspectletUtil,@GoogleTagManager, @payBanner)->
     @state = $state
     @mdSidenav = $mdSidenav
     @window = $window
+    @paymentMsgObs = null
     @userProgressObserver = null
     @scorePrediction = null
     @activeGroupId=null
     @currentUser = null
-    # if(@authorization.userExist())
-    #   @_init()
+
+    @paymentMsgObs = @payBanner.observePayBanner().register (status) =>
+      @showBuyNow = !status
+
+
     @userObserver = @userNotify.observeUserData().register (userData) =>
-      console.log 'try to notify app controller'
       if(@authorization.userExist())
         @_init(userData)
 
     @userProgressObserver = @product.observeGroupId().register (groupId) =>
-      console.log 'notify dentro de observer app controller'
       userInfo = @authorization.getUser()
       @currentUser = userInfo
       @_setInitialData @currentUser, groupId
       return
-
-    #$scope.$on '$destroy', =>
-      #@product.unregisterGroup @userProgressObserver
 
   hidVideoOption : (groupId) ->
     @hideVideoOption = groupId is 'ap_calculus' or
@@ -52,6 +51,10 @@ class AppController
       @toggleList()
     else
       @closeMainMenu()
+
+  showPaymentBanner:->
+    @showBuyNow = false
+    @payBanner.updateBannerStat(true)
 
   groupRedirect:(id) ->
     #Right Solution
@@ -124,7 +127,6 @@ class AppController
     )
 
   _setInitialData: (response, groupId) ->
-    console.log 'check group',@activeGroupId,groupId
     if @activeGroupId isnt groupId
       @activeGroupId=groupId
       @setMenu(groupId)
@@ -144,7 +146,6 @@ class AppController
       @activeItem = currentLoc
 
   setMenu:(groupId) ->
-    console.log 'SET MENU'
     menuParams =
       isReady: true
       groupId: groupId
@@ -154,22 +155,20 @@ class AppController
     @hidStudyPlan(groupId)
     @menu = @menuService.createLeftMenu(menuParams, @hideStudyPlan,
       @hideVideoOption, @canAccess)
-    console.log @menu
 
   _init: (response)->
-    #@user.self(true).then (response) =>
-    console.log 'This is he init method on appctr with response',response
     if response isnt null
       @currentUser = response
       @ListenloopUtil.initialize response
       @GaUtil.classic()
       @GaUtil.UA()
       @InspectletUtil.initialize()
-
+      @showBuyNow = !@payBanner.getBannerStatus()
 
 
  AppController.$inject = ['$scope', '$window', 'utilities', 'user','product',
 'groups','authorization','$mdSidenav','menuService','membership','userNotify',
-'$state','ListenloopUtil','GaUtil','InspectletUtil','GoogleTagManager']
+'$state','ListenloopUtil','GaUtil','InspectletUtil','GoogleTagManager',
+'payBanner']
 
 module.exports = AppController

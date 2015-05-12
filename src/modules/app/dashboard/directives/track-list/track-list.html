@@ -1,5 +1,5 @@
 <div layout-sm="column" layout="row" layout-fill layout-wrap>
-  <div flex-lg="33" flex-md="50" flex-sm="100" flex-gt-md="33" flex-gt-lg="20" ng-repeat="track in tracks | orderBy:track.position" class="animated" id="{{track.id}}">
+  <div flex-lg="33" flex-md="50" flex-sm="100" flex-gt-md="33" flex-gt-lg="20" ng-repeat="track in tracks | orderBy: 'position' " class="animated" id="{{track.id}}">
     <md-card>
       <md-card-content class="{{track.cardCss}}">
         <div class="card-bg-icon">
@@ -18,7 +18,7 @@
         <md-button class="md-hue-2 md-primary learn-button" ng-href="{{track.link}}" target="_blank">Learn</md-button>
         <span flex="4"></span>
         <div class="heart">
-          <md-icon class="md md-favorite-outline md-2x" ng-class="{'md-favorite active':track.favorite, 'md-favorite-outline':!track.favorite}" ng-click="setFavorite(track)"></md-icon>
+          <md-icon class="md md-2x" ng-class="{'md-favorite active':track.favorite, 'md-favorite-outline':!track.favorite}" ng-click="setFavorite(track)"></md-icon>
         </div>
       </div>
     </md-card>

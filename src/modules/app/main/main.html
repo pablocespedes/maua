@@ -17,8 +17,9 @@
             </md-option>
           </md-select>
           <span flex=""></span>
-          <img class="md-fab md-primary round-img pointer" ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="User Picture" ng-click="appCtrl.displayMenu()" />
+          <md-icon ng-if="appCtrl.showBuyNow" class="md md-2x md-attach-money" ng-click="appCtrl.showPaymentBanner()"></md-icon>
           <label class="pointer" ng-click="appCtrl.displayMenu()">{{appCtrl.currentUser.firstName}}</label>
+          <img class="md-fab md-primary round-img pointer" ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="User Picture" ng-click="appCtrl.displayMenu()" />
         </div>
       </div>
     </md-toolbar>

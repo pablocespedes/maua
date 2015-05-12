@@ -17,6 +17,7 @@ global._ = require "lodash"
 require 'satellizer'
 require 'restangular'
 require 'angular-resource'
+braintree = require 'braintree-web'
 ###
 app entry point
 ###
