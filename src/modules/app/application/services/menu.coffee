@@ -14,6 +14,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Dashboard'
           isReady: options.isReady
+          target: '_self'
           icon: 'md-dashboard'
           shouldShow: true
         }
@@ -23,6 +24,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Study Plan'
           isReady: options.isReady
+          target: '_self'
           icon: 'md-bookmark-outline'
           shouldShow: !hideStudyPlan
         }
@@ -32,6 +34,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Group Practice'
           isReady: options.isReady
+          target: '_self'
           icon: 'md-account-child'
           shouldShow: options.groupId != 'gre'
         }
@@ -41,6 +44,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Video Library'
           isReady: options.isReady
+          target: '_self'
           icon: 'md-video-collection'
           shouldShow: !hideVideoOption and options.groupId == 'gre'
         }
@@ -50,6 +54,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Video Library'
           isReady: options.isReady
+          target: '_blank'
           icon: 'md-video-collection'
           shouldShow: !hideVideoOption and options.groupId != 'gre'
         }
@@ -59,6 +64,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Custom Practice'
           isReady: options.isReady
+          target: '_blank'
           icon: 'md-my-library-books'
           shouldShow: options.groupId != 'gre'
         }
@@ -68,6 +74,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Take a Full Length Test'
           isReady: options.isReady
+          target: '_blank'
           icon: 'fa-lightbulb-o'
           shouldShow: options.groupId == 'gre'
         }
@@ -77,6 +84,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Take a Full Length Test'
           isReady: options.isReady
+          target: '_blank'
           icon: 'fa-lightbulb-o'
           shouldShow: options.groupId == 'gmat'
         }
@@ -86,6 +94,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'Skill Data'
           isReady: options.isReady
+          target: '_blank'
           icon: 'fa-dashboard'
           shouldShow: true
         }
@@ -95,6 +104,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'History'
           isReady: options.isReady
+          target: '_self'
           icon: ' md-insert-chart'
           shouldShow: options.groupId == 'gre'
         }
@@ -104,6 +114,7 @@ menu = ($window,utilities)->
           canAccess: canAccess
           title: 'History'
           isReady: options.isReady
+          target: '_blank'
           icon: ' md-insert-chart'
           shouldShow: options.groupId != 'gre'
         }

@@ -4,6 +4,138 @@ body {
   color: #767676
 }
 
+#practice-settings {
+  position: fixed;
+  right: -281px;
+  width: 270px;
+  top: 70px;
+  padding-right: 10px;
+  background: #333;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  -ms-transition: all .3s;
+  -o-transition: all .3s;
+  transition: all .3s;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  z-index: 999998;
+  &.open {
+    right: -10px;
+  }
+  > {
+    .header {
+      position: relative;
+      z-index: 100000;
+      line-height: 20px;
+      background: #444;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 10px 20px;
+      margin: 0;
+    }
+    div {
+      position: relative;
+      z-index: 100000;
+      background: #282828;
+      border-bottom-right-radius: 5px;
+      border-bottom-left-radius: 5px;
+    } >
+    md-slider {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+  }
+}
+
+#practice-settings-toggler {
+  font-size: 21px;
+  width: 50px;
+  height: 40px;
+  padding-right: 10px;
+  position: absolute;
+  left: -40px;
+  top: 0;
+  background: #444;
+  text-align: center;
+  line-height: 40px;
+  color: #fff;
+  border-radius: 5px;
+  z-index: 99999;
+  text-decoration: none !important;
+  -webkit-transition: color .3s;
+  -moz-transition: color .3s;
+  -ms-transition: color .3s;
+  -o-transition: color .3s;
+  transition: color .3s;
+}
+
+#practice-settings.open #practice-settings-toggler {
+  font-size: 16px;
+  color: #888;
+  &:hover {
+    color: #fff;
+  }
+}
+
+#practice-settings-list {
+  padding: 0;
+  margin: 0;
+  li {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    position: relative;
+    > span {
+      line-height: 20px;
+      color: #fff;
+      display: block;
+      padding: 12px 20px;
+      cursor: pointer;
+    }
+    + li {
+      border-top: 1px solid #333;
+    }
+  }
+}
+
+#practice-settings .practice-checkbox {
+  position: absolute;
+  right: 20px;
+  top: -4px;
+}
+
+.practice-checkbox {
+  .md-label:before {
+    content: '';
+  }
+}
+
+.right-to-left {
+  #practice-settings {
+    left: -270px;
+    right: auto;
+    padding-right: 0;
+    padding-left: 10px;
+    &.open {
+      left: -10px;
+      right: auto;
+    }
+  }
+  #practice-settings-toggler {
+    padding-left: 10px;
+    padding-right: 0;
+    left: auto;
+    right: -40px;
+  }
+}
+
 // timeline
 .timeline {
   position: relative;
@@ -120,7 +252,6 @@ body {
   margin: 0;
 }
 
-
 .img-responsive {
   display: block;
   height: auto
@@ -152,9 +283,11 @@ body {
 .text-center {
   text-align: center
 }
+
 .text-lg {
   font-size: 23px;
 }
+
 .text-justify {
   text-align: justify
 }

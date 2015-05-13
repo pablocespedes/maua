@@ -36,7 +36,7 @@
       </md-toolbar>
       <md-list>
         <md-list-item ng-repeat="item in appCtrl.menu" ng-if="item.isReady && item.canAccess && item.shouldShow" class="md-clickable">
-          <a ng-href="{{item.url}}">
+          <a ng-href="{{item.url}}" target="{{item.target}}">
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">
@@ -79,7 +79,7 @@
           </a>
         </md-list-item>
         <md-list-item>
-          <a ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}">
+          <a target="_blank" ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}">
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">

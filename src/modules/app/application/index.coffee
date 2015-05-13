@@ -1,8 +1,5 @@
 'use strict'
 module.exports = angular.module('grockitApp.app', [])
-.factory 'userNotify', require('./services/user.notify')
-.factory 'menuService', require('./services/menu')
-.factory 'levels', require('./services/level.services')
 .filter 'formatSeconds', require('./filters/formatSeconds')
 .filter 'truncate', require('./filters/truncate')
 .filter 'date', require('./filters/date')
@@ -10,6 +7,10 @@ module.exports = angular.module('grockitApp.app', [])
 .filter 'htmlToPlaintext', require('./filters/htmlToPlaintext')
 .filter 'level', require('./filters/level')
 .filter 'capitalize', require ('./filters/capitalize')
+.factory 'userNotify', require('./services/user.notify')
+.factory 'menuService', require('./services/menu')
+.factory 'levels', require('./services/level.services')
+.factory 'questionTiming', require('./services/question.timing')
 .factory 'youtube', require('./services/youtube')
 .factory 'dateUtils', require('./services/date.utils')
 .factory 'userPreflight', require('./services/userPreflight')
@@ -32,4 +33,7 @@ module.exports = angular.module('grockitApp.app', [])
  require('./directives/question-tagsO/question-tagsO')
 .directive 'questionTags', require('./directives/question-tags/question-tags')
 .directive 'questionTiming', require('./directives/quest-timing/quest-timing')
+.directive 'userSettings', require('./directives/user-settings/user-settings')
+
+
 

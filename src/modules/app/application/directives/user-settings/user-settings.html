@@ -1,0 +1,26 @@
+<div id="practice-settings" ng-class="{'open':openSetting}">
+  <a href="javascript:void(0)" id="practice-settings-toggler" ng-click="openSetting = !openSetting">
+    <i class="fa fa-cogs" data-toggle="tooltip" data-placement="left" title="New! Manage Question Timing"> </i>
+  </a>
+  <h5 class="header">SETTINGS</h5>
+  <div>
+    <ul id="practice-settings-list">
+      <li class="clearfix">
+        <span>Question Timer</span>
+        <div class="practice-checkbox">
+          <md-switch class="md-primary" ng-model="questionCheck" aria-label="Custom Time">
+          </md-switch>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <h5 class="header" ng-if="questionCheck">Question Time: <span ng-bind="timerSetting.minutes"></span> min</h5>
+  <div id="setting-config" ng-if="questionCheck">
+      <br>
+      <div layout="">
+      <md-slider flex="" class="md-primary" md-discrete="" ng-model="timerSetting.minutes" step="1" min="0" max="10" aria-label="rating">
+      </md-slider>
+    </div>
+  </div>
+</div>
+
