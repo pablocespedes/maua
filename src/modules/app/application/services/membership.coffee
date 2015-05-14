@@ -44,7 +44,7 @@ membership = ($location,$sce,lifeCycle, utilities,appMessages)->
     userCanAccesPage : (groupId) ->
       sections = $location.path().split('/')
       url = sections[sections.length - 1]
-      baseUrl = utilities.originalGrockit().url
+      baseUrl = utilities.originalGrockit()
       if @_validateMembership() and url != 'dashboard'
         utilities.redirect baseUrl + '/' + groupId + '/subscriptions/new'
       return

@@ -2,7 +2,7 @@
 class PracticeController
   # Services injected into the controller constructor
   constructor: ($scope,$timeout,@product, @practiceService,@utilities,
-  @splashMessages,@timer,@practiceUtilities,@questionTiming,$mdDialog) ->
+  @splashMessages,@timer,@practiceUtilities,@questionTiming,$mdDialog,@alert) ->
     @timeout = $timeout
     @mdDialog = $mdDialog
     @practiceObserver = null
@@ -124,6 +124,9 @@ class PracticeController
       else
         @practiceUtilities.usersRunOutQuestions @activeTrack.subject.name,
          @activeGroupId
+    .catch (e) =>
+      @handleError 'Sorry something retrieving your question information'
+
 
   presentQuestion : ->
     requestLocalData = @practiceService.getQuestionData()
@@ -133,6 +136,9 @@ class PracticeController
         @practiceService.getRoundSession(questionData.id, @activeGroupId)
         .then (result) =>
           @roundSessionAnswer = result
+        .catch (e) =>
+          @handleError 'Sorry something retrieving your question information'
+
         @questionData = questionData
         @practiceUtilities.setOneColumnLayout @questionData
         @answerType = @practiceUtilities.getAnswerType(questionData.kind)
@@ -163,6 +169,8 @@ class PracticeController
   bindVideoExplanationInfo : ->
     @practiceUtilities.getVideoExplanation(@questionData).then (videoInfo) =>
       @videoInfo = videoInfo
+    .catch (e) =>
+      @handleError 'Sorry something wrong getting your video Data'
 
   doNotKnowAnswer : ->
     @userConfirmed = false
@@ -255,8 +263,8 @@ class PracticeController
       if response
         @activeTrack = response
         @getNewPracticeGame @activeTrack.subject.url
-       # @breadcrumbs = breadcrumbs
-        #breadcrumbs.options = 'practice': @activeTrack.subject.name
+    .catch (e) =>
+      @handleError 'Sorry something wrong setting your track'
 
   isUserSettingAvailable : ->
     @timeObj = @questionTiming.getTime()
@@ -264,9 +272,14 @@ class PracticeController
       return true
     false
 
+  handleError:(message)->
+    @alert.sendError message
+    @loading = false
+    console.log e
+
 
 PracticeController.$inject = ['$scope','$timeout','product','practiceService',
 'utilities','splashMessages','timer','practiceUtilities','questionTiming',
-'$mdDialog']
+'$mdDialog','alert']
 
 module.exports = PracticeController

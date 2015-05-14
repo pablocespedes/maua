@@ -2,13 +2,13 @@ practiceUtilities = ($window, $q, $sce, utilities,
   practiceService, youtube, practiceConstants)->
   new class PracticeUtilities
     constructor: ->
+
     setQuestionTypeMatrixGroups : (items) ->
       console.log items
       _.forEach items, (answer, i) ->
         answer['matrix_group'] = (i - i % 3) / 3
 
       items = _.chunk items, 3
-
 
     removeBadImage : ->
       ###This function was added to solve the problem with the img on LSAT,

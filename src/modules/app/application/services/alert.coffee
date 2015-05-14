@@ -1,21 +1,15 @@
 'use strict'
 ### @ngInject ###
-alert = ($rootScope, $timeout) ->
+alert = (,$mdToast) ->
   new class Alert
-    alertTimeout = 'undefined'
     constructor: () ->
-    show: (type, title, message, timeout) ->
-      $rootScope.alert =
-        hasBeenShown: true
-        show: true
-        type: type
-        message: message
-        title: title
-      $timeout.cancel alertTimeout
-      alertTimeout = $timeout(->
-        $rootScope.alert.show = false
-        return
-      , timeout or 2000)
+    sendError: (errroMessage) ->
+     $mdToast.show $mdToast.simple()
+     .content(errroMessage)
+     .position($scope.getToastPosition())
+     .hideDelay(3000)
 
-alert.$inject = ['$rootScope','$timeout']
+
+
+alert.$inject = ['$mdToast']
 module.exports = alert

@@ -48,6 +48,7 @@ class DashboardController
             @activeGroupId is 'sat'
           historyVisible = false
           baseUrl = @utilities.originalGrockit(false)
+          console.log baseUrl + '/' + @activeGroupId + '/subscriptions/new'
           @paymentPage = baseUrl + '/' + @activeGroupId + '/subscriptions/new'
     @loading = false
 
