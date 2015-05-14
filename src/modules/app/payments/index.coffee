@@ -6,3 +6,7 @@ module.exports = angular.module('grockitApp.payments', [])
       controller: 'PaymentsController'
       controllerAs: 'vmPay'
       return
+.factory 'braintreeFactory', require('./services/braintree.service')
+.directive 'braintreeDropin',
+require('./directives/braintree-dropin/braintree-dropin')
+.controller 'PaymentsController', require('./payments.controller')

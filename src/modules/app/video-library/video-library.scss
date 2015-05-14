@@ -51,8 +51,11 @@
     opacity: 1;
     max-height: 40px;
   }
-}
 
+}
+#video-section .md-sidenav-right {
+    top: 64px;
+  }
 #video-content {
   md-list-item {
     border-bottom: 1px solid #eee;
@@ -130,7 +133,6 @@ md-sidenav.md-locked-open-remove.md-closed {
 }
 
 .title {
-  width: 750px;
   text-align: center;
   height: 500px;
   left: 0;
@@ -139,8 +141,7 @@ md-sidenav.md-locked-open-remove.md-closed {
   top: 0;
   bottom: 0;
   &_inner {
-    left: 38%;
-    width: 260px;
+    width: 100%;
     text-align: center;
     position: relative;
     margin-top: 17%;
