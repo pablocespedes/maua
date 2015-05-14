@@ -2,8 +2,9 @@
 class PracticeController
   # Services injected into the controller constructor
   constructor: ($scope,$timeout,@product, @practiceService,@utilities,
-  @splashMessages,@timer,@practiceUtilities) ->
+  @splashMessages,@timer,@practiceUtilities,@questionTiming,$mdDialog) ->
     @timeout = $timeout
+    @mdDialog = $mdDialog
     @practiceObserver = null
     @isbuttonClicked = false
     @maxOpts = []
@@ -17,13 +18,17 @@ class PracticeController
     @answerStatus = null
     @isValid = true
     @invalidMessage = ''
-
+    @time = 0
+    if @isUserSettingAvailable()
+      @time = @timeObj.minutes * 60
     @loadingMessage = @splashMessages.getLoadingMessage()
     @isDisabled = false
     @init()
     #Takes care to unregister the group once the user leaves the controller
     $scope.$on '$destroy', ->
       $scope.vmPr.product.unregisterGroup $scope.vmPr.practiceObserver
+      $scope.vmPr.timer.destroy $scope.vmPr.practiceTimer
+      $scope.vmPr.timer.destroy $scope.vmPr.questionTimer
 
   init : ->
     @practiceObserver = @product.observeGroupId().register (groupId) =>
@@ -75,7 +80,24 @@ class PracticeController
 
   resetQuestionTimer: ->
     @questionTimer.reset()
-    @questionTimer.start()
+    if @isUserSettingAvailable()
+      @time = @timeObj.minutes * 60
+
+    @questionTimer.start(@time)
+    if @shouldEnableQuestionTime()
+      @questionTimer.interval.then null, null, (val) =>
+        if @time == (val + 1)
+          alert = @mdDialog.alert()
+            .parent(angular.element(document.body))
+            .title('Time\'s Up')
+            .content('Review question solution!')
+            .ariaLabel('Review question solution')
+            .ok('Got it!')
+          @revealExplanation()
+          @mdDialog.show(alert).then ->
+            alert = undefined
+            return
+      return
     @restartPracticeTimer()
 
   restartPracticeTimer: ->
@@ -84,6 +106,8 @@ class PracticeController
   pauseTimers : ->
     @practiceTimer.pause()
     @questionTimer.pause()
+  shouldEnableQuestionTime : ->
+    @time > 0
 
   getNewPracticeGame : (apiUrl) ->
     @practiceService.createNewGame(apiUrl).then (game) =>
@@ -234,8 +258,15 @@ class PracticeController
        # @breadcrumbs = breadcrumbs
         #breadcrumbs.options = 'practice': @activeTrack.subject.name
 
+  isUserSettingAvailable : ->
+    @timeObj = @questionTiming.getTime()
+    if @utilities.truthy(@timeObj)
+      return true
+    false
+
 
 PracticeController.$inject = ['$scope','$timeout','product','practiceService',
-'utilities','splashMessages','timer','practiceUtilities']
+'utilities','splashMessages','timer','practiceUtilities','questionTiming',
+'$mdDialog']
 
 module.exports = PracticeController

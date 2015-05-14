@@ -3,7 +3,6 @@ questionTypeService = ()->
   new class QuestionTypesService
     # Services injected into the controller constructor
     constructor: ()->
-      console.log 'ctrl'
     resetSelection : (items, index) ->
       _.forEach items, (answer, i) ->
         if i is index

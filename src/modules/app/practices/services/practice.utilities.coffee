@@ -86,7 +86,6 @@ practiceUtilities = ($window, $q, $sce, utilities,
           resultObject.items =
             @setQuestionTypeMatrixGroups(resultObject.items)
         @removeBadImage()
-        console.log resultObject.items, 'item to return'
         return resultObject
       catch e
 
@@ -96,13 +95,11 @@ practiceUtilities = ($window, $q, $sce, utilities,
       selectAnswers = []
       if questionType is 'MultipleChoiceMatrixThreeByThree' or
       questionType is 'MultipleChoiceMatrixTwoByThree'
-        console.log answers
         answers = [].concat.apply([], answers)
 
 
       correctAnswers = _.filter(answers, 'correct': true)
       selectedAnswers = _.filter(answers, 'selected': true)
-      console.log correctAnswers, selectedAnswers,answers, 'answers'
       isValid = @validateAnswer(questionType,
         correctAnswers, selectedAnswers)
       if isValid

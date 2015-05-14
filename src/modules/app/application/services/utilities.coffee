@@ -103,9 +103,12 @@ utilities = ($state,$rootScope, $http, $location, $q, $window, urlsCons) ->
     currentPage :(page)->
       $rootScope.currentPage = page
 
-     existy:(x)->
+    existy:(x)->
       return x != null and x != 'null' and x != undefined and
        x != 'undefined'and angular.isDefined(x)
+
+    truthy:(x)->
+      return (x isnt false) and @existy(x)
 
 utilities.$inject=['$state','$rootScope', '$http', '$location','$q',
 '$window','urlsCons']

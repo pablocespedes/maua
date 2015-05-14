@@ -1,5 +1,5 @@
 CollectionService =require('./collection')
-timer = ($interval)->
+timer = ($interval,utilities)->
   new class Timer extends CollectionService
     constructor: ->
       super()
@@ -7,11 +7,13 @@ timer = ($interval)->
       timer =
         seconds: 0
         interval: null
-        start: ->
-          @interval = $interval((=>
-            @seconds++
-
-          ), 1000)
+        start:(count) ->
+          if not utilities.truthy(count)
+            count = 0
+          @interval = $interval((->
+            timer.seconds++
+            return
+          ), 1000, count)
         pause: ->
           $interval.cancel @interval
         reset: ->
@@ -27,5 +29,5 @@ timer = ($interval)->
       $interval.cancel timer.interval
       @remove timer
 
-timer.$inject = ['$interval']
+timer.$inject = ['$interval','utilities']
 module.exports = timer
