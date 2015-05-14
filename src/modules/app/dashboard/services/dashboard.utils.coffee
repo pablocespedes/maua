@@ -49,20 +49,19 @@ dashboardService = ($q,resource,utilities)->
       trackArray = @dashboardData.smart_practice.items
       smartPracticeItems = null
       cardCssCopy = @getAvailableCss()
-      #cardsList =
 
       smartPracticeItems =
       _.forEach trackArray, (result,index) =>
         subtracksStr = ''
         subCount = result.items.length
-        if utilities.existy cardsOrder
-          currentCard = @getStoredCard(cardsOrder,result.id)
-        else
-          currentCard.position = index
-          currentCard.favorite = false
+        # if utilities.existy cardsOrder
+        #   currentCard = @getStoredCard(cardsOrder,result.id)
+        # else
+        #   currentCard.position = index
+        #   currentCard.favorite = false
 
-        result.position = currentCard.position
-        result.favorite = currentCard.favorite
+        result.position = index#currentCard.position
+        #result.favorite = currentCard.favorite
         result.getScore = @_getScore(result)
         result.hasScore = @_getScore(result) != null and
          @_getScore(result) > 0
