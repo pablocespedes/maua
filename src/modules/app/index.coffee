@@ -19,9 +19,9 @@ module.exports = angular.module('grockitApp', [
   require('./app.config/index').name
   require('./application/index').name
   require('./analytics/index').name
-  require('./account/register/index').name
+  # require('./account/register/index').name
   require('./account/logout/index').name
-  require('./account/login/index').name
+  # require('./account/login/index').name
   require('./dashboard/index').name
   require('./history/index').name
   require('./questions/index').name
@@ -29,6 +29,7 @@ module.exports = angular.module('grockitApp', [
   require('./practices/index').name
   require('./question-view/index').name
   require('./video-library/index').name
+  require('./payments/index').name
 ]).run run
 
 run.$inject = [

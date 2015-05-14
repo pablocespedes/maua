@@ -2,7 +2,7 @@
 
 class DashboardController
   # Services injected into the controller constructor
-  constructor: ($window,$scope,$state,$auth,@product,@authorization,
+  constructor: ($scope,$state,$auth,@product,@authorization,
     @dashboardService, @utilities,@membership,@userNotify,@payBanner) ->
     @utilities.currentPage 'Dashboard'
     @state=$state
@@ -78,9 +78,11 @@ class DashboardController
 
       if not hasQuestionsAnswered and
        @activeGroupId is 'gre'
-        base = @utilities.newGrockit().url
-        $window.location.href = base + '/#/' + @activeGroupId +
-         '/custom-practice/'
+        @state.go 'custom-practice',
+            subject: @activeGroupId
+        # base = @utilities.newGrockit().url
+        # $window.location.href = base + '/#/' + @activeGroupId +
+        #  '/custom-practice/'
       else
         #if @enableScore
          # @_fetchScorePrediction()
@@ -114,7 +116,7 @@ class DashboardController
 
 
 
-DashboardController.$inject = ['$window','$scope','$state','$auth','product',
+DashboardController.$inject = ['$scope','$state','$auth','product',
 'authorization','dashboardService','utilities','membership','userNotify',
 'payBanner']
 

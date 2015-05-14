@@ -1,16 +1,16 @@
 braintree = require('braintree-web')
 
 braintreeFactory = (resource)->
-  new class BraintreeFactory
-    constructor: ->
+  new class BraintreeFactory extends resource
+    constructor:() ->
       super()
       @bt= {}
       @bt.clientToken = null
-      _.forEach braintree, (key)->
+      _.forEach braintree, (key)=>
         @bt[key] = braintree[key]
 
     getClientToken:->
-      @show('client-token')
+      @show('client_token')
 
     setupDropin:(options)->
       @getClientToken().then (token)->
