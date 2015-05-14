@@ -27,7 +27,6 @@ questionTypeService = ()->
           nexAction.addClass 'md-primary'
           seeAnswer.addClass 'hide'
           if answer.id is selectedChoice
-            console.log 'SET IT TO TRUE'
             answer.selected = true
             nexAction.addClass 'md-primary'
             seeAnswer.addClass 'hide'
@@ -35,7 +34,6 @@ questionTypeService = ()->
             answer.selected = false
             nexAction.removeClass 'md-primary'
             seeAnswer.removeClass 'hide'
-      console.log items
 
     selectMultipleChoice : (isConfirmClicked, items, index) ->
       if !isConfirmClicked
@@ -86,7 +84,6 @@ questionTypeService = ()->
             if !@findSelectedItems(items)
               nexAction.removeClass 'md-primary'
               seeAnswer.removeClass 'hide'
-        console.log items
 
     selectTwoChoice : (isConfirmClicked, items, index, maxOpt) ->
 
@@ -103,11 +100,9 @@ questionTypeService = ()->
               _.pull maxOpt, maxOpt[0]
 
             maxOpt.push answer.id
-            console.log maxOpt, 'maxopt push'
             #answer.selected = true
             nexAction.addClass 'md-primary'
             seeAnswer.addClass 'hide'
-            console.log answer
           else
             maxOpt = _.filter(maxOpt, (num) -> num isnt answer.id)
             answer.selected = false

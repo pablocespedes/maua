@@ -5,7 +5,7 @@
     <md-toolbar class="md-whiteframe-z1">
       <div class="md-toolbar-tools">
         <div flex="" class="fill-height">
-          <md-icon class="md md-menu md-2x white" ng-click="appCtrl.toggleList()"></md-icon>
+          <md-icon class="md md-menu md-2x white" ng-click="appCtrl.toggleList()" aria-label="Menu"></md-icon>
           <h2><span><img alt="Grockit" style="height: 44px;  margin-top: 16px;" src="assets/images/header-logo-beta.png" /></span></h2>
           <md-select ng-model="appCtrl.activeGroupId" aria-label="group">
             <md-select-label>{{$root.groupTitle}}</md-select-label>
@@ -13,7 +13,7 @@
             </md-option>
             <md-option ng-repeat="unlinked in appCtrl.ugroups.unLinkedGroups track by $index" value="{{unlinked.id}}" ng-click="appCtrl.groupRedirect(unlinked.id)" disable>
               <span ng-bind="unlinked.name"></span>
-              <md-icon class="md md-1x md-lock-outline product-icon"></md-icon>
+              <md-icon class="md md-1x md-lock-outline product-icon" aria-label="lock"></md-icon>
             </md-option>
           </md-select>
           <span flex=""></span>
@@ -54,7 +54,7 @@
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">
-                  <md-icon class="md md-2x {{item.icon}}"></md-icon>
+                  <md-icon class="md md-2x {{item.icon}}" aria-label="{{item.title}}"></md-icon>
                 </div>
                 <div class="inset">
                   {{item.title}}
@@ -70,7 +70,7 @@
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">
-                  <md-icon class="md md-2x md-account-child "></md-icon>
+                  <md-icon class="md md-2x md-account-child " aria-label="Account"></md-icon>
                 </div>
                 <div class="inset">Account
                 </div>
@@ -83,7 +83,7 @@
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">
-                  <md-icon class="md md-2x md-perm-identity"></md-icon>
+                  <md-icon class="md md-2x md-perm-identity" aria-label="Profile"></md-icon>
                 </div>
                 <div class="inset">Profile
                 </div>
@@ -96,7 +96,7 @@
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">
-                  <md-icon class="md md-2x md-settings-power"></md-icon>
+                  <md-icon class="md md-2x md-settings-power" aria-label="Log Out"></md-icon>
                 </div>
                 <div class="inset">Log Out
                 </div>
