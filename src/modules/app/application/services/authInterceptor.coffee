@@ -30,7 +30,7 @@ authInterceptor = ($window,$q,authorization,$injector) ->
       if rejection.status == 401
         $window.location.href ='https://staging.grockit.com/logout'
 
-      errorHandler().validateErrorType(rejection)
+      @errorHandler().validateErrorType(rejection)
       $q.reject rejection
 
     response: (response)->
