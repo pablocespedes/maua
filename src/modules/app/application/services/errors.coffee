@@ -9,50 +9,39 @@ HTTPStatusCodes =
   internalServerError: 500
   serviceUnavailable:503
 
-errorHandler =  (alert)->
+errorHandler =  (alert,utilities)->
   new class ErrorHandler
 
     constructor: () ->
 
     getMessage = (type) ->
       httpCodes =
-        200: ->
-          'Success!'
-        201: ->
-          'Created!'
-        202: ->
-          'Accepted'
         400: ->
           'Bad Request'
         401: ->
           'Unauthorized'
         403: ->
-          'Forbidden'
+          'The account being accessed does not have sufficient permissions'
+        404: ->
+          'The specified resource does not exist.'
         405: ->
           'Method not Allowed'
         500: ->
-          'Internal Server Error'
+          'The server encountered an internal error.'
         501: ->
           'Service Unavailable'
         'default': ->
           'We have problems retrieving your data'
       (httpCodes[type] or httpCodes['default'])()
 
-    checkWithAction:(message, actionText)->
-      toast = $mdToast.simple()
-      .content(message)
-      .action(action).highlightAction(true)
-      .position('top right')
-
-      return $mdToast.show(toast)
 
     validateErrorType:(rejection, actionText)->
       actionText = if rejection.status is 403 then 'Upgrade' else actionText
 
       message = getMessage(rejection.status)
-      @checkWithAction message, actionText || 'Ok'
+      alert.sendError message, (actionText || 'Ok'), utilities.upgradeRedirect
 
-errorHandler.$inject = ['alert']
+errorHandler.$inject = ['alert','utilities']
 module.exports = errorHandler
 
 

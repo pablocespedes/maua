@@ -114,8 +114,12 @@ utilities = ($state,$rootScope, $http, $location, $q, $window, urlsCons) ->
     lastUrlWord:->
       sections = $location.path().split('/')
       word = sections[sections.length - 1]
-      console.log word
       word
+
+    upgradeRedirect:(groupId) =>
+      baseUrl = @originalGrockit()
+      groupId = @getCurrentParam('subject') or groupId
+      @redirect baseUrl + '/' + groupId + '/subscriptions/new'
 
 utilities.$inject=['$state','$rootScope', '$http', '$location','$q',
 '$window','urlsCons']

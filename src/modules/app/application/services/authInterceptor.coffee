@@ -3,10 +3,10 @@ authInterceptor = ($window,$q,authorization,$injector) ->
     constructor: ->
       @addstartsWith()
 
-    errorHandler:->
+    errorHandler = ->
       $injector.get 'errorHandler'
 
-    utilities:->
+    utilities= ->
       $injector.get 'utilities'
 
     addstartsWith: ->
@@ -25,15 +25,16 @@ authInterceptor = ($window,$q,authorization,$injector) ->
           config.headers.Authorization = 'Token token='+'"'+accestoken+'=="'
 
       config
-    responseError: (rejection) ->
-      console.log rejection, 'rejection'
-      if rejection.status == 401
-        $window.location.href ='https://staging.grockit.com/logout'
 
-      @errorHandler().validateErrorType(rejection)
+    responseError: (rejection) ->
+      if rejection.status == 401
+        $window.location.href = utilities().originalGrockit+'/logout'
+
+      errorHandler().validateErrorType(rejection)
       $q.reject rejection
 
     response: (response)->
       response
+
 authInterceptor.$inject = ['$window','$q','authorization','$injector']
 module.exports = authInterceptor

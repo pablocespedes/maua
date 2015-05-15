@@ -43,9 +43,8 @@ membership = ($sce,lifeCycle, utilities,appMessages)->
 
     userCanAccesPage : (groupId) ->
 
-      baseUrl = utilities.originalGrockit()
       if @_validateMembership() and utilities.lastUrlWord() isnt 'dashboard'
-        utilities.redirect baseUrl + '/' + groupId + '/subscriptions/new'
+        utilities.upgradeRedirect(groupId)
       return
 
     upgradePromptMessage : ->
