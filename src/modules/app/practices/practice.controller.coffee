@@ -19,6 +19,7 @@ class PracticeController
     @isValid = true
     @invalidMessage = ''
     @time = 0
+    @Error = false
     if @isUserSettingAvailable()
       @time = @timeObj.minutes * 60
     @loadingMessage = @splashMessages.getLoadingMessage()
@@ -69,7 +70,8 @@ class PracticeController
         @percentAnswered =
           if percentAnswered > 0 then Math.round(percentAnswered.toFixed(2))
           else 0
-    .catch (e) ->
+    .catch (e) =>
+      @Error = true
       @showTiming = false
 
   initPracticeTimer: ->
@@ -110,11 +112,12 @@ class PracticeController
     @time > 0
 
   getNewPracticeGame : (apiUrl) ->
-    @practiceService.createNewGame(apiUrl).then (game) =>
+    @practiceService.createNewGame(apiUrl+'s').then (game) =>
       if angular.isDefined(game) and game != null
         @getQuestions()
         @initPracticeTimer()
         @initQuestionTimer()
+    .catch @handleError
 
   getQuestions : ->
     @practiceService.setQuestionsData(@activeGroupId,
@@ -124,8 +127,7 @@ class PracticeController
       else
         @practiceUtilities.usersRunOutQuestions @activeTrack.subject.name,
          @activeGroupId
-    .catch (e) =>
-      @handleError 'Sorry something retrieving your question information'
+    .catch @handleError
 
 
   presentQuestion : ->
@@ -169,8 +171,7 @@ class PracticeController
   bindVideoExplanationInfo : ->
     @practiceUtilities.getVideoExplanation(@questionData).then (videoInfo) =>
       @videoInfo = videoInfo
-    .catch (e) =>
-      @handleError 'Sorry something wrong getting your video Data'
+    .catch @handleError
 
   doNotKnowAnswer : ->
     @userConfirmed = false
@@ -263,8 +264,7 @@ class PracticeController
       if response
         @activeTrack = response
         @getNewPracticeGame @activeTrack.subject.url
-    .catch (e) =>
-      @handleError 'Sorry something wrong setting your track'
+    .catch @handleError
 
   isUserSettingAvailable : ->
     @timeObj = @questionTiming.getTime()
@@ -272,9 +272,9 @@ class PracticeController
       return true
     false
 
-  handleError:(message)->
-    @alert.sendError message
+  handleError:(e)=>
     @loading = false
+    @Error = true
     console.log e
 
 

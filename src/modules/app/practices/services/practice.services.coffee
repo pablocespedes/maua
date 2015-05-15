@@ -1,4 +1,5 @@
-practiceService = ($q,$resource,resource,urlsCons,dashboardService)->
+practiceService = ($q,$resource,resource,urlsCons,dashboardService,
+  errorHandler)->
   new class PracticeService extends resource
     constructor: ->
       super()
@@ -68,7 +69,7 @@ practiceService = ($q,$resource,resource,urlsCons,dashboardService)->
       .then((response) ->
         response.data.round_session
       ).catch (e) ->
-        alerts.showAlert alerts.setErrorApiMsg(e), 'danger'
+        errorHandler.validateErrorType(e, 'Ok')
 
     getQuestionFromApi: (questionId) ->
       @getQuestionById(questionId).then((result) ->
@@ -76,7 +77,7 @@ practiceService = ($q,$resource,resource,urlsCons,dashboardService)->
         questionCollection.push result.data.question
         questionCollection
       ).catch (e) ->
-        alerts.showAlert alerts.setErrorApiMsg(e), 'danger'
+        errorHandler.validateErrorType(e, 'Ok')
 
     createNewGame: (url) ->
       @createNewPracticeGame(url).then((game) =>
@@ -84,7 +85,7 @@ practiceService = ($q,$resource,resource,urlsCons,dashboardService)->
         @gameId = game.data.practice_game.id
         @gameId
       ).catch (e) ->
-        alerts.showAlert alerts.setErrorApiMsg(e), 'danger'
+        errorHandler.validateErrorType(e, 'Ok')
 
     getTimingInformation : (trackId, groupId, questionId) ->
       url = urlsCons.timingData + groupId + '/' + trackId + '/'+
@@ -102,5 +103,5 @@ practiceService = ($q,$resource,resource,urlsCons,dashboardService)->
 
 
 practiceService.$inject = ['$q','$resource','resource','urlsCons',
-'dashboardService']
+'dashboardService','errorHandler']
 module.exports = practiceService

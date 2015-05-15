@@ -91,6 +91,7 @@ utilities = ($state,$rootScope, $http, $location, $q, $window, urlsCons) ->
           return i
         i++
       -1
+
     newGrockit : ->
       _grockitHostEvaluation(true)
 
@@ -109,6 +110,12 @@ utilities = ($state,$rootScope, $http, $location, $q, $window, urlsCons) ->
 
     truthy:(x)->
       return (x isnt false) and @existy(x)
+
+    lastUrlWord:->
+      sections = $location.path().split('/')
+      word = sections[sections.length - 1]
+      console.log word
+      word
 
 utilities.$inject=['$state','$rootScope', '$http', '$location','$q',
 '$window','urlsCons']

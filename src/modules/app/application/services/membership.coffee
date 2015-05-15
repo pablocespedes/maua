@@ -1,5 +1,5 @@
 
-membership = ($location,$sce,lifeCycle, utilities,appMessages)->
+membership = ($sce,lifeCycle, utilities,appMessages)->
   new class Membership
     constructor: ->
       @memberInfo={}
@@ -42,10 +42,9 @@ membership = ($location,$sce,lifeCycle, utilities,appMessages)->
       return
 
     userCanAccesPage : (groupId) ->
-      sections = $location.path().split('/')
-      url = sections[sections.length - 1]
+
       baseUrl = utilities.originalGrockit()
-      if @_validateMembership() and url != 'dashboard'
+      if @_validateMembership() and utilities.lastUrlWord() isnt 'dashboard'
         utilities.redirect baseUrl + '/' + groupId + '/subscriptions/new'
       return
 
@@ -55,6 +54,6 @@ membership = ($location,$sce,lifeCycle, utilities,appMessages)->
 
 
 
-membership.$inject = ['$location','$sce','lifeCycle','utilities',
+membership.$inject = ['$sce','lifeCycle','utilities',
 'appMessages']
 module.exports = membership

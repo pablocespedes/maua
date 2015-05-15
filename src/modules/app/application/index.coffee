@@ -1,5 +1,6 @@
 'use strict'
 module.exports = angular.module('grockitApp.app', [])
+.service 'errorHandler', require('./services/errors')
 .factory 'userNotify', require('./services/user.notify')
 .factory 'menuService', require('./services/menu')
 .factory 'levels', require('./services/level.services')

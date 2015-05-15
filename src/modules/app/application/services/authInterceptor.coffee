@@ -1,4 +1,4 @@
-authInterceptor = (authorization) ->
+authInterceptor = ($window,$q,authorization) ->
   new class AuthInterceptor
     constructor: ->
       @addstartsWith()
@@ -12,6 +12,7 @@ authInterceptor = (authorization) ->
       shouldAddToken = config.url.startsWith 'https://api' or
        config.url.startsWith 'https://staging'
 
+      console.log config
       if shouldAddToken
         accestoken = authorization.getToken()
 
@@ -22,7 +23,19 @@ authInterceptor = (authorization) ->
               # 'S0yMjAwMGExZjkxZDc="'
               #config.headers.Authorization = "Bearer " + token  if token
       config
+    responseError: (rejection) ->
+      console.log rejection
+      if rejection.status == 401
+        $window.location.href ='https://staging.grockit.com/logout'
+
+
+        ### If not a 401, do nothing with this error.
+        # This is necessary to make a `responseError`
+        # interceptor a no-op.
+        ###
+
+      $q.reject rejection
     response: (response)->
       response
-authInterceptor.$inject = ['authorization']
+authInterceptor.$inject = ['$window','$q','authorization']
 module.exports = authInterceptor

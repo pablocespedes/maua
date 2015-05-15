@@ -13,7 +13,7 @@
             </md-option>
             <md-option ng-repeat="unlinked in appCtrl.ugroups.unLinkedGroups track by $index" value="{{unlinked.id}}" ng-click="appCtrl.groupRedirect(unlinked.id)" disable>
               <span ng-bind="unlinked.name"></span>
-              <md-icon class="md md-1x md-lock-outline product-icon" aria-label="lock"></md-icon>
+              <md-icon class="md md-1x md-schedule product-icon" aria-label="lock"></md-icon>
             </md-option>
           </md-select>
           <span flex=""></span>

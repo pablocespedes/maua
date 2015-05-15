@@ -1,4 +1,5 @@
-<div id="practice-settings" ng-class="{'open':openSetting}">
+<div>
+<div id="practice-settings" ng-class="{'open':openSetting}" ng-if="showUtc">
   <a href="javascript:void(0)" id="practice-settings-toggler" ng-click="openSetting = !openSetting">
     <i class="fa fa-cogs" data-toggle="tooltip" data-placement="left" title="New! Manage Question Timing"> </i>
   </a>
@@ -22,5 +23,6 @@
       </md-slider>
     </div>
   </div>
+</div>
 </div>
 

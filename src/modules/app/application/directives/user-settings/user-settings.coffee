@@ -5,9 +5,12 @@ userSettings = (questionTiming,utilities)->
     restrict: 'AE'
     replace: true
     templateUrl: 'app/application/directives/user-settings/user-settings.html'
-    link: (scope, element, attrs) ->
+    link: (scope, element, attrs, ctrl) ->
       scope.timerSetting =
         minutes: 0
+
+      scope.showUtc =  if utilities.lastUrlWord() is 'dashboard' or
+          utilities.lastUrlWord() is 'custom-practice' then true
 
       scope.openSetting = false
 
