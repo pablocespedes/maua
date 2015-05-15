@@ -49,7 +49,7 @@ dashboardService = ($q,resource,utilities)->
       trackArray = @dashboardData.smart_practice.items
       smartPracticeItems = null
       cardCssCopy = @getAvailableCss()
-
+      cardsCssCount = cardCssCopy.length-1
       smartPracticeItems =
       _.forEach trackArray, (result,index) =>
         subtracksStr = ''
@@ -77,7 +77,12 @@ dashboardService = ($q,resource,utilities)->
         result.subtracksStr = subtracksStr.substring(0, 100).concat('...')
 
         #set random card color
-        @getRandCss(result,cardCssCopy)
+        console.log index , cardsCssCount
+        if index <= cardsCssCount
+          @getCardCss(result,cardCssCopy,index)
+        else
+          @getRandCss(result,cardCssCopy)
+
 
       @dashboardData.smart_practice.items = smartPracticeItems
       @dashboardData.smart_practice
@@ -89,21 +94,25 @@ dashboardService = ($q,resource,utilities)->
       @dashboardData.progress.all.total_questions_answered >= 1
 
     getAvailableCss:()->
-      clasess = ['card-pink',
+      clasess = [
+                 'card-purple'
+                 'card-pink',
                  'card-teal',
-                 'card-amber',
                  'card-green',
-                 'card-indigo',
                  'card-grey',
+                 'card-blue-grey',
+                 'card-indigo',
+                 'card-amber',
                  'card-red',
                  'card-light-cyan',
                  'card-blue',
-                 'card-blue-grey',
                  'card-light-green'
                  'card-yellow',
-                 'card-lime',
-                 'card-purple']
+                 'card-lime']
       clasess.slice()
+
+    getCardCss:(item, clasessCopy, index)->
+      item.cardCss = clasessCopy[index]
 
     getRandCss:(item, clasessCopy)->
       clsLenght = clasessCopy.length-1
