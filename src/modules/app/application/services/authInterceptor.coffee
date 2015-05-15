@@ -1,7 +1,13 @@
-authInterceptor = ($window,$q,authorization,errorHandler) ->
+authInterceptor = ($window,$q,authorization,$injector) ->
   new class AuthInterceptor
     constructor: ->
       @addstartsWith()
+
+    errorHandler:->
+      $injector.get 'errorHandler'
+
+    utilities:->
+      $injector.get 'utilities'
 
     addstartsWith: ->
       if typeof String::startsWith isnt 'function'
@@ -24,10 +30,10 @@ authInterceptor = ($window,$q,authorization,errorHandler) ->
       if rejection.status == 401
         $window.location.href ='https://staging.grockit.com/logout'
 
-      errorHandler.validateErrorType(rejection)
+      errorHandler().validateErrorType(rejection)
       $q.reject rejection
 
     response: (response)->
       response
-authInterceptor.$inject = ['$window','$q','authorization','errorHandler']
+authInterceptor.$inject = ['$window','$q','authorization','$injector']
 module.exports = authInterceptor

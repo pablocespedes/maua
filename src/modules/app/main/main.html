@@ -6,7 +6,13 @@
       <div class="md-toolbar-tools">
         <div flex="" class="fill-height">
           <md-icon class="md md-menu md-2x white" ng-click="appCtrl.toggleList()" aria-label="Menu"></md-icon>
-          <h2><span><img alt="Grockit" style="height: 44px;  margin-top: 16px;" src="assets/images/header-logo-beta.png" /></span></h2>
+          <h2>
+          <span>
+           <a ui-sref="dashboard({subject: appCtrl.activeGroupId})">
+          <img alt="Grockit" style="height: 44px;  margin-top: 16px;" src="assets/images/header-logo-beta.png" />
+          </a>
+          </span>
+          </h2>
           <md-select ng-model="appCtrl.activeGroupId" aria-label="group">
             <md-select-label>{{$root.groupTitle}}</md-select-label>
             <md-option ng-repeat="linked in appCtrl.ugroups.linkedGroups track by $index" value="{{linked.id}}" ng-bind="linked.name" ng-click="appCtrl.groupRedirect(linked.id)">
@@ -67,7 +73,7 @@
         </md-list-item>
         <md-subheader class="management">Settings {{appCtrl.currentUser.firstName}}</md-subheader>
         <md-list-item>
-          <a target="_blank"  ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/account">
+          <a target="_blank" ng-href="{{::appCtrl.url}}/users/{{::appCtrl.currentUser.userId}}/account">
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">

@@ -1,7 +1,8 @@
 'use strict'
 alert = ($mdToast) ->
   new class Alert
-    constructor: () ->
+    constructor: ->
+
     success: (message) ->
       toast = $mdToast.simple()
       .content(message)

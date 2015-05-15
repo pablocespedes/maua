@@ -9,7 +9,7 @@ HTTPStatusCodes =
   internalServerError: 500
   serviceUnavailable:503
 
-errorHandler =  ->
+errorHandler =  (alert)->
   new class ErrorHandler
 
     constructor: () ->
@@ -52,7 +52,7 @@ errorHandler =  ->
       message = getMessage(rejection.status)
       @checkWithAction message, actionText || 'Ok'
 
-
+errorHandler.$inject = ['alert']
 module.exports = errorHandler
 
 
