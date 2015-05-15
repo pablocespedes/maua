@@ -112,7 +112,7 @@ class PracticeController
     @time > 0
 
   getNewPracticeGame : (apiUrl) ->
-    @practiceService.createNewGame(apiUrl+'s').then (game) =>
+    @practiceService.createNewGame(apiUrl).then (game) =>
       if angular.isDefined(game) and game != null
         @getQuestions()
         @initPracticeTimer()
