@@ -9,7 +9,7 @@ HTTPStatusCodes =
   internalServerError: 500
   serviceUnavailable:503
 
-errorHandler = (alert) ->
+errorHandler =  ->
   new class ErrorHandler
 
     constructor: () ->
@@ -38,22 +38,21 @@ errorHandler = (alert) ->
           'We have problems retrieving your data'
       (httpCodes[type] or httpCodes['default'])()
 
-    check:(message)->
-      alert.simple message
-
     checkWithAction:(message, actionText)->
-      alert.withAction message, actionText
+      toast = $mdToast.simple()
+      .content(message)
+      .action(action).highlightAction(true)
+      .position('top right')
 
-    validateErrorType:(response, actionText)->
-      console.log response
-      message = getMessage(response.status)
-      console.log message
-      @checkWithAction message, actionText
+      return $mdToast.show(toast)
+
+    validateErrorType:(rejection, actionText)->
+      actionText = if rejection.status is 403 then 'Upgrade' else actionText
+
+      message = getMessage(rejection.status)
+      @checkWithAction message, actionText || 'Ok'
 
 
-
-
-errorHandler.$inject = ['alert']
 module.exports = errorHandler
 
 

@@ -70,7 +70,6 @@ class PracticeController
         @percentAnswered =
           if percentAnswered > 0 then Math.round(percentAnswered.toFixed(2))
           else 0
-    .catch (e) =>
 
   initPracticeTimer: ->
     @practiceTimer = @timer.create()
@@ -136,8 +135,7 @@ class PracticeController
         @practiceService.getRoundSession(questionData.id, @activeGroupId)
         .then (result) =>
           @roundSessionAnswer = result
-        .catch (e) =>
-          @handleError 'Sorry something retrieving your question information'
+        .catch @handleError
 
         @questionData = questionData
         @practiceUtilities.setOneColumnLayout @questionData

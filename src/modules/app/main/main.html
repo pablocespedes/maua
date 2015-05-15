@@ -13,11 +13,11 @@
             </md-option>
             <md-option ng-repeat="unlinked in appCtrl.ugroups.unLinkedGroups track by $index" value="{{unlinked.id}}" ng-click="appCtrl.groupRedirect(unlinked.id)" disable>
               <span ng-bind="unlinked.name"></span>
-              <md-icon class="md md-1x md-schedule product-icon" aria-label="lock"></md-icon>
+              <md-icon class="md md-1x md-lock-outline product-icon" aria-label="lock"></md-icon>
             </md-option>
           </md-select>
           <span flex=""></span>
-          <md-icon ng-if="appCtrl.showBuyNow" class="md md-2x md-alarm-on" ng-click="appCtrl.showPaymentBanner()"></md-icon>
+          <md-icon ng-if="appCtrl.showBuyNow" class="md md-2x md-schedule" ng-click="appCtrl.showPaymentBanner()"></md-icon>
           &nbsp;
           <label class="pointer" ng-click="appCtrl.displayMenu()">{{appCtrl.currentUser.firstName}}</label>
           <img class="md-fab md-primary round-img pointer" ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="User Picture" ng-click="appCtrl.displayMenu()" />
