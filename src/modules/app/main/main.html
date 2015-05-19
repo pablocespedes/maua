@@ -1,11 +1,36 @@
 <div ng-controller="AppController as appCtrl">
-  <!--  <div layout="row" style="background: #0097a7; height:15px;">
-  </div> -->
-  <div id="main-toolbar" layout="row">
+  <md-toolbar id="main-toolbar" class="md-whiteframe-z1">
+    <div class="md-toolbar-tools">
+      <md-button class="md-icon-button" aria-label="Menu">
+        <md-icon class="mdi mdi-menu mdi-2x white" ng-click="appCtrl.toggleList()" aria-label="Menu"></md-icon>
+      </md-button>
+      <span>
+           <a ui-sref="dashboard({subject: appCtrl.activeGroupId})">
+          <img alt="Grockit" style="height: 38px; margin-top: 10px;" src="assets/images/header-logo-beta.png" />
+          </a>
+          </span>
+      <md-select ng-model="appCtrl.activeGroupId" aria-label="group">
+        <md-select-label>{{$root.groupTitle}}</md-select-label>
+        <md-option ng-repeat="linked in appCtrl.ugroups.linkedGroups track by $index" value="{{linked.id}}" ng-bind="linked.name" ng-click="appCtrl.groupRedirect(linked.id)">
+        </md-option>
+        <md-option ng-repeat="unlinked in appCtrl.ugroups.unLinkedGroups track by $index" value="{{unlinked.id}}" ng-click="appCtrl.groupRedirect(unlinked.id)" disable>
+          <span ng-bind="unlinked.name"></span>
+          <md-icon class="mdi mdi-1x mdi-lock-outline product-icon" aria-label="lock"></md-icon>
+        </md-option>
+      </md-select>
+      <span flex></span>
+      <md-button class="md-icon-button" aria-label="Settings">
+        <md-icon ng-if="appCtrl.showBuyNow" class="mdi mdi-2x mdi-schedule white" ng-click="appCtrl.showPaymentBanner()"></md-icon>
+      </md-button>
+      <!-- <label class="pointer" ng-click="appCtrl.displayMenu()">{{appCtrl.currentUser.firstName}}</label> -->
+      <img class="md-fab md-primary round-img pointer" ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="User Picture" ng-click="appCtrl.displayMenu()" />
+    </div>
+  </md-toolbar>
+<!--   <div id="main-toolbar" layout="row">
     <md-toolbar class="md-whiteframe-z1">
       <div class="md-toolbar-tools">
         <div flex="" class="fill-height">
-          <md-icon class="md md-menu md-2x white" ng-click="appCtrl.toggleList()" aria-label="Menu"></md-icon>
+          <md-icon class="mdi mdi-menu mdi-2x white" ng-click="appCtrl.toggleList()" aria-label="Menu"></md-icon>
           <h2>
           <span>
            <a ui-sref="dashboard({subject: appCtrl.activeGroupId})">
@@ -13,24 +38,15 @@
           </a>
           </span>
           </h2>
-          <md-select ng-model="appCtrl.activeGroupId" aria-label="group">
-            <md-select-label>{{$root.groupTitle}}</md-select-label>
-            <md-option ng-repeat="linked in appCtrl.ugroups.linkedGroups track by $index" value="{{linked.id}}" ng-bind="linked.name" ng-click="appCtrl.groupRedirect(linked.id)">
-            </md-option>
-            <md-option ng-repeat="unlinked in appCtrl.ugroups.unLinkedGroups track by $index" value="{{unlinked.id}}" ng-click="appCtrl.groupRedirect(unlinked.id)" disable>
-              <span ng-bind="unlinked.name"></span>
-              <md-icon class="md md-1x md-lock-outline product-icon" aria-label="lock"></md-icon>
-            </md-option>
-          </md-select>
           <span flex=""></span>
-          <md-icon ng-if="appCtrl.showBuyNow" class="md md-2x md-schedule" ng-click="appCtrl.showPaymentBanner()"></md-icon>
+          <md-icon ng-if="appCtrl.showBuyNow" class="mdi mdi-2x mdi-schedule" ng-click="appCtrl.showPaymentBanner()"></md-icon>
           &nbsp;
           <label class="pointer" ng-click="appCtrl.displayMenu()">{{appCtrl.currentUser.firstName}}</label>
           <img class="md-fab md-primary round-img pointer" ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="User Picture" ng-click="appCtrl.displayMenu()" />
         </div>
       </div>
     </md-toolbar>
-  </div>
+  </div> -->
   <div flex layout="row">
     <md-sidenav id="main-menu" md-component-id="left">
       <md-toolbar class="md-tall md-hue-2  menu-header">
@@ -47,7 +63,7 @@
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">
-                  <md-icon class="md md-2x {{item.icon}}"></md-icon>
+                  <md-icon class="mdi mdi-2x {{item.icon}} md-default-theme"></md-icon>
                 </div>
                 <div class="inset">
                   {{item.title}}
@@ -61,7 +77,7 @@
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">
-                  <md-icon class="md md-2x {{item.icon}}" aria-label="{{item.title}}"></md-icon>
+                  <md-icon class="md md-2x {{item.icon}} md-default-theme" aria-label="{{item.title}}"></md-icon>
                 </div>
                 <div class="inset">
                   {{item.title}}
@@ -77,7 +93,7 @@
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">
-                  <md-icon class="md md-2x md-account-child " aria-label="Account"></md-icon>
+                  <md-icon class="mdi mdi-2x mdi-account-child " aria-label="Account"></md-icon>
                 </div>
                 <div class="inset">Account
                 </div>
@@ -90,7 +106,7 @@
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">
-                  <md-icon class="md md-2x md-perm-identity" aria-label="Profile"></md-icon>
+                  <md-icon class="mdi mdi-2x mdi-perm-identity" aria-label="Profile"></md-icon>
                 </div>
                 <div class="inset">Profile
                 </div>
@@ -103,7 +119,7 @@
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">
-                  <md-icon class="md md-2x md-settings-power" aria-label="Log Out"></md-icon>
+                  <md-icon class="mdi mdi-2x mdi-settings-power" aria-label="Log Out"></md-icon>
                 </div>
                 <div class="inset">Log Out
                 </div>

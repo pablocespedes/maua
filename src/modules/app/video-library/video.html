@@ -15,7 +15,7 @@
       </div>
       <div class="md-toolbar-item">
         <md-button class=" md-primary" aria-label="Open" ng-click="vmVideo.checkNavStatus()" hide-gt-md>
-          <md-icon class="md md-menu md-2x menu_icon"></md-icon>
+          <md-icon class="mdi mdi-menu mdi-2x menu_icon"></md-icon>
         </md-button>
       </div>
     </div>
@@ -59,7 +59,7 @@
           <md-list>
             <md-list-item class="md-2-line md-no-proxy animate-repeat" ng-repeat="videoItem in video.videos | filter: vmVideo.searchText | orderBy: 'title'" ng-click="vmVideo.activeVideo(videoItem)">
               <div class="md-list-item-text">
-                <md-icon class="md md-play-circle-outline md-2x md-play"></md-icon>
+                <md-icon class="mdi mdi-play-circle-outline mdi-2x mdi-play"></md-icon>
                 <h3>
                   <span class="sub-title-video" ng-bind="videoItem.title"></span>
                   </h3>

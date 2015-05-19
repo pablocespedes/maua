@@ -30,8 +30,6 @@ module.exports = angular.module('grockitApp.app', [])
 .filter 'level', require('./filters/level')
 .filter 'capitalize', require ('./filters/capitalize')
 .controller 'AppController', require('./app.controller')
-.directive 'questionTagsOnly',
- require('./directives/question-tagsO/question-tagsO')
 .directive 'questionTags', require('./directives/question-tags/question-tags')
 .directive 'questionTiming', require('./directives/quest-timing/quest-timing')
 .directive 'userSettings', require('./directives/user-settings/user-settings')

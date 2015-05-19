@@ -15,7 +15,7 @@ menu = ($window,utilities)->
           title: 'Dashboard'
           isReady: options.isReady
           target: '_self'
-          icon: 'md-dashboard'
+          icon: 'mdi-dashboard'
           shouldShow: true
         }
         {
@@ -25,7 +25,7 @@ menu = ($window,utilities)->
           title: 'Study Plan'
           isReady: options.isReady
           target: '_self'
-          icon: 'md-bookmark-outline'
+          icon: 'mdi-bookmark-outline'
           shouldShow: !hideStudyPlan
         }
         {
@@ -35,7 +35,7 @@ menu = ($window,utilities)->
           title: 'Group Practice'
           isReady: options.isReady
           target: '_self'
-          icon: 'md-account-child'
+          icon: 'mdi-account-child'
           shouldShow: options.groupId != 'gre'
         }
         {
@@ -45,7 +45,7 @@ menu = ($window,utilities)->
           title: 'Video Library'
           isReady: options.isReady
           target: '_self'
-          icon: 'md-video-collection'
+          icon: 'mdi-video-collection'
           shouldShow: !hideVideoOption and options.groupId == 'gre'
         }
         {
@@ -55,7 +55,7 @@ menu = ($window,utilities)->
           title: 'Video Library'
           isReady: options.isReady
           target: '_blank'
-          icon: 'md-video-collection'
+          icon: 'mdi-video-collection'
           shouldShow: !hideVideoOption and options.groupId != 'gre'
         }
         {
@@ -65,7 +65,7 @@ menu = ($window,utilities)->
           title: 'Custom Practice'
           isReady: options.isReady
           target: '_blank'
-          icon: 'md-my-library-books'
+          icon: 'mdi-my-library-books'
           shouldShow: options.groupId != 'gre'
         }
         {
@@ -95,7 +95,7 @@ menu = ($window,utilities)->
           title: 'Skill Data'
           isReady: options.isReady
           target: '_blank'
-          icon: 'fa-dashboard'
+          icon: 'mdi-dashboard'
           shouldShow: true
         }
         {
@@ -105,7 +105,7 @@ menu = ($window,utilities)->
           title: 'History'
           isReady: options.isReady
           target: '_self'
-          icon: ' md-insert-chart'
+          icon: ' mdi-insert-chart'
           shouldShow: options.groupId == 'gre'
         }
         {
@@ -115,7 +115,7 @@ menu = ($window,utilities)->
           title: 'History'
           isReady: options.isReady
           target: '_blank'
-          icon: ' md-insert-chart'
+          icon: ' mdi-insert-chart'
           shouldShow: options.groupId != 'gre'
         }
       ]

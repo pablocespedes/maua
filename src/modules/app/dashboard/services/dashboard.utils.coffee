@@ -76,8 +76,6 @@ dashboardService = ($q,resource,utilities)->
           then subtrack.name else subtrack.name.concat(', ')
         result.subtracksStr = subtracksStr.substring(0, 100).concat('...')
 
-        #set random card color
-        console.log index , cardsCssCount
         if index <= cardsCssCount
           @getCardCss(result,cardCssCopy,index)
         else

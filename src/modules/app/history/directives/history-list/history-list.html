@@ -17,18 +17,18 @@
     <div ng-if="roundSession.outcome !== 'correct' && roundSession.outcome !== 'incorrect'" class="tl-icon bg-default"><i class="fa fa-minus"></i></div>
     <div class="panel tl-body">
       <div class="pull-right text-center answer-time">
-        <i class="md md-alarm md-1x"></i>
+        <i class="mdi mdi-alarm md-1x"></i>
         <p> {{( roundSession.time_to_answer > 0 ? roundSession.time_to_answer + "s" : "Skipped")}} </p>
       </div>
       <a href="#/{{groupId}}/review/{{roundSession.id}}" target="_blank">
         <p ng-bind-html="roundSession.question_stimulus | htmlToPlaintext | truncate:50 "></p>
       </a>
       <div style="margin-top: 10px;" class="text-sm">
-        <i class="md md-1x md-list"></i>&nbsp;&nbsp;
+        <i class="mdi mdi-1x mdi-list"></i>&nbsp;&nbsp;
         <a href="#"></a>{{roundSession.track_name}}
       </div>
       <div style="margin-top: 10px;" class="text-sm">
-        <i class="md md-1x md-dashboard"></i>&nbsp;&nbsp;
+        <i class="mdi mdi-1x mdi-dashboard"></i>&nbsp;&nbsp;
         <a href="#"></a>
         <span ng-bind="roundSession.experience_points | level"></span>
       </div>

@@ -8,13 +8,22 @@
 @import "../modules/app/practices/practice.scss";
 @import "../modules/app/history/history.scss";
 @import "../modules/app/video-library/video-library.scss";
+html {
+  font-size: 56.5%;
+  line-height: 1.1;
+}
+
 body {
   background: #f6f6f6;
   text-rendering: optimizeLegibility!important;
   -webkit-font-smoothing: antialiased!important;
-  -moz-osx-font-smoothing: grayscale!important
+  -moz-osx-font-smoothing: grayscale!important;
+  font-size: 1.6rem;
 }
 
+.mdi {
+  vertical-align: middle;
+}
 #intercom-container .intercom-launcher {
   bottom: 70px!important;
 }
@@ -68,12 +77,11 @@ md-radio-group[disabled] .md-container .md-off,
 md-radio-button[disabled] .md-container .md-off {
   border-color: rgba(0, 0, 0, 0.26)!important;
 }
+
 md-radio-group[disabled] .md-container .md-on,
 md-radio-button[disabled] .md-container .md-on {
-   background-color: transparent!important;
+  background-color: transparent!important;
 }
-
-
 
 md-list.md-default-theme md-list-item.md-2-line .md-list-item-text h3,
 md-list.md-default-theme md-list-item.md-2-line .md-list-item-text h4,
@@ -196,13 +204,12 @@ md-option > .md-text > .product-icon {
 
 #main-toolbar {
   .md-toolbar-tools {
+    .md-select-label:first-child span{
+      line-height: 2.2rem!important;
+    }
     margin-top: -8px;
-    // .menu-icon {
-    //   min-width: 1.8rem!important;
-    //   background-color: transparent;
-    //   margin: 15px 5px auto auto;
-    // }
-    md-select, h2 {
+    md-select,
+    h2 {
       margin-left: 16px;
     }
     md-icon {
@@ -223,9 +230,9 @@ md-option > .md-text > .product-icon {
     md-select-label {
       color: #ffffff !important;
     }
-    .payment{
-        width: inherit;
-        text-transform: none
+    .payment {
+      width: inherit;
+      text-transform: none
     }
   }
 }

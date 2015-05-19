@@ -6,7 +6,7 @@
       <a ng-href="{{vmDash.paymentPage}}" target="_blank">
         <div class="panel-body">
           <br>
-          <i class="md md-2x  md-schedule bg-icon"></i>
+          <i class="mdi mdi-2x  mdi-schedule bg-icon"></i>
           <h1 ng-bind-html="vmDash.upgradePromptMessage"></h1>
           <br>
           <span class="text-sm"><br></span>
@@ -17,7 +17,7 @@
   <div track-list tracks="vmDash.tracks " start-practice="vmDash.startPractice " is-visible="vmDash.enableScore && !vmDash.loading " can-practice="vmDash.canPractice "></div>
   <div>
     <div class=" fadeIn animated " ng-if="vmDash.isChallengeAvailable ">
-      <div class="col-md-12 ">
+
         <div class="panel topic-content panel-dark widget-profile ">
           <div class="panel-heading dashboard-title ">
             <span class="panel-title "> <h4><i class="panel-title-icon fa fa-fire "></i>Challenge</h4>
@@ -27,7 +27,7 @@
             <div challenge-dashboard challenges="vmDash.challengesGames "></div>
           </div>
         </div>
-      </div>
+
       <div class="push "></div>
     </div>
   </div>

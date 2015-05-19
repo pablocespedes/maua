@@ -8,12 +8,12 @@ initConfig =  ($httpProvider, $stateProvider,
 
   $mdThemingProvider
   .theme('default')
-  .primaryPalette('cyan',
+  .primaryPalette('blue-grey',
   'default': '500'
   'hue-1': '400'
   'hue-2': '800'
-  'hue-3': 'A700')
-  .accentPalette 'blue-grey', 'default': '100'
+  'hue-3': '700')
+  .accentPalette 'grey', 'default': '600'
 
   ApiUrlsProvider.host = "api.staging.grockit.com"
   ApiUrlsProvider.port = ''#3000
