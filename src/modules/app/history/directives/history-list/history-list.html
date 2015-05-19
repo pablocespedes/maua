@@ -1,6 +1,6 @@
 <div class="timeline">
   <!-- Timeline header -->
-  <div class=" tl-header  history-day" ng-class="{'bg-primary': !isCollapsed, 'bg-default': isCollapsed}" ng-click="toggle()">
+  <div class=" tl-header  history-day" ng-class="{'indigo-bg': !isCollapsed, 'blue-grey bg-200': isCollapsed}" ng-click="toggle()">
     <div layout="row">
       <div  ng-if="!isLoading()">
         <span id="identifier" ng-bind="identifier"></span>
@@ -12,8 +12,8 @@
     </div>
   </div>
   <div class="tl-entry" ng-repeat="roundSession in roundSessions" ng-hide="isCollapsed">
-    <div ng-if="roundSession.outcome === 'correct'" class="tl-icon bg-success"><i class="fa fa-check"></i></div>
-    <div ng-if="roundSession.outcome === 'incorrect'" class="tl-icon bg-danger"><i class="fa fa-times"></i></div>
+    <div ng-if="roundSession.outcome === 'correct'" class="tl-icon teal-bg"><i class="fa fa-check white-text"></i></div>
+    <div ng-if="roundSession.outcome === 'incorrect'" class="tl-icon red-bg"><i class="fa fa-times white-text"></i></div>
     <div ng-if="roundSession.outcome !== 'correct' && roundSession.outcome !== 'incorrect'" class="tl-icon bg-default"><i class="fa fa-minus"></i></div>
     <div class="panel tl-body">
       <div class="pull-right text-center answer-time">

@@ -65,7 +65,7 @@
             </div>
             <div ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
               <span class="badge avg-badge" ng-if="confirmed">
-              <span ng-class="{ 'teal-bg': !compAvgStatus, 'red-bg': compAvgStatus}" class="text-lg"><span ng-bind="compAvg"></span>s</span>
+              <span ng-class="{ 'teal-bg white-text': !compAvgStatus, 'red-bg white-text': compAvgStatus}" class="text-lg text-badge"><span ng-bind="compAvg"></span>s</span>
               </span>
               <span class="text-lg" ng-if="!confirmed"> <i class="mdi mdi-remove"></i> </span>
             </div>
@@ -151,8 +151,8 @@
           <div flex class=" text-right ">
             <div ng-class="{ 'red-bg':!answerStatus, 'teal-bg':answerStatus}" ng-if="confirmed"
               class="timing-check text-center text-slg no-padding-vr">
-              <i ng-if="!answerStatus" class="mdi mdi-close mdi-3x abs-center"></i>
-              <i ng-if="answerStatus" class="mdi mdi-check mdi-3x abs-center"></i>
+              <i ng-if="!answerStatus" class="mdi mdi-close mdi-3x abs-center white-text"></i>
+              <i ng-if="answerStatus" class="mdi mdi-check mdi-3x abs-center white-text"></i>
             </div>
             <div class="grey-bg timing-check text-center text-slg no-padding-vr" ng-if="!confirmed">
               <i class="mdi mdi-remove mdi-2x abs-center"></i>

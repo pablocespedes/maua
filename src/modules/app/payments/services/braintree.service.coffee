@@ -13,7 +13,8 @@ braintreeFactory = (resource)->
       @show('client_token')
 
     setupDropin:(options)->
-      @getClientToken().then (token)->
+      @getClientToken().then (response)->
+        token = response.data.token
         braintree.setup token, 'dropin', options
 
 

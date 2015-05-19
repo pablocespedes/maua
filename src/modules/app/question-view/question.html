@@ -5,7 +5,7 @@
   <md-progress-circular md-mode="indeterminate"></md-progress-circular>
 </div>
 <div id="practice" ng-show="!vmPr.loading" layout="row" layout-sm="column" layout-fill layout-wrap>
-  <div id="Panel1" flex layout-fill layout-padding layout-align="start center" ng-if="vmPr.questionData.setLayoutOneColumn">
+  <div id="Panel1" flex layout-fill layout-padding layout-align="start center" ng-if="vmPr.questionData.setLayoutOneColumn && vmPr.questionData.explanation!==''">
     <div id="question-explain" ng-if="vmPr.explanationInfo.showExplanation && vmPr.questionData.explanation!==''">
       <div class="panel" layout-fill>
         <div class="panel-heading">
@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div layout-margin class="sentence_correction_stimulus" ng-if="vmPr.questionData.questionInformation!==''">
+    <div class="sentence_correction_stimulus" ng-if="vmPr.questionData.questionInformation!==''">
       <div class="panel" layout-fill>
         <div class="panel-heading">
           <span class="panel-title"><i class="panel-title-icon fa fa-file-text-o"></i>Information</span>
