@@ -13,14 +13,15 @@
   }
   .bg-icon {
     margin-top: -10px;
-    font-size: 79px;
+    font-size: 65px;
     float: right;
-    right: 55px;
+    margin-right: 45px;
   }
   [class*='close-'] {
     color: #777;
     font: 22px/100% arial, sans-serif;
     position: absolute;
+    color: $white;
     right: 10px;
     text-decoration: none;
     text-shadow: 0 1px 0 #fff;
@@ -109,9 +110,6 @@
   }
   .card-img-top {
     position: relative;
-    // opacity: 0.7;
-    // height: 120px;
-    //overflow: hidden;
   }
   .card-img-top img {
     width: 100%;
@@ -164,46 +162,46 @@
       }
     }
     .card-pink {
-      background-color: #FF5252;
+      background-color: $card-pink;
     }
     .card-teal {
-      background-color: #009688;
+      background-color: $card-teal;
     }
     .card-amber {
-      background-color: #FFC107;
+      background-color: $card-amber;
     }
     .card-green {
-      background: #4CAF50;
+      background: $card-green;
     }
     .card-light-green {
-      background: #8BC34A;
+      background: $card-light-green;
     }
     .card-indigo {
-      background-color: #3F51B5;
+      background-color: $card-indigo;
     }
     .card-lime {
-      background: #C0CA33;
+      background: $card-lime;
     }
     .card-grey {
-      background: #BDBDBD;
+      background: $card-grey;
     }
     .card-red {
-      background: #EF5350;
+      background: $card-red;
     }
     .card-light-cyan {
-      background: #00B8D4;
+      background: $card-cyan;
     }
     .card-blue {
-      background: #2196F3;
+      background: $card-blue;
     }
     .card-blue-grey {
-      background-color: #607D8B;
+      background-color: $card-blue-grey;
     }
     .card-yellow {
-      background-color: #FFC107;
+      background-color: $card-yellow;
     }
     .card-purple {
-      background: #7E57C2;
+      background-color: $card-purple;
     }
   }
 }
@@ -222,65 +220,9 @@
   }
 }
 
-.itemhead {
-  overflow: hidden;
-  position: relative;
-  .questions {
-    cursor: default;
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    background: #d7d7d7;
-    text-align: center;
-    line-height: 50px;
-    z-index: 2;
-    right: 3px;
-    top: 18px;
-    font-size: 12px;
-    span {
-      color: #5a5a5a;
-    }
-  }
-  .questions:hover {
-    background: #00ACC1!important;
-    span {
-      color: #ffffff;
-    }
-  }
-  .main-img {
-    height: 140px!important;
-    margin-top: 6px;
-    opacity: 1;
-  }
-  h2 {
-    margin: 8px;
-    font-weight: 500;
-    font-size: 17px;
-    margin-bottom: 2px;
-  }
-  .subtracks {
-    margin-left: 8px;
-    max-width: 80%;
-    float: left;
-    min-height: 25px;
-    span {
-      font-size: 12px;
-      font-weight: 400;
-      opacity: 0.8;
-    }
-  }
-}
-
-.itemhead:hover .main-img {
-  opacity: 0.8;
-}
 
 .heart {
   cursor: pointer;
-  /* width: 26px; */
-  /* margin-right: 8px; */
-  /* top: 18px; */
-
   padding-top: 11px;
   border-radius: 2px;
 }

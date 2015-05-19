@@ -1,12 +1,12 @@
 
 <div id="dashboard">
   <div id="payment-panel" ng-if="vmDash.showBuyNow" layout="row" layout-margin layout-fill>
-    <div flex class="panel bg-info ">
+    <div flex class="panel blue-grey bg-400  ">
      <a href="javascript:void(0)" class="close-thik" ng-click="vmDash.hidPayment()"></a>
       <a ng-href="{{vmDash.paymentPage}}" target="_blank">
         <div class="panel-body">
           <br>
-          <i class="mdi mdi-2x  mdi-schedule bg-icon"></i>
+          <md-icon class="mdi mdi-2x mdi-schedule bg-icon white-text"></md-icon>
           <h1 ng-bind-html="vmDash.upgradePromptMessage"></h1>
           <br>
           <span class="text-sm"><br></span>

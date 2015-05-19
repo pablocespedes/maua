@@ -191,9 +191,7 @@
 }
 
 #practice {
-  // .md-button {
-  //   padding: 0px;
-  // }
+
   .disable-choice {
     img {
       opacity: 0.2;
@@ -291,29 +289,29 @@
     margin-left: 15px;
     margin-right: 13px;
   }
-  .second-set {
-    margin-left: 13px;
-    margin-right: 13px;
-    background-color: $letterCircle;
-  }
-  button.matrix {
-    display: block;
-    font-size: 14px;
-    padding: 0px 9px !important;
-    border: 2px solid $letterCircle;
-    font-weight: 700;
-    height: 31px;
-    width: 31px;
-  }
-  button.matrixTop {
-    display: block;
-    font-size: 14px;
-    padding: 0px 9px !important;
-    border: 2px solid $letterCircle;
-    font-weight: 700;
-    height: 31px;
-    width: 31px;
-  }
+  // .second-set {
+  //   margin-left: 13px;
+  //   margin-right: 13px;
+  //   background-color: $letterCircle;
+  // }
+  // button.matrix {
+  //   display: block;
+  //   font-size: 14px;
+  //   padding: 0px 9px !important;
+  //   border: 2px solid $letterCircle;
+  //   font-weight: 700;
+  //   height: 31px;
+  //   width: 31px;
+  // }
+  // button.matrixTop {
+  //   display: block;
+  //   font-size: 14px;
+  //   padding: 0px 9px !important;
+  //   border: 2px solid $letterCircle;
+  //   font-weight: 700;
+  //   height: 31px;
+  //   width: 31px;
+  // }
   .empty-space-matrix {
     padding-left: 30px;
   }
@@ -334,12 +332,12 @@
     border-bottom: 1px solid #000;
     border-left: 1px solid #000;
   }
-  button.letter {
-    display: block;
-    position: absolute;
-    font-weight: 600;
-    margin: -13px -3px;
-  }
+  // button.letter {
+  //   display: block;
+  //   position: absolute;
+  //   font-weight: 600;
+  //   margin: -13px -3px;
+  // }
   .expandable-section {
     padding: 10px 10px;
     background-color: #eee;
@@ -348,27 +346,25 @@
   .score-prediction-graph {
     max-width: 400px;
   }
-  .question-explain {
-    background: $questionExplainBg;
-    border-color: #bcbcbc;
-    border: 1px solid $letterCircle;
-    border-radius: 5px;
-    padding: 10px;
-  }
+  // .question-explain {
+  //   background: $questionExplainBg;
+  //   border-color: #bcbcbc;
+  //   border: 1px solid $letterCircle;
+  //   border-radius: 5px;
+  //   padding: 10px;
+  // }
   .explain-margin {
     color: black;
     margin: 2px 4px 2px 2px;
   }
   .answer-correct-panel {
     background: $answerCorrectPanelBg;
-    color: $answerCorrectPanelCol;
     border: 1px solid transparent;
     border-radius: 5px;
     padding: 10px;
   }
   .answer-incorrect-panel {
     background: $lightInvalidGray;
-    color: $invalidRed;
     border: 1px solid transparent;
     border-radius: 5px;
     padding: 10px;
@@ -454,7 +450,6 @@
   margin: 0px auto;
 }
 
-.loader-margin {}
 
 .cloudLoader {
   width: 150px;

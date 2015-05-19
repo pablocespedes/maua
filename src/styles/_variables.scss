@@ -1,15 +1,76 @@
 //
 // You can add/overwrite all your bower_components .sass variables here
 // ----------------------------------------------------------------------------------------------------
+
+
+/*** Colors ***/
+$primary-color: color("blue-grey", "500") !default;
+$primary-color-light: lighten($primary-color, 15%) !default;
+$primary-color-dark: darken($primary-color, 15%) !default;
+$secondary-color: color("teal", "100") !default;
+$success-color: color("green", "500") !default;
+$error-color: color("red", "500") !default;
+$link-color: color("light-blue", "a100") !default;
+
+$validGreen:        #e4f7c9;
+$answerCorrectPanelBg:      #e4f7c9;
+$answerCorrectPanelCol:     #e4f7c9;
+
+$white : color("shades", "white") !default;
+
+
 $invalidRed:        #F44336;
 $lightInvalidGray:      #f2f2f2;
 $lightInvalidRed :          #FF5252;
-$validGreen:        #4CAF50;
 $divisor:                   #5bc0de;
-$letterCircle:              #E3E3DE;
 $questionExplainBg:         #F2F2F2;
-$answerCorrectPanelBg:      #A5D6A7;
-$answerCorrectPanelCol:     #4CAF50;
-$white                :     #ffffff;
 
 
+/*** Global ***/
+// Media Query Ranges
+$small-screen-up: 601px !default;
+$medium-screen-up: 993px !default;
+$large-screen-up: 1201px !default;
+$small-screen: 600px !default;
+$medium-screen: 992px !default;
+$large-screen: 1200px !default;
+
+$small-screen-up: 601px !default;
+$medium-screen-up: 993px !default;
+$large-screen-up: 1201px !default;
+$small-screen: 600px !default;
+$medium-screen: 992px !default;
+$large-screen: 1200px !default;
+
+$medium-and-up: "only screen and (min-width : #{$small-screen-up})" !default;
+$large-and-up: "only screen and (min-width : #{$large-screen-up})" !default;
+$large-and-down: "only screen and (max-width : #{$large-screen})" !default;
+$small-and-down: "only screen and (max-width : #{$small-screen})" !default;
+$medium-and-down: "only screen and (max-width : #{$medium-screen})" !default;
+$medium-only: "only screen and (min-width : #{$small-screen-up}) and (max-width : #{$medium-screen})" !default;
+/*** Buttons ***/
+
+
+/*** Cards ***/
+$card-red: color("red", "400") !default;
+$card-pink: color("pink", "500") !default;
+$card-purple: color("purple", "500") !default;
+$card-deep-purple: color("deep-purple", "400") !default;
+$card-indigo: color("indigo", "400") !default;
+$card-blue: color("blue", "400") !default;
+$card-light-blue: color("light-blue", "400") !default;
+$card-cyan: color("cyan", "400") !default;
+$card-teal: color("teal", "400") !default;
+$card-green: color("green", "400") !default;
+$card-light-green: color("light-green", "400") !default;
+$card-lime: color("lime", "400") !default;
+$card-yellow: color("yellow", "400") !default;
+$card-amber: color("amber", "400") !default;
+$card-orange: color("orange", "400") !default;
+$card-deep-orange: color("deep-orange", "400") !default;
+$card-brown: color("brown", "400") !default;
+$card-blue-grey: color("blue-grey", "400") !default;
+$card-grey: color("grey", "400") !default;
+
+
+/*** SideNav ***/

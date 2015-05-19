@@ -1,0 +1,24 @@
+@media #{$medium-and-up} {
+
+}
+@media #{$large-and-up} {
+  #video-content{
+    height: 800px;
+  }
+}
+@media #{$large-and-down} {
+#video-content{
+    height: 800px;
+  }
+}
+
+@media #{$small-and-down} {
+
+}
+@media #{$medium-and-down} {
+
+}
+@media #{$medium-only} {
+
+}
+

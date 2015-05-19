@@ -11,7 +11,7 @@ alert = ($mdToast) ->
       .hideDelay(9000)
       .position('top right')
       if angular.isDefined callback
-         $mdToast.show(@toast).then callback
+        $mdToast.show(@toast).then callback
       else
         $mdToast.show(@toast)
 

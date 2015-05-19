@@ -1,6 +1,6 @@
+@import "colors";
 @import "variables";
 @import "imports";
-@import "colors";
 @import "grockit";
 @import "../modules/app/account/register/register.scss";
 @import "../modules/app/account/login/login.scss";
@@ -8,6 +8,7 @@
 @import "../modules/app/practices/practice.scss";
 @import "../modules/app/history/history.scss";
 @import "../modules/app/video-library/video-library.scss";
+@import "media-queries";
 html {
   font-size: 56.5%;
   line-height: 1.1;
@@ -141,9 +142,6 @@ a {
   color: inherit;
 }
 
-// .menu-header {
-//   background-color: #607D8B!important;
-// }
 .menu-title {
   position: absolute;
   bottom: 12px;

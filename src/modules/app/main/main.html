@@ -2,7 +2,7 @@
   <md-toolbar id="main-toolbar" class="md-whiteframe-z1">
     <div class="md-toolbar-tools">
       <md-button class="md-icon-button" aria-label="Menu">
-        <md-icon class="mdi mdi-menu mdi-2x white" ng-click="appCtrl.toggleList()" aria-label="Menu"></md-icon>
+        <md-icon class="mdi mdi-menu mdi-2x" ng-click="appCtrl.toggleList()" aria-label="Menu"></md-icon>
       </md-button>
       <span>
            <a ui-sref="dashboard({subject: appCtrl.activeGroupId})">
@@ -20,39 +20,18 @@
       </md-select>
       <span flex></span>
       <md-button class="md-icon-button" aria-label="Settings">
-        <md-icon ng-if="appCtrl.showBuyNow" class="mdi mdi-2x mdi-schedule white" ng-click="appCtrl.showPaymentBanner()"></md-icon>
+        <md-icon ng-if="appCtrl.showBuyNow" class="mdi mdi-2x mdi-schedule" ng-click="appCtrl.showPaymentBanner()"></md-icon>
       </md-button>
       <!-- <label class="pointer" ng-click="appCtrl.displayMenu()">{{appCtrl.currentUser.firstName}}</label> -->
       <img class="md-fab md-primary round-img pointer" ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="User Picture" ng-click="appCtrl.displayMenu()" />
     </div>
   </md-toolbar>
-<!--   <div id="main-toolbar" layout="row">
-    <md-toolbar class="md-whiteframe-z1">
-      <div class="md-toolbar-tools">
-        <div flex="" class="fill-height">
-          <md-icon class="mdi mdi-menu mdi-2x white" ng-click="appCtrl.toggleList()" aria-label="Menu"></md-icon>
-          <h2>
-          <span>
-           <a ui-sref="dashboard({subject: appCtrl.activeGroupId})">
-          <img alt="Grockit" style="height: 38px; margin-top: 10px;" src="assets/images/header-logo-beta.png" />
-          </a>
-          </span>
-          </h2>
-          <span flex=""></span>
-          <md-icon ng-if="appCtrl.showBuyNow" class="mdi mdi-2x mdi-schedule" ng-click="appCtrl.showPaymentBanner()"></md-icon>
-          &nbsp;
-          <label class="pointer" ng-click="appCtrl.displayMenu()">{{appCtrl.currentUser.firstName}}</label>
-          <img class="md-fab md-primary round-img pointer" ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="User Picture" ng-click="appCtrl.displayMenu()" />
-        </div>
-      </div>
-    </md-toolbar>
-  </div> -->
   <div flex layout="row">
     <md-sidenav id="main-menu" md-component-id="left">
       <md-toolbar class="md-tall md-hue-2  menu-header">
         <span flex></span>
         <div layout="column" class="md-toolbar-tools-bottom inset">
-          <md-icon class="menu-toggle md md-arrow-back md-2x white" ng-click="appCtrl.closeMainMenu()"></md-icon>
+          <md-icon class="menu-toggle mdi mdi-arrow-back mdi-2x" ng-click="appCtrl.closeMainMenu()"></md-icon>
           <h2 class="md-toolbar-tools md-toolbar-tools-bottom menu-title">{{$root.groupTitle}} {{$root.currentPage}}</h2>
           <span></span>
         </div>
