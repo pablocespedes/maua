@@ -24,6 +24,7 @@ body {
 .mdi {
   vertical-align: middle;
 }
+
 #intercom-container .intercom-launcher {
   bottom: 70px!important;
 }
@@ -202,14 +203,14 @@ md-option > .md-text > .product-icon {
   width: inherit!important;
 }
 
+.md-select-label:first-child span {
+  line-height: 2.2rem!important;
+}
+
 #main-toolbar {
   .md-toolbar-tools {
-    .md-select-label:first-child span{
-      line-height: 2.2rem!important;
-    }
     margin-top: -8px;
-    md-select,
-    h2 {
+    md-select, h2 {
       margin-left: 16px;
     }
     md-icon {
