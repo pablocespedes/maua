@@ -94,7 +94,7 @@ dashboardService = ($q,resource,utilities)->
     getAvailableCss:()->
       clasess = [
                  'card-purple'
-                 'card-pink',
+                 'card-red-light',
                  'card-teal',
                  'card-green',
                  'card-grey',

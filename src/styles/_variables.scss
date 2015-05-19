@@ -52,20 +52,21 @@ $medium-only: "only screen and (min-width : #{$small-screen-up}) and (max-width 
 
 
 /*** Cards ***/
-$card-red: color("red", "400") !default;
+$card-red-a200: color("red", "400") !default;
+$card-red-400: color("red", "400") !default;
 $card-pink: color("pink", "500") !default;
-$card-purple: color("purple", "500") !default;
+$card-purple: color("purple", "400") !default;
 $card-deep-purple: color("deep-purple", "400") !default;
-$card-indigo: color("indigo", "400") !default;
-$card-blue: color("blue", "400") !default;
-$card-light-blue: color("light-blue", "400") !default;
-$card-cyan: color("cyan", "400") !default;
+$card-indigo: color("indigo", "500") !default;
+$card-blue: color("blue", "500") !default;
+$card-light-blue: color("light-blue", "500") !default;
+$card-cyan: color("cyan", "a700") !default;
 $card-teal: color("teal", "400") !default;
-$card-green: color("green", "400") !default;
-$card-light-green: color("light-green", "400") !default;
-$card-lime: color("lime", "400") !default;
+$card-green: color("green", "500") !default;
+$card-light-green: color("light-green", "500") !default;
+$card-lime: color("lime", "600") !default;
 $card-yellow: color("yellow", "400") !default;
-$card-amber: color("amber", "400") !default;
+$card-amber: color("amber", "500") !default;
 $card-orange: color("orange", "400") !default;
 $card-deep-orange: color("deep-orange", "400") !default;
 $card-brown: color("brown", "400") !default;
