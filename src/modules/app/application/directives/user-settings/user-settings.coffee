@@ -20,14 +20,13 @@ userSettings = (questionTiming,utilities)->
         scope.timerSetting.minutes = time.minutes
 
       scope.questionCheck =
-        if utilities.existy(time) then true else false
+        if utilities.existy(time) and time.minutes > 0  then true else false
+
+      scope.onChange = (timeStatus)->
+        questionTiming.resetTime(timeStatus,scope.timerSetting)
 
       scope.$watch 'timerSetting.minutes', (val)->
         questionTiming.updateTime(scope.questionCheck,scope.timerSetting,val)
-
-      scope.$watch 'questionCheck', (val)->
-        questionTiming.resetTime(val,scope.timerSetting)
-
 
 userSettings.$inject = ['questionTiming','utilities']
 module.exports = userSettings

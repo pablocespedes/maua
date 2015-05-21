@@ -12,15 +12,13 @@ questionTiming = ->
       @get('questionTiming')
 
     updateTime:(questionCheck,timerSetting, newtime)->
-      if !questionCheck
-        timerSetting.minutes = 0
-      else
-        timerSetting.minutes = newtime
+      timerSetting.minutes = newtime
       @saveTime timerSetting
 
     resetTime:(questionCheck,timerSetting)->
+      console.log questionCheck,timerSetting
       if !questionCheck
         timerSetting.minutes = 0
-
+        @saveTime(timerSetting)
 
 module.exports = questionTiming
