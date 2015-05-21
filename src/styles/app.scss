@@ -213,14 +213,15 @@ md-option > .md-text > .product-icon {
     }
     md-icon {
       cursor: pointer;
-      -webkit-transition: all 200ms ease;
-      transition: all 200ms ease
+      -webkit-transition: all 300ms ease;
+      transition: all 300ms ease
     }
-    md-icon:hover {
-      -webkit-transform: rotate(360deg);
-      -ms-transform: rotate(360deg);
-      transform: rotate(360deg)
-    }
+    // md-icon:hover {
+    //   margin-top:0px;
+    //   -webkit-transform: rotate(360deg);
+    //   -ms-transform: rotate(360deg);
+    //   transform: rotate(360deg)
+    // }
     .round-img {
       border-radius: 30px;
       width: 34px;
@@ -268,7 +269,7 @@ footer {
 }
 
 .push {
-  height: 190px;
+  height: 330px;
 }
 
 .hide-footer {
