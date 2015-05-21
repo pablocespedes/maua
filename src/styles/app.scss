@@ -328,6 +328,7 @@ footer {
 .ui-view-container {
   position: relative;
   background-color: #f6f6f6!important;
+  min-height: 990px;
 }
 
 [ui-view].ng-enter,
