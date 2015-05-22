@@ -12,9 +12,9 @@
     </div>
   </div>
   <div class="tl-entry" ng-repeat="roundSession in roundSessions" ng-hide="isCollapsed">
-    <div ng-if="roundSession.outcome === 'correct'" class="tl-icon teal-bg"><i class="fa fa-check white-text"></i></div>
-    <div ng-if="roundSession.outcome === 'incorrect'" class="tl-icon red-bg"><i class="fa fa-times white-text"></i></div>
-    <div ng-if="roundSession.outcome !== 'correct' && roundSession.outcome !== 'incorrect'" class="tl-icon bg-default"><i class="fa fa-minus"></i></div>
+    <div ng-if="roundSession.outcome === 'correct'" class="tl-icon teal-bg"><i class="mdi mdi-check white-text"></i></div>
+    <div ng-if="roundSession.outcome === 'incorrect'" class="tl-icon red-bg"><i class="mdi mdi-clear white-text"></i></div>
+    <div ng-if="roundSession.outcome !== 'correct' && roundSession.outcome !== 'incorrect'" class="tl-icon bg-default"><i class="mdi mdi-remove"></i></div>
     <div class="panel tl-body">
       <div class="pull-right text-center answer-time">
         <i class="mdi mdi-alarm md-1x"></i>

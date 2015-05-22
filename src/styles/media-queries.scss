@@ -9,7 +9,7 @@
     bottom: 100px!important;
   }
   .footer, .push {
-    height: 80px; /* .push must be the same height as .footer */
+    height: 80px;
 
   }
 }
@@ -25,6 +25,11 @@
 @media #{$small-and-down} {
   #intercom-container .intercom-launcher {
     bottom: 85px!important;
+  }
+  .footer, .push {
+    height: 80px;
+    line-height: 6px;
+
   }
 }
 @media #{$medium-and-down} {

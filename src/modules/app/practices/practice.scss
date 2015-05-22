@@ -202,6 +202,11 @@
   min-height: 100%;
   height: 100%;
   margin-bottom: 155px;
+
+  .wrap-button-word{
+    white-space: normal;
+  }
+
   .disable-choice {
     img {
       opacity: 0.2;

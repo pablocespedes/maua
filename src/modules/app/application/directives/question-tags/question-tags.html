@@ -1,11 +1,11 @@
 <div layout="row" style="text-align: left; display: inline">
   <span ng-repeat="tr in tags">
-  <md-button ng-if="tr.resource_type == 'youtube'" class="md-raised md-primary" youtube="" rel="{{tr.resource}}">
+  <md-button ng-if="tr.resource_type == 'youtube'" class="md-raised md-primary wrap-button-word" youtube="" rel="{{tr.resource}}">
  <span>
- <span class="btn-label icon md md-play-circle-outline md-2x"></span> {{tr.name}} Refresher {{$index+1}} </span>
+ <span class="btn-label icon mdi mdi-play-circle-outline mdi-2x"></span> {{tr.name}} Refresher {{$index+1}} </span>
   </md-button>
-  <md-button ng-if="tr.resource_type == 'blog'" ng-href="{{tr.resource}}" target="_blank" class="md-raised md-primary">
-   <span><span class="btn-label icon fa  fa-quote-left"></span> {{tr.name}} Refresher {{$index+1}}</span>
+  <md-button ng-if="tr.resource_type == 'blog'" ng-href="{{tr.resource}}" target="_blank" class="md-raised md-primary wrap-button-word">
+   <span><span class="btn-label icon mdi mdi-format-quote mdi-flip-horizontal"></span> {{tr.name}} Refresher {{$index+1}}</span>
   </md-button>
   </span>
 </div>
