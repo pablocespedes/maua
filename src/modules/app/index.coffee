@@ -30,6 +30,8 @@ module.exports = angular.module('grockitApp', [
   require('./question-view/index').name
   require('./video-library/index').name
   require('./payments/index').name
+  require('./question-of-day/index').name
+  require('./kap-test-starter/index').name
 ]).run run
 
 run.$inject = [
