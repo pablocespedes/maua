@@ -82,7 +82,7 @@
                 <span class="practice-data" ng-bind="vmPr.questionTimer.seconds | formatSeconds"></span>
             </div>
             <div flex ng-if="!vmPr.loading" class="confirm-panel">
-                <md-button id="skipAction" ng-click="vmPr.revealExplanation()">Don't know? See answer.</md-button>&nbsp;
+                <md-button id="skipAction" ng-click="vmPr.revealExplanation()">Don't know? See answer.</md-button>
                 <md-button id="nextAction" class="md-primary md-raised" ng-disabled="vmPr.isDisabled" ng-click="vmPr.nextAction()" ng-bind="vmPr.nextActionTitle" aria-label="{{vmPr.nextActionTitle}}">
                 </md-button>
             </div>

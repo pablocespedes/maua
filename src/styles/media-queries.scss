@@ -6,7 +6,11 @@
     height: 800px;
   }
   #intercom-container .intercom-launcher {
-    bottom: 170px!important;
+    bottom: 100px!important;
+  }
+  .footer, .push {
+    height: 80px; /* .push must be the same height as .footer */
+
   }
 }
 @media #{$large-and-down} {
