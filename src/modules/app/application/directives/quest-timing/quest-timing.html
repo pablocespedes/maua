@@ -146,10 +146,10 @@
   </div>
   <div flex>
     <div class="panel panel-red">
-      <div class="panel-heading timing-box no-padding">
+      <div class="panel-heading timing-box no-padding answer-status-tm" ng-class="{ 'red-bg':!answerStatus, 'teal-bg':answerStatus}">
         <div layout="row">
           <div flex class=" text-right ">
-            <div ng-class="{ 'red-bg':!answerStatus, 'teal-bg':answerStatus}" ng-if="confirmed"
+            <div  ng-if="confirmed"
               class="timing-check text-center text-slg no-padding-vr">
               <i ng-if="!answerStatus" class="mdi mdi-close mdi-3x abs-center white-text"></i>
               <i ng-if="answerStatus" class="mdi mdi-check mdi-3x abs-center white-text"></i>

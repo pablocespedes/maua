@@ -5,15 +5,23 @@
   #video-content{
     height: 800px;
   }
+  #intercom-container .intercom-launcher {
+    bottom: 170px!important;
+  }
 }
 @media #{$large-and-down} {
-#video-content{
+  #video-content{
     height: 800px;
+  }
+  #intercom-container .intercom-launcher {
+    bottom: 170px!important;
   }
 }
 
 @media #{$small-and-down} {
-
+  #intercom-container .intercom-launcher {
+    bottom: 85px!important;
+  }
 }
 @media #{$medium-and-down} {
 
