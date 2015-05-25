@@ -12,6 +12,9 @@
     height: 80px;
 
   }
+  .confirm-panel {
+    text-align: right;
+  }
 }
 @media #{$large-and-down} {
   #video-content{
@@ -19,6 +22,9 @@
   }
   #intercom-container .intercom-launcher {
     bottom: 170px!important;
+  }
+  .confirm-panel {
+    text-align: right;
   }
 }
 
@@ -28,12 +34,15 @@
     right: 2px!important;
   }
   .footer, .push {
-    height: 160px;
-    line-height: 4px;
+    height: 120px;
+    line-height: 6px;
 
   }
   .md-title, .md-toolbar-tools{
     font-size: 15px!important;
+  }
+  .confirm-panel {
+    text-align: center;
   }
 }
 @media #{$medium-and-down} {
