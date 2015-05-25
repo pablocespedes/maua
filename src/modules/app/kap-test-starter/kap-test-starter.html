@@ -1,120 +1,130 @@
 <style type="text/css" media="screen">
 #kap-toolbar .logo {
-    margin-top: 55px;
-    margin-left: 10px;
+  margin-top: 55px;
+  margin-left: 10px;
 }
 
 .footer-kap {
-    text-align: center;
-    min-height: 190px;
-    height: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
+  text-align: center;
+  min-height: 190px;
+  height: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .footer-kap p {
-    margin: 0 0 10px;
+  margin: 0 0 10px;
 }
 
-#kap-base-panel  {
-    height: 180px!important;
+#kap-base-panel {
+  height: 180px!important;
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+  background: #f1f1f1;
 }
 
 #kap-base-panel .confirm-panel {
   text-align: center;
 }
 </style>
-<md-toolbar id="kap-toolbar" md-theme="kapTheme" class="md-tall md-whiteframe-z1">
+<div >
+  <md-toolbar id="kap-toolbar" md-theme="kapTheme" class="md-tall md-whiteframe-z1">
     <div class="md-toolbar-tools ">
-        <h3>
+      <h3>
         <span><img src="http://goto.grockit.com/kaplan/quizzes/images/logo.png" alt="" class="logo"></span>
       </h3>
     </div>
-</md-toolbar>
-<md-content layout-padding class="md-accent" style="height: 600px;padding: 24px;">
-    <div id="practice" ng-show="!vmPr.loading" layout="row" layout-sm="column" layout-fill layout-wrap>
+  </md-toolbar>
+  <div flex layout="row">
+    <md-content flex class="ui-view-container">
+      <div id="practice" ng-show="!vmPr.loading" layout="row" layout-sm="column" layout-fill layout-wrap>
         <div id="Panel1" flex layout-fill layout-padding layout-align="start center" ng-if="vmPr.questionData.setLayoutOneColumn && vmPr.questionData.explanation!==''">
-            <div id="question-explain" ng-if="vmPr.explanationInfo.showExplanation && vmPr.questionData.explanation!==''">
-                <div class="panel" layout-fill>
-                    <div class="panel-heading">
-                        <span class="panel-title"><i class="panel-title-icon fa fa-folder-open"></i>Explanation</span>
-                    </div>
-                    <div class="panel-body">
-                        <span ng-bind-html='vmPr.explanationInfo.questionExplanation'></span>
-                        <div id="videoExplain" ng-if="vmPr.videoInfo.showVideo">
-                            <br>
-                            <div class="video-container">
-                                <button youtube rel="{{vmPr.videoInfo.videoId}}" class="btn btn-flat btn-labeled btn-primary" id="videoExplainbtn">
-                                    <span class="btn-label text-lg icon mdi md-play-shopping-bag"></span><span ng-bind="vmPr.videoInfo.videoText"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+          <div id="question-explain" ng-if="vmPr.explanationInfo.showExplanation && vmPr.questionData.explanation!==''">
+            <div class="panel" layout-fill>
+              <div class="panel-heading">
+                <span class="panel-title"><i class="panel-title-icon fa fa-folder-open"></i>Explanation</span>
+              </div>
+              <div class="panel-body">
+                <span ng-bind-html='vmPr.explanationInfo.questionExplanation'></span>
+                <div id="videoExplain" ng-if="vmPr.videoInfo.showVideo">
+                  <br>
+                  <div class="video-container">
+                    <button youtube rel="{{vmPr.videoInfo.videoId}}" class="btn btn-flat btn-labeled btn-primary" id="videoExplainbtn">
+                      <span class="btn-label text-lg icon mdi md-play-shopping-bag"></span><span ng-bind="vmPr.videoInfo.videoText"></span>
+                    </button>
+                  </div>
                 </div>
+              </div>
             </div>
-            <div class="sentence_correction_stimulus" ng-if="vmPr.questionData.questionInformation!==''">
-                <div class="panel" layout-fill>
-                    <div class="panel-heading">
-                        <span class="panel-title"><i class="panel-title-icon fa fa-file-text-o"></i>Information</span>
-                    </div>
-                    <div class="panel-body">
-                        <div class="question-information" ng-class="{'fixed-width': vmPr.questionData.fixedWidth}" ng-bind-html='vmPr.questionData.questionInformation'></div>
-                    </div>
-                </div>
+          </div>
+          <div class="sentence_correction_stimulus" ng-if="vmPr.questionData.questionInformation!==''">
+            <div class="panel" layout-fill>
+              <div class="panel-heading">
+                <span class="panel-title"><i class="panel-title-icon fa fa-file-text-o"></i>Information</span>
+              </div>
+              <div class="panel-body">
+                <div class="question-information" ng-class="{'fixed-width': vmPr.questionData.fixedWidth}" ng-bind-html='vmPr.questionData.questionInformation'></div>
+              </div>
             </div>
+          </div>
         </div>
         <div id="Panel2" flex layout-fill layout-padding layout-align="start center">
-            <div class="panel" layout-fill>
-                <div class="panel-heading">
-                    <span class="panel-title">
+          <div class="panel" layout-fill>
+            <div class="panel-heading">
+              <span class="panel-title">
           <i class="panel-title-icon fa fa-flask"></i>Question</span>
-                </div>
-                <div class="panel-body">
-                    <div id="answercontent" class="info-box">
-                        <div id="solutionarea">
-                            <span ng-bind="vmPr.questionData.questPosition"></span>
-                            <div ng-bind-html='vmPr.questionData.stimulus'></div>
-                            <br>
-                            <!--answer-->
-                            <div ng-class="{ 'has-error' : !vmPr.isValid }">
-                                <span class="help-block" ng-if="!vmPr.isValid">{{vmPr.invalidMessage}}</span>
-                                <div id="answerType" ng-include="vmPr.answerType"></div>
-                            </div>
-                        </div>
-                        <md-chips ng-show="vmPr.explanationInfo.showExplanation">
-                            <md-chip ng-repeat="tag in vmPr.explanationInfo.tags" class="skill-label label-info">{{tag.name}}</md-chip>
-                        </md-chips>
-                    </div>
-                </div>
             </div>
-            <div ng-if="vmPr.explanationInfo.showExplanation && vmPr.explanationInfo.tagsResources.length>0" class="panel timing-padding" layout-fill>
-                <div class="panel-heading">
-                    <span class="panel-title"><i class="panel-title-icon fa fa-folder-open"></i>Skills to Review
+            <div class="panel-body">
+              <div id="answercontent" class="info-box">
+                <div id="solutionarea">
+                  <span ng-bind="vmPr.questionData.questPosition"></span>
+                  <div ng-bind-html='vmPr.questionData.stimulus'></div>
+                  <br>
+                  <!--answer-->
+                  <div ng-class="{ 'has-error' : !vmPr.isValid }">
+                    <span class="help-block" ng-if="!vmPr.isValid">{{vmPr.invalidMessage}}</span>
+                    <div id="answerType" ng-include="vmPr.answerType"></div>
+                  </div>
+                </div>
+                <md-chips ng-show="vmPr.explanationInfo.showExplanation">
+                  <md-chip ng-repeat="tag in vmPr.explanationInfo.tags" class="skill-label label-info">{{tag.name}}</md-chip>
+                </md-chips>
+              </div>
+            </div>
+          </div>
+          <div ng-if="vmPr.explanationInfo.showExplanation && vmPr.explanationInfo.tagsResources.length>0" class="panel timing-padding" layout-fill>
+            <div class="panel-heading">
+              <span class="panel-title"><i class="panel-title-icon fa fa-folder-open"></i>Skills to Review
             </span>
-                </div>
-                <div class="panel-body no-padding-vr">
-                    <div question-tags tags="vmPr.explanationInfo.tagsResources"></div>
-                </div>
             </div>
+            <div class="panel-body no-padding-vr">
+              <div question-tags tags="vmPr.explanationInfo.tagsResources"></div>
+            </div>
+          </div>
         </div>
-    </div>
-</md-content>
-<div id="kap-base-panel" class="footer md-whiteframe-z2">
-    <div layout="row" layout-padding layout-align="center center">
-        <div flex ng-if="!vmPr.loading" class="confirm-panel">
-            <md-button id="nextAction" class="md-primary md-raised"  ng-click="vmPr.nextAction()" ng-bind="vmPr.nextActionTitle" aria-label="{{vmPr.nextActionTitle}}">
+      </div>
+
+    </md-content>
+
+  </div>
+    <div id="kap-base-panel" class="md-whiteframe-z2">
+        <div layout="row" layout-padding layout-align="center center">
+          <div flex ng-if="!vmPr.loading" class="confirm-panel">
+            <md-button id="nextAction" class="md-primary md-raised" ng-click="vmPr.nextAction()" ng-bind="vmPr.nextActionTitle" aria-label="{{vmPr.nextActionTitle}}">
             </md-button>
+          </div>
         </div>
-    </div>
-    <div class="footer-kap">
-        <p>
+        <div class="footer-kap">
+          <p>
             MCAT® is a registered trademark of the Association of American Medical Colleges. Test names and other trademarks are the property of the respective trademark holders. None of the trademark holders are affiliated with Kaplan or this website.
-        </p>
-        Kaplan | 395 Hudson Street, 3rd Floor | New York, NY 10014
-        <br> © Kaplan Inc. All Rights Reserved.
-        <br>
-        <a href="http://www.kaptest.com/assets/content/popup/privacy-policy.html" target="_blank">Terms of Use</a>
-    </div>
+          </p>
+          Kaplan | 395 Hudson Street, 3rd Floor | New York, NY 10014
+          <br> © Kaplan Inc. All Rights Reserved.
+          <br>
+          <a href="http://www.kaptest.com/assets/content/popup/privacy-policy.html" target="_blank">Terms of Use</a>
+        </div>
+      </div>
 </div>
