@@ -36,10 +36,13 @@ errorHandler =  (alert,utilities)->
 
 
     validateErrorType:(rejection, actionText)->
-      actionText = if rejection.status is 403 then 'Upgrade' else actionText
-
       message = getMessage(rejection.status)
-      alert.sendError message, (actionText || 'Ok'), utilities.upgradeRedirect
+      if rejection.status is 403
+        actionText = 'Upgrade'
+        alert.sendError message, (actionText || 'Ok'),utilities.upgradeRedirect
+      else
+        alert.sendError message, (actionText || 'Ok')
+
 
 errorHandler.$inject = ['alert','utilities']
 module.exports = errorHandler
