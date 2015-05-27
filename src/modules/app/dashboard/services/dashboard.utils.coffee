@@ -86,7 +86,6 @@ dashboardService = ($q,resource,utilities,learnContent)->
           @getRandCss(result,cardCssCopy)
 
       @dashboardData.smart_practice.items = smartPracticeItems
-      console.log @dashboardData.smart_practice
       @dashboardData.smart_practice
 
     getChallenge : ->
@@ -101,8 +100,8 @@ dashboardService = ($q,resource,utilities,learnContent)->
                  'card-red-light',
                  'card-teal',
                  'card-green',
-                 'card-grey',
-                 'card-blue-grey',
+                 'card-orange',
+                 'card-light-blue',
                  'card-indigo',
                  'card-amber',
                  'card-red',

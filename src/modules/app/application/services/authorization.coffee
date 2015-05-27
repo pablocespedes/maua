@@ -11,6 +11,8 @@ authorization = ($window,$cookies)->
       @cachedUser = undefined
       @userInfo = "userInfo"
       @userToken = "userToken"
+      @paymentBannerInfo = 'paymentBanner'
+      @questionTimingInfo = 'questionTiming'
 
     existy:(x)->
       return x != null and x != 'null' and x != undefined and x != 'undefined'
@@ -55,6 +57,8 @@ authorization = ($window,$cookies)->
     removeUser: ->
       @cachedUser = null
       @remove @userInfo
+      @remove @paymentBannerInfo
+      @remove @questionTimingInfo
 
 authorization.$inject = ['$window','$cookies']
 module.exports = authorization
