@@ -1,6 +1,6 @@
 Storage =require('../../application/services/_storage')
 
-dashboardService = ($q,resource,utilities)->
+dashboardService = ($q,resource,utilities,learnContent)->
   new class DashboardService extends Storage
 
     #allows multiple classes to be extend
@@ -13,6 +13,7 @@ dashboardService = ($q,resource,utilities)->
     constructor: ->
       super()
       @dashboardData = null
+      @learnData = null
       @groupId = null
 
     getDashboard :(groupId) ->
@@ -21,9 +22,12 @@ dashboardService = ($q,resource,utilities)->
     setDashboardData : (groupId) ->
       deferred = $q.defer()
       @groupId = groupId
-      @getDashboard(groupId).then (result) =>
+      promises = $q.all [@getDashboard(@groupId),
+      learnContent.getLearnData().$promise]
+      promises.then (result) =>
+        @learnData = _.filter result[1], groupId:@groupId
         @dashboardData = null
-        @dashboardData = result.data.dashboard
+        @dashboardData = result[0].data.dashboard
         deferred.resolve true
       deferred.promise
 
@@ -59,7 +63,7 @@ dashboardService = ($q,resource,utilities)->
         # else
         #   currentCard.position = index
         #   currentCard.favorite = false
-
+        result.learnLink = @getLearnLink(result.id)
         result.position = index#currentCard.position
         #result.favorite = currentCard.favorite
         result.getScore = @_getScore(result)
@@ -81,8 +85,8 @@ dashboardService = ($q,resource,utilities)->
         else
           @getRandCss(result,cardCssCopy)
 
-
       @dashboardData.smart_practice.items = smartPracticeItems
+      console.log @dashboardData.smart_practice
       @dashboardData.smart_practice
 
     getChallenge : ->
@@ -132,8 +136,14 @@ dashboardService = ($q,resource,utilities)->
         {'position': item.position, 'id':item.id, 'favorite': item.favorite }
       @save('cards_'+@groupId,cards)
 
+    getLearnLink:(id)->
+      learnData = _.find @learnData, (data)->
+        return data.id is id
+      if utilities.existy(learnData) then learnData.link else ''
 
 
 
-dashboardService.$inject = ['$q','resource','utilities']
+
+
+dashboardService.$inject = ['$q','resource','utilities','learnContent']
 module.exports = dashboardService

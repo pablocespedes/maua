@@ -10,5 +10,6 @@ module.exports = angular.module('grockitApp.dashboard', [])
       return
 .directive 'trackList', require('./directives/track-list/track-list')
 .directive 'challenge', require('./directives/challenge/challenge')
+.factory 'learnContent', require('./services/learn.content')
 .factory 'dashboardService', require('./services/dashboard.utils')
 .controller 'DashboardController', require('./dashboard.controller')
