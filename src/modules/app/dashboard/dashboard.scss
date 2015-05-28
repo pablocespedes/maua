@@ -121,9 +121,16 @@
     z-index: 10;
     margin-right: 8px;
     border-top: 1px solid rgba(0, 0, 0, 0.12);
-    md-button, button {
-      padding: 0!important;
-    }
+    // md-button, button {
+    //   padding: 0!important;
+    // }
+  }
+  .card-icon {
+    border-left: 1px solid #edecec;
+    padding: 0px!important;
+    margin: 0px -8px 0px 15px;
+    padding-bottom: 8px!important;
+    min-width: 50px;
   }
   .btn-float {
     z-index: 9999;
@@ -194,7 +201,7 @@
     .card-blue {
       background: $card-blue;
     }
-    .card-light-blue{
+    .card-light-blue {
       background-color: $card-light-blue;
     }
     .card-yellow {
@@ -219,7 +226,6 @@
     margin-left: -15px;
   }
 }
-
 
 .heart {
   cursor: pointer;

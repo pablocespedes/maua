@@ -32,18 +32,20 @@ dashboardService = ($q,resource,utilities,learnContent)->
       deferred.promise
 
     getScorePrediction : ->
-      scoreData = {}
       scoreResponse = @dashboardData.score_prediction
-
+      scoreData = {}
       scoreData.tracks = scoreResponse.tracks
       scoreData.totalScore = if scoreResponse.total_score != null
       then scoreResponse.total_score else 0
-
       scoreData.incomplete = scoreResponse.incomplete
       if scoreResponse.range != null and !_.isEmpty(scoreResponse.range)
         scoreData.rangeExist = true
-
-      history
+        scoreData.rangeInit = scoreResponse.range[0]
+        scoreData.rangeEnd = scoreResponse.range[1]
+      else
+        scoreData.rangeExist = false
+      console.log scoreData
+      scoreData
 
     getSmartPractice : ->
       accuracy = null
@@ -69,7 +71,7 @@ dashboardService = ($q,resource,utilities,learnContent)->
         result.getScore = @_getScore(result)
         result.hasScore = @_getScore(result) != null and
          @_getScore(result) > 0
-
+        console.log result
         subtracks = _.forEach result.items, (subtrack,index) ->
           accuracy = (subtrack.total_questions_answered_correctly /
             (subtrack.total_questions_answered * 100))

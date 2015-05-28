@@ -1,5 +1,5 @@
 
-trackList = ($mdDialog,dashboardService)->
+trackList = ($mdDialog,dashboardService,utilities)->
   new class TrackList
     constructor: () ->
     restrict: 'AE'
@@ -13,7 +13,8 @@ trackList = ($mdDialog,dashboardService)->
       titles: '='
     link: (scope, element, attr) ->
       overlayTrack = null
-      scope.shouldShowOverlay = (track) ->
+
+      scope.shouldShowScore = (track) ->
         if track.hasScore
           false
         else if overlayTrack == null
@@ -27,7 +28,7 @@ trackList = ($mdDialog,dashboardService)->
          track.items.length > 0 then true else false
 
       scope.getYourScorePredictionUrl = (track) ->
-        baseUrl = utilities.originalGrockit(false).url
+        baseUrl = utilities.originalGrockit(false)
         utilities.redirect baseUrl + '/assessment/for_track/' + track.id
 
       scope.setFavorite = (track)->
@@ -58,5 +59,5 @@ trackList = ($mdDialog,dashboardService)->
         return
 
 
-trackList.$inject = ['$mdDialog','dashboardService']
+trackList.$inject = ['$mdDialog','dashboardService','utilities']
 module.exports = trackList

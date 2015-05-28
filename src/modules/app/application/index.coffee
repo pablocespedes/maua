@@ -22,6 +22,7 @@ module.exports = angular.module('grockitApp.app', [])
 .factory 'groups', require('./services/groups')
 .factory 'membership', require('./services/membership')
 .factory 'payBanner', require('./services/banner.payments')
+.factory 'scoreNotifier', require('./services/score.notifier')
 .filter 'formatSeconds', require('./filters/formatSeconds')
 .filter 'truncate', require('./filters/truncate')
 .filter 'date', require('./filters/date')
@@ -33,6 +34,6 @@ module.exports = angular.module('grockitApp.app', [])
 .directive 'questionTags', require('./directives/question-tags/question-tags')
 .directive 'questionTiming', require('./directives/quest-timing/quest-timing')
 .directive 'userSettings', require('./directives/user-settings/user-settings')
-
+.directive 'scorePrediction', require('./directives/score/score')
 
 

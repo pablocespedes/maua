@@ -3,7 +3,8 @@
 class DashboardController
   # Services injected into the controller constructor
   constructor: ($scope,$state,$auth,@product,@authorization,
-    @dashboardService, @utilities,@membership,@userNotify,@payBanner) ->
+    @dashboardService, @utilities,@membership,@userNotify,@payBanner,
+    @scoreNotifier) ->
     @utilities.currentPage 'Dashboard'
     @state=$state
     @userObserver = null
@@ -85,8 +86,8 @@ class DashboardController
         # $window.location.href = base + '/#/' + @activeGroupId +
         #  '/custom-practice/'
       else
-        #if @enableScore
-         # @_fetchScorePrediction()
+        if @enableScore
+          @_fetchScorePrediction()
         @_fetchTracks()
         # @_getHistoryInformation()
         @_getChallenge()
@@ -98,8 +99,10 @@ class DashboardController
 
   _fetchScorePrediction : ->
     scoreResponse = @dashboardService.getScorePrediction()
+    console.log scoreResponse
     if angular.isDefined(scoreResponse)
-      setItUpScorePrediction.setScorePrediction scoreResponse
+      console.log 'try to notify'
+      @scoreNotifier.setScore scoreResponse
       @score = scoreResponse
 
   _getHistoryInformation : ->
@@ -119,6 +122,6 @@ class DashboardController
 
 DashboardController.$inject = ['$scope','$state','$auth','product',
 'authorization','dashboardService','utilities','membership','userNotify',
-'payBanner']
+'payBanner','scoreNotifier']
 
 module.exports = DashboardController

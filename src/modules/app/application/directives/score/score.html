@@ -1,0 +1,32 @@
+<div >
+
+<span class="dropdown-toggle loadingScore" data-toggle="dropdown" ng-click="showScoreData()">
+  <i class="nav-icon fa fa-trophy"></i>
+  <span class="small-screen-text ">Score: <span class="text-semibold" ng-bind="scoreData.totalScore"></span></span>
+</span>
+<div ng-class="{'show-score':showScore}" class="dropdown-menu widget-notifications no-padding bg-green" style="width: 300px;background:#5CD2AE!important;">
+  <div class="notification" ng-if="isVisible">
+    <i class="fa fa-trophy bg-icon bg-big"></i>
+    <div layout="row" layout-sm="column" layout-align="space-around">
+      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <br>
+    <br>
+    <span class=" text-sm"> Your Overall <span ng-bind="groupTitle"></span> Score Prediction</span>
+  </div>
+  <!-- / .notification -->
+  <div class="notification" ng-if="!isVisible">
+    <i class="fa fa-trophy bg-icon text-xlg pull-right"></i>
+    <span class="text-xlg">
+              <strong ng-if="hasScore()" ng-bind="scoreData.totalScore"></strong>
+              <strong ng-if="!hasScore()" class="text-lg" ng-bind="noScoreMessage"></strong>
+            </span>
+    <br>
+    <span ng-show="scoreData.rangeExist" class="text-bg">
+        <span ng-bind="scoreData.rangeInit"></span>-<span ng-bind="scoreData.rangeEnd"></span>
+    </span>
+    <br>
+    <span ng-show="hasScore()" class="text-sm"> Your Overall <span ng-bind="groupTitle"></span> Score Prediction</span>
+  </div>
+</div>
+</div>

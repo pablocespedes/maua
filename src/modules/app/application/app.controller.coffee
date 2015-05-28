@@ -2,7 +2,8 @@
 class AppController
   constructor: ($scope, $window, @utilities, @user,@product, @groups,
     @authorization,$mdSidenav,@menuService,@membership,@userNotify,$state,
-    @ListenloopUtil,@GaUtil,@InspectletUtil,@GoogleTagManager, @payBanner)->
+    @ListenloopUtil,@GaUtil,@InspectletUtil,@GoogleTagManager, @payBanner,
+    @scoreNotifier)->
     @state = $state
     @mdSidenav = $mdSidenav
     @window = $window
@@ -120,11 +121,10 @@ class AppController
     )
 
   _getScorePrediction: ->
-    scorePrediction = setItUpScorePrediction.observeScorePrediction()
-    .register((scoreResponse) ->
+    @scorePrediction = @scoreNotifier.observeScore().register (scoreResponse) ->
+      console.log 'get notify', scoreResponse
       @score = scoreResponse
       @scoreLoading = false
-    )
 
   _setInitialData: (response, groupId) ->
     if @activeGroupId isnt groupId
@@ -132,8 +132,8 @@ class AppController
       @setMenu(groupId)
       @enableScore = groupId is 'gmat' or groupId is 'act' or
       groupId is 'sat'
-      #if @enableScore
-        #@_getScorePrediction()
+      if @enableScore
+        @_getScorePrediction()
       gtmData =
         'platformVersion': '2'
         'studyingFor': groupId
@@ -172,6 +172,6 @@ class AppController
  AppController.$inject = ['$scope', '$window', 'utilities', 'user','product',
 'groups','authorization','$mdSidenav','menuService','membership','userNotify',
 '$state','ListenloopUtil','GaUtil','InspectletUtil','GoogleTagManager',
-'payBanner']
+'payBanner','scoreNotifier']
 
 module.exports = AppController
