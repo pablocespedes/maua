@@ -2,6 +2,19 @@
   line-height: 36px;
 }
 
+.score-text {
+  margin-left: 87px !important;
+  margin-top: 100px;
+  font-weight: bold;
+  left: inherit !important;
+  box-shadow: none !important;
+  right: auto;
+  bottom: auto;
+  left: 20px;
+  text-transform: uppercase;
+  position: absolute;
+}
+
 #payment-panel {
   .panel {
     max-height: 90px;
@@ -132,6 +145,12 @@
     padding-bottom: 8px!important;
     min-width: 50px;
   }
+  .challenge-icon {
+    border-left: 1px solid #edecec;
+    padding: 6px !important;
+    margin: 0px -8px 0px 15px;
+    min-width: 50px;
+  }
   .btn-float {
     z-index: 9999;
     position: absolute;
@@ -140,7 +159,7 @@
   }
   md-card {
     md-card-content {
-      min-height: 110px;
+      min-height: 120px;
     }
     overflow: hidden;
     box-sizing: border-box;

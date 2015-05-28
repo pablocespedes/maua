@@ -1,8 +1,7 @@
-
 <div id="dashboard">
   <div id="payment-panel" ng-if="vmDash.showBuyNow" layout="row" layout-margin layout-fill>
     <div flex class="panel blue-grey bg-400  ">
-     <a href="javascript:void(0)" class="close-thik" ng-click="vmDash.hidPayment()"></a>
+      <a href="javascript:void(0)" class="close-thik" ng-click="vmDash.hidPayment()"></a>
       <a ng-href="{{vmDash.paymentPage}}" target="_blank">
         <div class="panel-body">
           <br>
@@ -14,23 +13,7 @@
       </a>
     </div>
   </div>
-  <div track-list tracks="vmDash.tracks " start-practice="vmDash.startPractice " is-visible="vmDash.enableScore && !vmDash.loading " can-practice="vmDash.canPractice "></div>
-  <div>
-    <div class=" fadeIn animated " ng-if="vmDash.isChallengeAvailable ">
-
-        <div class="panel topic-content panel-dark widget-profile ">
-          <div class="panel-heading dashboard-title ">
-            <span class="panel-title "> <h4><i class="panel-title-icon fa fa-fire "></i>Challenge</h4>
-          </span>
-          </div>
-          <div class="list-group text-left ">
-            <div challenge-dashboard challenges="vmDash.challengesGames "></div>
-          </div>
-        </div>
-
-      <div class="push "></div>
-    </div>
-  </div>
+  <div track-list tracks="vmDash.tracks " start-practice="vmDash.startPractice " is-visible="vmDash.enableScore && !vmDash.loading " can-practice="vmDash.canPractice" challenges="vmDash.challengesGames"></div>
 </div>
 <div layout="row" layout-sm="column" layout-align="space-around" ng-if="vmDash.loading">
   <md-progress-circular md-mode="indeterminate"></md-progress-circular>

@@ -71,7 +71,7 @@ dashboardService = ($q,resource,utilities,learnContent)->
         result.getScore = @_getScore(result)
         result.hasScore = @_getScore(result) != null and
          @_getScore(result) > 0
-        console.log result
+        result.challengeLink = @createChallengeLink(result.name)
         subtracks = _.forEach result.items, (subtrack,index) ->
           accuracy = (subtrack.total_questions_answered_correctly /
             (subtrack.total_questions_answered * 100))
@@ -89,9 +89,6 @@ dashboardService = ($q,resource,utilities,learnContent)->
 
       @dashboardData.smart_practice.items = smartPracticeItems
       @dashboardData.smart_practice
-
-    getChallenge : ->
-      @dashboardData.challenge
 
     hasQuestionsAnswered : ->
       @dashboardData.progress.all.total_questions_answered >= 1
@@ -142,8 +139,21 @@ dashboardService = ($q,resource,utilities,learnContent)->
         return data.id is id
       if utilities.existy(learnData) then learnData.link else ''
 
+    getword:(words,position)->
+      n = words.split(" ")
+      index = if utilities.existy(position) then position else n.length - 1
+      n[index]
 
+    createChallengeLink:(trackName)->
+      trackToMatch = @getword(trackName)
+      challengeItems = _.filter @dashboardData.challenge.items,(challengeItem)=>
+        challengeItem.name = @getword(challengeItem.name,0)
+      item = (_.find challengeItems, name: trackToMatch) || ''
 
+      if utilities.existy(item) && !_.isEmpty item
+        id = utilities.lastUrlWord(item.url)
+        baseUrl = utilities.originalGrockit()
+        return baseUrl + '/assessment/introcards/' + id
 
 
 dashboardService.$inject = ['$q','resource','utilities','learnContent']

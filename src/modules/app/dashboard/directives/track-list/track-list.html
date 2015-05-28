@@ -2,6 +2,12 @@
   <div flex-lg="33" flex-md="50" flex-sm flex-gt-md="33" flex-gt-lg="25" ng-repeat="track in tracks | orderBy: 'position' " class="animated" id="{{track.id}}">
     <md-card>
       <md-card-content class="{{track.cardCss}}">
+       <span class="score-text " ng-if="track.hasScore && isVisible"  aria-label="Your Score Prediction">
+          <span class="text-primary" >
+            Your Score Prediction: <span ng-bind="track.getScore"></span>
+          </span>
+
+        </span>
         <div class="card-bg-icon">
           <md-icon class="mdi mdi-assessment" aria-label="{{track.name}}">
           </md-icon>
@@ -14,15 +20,16 @@
         </p>
       </md-card-content>
       <div layout="row" flex="" class="fill-height card-actions ">
-        <md-button class="md-hue-2 md-primary" ng-click="startPractice(track,track.id)">Practice</md-button>
+       <md-button class="md-hue-2 md-primary" ng-click="startPractice(track,track.id)">Practice</md-button>
         <md-button class="md-hue-2 md-primary learn-button" ng-href="{{track.learnLink}}" target="_blank">Learn</md-button>
         <span flex="2"></span>
-        <md-button ng-if="track.hasScore && isVisible" class="md-primary card-icon" ng-disabled aria-label="Your Score Prediction">
-          <span class="text-primary" ng-bind="track.getScore"></span>
+        <md-button ng-if="track.hasScore && isVisible" class="md-primary challenge-icon learn-button" ng-href="{{track.challengeLink}}" target="_blank" ng-disabled="!canPractice" aria-label="Take a Challenge">
+          <md-icon class="fa fa-trophy text-lg "></md-icon>
           <md-tooltip>
-            Your Score Prediction
+            Take a Challenge
           </md-tooltip>
         </md-button>
+
         <md-button ng-if="!track.hasScore && isVisible" class="md-primary card-icon" ng-click="getYourScorePredictionUrl(track)" ng-disabled="!canPractice" aria-label="Take a Diagnostic">
           <md-icon class="mdi mdi-assignment mdi-2x"></md-icon>
           <md-tooltip>

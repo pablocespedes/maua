@@ -13,7 +13,7 @@ class DashboardController
     showingTour = false
     showTour = false
     @loading = true
-    isChallengeAvailable = false
+    @isChallengeAvailable = false
     historyVisible = false
 
     $scope.$on '$destroy', () ->
@@ -49,7 +49,6 @@ class DashboardController
             @activeGroupId is 'sat'
           historyVisible = false
           baseUrl = @utilities.originalGrockit(false)
-          console.log baseUrl + '/' + @activeGroupId + '/subscriptions/new'
           @paymentPage = baseUrl + '/' + @activeGroupId + '/subscriptions/new'
     @loading = false
 
@@ -90,7 +89,6 @@ class DashboardController
           @_fetchScorePrediction()
         @_fetchTracks()
         # @_getHistoryInformation()
-        @_getChallenge()
 
   _fetchTracks : ->
     smartPractice = @dashboardService.getSmartPractice()
@@ -110,14 +108,6 @@ class DashboardController
     if angular.isDefined(historyResponse)
       membership.membershipValidation activeGroupId, historyResponse.all
     setItUpUserProgress.setUserProgress historyResponse
-
-  _getChallenge : ->
-    challenge = @dashboardService.getChallenge()
-    if not _.isEmpty(challenge) and
-     challenge.items.length > 0
-      isChallengeAvailable = true
-      challengesGames = challenge.items
-
 
 
 DashboardController.$inject = ['$scope','$state','$auth','product',

@@ -111,8 +111,9 @@ utilities = ($state,$rootScope, $http, $location, $q, $window, urlsCons) ->
     truthy:(x)->
       return (x isnt false) and @existy(x)
 
-    lastUrlWord:->
-      sections = $location.path().split('/')
+    lastUrlWord:(url)->
+      path = if @existy(url) then url else $location.path()
+      sections = path.split('/')
       word = sections[sections.length - 1]
       word
 
