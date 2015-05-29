@@ -44,7 +44,6 @@ dashboardService = ($q,resource,utilities,learnContent)->
         scoreData.rangeEnd = scoreResponse.range[1]
       else
         scoreData.rangeExist = false
-      console.log scoreData
       scoreData
 
     getSmartPractice : ->

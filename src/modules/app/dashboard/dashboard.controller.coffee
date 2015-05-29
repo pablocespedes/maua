@@ -97,9 +97,7 @@ class DashboardController
 
   _fetchScorePrediction : ->
     scoreResponse = @dashboardService.getScorePrediction()
-    console.log scoreResponse
     if angular.isDefined(scoreResponse)
-      console.log 'try to notify'
       @scoreNotifier.setScore scoreResponse
       @score = scoreResponse
 

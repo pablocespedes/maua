@@ -122,7 +122,6 @@ class AppController
 
   _getScorePrediction: ->
     @scorePrediction = @scoreNotifier.observeScore().register (scoreResponse) ->
-      console.log 'get notify', scoreResponse
       @score = scoreResponse
       @scoreLoading = false
 
