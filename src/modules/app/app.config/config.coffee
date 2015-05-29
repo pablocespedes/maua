@@ -2,7 +2,7 @@
 
 initConfig =  ($httpProvider, $stateProvider,
   $urlRouterProvider,RestangularProvider, ApiUrlsProvider,$mdThemingProvider,
-  intercomProvider, IntercomAppId) ->
+  intercomProvider, IntercomAppId, urlsCons) ->
   intercomProvider.appID(IntercomAppId)
   intercomProvider.asyncLoading(true)
 
@@ -18,7 +18,13 @@ initConfig =  ($httpProvider, $stateProvider,
   .theme('kapTheme')
     .primaryPalette('indigo')
 
-  ApiUrlsProvider.host = "api.grockit.com"
+  urlPattern = /http(s?)\:\/\/staging/.test(location.origin)
+  localPattern = /http(s?)\:\/\/localhost/.test(location.origin)
+
+  host = if urlPattern or localPattern
+  then urlsCons.stagingAPI else urlsCons.liveAPI
+
+  ApiUrlsProvider.host = host
   ApiUrlsProvider.port = ''#3000
 
   delete $httpProvider.defaults.headers.common["X-Requested-With"]
@@ -41,7 +47,7 @@ initConfig =  ($httpProvider, $stateProvider,
 
 initConfig.$inject = ['$httpProvider','$stateProvider',
 '$urlRouterProvider', 'RestangularProvider','ApiUrlsProvider',
-'$mdThemingProvider','intercomProvider', 'IntercomAppId']
+'$mdThemingProvider','intercomProvider', 'IntercomAppId','urlsCons']
 
 
 module.exports = initConfig

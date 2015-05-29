@@ -71,7 +71,6 @@ dashboardService = ($q,resource,utilities,learnContent)->
         result.hasScore = @_getScore(result) != null and
          @_getScore(result) > 0
         result.challengeLink = @createChallengeLink(result.name)
-        console.log result.challengeLink
         subtracks = _.forEach result.items, (subtrack,index) ->
           accuracy = (subtrack.total_questions_answered_correctly /
             (subtrack.total_questions_answered * 100))

@@ -25,8 +25,8 @@ module.exports = angular.module('grockitApp.config', [])
   ww2Grockit2: 'ww2.grockit.com'
   timingData: 'https://s3.amazonaws.com/go.grockit.com/2.0/data/'
   youtubeAPI: 'https://gdata.youtube.com/feeds/api/videos/'
-  stagingAPI: 'https://api.staging.grockit.com'
-  liveAPI: 'https://api.grockit.com'
+  stagingAPI: 'api.staging.grockit.com'
+  liveAPI: 'api.grockit.com'
 .constant('userRoles',
   admin: 'admin'
   member: 'member'
