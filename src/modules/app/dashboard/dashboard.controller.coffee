@@ -2,7 +2,7 @@
 
 class DashboardController
   # Services injected into the controller constructor
-  constructor: ($scope,$state,$auth,@product,@authorization,
+  constructor: ($scope,$state,@product,@authorization,
     @dashboardService, @utilities,@membership,@userNotify,@payBanner,
     @scoreNotifier) ->
     @utilities.currentPage 'Dashboard'
@@ -108,7 +108,7 @@ class DashboardController
     setItUpUserProgress.setUserProgress historyResponse
 
 
-DashboardController.$inject = ['$scope','$state','$auth','product',
+DashboardController.$inject = ['$scope','$state','product',
 'authorization','dashboardService','utilities','membership','userNotify',
 'payBanner','scoreNotifier']
 

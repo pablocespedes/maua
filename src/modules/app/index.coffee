@@ -11,7 +11,7 @@ module.exports = angular.module('grockitApp', [
   'ui.router'
   'ngMessages'
   'ngSanitize'
-  'satellizer'
+  #'satellizer'
   'restangular'
   'ngResource',
   'ngCookies',

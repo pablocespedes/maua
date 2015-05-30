@@ -1,7 +1,7 @@
 'use strict'
 class HistoryController
   # Services injected into the controller constructor
-  constructor: ($scope, $state, $auth, @history, @product, @collapseManager) ->
+  constructor: ($scope, $state, @history, @product, @collapseManager) ->
     @loading = true
     @isRequesting = false
     @history.reset()
@@ -33,7 +33,7 @@ class HistoryController
       @groupId = groupId
       @getQuestions()
 
-HistoryController.$inject = ['$scope','$state','$auth','history','product',
+HistoryController.$inject = ['$scope','$state','history','product',
 'collapseManager']
 
 module.exports = HistoryController

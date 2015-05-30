@@ -14,7 +14,7 @@ require 'angular-sanitize'
 require 'angular-messages'
 require 'angular-cookies'
 global._ = require "lodash"
-require 'satellizer'
+#require 'satellizer'
 require 'restangular'
 require 'angular-resource'
 braintree = require 'braintree-web'

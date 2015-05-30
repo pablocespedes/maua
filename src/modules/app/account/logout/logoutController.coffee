@@ -2,7 +2,7 @@
 ### @ngInject ###
 class LogoutController
 
-  constructor: ($window,$state,$auth,@utilities,@authorization) ->
+  constructor: ($window,$state,@utilities,@authorization) ->
     @window = $window
     #$auth.logout()
     #$state.go('main')
@@ -14,7 +14,7 @@ class LogoutController
     @window.location.href = logOut
     return
 
-LogoutController.$inject = ['$window','$state','$auth','utilities',
+LogoutController.$inject = ['$window','$state','utilities',
 'authorization']
 
 module.exports = LogoutController
