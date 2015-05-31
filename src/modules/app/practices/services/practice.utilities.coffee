@@ -276,7 +276,10 @@ practiceUtilities = ($window, $q, $sce,alert,utilities,practiceService,
         ariaLabel: 'User Runs Out of questions'
         okText: 'Go to Review'
         callbackSuccess:->
-          utilities.redirect 'https://grockit.com/reviews'
+          if activeGroupId is 'gre'
+            utilities.internalRedirect '/' + activeGroupId + '/history'
+          else
+            utilities.redirect 'https://grockit.com/reviews'
         cancelText:'Go to Dashboard'
         callbackError: ->
           utilities.internalRedirect '/' + activeGroupId + '/dashboard'

@@ -77,17 +77,15 @@ class DashboardController
     @dashboardService.setDashboardData(groupId).then (result) =>
       hasQuestionsAnswered = @dashboardService.hasQuestionsAnswered()
 
-      if not hasQuestionsAnswered and
-       @activeGroupId is 'gre'
-        @state.go 'custom-practice',
-            subject: @activeGroupId
-        # base = @utilities.newGrockit().url
-        # $window.location.href = base + '/#/' + @activeGroupId +
-        #  '/custom-practice/'
-      else
-        if @enableScore
-          @_fetchScorePrediction()
-        @_fetchTracks()
+      # if not hasQuestionsAnswered and
+      #  @activeGroupId is 'gre'
+      #   @state.go 'custom-practice',
+      #       subject: @activeGroupId
+
+      # else
+      if @enableScore
+        @_fetchScorePrediction()
+      @_fetchTracks()
         # @_getHistoryInformation()
 
   _fetchTracks : ->
