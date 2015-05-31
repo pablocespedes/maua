@@ -3,6 +3,10 @@ authInterceptor = ($window,$q,authorization,$injector) ->
     constructor: ->
       @addstartsWith()
 
+    validateUrl = (config)->
+      return config.url.startsWith 'https://api' or
+      config.url.startsWith 'https://staging'
+
     errorHandler = ->
       $injector.get 'errorHandler'
 
@@ -15,10 +19,8 @@ authInterceptor = ($window,$q,authorization,$injector) ->
           @indexOf(str) == 0
 
     request: (config) ->
-      shouldAddToken = config.url.startsWith 'https://api' or
-       config.url.startsWith 'https://staging'
 
-      if shouldAddToken
+      if validateUrl(config)
         accestoken = authorization.getToken()
 
         if(accestoken isnt 'null')
@@ -27,10 +29,13 @@ authInterceptor = ($window,$q,authorization,$injector) ->
       config
 
     responseError: (rejection) ->
+      console.log validateUrl(rejection.config)
       if rejection.status == 401
         $window.location.href = utilities().originalGrockit+'/logout'
 
-      errorHandler().validateErrorType(rejection)
+      if validateUrl(rejection.config)
+        console.log 'entro'
+        errorHandler().validateErrorType(rejection)
       $q.reject rejection
 
     response: (response)->

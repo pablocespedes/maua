@@ -70,6 +70,8 @@ class PracticeController
         @percentAnswered =
           if percentAnswered > 0 then Math.round(percentAnswered.toFixed(2))
           else 0
+    .catch ()->
+
 
   initPracticeTimer: ->
     @practiceTimer = @timer.create()

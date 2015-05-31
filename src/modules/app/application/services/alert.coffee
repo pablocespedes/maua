@@ -1,5 +1,5 @@
 'use strict'
-alert = ($mdToast) ->
+alert = ($mdToast,$mdDialog) ->
   new class Alert
     constructor: ->
       @toast = $mdToast.simple()
@@ -15,10 +15,19 @@ alert = ($mdToast) ->
       else
         $mdToast.show(@toast)
 
-    success: (message, action) ->
+    customDialog: (options) ->
+      confirm = $mdDialog.confirm()
+      .title(options.title)
+      .content(options.content)
+      .ariaLabel(options.ariaLabel)
+      .ok(options.okText)
+      .cancel(options.cancelText)
+
+      $mdDialog.show(confirm).then options.callbackSuccess,
+      options.callbackError
 
     sendError: (message,action,callback)->
       @createAlert message,action, callback
 
-alert.$inject = ['$mdToast']
+alert.$inject = ['$mdToast','$mdDialog']
 module.exports = alert

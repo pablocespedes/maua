@@ -1,5 +1,5 @@
-practiceUtilities = ($window, $q, $sce, utilities,
-  practiceService, youtube, practiceConstants)->
+practiceUtilities = ($window, $q, $sce,alert,utilities,practiceService,
+ youtube, practiceConstants)->
   new class PracticeUtilities
     constructor: ->
 
@@ -268,23 +268,20 @@ practiceUtilities = ($window, $q, $sce, utilities,
 
     usersRunOutQuestions : (trackTitle, activeGroupId) ->
       options =
-        message: 'You\'ve answered all of the adaptive questions'+
+        content: 'You\'ve answered all of the adaptive questions'+
         ' we have for you in ' + trackTitle + '.  ' + 'That\'s a lot'+
         ' of practice.  Would you like to review questions you\'ve answered'+
         'or go back to the main dashboard? '
         title: 'Congratulations!'
-        buttons:
-          review:
-            label: 'Go to Review'
-            className: 'btn-info'
-            callback: ->
-              utilities.redirect 'https://grockit.com/reviews'
-          main:
-            label: 'Go to Dashboard'
-            className: 'md-primary'
-            callback: ->
-              utilities.internalRedirect '/' + activeGroupId + '/dashboard'
-      utilities.dialogService options
+        ariaLabel: 'User Runs Out of questions'
+        okText: 'Go to Review'
+        callbackSuccess:->
+          utilities.redirect 'https://grockit.com/reviews'
+        cancelText:'Go to Dashboard'
+        callbackError: ->
+          utilities.internalRedirect '/' + activeGroupId + '/dashboard'
+
+      alert.customDialog options
 
     getAnswerType : (questionKind) ->
       template = ''
@@ -337,6 +334,6 @@ practiceUtilities = ($window, $q, $sce, utilities,
           break
       message
 
- practiceUtilities.$inject = ['$window', '$q', '$sce', 'utilities',
+ practiceUtilities.$inject = ['$window', '$q', '$sce','alert','utilities',
   'practiceService', 'youtube', 'practiceConstants']
 module.exports = practiceUtilities
