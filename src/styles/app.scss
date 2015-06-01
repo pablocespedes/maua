@@ -197,8 +197,8 @@ md-option > .md-text > .product-icon {
   width: inherit!important;
 }
 
-.md-select-label:first-child span {
-  line-height: 2.2rem!important;
+.md-select-label:first-child  span:first-child  {
+  min-width: 100%;
 }
 
 #main-toolbar {
