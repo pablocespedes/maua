@@ -1,88 +1,37 @@
 <div layout="column" layout-align="center center">
- <h2>Get Grockit GRE® Prep Now!</h2>
- <p>Grockit gives you access to a comprehensive, personalized platform for GRE® prep with <strong>more than 1,800 practice questions</strong>, skill-based practice, and group games.</p>
-
-</div>
-<!--
-<div id="order_header">
   <h2>Get Grockit GRE® Prep Now!</h2>
-  <style type="text/css" media="screen">
-    .feature_heading {
-    font-size: 20px;
-  }
-
-  .feature {
-    margin: 0 0 0 0;
-    padding: 0;
-    font-size: 30px;
-  }
-
-  .features {
-    margin-left: 20px;
-    margin-bottom: 10px;
-    margin-top: 0px;
-  }
-
-  .features i {
-    color: #399CCA;
-  }
-
-  .features td {
-    padding: 0px 20px 15px 0;
-  }
-  </style>
-  <p style="font-size: 16px;margin-bottom: 20px;">Grockit gives you access to a comprehensive, personalized platform for GRE® prep with <strong>more than 1,800 practice questions</strong>, skill-based practice, and group games.</p>
-
-  <table width="650" class="features">
-    <tbody>
-      <tr>
-        <td width="20" align="center"><i class="fa fa-puzzle-piece feature"></i></td>
-        <td><span class="feature_heading">Practice alongside books, tutoring, or classroom prep</span>
-          <br>You'll get the right practice modes for your current study plan with <strong>realistic practice questions</strong>. Similar to personalized tutoring, the targeted practice and skill tracking will show you <strong>where to focus</strong>.</td>
-      </tr>
-      <tr>
-        <td align="center"><i class="fa fa-clock-o feature"></i></td>
-        <td><span class="feature_heading">Save time</span>
-          <br>You can set aside several hours or <strong>just 10-15 minutes</strong> at a time and get a quick but effective workout. Grockit selects practice questions that have the <strong>highest chance of improving your score</strong>.</td>
-      </tr>
-      <tr>
-        <td align="center"><i class="fa fa-flask feature"></i></td>
-        <td><span class="feature_heading">Learn the right things</span>
-          <br>You won't waste time on what you already know or topics that will take too long to master <strong>before your exam date</strong>. Grockit is built using <strong>Learning Science</strong> to adapt to your skills as you progress.</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 style="color: #fff;font-weight: normal;font-size: 20px;background-color: #666;margin-left: -20px;margin-right: -20px;padding: 5px 20px;margin-bottom: 20px;">Select Membership Type</h3>
-  <div style="margin-left:65px;" id="package_options_radio">
-    <table border="0">
-      <tbody>
-        <tr>
-          <td width="30" style="padding: 0px 5px;">
-            <input type="radio" name="package_options_radio" id="package_options_radio1" style="display:inline;" value="1">
-          </td>
-          <td width="150" style="padding: 0px 5px;">Access for 1 Week</td>
-          <td style="padding: 0px 5px;">$9 one-time fee</td>
-        </tr>
-        <tr>
-          <td style="padding: 0px 5px;">
-            <input type="radio" name="package_options_radio" id="package_options_radio2" style="display:inline;" value="2">
-          </td>
-          <td style="padding: 0px 5px;">Access for 1 Month</td>
-          <td style="padding: 0px 5px;">$25 one-time fee</td>
-        </tr>
-        <tr>
-          <td style="padding: 0px 5px;">
-            <input type="radio" name="package_options_radio" id="package_options_radio3" style="display:inline;" value="3">
-          </td>
-          <td style="padding: 0px 5px;">Subscription</td>
-          <td style="padding: 0px 5px;">$19.99/month until you cancel</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <br>
-</div> -->
-<form action="/buy-something" method="post">
-  <braintree-dropin></braintree-dropin>
-  <input type="submit" value="Subscribe" />
-</form>
+  <p>Grockit gives you access to a comprehensive, personalized platform for GRE® prep with <strong>more than 1,800 practice questions</strong>, skill-based practice, and group games.</p>
+  <md-list>
+    <md-list-item class="md-2-line">
+      <md-icon class="fa fa-puzzle-piece feature"></md-icon>
+      <div class="md-list-item-text" ng-class="{'md-offset': $index != 0 }">
+        <p> <span class="feature_heading">Practice alongside books, tutoring, or classroom prep</span>
+          <br>You'll get the right practice modes for your current study plan with <strong>realistic practice questions</strong>. Similar to personalized tutoring, the targeted practice and skill tracking will show you <strong>where to focus</strong> </p>
+      </div>
+    </md-list-item>
+    <md-list-item class="md-2-line">
+      <md-icon class="fa fa-clock-o feature"></md-icon>
+      <div class="md-list-item-text" ng-class="{'md-offset': $index != 0 }">
+        <p> <span class="feature_heading">Save time</span>
+          <br>You can set aside several hours or <strong>just 10-15 minutes</strong> at a time and get a quick but effective workout. Grockit selects practice questions that have the <strong>highest chance of improving your score</strong>. </p>
+      </div>
+    </md-list-item>
+    <md-list-item class="md-2-line">
+      <md-icon class="fa fa-flask feature"></md-icon>
+      <div class="md-list-item-text" ng-class="{'md-offset': $index != 0 }">
+        <p> <span class="feature_heading">Learn the right things</span>
+          <br>You won't waste time on what you already know or topics that will take too long to master <strong>before your exam date</strong>. Grockit is built using <strong>Learning Science</strong> to adapt to your skills as you progress.</p>
+      </div>
+    </md-list-item>
+  </md-list>
+  <h3 flex style="color: #fff;font-weight: normal;font-size: 20px;background-color: #666;margin-left: -20px;margin-right: -20px;padding: 5px 20px;margin-bottom: 20px;">Select Membership Type</h3>
+  <md-radio-group ng-model="data.group1">
+    <md-radio-button value="Apple" class="md-primary">Access for 1 Week $9 one-time fee</md-radio-button>
+    <md-radio-button value="Banana"> Access for 1 Month $25 one-time fee</md-radio-button>
+    <md-radio-button value="Mango">Subscription $19.99/month until you cancel</md-radio-button>
+  </md-radio-group>
+  <form action="/buy-something" method="post">
+    <braintree-dropin></braintree-dropin>
+    <input type="submit" value="Subscribe" />
+  </form>
+</div>
