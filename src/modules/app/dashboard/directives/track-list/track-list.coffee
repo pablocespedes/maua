@@ -31,7 +31,7 @@ trackList = ($mdDialog,dashboardService,utilities)->
 
       #   trackCopy = track
       #   trackCopy.favorite = !trackCopy.favorite
-      #   trackCopy.position = if trackCopy.favorite then 0 else @tracks.length-1
+      #  trackCopy.position = if trackCopy.favorite then 0 else @tracks.length-1
 
       #   _.pull @tracks, track
 

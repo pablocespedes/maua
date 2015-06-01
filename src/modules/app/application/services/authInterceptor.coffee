@@ -29,12 +29,10 @@ authInterceptor = ($window,$q,authorization,$injector) ->
       config
 
     responseError: (rejection) ->
-      console.log validateUrl(rejection.config)
       if rejection.status == 401
         $window.location.href = utilities().originalGrockit+'/logout'
 
       if validateUrl(rejection.config)
-        console.log 'entro'
         errorHandler().validateErrorType(rejection)
       $q.reject rejection
 
