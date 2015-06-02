@@ -1,10 +1,7 @@
-Storage =require('./_storage')
-
-paymentBanner = (Observer,utilities)->
-  new class PaymentBanner extends Storage
+paymentBanner = (Observer,utilities,storage)->
+  new class PaymentBanner
 
     constructor: ->
-      super()
       @observable = Observer.create('paymentBanner')
 
     observePayBanner : ->
@@ -15,15 +12,15 @@ paymentBanner = (Observer,utilities)->
 
     updateBannerStat:(status)->
       bannerStatus = 'status':status
-      @save 'paymentBanner', bannerStatus
+      storage.save 'paymentBanner', bannerStatus
       @observable.notify status
 
     bannerExists:->
-      utilities.existy(@get('paymentBanner'))
+      utilities.existy(storage.get('paymentBanner'))
 
     getBannerStatus:->
-      @get('paymentBanner').status
+      storage.get('paymentBanner').status
 
 
-paymentBanner.$inject = ['Observer','utilities']
+paymentBanner.$inject = ['Observer','utilities','storage']
 module.exports =   paymentBanner

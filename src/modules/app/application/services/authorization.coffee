@@ -1,12 +1,10 @@
-Storage =require('./_storage')
-
-authorization = ($window,$cookies)->
-  new class Authorization extends Storage
+authorization = ($window,storage)->
+  new class Authorization
 
     ##cached token allow us to have the token in memory, just as
     ##little optimization to not access the token that is save on local storage.
     constructor: ($window)->
-      super()
+      console.log storage
       @cachedToken = undefined
       @cachedUser = undefined
       @userInfo = "userInfo"
@@ -19,33 +17,26 @@ authorization = ($window,$cookies)->
 
     setToken: (token) ->
       @cachedToken = token
-      @save @userToken, token
-
-    getCookie: (key) ->
-      cookie = null
-      keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)')
-      if angular.isDefined(keyValue) and keyValue != null
-        cookie = keyValue[2]
-      cookie
+      storage.save @userToken, token
 
     getToken: ->
-      @cachedToken = decodeURIComponent @getCookie('authentication_token')
-      #@get(@userToken) unless @cachedToken
+      @cachedToken = storage.getCookie 'authentication_token'
       @cachedToken
 
     removeCookie :->
-      delete $cookies['authentication_token']
+      #delete $cookies['authentication_token']
+      storage.removeCookie 'authentication_token'
 
     removeToken: ->
       @cachedToken = null
-      @remove @userToken
+      storage.remove @userToken
 
     setUser: (userData)->
       @cachedUser = userData
-      @save @userInfo, userData
+      storage.save @userInfo, userData
 
     getUser: ->
-      @cachedUser = @get(@userInfo) unless @cachedUser
+      @cachedUser = storage.get(@userInfo) unless @cachedUser
       @cachedUser
 
     userExist: ->
@@ -56,9 +47,9 @@ authorization = ($window,$cookies)->
 
     removeUser: ->
       @cachedUser = null
-      @remove @userInfo
-      @remove @paymentBannerInfo
-      @remove @questionTimingInfo
+      storage.remove @userInfo
+      storage.remove @paymentBannerInfo
+      storage.remove @questionTimingInfo
 
-authorization.$inject = ['$window','$cookies']
+authorization.$inject = ['$window','storage']
 module.exports = authorization

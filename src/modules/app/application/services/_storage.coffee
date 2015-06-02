@@ -1,32 +1,42 @@
-class Storage
-  constructor:() ->
-    @storage = window.localStorage
-    @hasLocalStorage = @testLocalStorage()
+storage = ($cookies)->
+  new class Storage
+    constructor:() ->
+      @storage = window.localStorage
+      @hasLocalStorage = @testLocalStorage()
 
-  save:(key,object) ->
-    if @hasLocalStorage
+    save:(key,object) ->
+      if @hasLocalStorage
+        try
+          @storage.setItem(key, JSON.stringify(object))
+        catch e
+      else if key isnt 'userInfo'
+        $cookies.putObject key, object
+
+    get:(key) ->
+      if @hasLocalStorage
+        value = @storage.getItem(key)
+        value && JSON.parse(value)
+      else
+        $cookies.getObject key
+
+    remove:(key)->
+      if @hasLocalStorage then @storage.removeItem key else @removeCookie key
+
+    testLocalStorage: ->
       try
-        @storage.setItem(key, JSON.stringify(object))
-        console.log 'write the object', key
+        @storage.setItem 'storage.test', true
+        @storage.removeItem 'storage.test'
+        return true
       catch e
-        console.log 'local storage is not supported'
+        return false
+      return
 
+    getCookie: (key)->
+      $cookies.get key
 
-  get:(key) ->
-    value = @storage.getItem(key)
-    return value && JSON.parse(value)
+    removeCookie: (key)->
+      $cookies.remove key
 
-  remove:(key)->
-    @storage.removeItem key
-
-  testLocalStorage: ->
-    try
-      localStorage.setItem prefix + 'angular.webStorage.test', true
-      localStorage.removeItem prefix + 'angular.webStorage.test'
-      return true
-    catch e
-      return false
-    return
-
-module.exports = Storage
+storage.$inject = ['$cookies']
+module.exports = storage
 

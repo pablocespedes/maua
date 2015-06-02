@@ -1,11 +1,11 @@
 
-user = ($q,resource,authorization,userRoles,imgVersion,userNotify)->
+user = ($q,resource,authorization,userRoles,imgVersion,userNotify, utilities)->
   new class User extends resource
 
     constructor: ()->
       super()
     _defaultGroup = (user) ->
-      if user != null and angular.isDefined(user.currentGroup)
+      if utilities.existy(user) and utilities.existy(user.currentGroup)
       then user.currentGroup else undefined
 
     _setUserData = (response,user) ->
@@ -13,9 +13,6 @@ user = ($q,resource,authorization,userRoles,imgVersion,userNotify)->
         userId: response.id
         role: if response.guest then userRoles.guest else userRoles.member
         groupMemberships: response.group_memberships
-        currentGroup: if angular.isDefined(_defaultGroup(user))
-        then _defaultGroup(user)
-        else response.group_memberships[0].group_id
         firstName: response.first_name
         fullName: response.full_name
         avatarUrl: if angular.isDefined(response.avatar_url) or
@@ -24,6 +21,8 @@ user = ($q,resource,authorization,userRoles,imgVersion,userNotify)->
          else 'images/avatar.png'
         emailAddress: response.email_address
         becamePremiumAt: response.became_premium_at
+      currentUser.currentGroup = if angular.isDefined(_defaultGroup(user))
+      then _defaultGroup(user) else response.group_memberships[0].group_id
       authorization.setUser(currentUser)
       currentUser
     self :(wantUpdate) ->
@@ -32,7 +31,6 @@ user = ($q,resource,authorization,userRoles,imgVersion,userNotify)->
       if not user or wantUpdate
         @show('users','self').then (result) ->
           user= _setUserData(result.data.user,user)
-          authorization.setUser(user)
           userNotify.notifyUserExists(user)
           deferred.resolve(user)
           return
@@ -51,5 +49,5 @@ user = ($q,resource,authorization,userRoles,imgVersion,userNotify)->
 
 
 user.$inject = ['$q','resource','authorization','userRoles','imgVersion',
-'userNotify']
+'userNotify','utilities']
 module.exports = user

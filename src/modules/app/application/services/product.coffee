@@ -1,15 +1,13 @@
-Storage =require('./_storage')
-
-product = (Observer, utilities)->
-  new class Product extends Storage
+product = (Observer, utilities, authorization)->
+  new class Product
     constructor: ->
-      super()
-      @currentUser = @get('userInfo')
       @observable = Observer.create('currentProduct')
     currentGroupId : (groupId, actualGroup) ->
-      if @currentUser isnt null and groupId isnt @currentUser.currentGroup
-        @currentUser.currentGroup = groupId
-        @save 'userInfo', @currentUser
+      currentUser = authorization.getUser()
+      if utilities.existy(currentUser) and
+       groupId isnt currentUser.currentGroup
+        currentUser.currentGroup = groupId
+        authorization.setUser currentUser
       utilities.setGroupTitle actualGroup.name
       @observable.notify groupId
 
@@ -19,5 +17,5 @@ product = (Observer, utilities)->
     unregisterGroup : (groupObserver) ->
       @observable.unregister groupObserver
 
-product.$inject = ['Observer','utilities']
+product.$inject = ['Observer','utilities','authorization']
 module.exports = product

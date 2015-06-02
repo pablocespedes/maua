@@ -1,24 +1,21 @@
-Storage =require('./_storage')
-
-questionTiming = ->
-  new class QuestionTiming extends Storage
+questionTiming = (storage)->
+  new class QuestionTiming
     constructor: ->
-      super()
 
     saveTime:(questionTime)->
-      @save('questionTiming',questionTime)
+      storage.save('questionTiming',questionTime)
 
     getTime:->
-      @get('questionTiming')
+      storage.get('questionTiming')
 
     updateTime:(questionCheck,timerSetting, newtime)->
       timerSetting.minutes = newtime
       @saveTime timerSetting
 
     resetTime:(questionCheck,timerSetting)->
-      console.log questionCheck,timerSetting
       if !questionCheck
         timerSetting.minutes = 0
         @saveTime(timerSetting)
 
+questionTiming.$inject = ['storage']
 module.exports = questionTiming
