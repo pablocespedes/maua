@@ -1,0 +1,32 @@
+<div class="panel" layout-fill>
+  <div class="panel-heading">
+    <span class="panel-title">
+          <i class="panel-title-icon fa fa-flask"></i>Question</span>
+  </div>
+  <div class="panel-body">
+    <div id="answercontent" class="info-box">
+      <div id="solutionarea">
+        <span ng-bind="vmPr.questionData.questPosition"></span>
+        <div ng-bind-html='vmPr.questionData.stimulus'></div>
+        <br>
+        <!--answer-->
+        <div ng-class="{ 'has-error' : !vmPr.isValid }">
+          <span class="help-block" ng-if="!vmPr.isValid">{{vmPr.invalidMessage}}</span>
+          <div id="answerType" ng-include="vmPr.answerType"></div>
+        </div>
+      </div>
+      <md-chips ng-show="vmPr.explanationInfo.showExplanation">
+        <md-chip ng-repeat="tag in vmPr.explanationInfo.tags" class="skill-label label-info">{{tag.name}}</md-chip>
+      </md-chips>
+    </div>
+  </div>
+</div>
+<div ng-if="vmPr.explanationInfo.showExplanation && vmPr.explanationInfo.tagsResources.length>0" class="panel timing-padding" layout-fill>
+  <div class="panel-heading">
+    <span class="panel-title"><i class="panel-title-icon fa fa-folder-open"></i>Skills to Review
+            </span>
+  </div>
+  <div class="panel-body no-padding-vr">
+    <div question-tags tags="vmPr.explanationInfo.tagsResources"></div>
+  </div>
+</div>

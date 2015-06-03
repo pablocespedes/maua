@@ -52,8 +52,12 @@ utilities = ($state,$rootScope, $http, $location, $q, $window, urlsCons) ->
     internalRedirect : (url) ->
       $location.path url
 
-    redirect : (url) ->
-      $window.location = url
+    redirect : (url,target) ->
+      if @existy(target)
+        $window.open url, target
+      else
+        $window.location = url
+      return
 
     getCurrentParam : (key) ->
       if angular.isDefined($state.params)

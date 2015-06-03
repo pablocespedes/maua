@@ -4,7 +4,6 @@ authorization = ($window,storage)->
     ##cached token allow us to have the token in memory, just as
     ##little optimization to not access the token that is save on local storage.
     constructor: ($window)->
-      console.log storage
       @cachedToken = undefined
       @cachedUser = undefined
       @userInfo = "userInfo"

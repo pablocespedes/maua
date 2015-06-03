@@ -7,7 +7,7 @@
       </div>
       <md-radio-group ng-model="item.matrix_group">
         <a id="answer" ng-repeat="item in main" href="javascript:void(0)" class="list-group-item" ng-class="{'disable-choice': item.crossOut && !(showExplanation)}" ng-click="selectAnswer($index,(($index-($index%3))/3 ),main)">
-          <md-radio-button ng-value="item.id" aria-label="false" class="md-primary" ng-disabled=" item.crossOut ">
+          <md-radio-button ng-value="item.id" aria-label="false" class="md-primary" ng-disabled=" item.crossOut || showExplanation">
             <div ng-bind-html="item.body"></div>
           </md-radio-button>
           <span ng-if="showExplanation && item.selected==true" class="float-right arrow-selected">&#10094;</span>

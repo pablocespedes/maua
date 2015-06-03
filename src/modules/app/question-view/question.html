@@ -5,66 +5,16 @@
   <md-progress-circular md-mode="indeterminate"></md-progress-circular>
 </div>
 <div id="practice" ng-show="!vmPr.loading" layout="row" layout-sm="column" layout-fill layout-wrap>
-  <div id="Panel1" flex layout-fill layout-padding layout-align="start center" ng-if="vmPr.questionData.setLayoutOneColumn && vmPr.questionData.explanation!==''">
-    <div id="question-explain" ng-if="vmPr.explanationInfo.showExplanation && vmPr.questionData.explanation!==''">
-      <div class="panel" layout-fill>
-        <div class="panel-heading">
-          <span class="panel-title"><i class="panel-title-icon fa fa-folder-open"></i>Explanation</span>
-        </div>
-        <div class="panel-body">
-          <span ng-bind-html='vmPr.explanationInfo.questionExplanation'></span>
-          <div id="videoExplain" ng-if="vmPr.videoInfo.showVideo">
-            <br>
-            <div class="video-container">
-              <button youtube rel="{{vmPr.videoInfo.videoId}}" class="btn btn-flat btn-labeled btn-primary" id="videoExplainbtn">
-                <span class="btn-label text-lg icon fa fa-youtube-play"></span><span ng-bind="vmPr.videoInfo.videoText"></span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div id="Panel1" flex layout-fill layout-padding layout-align="start center" ng-if="vmPr.questionData.setLayoutOneColumn">
+    <div pr-first-panel>
     </div>
-    <div class="sentence_correction_stimulus" ng-if="vmPr.questionData.questionInformation!==''">
-      <div class="panel" layout-fill>
-        <div class="panel-heading">
-          <span class="panel-title"><i class="panel-title-icon fa fa-file-text-o"></i>Information</span>
-        </div>
-        <div class="panel-body">
-          <div class="question-information" ng-class="{'fixed-width': vmPr.questionData.fixedWidth}" ng-bind-html='vmPr.questionData.questionInformation'></div>
-        </div>
-      </div>
+  </div>
+  <div id="Panel1" layout-fill layout-padding layout-align="start center" ng-if="!vmPr.questionData.setLayoutOneColumn">
+    <div pr-first-panel>
     </div>
   </div>
   <div id="Panel2" flex layout-fill layout-padding layout-align="start center">
-    <div class="panel" layout-fill>
-      <div class="panel-heading">
-        <span class="panel-title">
-          <i class="panel-title-icon fa fa-flask"></i>Question</span>
-      </div>
-      <div class="panel-body">
-        <div id="answercontent" class="info-box">
-          <div id="solutionarea">
-            <span ng-bind="vmPr.questionData.questPosition"></span>
-            <div ng-bind-html='vmPr.questionData.stimulus'></div>
-            <br>
-            <!--answer-->
-            <div ng-class="{ 'has-error' : !vmPr.isValid }">
-              <span class="help-block" ng-if="!vmPr.isValid">{{vmPr.invalidMessage}}</span>
-              <div id="answerType" ng-include="vmPr.answerType"></div>
-            </div>
-          </div>
-          <div ng-if="vmPr.explanationInfo.showExplanation" class=" practice-tags" question-tags-only xp="vmPr.explanationInfo.xpTag" tags="vmPr.explanationInfo.tags"></div>
-        </div>
-      </div>
-    </div>
-    <div ng-if="vmPr.explanationInfo.showExplanation && vmPr.explanationInfo.tagsResources.length>0" class="panel timing-padding" layout-fill>
-      <div class="panel-heading">
-        <span class="panel-title"><i class="panel-title-icon fa fa-folder-open"></i>Skills to Review
-            </span>
-      </div>
-      <div class="panel-body no-padding-vr">
-        <div question-tags tags="vmPr.explanationInfo.tagsResources"></div>
-      </div>
+    <div pr-sec-panel>
     </div>
   </div>
 </div>

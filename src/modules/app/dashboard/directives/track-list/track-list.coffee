@@ -21,8 +21,7 @@ trackList = ($mdDialog,dashboardService,utilities)->
 
       scope.getYourScorePredictionUrl = (track) ->
         baseUrl = utilities.originalGrockit(false)
-        console.log baseUrl + '/assessment/for_track/' + track.id
-        utilities.redirect baseUrl + '/assessment/for_track/' + track.id
+        utilities.redirect baseUrl + '/assessment/for_track/'+track.id, '_blank'
 
       # scope.setFavorite = (track)->
       #   animEv='webkitAnimationEnd mozAnimationEnd '+
