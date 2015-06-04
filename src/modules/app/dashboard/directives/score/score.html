@@ -1,0 +1,25 @@
+<md-card>
+  <div class="panel-heading indigo-bg">
+    <div class="panel-title white-text">
+      <md-icon class="fa fa-trophy white-text" aria-label=" ">
+      </md-icon>
+      <span class="text-md">Overall <span ng-bind="groupTitle"></span> Score Prediction</span>
+    </div>
+  </div>
+  <md-card-content class="info text-center grey-text text-700">
+    <div class="card-bg-icon bg-icon-info float-right">
+      <md-icon class="fa fa-trophy grey bg-300" aria-label="overall score prediction">
+      </md-icon>
+    </div>
+    <p class="text-md">
+    Your score prediction is:
+    <strong ng-if="scoreData.hasScore" class="text-md" ng-bind="scoreData.totalScore"></strong>
+    <strong ng-if="!scoreData.hasScore" class="text-md" ng-bind="noScoreMessage"></strong>
+    <div ng-if="scoreData.rangeExist">
+      <span ng-show="scoreData.rangeExist" class="text-md">
+        <span ng-bind="scoreData.rangeInit"></span>-<span ng-bind="scoreData.rangeEnd"></span>
+      </span>
+    </div>
+    </p>
+  </md-card-content>
+</md-card>

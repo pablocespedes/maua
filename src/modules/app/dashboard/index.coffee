@@ -9,6 +9,8 @@ module.exports = angular.module('grockitApp.dashboard', [])
       controllerAs: 'vmDash'
       return
 .directive 'trackList', require('./directives/track-list/track-list')
+.directive 'scorePrediction', require('./directives/score/score')
+.directive 'userProgress', require('./directives/user-progress/user-progress')
 .factory 'learnContent', require('./services/learn.content')
 .factory 'dashboardService', require('./services/dashboard.utils')
 .controller 'DashboardController', require('./dashboard.controller')

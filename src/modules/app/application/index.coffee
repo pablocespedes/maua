@@ -35,7 +35,6 @@ module.exports = angular.module('grockitApp.app', [])
 .directive 'questionTags', require('./directives/question-tags/question-tags')
 .directive 'questionTiming', require('./directives/quest-timing/quest-timing')
 .directive 'userSettings', require('./directives/user-settings/user-settings')
-.directive 'scorePrediction', require('./directives/score/score')
 .directive 'prFirstPanel',
 require('./directives/pr-first-panel/pr-first-panel')
 .directive 'prSecPanel',

@@ -44,7 +44,22 @@ dashboardService = ($q,resource,utilities,learnContent)->
         scoreData.rangeEnd = scoreResponse.range[1]
       else
         scoreData.rangeExist = false
+      scoreData.hasScore = scoreData.incomplete is false and
+           scoreData.totalScore isnt null and scoreData.totalScore > 0
+
       scoreData
+
+    getProgress : ->
+      history = {}
+      history.today = if utilities.existy @dashboardData.progress.today
+      then @dashboardData.progress.today.total_questions_answered else 0
+
+      history.lastWeek = if utilities.existy @dashboardData.progress.last_week
+      then @dashboardData.progress.last_week.total_questions_answered else 0
+
+      history.all = if utilities.existy @dashboardData.progress.all
+      then @dashboardData.progress.all.total_questions_answered else 0
+      history
 
     getSmartPractice : ->
       accuracy = null

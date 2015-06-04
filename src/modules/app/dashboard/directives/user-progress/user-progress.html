@@ -1,0 +1,25 @@
+<md-card>
+  <div class="panel-heading indigo-bg">
+    <div class="panel-title white-text">
+      <md-icon class="mdi mdi-trending-up white-text" aria-label=" ">
+      </md-icon>
+      <span class="text-md">Your Progress</span>
+    </div>
+  </div>
+  <md-card-content class="info text-center grey-text text-700">
+    <ul class="list-justified text-center">
+      <li>
+        <p class="text-md">Today</p>
+        <p class="red-text text-a200"><b><span ng-bind="progressInfo.today"></span></b></p>
+      </li>
+      <li>
+        <p class="text-md">Last Week</p>
+        <p class="blue-text blue-a200"><b><span ng-bind="progressInfo.lastWeek"></span></b></p>
+      </li>
+      <li>
+        <p class="text-md">All</p>
+        <p class="amber-text amber-a200"><b><span ng-bind="progressInfo.all"></span></b></p>
+      </li>
+    </ul>
+  </md-card-content>
+</md-card>

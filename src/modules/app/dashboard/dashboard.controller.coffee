@@ -41,7 +41,7 @@ class DashboardController
       @dashObserver = @product.observeGroupId().register (groupId) =>
         if @activeGroupId isnt groupId
           @activeGroupId = groupId
-          @_getDashboard @activeGroupId
+          @getDashboard @activeGroupId
           @showBuyNow = @showPayBanner()
           @upgradePromptMessage = @membership.upgradePromptMessage()
           @canPractice = @membership.canPractice()
@@ -59,7 +59,6 @@ class DashboardController
           @utilities.setActiveTrack subject, trackId
           @state.go 'custom-practice',
             subject: @activeGroupId
-        #@utilities.internalRedirect '/' + @activeGroupId + '/custom-practice/'
         else
           url = '/' + @activeGroupId + '/' + trackId + '/play'
           @utilities.redirect url
@@ -73,37 +72,28 @@ class DashboardController
     else @membership.showBuyButton()
 
 
-  _getDashboard : (groupId) ->
+  getDashboard : (groupId) ->
     @dashboardService.setDashboardData(groupId).then (result) =>
       hasQuestionsAnswered = @dashboardService.hasQuestionsAnswered()
-
-      # if not hasQuestionsAnswered and
-      #  @activeGroupId is 'gre'
-      #   @state.go 'custom-practice',
-      #       subject: @activeGroupId
-
-      # else
       if @enableScore
-        @_fetchScorePrediction()
-      @_fetchTracks()
-        # @_getHistoryInformation()
+        @fetchScorePrediction()
+      @fetchTracks()
+      @getHistoryInformation()
 
-  _fetchTracks : ->
+  fetchTracks : ->
     smartPractice = @dashboardService.getSmartPractice()
     @tracks = smartPractice.items
     @loading = false
 
-  _fetchScorePrediction : ->
+  fetchScorePrediction : ->
     scoreResponse = @dashboardService.getScorePrediction()
     if angular.isDefined(scoreResponse)
-      @scoreNotifier.setScore scoreResponse
       @score = scoreResponse
 
-  _getHistoryInformation : ->
-    historyResponse = @dashboardService.getProgress()
-    if angular.isDefined(historyResponse)
-      membership.membershipValidation activeGroupId, historyResponse.all
-    setItUpUserProgress.setUserProgress historyResponse
+  getHistoryInformation : ->
+    @historyResponse = @dashboardService.getProgress()
+    if angular.isDefined(@historyResponse)
+      @membership.membershipValidation @activeGroupId, @historyResponse.all
 
 
 DashboardController.$inject = ['$scope','$state','product',

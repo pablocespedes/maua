@@ -1,6 +1,6 @@
 <div layout-sm="column" layout="row" layout-fill layout-wrap>
   <div flex-lg="33" flex-md="50" flex-sm flex-gt-md="33" flex-gt-lg="25" ng-repeat="track in tracks | orderBy: 'position' " class="animated" id="{{track.id}}">
-    <md-card>
+    <md-card class="white-text">
       <md-card-content class="{{track.cardCss}}">
        <span class="score-text " ng-if="track.hasScore && isVisible"  aria-label="Your Score Prediction">
           <span class="text-primary" >
@@ -9,11 +9,9 @@
 
         </span>
         <div class="card-bg-icon">
-          <md-icon class="mdi mdi-assessment" aria-label="{{track.name}}">
+          <md-icon class="mdi mdi-assessment white-text" aria-label="{{track.name}}">
           </md-icon>
         </div>
-        <!-- <md-icon class="md md-assessment" aria-hidden="true">
- -->
         </md-icon>
         <h3 ng-bind="track.name"></h3>
         <p ng-bind="track.subtracksStr">
