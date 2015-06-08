@@ -2,13 +2,13 @@
   <br>
   <div layout-sm="column" layout="row" layout-fill layout-wrap>
     <div flex score-prediction group-title="$root.groupTitle" score-data="vmDash.score" ng-if="vmDash.enableScore" no-score-message="More data needed for {{$root.groupTitle}} score."></div>
-    <div flex user-progress progress-info="vmDash.historyResponse" ng-if="vmDash.historyResponse.all>0">
+    <div flex user-progress progress-info="vmDash.historyResponse" ng-if="vmDash.historyResponse.all">
     </div>
     <div flex id="payment-panel" ng-if="vmDash.showBuyNow">
       <md-card>
         <div class="panel-heading indigo-bg">
           <div class="panel-title white-text">
-            <md-icon class="mdi mdi-thumb-up white-text" aria-label=" ">
+            <md-icon md-font-icon="mdi-thumb-up white-text" aria-label=" ">
             </md-icon>
             <span class="text-md">
             <a ng-href="{{vmDash.paymentPage}}" target="_blank" class="text-md">  Upgrade Now
@@ -18,7 +18,7 @@
         </div>
         <md-card-content class="info text-center grey-text text-700">
           <div class="card-bg-icon bg-icon-info float-right">
-            <md-icon class="mdi mdi-schedule" aria-label=" ">
+            <md-icon md-font-icon="mdi mdi-schedule" aria-label=" ">
             </md-icon>
           </div>
           <a ng-href="{{vmDash.paymentPage}}" target="_blank">

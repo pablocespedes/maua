@@ -2,7 +2,7 @@
   <md-toolbar id="main-toolbar" class="md-whiteframe-z1">
     <div class="md-toolbar-tools">
       <md-button class="md-icon-button" aria-label="Menu" ng-click="appCtrl.toggleList()">
-        <md-icon class="mdi mdi-menu mdi-2x white-text" aria-label="Menu"></md-icon>
+        <md-icon md-font-icon="mdi mdi-menu mdi-2x white-text" aria-label="Menu"></md-icon>
       </md-button>
       <span>
            <a ui-sref="dashboard({subject: appCtrl.activeGroupId})">
@@ -15,12 +15,12 @@
         </md-option>
         <md-option ng-repeat="unlinked in appCtrl.ugroups.unLinkedGroups track by $index" value="{{unlinked.id}}" ng-click="appCtrl.groupRedirect(unlinked.id)" disable>
           <span ng-bind="unlinked.name"></span>
-          <md-icon class="mdi mdi-1x mdi-lock-outline product-icon" aria-label="lock"></md-icon>
+          <md-icon md-font-icon="mdi mdi-1x mdi-lock-outline product-icon" aria-label="lock"></md-icon>
         </md-option>
       </md-select>
       <span flex></span>
       <md-button class="md-icon-button" aria-label="Settings">
-        <md-icon ng-if="appCtrl.showBuyNow" class="mdi mdi-2x mdi-schedule white-text" ng-click="appCtrl.showPaymentBanner()"></md-icon>
+        <md-icon ng-if="appCtrl.showBuyNow" md-font-icon="mdi mdi-2x mdi-schedule white-text" ng-click="appCtrl.showPaymentBanner()"></md-icon>
       </md-button>
       <!-- <label class="pointer" ng-click="appCtrl.displayMenu()">{{appCtrl.currentUser.firstName}}</label> -->
       <img class="md-fab md-primary round-img pointer" ng-src="{{::appCtrl.currentUser.avatarUrl}}" alt="User Picture" ng-click="appCtrl.displayMenu()" />
@@ -31,7 +31,7 @@
       <md-toolbar class="md-tall md-hue-2  menu-header">
         <span flex></span>
         <div layout="column" class="md-toolbar-tools-bottom inset">
-          <md-icon class="menu-toggle mdi mdi-arrow-back mdi-2x white-text" ng-click="appCtrl.closeMainMenu()"></md-icon>
+          <md-icon md-font-icon="menu-toggle mdi mdi-arrow-back mdi-2x white-text" ng-click="appCtrl.closeMainMenu()"></md-icon>
           <h2 class="md-toolbar-tools md-toolbar-tools-bottom menu-title">{{$root.groupTitle}} {{$root.currentPage}}</h2>
           <span></span>
         </div>
@@ -42,7 +42,7 @@
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">
-                  <md-icon class="mdi mdi-2x {{item.icon}} md-default-theme"></md-icon>
+                  <md-icon md-font-icon="mdi mdi-2x {{item.icon}} md-default-theme"></md-icon>
                 </div>
                 <div class="inset">
                   {{item.title}}
@@ -56,7 +56,7 @@
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">
-                  <md-icon class="md md-2x {{item.icon}} md-default-theme" aria-label="{{item.title}}"></md-icon>
+                  <md-icon md-font-icon="md md-2x {{item.icon}} md-default-theme" aria-label="{{item.title}}"></md-icon>
                 </div>
                 <div class="inset">
                   {{item.title}}
@@ -72,7 +72,7 @@
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">
-                  <md-icon class="mdi mdi-2x mdi-account-child " aria-label="Account"></md-icon>
+                  <md-icon md-font-icon="mdi mdi-2x mdi-account-child " aria-label="Account"></md-icon>
                 </div>
                 <div class="inset">Account
                 </div>
@@ -85,7 +85,7 @@
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">
-                  <md-icon class="mdi mdi-2x mdi-perm-identity" aria-label="Profile"></md-icon>
+                  <md-icon md-font-icon="mdi mdi-2x mdi-perm-identity" aria-label="Profile"></md-icon>
                 </div>
                 <div class="inset">Profile
                 </div>
@@ -98,7 +98,7 @@
             <div class="md-list-item-inner">
               <div class="md-list-item-text" md-ink-ripple>
                 <div class="inset">
-                  <md-icon class="mdi mdi-2x mdi-settings-power" aria-label="Log Out"></md-icon>
+                  <md-icon md-font-icon="mdi mdi-2x mdi-settings-power" aria-label="Log Out"></md-icon>
                 </div>
                 <div class="inset">Log Out
                 </div>

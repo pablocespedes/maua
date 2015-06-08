@@ -9,7 +9,7 @@
 
         </span>
         <div class="card-bg-icon">
-          <md-icon class="mdi mdi-assessment white-text" aria-label="{{track.name}}">
+          <md-icon md-font-icon="mdi mdi-assessment white-text" aria-label="{{track.name}}">
           </md-icon>
         </div>
         </md-icon>
@@ -22,14 +22,14 @@
         <md-button ng-if="track.learnLink !== ''" class="md-hue-2 md-primary learn-button" ng-href="{{track.learnLink}}" target="_blank">Learn</md-button>
         <span flex="2"></span>
         <md-button ng-if="track.hasScore && isVisible" class="md-primary challenge-icon learn-button" ng-href="{{track.challengeLink}}" target="_blank" ng-disabled="!canPractice" aria-label="Take a Challenge">
-          <md-icon class="fa fa-trophy text-lg "></md-icon>
+          <md-icon md-font-icon="fa fa-trophy text-lg "></md-icon>
           <md-tooltip>
             Take a Challenge
           </md-tooltip>
         </md-button>
 
         <md-button ng-if="!track.hasScore && isVisible" class="md-primary card-icon" ng-click="getYourScorePredictionUrl(track)" ng-disabled="!canPractice" aria-label="Take a Diagnostic">
-          <md-icon class="mdi mdi-assignment mdi-2x"></md-icon>
+          <md-icon md-font-icon="mdi mdi-assignment mdi-2x"></md-icon>
           <md-tooltip>
             Take a Diagnostic
           </md-tooltip>
