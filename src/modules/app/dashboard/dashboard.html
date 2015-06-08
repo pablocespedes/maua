@@ -4,7 +4,7 @@
     <div flex score-prediction group-title="$root.groupTitle" score-data="vmDash.score" ng-if="vmDash.enableScore" no-score-message="More data needed for {{$root.groupTitle}} score."></div>
     <div flex user-progress progress-info="vmDash.historyResponse">
     </div>
-    <div flex>
+    <div flex id="payment-panel" ng-if="vmDash.showBuyNow" >
       <md-card>
         <div class="panel-heading indigo-bg">
           <div class="panel-title white-text">
@@ -13,7 +13,7 @@
             <span class="text-md">
             <a ng-href="{{vmDash.paymentPage}}" target="_blank" class="text-md">  Upgrade Now
             </a>
-             <a href="javascript:void(0)" class="close-thik" ng-click="vmDash.hidPayment()"></a>
+             <!-- <a href="javascript:void(0)" class="close-thik" ng-click="vmDash.hidPayment()"></a> -->
             </span>
           </div>
         </div>
@@ -29,33 +29,6 @@
       </md-card>
     </div>
   </div>
-  <!--   <div layout-sm="column" layout="row" layout-fill layout-wrap>
-    <div id="payment-panel" ng-if="vmDash.showBuyNow" flex>
-      <md-card>
-        <div class="panel-heading indigo-bg">
-          <div class="panel-title white-text ">
-            <md-icon class="mdi white-text mdi-schedule" aria-label=" ">
-            </md-icon>
-            <a ng-href="{{vmDash.paymentPage}}" target="_blank" class="text-md"> Upgrade Now</a>
-            <a href="javascript:void(0)" class="close-thik" ng-click="vmDash.hidPayment()"></a>
-          </div>
-        </div>
-        <md-card-content class="info text-center grey-text text-700">
-          <div class="card-bg-icon bg-icon-info float-right">
-            <md-icon class="mdi mdi-schedule" aria-label=" ">
-            </md-icon>
-          </div>
-          <a ng-href="{{vmDash.paymentPage}}" target="_blank">
-            <h1 ng-bind-html="vmDash.upgradePromptMessage"></h1>
-          </a>
-          <br>
-          <span class="text-sm"><br></span>
-        </md-card-content>
-      </md-card>
-    </div>
-  </div> -->
-  <!--  <div id="payment-panel" ng-if="vmDash.showBuyNow" layout="row" layout-margin layout-fill>
-  </div> -->
   <div track-list tracks="vmDash.tracks " start-practice="vmDash.startPractice " is-visible="vmDash.enableScore && !vmDash.loading " can-practice="vmDash.canPractice" challenges="vmDash.challengesGames"></div>
 </div>
 <div layout="row" layout-sm="column" layout-align="space-around" ng-if="vmDash.loading">

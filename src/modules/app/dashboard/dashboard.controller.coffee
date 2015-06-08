@@ -42,7 +42,7 @@ class DashboardController
         if @activeGroupId isnt groupId
           @activeGroupId = groupId
           @getDashboard @activeGroupId
-          @showBuyNow = @showPayBanner()
+          @showBuyNow = @membership.showBuyButton() #@showPayBanner()
           @upgradePromptMessage = @membership.upgradePromptMessage()
           @canPractice = @membership.canPractice()
           @enableScore = @activeGroupId is 'gmat' or @activeGroupId is 'act' or
