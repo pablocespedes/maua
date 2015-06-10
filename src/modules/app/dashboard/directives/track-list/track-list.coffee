@@ -14,6 +14,7 @@ trackList = ($mdDialog,dashboardService,utilities)->
       challenges:'='
     link: (scope, element, attr) ->
       overlayTrack = null
+      scope.ignoredTrack = '51dc4005-de13-c3ef-3ec3-6b2566c46220'
 
       scope.empty = (track) ->
         if angular.isDefined(track.items) and
