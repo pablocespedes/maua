@@ -4,7 +4,7 @@ class DashboardController
   # Services injected into the controller constructor
   constructor: ($scope,$state,@product,@authorization,
     @dashboardService, @utilities,@membership,@userNotify,@payBanner,
-    @scoreNotifier) ->
+    @scoreNotifier, @testCountService) ->
     @utilities.currentPage 'Dashboard'
     @state=$state
     @userObserver = null
@@ -40,6 +40,7 @@ class DashboardController
       user_id = userInfo.userId
       @dashObserver = @product.observeGroupId().register (groupId) =>
         if @activeGroupId isnt groupId
+          @hidStudyPlan(groupId)
           @activeGroupId = groupId
           @getDashboard @activeGroupId
           @showBuyNow = @membership.showBuyButton() #@showPayBanner()
@@ -50,7 +51,18 @@ class DashboardController
           historyVisible = false
           baseUrl = @utilities.originalGrockit(false)
           @paymentPage = baseUrl + '/' + @activeGroupId + '/subscriptions/new'
+          @studyUrl = baseUrl+ '/' + @activeGroupId + '/study_plan'
+          @groupPrUrl = baseUrl + '/' + @activeGroupId + '/social'
+          @customPrUrl = baseUrl + '/' + @activeGroupId + '/custom_games/new'
+          @shouldShow =  @activeGroupId != 'gre'
+          @testDay = @testCountService.getCountDownData(@activeGroupId)
+
     @loading = false
+
+  hidStudyPlan : (groupId) ->
+    @hideStudyPlan = groupId is 'ap_psychology' or
+     groupId is 'ap_world_history' or groupId is 'gre' or
+      groupId is 'lsat' or groupId is 'iim-cat'
 
   startPractice : (subject, trackId) =>
     if @canPractice
@@ -98,6 +110,6 @@ class DashboardController
 
 DashboardController.$inject = ['$scope','$state','product',
 'authorization','dashboardService','utilities','membership','userNotify',
-'payBanner','scoreNotifier']
+'payBanner','scoreNotifier','testCountService']
 
 module.exports = DashboardController

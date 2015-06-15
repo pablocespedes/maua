@@ -2,11 +2,10 @@
   <div flex-lg="33" flex-md="50" flex-sm flex-gt-md="33" flex-gt-lg="25" ng-repeat="track in tracks | orderBy: 'position' " class="animated" id="{{track.id}}">
     <md-card class="white-text">
       <md-card-content class="{{track.cardCss}}">
-       <span class="score-text " ng-if="track.hasScore && isVisible"  aria-label="Your Score Prediction">
+        <span class="score-text " ng-if="track.hasScore && isVisible" aria-label="Your Score Prediction">
           <span class="text-primary" >
             Your Score Prediction: <span ng-bind="track.getScore"></span>
-          </span>
-
+        </span>
         </span>
         <div class="card-bg-icon">
           <md-icon md-font-icon="mdi mdi-assessment white-text" aria-label="{{track.name}}">
@@ -18,7 +17,7 @@
         </p>
       </md-card-content>
       <div layout="row" flex="" class="fill-height card-actions ">
-       <md-button class="md-hue-2 md-primary" ng-click="startPractice(track,track.id)">Practice</md-button>
+        <md-button class="md-hue-2 md-primary" ng-click="startPractice(track,track.id)">Practice</md-button>
         <md-button ng-if="track.learnLink !== ''" class="md-hue-2 md-primary learn-button" ng-href="{{track.learnLink}}" target="_blank">Learn</md-button>
         <span flex="2"></span>
         <md-button ng-if="track.hasScore && isVisible && track.id !== ignoredTrack" class="md-primary challenge-icon learn-button" ng-href="{{track.challengeLink}}" target="_blank" ng-disabled="!canPractice" aria-label="Take a Challenge">
@@ -27,7 +26,6 @@
             Take a Challenge
           </md-tooltip>
         </md-button>
-
         <md-button ng-if="!track.hasScore && isVisible && track.id !== ignoredTrack" class="md-primary card-icon" ng-click="getYourScorePredictionUrl(track)" ng-disabled="!canPractice" aria-label="Take a Diagnostic">
           <md-icon md-font-icon="mdi mdi-assignment mdi-2x"></md-icon>
           <md-tooltip>
@@ -37,6 +35,57 @@
         <!-- <div class="heart">
           <md-icon class="md md-2x" ng-class="{'md-favorite active':track.favorite, 'md-favorite-outline':!track.favorite}" ng-click="setFavorite(track)"></md-icon>
         </div> -->
+      </div>
+    </md-card>
+  </div>
+  <div ng-if="!hideStudyPlan && isVisible " flex-lg="33" flex-md="50" flex-sm flex-gt-md="33" flex-gt-lg="25" class="animated">
+    <md-card class="white-text">
+      <md-card-content class="red bg-a700 ">
+        <div class="card-bg-icon">
+          <md-icon md-font-icon="mdi mdi-assessment white-text" aria-label="Study Plan">
+          </md-icon>
+        </div>
+        </md-icon>
+        <h3>Study Plan</h3>
+        <p ng-bind="track.subtracksStr">
+        </p>
+      </md-card-content>
+      <div layout="row" flex="" class="fill-height card-actions ">
+        <md-button class="md-hue-2 md-primary" ng-href="{{studyUrl}}">Practice</md-button>
+      </div>
+    </md-card>
+  </div>
+  <div ng-if="shouldShow" flex-lg="33" flex-md="50" flex-sm flex-gt-md="33" flex-gt-lg="25" class="animated">
+    <md-card class="white-text">
+      <md-card-content class="green bg-a700">
+        <div class="card-bg-icon">
+          <md-icon md-font-icon="mdi mdi-assessment white-text" aria-label="Group Practice">
+          </md-icon>
+        </div>
+        </md-icon>
+        <h3>Group Practice</h3>
+        <p ng-bind="track.subtracksStr">
+        </p>
+      </md-card-content>
+      <div layout="row" flex="" class="fill-height card-actions ">
+        <md-button class="md-hue-2 md-primary" ng-href="{{groupPrUrl}}">Practice</md-button>
+      </div>
+    </md-card>
+  </div>
+  <div ng-if="shouldShow" flex-lg="33" flex-md="50" flex-sm flex-gt-md="33" flex-gt-lg="25" class="animated">
+    <md-card class="white-text">
+      <md-card-content class="cyan bg-a400">
+        <div class="card-bg-icon">
+          <md-icon md-font-icon="mdi mdi-assessment white-text" aria-label="Custom Practice">
+          </md-icon>
+        </div>
+        </md-icon>
+        <h3>Custom Practice</h3>
+        <p ng-bind="track.subtracksStr">
+        </p>
+      </md-card-content>
+      <div layout="row" flex="" class="fill-height card-actions ">
+        <md-button class="md-hue-2 md-primary" ng-href="{{customPrUrl}}">Practice</md-button>
       </div>
     </md-card>
   </div>

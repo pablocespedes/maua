@@ -1,10 +1,7 @@
-Storage =require('../../application/services/_storage')
 
-dashboardService = ($q,resource,utilities,learnContent)->
-  new class DashboardService extends Storage
+dashboardService = ($q,resource,utilities,learnContent,storage)->
+  new class DashboardService extends resource
 
-    #allows multiple classes to be extend
-    _.extend @::, resource::, Storage::
 
     _getScore: (track) ->
       if @dashboardData.score_prediction
@@ -65,7 +62,7 @@ dashboardService = ($q,resource,utilities,learnContent)->
       accuracy = null
       subtracks = null
       currentCard = {}
-      #cardsOrder = @get('cards_'+@groupId)
+      #cardsOrder = storage.get('cards_'+@groupId)
       trackArray = @dashboardData.smart_practice.items
       smartPracticeItems = null
       cardCssCopy = @getAvailableCss()
@@ -146,7 +143,7 @@ dashboardService = ($q,resource,utilities,learnContent)->
     saveCardPosition:(tracks)->
       cards = _.map tracks, (item)->
         {'position': item.position, 'id':item.id, 'favorite': item.favorite }
-      @save('cards_'+@groupId,cards)
+      storage.save('cards_'+@groupId,cards)
 
     getLearnLink:(id)->
       learnData = _.find @learnData, (data)->
@@ -170,5 +167,6 @@ dashboardService = ($q,resource,utilities,learnContent)->
         return baseUrl + '/assessment/introcards/' + id
 
 
-dashboardService.$inject = ['$q','resource','utilities','learnContent']
+dashboardService.$inject = ['$q','resource','utilities','learnContent',
+'storage']
 module.exports = dashboardService

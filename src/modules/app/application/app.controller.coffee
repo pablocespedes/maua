@@ -33,10 +33,10 @@ class AppController
       groupId is 'ap_world_history' or groupId is 'academy' or
        groupId is 'iim-cat'
 
-  hidStudyPlan : (groupId) ->
-    @hideStudyPlan = groupId is 'ap_psychology' or
-     groupId is 'ap_world_history' or groupId is 'gre' or
-      groupId is 'lsat' or groupId is 'iim-cat'
+  # hidStudyPlan : (groupId) ->
+  #   @hideStudyPlan = groupId is 'ap_psychology' or
+  #    groupId is 'ap_world_history' or groupId is 'gre' or
+  #     groupId is 'lsat' or groupId is 'iim-cat'
 
   toggleList:() ->
     @mdSidenav('left').open()
@@ -151,7 +151,7 @@ class AppController
 
     @canAccess = @membership.canPractice()
     @hidVideoOption(groupId)
-    @hidStudyPlan(groupId)
+    # @hidStudyPlan(groupId)
     @menu = @menuService.createLeftMenu(menuParams, @hideStudyPlan,
       @hideVideoOption, @canAccess)
 

@@ -1,10 +1,18 @@
 dateUtils = () ->
   new class DateUtils
     constructor: () ->
-    secondsBetweenDates : (date1, date2) ->
+
+    diffBetweenDates:(date1, date2) ->
       date1 = new Date(date1)
       date2 = new Date(date2)
-      Math.abs(date2.getTime() - date1.getTime()) / 1000
+      return Math.abs(date2.getTime() - date1.getTime())
+
+    secondsBetweenDates : (date1, date2) ->
+      @diffBetweenDates(date1, date2) / 1000
+
+    daysBetweenDates : (date1, date2) ->
+      timeDiff = @diffBetweenDates date1, date2
+      diffDays = Math.ceil timeDiff / (1000 * 3600 * 24)
 
     getStandardDate : (date) ->
       day = date.getDate()

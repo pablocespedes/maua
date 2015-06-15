@@ -12,6 +12,11 @@ trackList = ($mdDialog,dashboardService,utilities)->
       canPractice: '='
       titles: '='
       challenges:'='
+      hideStudyPlan:'='
+      studyUrl:'='
+      groupPrUrl:'='
+      shouldShow:'='
+      customPrUrl:'='
     link: (scope, element, attr) ->
       overlayTrack = null
       scope.ignoredTrack = '51dc4005-de13-c3ef-3ec3-6b2566c46220'

@@ -1,0 +1,28 @@
+<div>
+  <md-card>
+    <div class="panel-heading indigo-bg">
+      <div class="panel-title white-text">
+        <md-icon md-font-icon="mdi mdi-schedule white-text" aria-label=" ">
+        </md-icon>
+        <span class="text-md">
+          Time remaining until my {{groupTitle}}
+        </span>
+      </div>
+    </div>
+    <md-card-content class="info text-center grey-text text-700">
+      <div class="card-bg-icon bg-icon-info float-right">
+        <md-icon md-font-icon="mdi mdi-schedule" aria-label=" ">
+        </md-icon>
+      </div>
+      <md-input-container flex ng-show="!testDayExist()">
+        <label>Submission Date</label>
+        <input type="date" ng-model="submissionDate">
+      </md-input-container>
+      <div ng-if="testDayExist()">
+       <h2>You Have <span ng-bind="testDay.days"></span> days left before your test
+        <a href="" title="" class="text-underline text-sm" ng-click="removeTestDay()">Edit Day</a>
+       </h2>
+      </div>
+    </md-card-content>
+  </md-card>
+</div>

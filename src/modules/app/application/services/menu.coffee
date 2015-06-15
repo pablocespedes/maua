@@ -18,26 +18,26 @@ menu = ($window,utilities)->
           icon: 'mdi-dashboard'
           shouldShow: true
         }
-        {
-          id: 'study_plan'
-          url: @baseUrl + '/' + options.groupId + '/study_plan'
-          canAccess: canAccess
-          title: 'Study Plan'
-          isReady: options.isReady
-          target: '_self'
-          icon: 'mdi-bookmark-outline'
-          shouldShow: !hideStudyPlan
-        }
-        {
-          id: 'social'
-          url: @baseUrl + '/' + options.groupId + '/social'
-          canAccess: canAccess
-          title: 'Group Practice'
-          isReady: options.isReady
-          target: '_self'
-          icon: 'mdi-account-child'
-          shouldShow: options.groupId != 'gre'
-        }
+        # {
+        #   id: 'study_plan'
+        #   url: @baseUrl + '/' + options.groupId + '/study_plan'
+        #   canAccess: canAccess
+        #   title: 'Study Plan'
+        #   isReady: options.isReady
+        #   target: '_self'
+        #   icon: 'mdi-bookmark-outline'
+        #   shouldShow: !hideStudyPlan
+        # }
+        # {
+        #   id: 'social'
+        #   url: @baseUrl + '/' + options.groupId + '/social'
+        #   canAccess: canAccess
+        #   title: 'Group Practice'
+        #   isReady: options.isReady
+        #   target: '_self'
+        #   icon: 'mdi-account-child'
+        #   shouldShow: options.groupId != 'gre'
+        # }
         {
           id: 'video_courses'
           url: '#/' + options.groupId + '/video-library'
@@ -58,16 +58,16 @@ menu = ($window,utilities)->
           icon: 'mdi-video-collection'
           shouldShow: !hideVideoOption and options.groupId != 'gre'
         }
-        {
-          id: 'custom_practice'
-          url: @baseUrl + '/' + options.groupId + '/custom_games/new'
-          canAccess: canAccess
-          title: 'Custom Practice'
-          isReady: options.isReady
-          target: '_blank'
-          icon: 'mdi-my-library-books'
-          shouldShow: options.groupId != 'gre'
-        }
+        # {
+        #   id: 'custom_practice'
+        #   url: @baseUrl + '/' + options.groupId + '/custom_games/new'
+        #   canAccess: canAccess
+        #   title: 'Custom Practice'
+        #   isReady: options.isReady
+        #   target: '_blank'
+        #   icon: 'mdi-my-library-books'
+        #   shouldShow: options.groupId != 'gre'
+        # }
         {
           id: 'gre_fullLenghtTest'
           url: @grockitTV + 'grepracticetest'
