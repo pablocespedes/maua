@@ -11,6 +11,8 @@ class LogoutController
     logOut = @utilities.originalGrockit() + '/logout'
     @authorization.removeUser()
     @authorization.removeCookie()
+    grouId = @utilities.getActiveTrack()
+    @authorization.removeFromStorage(groupId + '_test_count')
     @window.location.href = logOut
     return
 

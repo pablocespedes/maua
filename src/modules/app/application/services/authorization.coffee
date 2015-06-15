@@ -46,9 +46,12 @@ authorization = ($window,storage)->
 
     removeUser: ->
       @cachedUser = null
-      storage.remove @userInfo
-      storage.remove @paymentBannerInfo
-      storage.remove @questionTimingInfo
+      @removeFromStorage @userInfo
+      @removeFromStorage @paymentBannerInfo
+      @removeFromStorage @questionTimingInfo
+
+    removeFromStorage:(key)->
+      storage.remove key
 
 authorization.$inject = ['$window','storage']
 module.exports = authorization
