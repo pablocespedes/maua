@@ -1,4 +1,4 @@
-testCountService = (storage,dateUtils)->
+testCountService = (storage,dateUtils,utilities)->
   new class TestCountService
     constructor:->
 
@@ -12,7 +12,12 @@ testCountService = (storage,dateUtils)->
 
     getCountDownData:(groupId)->
       key = groupId + '_test_count'
-      storage.get(key)
+      testDay = storage.get(key)
+      if utilities.existy testDay
+        date = new Date testDay.date
+        testDay.days = @getLeftDays(date)
+        @setData(testDay)
+        return testDay
 
     setData:(data)->
       key = data.groupId + '_test_count'
@@ -22,5 +27,5 @@ testCountService = (storage,dateUtils)->
       key = groupId + '_test_count'
       storage.remove(key)
 
-testCountService.$inject = ['storage','dateUtils']
+testCountService.$inject = ['storage','dateUtils','utilities']
 module.exports = testCountService

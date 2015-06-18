@@ -39,4 +39,5 @@ module.exports = angular.module('grockitApp.app', [])
 require('./directives/pr-first-panel/pr-first-panel')
 .directive 'prSecPanel',
 require('./directives/pr-sec-panel/pr-sec-panel')
+.directive 'dateMask', require('./directives/date-mask')
 

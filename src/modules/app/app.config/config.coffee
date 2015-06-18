@@ -5,15 +5,33 @@ initConfig =  ($httpProvider, $stateProvider,
   intercomProvider, IntercomAppId, urlsCons) ->
   intercomProvider.appID(IntercomAppId)
   intercomProvider.asyncLoading(true)
+  console.log $mdThemingProvider
+  $mdThemingProvider.definePalette 'grockitPalette',
+    '50': 'b0d9e9' #light blue
+    '100': 'ace0eb' #ligther blue
+    '200': '3794be' #light cyan
+    '300': '238399' #darker cyan
+    '400': '6a4a3c' #brown
+    '500': '404040' #dark grey
+    '600': 'a20039' #dark Pink
+    '700': '1d2172' #dark indigo
+    '800': 'dc2730' # orange
+    '900': 'f4a144' # amber
+    'A100': '95bc55' # light lime
+    'A200': '676767' #dark grey
+    'A400': 'f0f0f0' # light grey
+    'A700': 'dedede' #grey
+    'contrastDefaultColor': 'light'
 
   $mdThemingProvider
   .theme('default')
-    .primaryPalette('blue-grey',
-    'default': '500'
+    .primaryPalette('grockitPalette',
+    'default': '300'
     'hue-1': '400'
-    'hue-2': '800'
+    'hue-2': '200'
     'hue-3': '700')
     .accentPalette 'grey', 'default': '600'
+
   $mdThemingProvider
   .theme('kapTheme')
     .primaryPalette('indigo')

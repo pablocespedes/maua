@@ -12,8 +12,7 @@ countDown = (testCountService,utilities)->
     link:(scope,attr,elm)->
 
       scope.testDayExist = ()->
-        if utilities.existy(scope.testDay)
-        then true else false
+        utilities.existy(scope.testDay)
 
       scope.removeTestDay = ()->
         testCountService.deleteTestDay(scope.groupId)
@@ -25,6 +24,7 @@ countDown = (testCountService,utilities)->
           scope.testDay =
             groupId: scope.groupId
             days: testCountService.getLeftDays(newValue)
+            date: newValue
 
           testCountService.setData(scope.testDay)
       return
