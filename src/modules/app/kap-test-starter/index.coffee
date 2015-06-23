@@ -14,5 +14,6 @@ module.exports = angular.module('grockitApp.kapTestStarter', [])
 .factory 'splashMessages', require('../practices/services/splash.service')
 .factory 'practiceUtilities',
   require('../practices/services/practice.utilities')
+.factory 'kapTestService', require('./services/kap-test-starter')
 .controller 'KapTestController', require('./kap-test-starter.controller')
 

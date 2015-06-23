@@ -1,7 +1,7 @@
 class KapTestController
   # Services injected into the controller constructor
   constructor: (@product, @practiceService,@utilities,
-    @practiceUtilities,$mdDialog,@alert) ->
+    @practiceUtilities,$mdDialog,@alert,@groups,@kapTestService) ->
     @mdDialog = $mdDialog
     @isbuttonClicked = false
     @maxOpts = []
@@ -18,10 +18,37 @@ class KapTestController
     @Error = false
     @isDisabled = false
     @init()
+    @subject = ''
+
+
+  fetchGroups : ->
+    @groups.membershipGroups(true).then (result) =>
+      @responseGroups = result.data.groups
+
+  groupChanged : ->
+    @fetchTracks @activeGroupId
+
+  fetchTracks : (groupId) ->
+    @kapTestService.getTracks(groupId).then (result) =>
+      @responseTracks = result.data.dashboard.smart_practice.items
+      console.log @responseTracks
+
+  getSelectedTrack : ->
+    @responseTracks
+    console.log @responseTracks
+    for i in @responseTracks
+      if i.id is @activeTrackId
+        @subject = i
+        console.log @subject
+
+  trackChanged : ->
+    @getSelectedTrack @activeTrackId
+    console.log @subject
+    @utilities.setActiveTrack @subject, @activeTrackId
+    @setCurrentTrack @activeGroupId
 
   init : ->
-    @activeGroupId = 'gre'
-    @setCurrentTrack @activeGroupId
+    @fetchGroups()
 
   nextAction : ->
     if @nextActionTitle == 'Confirm Choice'
@@ -176,6 +203,7 @@ class KapTestController
     @practiceUtilities.setCurrentTrack(groupId).then (response) =>
       if response
         @activeTrack = response
+        console.log @activeTrack
         @getNewPracticeGame @activeTrack.subject.url
     .catch @handleError
 
@@ -185,6 +213,6 @@ class KapTestController
     console.log e
 
 KapTestController.$inject = ['product','practiceService','utilities',
-'practiceUtilities','$mdDialog','alert']
+'practiceUtilities','$mdDialog','alert','groups','kapTestService']
 
 module.exports = KapTestController
