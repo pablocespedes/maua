@@ -1,0 +1,66 @@
+#kap-test-starter{
+
+.logo {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.footer-kap {
+  text-align: center;
+  min-height: 190px;
+  height: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.footer-kap p {
+  margin: 0 0 10px;
+}
+
+#kap-base-panel {
+  height: 180px!important;
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+  background: #f1f1f1;
+}
+
+#kap-base-panel .confirm-panel {
+  text-align: center;
+}
+
+.kap-select {
+  margin-left: 35px;
+}
+
+.kap-select span{
+  color: white;
+}
+
+@media only screen and (max-width: 600px) {
+  .kap-select md-select.md-kapTheme-theme .md-select-label.md-placeholder{
+    margin-left: -8px;
+    margin-bottom: -13px;
+  }
+
+  .kap-select md-select.md-kapTheme-theme .md-select-label {
+    margin-left: -8px;
+    margin-bottom: -13px;
+  }
+
+  md-toolbar.md-kapTheme-theme{
+    font-size: 12px;
+  }
+
+  .kap-select {
+    margin-bottom: -10px;
+  }
+
+  #kap-toolbar .logo{
+    height: 35px;
+    margin-left: 50px;
+  }
+}
+}

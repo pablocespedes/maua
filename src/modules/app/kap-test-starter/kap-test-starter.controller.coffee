@@ -31,19 +31,19 @@ class KapTestController
   fetchTracks : (groupId) ->
     @kapTestService.getTracks(groupId).then (result) =>
       @responseTracks = result.data.dashboard.smart_practice.items
-      console.log @responseTracks
 
   getSelectedTrack : ->
     @responseTracks
-    console.log @responseTracks
     for i in @responseTracks
       if i.id is @activeTrackId
         @subject = i
-        console.log @subject
 
   trackChanged : ->
+    if @nextActionTitle == 'Next Question'
+      @isValid = true
+      @invalidMessage = ''
+      @changeTrackQuestion()
     @getSelectedTrack @activeTrackId
-    console.log @subject
     @utilities.setActiveTrack @subject, @activeTrackId
     @setCurrentTrack @activeGroupId
 
@@ -180,6 +180,21 @@ class KapTestController
     angular.element('#nextAction').removeClass 'md-primary'
     return
 
+  changeTrackQuestion : ->
+    @isbuttonClicked = false
+    @numerator = null
+    @denominator = null
+    angular.element('#answercontent *')
+    .removeClass('btn-primary btn-danger btn-success').removeAttr 'disabled'
+    @videoInfo.showVideo = false
+    @explanationInfo.showExplanation = false
+    @answerStatus = null
+    @nextActionTitle = 'Confirm Choice'
+    @messageConfirmation = ''
+    angular.element('#skipAction').removeClass 'hide'
+    angular.element('#nextAction').removeClass 'md-primary'
+    return
+
   confirmAnswer : ->
     @answerStatus = @practiceUtilities.confirmChoice(@questionData,
      @roundSessionAnswer, @items, @questionData.kind, @activeGroupId)
@@ -203,14 +218,12 @@ class KapTestController
     @practiceUtilities.setCurrentTrack(groupId).then (response) =>
       if response
         @activeTrack = response
-        console.log @activeTrack
         @getNewPracticeGame @activeTrack.subject.url
     .catch @handleError
 
   handleError:(e)=>
     @loading = false
     @Error = true
-    console.log e
 
 KapTestController.$inject = ['product','practiceService','utilities',
 'practiceUtilities','$mdDialog','alert','groups','kapTestService']

@@ -15,6 +15,7 @@ module.exports = angular.module('grockitApp', [
   'restangular'
   'ngResource',
   'ngCookies',
+  'materialDatePicker',
   require('../../../tmp/templates').name
   require('./app.config/index').name
   require('./application/index').name

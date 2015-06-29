@@ -43,7 +43,9 @@
     "angular-resource": "./bower_components/angular-resource/angular-resource.min.js",
     "angular-sanitize": "./bower_components/angular-sanitize/angular-sanitize.min.js",
     "angular-cookies": "./bower_components/angular-cookies/angular-cookies.min.js",
-    "braintree-web": "./bower_components/braintree-web/dist/braintree.js"
+    "braintree-web": "./bower_components/braintree-web/dist/braintree.js",
+    "material-date-picker": "./bower_components/material-date-picker/build/mbdatepicker.js",
+    "moment": "./bower_components/moment/min/moment.min.js"
   },
   "browserify-shim": {},
   "dependencies": {

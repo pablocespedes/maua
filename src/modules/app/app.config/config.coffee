@@ -5,7 +5,6 @@ initConfig =  ($httpProvider, $stateProvider,
   intercomProvider, IntercomAppId, urlsCons) ->
   intercomProvider.appID(IntercomAppId)
   intercomProvider.asyncLoading(true)
-  console.log $mdThemingProvider
   $mdThemingProvider.definePalette 'grockitPalette',
     '50': 'b0d9e9' #light blue
     '100': 'ace0eb' #ligther blue

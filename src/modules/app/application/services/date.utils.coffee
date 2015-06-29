@@ -5,6 +5,7 @@ dateUtils = () ->
     diffBetweenDates:(date1, date2) ->
       date1 = new Date(date1)
       date2 = new Date(date2)
+      console.log date1, date2
       return Math.abs(date2.getTime() - date1.getTime())
 
     secondsBetweenDates : (date1, date2) ->

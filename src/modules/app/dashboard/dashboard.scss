@@ -113,7 +113,15 @@
 }
 
 #dashboard {
-  .dash-title{
+  .time-card {
+    overflow: visible;
+  }
+  .time-content {
+    left: 56%;
+    top: -25px;
+    font-size: 168px!important;
+  }
+  .dash-title {
     margin-left: 12px;
   }
   ul.list-justified {

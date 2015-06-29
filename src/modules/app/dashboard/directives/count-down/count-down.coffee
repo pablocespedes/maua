@@ -11,15 +11,23 @@ countDown = (testCountService,utilities)->
       groupId:'='
     link:(scope,attr,elm)->
 
+      scope.arrows =
+        year:
+          left: 'assets/images/white_arrow_left.svg',
+          right: 'assets/images/white_arrow_right.svg'
+        month:
+          left: 'assets/images/grey_arrow_left.svg'
+          right: 'assets/images/grey_arrow_right.svg'
+
       scope.testDayExist = ()->
         utilities.existy(scope.testDay)
 
       scope.removeTestDay = ()->
         testCountService.deleteTestDay(scope.groupId)
-        scope.submissionDate = null
+        scope.date = null
         scope.testDay = testCountService.getCountDownData(scope.groupId)
 
-      scope.$watch 'submissionDate', (newValue, oldValue)->
+      scope.$watch 'date', (newValue)->
         if utilities.existy newValue
           scope.testDay =
             groupId: scope.groupId

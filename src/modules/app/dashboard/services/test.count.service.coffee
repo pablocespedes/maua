@@ -3,10 +3,9 @@ testCountService = (storage,dateUtils,utilities)->
     constructor:->
 
     getLeftDays:(testDate)->
-
-      if testDate > new Date()
+      date2 = new Date testDate
+      if date2 > new Date()
         date1 = new Date()
-        date2 = new Date testDate
         return dateUtils.daysBetweenDates date1, date2
       return 0
 
@@ -14,8 +13,7 @@ testCountService = (storage,dateUtils,utilities)->
       key = groupId + '_test_count'
       testDay = storage.get(key)
       if utilities.existy testDay
-        date = new Date testDay.date
-        testDay.days = @getLeftDays(date)
+        testDay.days = @getLeftDays(testDay.date)
         @setData(testDay)
         return testDay
 

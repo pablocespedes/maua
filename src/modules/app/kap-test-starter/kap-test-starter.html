@@ -1,6 +1,6 @@
-<style type="text/css" media="screen">
-  #kap-toolbar .logo {
-    margin-top: 55px;
+<!--<style type="text/css" media="screen">
+  .logo {
+    margin-top: 10px;
     margin-left: 10px;
   }
 
@@ -31,35 +31,70 @@
   }
 
   .kap-select {
-    margin-top: 70px;
     margin-left: 35px;
-    display: block;
-    padding-bottom: 2px;
-    position: relative;
-    max-width: 180px;
   }
 
   .kap-select span{
     color: white;
   }
 
-</style>
-<div>
-  <md-toolbar id="kap-toolbar" md-theme="kapTheme" class="md-tall md-whiteframe-z1" layout="row">
-  <div class="md-toolbar-tools">
-    <h3>
+  @media only screen and (max-width: 600px) {
+  .kap-select md-select.md-kapTheme-theme .md-select-label.md-placeholder{
+    margin-left: -20px;
+  }
+
+  .kap-select md-select.md-kapTheme-theme .md-select-label {
+    margin-left: -20px;
+  }
+
+  /*kap-select*/
+  md-option{
+    height: 16px;
+  }
+
+  #kap-toolbar .logo{
+    height: 35px;
+    margin-left: 70px;
+  }
+}
+
+</style> -->
+<div id="kap-test-starter">
+
+  <!-- <md-toolbar id="kap-toolbar" md-theme="kapTheme" class="md-tall md-whiteframe-z1" layout="row" layout-sm="column">
+  <div flex class="md-toolbar-tools">
+  <h3>
       <span><img src="http://goto.grockit.com/kaplan/quizzes/images/logo.png" alt="" class="logo"></span>
     </h3>
-    <div class="kap-select">
+  </div>
+  <div layout="row" layout-sm="column">
+    <div class="kap-select" flex>
+      <md-select ng-model="vmPr.activeGroupId" ng-change="vmPr.groupChanged()" placeholder="Select a group">
+      <md-option ng-value="group.id" ng-repeat="group in vmPr.responseGroups">{{group.name}}</md-option>
+    </md-select>
+  </div>
+  <div class="kap-select" flex>
+    <md-select ng-model="vmPr.activeTrackId" ng-disabled="!vmPr.activeGroupId" ng-change="vmPr.trackChanged()" placeholder="Select a track">
+    <md-option ng-value="track.id" ng-repeat="track in vmPr.responseTracks">{{track.name}}</md-option>
+  </md-select>
+</div>
+</div>
+</md-toolbar> -->
+<md-toolbar id="kap-toolbar" md-theme="kapTheme" class="md-tall md-whiteframe-z1" layout="row" layout-sm="column">
+  <div flex-lg="20">
+    <span><img src="http://goto.grockit.com/kaplan/quizzes/images/logo.png" alt="" class="logo"></span>
+  </div>
+  <div flex layout="row" layout-sm="column">
+    <div flex-lg="20" class="kap-select">
       <md-select ng-model="vmPr.activeGroupId" ng-change="vmPr.groupChanged()" placeholder="Select a group">
         <md-option ng-value="group.id" ng-repeat="group in vmPr.responseGroups">{{group.name}}</md-option>
       </md-select>
     </div>
-      <div class="kap-select">
-        <md-select ng-model="vmPr.activeTrackId" ng-disabled="!vmPr.activeGroupId" ng-change="vmPr.trackChanged()" placeholder="Select a track">
-          <md-option ng-value="track.id" ng-repeat="track in vmPr.responseTracks">{{track.name}}</md-option>
-        </md-select>
-      </div>
+    <div flex class="kap-select">
+      <md-select ng-model="vmPr.activeTrackId" ng-disabled="!vmPr.activeGroupId" ng-change="vmPr.trackChanged()" placeholder="Select a track">
+        <md-option ng-value="track.id" ng-repeat="track in vmPr.responseTracks">{{track.name}}</md-option>
+      </md-select>
+    </div>
   </div>
 </md-toolbar>
 <div flex layout="row" ng-show="vmPr.activeTrackId">

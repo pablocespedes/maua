@@ -18,6 +18,8 @@ global._ = require "lodash"
 require 'restangular'
 require 'angular-resource'
 braintree = require 'braintree-web'
+global.moment = require 'moment'
+require 'material-date-picker'
 ###
 app entry point
 ###
