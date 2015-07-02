@@ -4,7 +4,7 @@
       <md-checkbox ng-disabled="item.crossOut || showExplanation" class="md-primary" aria-label="false" ng-model="item.selected">
         <div ng-bind-html="item.body"></div>
       </md-checkbox>
-      <span ng-if="showExplanation && item.selected==true" class="float-right arrow-selected">&#10094;</span>
+      <span ng-if="showExplanation && item.selected==true" class="pull-right cross-out fa fa-chevron-left fa-lg"></span>
       <span ng-if="!(showExplanation) && showforCurrentGroup" class="pull-right cross-out fa fa-times" data-original-title="{{item.crossOutMsg}}" ng-click="crossOutChoice($index,$event)">
            <md-tooltip md-direction="left">
             {{item.crossOutMsg}}

@@ -84,7 +84,7 @@ class ReviewController
     @practiceService.getTimingInformation(@trackId,
      @activeGroupId, questionId).$promise.then((result) =>
       timingData = result[0]
-      @showTiming = true
+      #@showTiming = true
       @timingData = timingData
       @totalAnswered = timingData.total_answered
       mergedList = _.map(@items, (item) ->
@@ -97,7 +97,7 @@ class ReviewController
       @isbuttonClicked = true
 
     ).catch (e) ->
-      @showTiming = false
+      #@showTiming = false
 
 ReviewController.$inject = ['$scope', 'practiceUtilities', 'product',
  'practiceService', 'reviewService', 'utilities', 'dateUtils']

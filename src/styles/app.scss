@@ -76,12 +76,12 @@ html {
 
 md-radio-group[disabled] .md-container .md-off,
 md-radio-button[disabled] .md-container .md-off {
-  border-color: rgba(0, 0, 0, 0.26)!important;
+  border-color: rgba(117,117,117,0.87)!important;
 }
 
 md-radio-group[disabled] .md-container .md-on,
 md-radio-button[disabled] .md-container .md-on {
-  background-color: transparent!important;
+  background-color: rgba(117,117,117,0.87)!important;
 }
 
 md-list.md-default-theme md-list-item.md-2-line .md-list-item-text h3,

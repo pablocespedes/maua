@@ -24,6 +24,7 @@ class PracticeController
       @time = @timeObj.minutes * 60
     @loadingMessage = @splashMessages.getLoadingMessage()
     @isDisabled = false
+    @isSkipActionDisabled = false
     @init()
     #Takes care to unregister the group once the user leaves the controller
     $scope.$on '$destroy', ->
@@ -49,6 +50,7 @@ class PracticeController
       @isValid = true
       @invalidMessage = ''
       @nextQuestion()
+      @isSkipActionDisabled = false
 
   revealExplanation : ->
     @pauseTimers()
@@ -59,7 +61,6 @@ class PracticeController
       @activeGroupId,questionId).$promise.then (result) =>
       if angular.isDefined(result)
         timingData = result[0]
-        @showTiming = true
         @timingData = timingData
         @totalAnswered = timingData.total_answered
         mergedList = _.map(@items, (item) ->
@@ -209,6 +210,7 @@ class PracticeController
       @isbuttonClicked = true
       @isValid = true
       @invalidMessage = ''
+      @isSkipActionDisabled = true
     else
       @isDisabled = false
       @isValid = false
@@ -248,6 +250,7 @@ class PracticeController
       @isbuttonClicked = true
       @isValid = true
       @invalidMessage = ''
+      @isSkipActionDisabled = true
     else
       @isDisabled = false
       @isValid = false
@@ -273,7 +276,6 @@ class PracticeController
   handleError:(e)=>
     @loading = false
     @Error = true
-    console.log e
 
 
 PracticeController.$inject = ['$scope','$timeout','product','practiceService',

@@ -1,6 +1,6 @@
 <div ng-if="!vmPr.Error">
   <div layout="row" layout-align="center center">
-    <div flex ng-if="vmPr.explanationInfo.showExplanation && vmPr.showTiming && vmPr.questionAnalytics" class="reset-layout" question-timing data="vmPr.timingData" confirmed="vmPr.userConfirmed" your-time="vmPr.questionTimer.seconds" answer-status="vmPr.answerStatus" xp-tag="vmPr.explanationInfo.xpTag" percent-answered="vmPr.percentAnswered" last-answer-loaded="vmPr.questionData.kind">
+    <div flex ng-if="vmPr.explanationInfo.showExplanation && vmPr.questionAnalytics" class="reset-layout" question-timing data="vmPr.timingData" confirmed="vmPr.userConfirmed" your-time="vmPr.questionTimer.seconds" answer-status="vmPr.answerStatus" xp-tag="vmPr.explanationInfo.xpTag" percent-answered="vmPr.percentAnswered" last-answer-loaded="vmPr.questionData.kind">
     </div>
   </div>
   <div layout="row" layout-sm="column" layout-align="space-around" ng-if="vmPr.loading">
@@ -31,7 +31,7 @@
         <span class="practice-data" ng-bind="vmPr.questionTimer.seconds | formatSeconds"></span>
       </div>
       <div flex ng-if="!vmPr.loading" class="confirm-panel">
-        <md-button id="skipAction" ng-click="vmPr.revealExplanation()">Don't know? See answer.</md-button>
+        <md-button id="skipAction" ng-click="vmPr.revealExplanation()" ng-hide="vmPr.isSkipActionDisabled">Don't know? See answer.</md-button>
         <md-button id="nextAction" class="md-primary md-raised" ng-disabled="vmPr.isDisabled" ng-click="vmPr.nextAction()" ng-bind="vmPr.nextActionTitle" aria-label="{{vmPr.nextActionTitle}}">
         </md-button>
       </div>

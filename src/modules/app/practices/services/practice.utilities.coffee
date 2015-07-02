@@ -4,7 +4,6 @@ practiceUtilities = ($window, $q, $sce,alert,utilities,practiceService,
     constructor: ->
 
     setQuestionTypeMatrixGroups : (items) ->
-      console.log items
       _.forEach items, (answer, i) ->
         answer['matrix_group'] = (i - i % 3) / 3
 

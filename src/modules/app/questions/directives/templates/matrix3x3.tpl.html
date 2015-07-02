@@ -10,7 +10,7 @@
           <md-radio-button ng-value="item.id" aria-label="false" class="md-primary" ng-disabled=" item.crossOut || showExplanation">
             <div ng-bind-html="item.body"></div>
           </md-radio-button>
-          <span ng-if="showExplanation && item.selected==true" class="float-right arrow-selected">&#10094;</span>
+          <span ng-if="showExplanation && item.selected==true" class="pull-right cross-out fa fa-chevron-left fa-lg"></span>
           <span ng-if="!(showExplanation) && showforCurrentGroup" class="pull-right cross-out fa fa-times" data-original-title="{{item.crossOutMsg}}" ng-click="crossOutChoice($index,$event,main)">
            <md-tooltip md-direction="left">
             {{item.crossOutMsg}}

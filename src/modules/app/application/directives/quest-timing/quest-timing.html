@@ -31,20 +31,19 @@
             <div class="text-lg" ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
               <span  ng-bind="data.avg_time_to_answer"></span>s
             </div>
-
             <div ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
               <i class="mdi mdi-remove mdi-2x"></i>
             </div>
           </div>
         </div>
       </div>
-      <a href="javascript:void(0)" ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
+      <a href="javascript:void(0)" ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100 || data === undefined">
         <div class="panel-footer timing-box-padding">
           <span class="pull-left">New item!</span>
           <div class="clearfix"></div>
         </div>
       </a>
-        <a href="javascript:void(0)" ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
+      <a href="javascript:void(0)" ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
         <div class="panel-footer timing-box-padding">
           <span class="pull-left">Average time to answer</span>
           <div class="clearfix"></div>
@@ -65,14 +64,14 @@
             </div>
             <div ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
               <span class="badge avg-badge" ng-if="confirmed">
-              <span ng-class="{ 'teal-bg white-text': !compAvgStatus, 'red-bg white-text': compAvgStatus}" class="text-lg text-badge"><span ng-bind="compAvg"></span>s</span>
+                <span ng-class="{ 'teal-bg white-text': !compAvgStatus, 'red-bg white-text': compAvgStatus}" class="text-lg text-badge"><span ng-bind="compAvg"></span>s</span>
               </span>
               <span class="text-lg" ng-if="!confirmed"> <i class="mdi mdi-remove"></i> </span>
             </div>
           </div>
         </div>
       </div>
-      <a href="javascript:void(0)" ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100">
+      <a href="javascript:void(0)" ng-if="data.avg_time_to_answer < 1 || data.total_answered < 100 || data === undefined">
         <div class="panel-footer timing-box-padding">
           <span class="pull-left">New item!</span>
           <div class="clearfix"></div>
@@ -81,10 +80,13 @@
       <a href="javascript:void(0)" ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
         <div class="panel-footer timing-box-padding">
           <span class="pull-left" ng-if="!compAvgStatus && confirmed">
-          You took less time than the average
+            You took less time than the average
           </span>
           <span class="pull-left" ng-if="compAvgStatus && confirmed">
-          You took more time than the average
+            You took more time than the average
+          </span>
+          <span class="pull-left" ng-if="!compAvgStatus && !confirmed">
+            <i class="mdi mdi-remove mdi-2x"></i>
           </span>
           <div class="clearfix"></div>
         </div>
@@ -124,22 +126,30 @@
             </div>
             <div ng-if="percentAnswered >= 1 && data.total_answered >= 100">
               <span class="text-lg">
-              <span ng-bind="percentAnswered"></span>%
+                <span ng-bind="percentAnswered"></span>%
               </span>
             </div>
           </div>
         </div>
       </div>
-      <a href="javascript:void(0)" ng-if="percentAnswered < 1 || data.total_answered < 100">
-        <div class="panel-footer timing-box-padding">
-          <span class="pull-left">New item!</span>
-          <div class="clearfix"></div>
-        </div>
-      </a>
       <a href="javascript:void(0)" ng-if="percentAnswered >= 1 && data.total_answered >= 100">
         <div class="panel-footer timing-box-padding">
           <span class="pull-left">Users answered this question correctly</span>
           <div class="clearfix"></div>
+        </div>
+      </a>
+      <a href="javascript:void(0)" ng-if="percentAnswered < 1 || data.total_answered < 100 || data === undefined">
+        <div ng-if="!(data.avg_time_to_answer >= 1 && data.total_answered >= 100)">
+          <div class="panel-footer timing-box-padding">
+            <span class="pull-left">New item!</span>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div ng-if="data.avg_time_to_answer >= 1 && data.total_answered >= 100">
+          <div class="panel-footer timing-box-padding">
+            <span class="pull-left"><i class="mdi mdi-remove mdi-2x"></i></span>
+            <div class="clearfix"></div>
+          </div>
         </div>
       </a>
     </div>
@@ -150,17 +160,17 @@
         <div layout="row">
           <div flex class=" text-right ">
             <div  ng-if="confirmed"
-              class="timing-check text-center text-slg no-padding-vr">
-              <i ng-if="!answerStatus" class="mdi mdi-close mdi-3x abs-center white-text"></i>
-              <i ng-if="answerStatus" class="mdi mdi-check mdi-3x abs-center white-text"></i>
-            </div>
-            <div class="grey-bg timing-check text-center text-slg no-padding-vr" ng-if="!confirmed">
-              <i class="mdi mdi-remove mdi-2x abs-center"></i>
-            </div>
+            class="timing-check text-center text-slg no-padding-vr">
+            <i ng-if="!answerStatus" class="mdi mdi-close mdi-3x abs-center white-text"></i>
+            <i ng-if="answerStatus" class="mdi mdi-check mdi-3x abs-center white-text"></i>
+          </div>
+          <div class="grey-bg timing-check text-center text-slg no-padding-vr" ng-if="!confirmed">
+            <i class="mdi mdi-remove mdi-2x abs-center"></i>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 </div>
 
