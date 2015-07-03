@@ -13,11 +13,11 @@ countDown = (testCountService,utilities)->
 
       scope.arrows =
         year:
-          left: 'assets/images/white_arrow_left.svg',
-          right: 'assets/images/white_arrow_right.svg'
+          left: 'assets/images/white_arrow_left.png',
+          right: 'assets/images/white_arrow_right.png'
         month:
-          left: 'assets/images/grey_arrow_left.svg'
-          right: 'assets/images/grey_arrow_right.svg'
+          left: 'assets/images/grey_arrow_left.png'
+          right: 'assets/images/grey_arrow_right.png'
 
       scope.testDayExist = ()->
         utilities.existy(scope.testDay)
@@ -38,5 +38,6 @@ countDown = (testCountService,utilities)->
       return
 countDown.$inject = ['testCountService','utilities']
 module.exports = countDown
+
 
 
