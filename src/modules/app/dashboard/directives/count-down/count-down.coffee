@@ -40,4 +40,3 @@ countDown.$inject = ['testCountService','utilities']
 module.exports = countDown
 
 
-

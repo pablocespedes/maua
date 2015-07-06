@@ -15,17 +15,57 @@
   .confirm-panel {
     text-align: right;
   }
+  #dashboard md-card.principalCards{
+    min-height: 192px;
+    max-height: 192px;
+  }
+
+  #dashboard md-card .mb-datepicker table {
+    width: 350px;
+  }
+  #dashboard md-card-content md-input-container .mb-datepicker {
+    width: 350px;
+  }
 }
 @media #{$large-and-down} {
   #video-content{
     height: 800px;
   }
+
   #intercom-container .intercom-launcher {
     bottom: 170px!important;
   }
   .confirm-panel {
     text-align: right;
   }
+
+  #dashboard md-card.principalCards{
+    min-height: 192px;
+    max-height: 192px;
+  }
+
+  #dashboard md-card .text-md{
+    font-size: 16px;
+  }
+    #dashboard md-card .mb-datepicker table {
+    width: 276px;
+  }
+  #dashboard .time-card .daysLeftQuantity {
+    font-size:12px;
+  }
+
+  #dashboard md-card-content md-input-container .mb-datepicker {
+    width: 276px;
+  }
+
+  #dashboard md-card-content md-input-container .mb-datepicker .header-year{
+    margin-left: -21px;
+  }
+
+  #dashboard md-card-content md-input-container .mb-datepicker .header-month {
+    margin-left: -21px;
+  }
+
 }
 
 @media #{$small-and-down} {
@@ -47,11 +87,22 @@
   #Panel1 {
     margin-left: 0rem!important;
   }
+  #dashboard md-card .mb-datepicker table {
+    width: 276px;
+  }
+  #dashboard md-card-content md-input-container .mb-datepicker {
+    width: 276px;
+    margin-left: -10px;
+  }
 }
+
 @media #{$medium-and-down} {
 
 }
 @media #{$medium-only} {
-
+    #dashboard md-card-content md-input-container .mb-datepicker {
+      width: 276px;
+      margin-left: -111px;
+  }
 }
 

@@ -1,4 +1,4 @@
-.learn-button {
+﻿.learn-button {
   line-height: 36px;
 }
 
@@ -113,7 +113,7 @@
 }
 
 #dashboard {
-  .time-card {
+  .time-card.principalCards{
     overflow: visible;
   }
   .time-content {
@@ -293,4 +293,8 @@
 
 .heart .active {
   color: #D50000!important;
+}
+
+#dashboard md-card span.text-primary{
+  margin-left: -91px;
 }

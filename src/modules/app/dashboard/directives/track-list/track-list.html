@@ -2,8 +2,8 @@
   <div flex-lg="33" flex-md="50" flex-sm flex-gt-md="33" flex-gt-lg="25" ng-repeat="track in tracks | orderBy: 'position' " class="animated" id="{{track.id}}">
     <md-card class="white-text">
       <md-card-content class="{{track.cardCss}}">
-        <span class="score-text " ng-if="track.hasScore && isVisible" aria-label="Your Score Prediction">
-          <span class="text-primary" >
+        <span flex class="score-text" ng-if="track.hasScore && isVisible" aria-label="Your Score Prediction">
+          <span flex class="text-primary" >
             Your Score Prediction: <span ng-bind="track.getScore"></span>
         </span>
         </span>
